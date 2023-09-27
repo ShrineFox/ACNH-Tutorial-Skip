@@ -1,0 +1,53 @@
+flow Root():
+    run v200_AddChangeHouseFormNotice()
+    if System.EventFlags['cPlayer:PcHousingLoanFinish']:
+        # We can customize the outside of your home for free!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:004_02', false)
+    else:
+        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+        # We can customize the outside of your home for 5,000 Bells.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:004_01', false)
+    # If you place your order now, it'll be ready by tomorrow morning. So… are you interested?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:004_03', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        # My, my… Changed your mind? Well, you know where to find me if you want to customize your home.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:007', false)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+            run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+    elif (not System.EventFlags['cPlayer:PcHousingLoanFinish']) and (not EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(5000)):
+        # Er… Nook Inc. policy is to collect our customization fees at the beginning of the transaction. It seems as though you don't have enough Bells on hand…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:005', false)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    else:
+        # Excellent! Then I'll show you our design catalog and you can choose what you'd like for your home.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:006', false)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        EventFlowSystemActor.UICustomHomeHandlingEventFlowSystemActor.UICustomHomeHandling('cParts')
+        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            # Hmmm… Interesting design choice!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:008_01', false)
+            if not System.EventFlags['cPlayer:PcHousingLoanFinish']:
+                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+                # That'll be 5,000 Bells, please!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:008_02', false)
+                EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(-5000, false)
+                # Thank you kindly!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:009_01', false)
+            # I'll make sure that construction is done by tomorrow morning. If you're like me, you're already excited!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:009_02', false)
+            System.EventFlags['cPlayer:RcoChangeHouseDesignReserved'] = true
+            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        else:
+            # My, my… Changed your mind? Well, you know where to find me if you want to customize your home.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:007', false)
+            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+                run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+ 
+flow v200_AddChangeHouseFormNotice():
+    if (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`SecondFloor`, `Basement`)) and (not System.EventFlags['cPlayer:CompleteNoticeChangeHouseForm']):
+        # Looking to customize the exterior of your home, hm? That reminds me, there's something I wanted to tell you. I'm now offering full house designs as a…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1401', false)
+        System.EventFlags['cPlayer:CompleteNoticeChangeHouseForm'] = true
+ 

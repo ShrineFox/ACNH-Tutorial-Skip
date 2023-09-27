@@ -1,0 +1,80 @@
+flow FunitureN_Chk():
+    if (not MainNpc.IsNnpcTentMainNpc.IsNnpcTent()) and (EventFlowSystemActor.NowRoomFtrNumEventFlowSystemActor.NowRoomFtrNum(1)):
+        MainNpc.SelectFreeCFurnitureFurnitureMainNpc.SelectFreeCFurnitureFurniture(0)
+        MainNpc.SetItemNameMainNpc.SetItemName(13, 0, 0)
+        if MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeCFurniture'):
+            MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeCFurniture')
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        else:
+            run RoomN_Chk()
+    else:
+        run RoomN_Chk()
+ 
+flow FunitureP_Chk():
+    if EventFlowSystemActor.ExistAnyItemInNowRoomEventFlowSystemActor.ExistAnyItemInNowRoom():
+        MainNpc.SelectFreeCFurnitureFurnitureMainNpc.SelectFreeCFurnitureFurniture(1)
+        MainNpc.SetItemNameMainNpc.SetItemName(13, 0, 0)
+        if MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeCFurniture'):
+            MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeCFurniture')
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        else:
+            run RoomP()
+    else:
+        # RANDOM: This room is so…empty. I bet this is wh… // Yodelay! Heeeee! Hooooooooooo! A huh hu… // If I were you… Oh man. That'd be weird …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomG:101', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Furniture_Chk():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+        run FunitureN_Chk()
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse'):
+        run FunitureP_Chk()
+ 
+flow RoomN_Chk():
+    if EventFlowSystemActor.SystemCountPlayerNumEventFlowSystemActor.SystemCountPlayerNum() < 2:
+        if MainNpc.NpcIsExistOtherNpcMainNpc.NpcIsExistOtherNpc():
+entrypoint Event4:
+            MainNpc.SetNpcNameMainNpc.SetNpcName(16, 1)
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                case 0:
+                    # Wow. It feels like a birthday party— or even a REGULAR party—with everyone over like this!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH:006', false)
+                case 1:
+                    # <115:1:cd01> is here too? This is so cool.<10:4> So cool.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH:007', false)
+                case 2:
+                    # So many folks here to see ME. Wow. I feel like Mr. Popular, a huh huh huh, <110:5>.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH:008', false)
+        else:
+            MainNpc.NpcSelectFreeTalkMainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH', '', '', '', true)
+    else:
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # Why are so many folks here?<10:4> I don't remember inviting them.<10:4> Did I invite them? <10:4>Mysterious.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH:011', false)
+            case 1:
+                # So many guests today! I got crumbs everywhere and they're gonna mess up my sorting system!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH:010', false)
+            case 2:
+                # Oh wow, I dunno if I've ever had this many folks in my house at once. I wonder what's going on?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomH:009', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow RoomN_withG():
+    run Event4()
+ 
+flow RoomP():
+    MainNpc.NpcSelectFreeTalkMainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Free/BO_FreeC_RoomG', '', '', '', true)
+    MainNpc.EventFlags['cNpcMemory:TalkReSelectLast'] = 4
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Room_Chk():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+        run RoomN_Chk()
+        MainNpc.EventFlags['cNpcMemory:TalkReSelectLast'] = 4
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse'):
+        run RoomP()
+    else:
+        run NNPC_FreeA::HouseQuestions_Chkrun NNPC_FreeA::HouseQuestions_Chk()
+ 

@@ -1,0 +1,301 @@
+flow Chk_RcoSel_DIY():
+    if not System.EventFlags['cPlayer:MainmenuRecipe']:
+        SubflowResults[0] = 0
+    elif EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() != `BlathersNotMovedIn`:
+        if System.EventFlags['cPlayer:EnableDiyRemake']:
+            SubflowResults[0] = 2
+        elif System.EventFlags['cPlayer:RcoEnableRemakeTrial']:
+            SubflowResults[0] = 0
+        else:
+            SubflowResults[0] = 2
+    elif System.EventFlags['cPlayer:EnableDiyRemake']:
+        run Rco_SelChk_FinishRemakeWs()
+    elif not System.EventFlags['cPlayer:RcoEnableRemakeTrial']:
+        run Rco_SelChk_FinishRemakeWs()
+    elif EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(5):
+        SubflowResults[0] = 0
+    elif (not EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'Insect', '')) and (not EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'Fish', '')):
+        SubflowResults[0] = 0
+    elif System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        SubflowResults[0] = 3
+    else:
+        SubflowResults[0] = 0
+ 
+flow Rco_Office_CmnSelAgain():
+    run Chk_RcoSel_DIY()
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        if System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+            if SubflowResults@2[15] == 0:
+                if SubflowResults@3[0] == 0:
+                    # Is there…anything else I can help you with, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1101', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWs()
+                else:
+                    # Is there…anything else I can help you with, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1102', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4Brun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B()
+            elif SubflowResults@3[0] == 0:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1103', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCe()
+            else:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1104', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Ce()
+        elif SubflowResults@2[15] == 0:
+            if SubflowResults@3[0] == 0:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:601', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWs()
+            else:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:602', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4Brun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B()
+        elif SubflowResults@3[0] == 0:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:603', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCe()
+        else:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:604', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Ce()
+    elif not System.EventFlags['cPlayer:RcoPaid1stCharge']:
+        if SubflowResults@2[15] == 0:
+            if SubflowResults@3[0] == 0:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:601_02', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWs()
+            else:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:602_02', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2Prun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2P()
+        elif SubflowResults@3[0] == 0:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:603_02', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCe()
+        else:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:604_02', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Ce()
+    elif System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+        if SubflowResults@2[15] == 0:
+            if SubflowResults@3[0] == 0:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1111', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWs()
+            else:
+                # Is there…anything else I can help you with, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1112', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2Prun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2P()
+        elif SubflowResults@3[0] == 0:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1113', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCe()
+        else:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1114', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Ce()
+    elif SubflowResults@2[15] == 0:
+        if SubflowResults@3[0] == 0:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:601_01', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWs()
+        else:
+            # Is there…anything else I can help you with, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:602_01', false)
+            run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2Prun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2P()
+    elif SubflowResults@3[0] == 0:
+        # Is there…anything else I can help you with, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:603_01', false)
+        run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCe()
+    else:
+        # Is there…anything else I can help you with, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:604_01', false)
+        run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Ce()
+ 
+flow Rco_SelChk_FinishRemakeWs():
+    if EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(5):
+        SubflowResults[0] = 2
+    elif (not EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'Insect', '')) and (not EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'Fish', '')):
+        SubflowResults[0] = 2
+    elif System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        SubflowResults[0] = 1
+    else:
+        SubflowResults[0] = 2
+ 
+flow Root():
+    run Chk_RcoSel_DIY()
+    if not System.EventFlags['cPlayer:RcoPaid1stCharge']:
+        if SubflowResults@2[15] == 0:
+            switch SubflowResults@4[0]:
+                case 0:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:101', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_WsMhrun SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_WsMh()
+                case 1:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:102', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_DoMhrun SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_DoMh()
+                case 2:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:103', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_3Brun SNPC_rco_01_Tent_Selecor::RcoTentSel_3B()
+                case 3:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:104', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_5B_DoWsMhrun SNPC_rco_01_Tent_Selecor::RcoTentSel_5B_DoWsMh()
+        else:
+            switch SubflowResults@4[0]:
+                case 0:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:105', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_WsCeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_WsCeMh()
+                case 1:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:106', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_DoCeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_DoCeMh()
+                case 2:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:107', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_4B_CeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_4B_CeMh()
+                case 3:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:108', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_6B_DoWsCeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_6B_DoWsCeMh()
+    elif EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+        if SubflowResults@2[15] == 0:
+            switch SubflowResults@4[0]:
+                case 0:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:201', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_WsMhrun SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_WsMh()
+                case 1:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:202', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_DoMhrun SNPC_rco_01_Tent_Selecor::RcoTentSel_4B_DoMh()
+                case 2:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:203', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_3Brun SNPC_rco_01_Tent_Selecor::RcoTentSel_3B()
+                case 3:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:204', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentSel_5B_DoWsMhrun SNPC_rco_01_Tent_Selecor::RcoTentSel_5B_DoWsMh()
+        else:
+            switch SubflowResults@4[0]:
+                case 0:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:205', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_WsCeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_WsCeMh()
+                case 1:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:206', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_DoCeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_5B_DoCeMh()
+                case 2:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:207', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_4B_CeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_4B_CeMh()
+                case 3:
+                    # What would you like to talk to me about? I'm all ears!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:208', false)
+                    run SNPC_rco_01_Tent_Selecor::RcoTentCel_6B_DoWsCeMhrun SNPC_rco_01_Tent_Selecor::RcoTentCel_6B_DoWsCeMh()
+    elif System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        if System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+            if SubflowResults@2[15] == 0:
+                switch SubflowResults@3[0]:
+                    case 0:
+                        # This is the construction consultation counter! How can I help you, hm?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1001', false)
+                        run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWs()
+                    case 2:
+                        # This is the construction consultation counter! How can I help you, hm?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1002', false)
+                        run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4Brun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B()
+                    default:
+                        return
+            else:
+                switch SubflowResults@3[0]:
+                    case 0:
+                        # This is the construction consultation counter! How can I help you, hm?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1003', false)
+                        run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCe()
+                    case 2:
+                        # This is the construction consultation counter! How can I help you, hm?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1004', false)
+                        run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Ce()
+                    default:
+                        return
+        elif SubflowResults@2[15] == 0:
+            switch SubflowResults@3[0]:
+                case 0:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:501', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_HintWs()
+                case 2:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:502', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4Brun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B()
+                default:
+                    return
+        else:
+            switch SubflowResults@3[0]:
+                case 0:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:503', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_6B_HintWsCe()
+                case 2:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:504', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_Ce()
+                default:
+                    return
+    elif System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+        if SubflowResults@2[15] == 0:
+            switch SubflowResults@3[0]:
+                case 0:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1011', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWs()
+                case 2:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1012', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2Prun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2P()
+                default:
+                    return
+        else:
+            switch SubflowResults@3[0]:
+                case 0:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1013', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCe()
+                case 2:
+                    # This is the construction consultation counter! How can I help you, hm?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:1014', false)
+                    run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Ce()
+                default:
+                    return
+    elif SubflowResults@2[15] == 0:
+        switch SubflowResults@3[0]:
+            case 0:
+                # This is the construction consultation counter! How can I help you, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:511', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWsrun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_HintWs()
+            case 2:
+                # This is the construction consultation counter! How can I help you, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:512', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2Prun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_3B_2P()
+            default:
+                return
+    else:
+        switch SubflowResults@3[0]:
+            case 0:
+                # This is the construction consultation counter! How can I help you, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:513', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_5B_2P_HintWsCe()
+            case 2:
+                # This is the construction consultation counter! How can I help you, hm?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common_Choice:514', false)
+                run SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Cerun SNPC_rco_01_Office_Selecor::Rco_OfficeSel_4B_2P_Ce()
+            default:
+                return
+ 

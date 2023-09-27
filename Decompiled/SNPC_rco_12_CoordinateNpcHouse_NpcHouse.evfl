@@ -1,0 +1,230 @@
+flow BackToEdit():
+    # No problem. There's a lot to consider, so take your time.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2063', false)
+ 
+flow ChangeHouseDesign():
+    if (not EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag()) and (not System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']):
+        # Got it! Then let's have a look at the catalog together, and you can tell me what you think looks best.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2031', true)
+    else:
+        # Yes, yes. Of course! I'll get the catalog, and we can figure out how things should change, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2032', true)
+    EventFlowSystemActor.UICustomNpcHomeHandlingEventFlowSystemActor.UICustomNpcHomeHandling()
+    if not EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        if SubflowResults@2[1] == 0:
+            # Changed your mind? No problem. There's a lot to consider, so take your time.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2036', false)
+        else:
+            if EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag():
+                # Oh? You'd like to leave plans for the exterior as they are?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2025', false)
+                run Sub_grp_Event50()
+            else:
+                # Oh, so you don't want to change the exterior. No problem! Interior plans only. Is that everything, then?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2024', false)
+                run Sub_grp_Event50()
+    elif SubflowResults@2[1] == 0:
+        if EventFlowSystemActor.IsOnNpcInteriorReserveFlagEventFlowSystemActor.IsOnNpcInteriorReserveFlag():
+            # I think that's everything I need for the exterior. I'll let you work on those changes to the interior plans.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2034', false)
+        else:
+            if (not System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']) and (not EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag()):
+                # OK! I have your plan for the home's exterior jotted down. Keep plugging away at that interior design. Yes, yes. I'm eager to see how it'll all come t…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2033', false)
+            else:
+                # OK, I've got everything recorded. I'll let you get back to work on those interior plans.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2035', false)
+        System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged'] = true
+    else:
+        System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged'] = true
+        # Yes, yes, this all looks excellent. I believe that's everything. What do you think? Ready to call it done?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2023', false)
+        run Sub_grp_Event50()
+ 
+flow ChkAct():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() in (0, 4, 5):
+        MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+        MainNpc.TurnBodyMainNpc.TurnBody(17, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(45)
+        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+ 
+flow End_NpcHouseEdit():
+    if EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag():
+        # Understood! Everything's ready, then. Great work!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2027', true)
+        run Sub_Event109()
+    else:
+        # Understood! Everything's ready, then. Great work!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2026', true)
+        run Sub_Event109()
+ 
+flow ForceTalk():
+    MainNpc.NpcHouseEditItemMergeMainNpc.NpcHouseEditItemMerge()
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cUISelectedNpcName', 'cDegit', 0, 0, '')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.TurnNeckPlayer.TurnNeck(0, false)
+    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    if EventFlowSystemActor.IsOnNpcInteriorReserveFlagEventFlowSystemActor.IsOnNpcInteriorReserveFlag():
+        # Alright! Let's get started. What do you want to change about the interior plans?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2002', false)
+    else:
+        # Alright! Let's get down to business. Tell me what you have in mind for <115:1:cd00>'s home.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2001', false)
+        if not System.EventFlags['cPlayer:TalkAboutNpcHouseCoordeHint']:
+            # Just work through your idea exactly like how you would for Lottie.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2001_01', false)
+            # There is one limitation though… We can't change the size of any rooms. Otherwise, anything goes!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2001_02', false)
+            # If it helps, you can also press in  to imagine <115:1:cd00> in here.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2001_03', false)
+            System.EventFlags['cPlayer:TalkAboutNpcHouseCoordeHint'] = true
+    if System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']:
+        # Let me know when you're done!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2003_02', false)
+    elif EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag():
+        # Let me know when you're done or if you'd like to make changes to the home's exterior plans.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2003_03', false)
+    else:
+        # Let me know when you're done or if you'd like to work on remodeling the home's exterior.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2003_01', false)
+ 
+flow Gate():
+    # Hm? Is there something wrong? If you need anything, come talk to me.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2101', true)
+    run Sub_Event6()
+ 
+flow Gate_monolog():
+    # I need to finish decorating first, then I can report back to Tom Nook...
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1601', true)
+    run Sub_Event6()
+ 
+flow NoChangeExterior():
+    if EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag():
+        # Alright! Is there anything you want to change about the plans for the exterior remodel?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2022', false)
+        run Event46()
+    else:
+        run Event26()
+ 
+flow Root():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cUISelectedNpcName', 'cDegit', 0, 0, '')
+    if System.EventFlags['cLandTemp:NpcHouseCoordinateIsRetake']:
+        if (not EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag()) and (not System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']):
+            # Hm? What can I do for you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2013', false)
+        else:
+            # Hm? What can I do for you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2014', false)
+    else:
+        if System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']:
+            # Hm? What can I do for you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2012', false)
+        else:
+            # Hm? What can I do for you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2011', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        case 0:
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            run ChkAct()
+            if not EventFlowSystemActor.HasNpcHouseCoordinateEndSpaceEventFlowSystemActor.HasNpcHouseCoordinateEndSpace():
+                # Yes, yes, I see. Um… May I offer some constructive criticism? How do I put this? Nook Inc. tries to guarantee a certain level of comfort for our cust…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2102', false)
+            elif not EventFlowSystemActor.HasNpcHouseCoordinateEntranceSpaceEventFlowSystemActor.HasNpcHouseCoordinateEntranceSpace():
+                # Oho! I see. I have some feedback, if you have a moment. At Nook Inc. we like to ensure that our customers are able to, um…get inside their homes. Ple…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2103', false)
+            elif System.EventFlags['cLandTemp:NpcHouseCoordinateIsRetake']:
+                if System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']:
+                    if EventFlowSystemActor.IsOnNpcInteriorReserveFlagEventFlowSystemActor.IsOnNpcInteriorReserveFlag():
+                        # Alright! We'll go forward with these remodel plans, then. Excellent work!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2027_01', true)
+                        run Sub_Event109()
+                    else:
+                        # Alright! We'll go forward with these remodel plans, then. Excellent work!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2026_01', true)
+                        run Sub_Event109()
+                else:
+                    run NoChangeExterior()
+            elif System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']:
+                # Alright! We'll go forward with these remodel plans, then. Excellent work!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2026_01', true)
+                run Sub_Event109()
+            else:
+entrypoint Event26:
+                # OK! I'm ready to plan out the exterior remodel if you are!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2021', false)
+entrypoint Event46:
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    SubflowResults[1] = 1
+                    run ChangeHouseDesign()
+                else:
+                    run End_NpcHouseEdit()
+        case 1:
+            SubflowResults[1] = 0
+            run ChangeHouseDesign()
+        case 2:
+            if System.EventFlags['cLandTemp:NpcHouseCoordinateIsRetake']:
+                if not EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag():
+                    # Really? In that case, we'll use the old interior plan. Is that OK?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2055', false)
+                elif EventFlowSystemActor.IsOnNpcInteriorReserveFlagEventFlowSystemActor.IsOnNpcInteriorReserveFlag():
+                    # Really? In that case, we'll use the old plans. Are you absolutely sure? 
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2053', false)
+                else:
+                    # Really? In that case, we'll use the old exterior plan and throw out any plans for the interior. Are you sure?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2054', false)
+            else:
+                if System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']:
+                    # Really? The plans you're working on, including the exterior, will all be thrown out. Are you absolutely sure? 
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2052', false)
+                else:
+                    # Really? The plans you're working on will all be thrown out. Are you absolutely sure?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2051', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if System.EventFlags['cLandTemp:NpcHouseCoordinateIsRetake']:
+                    # Completely understood! No changes. We're going to go forward with what we had earlier.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2062', true)
+                else:
+                    # That's too bad… But you're the designer, so it's your decision.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:2061', true)
+                    EventFlowSystemActor.SetNpcExteriorReserveFlagEventFlowSystemActor.SetNpcExteriorReserveFlag(false)
+                EventFlowSystemActor.StructureTranscriptNpcHouseCustomEventFlowSystemActor.StructureTranscriptNpcHouseCustom(1)
+                EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:rco', '', false)
+                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cIdrOffice01', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+            else:
+                run BackToEdit()
+        case 3:
+            run BackToEdit()
+ 
+local flow Sub_Event109():
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(62)
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_RequestOkay', -1)
+    fork:
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('RequestOkay', true, '', 0, false)
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(62)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+    if System.EventFlags['cLandTemp:NpcHouseCoordinateHouseDesignChanged']:
+        EventFlowSystemActor.StructureTranscriptNpcHouseCustomEventFlowSystemActor.StructureTranscriptNpcHouseCustom(0)
+        EventFlowSystemActor.SetNpcExteriorReserveFlagEventFlowSystemActor.SetNpcExteriorReserveFlag(true)
+    System.EventFlags['cLandTemp:NpcInteriorCoordinateDone'] = true
+    EventFlowSystemActor.SetNpcInteriorReserveFlagEventFlowSystemActor.SetNpcInteriorReserveFlag(true)
+    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:rco', '', false)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cIdrOffice01', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+local flow Sub_Event6():
+    Player.PlayerDemoMovePlayer.PlayerDemoMove('cNextInfoAngle', 1)
+ 
+local flow Sub_grp_Event50():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run End_NpcHouseEdit()
+    else:
+        run BackToEdit()
+ 

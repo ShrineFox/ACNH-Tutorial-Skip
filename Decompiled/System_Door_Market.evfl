@@ -1,0 +1,26 @@
+flow Market_ClosedTime():
+    if System.EventFlags['cLand:RegulationType2']:
+        # Nook's Cranny Shop hours: 7 AM - 10 PM
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111_00_01', false)
+    elif System.EventFlags['cLand:RegulationType3']:
+        # Nook's Cranny Shop hours: 8 AM - 11 PM
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111_00_02', false)
+    else:
+        # Nook's Cranny Shop hours: 8 AM - 10 PM
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111', false)
+ 
+flow Root():
+    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+        # Due to unusual circumstances, we will be closed today.                                    –Nook's Cranny
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111_02', false)
+        EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+    elif not EventFlowSystemActor.IsDuringBusinessHoursEventFlowSystemActor.IsDuringBusinessHours('Market'):
+        run Market_ClosedTime()
+        EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+    elif EventFlowSystemActor.EnvHourOverGrowUpEventFlowSystemActor.EnvHourOverGrowUp():
+        # Due to circumstances, our operating hours for today have changed.                                    –Nook's Cranny
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111_01', false)
+        EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+    else:
+        EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=0)
+ 

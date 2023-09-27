@@ -1,0 +1,32 @@
+flow Root():
+    if EventFlowSystemActor.NetIsDemoPlayerEventFlowSystemActor.NetIsDemoPlayer():
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(84)
+    else:
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(85)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut0', '', 'CameraTag:Root', false, false, false, 0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+    if EventFlowSystemActor.NetIsDemoPlayerEventFlowSystemActor.NetIsDemoPlayer():
+        SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+        # Alright. Clear skies to ya!<10:7:003c0000>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:810', true)
+        SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
+        SubNpc.NpcRailMoveSubNpc.NpcRailMove(0, false, false, -1, -1, 0)
+        MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+        SubNpc.NpcRailMoveSubNpc.NpcRailMove(1, false, false, -1, -1, 0)
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(76)
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff', -1)
+        EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cLeaveVisitor')
+    else:
+        fork:
+            branch:
+                MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+                SubNpc.NpcRailMoveSubNpc.NpcRailMove(0, false, false, -1, -1, 0)
+                SubNpc.NpcRailMoveSubNpc.NpcRailMove(1, false, false, -1, -1, 0)
+            branch:
+                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cNetDemoPlayerName', 'cDegit', 0, 0, '')
+                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cNetDemoPlayerLandName', 'cDegit', 0, 0, '')
+                # <50:3><115:0:cd00> is going home. Safe travels!<10:8:003c0000>
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:021', true)
+        EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cSeeOffVisitor')
+ 

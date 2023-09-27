@@ -1,0 +1,65 @@
+flow FinishLoan_Force():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+entrypoint Event21:
+    if System.EventFlags['cPlayer:PlayerMovingAfterLoanFinish']:
+        # Well, hello there, PLAYER! Say, I was just looking over the file on your home loan from your previous island.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:1001', false)
+        System.EventFlags['cPlayer:PlayerMovingAfterLoanFinish'] = false
+    else:
+        # Well, hello there, PLAYER!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:001', false)
+    switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+        case `BaseHouse`:
+            # I must offer a hearty congratulations. You've paid off your loan in full! I'd expect nothing less, of course, but such a milestone is certainly cause…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:003', false)
+            run Sub_Event13()
+        case `HouseExpansion1`:
+            # Congratulations! You are the proud owner of a luxuriously sized, paid-in-full home! I can't imagine the feeling of satisfaction you must have. Truly,…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:004', false)
+            run Sub_Event13()
+        case `BackRoom`:
+            # I must thank you for the diligent repayment of your home loan. Yes, yes! I must ask… Were your payments by any chance motivated by a desire for expan…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:005', false)
+            run Sub_Event13()
+        case `LeftRoom`:
+            # I must thank you for the diligent repayment of your home loan. Yes, yes! I must ask… Were your payments by any chance motivated by a desire for expan…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:006', false)
+            run Sub_Event13()
+        case `RightRoom`:
+            # I must thank you for the diligent repayment of your home loan. Yes, yes! I must ask… Were your payments by any chance motivated by a desire for expan…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:007', false)
+            run Sub_Event13()
+        case `SecondFloor`:
+            # Please allow me to offer my most enthusiastic congratulations! From one entrepreneur to another, you certainly seem to have a knack for managing your…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:008', false)
+            run Sub_Event13()
+        case `Basement`:
+            # My goodness, you've done it. You've paid off your home- renovation loan in full! Congratulations! You're debt-free and set for life in an amazing, sp…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:1201', false)
+            # Oh, yes! There is one other thing for us to discuss. Although we cannot expand your house any further… Maybe we could look into expanding the size of…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:1201_01', false)
+            # Unfortunately, such construction would not come cheap, so I'd need the entire cost to be paid up front.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:1201_02', false)
+            # Now, I imagine that, as your house has grown, you've placed quite a few things into storage, hm? But then, before you know it, your storage is full! …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:1201_03', false)
+            # And on that note, I'd just like to say that I hope Nook Inc. continues to serve you for years to come. Oh! And once again, congratulations!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_02_Loan:1201_04', false)
+            System.EventFlags['cPlayer:RcoStandbyNoticeStorageExpansion'] = false
+            System.EventFlags['cPlayer:PcHousingLoanFinish'] = true
+            run Sub_Event13()
+        default:
+            return
+ 
+flow FinishLoan_Force_Init():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+ 
+flow Root():
+    if System.EventFlags['cPlayer:PlayerLoanFinish1st']:
+        run Event21()
+ 
+local flow Sub_Event13():
+    System.EventFlags['cPlayer:RcoHeardRemodel1'] = true
+    System.EventFlags['cPlayer:PlayerLoanFinish1st'] = false
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

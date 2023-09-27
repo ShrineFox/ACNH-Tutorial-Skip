@@ -1,0 +1,248 @@
+flow ChangeStage(FadeOutKindString: str, FadeOutSpeed: float, TargetStage: str, FadeInKindString: str, FadeColorString: str, FadeInSpeed: str):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeOutKindString, 'cCircle'):
+        EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+        if EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, 0.0, 2):
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed, FadeInSpeed=FadeInSpeed)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -1.0, 2):
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -2.0, 2):
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.5)
+        else:
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.75)
+    elif EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeOutKindString, 'cNormalFader'):
+        EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+        if EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, 0.0, 2):
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed, FadeInSpeed=FadeInSpeed)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -1.0, 2):
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.5)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -2.0, 2):
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0)
+        else:
+            run ChangeStage_FadeIn(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.10000000149011612)
+    else:
+        run ChangeStage_FadeIn(TargetStage=TargetStage, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0, FadeOutKindString='cCircle')
+ 
+flow ChangeStage_FadeIn(FadeOutSpeed: float, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeInSpeed: str, TargetStage: str):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeInKindString, 'cCircle'):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+            run Sub_Event26(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(5)
+                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.5)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(7)
+                    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.75)
+                else:
+                    run Sub_Event26(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    elif not EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeInKindString, 'cNormalFader'):
+        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, 'cCircle', FadeColorString, FadeOutSpeed, 1.0)
+    elif (not EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColorString, 'cBlack')) and (EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColorString, 'cWhite')):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+            run Sub_Event32(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(2)
+                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(4)
+                    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.10000000149011612)
+                else:
+                    run Sub_Event32(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    elif EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+        run Sub_Event28(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    else:
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+            EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(2)
+            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(4)
+                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.10000000149011612)
+            else:
+                run Sub_Event28(TargetStage=TargetStage, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+ 
+flow NextGoTo(NextInfoKey: str):
+    EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+    EventFlowSystemActor.NextGoToEventFlowSystemActor.NextGoTo(NextInfoKey, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow ReEnterStage(FadeOutKindString: str, FadeOutSpeed: float, Type: int, FadeInKindString: str, FadeColorString: str, FadeInSpeed: str):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeOutKindString, 'cCircle'):
+        EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+        if EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, 0.0, 2):
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed, FadeInSpeed=FadeInSpeed)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -1.0, 2):
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -2.0, 2):
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.5)
+        else:
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.75)
+    elif EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeOutKindString, 'cNormalFader'):
+        EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+        if EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, 0.0, 2):
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed, FadeInSpeed=FadeInSpeed)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -1.0, 2):
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.5)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -2.0, 2):
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0)
+        else:
+            run ReEnterStage_FadeIn(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.10000000149011612)
+    else:
+        run ReEnterStage_FadeIn(Type=Type, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0, FadeOutKindString='cCircle')
+ 
+flow ReEnterStage_FadeIn(FadeOutSpeed: float, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeInSpeed: str, Type: int):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeInKindString, 'cCircle'):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+            run Sub_Event83(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(5)
+                EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.5)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(7)
+                    EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.75)
+                else:
+                    run Sub_Event83(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    elif not EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeInKindString, 'cNormalFader'):
+        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+        EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, 'cCircle', FadeColorString, FadeOutSpeed, 1.0)
+    elif (not EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColorString, 'cBlack')) and (EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColorString, 'cWhite')):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+            run Sub_Event87(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(2)
+                EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(4)
+                    EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.10000000149011612)
+                else:
+                    run Sub_Event87(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    elif EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+        run Sub_Event85(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    else:
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+            EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(2)
+            EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(4)
+                EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.10000000149011612)
+            else:
+                run Sub_Event85(Type=Type, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+ 
+flow ReturnPreStage(FadeOutKindString: str, FadeOutSpeed: float, NextInfoKey: str, FadeInKindString: str, FadeColorString: str, FadeInSpeed: str):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeOutKindString, 'cCircle'):
+        EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+        if EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, 0.0, 2):
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed, FadeInSpeed=FadeInSpeed)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -1.0, 2):
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -2.0, 2):
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.5)
+        else:
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.75)
+    elif EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeOutKindString, 'cNormalFader'):
+        EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+        if EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, 0.0, 2):
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed, FadeInSpeed=FadeInSpeed)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -1.0, 2):
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.5)
+        elif EventFlowSystemActor.FadeSpeedCheckEventFlowSystemActor.FadeSpeedCheck(FadeOutSpeed, -2.0, 2):
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0)
+        else:
+            run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=0.10000000149011612)
+    else:
+        run ReturnPreStage_FadeIn(NextInfoKey=NextInfoKey, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeInSpeed=FadeInSpeed, FadeOutSpeed=1.0, FadeOutKindString='cCircle')
+ 
+flow ReturnPreStage_FadeIn(FadeOutSpeed: float, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeInSpeed: str, NextInfoKey: str):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeInKindString, 'cCircle'):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+            run Sub_Event42(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(5)
+                EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.5)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(7)
+                    EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.75)
+                else:
+                    run Sub_Event42(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    elif not EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeInKindString, 'cNormalFader'):
+        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, 'cCircle', FadeColorString, FadeOutSpeed, 1.0)
+    elif (not EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColorString, 'cBlack')) and (EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColorString, 'cWhite')):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+            run Sub_Event53(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(2)
+                EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(4)
+                    EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.10000000149011612)
+                else:
+                    run Sub_Event53(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    elif EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cNormal'):
+        run Sub_Event44(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+    else:
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cFast'):
+            EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(2)
+            EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeInSpeed, 'cSlow'):
+                EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(4)
+                EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.10000000149011612)
+            else:
+                run Sub_Event44(NextInfoKey=NextInfoKey, FadeOutKindString=FadeOutKindString, FadeInKindString=FadeInKindString, FadeColorString=FadeColorString, FadeOutSpeed=FadeOutSpeed)
+ 
+flow StartAmiiboPhone(OverWriteFlow: str):
+    EventFlowSystemActor.NextLPFadeFollowUIEventFlowSystemActor.NextLPFadeFollowUI()
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('GotoAmiiboPhone', -1)
+    EventFlowSystemActor.StartAmiiboPhoneEventFlowSystemActor.StartAmiiboPhone('cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.5, OverWriteFlow)
+ 
+local flow Sub_Event26(TargetStage: str, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+ 
+local flow Sub_Event28(TargetStage: str, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.5)
+ 
+local flow Sub_Event32(TargetStage: str, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage(TargetStage, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.5)
+ 
+local flow Sub_Event42(NextInfoKey: str, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+    EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+ 
+local flow Sub_Event44(NextInfoKey: str, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.5)
+ 
+local flow Sub_Event53(NextInfoKey: str, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage(NextInfoKey, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.5)
+ 
+local flow Sub_Event83(Type: int, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(6)
+    EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 1.0)
+ 
+local flow Sub_Event85(Type: int, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.5)
+ 
+local flow Sub_Event87(Type: int, FadeOutKindString: str, FadeInKindString: str, FadeColorString: str, FadeOutSpeed: float):
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(3)
+    EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(Type, FadeOutKindString, FadeInKindString, FadeColorString, FadeOutSpeed, 0.5)
+ 

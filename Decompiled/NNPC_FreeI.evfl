@@ -1,0 +1,28 @@
+flow Present_Chk():
+    System.EventFlags['cPlayerTemp:FreeISelectCount'] = 0
+    if (not System.EventFlags['cPlayer:TalkFreeIPresentTodayAnyone']) and (not System.EventFlags['cPlayerTemp:TalkClothesPNow']) and (not Player.PlayerOutfitMarinesuit'cPlayer:TalkFreeIPresentTodayAnyone']) and (not System.EventFlags['cPlayerTemp:TalkClothesPNow']) and (not Player.PlayerOutfitMarinesuit()) and (MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeIPresent')):
+        run ReSelect()
+ 
+flow ReSelect():
+    MainNpc.DecideFreeITypeMainNpc.DecideFreeIType()
+    MainNpc.DecideFreeIRewardMainNpc.DecideFreeIReward()
+    if MainNpc.NpcIsRewardDecidedMainNpc.NpcIsRewardDecided():
+        MainNpc.SetItemNameMainNpc.SetItemName(27, 6, 0)
+        MainNpc.SetItemNameMainNpc.SetItemName(27, 0, 0)
+        # RANDOM: That outfit looks real good on you, <11… // You look good wearing anything at all, … // <50:3><110:3>, that's a real super cool…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeI_Present:001', false)
+        MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeIPresent')
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(27, true)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, '"Default"')
+        # RANDOM: Go be a cool fashion person now! // I hope I made ya happy. // A huh huh huh! Just imagining how cool …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeI_Present:002', false)
+        System.EventFlags['cPlayer:TalkFreeIPresentTodayAnyone'] = true
+        System.EventFlags['cPlayerTemp:TalkPresentNow'] = true
+        MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(2)
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+    elif System.EventFlags['cPlayerTemp:FreeISelectCount'] < 5:
+        System.EventFlags['cPlayerTemp:FreeISelectCount'] += 1
+        run ReSelect()
+ 

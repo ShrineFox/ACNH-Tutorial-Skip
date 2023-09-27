@@ -1,0 +1,24 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(17, false)
+ 
+flow Root():
+    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        if MainNpc.NpcCommuneShopOpenMainNpc.NpcCommuneShopOpen() != 0:
+            MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+            MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_ttl_02_Commune', 'Root', true, true, ArgInt0=0)
+        elif EventFlowSystemActor.CommuneShopEventEventFlowSystemActor.CommuneShopEvent('cTtlShop'):
+            run Demo_Common_Commune::TtlOpen_TtlPosrun Demo_Common_Commune::TtlOpen_TtlPos()
+            MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+            MainNpc.NpcChangeConversationPretenseStateMainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Ttl_Shop_ttl', false, true, ArgInt0=0, ArgStr0='spn')
+        else:
+            if MainNpc.NpcLabelMainNpc.NpcLabel('ttlA'):
+                MainNpc.NpcAISetPosByRailMainNpc.NpcAISetPosByRail(3, 0, true, 0.0)
+                MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cPutAway', true)
+                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_ttl_02_Commune', 'Root', false, true)
+            else:
+                MainNpc.NpcAISetPosByRailMainNpc.NpcAISetPosByRail(3, 1, true, 0.0)
+                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_ttl_02_Commune', 'Root', false, true)
+    else:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_ttl_02_Commune', 'Root', false, true)
+ 

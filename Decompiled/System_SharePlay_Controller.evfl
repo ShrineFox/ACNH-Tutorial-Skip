@@ -1,0 +1,91 @@
+flow Impl(PlayerIndex: int = 0):
+    if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+        run Restart(PlayerIndex=PlayerIndex)
+    else:
+        run System_Controller::SetupSoloControllerrun System_Controller::SetupSoloController()
+ 
+flow NextPlayer(PlayerIndex: int = 0, BaseIndex: int):
+    PlayerIndex = BaseIndex
+    run Event20()
+ 
+flow Restart(PlayerIndex: int = 0):
+    EventFlowSystemActor.ControllerConnectBeginEventFlowSystemActor.ControllerConnectBegin()
+    PlayerIndex = 0
+entrypoint Event20:
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cConnectCtrlPlayerName', 'cDegit', 0, PlayerIndex, '')
+    EventFlowSystemActor.ControllerConnectTimerStartEventFlowSystemActor.ControllerConnectTimerStart(30)
+    # <50:3><115:0:cd00>, please press  and  (or  and ) at the same time.<10:8:00000000>
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:007', false)
+    EventFlowSystemActor.ControllerConnectEventFlowSystemActor.ControllerConnect(PlayerIndex)
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(1):
+        EventFlowSystemActor.ControllerConnectTimerCloseEventFlowSystemActor.ControllerConnectTimerClose()
+        run Sub_grp_Event31(PlayerIndex=PlayerIndex)
+    else:
+        EventFlowSystemActor.ControllerConnectTimerCloseEventFlowSystemActor.ControllerConnectTimerClose()
+        switch EventFlowSystemActor.ControllerConnectResultEventFlowSystemActor.ControllerConnectResult():
+            case 0:
+                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(45)
+                PlayerIndex += 1
+                if EventFlowSystemActor.ControllerConnectNumEventFlowSystemActor.ControllerConnectNum() == 0:
+                    EventFlowSystemActor.ControllerConnectEndEventFlowSystemActor.ControllerConnectEnd(true)
+                    run StartPlay()
+                else:
+                    run NextPlayer(BaseIndex=PlayerIndex)
+            case 1:
+                run Sub_grp_Event31(PlayerIndex=PlayerIndex)
+            case 2:
+                run Sub_Event30(PlayerIndex=PlayerIndex)
+ 
+flow Root():
+    EventFlowSystemActor.WaitFaderSleepEventFlowSystemActor.WaitFaderSleep()
+    run Impl()
+    EventFlowSystemActor.DemoShareStartEndEventFlowSystemActor.DemoShareStartEnd()
+    if (EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0)) and (System.EventFlags['cPlayer:TownNewsReserve']):
+        EventFlowSystemActor.BroadcastDemoStartEventFlowSystemActor.BroadcastDemoStart()
+        if (System.EventFlags['cLand:BuiltTownOffice']) and (not System.EventFlags['cLand:BuiltTownOfficeToday']):
+            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUpTalk', 'cNormalFader', 'cCircle', 'cBlack', 1.0, 1.0)
+        else:
+            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUpTalkEventPlaza', 'cNormalFader', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow StartPlay():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.StartSharePlayEventFlowSystemActor.StartSharePlay()
+    if not EventFlowSystemActor.EventFlagAllSharePlayPlayerEventFlowSystemActor.EventFlagAllSharePlayPlayer('cPlayer:SharePlayGuideDone'):
+        EventFlowSystemActor.EventFlagAllSharePlayPlayerEventFlowSystemActor.EventFlagAllSharePlayPlayer('cPlayer:SharePlayGuideDone')
+        run System_SharePlay_Entry::SharePlay_HowToPlayrun System_SharePlay_Entry::SharePlay_HowToPlay()
+ 
+local flow Sub_Event30(PlayerIndex: int):
+    EventFlowSystemActor.ControllerConnectEndEventFlowSystemActor.ControllerConnectEnd(true)
+    if EventFlowSystemActor.CountSharePlayerNumEventFlowSystemActor.CountSharePlayerNum(4):
+        EventFlowSystemActor.RequetCtrlConnectSupportEventFlowSystemActor.RequetCtrlConnectSupport(4)
+    else:
+        if EventFlowSystemActor.CountSharePlayerNumEventFlowSystemActor.CountSharePlayerNum(3):
+            EventFlowSystemActor.RequetCtrlConnectSupportEventFlowSystemActor.RequetCtrlConnectSupport(3)
+        else:
+            switch EventFlowSystemActor.CountSharePlayerNumEventFlowSystemActor.CountSharePlayerNum(2):
+                case 0, 1:
+                    EventFlowSystemActor.RequetCtrlConnectSupportEventFlowSystemActor.RequetCtrlConnectSupport(2)
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(1):
+        # A controller was not connected. Ending the session for now.<10:7:012c0000>
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:010', true)
+        run System_SharePlay_Exit::Rootrun System_SharePlay_Exit::Root()
+    else:
+        # Controllers have been connected for all island residents. Have fun!
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:011', false)
+        run StartPlay()
+ 
+local flow Sub_grp_Event31(PlayerIndex: int):
+    if PlayerIndex < 1:
+        # A controller was not connected. Ending the session for now.<10:7:012c0000>
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:008', true)
+        EventFlowSystemActor.ControllerConnectEndEventFlowSystemActor.ControllerConnectEnd(false)
+        run System_SharePlay_Exit::Rootrun System_SharePlay_Exit::Root()
+    else:
+        # Can you connect a controller for <115:0:cd00>?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:009', true)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Restart()
+        else:
+            run Sub_Event30(PlayerIndex=PlayerIndex)
+ 

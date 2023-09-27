@@ -1,0 +1,179 @@
+flow AddDustCloth():
+    run PreDustCloth()
+entrypoint Event142:
+    run MncPreface()
+    # One more amazing vacation home for the islands to sing about! But before we wrap up, you got a second?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:161', false)
+    # So, you remember how to make furniture sparkle, right? Well, when I told Wardell that I told you about it, he told me a cool thing, then told me to t…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:162', false)
+    # So when you're getting ready to polish, you can make different effects besides sparkling too! Start by pressing  like always, then try some out!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:163', true)
+    System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02'] = true
+    run EndTalk()
+ 
+flow AddDustClothChk():
+    if (not System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02']) and (System.EventFlags['cWherearenPlayer:NewBuildCount'] == 11):
+        run RunDustClothEvent(BlackBoardKey='AddDust')
+ 
+flow AddDustClothTalk():
+    run PreDustClothTalk()
+    run Event142()
+ 
+flow AddDustClothTalk_Init():
+    MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+ 
+flow AddDustCloth_Init():
+    MainNpc.NpcAISetPosMainNpc.NpcAISetPos(160.0, 230.0, 0.0, false, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, false)
+    run AddDustClothTalk_Init()
+ 
+flow DustClothTalk():
+    run PreDustClothTalk()
+    run Event141()
+ 
+flow DustClothTalk_Init():
+    MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+ 
+flow EndTalk():
+    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+    MainNpc.NpcSetVisibleActionMainNpc.NpcSetVisibleAction(false)
+    Player.TurnNeckPlayer.TurnNeck(1, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+    # You were talking about giving furniture extra sparkle, right? That sounds super neat.
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:022', true)
+ 
+flow MncPreface():
+    SubNpc.SetNpcNameSubNpc.SetNpcName(0, 0)
+    # Sorry! Just need a moment for a quick supervisor-to-designer consult…if you don't mind!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:102', true)
+    SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Nodding', true, '', 0, false)
+    EventFlowSystemActor@Player.WaitFrameEventFlowSystemActor@Player.WaitFrame(20)
+    fork:
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+        branch:
+            EventFlowSystemActor@Player.WaitFrameEventFlowSystemActor@Player.WaitFrame(10)
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+    EventFlowSystemActor@Player.WaitFrameEventFlowSystemActor@Player.WaitFrame(40)
+    SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(12)
+    SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+ 
+flow PreDustCloth():
+    fork:
+        branch:
+            Player.TurnNeckPlayer.TurnNeck(1, false)
+            Player.TurnBodyPlayer.TurnBody(11, 0.0)
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+            SubNpc.TurnBodySubNpc.TurnBody(11, 0.0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, false)
+    fork:
+        branch:
+            # Heeey, PLAYER! Hold up a sec!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:101', true)
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(20)
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
+    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, true)
+    fork:
+        branch:
+            SubNpc.TurnBodySubNpc.TurnBody(0, 0.0)
+            SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+        branch:
+            Player.TurnBodyPlayer.TurnBody(0, 0.0)
+            Player.TurnNeckPlayer.TurnNeck(0, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(80)
+    EventFlowSystemActor.SetupActorPositionEventFlowSystemActor.SetupActorPosition(13)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('LandingTalk', '', 'Place:SafeArea', false, false, false, 0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+    MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+ 
+flow PreDustClothTalk():
+    fork:
+        branch:
+            Player.TurnNeckPlayer.TurnNeck(11, false)
+            Player.TurnBodyPlayer.TurnBody(11, 0.0)
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
+            SubNpc.TurnBodySubNpc.TurnBody(11, 0.0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, false)
+    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    fork:
+        branch:
+            # Heeey, PLAYER! Hold up a sec!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:101', true)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, true)
+    fork:
+        branch:
+            EventFlowSystemActor@Sound.EmitDoorSoundEventFlowSystemActor@Sound.EmitDoorSound('cDoorEnter')
+        branch:
+            Player.TurnBodyPlayer.TurnBody(12, 20.0)
+        branch:
+            SubNpc.TurnBodySubNpc.TurnBody(12, 0.0)
+    fork:
+        branch:
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            MainNpc.NpcEnterMainNpc.NpcEnter('Entrance', -2, 5.0)
+            MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+        branch:
+            Player.TurnBodyPlayer.TurnBody(11, 0.0)
+            Player.TurnNeckPlayer.TurnNeck(0, false)
+            Player.TurnBodyPlayer.TurnBody(0, 0.0)
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+            SubNpc.TurnBodySubNpc.TurnBody(0, 0.0)
+ 
+flow Root():
+    run PreDustCloth()
+entrypoint Event141:
+    run MncPreface()
+    # You're getting really good at this interior-design thing. But I've got a cool technique to show you that can take it to the next level!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:103', false)
+    # Remember how Wardell made the office furniture sparkle just by polishing it? Well…he showed me how to do it! With this neat trick, you can make a roo…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:104', false)
+    # Step one! Get your bod and your polishing duds ready with ! Step two! Face the furniture item and press ! Step three! Oh, wait… There is no step th…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:105', false)
+    # So that's it! If you spot any furniture that could do with an extra sparkle, try it out!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:106', true)
+    System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_01'] = true
+    run EndTalk()
+ 
+flow Root_Init():
+    MainNpc.NpcAISetPosMainNpc.NpcAISetPos(160.0, 230.0, 0.0, false, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    run DustClothTalk_Init()
+ 
+flow RunDustClothEvent(BlackBoardKey: str):
+    if EventFlowSystemActor.WherearenNpcOrderTypeEventFlowSystemActor.WherearenNpcOrderType() == 0:
+        # Thank you! Now, lemme see…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:021', true)
+        if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcGarden'):
+            System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_House'] = true
+            EventFlowSystemActor.WherearenSetNpcOrderStartStageEventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcRoomNo0')
+            EventFlowSystemActor.ReserveSkipSceneStartDemoEventFlowSystemActor.ReserveSkipSceneStartDemo()
+            System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcStageSelected', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+        else:
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+            EventFlowSystemActor.SetNpcAIBlackBoardByLabelEventFlowSystemActor.SetNpcAIBlackBoardByLabel('mnc', BlackBoardKey, 1, 1)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(1)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow UnlockDustClothChk():
+    if (not System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_01']) and (System.EventFlags['cWherearenPlayer:NewBuildCount'] >= 3):
+        run RunDustClothEvent(BlackBoardKey='UnlockDust')
+ 

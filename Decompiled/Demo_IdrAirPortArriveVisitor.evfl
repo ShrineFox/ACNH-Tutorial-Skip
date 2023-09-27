@@ -1,0 +1,29 @@
+flow Root():
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(50)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut0', '', 'CameraTag:Root', false, false, false, 0)
+    fork:
+        branch:
+            SubNpc.NpcRailMoveSubNpc.NpcRailMove(0, true, false, -1, -1, 0)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+            MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Clapping', true, '', 0, true)
+    fork:
+        branch:
+            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cNetDemoPlayerName', 'cDegit', 0, 0, '')
+            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cNetDemoPlayerLandName', 'cDegit', 0, 0, '')
+            # <50:3><115:0:cd00> from <115:2:cd00> is here to play!<10:8:003c0000>
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:020', false)
+        branch:
+            SubNpc.NpcRailMoveSubNpc.NpcRailMove(1, false, false, -1, -1, 0)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+    EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cVisitFriend', 0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    fork:
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cArriveVisitor')
+        branch:
+            SubNpc.NpcRailMoveSubNpc.NpcRailMove(2, false, false, -1, -1, 0)
+ 

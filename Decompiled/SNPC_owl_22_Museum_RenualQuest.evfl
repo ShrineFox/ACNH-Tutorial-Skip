@@ -1,0 +1,261 @@
+flow AfterRenualQuest():
+    # Hoo hoo! If it isn't PLAYER!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
+    if System.EventFlags['cLand:Museum3BuiltToday']:
+        # I am pleased to say the art exhibit is finally finished!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:401', false)
+    else:
+        # Thanks to you, the art gallery is now complete!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:402', false)
+    if System.EventFlags['cPlayer:Owl1stTalkMuseum1']:
+        if System.EventFlags['cPlayer:OwlShowPaintingMyself']:
+            # Your very own donations made it all possible, PLAYER. So, to you I am most grateful.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:403', false)
+        # The entrance to the gallery is but a jaunt up the stairs. Please, do take a gander at your leisure.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:404', false)
+        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+            # Ah! There is one more thing I should mention… All the collections are now complete! That goes for the art collection too. A wondrous achievement inde…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:405', false)
+            System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
+        elif System.EventFlags['cPlayer:FutaExplanationDonationComp']:
+            # Ah! There is one more thing I should mention… We are not accepting new donations for the other exhibits. We can only take donations to the art galler…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:406', false)
+            System.EventFlags['cPlayer:FutaExplanationDonationComp'] = false
+    else:
+        # Eh wot?! This is the first time I've seen you since the museum opened? I say! A brief tour is in order! You will find display rooms featuring donated…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:407', false)
+        if not System.EventFlags['cPlayer:OwlShowFossilMyself']:
+            System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
+            # To the left here are the bugs, and to the right you'll find our fish. And in the basement… You'll find the fossils! Indeed, they have been discovered…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_03', false)
+        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+            # In fact, so great has been the spirit of giving that our collection is 100 percent complete! New donations are no longer needed, but if you wish to l…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
+            System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
+        else:
+            # Ah! That's right! I have more good news to report. That is, the donation process has been streamlined. Henceforth we will accept multiple donations a…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
+        System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
+        System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
+    System.EventFlags['cPlayer:Owl1stTalkMuseum2'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow BeforeRenualQuest():
+    if (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() == `BlathersMuseumNoArt`) and (not System.EventFlags['cPlayer:OwlShowPaintingBeforeQuest']) and (not EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(60)) and (EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')):
+        # Hoo my! Why, PLAYER, is that a piece of art you have in your possession?!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:201', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Yes, yes, just as I suspected. Where DID you find it?!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:202', false)
+        else:
+            # Yes, well, I suspected as much. 'Tis not easy to come by a work of art such as this.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:203', false)
+        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+            case `BlathersTent`:
+                # I do dearly wish to acquire a piece of fine art. Alas, I must forgo it at this time. Once the museum is open and our collection is underway, then we …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:204', false)
+                run Sub_Event8()
+            case `BlathersMuseumNoArt`:
+                # I do dearly wish to acquire a piece of fine art. Alas, I must abstain at this time. I daresay we will be able to add art to our repertoire once the m…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:205', false)
+                run Sub_Event8()
+            default:
+                return
+ 
+flow DiveFish_nothing():
+    # Might I help you with anything else?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:102', false)
+    switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+        case 0:
+            run DonatePainting()
+        case 1:
+            run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
+        case 2:
+            run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
+        case 3:
+            run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
+        case 4:
+            run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
+ 
+flow DonatePainting(MultiComplete: bool = false, CompleteRoomType: int = 0):
+    if System.EventFlags['cPlayer:OwlPaintingQuestDeclined']:
+        # Hoo! Hoo, I say! Splendid! What no-doubt priceless piece of art will you be showing me this time?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:302', false)
+    else:
+        # Hoo, is that so?! What manner of art will you be showing me? I'm all aflutter!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:301', false)
+    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_5', 'cItemSelect', false)
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+        switch MainNpc.OwlDonationItemTypeMainNpc.OwlDonationItemType():
+            case `PictureOrSculpture`:
+                # RANDOM: Hoo WHAT?! Is that…[a|an] <125:0:0000>?… // Hoo! Unless I am mistaken— and I am not… // Hoo! I say, hoot! THAT is most surely […
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:135', false)
+                if System.EventFlags['cPlayer:OwlPaintingQuestDeclined']:
+                    # Of course, if you were to donate this <125:0:0000>… The museum could expand to include an art gallery! Hoo, what say you? Would you place it in my go…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:307', false)
+                else:
+                    # Now, if you were to donate this <125:0:0000>… Your generosity would enable us to add an art exhibit to our beloved museum. What say you? Might I give…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:306', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    # Jolly good and hoot hoot hooray! Splendid news indeed! I really can't thank you enough!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:310', false)
+                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, '"Default"')
+                    MainNpc.OwlDonationDoneMainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
+                    # It pleases me greatly to say that I will now be able to apply for an expansion to the museum! Hoo! So much to do! I must prepare for construction imm…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:311', false)
+                    System.EventFlags['cLand:MuseumGrowupEnable2'] = true
+                    System.EventFlags['cPlayer:FutaReadyForMuseum2'] = true
+                    System.EventFlags['cPlayer:OwlShowPaintingMyself'] = true
+                else:
+                    # Ah. I see. A sublime piece of art such as this would, indeed, be difficult to part with. And so I shall simply thank you for showing it to me. Now, b…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:308', false)
+                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, '"Default"')
+                    System.EventFlags['cPlayer:OwlPaintingQuestDeclined'] = true
+                    # Should you acquire any more works of art, I would, of course, be most grateful if you showed them to me.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:309', false)
+                    run Select5_Painting_Again()
+            case `PictureFakeOrSculptureFake`:
+                # My feathers, is that [a|an] <125:0:0000>?!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:138', false)
+                # Hmm…it gives one pause to see [a|an]<125:0:0000> up close like this.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:148', false)
+                # <10:12><10:10> HOO-WHAT?!<10:9> Upon closer examination, I have grave news to share with you! This work of art…is a FAKE!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:139', false)
+                # I do thank you for showing this to me, but, well… I really must return it to you. Hoo, sad but true.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:304', false)
+                System.EventFlags['cLifeSupportAchievement:DonateFake'] += 1
+                MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, '"Default"')
+                run Select5_Painting_Again()
+            default:
+                return
+    else:
+        # Changed your mind, have you?<10:4> Another time then. Your assistance is always welcome.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:105', true)
+ 
+flow QuestCheck():
+    if (not System.EventFlags['cLand:Museum2BuiltToday']) and (EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(60)):
+        if not System.EventFlags['cLand:OwlWantsPainting']:
+            System.EventFlags['cLand:OwlWantsPainting'] = true
+            System.EventFlags['cLand:FoxPreVisitReserve'] = true
+            # Why, PLAYER, I've been meaning to tell you the good news, hootie hoo! Thanks to your hard work and the support of the good folks of ISLAND… The museu…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:001', false)
+            System.EventFlags['cPlayer:OwlPaintingQuestExplain'] = true
+            System.EventFlags['cPlayer:OwlPaintingQuestReminder'] = true
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif System.EventFlags['cLand:MuseumGrowupEnable2']:
+            if not System.EventFlags['cPlayer:FutaReadyForMuseum2']:
+                # Hootie hoo! I have exciting news for you, PLAYER! A piece of art has been donated to the museum! Indeed, that means an art exhibit is in order at las…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:002', false)
+                System.EventFlags['cPlayer:FutaReadyForMuseum2'] = true
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        else:
+            if not System.EventFlags['cPlayer:OwlPaintingQuestExplain']:
+                # Why, PLAYER, I've been meaning to tell you the good news, hootie hoo! Thanks to your hard work and the support of the good folks of ISLAND… The museu…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:001', false)
+                System.EventFlags['cPlayer:OwlPaintingQuestExplain'] = true
+                System.EventFlags['cPlayer:OwlPaintingQuestReminder'] = true
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+            elif EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                run Select4_Painting()
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+            else:
+                run Select5_Painting()
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+        case `BlathersMuseumNoArt`:
+            run QuestCheck()
+            run SNPC_owl::NoTopicrun SNPC_owl::NoTopic()
+        case `BlathersMuseumArt`, `BlathersCafe`:
+            run SNPC_owl::NoTopicrun SNPC_owl::NoTopic()
+        default:
+            return
+ 
+flow Select4_Painting():
+    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5'):
+        # How may I be of service?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:103', false)
+        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+            case 0:
+                run DonatePainting()
+            case 1:
+                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
+            case 2:
+                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
+            case 3:
+                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
+    else:
+        run SNPC_owl_00_Common::Select3_Comprun SNPC_owl_00_Common::Select3_Comp()
+ 
+flow Select4_Painting_Again():
+    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5'):
+        # Might I help you with anything else?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:104', false)
+        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+            case 0:
+                run DonatePainting()
+            case 1:
+                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
+            case 2:
+                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
+            case 3:
+                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
+    else:
+        run SNPC_owl_00_Common::Comp_Againrun SNPC_owl_00_Common::Comp_Again()
+ 
+flow Select5_Painting():
+    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5'):
+        # How may I be of service?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:101', false)
+        switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            case 0:
+                run DonatePainting()
+            case 1:
+                run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
+            case 2:
+                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
+            case 3:
+                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
+            case 4:
+                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
+    else:
+        run SNPC_owl_00_Common::Select4run SNPC_owl_00_Common::Select4()
+ 
+flow Select5_Painting_Again():
+    if not EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5'):
+        run SNPC_owl_00_Common::Select4_Againrun SNPC_owl_00_Common::Select4_Again()
+    elif System.EventFlags['cLand:OwlFoundDiveFish']:
+        run DiveFish_nothing()
+    elif not System.EventFlags['cPlayer:OwlPaintingDiveFish']:
+        run DiveFish_nothing()
+    elif EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
+        # Might I help you with anything else?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:105', false)
+        switch EventFlowSystemActor.GeneralTalkChoice6EventFlowSystemActor.GeneralTalkChoice6():
+            case 0:
+                run SNPC_owl_23_Museum_DiveFish::DonateDiveFishrun SNPC_owl_23_Museum_DiveFish::DonateDiveFish()
+            case 1:
+                run DonatePainting()
+            case 2:
+                run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
+            case 3:
+                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
+            case 4:
+                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
+            case 5:
+                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
+    else:
+        run DiveFish_nothing()
+ 
+local flow Sub_Event8():
+    System.EventFlags['cPlayer:OwlShowPaintingBeforeQuest'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow TodayTalk1st():
+    if EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() == `BlathersMuseumNoArt`:
+        run QuestCheck()
+ 

@@ -1,0 +1,39 @@
+flow Check_fox():
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('CheckItemIndex', 0):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_fox', 'Root_ItemCheck')
+ 
+flow Enter_fox():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(13, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(18, true)
+    run AI_NPC_Common::Speakrun AI_NPC_Common::Speak(FlowName='SNPC_fox', EntryName='Root_EnterShop')
+    System.EventFlags['cLandTemp:FoxEnterBalloon'] = true
+    System.EventFlags['cLandTemp:ShopEnterMessageFlag'] = true
+ 
+flow Init():
+    MainNpc.SetSightRangeMainNpc.SetSightRange(0, 64)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckItemIndex', -1)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ItemPrice', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('EnterMessage', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('LeaveMessage', 0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cItemCheck', true)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+    if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cEnterBalloon', true)
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveBalloon', true)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+        MainNpc.NpcAISetPosByRailMainNpc.NpcAISetPosByRail(1, 0, true, 270.0)
+    else:
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cEnterFox', false)
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveFox', false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, false)
+ 
+flow Leave_fox():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_fox', EntryName='Root_LeaveShop')
+ 
+flow Root():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cFox', '', 'SNPC_fox', 'Root_Talk', false, true)
+ 

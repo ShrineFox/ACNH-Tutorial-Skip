@@ -1,0 +1,167 @@
+flow CompleteActing():
+    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    fork:
+        branch:
+            Player.TurnBodyPlayer.TurnBody(15, 0.0)
+        branch:
+            MainNpc.TurnBodyMainNpc.TurnBody(15, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    fork:
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('MncHappy', true, '', 0, false)
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('RequestWillingness', true, '', 0, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(100)
+ 
+flow Gate():
+    EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+    switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+        case 0:
+            run GateTalk_VisitChk()
+            run Sub_Event1()
+        case 1, 2, 3, 4, 5, 7:
+            run Sub_Event1()
+        case 6:
+            run GateTalk_ReturnMainErea()
+ 
+flow GateTalk_ReturnMainErea():
+    EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+    if System.EventFlags['cWherearenPlayer:SeqHousePhotoTutorialDone']:
+        # If you want to head back, go talk to the client real quick first, OK?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:006', false)
+    else:
+        # Hey, wait a second! Did you share your photo with the client?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:042', true)
+ 
+flow GateTalk_VisitChk():
+    if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+        # Whoa, hold up! If we're going back, we at least have to say something to the client first!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:082', true)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow ReturnMainErea():
+    # What's up?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:201', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # OK, let's head for home!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:007', true)
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+        System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+        System.EventFlags['cWherearenPlayer:VisitHouseReturn'] = true
+        run Demo_Common_Wherearen::CheckReturnWithTakumirun Demo_Common_Wherearen::CheckReturnWithTakumi()
+        if SubflowResults@2[0] == 0:
+            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+        else:
+            System.EventFlags['cWherearenPlayer:ReturnWithOtg'] = true
+            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+    else:
+        # Yeah? Well, I'll just relax here, then. Let me know when it's time to get going, OK?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:008', false)
+ 
+flow Root():
+    EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+    run Sub_Event1()
+ 
+local flow Sub_Event1():
+    switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+        case 0:
+            if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+                run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::TalkInGardenrun SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::TalkInGarden()
+            else:
+                run ReturnMainErea()
+        case 2:
+            if System.EventFlags['cWherearenPlayer:SeqFirstEditOngoing']:
+                run SNPC_mnc_10_WherearenEvent_HouseEdit::Talkrun SNPC_mnc_10_WherearenEvent_HouseEdit::Talk()
+            elif not System.EventFlags['cWherearenPlayer:Prohibit_SuspendEdit']:
+                # What's up? Aren't you still in the middle of work?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:001', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    # Seriously? You're really quitting?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:003', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        # Got it. I'll let the client know. Let's head back, then, OK?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:004', true)
+                        System.EventFlags['cPlayerTemp:WHEREAREN_GetDrink'] = false
+                        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cCancel')
+                        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+                        System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+                        run Demo_Common_Wherearen::CheckReturnWithTakumirun Demo_Common_Wherearen::CheckReturnWithTakumi()
+                        if SubflowResults@2[0] == 0:
+                            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+                            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+                        else:
+                            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+                            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+                    else:
+                        # Right? I knew it! Well then, give it your best!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:005', false)
+                else:
+                    # Gotcha. Well, go get 'em!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:002', false)
+            elif System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing']:
+                # Hm? Oh. If you're finished, you should go let the client know. I wonder how Lottie is doing.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:001_02', true)
+            else:
+                # Hey! If you're done working, you should let the client know.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:001_01', true)
+        case 3, 6:
+            run UnderShooting()
+        default:
+            return
+ 
+flow UnderShooting():
+    EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+    if System.EventFlags['cWherearenPlayer:SeqHousePhotoTutorialDone']:
+        # That excellent photo you took is already uploaded to the Happy Home Network, you know. But if you took more than one and you wanna change out the fea…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:022', false)
+    else:
+        # RANDOM: When you feel like you've got just the … // I'm not the best photographer, but I be…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:041', true)
+ 
+flow VisitTalk():
+    System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Garden'] = false
+    if System.EventFlags['cWherearenPlayer:SeqFirstEditOngoing']:
+        run SNPC_mnc_10_WherearenEvent_HouseEdit::VisitTalk_FristEditrun SNPC_mnc_10_WherearenEvent_HouseEdit::VisitTalk_FristEdit()
+    elif System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+        run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::VisitTalk_FristVisitCustomerrun SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::VisitTalk_FristVisitCustomer()
+    elif EventFlowSystemActor.IsResumeWherearenOrderEventFlowSystemActor.IsResumeWherearenOrder():
+        run NNPC_Spot_WherearenGarden::EnterGardenrun NNPC_Spot_WherearenGarden::EnterGarden(Main=SubNpc, Sub=MainNpc)
+        # Here we are! OK, let's go show folks how work gets done!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:102', true)
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+        EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('')
+    else:
+        if EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cCustomer'):
+            run NNPC_Spot_WherearenGarden::EnterGardenrun NNPC_Spot_WherearenGarden::EnterGarden(Main=SubNpc, Sub=MainNpc)
+        else:
+            run NNPC_Spot_WherearenGarden::EnterGardenWithoutCustomerrun NNPC_Spot_WherearenGarden::EnterGardenWithoutCustomer()
+        EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+        if (not EventFlowSystemActor.IsSharehouseOrderCustomerEventFlowSystemActor.IsSharehouseOrderCustomer()) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('alp', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('rct', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('hgs', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('kpp', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('boa', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('bey', 'cCustomer')):
+            # Here we are at <115:9:cd00>'s vacation home!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:103', false)
+        else:
+            # Here we are at <115:9:cd00>'s vacation home!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:104', false)
+ 
+flow VisitTalk_Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    if System.EventFlags['cWherearenPlayer:SeqFirstEditOngoing']:
+        MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+    else:
+        if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+            if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerArrivalTalk']:
+                MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+            else:
+                MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+                MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+                MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+        elif EventFlowSystemActor.IsResumeWherearenOrderEventFlowSystemActor.IsResumeWherearenOrder():
+            if EventFlowSystemActor.WherearenIsResumeNpcLiveTogetherEventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
+                MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(2, false, false, false, false, true)
+            MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, true, false)
+        else:
+            MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+ 

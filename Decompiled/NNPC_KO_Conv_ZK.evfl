@@ -1,0 +1,109 @@
+flow Root():
+    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhraseMainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+        fork:
+            branch:
+                Player.TurnBodyPlayer.TurnBody(0, 0.0)
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+            branch:
+                SubNpc.TurnBodySubNpc.TurnBody(0, 0.0)
+        # You and I are like [a|an]<110:7:cd00> and [a|an]<135:5:cd00>… Reckon we got nothing in common, <110:5>.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:201', false)
+        MainNpc.NpcCopyPhraseMainNpc.NpcCopyPhrase()
+        Player.TurnNeckPlayer.TurnNeck(1, false)
+        # We should do something about that! What if I started using your cool retro lingo? <50:3><110:5>… I sound like you now, <110:5>!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:202', false)
+        Player.TurnNeckPlayer.TurnNeck(0, false)
+        # I ain't retro! And you just sound like you, sayin' "<110:5>."
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:203', false)
+        Player.TurnNeckPlayer.TurnNeck(1, false)
+        # Speaking in sync is only our first step down this road together! Where this journey takes us next is your move, <110:5>!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:204', false)
+        fork:
+            branch:
+                Player.TurnNeckPlayer.TurnNeck(0, false)
+            branch:
+                SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+        # I ain't on no journey with you, pal. So don't bother with syncin' us up!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:205', false)
+    elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+        fork:
+            branch:
+                Player.TurnBodyPlayer.TurnBody(0, 0.0)
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+            branch:
+                SubNpc.TurnBodySubNpc.TurnBody(0, 0.0)
+        # I don't care! They're all goofy, how's that?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:001', false)
+        Player.TurnNeckPlayer.TurnNeck(1, false)
+        # I'm just asking for an honest opinion. Is that so hard?
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:002', false)
+        # <20:3:cd06><20:2:cd03>Can you get me out of this, <110:3>?<20:2:cd08> <50:3><110:31:cd01> is buggin' me to choose his "best pose"… Can you pick one, …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:003', false)
+        fork:
+            branch:
+                SubNpc.TurnBodySubNpc.TurnBody(10, 0.0)
+            branch:
+                Player.TurnBodyPlayer.TurnBody(1, 0.0)
+        # <10:12>TA-DA!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:004', false)
+        # And the second one?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:005', false)
+        # <10:12>Like so!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:006', false)
+        # And the third, and last, one?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:007', false)
+        # <10:12>Oh HO!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:008', false)
+        # There. Now let's get this over with. <20:3:cd06><20:2:cd08>Which pose was the least goofy?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:009', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0, 1, 2:
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                    case 0:
+                        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+                        Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+                        # Sure, why not?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:010', false)
+                    case 1:
+                        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+                        Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+                        # There. That's that, I guess.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:014', false)
+                    case 2:
+                        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+                        Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+                        # Thanks for ending that nonsense.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:015', false)
+                MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+                # <20:3:cd05>What was the point <20:2:cd07>of all that nincompoopery, anyway?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:011', false)
+                Player.TurnNeckPlayer.TurnNeck(1, false)
+                # It's brand recognition, buddy! Picture one of these going viral, then picture me riding that wave of attention as long as it lasts!
+                SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:012', false)
+                SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('SmugFace', true, '', 0, false)
+                # I ain't your buddy, and I got no idea what you're blatherin' about.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:013', false)
+    else:
+        fork:
+            branch:
+                Player.TurnBodyPlayer.TurnBody(1, 0.0)
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+            branch:
+                SubNpc.TurnBodySubNpc.TurnBody(0, 0.0)
+        # How do you come up with all your confoundin' flapdoodle, anyways?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:101', false)
+        Player.TurnNeckPlayer.TurnNeck(1, false)
+        # I do have a way with words, huh? Well, all my content is pure, original <110:31:cd01>, <110:5>!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:102', false)
+        Player.TurnNeckPlayer.TurnNeck(0, false)
+        # You're misunderstandin' me! I mean, all those highfalutin' horsefeathers you sprinkle all over everyone… Where do you even come up with stuff like, "…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:103', false)
+        Player.TurnNeckPlayer.TurnNeck(1, false)
+        # Don't you agree the mouthfeel of the <110:7:cd01> on this island is to die for?
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:104', false)
+        # Eeyuugh! Mouthfeel?! Now you've gone and ruined <110:7:cd01> for everyone in earshot!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_ZK:105', false)
+ 

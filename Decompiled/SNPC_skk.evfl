@@ -1,0 +1,127 @@
+flow Boc_DC_1st():
+    run Event4()
+ 
+flow Boc_DC_Buy():
+    run Event33()
+ 
+flow Root():
+    if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(22, -1, true, true) != 0:
+        # Sorry, chum. I'm done for the day. Hate to disappoint, but...tell you what. Swing by again next time, eh?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:040', false)
+    elif EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        if System.EventFlags['cPlayer:SkkTalkBeforeFlag']:
+            if System.EventFlags['cPlayer:SkkTalkFirstTimeCommune']:
+                # 'Allo! Welcome to… Oh, crikey! It's my old chum! Good to see your face again.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:041', false)
+                # I visit this island now and again to sell my wares. Hope you'll swing by whenever I'm around.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:042', false)
+                # If it's awright with you, why not take a look-see at my offerings on this fine day?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:002', false)
+                System.EventFlags['cPlayer:SkkTalkFirstTimeCommune'] = false
+                System.EventFlags['cPlayer:SkkTalkTodayFlag'] = true
+            elif not System.EventFlags['cPlayer:SkkTalkTodayFlag']:
+                System.EventFlags['cPlayer:SkkTalkTodayFlag'] = true
+entrypoint Event4:
+                # Welcome, chum! Have a look. No rush, no rush at all.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:003', false)
+            elif System.EventFlags['cPlayer:SkkPurchaseToday']:
+entrypoint Event34:
+                # 'Allo! Lookin' to buy somethin' else, eh? There's a good chum for ya!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:005', false)
+            else:
+entrypoint Event33:
+                # 'Allo! So then, somethin' caught your fancy after all, eh?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:004', false)
+        else:
+            System.EventFlags['cPlayer:SkkTalkBeforeFlag'] = true
+            # Welcome! …Well, well. What do we have here? Haven't seen your face before. The name's Kicks. You mighta already guessed it, but I'm the source for sh…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:001', false)
+            # If it's awright with you, why not take a look-see at my offerings on this fine day?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:002', false)
+        fork:
+            branch:
+                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+            branch:
+                EventFlowSystemActor@UI.UIShopBuyAppearEventFlowSystemActor@UI.UIShopBuyAppear('cShoes')
+entrypoint Event10:
+        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemPrice', 1)
+            # Awright. <50:3><125:0:0000>… Comes to <90:26:0001>. So…you buyin'?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:020', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+                run skk_Again_Look()
+            elif not EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
+                # Crikey! I'm afraid you're already loaded up on items.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:011', false)
+                fork:
+                    branch:
+                        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                    branch:
+                        EventFlowSystemActor@Sub.MessageSuspendEventFlowSystemActor@Sub.MessageSuspend()
+                    branch:
+                        EventFlowSystemActor@Sub1.UIShopBuyDisappearEventFlowSystemActor@Sub1.UIShopBuyDisappear()
+            elif MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.0):
+                # Very much obliged!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:013', true)
+                run Demo_Common::Demo_Cmn_Shoppingrun Demo_Common::Demo_Cmn_Shopping()
+                # I appreciate your business, my chum.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:014', false)
+                if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+                    System.EventFlags['cPlayer:SkkPurchaseToday'] = true
+                else:
+                    System.EventFlags['cPlayerVisit:DC_SkkBuyFlag'] = true
+                run skk_Again_Buy()
+            else:
+                # What's this now? Oh…crikey. Looks like you're short on Bells today!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:012', false)
+                run skk_Again_NoMoney()
+        else:
+            fork:
+                branch:
+                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                branch:
+                    EventFlowSystemActor@Sub.UIShopBuyDisappearEventFlowSystemActor@Sub.UIShopBuyDisappear()
+            if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+                if System.EventFlags['cPlayer:SkkPurchaseToday']:
+                    # Much obliged!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:008', false)
+                else:
+                    # Nothin' standin' out? Not a problem. Come by and visit anytime, eh?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:007', false)
+            else:
+                if System.EventFlags['cPlayerVisit:DC_SkkBuyFlag']:
+                    # Much obliged!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:008', false)
+                else:
+                    # Nothin' standin' out? Not a problem. Come by and visit anytime, eh?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:007', false)
+    else:
+        if not System.EventFlags['cPlayerVisit:DC_SkkTalkFlag']:
+            System.EventFlags['cPlayerVisit:DC_SkkTalkFlag'] = true
+            run Boc_DC_1st()
+        elif System.EventFlags['cPlayerVisit:DC_SkkBuyFlag']:
+            run Skk_DC_Buy_Again()
+        else:
+            run Boc_DC_Buy()
+ 
+flow Skk_DC_Buy_Again():
+    run Event34()
+ 
+flow skk_Again_Buy():
+    # Anything else you wanna buy?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:030', false)
+    run Event128()
+ 
+flow skk_Again_Look():
+    # Anything else you wanna see?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:031', false)
+entrypoint Event128:
+    EventFlowSystemActor.UIShopBuyReselectionAppearEventFlowSystemActor.UIShopBuyReselectionAppear()
+    run Event10()
+ 
+flow skk_Again_NoMoney():
+    # Care to take a gander at my other wares?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/skk/SP_skk:032', false)
+    run Event128()
+ 

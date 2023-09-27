@@ -1,0 +1,20 @@
+flow DisableWorkMotion():
+    MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+    MainNpc.NpcAISetExitStrcMainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+ 
+flow Init():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
+        if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+            run DisableWorkMotion()
+ 
+flow Root():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cOfficeWait', '', 'SNPC_sza', 'Root', true, true)
+        if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
+            MainNpc.NpcAISetExitStrcMainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+        elif (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')) and (not EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()) and (not System.EventFlags['cPlayer:RcoFirstTalkNewOffice']):
+            run DisableWorkMotion()
+    else:
+        MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_sza', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+ 

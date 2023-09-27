@@ -1,0 +1,65 @@
+flow BackToSelect():
+    EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(0, 0, 0, 1, 1)
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cMyDesignTitle', 0)
+        EventFlowSystemActor.UIMyDesignExchangeInfoHandlingEventFlowSystemActor.UIMyDesignExchangeInfoHandling('cUpload')
+        switch EventFlowSystemActor.UIMyDesignExchangeUploadResultEventFlowSystemActor.UIMyDesignExchangeUploadResult():
+            case 0:
+                run BackToSelect()
+            case 1:
+                System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList'] = false
+                # Would you like to post another creation?
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2427', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+                else:
+                    run NextSelect()
+            case 2:
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    else:
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+ 
+flow NextSelect():
+    run Event8()
+ 
+flow RegistAuthor():
+    # Please Read Before Posting Designs The custom designs you post can be viewed by other players around the world. Please do not post designs that conta…
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2421', true)
+    EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+    EventFlowSystemActor.NetGetDesignerIDEventFlowSystemActor.NetGetDesignerID(true)
+    EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    else:
+        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+        # Saving. Do not touch .
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+        EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cOwnDesignerIDD', 'cDegit', 0, 0, '')
+        # Thank you for your interest in posting designs! You are now registered as a creator. Your ID is <140:17:cd00>. You can check your creator ID at any t…
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2425', true)
+ 
+flow Root():
+    if EventFlowSystemActor.HasAbleDisplayMyDesignEventFlowSystemActor.HasAbleDisplayMyDesign():
+        run Obj_WorldMyDesignGallery_02_SubFlow::PreCheckConnectionrun Obj_WorldMyDesignGallery_02_SubFlow::PreCheckConnection()
+        if EventFlowSystemActor.NetHasDesignerIDEventFlowSystemActor.NetHasDesignerID():
+entrypoint Event8:
+            run Obj_WorldMyDesignGallery_02_SubFlow::GetMyIdListrun Obj_WorldMyDesignGallery_02_SubFlow::GetMyIdList()
+        else:
+            run RegistAuthor()
+            run Obj_WorldMyDesignGallery_02_SubFlow::GetMyIdListrun Obj_WorldMyDesignGallery_02_SubFlow::GetMyIdList()
+            # Please select a design to post.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2436', true)
+        if EventFlowSystemActor.IsReachedUploadCountMaxEventFlowSystemActor.IsReachedUploadCountMax():
+            # You've reached the limit for the number of custom designs you can post. Please select one to delete.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2428', false)
+            run Obj_WorldMyDesignGallery_05_MyOpus::FullModerun Obj_WorldMyDesignGallery_05_MyOpus::FullMode()
+        else:
+            run BackToSelect()
+    else:
+        # You don't seem to have any custom designs of your own. Please try again after you've made a custom design.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2429', true)
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+ 

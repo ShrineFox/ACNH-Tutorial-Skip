@@ -1,0 +1,32 @@
+flow PumpkinSeeding():
+    if (EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(13227, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')) and (not System.EventFlags['cPlayer:RcmExplainPumpkinFlag']):
+        # Ah, <125:0:0200>? These are a limited-time offer for the month of October! __...October!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:132_01', false)
+        System.EventFlags['cPlayer:RcmExplainPumpkinFlag'] = true
+        if (not System.EventFlags['cPlayer:SloExplainPumpkinColorFlag']) and (not System.EventFlags['cPlayer:ExplainPumpkinColorFlag']):
+            # You can harvest these pumpkin starts a few days after you plant them. And they'll grow all by themselves, but you'll get a better harvest if you wate…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:132_02', false)
+            # Pumpkins grow in four colors: orange, green, yellow, and white. You won't know what color you're going to get until they start growing. It makes harv…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:132_03', false)
+            System.EventFlags['cPlayer:ExplainPumpkinColorFlag'] = true
+            System.EventFlags['cPlayer:SloExplainPumpkinColorFlag'] = true
+        # I can sell these as singles or in bulk. How many would you like?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:132_04', false)
+        run Select()
+ 
+flow Root():
+    run PumpkinSeeding()
+    # <50:3><125:0:0200>? I can sell in singles or in bulk. How many would you like?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:131', false)
+    run Select()
+ 
+flow Select():
+    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+        case 0:
+            run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Processrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+        case 1:
+            SubflowResults[0] = 1
+            run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Processrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+        case 2:
+            run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancelrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
+ 

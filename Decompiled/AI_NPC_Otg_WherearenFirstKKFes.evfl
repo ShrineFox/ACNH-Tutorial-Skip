@@ -1,0 +1,16 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+    if System.EventFlags['cWherearenPlayer:FirstKKFesStep'] != 1:
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('Speak', 1)
+    else:
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('Speak', 0)
+ 
+flow Root():
+    if not System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes']:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('Speak', 1):
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_otg_27_WherearenEvent_KKFes')
+    else:
+        MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', '', '', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
+ 

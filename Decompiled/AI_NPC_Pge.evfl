@@ -1,0 +1,29 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(17, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(19, true)
+ 
+flow Leave_pge():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_pge_04_Out')
+ 
+flow Root():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, true)
+    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cSitdownCafe', true)
+        if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'SNPC_pge_02_Takeout', 'Root', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+        else:
+            if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+                MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+            MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cExitCafe', false)
+            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'SNPC_pge_02_Takeout', 'Root', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+    else:
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, true)
+        if MainNpc.NpcIsEquipedHandToolMainNpc.NpcIsEquipedHandTool(4):
+            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'SNPC_pge_02_Takeout', 'Root', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cPgePostTalk', '', 'SNPC_pge_02_Takeout', 'Root', false, false)
+    MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cPgeWaitDishcloth')
+ 

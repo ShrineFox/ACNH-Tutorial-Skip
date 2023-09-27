@@ -1,0 +1,272 @@
+flow About_MyHome_v200():
+    if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
+        if System.EventFlags['cPlayer:PlayerMovingOrderHouseMoveInIsland']:
+            if System.EventFlags['cPlayer:ReturnMyHomeMoving8000PMoving']:
+                # Now, I'm sure you're quite eager to talk about your home, hm? But before we get to that, I believe we have one minor piece of unfinished business to …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1005_01', false)
+            else:
+                # Now, I'm sure you're quite eager to talk about your home, hm? But before we get to that, I believe we have one minor piece of unfinished business to …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1005', false)
+            System.EventFlags['cPlayer:RcoMoveHouseReserved'] = false
+            System.EventFlags['cPlayer:PlayerMovingOrderHouseMoveInIsland'] = false
+        else:
+            run SNPC_rco_10_Common_MoveHouse::MoveMyHouseOngoingrun SNPC_rco_10_Common_MoveHouse::MoveMyHouseOngoing()
+    elif System.EventFlags['cPlayer:RcoChangeHouseDesignReserved']:
+        if System.EventFlags['cPlayer:PlayerMovingOrderChangeHouseDesign']:
+            # Now, I'm sure you're quite eager to talk about your home, hm? But before we get to that, I believe we have one minor piece of unfinished business to …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1001', false)
+            # Just before moving here, you requested some changes to the exterior of your home, did you not? Well, I am pleased to inform you that I am more than w…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1002_01', false)
+            # In fact, everything should be ready by tomorrow. Quite impressive, hm? I hope you're pleased with it.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1003', false)
+            System.EventFlags['cPlayer:PlayerMovingOrderChangeHouseDesign'] = false
+        else:
+            # Your exterior customization order will be ready tomorrow morning. I know! It's all very exciting, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:010', false)
+    elif System.EventFlags['cPlayer:RcoOrderedHouseBuilt']:
+        if System.EventFlags['cPlayer:PlayerMovingOrderHouseBuilt']:
+            # Now, I'm sure you're quite eager to talk about your home, hm? But before we get to that, I believe we have one minor piece of unfinished business to …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1001', false)
+            # Just before moving here, you requested an expansion for your living space, did you not? Well, I am pleased to inform you that I am more than willing …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1002', false)
+            # In fact, everything should be ready by tomorrow. Quite impressive, hm? I hope you're pleased with it.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1003', false)
+            System.EventFlags['cPlayer:PlayerMovingOrderHouseBuilt'] = false
+        else:
+            switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+                case `PlacedTent`:
+                    # Yes, I think your home will be ready by tomorrow. I'm so excited for you, PLAYER!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:261_01', false)
+                case `BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`:
+                    # Hm, I think the construction you requested will be coming along.<10:4> Yes, yes, I know you're excited!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:261', false)
+                default:
+                    return
+    elif not System.EventFlags['cPlayer:RcoStorageExpansionReserved']:
+        run RcoChkAboutMyHomeSel()
+        switch SubflowResults@8[0]:
+            case 0, 1, 2, 3, 4, 5:
+                run NotOpenStorageExpansion()
+            case 6:
+                # Time to talk about your home, hm? What shall we discuss?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1192', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    case 0:
+                        run SNPC_rco_10_Common_ExpandHouseStorage::Rootrun SNPC_rco_10_Common_ExpandHouseStorage::Root()
+                    case 1:
+                        run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                    case 2:
+                        run Rco_AboutMyHome_Cancel()
+            case 7:
+                if System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']:
+                    # Time to talk about your home, hm? What shall we discuss?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1191', false)
+                    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                        case 0:
+                            run SNPC_rco_10_Common_ExpandHouseStorage::Rootrun SNPC_rco_10_Common_ExpandHouseStorage::Root()
+                        case 1:
+                            run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                        case 2:
+                            run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                        case 3:
+                            run Rco_AboutMyHome_Cancel()
+                else:
+                    run RcoChkTalkAboutMoveMyHome()
+    elif System.EventFlags['cPlayer:PlayerMovingReservedStorageExpand']:
+        # Now, I'm sure you're quite eager to talk about your home, hm? But before we get to that, I believe we have one minor piece of unfinished business to …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1001', false)
+        # Before you moved here, I heard you requested to expand your home storage. Fear not! I am more than willing to take on the job! Yes, yes!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1021', false)
+        # In fact, everything should be ready by tomorrow. Quite impressive, hm? I hope you're pleased with it.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1003', false)
+        System.EventFlags['cPlayer:PlayerMovingReservedStorageExpand'] = false
+    else:
+        # I should have your home-storage expansion finished by tomorrow morning. Exciting, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1116', false)
+ 
+flow ChkAboutStorageExpansion():
+    if not System.EventFlags['cPlayer:RcoStorageExpansionLevel']:
+        run SelEnable_ExpandStorage()
+    elif EventFlowSystemActor.FlagSystemIntValue4EventFlowSystemActor.FlagSystemIntValue4(4, 'cPlayer:RcoStorageExpansion_v200_AddLevel') in (0, 1, 2):
+        run SelEnable_ExpandStorage()
+    elif EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+        SubflowResults[0] = 1
+    else:
+        SubflowResults[0] = 4
+ 
+flow MoveOpen_NotOpenStorageExpansion():
+    switch SubflowResults@6[0]:
+        case 3:
+            # Alright, I've kept you waiting long enough… How can I help you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:056', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                case 0:
+                    run RcoCheckUpgradeMyHome()
+                case 1:
+                    run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                case 2:
+                    run Rco_AboutMyHome_Cancel()
+        case 4:
+            # Alright, I've kept you waiting long enough… How can I help you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:058', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                case 0:
+                    run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                case 1:
+                    run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                case 2:
+                    run Rco_AboutMyHome_Cancel()
+        case 5:
+            # Alright, I've kept you waiting long enough… How can I help you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:057', false)
+            switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                case 0:
+                    run RcoCheckUpgradeMyHome()
+                case 1:
+                    run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                case 2:
+                    run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                case 3:
+                    run Rco_AboutMyHome_Cancel()
+        default:
+            return
+ 
+flow NotOpenStorageExpansion():
+    switch SubflowResults@6[0]:
+        case 0:
+            run RcoCheckUpgradeMyHome()
+        case 1:
+            # Time to talk about your home, hm? Right now, I can assist you with home customization. Interested?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:053', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+            else:
+                run Rco_AboutMyHome_Cancel()
+        case 2:
+            # Time to talk about your home, hm? What shall we discuss?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:052', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                case 0:
+                    run RcoCheckUpgradeMyHome()
+                case 1:
+                    run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                case 2:
+                    run Rco_AboutMyHome_Cancel()
+        case 3:
+            if System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']:
+                # Time to talk about your home, hm? What shall we discuss?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:055', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    case 0:
+                        run RcoCheckUpgradeMyHome()
+                    case 1:
+                        run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                    case 2:
+                        run Rco_AboutMyHome_Cancel()
+            else:
+                run RcoChkTalkAboutMoveMyHome()
+        case 4:
+            if System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']:
+                # Time to talk about your home, hm? There are a few ways I can assist you. What would you like to do?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:051', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    case 0:
+                        run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                    case 1:
+                        run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                    case 2:
+                        run Rco_AboutMyHome_Cancel()
+            else:
+                run RcoChkTalkAboutMoveMyHome()
+        case 5:
+            if System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']:
+                # Time to talk about your home, hm? What shall we discuss?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:054', false)
+                switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                    case 0:
+                        run RcoCheckUpgradeMyHome()
+                    case 1:
+                        run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                    case 2:
+                        run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                    case 3:
+                        run Rco_AboutMyHome_Cancel()
+            else:
+                run RcoChkTalkAboutMoveMyHome()
+ 
+flow RcoCheckUpgradeMyHome():
+    if System.EventFlags['cPlayer:PlayerLoanRepaying']:
+        # Hm… I hate to disappoint, but I can't take expansion requests while you have an outstanding loan balance… Remember, you can make payments at the Nook…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:262', false)
+    else:
+        run SNPC_rco_10_Common_UpgradeMyhome::Rootrun SNPC_rco_10_Common_UpgradeMyhome::Root()
+ 
+flow RcoChkAboutMyHomeSel():
+    switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+        case `PlacedTent`:
+            SubflowResults[0] = 0
+        case `BaseHouse`, `HouseExpansion1`, `BackRoom`:
+            if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+                SubflowResults[0] = 0
+            else:
+                SubflowResults[0] = 3
+        case `LeftRoom`, `RightRoom`, `SecondFloor`:
+            if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+                SubflowResults[0] = 2
+            else:
+                SubflowResults[0] = 5
+        case `Basement`:
+            run ChkAboutStorageExpansion()
+        default:
+            return
+ 
+flow RcoChkTalkAboutMoveMyHome():
+    # So you'd like to talk about your home, hm?<10:4> Oh! But… There's something I should tell you first. Along with layout assistance, I'm also ready to …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:012', false)
+    System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome'] = true
+    switch SubflowResults@8[0]:
+        case 0, 1, 2, 3, 4, 5:
+            run MoveOpen_NotOpenStorageExpansion()
+        case 7:
+            # Alright, I've kept you waiting long enough… How can I help you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1193', false)
+            switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                case 0:
+                    run SNPC_rco_10_Common_ExpandHouseStorage::Rootrun SNPC_rco_10_Common_ExpandHouseStorage::Root()
+                case 1:
+                    run SNPC_rco_10_Common_ChangeHouseDesign::Rootrun SNPC_rco_10_Common_ChangeHouseDesign::Root()
+                case 2:
+                    run SNPC_rco_10_Common_MoveHouse::Rootrun SNPC_rco_10_Common_MoveHouse::Root()
+                case 3:
+                    run Rco_AboutMyHome_Cancel()
+        default:
+            return
+ 
+flow Rco_AboutMyHome_Cancel():
+    # Oh, you don't need any help?<10:4> Well, I'll be here to chat if you have any questions about your home!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:101', false)
+    if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+        run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+ 
+flow Root():
+    if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+        run About_MyHome_v200()
+    elif System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+        # Of course, of course! Let's talk about them! We can discuss your own home or suggest designs to one of our other residents. Which will it be?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1200', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                run About_MyHome_v200()
+            case 1:
+                run SNPC_rco_11_CoordinateNpcHouse_Office::Rootrun SNPC_rco_11_CoordinateNpcHouse_Office::Root()
+            case 2:
+                run Rco_AboutMyHome_Cancel()
+    else:
+        run About_MyHome_v200()
+ 
+flow SelEnable_ExpandStorage():
+    if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+        SubflowResults[0] = 6
+    else:
+        SubflowResults[0] = 7
+ 

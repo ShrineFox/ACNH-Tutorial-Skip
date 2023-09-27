@@ -1,0 +1,25 @@
+flow PhoneReceiving():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    Player.SmartPhonePlayer.SmartPhone(0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
+    Player.SmartPhonePlayer.SmartPhone(4)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+    run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(2, 'Phone_Recieving')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhonePlayer.SmartPhone(5)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+ 
+flow Root():
+    # Oh, hey! First time playing with friends? Have I got an app for you! It's called Best Friends List, and I can honestly tell you, without exaggeration…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:101', true)
+    run PhoneReceiving()
+    System.EventFlags['cPlayer:MainmenuFriendList'] = true
+    EventFlowSystemActor.UIMenuDeviceAppearEventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cFriendList')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+    # Aaaand you're all set! The app's got instructions built in, so just open it after you meet up with a friend.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:111', true)
+    Player.SmartPhonePlayer.SmartPhone(1)
+ 

@@ -1,0 +1,37 @@
+flow DIYExplain():
+    if not System.EventFlags['cPlayer:MainmenuRecipe']:
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_62_Event_MayDay:016', false)
+        System.EventFlags['cPlayerTemp:RecommendDIYtrialMayDay'] = true
+ 
+flow Root():
+    if System.EventFlags['cPlayer:MainmenuRecipe']:
+        if not System.EventFlags['cPlayer:CompleteEventMayDay']:
+            run Sub_grp_Event1()
+    else:
+        if not System.EventFlags['cPlayerTemp:RecommendDIYtrialMayDay']:
+            run Sub_grp_Event1()
+ 
+local flow Sub_grp_Event1():
+    if System.EventFlags['cPlayer:GetMayDayTicket']:
+        if System.EventFlags['cPlayer:UseMayDayTicket']:
+            # Oh! I heard you took your May Day Tour, PLAYER! We spared no effort putting the event together. So tell me… How did it go?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_62_Event_MayDay:008', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                # I'm so glad to hear that! Believe me, when you're happy, I'm happy.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_62_Event_MayDay:009', false)
+            else:
+                # Oh? Perhaps…that sort of activity isn't necessarily your speed, hm? I do hope it brought even the tiniest smile to your face, though. Yes, yes, that …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_62_Event_MayDay:009_01', false)
+            if System.EventFlags['cPlayer:ClearMayDayTour']:
+                # I also heard that you managed to make your way through the maze! Maybe it was too easy for an adventurer of your skill, hm?<10:4> Well, I'm just happ…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_62_Event_MayDay:010', false)
+            # Allow me to once again express my gratitude for everything you and the other residents do. You can be certain that Nook Inc. will continue doing what…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_62_Event_MayDay:011', false)
+            System.EventFlags['cPlayer:CompleteEventMayDay'] = true
+            System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif System.EventFlags['cPlayer:DodHeardAboutMayDayTravelTicket']:
+            switch System.EventFlags['cPlayer:RcoHeardAboutMayDayTravelTicket']:
+                default:
+                    return
+ 

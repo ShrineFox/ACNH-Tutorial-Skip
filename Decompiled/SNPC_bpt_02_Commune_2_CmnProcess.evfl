@@ -1,0 +1,137 @@
+flow Bpt_Finish_FortuneTelling():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTellingEnd_ShineWeakly')
+    EventFlowSystemActor.SystemBGMVolumeChangeEventFlowSystemActor.SystemBGMVolumeChange(-9.0, 1.0, 0, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTellingEnd_GoOut')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(65)
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cCandle_Off')
+    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.75, 0, 0.0)
+    fork:
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(35)
+            if SubflowResults@4[3] in (2, 3):
+                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(35)
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(53)
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cEnvEffect_Out')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(50)
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cWaiting')
+    if SubflowResults@4[3] not in (0, 1):
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+        Player.PlayerChangeStateDemoTalkPlayer.PlayerChangeStateDemoTalk()
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(133)
+    EventFlowSystemActor.SystemBGMVolumeResetEventFlowSystemActor.SystemBGMVolumeReset(0.0, 0, 0.0)
+ 
+flow Bpt_PayExtraFee():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(10000, true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(156)
+ 
+flow Bpt_PayFortuneFee():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(1000, true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(155)
+ 
+flow Bpt_Start_FortuneTelling():
+    if SubflowResults@4[3] in (0, 1):
+        # Now please…close your eyes…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:021_01', true)
+    else:
+        # Please…close your eyes again.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:021_02', true)
+    Player.PlayerFortuneCloseEyesPlayer.PlayerFortuneCloseEyes()
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cEnvEffect_In')
+    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 3, 0.0)
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(53)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WindChime', -1)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(150)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(131)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cCandle_On')
+    EventFlowSystemActor.SystemBGMVolumeResetEventFlowSystemActor.SystemBGMVolumeReset(0.0, 0, 0.0)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(132)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+    MainNpc.NpcStartASMainNpc.NpcStartAS('BptASpell', false, true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(7)
+    fork:
+        branch:
+            switch SubflowResults@4[3]:
+                case 0, 1:
+                    # <100:2>Keeee ha mo-ataa… Keeee ha mo-nurataa… LLA SWONK LATSYRC EHT!</100:2><10:8:003c0000>
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:022_01', false)
+                case 2:
+                    # <100:2>Keeee ha mo-ataa… Keeee ha mo-nurataa… RETSASID DIOVA!</100:2><10:8:003c0000>
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:022_02', false)
+                case 3:
+                    # <100:2>Keeee ha mo-ataa… Keeee ha mo-nurataa… SELUR PIHSDNEIRF!</100:2><10:8:003c0000>
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:022_03', false)
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
+            EventFlowSystemActor@Sub.ChangeCommuneDecoFortuneStateEventFlowSystemActor@Sub.ChangeCommuneDecoFortuneState('cFortuneTellingStart_Shine')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    if SubflowResults@4[3] not in (0, 1):
+        EventFlowSystemActor.WaitCommuneDecoFortuneDisplayContentPreparationEventFlowSystemActor.WaitCommuneDecoFortuneDisplayContentPreparation()
+    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(3)
+    fork:
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(135)
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+        branch:
+            MainNpc.NpcStartASMainNpc.NpcStartAS('BptADivine', false, true)
+            # <10:10><100:2><10:12><100:13>YEEeeeeee!</100:13></100:2>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:023', false)
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
+            run CrystalBall_Flash()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    if SubflowResults@4[3] in (0, 1):
+        EventFlowSystemActor.WaitCommuneDecoFortuneDisplayContentPreparationEventFlowSystemActor.WaitCommuneDecoFortuneDisplayContentPreparation()
+        run CrystalBall_Reflect()
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(75)
+        MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(0)
+        fork:
+            branch:
+                # Oh… Oh, I see something… Yes…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:024', false)
+            branch:
+                Player.PlayerChangeStateDemoTalkPlayer.PlayerChangeStateDemoTalk()
+ 
+flow CrystalBall_Flash():
+    switch SubflowResults@Sub@4[3]:
+        case 0, 1:
+            EventFlowSystemActor@Sub.ChangeCommuneDecoFortuneStateEventFlowSystemActor@Sub.ChangeCommuneDecoFortuneState('cFortuneTelling_ShineStrongly')
+        case 2:
+            EventFlowSystemActor@Sub.ChangeCommuneDecoFortuneStateEventFlowSystemActor@Sub.ChangeCommuneDecoFortuneState('cFortuneTelling_ShineStrongly_Purification')
+        case 3:
+            EventFlowSystemActor@Sub.ChangeCommuneDecoFortuneStateEventFlowSystemActor@Sub.ChangeCommuneDecoFortuneState('cFortuneTelling_ShineStrongly_Pray')
+ 
+flow CrystalBall_Reflect():
+    switch SubflowResults@4[3]:
+        case 0:
+            switch MainNpc.FortuneBranchPreMainNpc.FortuneBranchPre():
+                case 0, 1:
+                    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTelling_SomethingIsReflected_MoneyLuck')
+                case 2, 3:
+                    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTelling_SomethingIsReflected_FriendshipLuck')
+                case 4, 5:
+                    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTelling_SomethingIsReflected_ItemLuck')
+                case 6, 7:
+                    EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTelling_SomethingIsReflected_HealthyLuck')
+        case 1:
+            EventFlowSystemActor.ChangeCommuneDecoFortuneStateEventFlowSystemActor.ChangeCommuneDecoFortuneState('cFortuneTelling_SomethingIsReflected_Affinity')
+        default:
+            return
+ 

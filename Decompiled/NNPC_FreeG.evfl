@@ -1,0 +1,23 @@
+flow Host_Chk():
+    if not MainNpc.EventFlags['cNpcMemory:TalkFreeGNow']:
+        MainNpc.NpcSelectFreeTalkMainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Free/BO_FreeG_Host', '', '', '', true)
+        MainNpc.EventFlags['cNpcMemory:TalkFreeGNow'] = true
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+            run Host_Chk()
+        else:
+            run Visitor_Chk()
+ 
+flow Visitor_Chk():
+    if not MainNpc.EventFlags['cNpcMemory:TalkFreeGNow']:
+        if MainNpc.EventFlags['cNpcMemory:SameLand']:
+            # Hey, <110:3>. What've you been doing to chill out and have fun back on ISLAND?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeG_Visitor:201', false)
+        else:
+            MainNpc.NpcSelectFreeTalkMainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Free/BO_FreeG_Visitor', '', '', '', true)
+        MainNpc.EventFlags['cNpcMemory:TalkFreeGNow'] = true
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

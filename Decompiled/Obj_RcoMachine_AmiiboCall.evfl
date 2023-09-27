@@ -1,0 +1,41 @@
+flow Root():
+    switch MainNpc.CheckNpcCharacterSizeMainNpc.CheckNpcCharacterSize():
+        case 0:
+            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Small', '', 'CameraTag:Root', false, false, false, 0)
+        case 1:
+            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Normal', '', 'CameraTag:Root', false, false, false, 0)
+        case 2:
+            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Large', '', 'CameraTag:Root', false, false, false, 0)
+        case 3:
+            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ExtraLarge', '', 'CameraTag:Root', false, false, false, 0)
+    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    if EventFlowSystemActor.IsAmiiboNpcLivingEventFlowSystemActor.IsAmiiboNpcLiving():
+        # RANDOM: Hi, this is <110:10>! Huh? <50:3><110:3… // Hi, this is <110:10>! Oh! Hey, <110:3>.… // Hi! It's <110:10>! Hey, <110:3>! What's… // Heya, it's me! <50:3><110:10>! <50:3><1…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Amiibo:301', false)
+        # RANDOM: You wanna go camping? On ISLAND?! A huh… // Huh? You wanna go camping?! OK! So wher… // You want me to come to the campsite? Is… // Huh? Let's camp on this island?!<10:4> …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Amiibo:302', false)
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:AmiiboCall', '', false)
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
+        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.20000000298023224)
+    else:
+        # RANDOM: I'm <110:10>! Whaddaya need? I'm real b… // Hello! This is <110:10>. Thanks for the… // Hi! It's <110:10>! What's up? Hi, by th… // Hi! It's lovable <110:10>! It's so exci…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Amiibo:401', false)
+        if EventFlowSystemActor.AmiiboNpcIsIncludedCamperListEventFlowSystemActor.AmiiboNpcIsIncludedCamperList():
+            # RANDOM: Uh-huh, uh-huh…that sounds great! I'll … // Ooh! Camping?! You betcha! I love your … // Camping? Are there bugs there? Right…ou… // Huh? Come to the campsite? OK! I'll be …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Amiibo:102', false)
+        else:
+            # RANDOM: You wanna play at the campsite? Sounds … // You're inviting me to go camping? On yo… // Ya wanna hang out at the campsite on yo… // Come chill at your island's campsite? S…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Amiibo:202', false)
+        System.EventFlags['cLand:AmiiboCampSiteCall'] = true
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', false, '', 0, false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+        System.EventFlags['cPlayer:CampInvite'] = true
+        EventFlowSystemActor.SetAmiiboCamperNPCEventFlowSystemActor.SetAmiiboCamperNPC()
+        EventFlowSystemActor.EventFlagOffAllLiverEventFlowSystemActor.EventFlagOffAllLiver('cPlayer:CampFirstTalk')
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
+        EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:AmiiboCall', '', false)
+        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.20000000298023224)
+ 

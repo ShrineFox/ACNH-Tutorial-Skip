@@ -1,0 +1,213 @@
+flow AskConnect():
+    if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+        if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+            EventFlowSystemActor.ChangeAmiiboNPCEventFlowSystemActor.ChangeAmiiboNPC('cRcm')
+        else:
+            EventFlowSystemActor.ChangeAmiiboNPCEventFlowSystemActor.ChangeAmiiboNPC('cRct')
+        # Would you like to be connected with a representative from this pair?
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:404', false)
+    else:
+        # Would you like to connect with this client?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:401', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        run UsingAmiibo_AskRetry()
+    elif (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3)) or (not EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cTkk')):
+        if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cRco'):
+            run Demo_Common_Wherearen::StoryEventChk_AfterNewBuildrun Demo_Common_Wherearen::StoryEventChk_AfterNewBuild()
+            if SubflowResults@10[12] in (0, 1, 2, 3, 4, 5, 6, 8, 9):
+                run GoToAmiiboPhone()
+            else:
+                run Sub_Event65()
+        else:
+            run GoToAmiiboPhone()
+    else:
+        run Sub_Event65()
+ 
+flow Check_Abailability():
+    EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 1)
+    switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+        case 0:
+            if System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
+                # I've got something else I need to do, so I'll look for a new client some other time.
+                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:002', true)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 1:
+            SubflowResults[18] = 1
+        case 2, 3, 4, 5, 6, 7:
+            if EventFlowSystemActor.IsWherearenCutomerNpcNameWithTitleEventFlowSystemActor.IsWherearenCutomerNpcNameWithTitle(false):
+                # I'll look for a new client some other time. I'm in the middle of working on <115:1:cd01>'s home.
+                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:001_02', false)
+            else:
+                # I'll look for a new client some other time. I'm in the middle of working on <115:1:cd01>'s home.
+                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:001_01', false)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow DeletePhotoUI():
+    fork:
+        branch:
+            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+        branch:
+            EventFlowSystemActor@sub.MessageSuspendEventFlowSystemActor@sub.MessageSuspend()
+ 
+flow FinishUsingAmiiboReader():
+    # Thank you for using this service.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:501', false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    GeneralObject.StartAnimationGeneralObject.StartAnimation('Off', 'cTrigger')
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow GoToAmiiboPhone():
+    run NFC_CheckResidentNNPC()
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('GotoAmiiboPhone', -1)
+    if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cOtg'):
+        if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cOtgMakeUp'):
+            System.EventFlags['cWherearenPlayer:OtgWithoutMakeup'] = false
+        else:
+            System.EventFlags['cWherearenPlayer:OtgWithoutMakeup'] = true
+    EventFlowSystemActor.StartAmiiboPhoneEventFlowSystemActor.StartAmiiboPhone('cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.5, 'Obj_WherearenAmiiboDeviceCall')
+ 
+flow NFC_CheckResidentNNPC():
+    if EventFlowSystemActor.IsAmiiboNpcLivingEventFlowSystemActor.IsAmiiboNpcLiving():
+        if not EventFlowSystemActor.IsAcquaintanceAmiiboNPCEventFlowSystemActor.IsAcquaintanceAmiiboNPC():
+            # Thank you for waiting. Unfortunately, <115:1:cd00> is not acquainted with you. Therefore, [he|she] will not respond— even if contacted. Perhaps you s…
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:601', false)
+            run UsingAmiibo_AskRetry()
+        elif EventFlowSystemActor.IsAmiiboNpcSickEventFlowSystemActor.IsAmiiboNpcSick():
+            # Thank you for waiting. Unfortunately, <115:1:cd00> is not feeling [his|her] best today. [He|She] asked that you please contact [him|her] again once […
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:602', false)
+            run UsingAmiibo_AskRetry()
+        elif EventFlowSystemActor.IsAmiiboNpcMoveInTodayEventFlowSystemActor.IsAmiiboNpcMoveInToday():
+            # Thank you for waiting. <115:1:cd00> just moved in today and is very busy with unpacking. [He|She] asked that you please contact [him|her] again anoth…
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:604', false)
+            run UsingAmiibo_AskRetry()
+        else:
+            switch EventFlowSystemActor.IsAmiiboNpcMoveOutTodayEventFlowSystemActor.IsAmiiboNpcMoveOutToday():
+                case 0:
+                    if (EventFlowSystemActor.AmiiboNpcIsBirthdayEventFlowSystemActor.AmiiboNpcIsBirthday()) and (EventFlowSystemActor.IsHoldNpcBirthdayEventFlowSystemActor.IsHoldNpcBirthday()):
+                        # Thank you for waiting. <115:1:cd00> cannot meet with you right now since [he|she] is having a birthday party today. [He|She] did ask that you please …
+                        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:603', false)
+                        run UsingAmiibo_AskRetry()
+                case 1:
+                    # Thank you for waiting. <115:1:cd00> is moving today and is very busy with packing. [He|She] said [he|she] will be happy to meet with you if you conta…
+                    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:605', false)
+                    run UsingAmiibo_AskRetry()
+                case 2:
+                    # Thank you for waiting. <115:1:cd00> left the island today and is currently in the middle of moving. [He|She] said [he|she] will be happy to meet with…
+                    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:606', false)
+                    run UsingAmiibo_AskRetry()
+ 
+flow OtgTalk():
+    run SNPC_otg_14_WherearenEvent_Amiibo::AmiiboDeviceCamera_Directrun SNPC_otg_14_WherearenEvent_Amiibo::AmiiboDeviceCamera_Direct()
+    if not System.EventFlags['cWherearenPlayer:SeqAvailableAmiiboDone']:
+        run SNPC_otg_14_WherearenEvent_Amiibo::Root_AmiiboDevicerun SNPC_otg_14_WherearenEvent_Amiibo::Root_AmiiboDevice()
+    elif System.EventFlags['cWherearenPlayer:SeqEnvSoundOngoing']:
+        if System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']:
+            # Oh! I'm happy that you're all ready to go, but it's break time right now, PLAYER, so take it easy. "If you're taking a break, make it a good one!" Th…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:045', true)
+        else:
+            run SNPC_otg_30_WherearenEvent_EnvSound::FromAmiiboReaderrun SNPC_otg_30_WherearenEvent_EnvSound::FromAmiiboReader()
+    elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
+        run SNPC_otg_17_WherearenEvent_DIYCatalog::FromAmiiboReaderrun SNPC_otg_17_WherearenEvent_DIYCatalog::FromAmiiboReader()
+    else:
+        run Demo_Common_Wherearen::StoryEventChk_StartingWorkrun Demo_Common_Wherearen::StoryEventChk_StartingWork()
+        if SubflowResults@9[16] == 0:
+            # Are you planning to make some sales calls using the <item>amiibo scanner, PLAYER?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:041', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                # OK! Go right ahead!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:042', true)
+                if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
+                    run SNPC_otg_16_WherearenEvent_Kabetasu::Preparationrun SNPC_otg_16_WherearenEvent_Kabetasu::Preparation()
+                EventFlowSystemActor.ChangeWherearenWorkModeEventFlowSystemActor.ChangeWherearenWorkMode(false, true)
+            else:
+                # Is that right? OK, I got it.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:043', true)
+        else:
+            # I'm so sorry! The <item>amiibo scanner is jammed right now. So could you please use it another time, PLAYER?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:044', true)
+ 
+flow Root(NpadId: int = 0, ReadPadId: int = 0):
+    SubflowResults[19] = 2
+    run Check_Abailability()
+    if (not System.EventFlags['cWherearenPlayer:NoticeAboutAmibo_FullOpen']) and (System.EventFlags['cWherearenPlayer:Unlock_ThemeFreeEdit']) and (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7)):
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+        # You're ready to work with VIP clients!
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0108', false)
+        System.EventFlags['cWherearenPlayer:NoticeAboutAmibo_FullOpen'] = true
+    if SubflowResults@2[18] == 0:
+        # Maybe I should contact someone by using amiibo and see if they're interested in a vacation home.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:101', false)
+    else:
+        # Should I use an amiibo to find a roommate for <115:1:cd01>?
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:102', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+        GeneralObject.StartAnimationGeneralObject.StartAnimation('On', 'cHold')
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+        # Contacting the amiibo Connection Service…
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:201', false)
+        run Obj_Common_AmiiboProcess::NFC_SettingChkrun Obj_Common_AmiiboProcess::NFC_SettingChk()
+        # Please ready the amiibo of the client you want to reach.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:202', false)
+        run StartAmiiboReading()
+ 
+flow StartAmiiboReading(NpadId: int = 0, ReadPadId: int = 0):
+    run Obj_Common_AmiiboProcess::NFC_ReadProcessrun Obj_Common_AmiiboProcess::NFC_ReadProcess()
+    if SubflowResults@2[18] == 0:
+        if EventFlowSystemActor.WherearenIsBuiltNpcForAmiiboEventFlowSystemActor.WherearenIsBuiltNpcForAmiibo():
+            # The client you want to reach already has a vacation home. Please speak to them directly if you want to suggest remodeling their home.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:301', false)
+            run UsingAmiibo_AskRetry()
+        elif System.EventFlags['cWherearenPlayer:Unlock_ThemeFreeEdit']:
+            run AskConnect()
+        elif EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cSNPC'):
+            # You can't connect with this VIP client yet.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:305', false)
+            run UsingAmiibo_AskRetry()
+        else:
+            run AskConnect()
+    elif EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cWherearenCustomer'):
+        # You'll need to speak with a different client. <115:1:cd01> can't be [his|her] own roommate.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:302', false)
+        run UsingAmiibo_AskRetry()
+    elif EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cSNPC'):
+        if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+            # You can't connect with these clients.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:303_02', false)
+        else:
+            # You can't connect with this client.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:303_01', false)
+        run UsingAmiibo_AskRetry()
+    elif not EventFlowSystemActor.WherearenIsBuiltNpcForAmiiboEventFlowSystemActor.WherearenIsBuiltNpcForAmiibo():
+        run AskConnect()
+    elif EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cIsShareHouseNpc'):
+        run AskConnect()
+    else:
+        fork:
+            branch:
+                # If you ask <115:1:cd00> to be a roommate, [his|her] vacation home will be demolished. Are you sure?
+                EventFlowSystemActor@sub.OpenMessageWindowEventFlowSystemActor@sub.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:403', false)
+            branch:
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpeg_Amiibo', 0, false, 0.0, 0.0, '')
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run DeletePhotoUI()
+            run GoToAmiiboPhone()
+        else:
+            run DeletePhotoUI()
+            run UsingAmiibo_AskRetry()
+ 
+local flow Sub_Event65():
+    # ...<115:1:cd00> isn't answering right now.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:304', false)
+    run UsingAmiibo_AskRetry()
+ 
+flow UsingAmiibo_AskRetry():
+    # Would you like to connect with a different client?
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:402', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run Obj_Common_AmiiboProcess::NFC_SettingChkrun Obj_Common_AmiiboProcess::NFC_SettingChk()
+        run StartAmiiboReading()
+    else:
+        run FinishUsingAmiiboReader()
+ 

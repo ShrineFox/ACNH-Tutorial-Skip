@@ -1,0 +1,259 @@
+flow Root(ItemPrice: int = 0, Reverse: bool = false):
+    MainNpc.SetApproachTalkItemMainNpc.SetApproachTalkItem(1)
+    MainNpc.SetItemNameMainNpc.SetItemName(6, 0, 0)
+    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(6, true)
+    if MainNpc.CheckNpcApproachTypeMainNpc.CheckNpcApproachType():
+        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            # This might seem like it's comin' outta nowhere…but you wanna buy my <125:0:0000>?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:001', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Sub_Event82(ItemPrice=ItemPrice, Reverse=Reverse)
+            else:
+                # Oh. Umm… OK. It's cool. I'll ask around and see if anybody else is interested, then.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:005', false)
+        else:
+            # Whaddaya think about buying stuff from me? 'Cause I wanna sell my <125:0:0000>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:002', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Sub_Event82(ItemPrice=ItemPrice, Reverse=Reverse)
+            else:
+                # No worries. There's a buncha folks I can ask. I just figured I'd ask you first!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:006', false)
+    elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # So…there's some things I've been tryin' to get a hold of, but I'm too short—on Bells, I mean… Soooo, I'm tryin' to sell some of my stuff. Ya know, th…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:003', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+            MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType1', ItemPrice, Reverse)
+            # Whoa! OK, lemme see… Howzabout… [A|An]<125:0:0000> for, um…<90:21:0001>?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:300', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Sub_grp_Event138(ItemPrice=ItemPrice, Reverse=Reverse)
+            else:
+                MainNpc.SetApproachTalkItemMainNpc.SetApproachTalkItem(1)
+                MainNpc.SetItemNameMainNpc.SetItemName(6, 0, 0)
+                MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(6, true)
+                MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType1', ItemPrice, Reverse)
+                # Umm… If that's not your thing, maybe you'd like, uh… [A|An]<125:0:0000> for, hmm…<90:21:0001>?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:303', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run Sub_grp_Event138(ItemPrice=ItemPrice, Reverse=Reverse)
+                else:
+                    MainNpc.SetApproachTalkItemMainNpc.SetApproachTalkItem(1)
+                    MainNpc.SetItemNameMainNpc.SetItemName(6, 0, 0)
+                    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(6, true)
+                    MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType1', ItemPrice, Reverse)
+                    # Hmm… Maybe you'd be more into something like, uh… [A|An]<125:0:0000> for an even…<90:21:0001>?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:304', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        run Sub_grp_Event138(ItemPrice=ItemPrice, Reverse=Reverse)
+                    else:
+                        MainNpc.SetApproachTalkItemMainNpc.SetApproachTalkItem(1)
+                        MainNpc.SetItemNameMainNpc.SetItemName(6, 0, 0)
+                        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(6, true)
+                        MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType1', ItemPrice, Reverse)
+                        # Huh? OK, but this is the last thing I've got to offer! How'd ya like… [A|An]<125:0:0000> for, um…<90:21:0001>?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:305', false)
+                        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                            run Sub_grp_Event138(ItemPrice=ItemPrice, Reverse=Reverse)
+                        else:
+                            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                            # Well, I'm all out of stuff! Sorry I didn't have anything ya wanted… I sure hope somebody wants this junk! I'm gett'n sleepy haul'n it around, <110:6>!
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:306', false)
+        else:
+            # No worries. I'll check with some other folks. Maybe I'll have better luck that way, <110:5>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:007', false)
+    else:
+        # I was shopping and I bought [a|an]<125:0:0000> and I dunno why. Anyway, I already had [a|an] <125:0:0000>… Want my extra?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:004', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+            MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType3', ItemPrice, Reverse)
+            # Oh, wow. You want it? Is, uh… <90:21:0003> cool?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:400', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Sub_grp_Event139(ItemPrice=ItemPrice, Reverse=Reverse)
+            else:
+                if (MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel() in (0, 1)) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(85)):
+                    MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType2', ItemPrice, Reverse)
+                    # Well, uh…I guess I could maybe say a number like…<90:21:0002>? Would that be a cool number?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:403', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        run Sub_grp_Event139(ItemPrice=ItemPrice, Reverse=Reverse)
+                    else:
+                        if (MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel() in (0, 1)) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(85)):
+                            MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType1', ItemPrice, Reverse)
+                            # Uhh… Well, what about <90:21:0001>? That's a pretty good deal, right?
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:404', false)
+                            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                                run Sub_grp_Event139(ItemPrice=ItemPrice, Reverse=Reverse)
+                            else:
+                                if (MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel() == 0) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(85)):
+                                    MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType0', ItemPrice, Reverse)
+                                    # OK! Let's, um, money talk! I'm gonna say…<90:21:0000>! That's a money number. And it's the tiniest money number I can say!
+                                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:405', false)
+                                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+                                        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                                        # Well, alright… If you don't want it, I'll go ask someone else. But, uh… thanks, <110:6>!
+                                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:408', false)
+                                    elif EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ItemPrice):
+                                        # Yes! Finally! I was startin' to worry I'd have two of these things at my place for forever, <110:6>!
+                                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:406', false)
+                                        MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, '"Default"')
+                                        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ItemPrice, Reverse)
+                                        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                                        # Oh yeah, I'm gonna buy soooo many SNACKS with these Bells! So! Many!
+                                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:407', false)
+                                        MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+                                        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+                                    else:
+                                        # Neat, thank you! But you don't got enough Bells. Sorry… No Bells, no deal.
+                                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:009', false)
+                                else:
+                                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                                    # Sorry, buddy. I can't go any lower than that… I need the snack money!
+                                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:411', false)
+                        else:
+                            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                            # That's the smallest price I can do for this. Even though I wanna get rid of it, I still need them Bells!
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:410', false)
+                else:
+                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                    # Sorry, I can't say a smaller number. A huh huh, I could say one, but not as a price.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:409', false)
+        else:
+            # Ah, that's cool. Maybe they take returns…<10:4> Huh. I hope I bought a receipt too. Hmm…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:008', false)
+ 
+local flow Sub_Event82(ItemPrice: int, Reverse: bool):
+    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70):
+        MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType2', ItemPrice, Reverse)
+        # I was thinkin' I'd ask for something like <90:21:0002>… How's that sound?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:100', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            if (MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel() in (0, 1)) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30)):
+                # I dunno… It'd be a waste to just get rid of it. Sooo…since we're snack buddies, you can take it—for free! With friends like you, who needs Bells. Not…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:103', false)
+                MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, '"Default"')
+                # I'm just happy to get rid of it. But I'm even happier that you've got it now!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:104', false)
+                MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+                MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+            else:
+                # Too much for you? OK, cool. I'll keep asking around, then…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:105', false)
+        elif EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ItemPrice):
+            # Oh, wow! Thanks bunches! If you're ready now, let's go ahead and swap!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:101', false)
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, '"Default"')
+            EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ItemPrice, Reverse)
+            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            # I hope you enjoy it as much as I thought I was gonna!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:102', false)
+            MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+            MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+        else:
+            # Neat, thank you! But you don't got enough Bells. Sorry… No Bells, no deal.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:009', false)
+    else:
+        MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType4', ItemPrice, Reverse)
+        # I was thinking something like <90:21:0004>… How's that sound?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:200', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType2', ItemPrice, Reverse)
+                # Hmm… I guess you're right. I was just thinking of all the snacks I could buy with that many Bells... What about, uh, <90:21:0002>? Would that be cool?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:201', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run Sub_grp_Event134(ItemPrice=ItemPrice, Reverse=Reverse)
+                else:
+                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+                        MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType1', ItemPrice, Reverse)
+                        # It's STILL too much? Well, uh…what if I lowered it to…<90:21:0001>?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:205', false)
+                        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                            run Sub_grp_Event134(ItemPrice=ItemPrice, Reverse=Reverse)
+                        elif EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+                            MainNpc.NpcSetExchangeMoneyMainNpc.NpcSetExchangeMoney('cSell', 'cType0', ItemPrice, Reverse)
+                            # Um… What about <90:21:0000>? But I can't go any lower than that. The bugs in my floor'll get mad!
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:207', false)
+                            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+                                EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                                # That's too bad. I had fun doing a bargaining with you anyway! Let's do it again sometime!
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:210', false)
+                            elif EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ItemPrice):
+                                # Great! Thanks, buddy!
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:208', false)
+                                MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, '"Default"')
+                                EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ItemPrice, Reverse)
+                                EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                                # You're real good at gettin' deals. I could really learn some stuff from you!
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:209', false)
+                                MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+                                MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+                            else:
+                                # Neat, thank you! But you don't got enough Bells. Sorry… No Bells, no deal.
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:009', false)
+                        else:
+                            run Sub_Event88(ItemPrice=ItemPrice, Reverse=Reverse)
+                    else:
+                        run Sub_Event88(ItemPrice=ItemPrice, Reverse=Reverse)
+            case 1:
+                run Sub_grp_Event134(ItemPrice=ItemPrice, Reverse=Reverse)
+            case 2:
+                EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                # Huh. That's too bad…but it's cool. It's cool, even if it's too bad!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:204', false)
+ 
+local flow Sub_Event88(ItemPrice: int, Reverse: bool):
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    # Aw, that's as low as I can go… Whatta shame, <110:5>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:206', false)
+ 
+local flow Sub_grp_Event134(ItemPrice: int, Reverse: bool):
+    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ItemPrice):
+        # Awesome! Thanks a ton!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:202', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, '"Default"')
+        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ItemPrice, Reverse)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        # All I ask is that you promise you'll take good care of it!<10:4> That's what Grandma always says!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:203', false)
+        MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+    else:
+        # Neat, thank you! But you don't got enough Bells. Sorry… No Bells, no deal.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:009', false)
+ 
+local flow Sub_grp_Event138(ItemPrice: int, Reverse: bool):
+    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ItemPrice):
+        # Hooray! Thanks a bunch! You're the best, <110:3>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:301', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, '"Default"')
+        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ItemPrice, Reverse)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        # Now that you've helped me out, I can finally get my mitts on all them snacks I've been dreaming of!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:302', false)
+        MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+    else:
+        # Neat, thank you! But you don't got enough Bells. Sorry… No Bells, no deal.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:009', false)
+ 
+local flow Sub_grp_Event139(ItemPrice: int, Reverse: bool):
+    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ItemPrice):
+        # Yes! I was hoping you'd say that. OK, here ya go!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:401', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, '"Default"')
+        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ItemPrice, Reverse)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        # You're the best! Next time I'm in a jam—or stuck in a jam jar—I'm calling you first!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:402', false)
+        MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(0)
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+    else:
+        # Neat, thank you! But you don't got enough Bells. Sorry… No Bells, no deal.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachC_Sell:009', false)
+ 

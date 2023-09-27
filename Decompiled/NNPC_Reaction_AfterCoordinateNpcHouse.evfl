@@ -1,0 +1,33 @@
+flow EndProcess():
+    MainNpc.EventFlags['cNpcMemory:TodayHeardReactTalkAboutCoordinateHouse'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    if not MainNpc.EventFlags['cNpcMemory:TodayHeardReactTalkAboutCoordinateHouse']:
+        if MainNpc.EventFlags['cNpcMemory:TodayReserveCoordinateHouseInterior']:
+            if (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(40)) and (MainNpc.EventFlags['cNpcMemory:InteriorCoordinator']):
+                # RANDOM: So…you're redecorating my place. Again.… // I'm so glad you're redecorating my plac…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_AfterCoordinateNpcHouse:002', false)
+                run EndProcess()
+            else:
+                # RANDOM: Hey! Thanks a bunch for pitching Tom No… // Hey, what's my home gonna look like aft… // Thanks for suggesting a remodel to my p…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_AfterCoordinateNpcHouse:001', false)
+                run EndProcess()
+        elif MainNpc.EventFlags['cNpcMemory:TodayReserveCoordinateHouseExterior']:
+            # RANDOM: It's real neat my home's gonna get a bi… // I'm real excited the outside of my hous…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_AfterCoordinateNpcHouse:005', false)
+            run EndProcess()
+        elif not MainNpc.EventFlags['cNpcMemory:TodayCompleteCoordinateHouseInterior']:
+            if MainNpc.EventFlags['cNpcMemory:TodayCompleteCoordinateHouseExterior']:
+                # RANDOM: Did you see what my home looks like now… // My place looks so cool now I didn't eve…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_AfterCoordinateNpcHouse:006', false)
+                run EndProcess()
+        elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+            # RANDOM: Wow! My place looks all different and, … // I'm pretty sure you already know, but y… // You're super-duper good at redecorating…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_AfterCoordinateNpcHouse:003', false)
+            run EndProcess()
+        else:
+            # RANDOM: My place looks AMAZING! Thanks for all … // Guess what, guess what, gueeeess whaaaa…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_AfterCoordinateNpcHouse:004', false)
+            run EndProcess()
+ 

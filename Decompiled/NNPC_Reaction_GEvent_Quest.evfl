@@ -1,0 +1,38 @@
+flow CatchFishFes_Quest():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # Get moving! There's fish to catch! And maybe eat!<10:4> Probably, definitely eat! YUM!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_Quest:004', true)
+        case 1:
+            # You've got time to chat? You're gonna run outta time!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_Quest:005', true)
+        case 2:
+            # Don't just goof around! Ya gotta go catch them fishies!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_Quest:006', true)
+ 
+flow CatchInsectFes_Quest():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # Good luck, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_Quest:001', true)
+        case 1:
+            # How ya doing? You oughta hurry before the Bug-Off's over!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_Quest:002', true)
+        case 2:
+            # You're real cool to talk to, but you'll miss the bugs if you're chilling with me, <110:3>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_Quest:003', true)
+ 
+flow Root():
+    if not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+        if System.EventFlags['cLandTemp:CatchInsectFesQuestStart']:
+            run CatchInsectFes_Quest()
+            run Sub_Event14()
+        elif System.EventFlags['cLandTemp:CatchFishFesQuestStart']:
+            run CatchFishFes_Quest()
+            run Sub_Event14()
+ 
+local flow Sub_Event14():
+    MainNpc.SetNpcFeelMainNpc.SetNpcFeel('cNormal', 120, false)
+    MainNpc.EventFlags['cNpcMemory:AcquaintanceshipFlagOff'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

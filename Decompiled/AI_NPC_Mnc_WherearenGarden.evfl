@@ -1,0 +1,41 @@
+flow Appear():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'Root', false, false)
+ 
+flow Init():
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('UnlockDust', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('AddDust', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ReqVisible', 0)
+    if EventFlowSystemActor.IsCheckLeaveGardenEventFlowSystemActor.IsCheckLeaveGarden():
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveWherearenGarden', false)
+ 
+flow Leave():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Gate', FlowName='SNPC_mnc_02_WherearenGarden')
+ 
+flow RequestCheck():
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('ReqVisible', 1):
+        if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('ReqVisible', 2):
+            MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_mnc_02_WherearenGarden', 'UnderShooting', false, false, ArgInt0=0)
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'UnderShooting', false, true)
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('ReqVisible', 0)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    MainNpc.NpcAIDefaultSettingMainNpc.NpcAIDefaultSetting(1)
+    run RequestCheck()
+    if (System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoReserve']) and (System.EventFlags['cWherearenPlayer:NewBuildCount'] != 0):
+        MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
+    elif System.EventFlags['cWherearenPlayer:IsMncChangeStageForPhotoMode']:
+        if System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoSkip']:
+            System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoSkip'] = false
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='OrderDone', FlowName='SNPC_mnc_02_WherearenGarden')
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'UnderShooting', false, true)
+    elif System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Garden']:
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_02_WherearenGarden', EntryName='VisitTalk')
+    elif System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoReserve']:
+        MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
+    else:
+        run Appear()
+ 

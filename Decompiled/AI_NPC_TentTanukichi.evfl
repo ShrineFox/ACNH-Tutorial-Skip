@@ -1,0 +1,19 @@
+flow CheckRob():
+    if not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+    elif System.EventFlags['cPlayer:RcoFinishMakingAxe']:
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+    else:
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
+ 
+flow Init():
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckRobResult', 0)
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
+        MainNpc.NpcAISetCheckRobFuncMainNpc.NpcAISetCheckRobFunc('cTanukichiTent', 'CheckRob', 'Ftr_Working', 'Root_Tutorial', false, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+ 
+flow Root():
+    MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+ 

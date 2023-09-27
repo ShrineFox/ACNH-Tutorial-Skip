@@ -1,0 +1,538 @@
+flow Root():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    if System.EventFlags['cPlayer:SnowmanBuildFlag']:
+        run Snowman_Built()
+    else:
+        System.EventFlags['cPlayer:SnowmanBuildFlag'] = true
+        System.EventFlags['cPlayer:SnowmanFirstBuildTodayFlag'] = true
+        run Snowman_FirstBuild()
+ 
+flow Root_Talk():
+    run Snowman_Chk()
+    run Snowman_Chat()
+ 
+flow Snowman_Built():
+    switch SnowMan.SnowManGradeSnowMan.SnowManGrade():
+        case 0:
+            # RANDOM: <10:12>You did it! I…I can't believe it… // You're looking at pure snowfolk perfect… // <10:12>Your perfect Snowboy is here! It…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:001', false)
+            # RANDOM: I can't praise you enough for your top-… // Even I can't play it cool here. I'm pra…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:010', false)
+            System.EventFlags['cLifeSupportAchievement:MakePerfectSnowball'] += 1
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('Snowman', 65534):
+                if EventFlowSystemActor.IsMadeCraftUnlockRecipeEventFlowSystemActor.IsMadeCraftUnlockRecipe('Snowman', 'cAND'):
+                    SnowMan.DecideEventRewardSnowMan.DecideEventReward('cSnowmanReward')
+                    switch EventFlowSystemActor.RandomChoice5EventFlowSystemActor.RandomChoice5(5):
+                        case 0:
+                            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSnowman', 'MAIL_SP_Snowman', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+                        case 1:
+                            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSnowman', 'MAIL_SP_Snowman', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+                        case 2:
+                            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSnowman', 'MAIL_SP_Snowman', 3, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+                        case 3:
+                            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSnowman', 'MAIL_SP_Snowman', 4, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+                        case 4:
+                            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSnowman', 'MAIL_SP_Snowman', 5, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+                    # I'll give you a special item as a reward… I'll pop it in the mail for you, so keep an eye out for it!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:016', false)
+                    run Sub_Event17()
+                elif EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+                    # As a thank-you, I'll give you this awesome <item>large snowflake!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:017', false)
+                    run Sub_Event111()
+                else:
+                    # I mean… I really did want to reward you. But you're holding too much stuff, bud. Get yourself situated, come back, and I'll give you something good.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:018', false)
+                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+            elif System.EventFlags['cPlayer:MainmenuRecipe']:
+                EventFlowSystemActor.DecideOpenCraftRecipeEventFlowSystemActor.DecideOpenCraftRecipe('cRewardSnowman')
+                EventFlowSystemActor.OpenSelectedSequenceCraftRecipeEventFlowSystemActor.OpenSelectedSequenceCraftRecipe()
+                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cRewardSnowMan', 'cDegit', 0, 0, '')
+                # I think it's only appropriate that I share a DIY recipe with such a gifted snow crafter. Let's see… I know! I'll show you how to make [a|an]<125:0:00…
+                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:011', false)
+                # And take a <item>large snowflake too. It's required to craft the item.
+                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:013', false)
+                run Sub_Event159()
+            elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+                if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']):
+                    run Snowman_GiveSnowCrystal_MovingSubP()
+                else:
+                    run Sub_Event201()
+            else:
+entrypoint Event229:
+                if System.EventFlags['cPlayer:SnowmanDIYMailFlag']:
+                    # Now listen, to thank you for making me, I want to share some knowledge about how to craft a special item. Wait… Hang on… You've never done DIY before…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:108', false)
+                    # I'll give you a <item>large snowflake! I want you to learn how to craft with DIY and make it right away!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:109', false)
+                    run Sub_Event159()
+                else:
+                    run Sub_Event201()
+        case 1:
+            # RANDOM: Ohhhhh! So close! My head should be a l… // Ohhhhh! So close! I was almost a perfec… // Almost! So, so close. Giving 90 percent…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:002', false)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 2:
+            # RANDOM: Um… We, uh, didn't quite get me right. … // Huh… You went with this size head… Inte… // Yo, y'all! It's suh-suh-Snowboy time! C…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:003', false)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 3:
+            # RANDOM: <10:12>Wonderful! Just. Wonderful. That… // What. Is. Going. On. Bud. Crafting the … // I was really hoping to go into snow mod…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:004', false)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Snowman_Chat():
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        run Snowman_Chat_HostP()
+    else:
+        run Snowman_Chat_GuestP()
+ 
+flow Snowman_Chat_Always():
+    switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+        case 0:
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                case 0:
+                    # It's my birthday today! Cake sounds yummy, but…no candles, please.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:056', false)
+                case 1:
+                    # This seems like a very nice island. It'll be fun hanging out here!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:057', false)
+                case 2:
+                    # I know I was just born today, but for some reason I just don't feel like a kid. I'm an old soul, I guess.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:058', false)
+        case 1:
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                case 0:
+                    # Hey! You wanna play rock-paper- scissors? Ready? Here we go… Um… Sorry… I just wanted to try.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:059', false)
+                case 1:
+                    # Would you believe me if I told you I was an alien? I mean, I did fall from the sky, you know. Actually, I fell in a million pieces. I'm like an entir…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:060', false)
+                case 2:
+                    # Even snowfolks get cold sometimes. I bet you didn't know that.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:061', false)
+        case 2:
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                case 0:
+                    # This island is a good home, but I wouldn't mind traveling a bit. You know…meet some snowfolk from all over the world, compare snow stories, try some …
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:062', false)
+                case 1:
+                    # Snowpeeps have it easy when it comes to working out. One good freeze, and we've got muscles like sculpted steel.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:063', false)
+                case 2:
+                    # I've lost a little weight lately, but it's mostly water weight…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:064', false)
+        case 3:
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                case 0:
+                    # I've heard all about summer, but I'd really like to experience it first-hand. I know! Be careful what you wish for, right? It's just that I'm kind of…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:065', false)
+                case 1:
+                    # It's funny to think that everything about me fell from the sky…even my voice!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:066', false)
+                case 2:
+                    # You know what would be a good home for me? A walk-in freezer would be a good home for me.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:067', false)
+ 
+flow Snowman_Chat_Grade():
+    switch SnowMan.SnowManGradeSnowMan.SnowManGrade():
+        case 0:
+            switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+                case 0:
+                    # I am really impressed with the way you made me. I'm not vain, I just appreciate the craftsmanship.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:068', false)
+                case 1:
+                    # The one drawback to being perfectly crafted, is that everyone wants to stop and admire you. It wouldn't be such a big deal, but I can't even sign aut…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:069', false)
+                case 2:
+                    # Yeah, I'm pretty much the new <110:33> mascot. I mean, can you blame folks for liking me so much? I'm gorgeous!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:070', false)
+                case 3:
+                    # Ah, the admiring stares of my many fans… I hope I'm this gorgeous the next time I'm reborn!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:071', false)
+        case 1:
+            switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+                case 0:
+                    # It's a good thing I'm not completely perfect. I'd probably be stuck-up.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:072', false)
+                case 1:
+                    # I think I have a really good chance at winning the island's "Best Snowperson of YEAR" award. There isn't a lot of competition, and I've heard the jud…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:073', false)
+                case 2:
+                    # You know that wake-me-up feeling you get when you take a deep breath of fresh, icy-cool air? Yeah, I get that all the time.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:074', false)
+                case 3:
+                    # I'm kind of an island superstar today. But I'm one good trans-oceanic wind current away from going global!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:075', false)
+        case 2:
+            switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+                case 0:
+                    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                        case 0:
+                            # Well, I might not be perfect, but I can have a good attitude, you know? That's on me, bud.
+                            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:076', false)
+                        case 1:
+                            run Sub_grp_Event122()
+                        case 2:
+                            run Sub_grp_Event73()
+                case 1:
+                    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                        case 0:
+                            run Sub_grp_Event122()
+                        case 1:
+                            run Sub_grp_Event73()
+                        case 2:
+                            # If I were a snow sculptor, I'd probably roll me up a nice snow home and a cool snow car.
+                            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:077', false)
+                case 2:
+                    # It shows character to accept one's lot in life. I've got a lot of character, bud. Yep. A LOT of character.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:078', false)
+                case 3:
+                    # All snowfolks melt sooner or later. Might as well enjoy the ride…and do it all again next winter!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:079', false)
+        case 3:
+            switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+                case 0:
+                    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                        case 0:
+                            # I really don't want to be on display, but snowfolks live outside, so…
+                            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:084', false)
+                        case 1:
+                            run Sub_grp_Event130()
+                        case 2:
+                            run Sub_grp_Event175()
+                case 1:
+                    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+                        case 0:
+                            run Sub_grp_Event130()
+                        case 1:
+                            run Sub_grp_Event175()
+                        case 2:
+                            # You know, I'm getting more and more comfy with the way I look. Perfection is overrated.
+                            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:085', false)
+                case 2:
+                    # I get a real low-level view of the island. I tend to notice a lot about everyone's feet. Sorry. Didn't mean to make you feel self-conscious. You have…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:086', false)
+                case 3:
+                    # OK. Here's my last wish…for now. Next time you make me, try to make me look a little more…cool.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:087', false)
+ 
+flow Snowman_Chat_GuestP():
+    if SnowMan.SnowManIsSnowMeltSeasonSnowMan.SnowManIsSnowMeltSeason():
+        # RANDOM: As the snow melts, snowfolks here on IS… // Well, my seasonal business is just abou… // So nice of you to take a moment to chat…
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:201', false)
+    else:
+        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+            # RANDOM: Hello, traveler… Enjoy your time onISLA… // Welcome to ISLAND! // Enjoy ISLAND!
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:211', false)
+        if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70):
+            switch SnowMan.SnowManGradeSnowMan.SnowManGrade():
+                case 0:
+                    # RANDOM: The best snowperson ever welcomes you, … // Imagine a snowperson so marvelous that … // Two things you need to see: my perfect …
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:202', false)
+                case 1:
+                    # RANDOM: I'm a pretty good snowperson from a pre… // Feel free to take as many pictures of m… // I'm a pretty great snowperson, but I fe…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:203', false)
+                case 2, 3:
+                    # RANDOM: I might not be the most perfect snowper… // It's so nice when you superstars take a… // I could chat with you all day, but you …
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:204', false)
+        else:
+            switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+                case 0:
+                    # Today is my birthday. I was literally born TODAY. And your attention is the best present I've ever received.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:205', false)
+                case 1:
+                    # You know how pizza is so good the next day after it's been in the fridge for the night? That's pretty much what's going on here. Day two is a good da…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:206', false)
+                case 2:
+                    # Well, I don't have much time left on this little island, but it's been a blast. Tell your friends this: Don't let the snowfolk goodness end here. Mak…
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:207', false)
+                case 3:
+                    # I'm so excited to melt away today! I mean, I had a good run. And I can always come back next season.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:208', false)
+ 
+flow Snowman_Chat_HostP():
+    if SnowMan.SnowManIsSnowMeltSeasonSnowMan.SnowManIsSnowMeltSeason():
+        switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+            case 0, 1:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+                    # Snow ruled the land not so long ago. I'm talking about yesterday...
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:050', false)
+                else:
+                    # Spring is so colorful. It really makes me stand out!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:051', false)
+            case 2:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+                    # It's hot, but…I've heard summer is even hotter. I don't wanna think about it.
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:052', false)
+                else:
+                    # I'm getting rarer by the minute. Pretty soon, I might be the only snow around. Cool, huh?
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:053', false)
+            case 3:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+                    # I won't be around forever, you know. Pretty soon, I'll have to melt on down the road. I don't mean to sound so cold. I will miss you. It's just that …
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:054', false)
+                else:
+                    # Well, I hope to see you next winter, but I guess that depends on whether or not you build me again!
+                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:055', false)
+    elif SnowMan.SnowManGradeSnowMan.SnowManGrade() in (0, 1):
+        run Sub_grp_Event26()
+    else:
+        switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+            case 0:
+                if System.EventFlags['cPlayer:SnowmanFirstBuildTodayFlag']:
+                    run Snowman_Chat_Always()
+                else:
+                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(55):
+                        run Snowman_Chat_Always()
+                    else:
+                        run Snowman_Chat_Grade()
+            case 1:
+                if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(55):
+                    run Snowman_Chat_Always()
+                else:
+                    run Snowman_Chat_Grade()
+            case 2, 3:
+                run Sub_grp_Event26()
+ 
+flow Snowman_Chk():
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        if SnowMan.SnowManGradeSnowMan.SnowManGrade() == 0:
+            switch SnowMan.SnowManAgeSnowMan.SnowManAge():
+                case 0:
+                    if not System.EventFlags['cPlayer:SnowmanGotDay1Flag']:
+                        if SnowMan.IsMadeSnowManPlayerSnowMan.IsMadeSnowManPlayer():
+                            if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+                                # Oh, hey! I'll give you this now, 'cause I couldn't before.
+                                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:030', false)
+                                EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+                                # Please, take it! It's an awesome <item>large snowflake!
+                                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:032', false)
+                                if System.EventFlags['cPlayer:MainmenuRecipe']:
+                                    # I put your thank-you gift among your belongings. Now go on and craft an item that'll remind you of me!
+                                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:020', false)
+                                else:
+                                    # I used my snow magic to put it in your pockets. Now go take that DIY workshop, and start crafting!
+                                    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:113', false)
+                                # RANDOM: Bud. I am so excited at how coooool you… // Wow… I could be a snow model. And YOU… … // I was built cool, and it's all because …
+                                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:021', false)
+                                run Sub_Event193()
+                        elif EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('Snowman', 65534):
+                            if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+                                # I was built today, so I guess that makes today my birthday! I'm soooo glad I was born soooo cool. I'm feeling generous for my birthday, so here's a l…
+                                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:034', false)
+                                EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+                                # Please, take it! It's an awesome <item>large snowflake!
+                                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:032', false)
+                                # I put your thank-you gift among your belongings. Now go on and craft an item that'll remind you of me!
+                                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:020', false)
+                                run Sub_Event193()
+                        elif System.EventFlags['cPlayer:MainmenuRecipe']:
+                            EventFlowSystemActor.DecideOpenCraftRecipeEventFlowSystemActor.DecideOpenCraftRecipe('cRewardSnowman')
+                            EventFlowSystemActor.OpenSelectedSequenceCraftRecipeEventFlowSystemActor.OpenSelectedSequenceCraftRecipe()
+                            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cRewardSnowMan', 'cDegit', 0, 0, '')
+                            # I was built today, so I guess that makes today my birthday! I'm soooo glad I was born soooo cool. I'm in a giving mood, so I'm going to share a way t…
+                            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:033', false)
+                            # It's a DIY recipe for [a|an]<125:0:0000>! Check your phone later!
+                            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:012', false)
+                            run Sub_Event193()
+                case 1:
+                    if (not System.EventFlags['cPlayer:SnowmanGotDay2Flag']) and (SnowMan.IsMadeSnowManPlayerSnowMan.IsMadeSnowManPlayer()) and (EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540)):
+                        EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+                        # RANDOM: Bud. I got a <item>large snowflake, and… // Here's a <item>large snowflake for an e…
+                        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:040', false)
+                        System.EventFlags['cPlayer:SnowmanGotDay2Flag'] = true
+                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+                case 2:
+                    if (not System.EventFlags['cPlayer:SnowmanGotDay3Flag']) and (SnowMan.IsMadeSnowManPlayerSnowMan.IsMadeSnowManPlayer()) and (EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540)):
+                        EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+                        # RANDOM: I'm so embarrassed. Turns out I had thi… // Oh, hey! Take this <item>large snowflak…
+                        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:041', false)
+                        System.EventFlags['cPlayer:SnowmanGotDay3Flag'] = true
+                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+                case 3:
+                    if (not System.EventFlags['cPlayer:SnowmanGotDay4Flag']) and (SnowMan.IsMadeSnowManPlayerSnowMan.IsMadeSnowManPlayer()) and (EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540)):
+                        EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+                        # RANDOM: You know what you need? You need a <ite… // Take this before I melt away, bud. It's…
+                        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:042', false)
+                        System.EventFlags['cPlayer:SnowmanGotDay4Flag'] = true
+                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif (System.EventFlags['cPlayer:SnowmanFirstBuildTodayFlag']) and (not System.EventFlags['cPlayer:SnowmanGotDay1Flag']) and (EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540)):
+            # Oh, hey! I'll give you this now, 'cause I couldn't before.
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:030', false)
+            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+            # Please, take it! It's an awesome <item>large snowflake!
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:032', false)
+            # I've placed it with your belongings. Use it to make a special item of mine.
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:015', false)
+            System.EventFlags['cPlayer:SnowmanGotDay1Flag'] = true
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Snowman_FirstBuild():
+    # Aaaand nice to meet you! Finally, we can talk face-to-face! I was eager to meet you, even when I was still just a million little flakes. Nice work ro…
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:100', false)
+    if System.EventFlags['cPlayer:MainmenuRecipe']:
+        if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('Snowman', 65534):
+            # As a thank-you, I'll give you this awesome <item>large snowflake!
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:017', false)
+            run Sub_Event105()
+        else:
+            EventFlowSystemActor.DecideOpenCraftRecipeEventFlowSystemActor.DecideOpenCraftRecipe('cRewardSnowman')
+            EventFlowSystemActor.OpenSelectedSequenceCraftRecipeEventFlowSystemActor.OpenSelectedSequenceCraftRecipe()
+            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cRewardSnowMan', 'cDegit', 0, 0, '')
+            if SnowMan.SnowManGradeSnowMan.SnowManGrade() == 0:
+                # I think it's only appropriate that I share a DIY recipe with such a gifted snow crafter. Let's see… I know! I'll show you how to make [a|an]<125:0:00…
+                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:011', false)
+                run Sub_Event174()
+            else:
+                # Now listen, to thank you for making  me, I want to share some knowledge about how to craft a special item. Check your NookPhone recipes for [a|an]<12…
+                SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:101', false)
+                run Sub_Event174()
+    elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() != `Homeless`:
+entrypoint Event112:
+        EventFlowSystemActor.DecideEventRewardDIYRecipeEventFlowSystemActor.DecideEventRewardDIYRecipe('Snowman')
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSnowman', 'MAIL_SP_Snowman', 6, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+        System.EventFlags['cPlayer:SnowmanDIYMailFlag'] = true
+        # Now listen, to thank you for making me, I want to share some knowledge about how to craft a special item. Wait… Hang on… You've never done DIY before…
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:107', false)
+        run Sub_Event174()
+    elif (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']):
+        run Snowman_SendRecipe_MovingSubP()
+    else:
+        # Now, listen—to thank you for making me, I want to share some knowledge about how to craft a special item. Wait… Hang on… You've never done DIY before…
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:110', false)
+        # Here's a <item>large snowflake to thank you for making me! This is a really rare item. You're gonna need it for my special DIY recipe!
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:112', false)
+        if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+            # I used my snow magic to put it in your pockets. Now go take that DIY workshop, and start crafting!
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:113', false)
+            run Sub_Event160()
+        else:
+            run Sub_Event163()
+ 
+flow Snowman_GiveSnowCrystal_MovingSubP():
+    run Event229()
+ 
+flow Snowman_SendRecipe_MovingSubP():
+    run Event112()
+ 
+local flow Sub_Event105():
+    if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+        # I've placed it with your belongings. Use it to make a special item of mine.
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:015', false)
+        run Sub_Event160()
+    else:
+        run Sub_Event163()
+ 
+local flow Sub_Event107():
+    # Or…not. You're holding too many things. Why don't you sort that out and then find your way back to me?
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:014', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event111():
+    # I put your thank-you gift among your belongings. Now go on and craft an item that'll remind you of me!
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:020', false)
+    run Sub_Event23()
+ 
+local flow Sub_Event159():
+    if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+        run Sub_Event111()
+    else:
+        run Sub_Event107()
+ 
+local flow Sub_Event160():
+    EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+    System.EventFlags['cPlayer:SnowmanGotDay1Flag'] = true
+    run Sub_grp_Event152()
+ 
+local flow Sub_Event163():
+    # Or…not. You're holding too many things. Why don't you sort that out and then find your way back to me?
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:014', false)
+    run Sub_grp_Event152()
+ 
+local flow Sub_Event17():
+    System.EventFlags['cPlayer:SnowmanGotDay1Flag'] = true
+    # RANDOM: Bud. I am so excited at how coooool you… // Wow… I could be a snow model. And YOU… … // I was built cool, and it's all because …
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:021', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event174():
+    # And take a <item>large snowflake too. It's required to craft the item.
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:013', false)
+    run Sub_Event105()
+ 
+local flow Sub_Event193():
+    System.EventFlags['cPlayer:SnowmanGotDay1Flag'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event201():
+    # Now, listen—to thank you for making me, I want to share some knowledge about how to craft a special item. Wait… Hang on… You've never done DIY before…
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:111', false)
+    # Here's a <item>large snowflake to thank you for making me! This is a really rare item. You're gonna need it for my special DIY recipe!
+    SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:112', false)
+    if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3540):
+        # I used my snow magic to put it in your pockets. Now go take that DIY workshop, and start crafting!
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:113', false)
+        run Sub_Event23()
+    else:
+        run Sub_Event107()
+ 
+local flow Sub_Event23():
+    EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3540, 1)
+    run Sub_Event17()
+ 
+local flow Sub_grp_Event122():
+    if SnowMan.SnowManIsHeadSmallerThanBodySnowMan.SnowManIsHeadSmallerThanBody():
+        # If only my head had been made a little bit bigger… But you know what? I'm just gonna accept who I am and be happy.
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:080', false)
+    else:
+        # I feel like I have a body-sized head and a head-sized body, you know? The key to making good snowpeople is to make body-sized bodies and head-sized h…
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:081', false)
+ 
+local flow Sub_grp_Event130():
+    if SnowMan.SnowManIsHeadSmallerThanBodySnowMan.SnowManIsHeadSmallerThanBody():
+        # My small head is going to melt faster than my body. What will my body think about when my head is gone?
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:088', false)
+    else:
+        # This little body has a hard time supporting my big head. On the plus side, I'm very smart.
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:089', false)
+ 
+local flow Sub_grp_Event152():
+    switch SnowMan.SnowManGradeSnowMan.SnowManGrade():
+        case 0:
+            # I can't believe this is your first time making me. I mean, just look at me… I'm perfect! It's a real head-scratcher… Or it would be, if I could scrat…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:103', false)
+            System.EventFlags['cLifeSupportAchievement:MakePerfectSnowball'] += 1
+        case 1:
+            # Your snowcrafting sensibilities are admirable. For your first snowfolk, I look pretty good. With just a little more practice, I'm sure you can build …
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:104', false)
+        case 2:
+            # Well… I've been made worse. And this is your first build, so I'll let a few mistakes slide. Try again sometime!
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:105', false)
+        case 3:
+            # If I'm being honest, I'm not what you would call an amazing snowperson… But everyone's gotta start somewhere, right? Keep trying, and I'm sure you'll…
+            SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:106', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_grp_Event175():
+    if SnowMan.SnowManIsHeadSmallerThanBodySnowMan.SnowManIsHeadSmallerThanBody():
+        # I have a bit too much snow packed around my body to see my feet…
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:090', false)
+    else:
+        # I think my body is going to collapse under the weight of my head…
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:091', false)
+ 
+local flow Sub_grp_Event26():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70):
+        run Snowman_Chat_Always()
+    else:
+        run Snowman_Chat_Grade()
+ 
+local flow Sub_grp_Event73():
+    if SnowMan.SnowManIsHeadSmallerThanBodySnowMan.SnowManIsHeadSmallerThanBody():
+        # I might not have great aesthetics, but I've got great balance with this big base. So…there's that.
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:082', false)
+    else:
+        # My balance isn't so great because my head is so big. I feel like I have to stand still so it doesn't roll off.
+        SnowMan.OpenMessageWindowSnowMan.OpenMessageWindow('TalkObj/OBJ_Snowman:083', false)
+ 

@@ -1,0 +1,38 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.ServiceMotionControlMainNpc.ServiceMotionControl(false)
+ 
+flow Root():
+    switch MainNpc.DevideCountDownStateMainNpc.DevideCountDownState():
+        case 0, 1, 2, 3:
+            MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+        case 4:
+            run Sub_grp_Event15()
+        case 5, 6:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCountdownWait', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false)
+        case 7:
+            MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cNpcStickLightCountdown')
+            switch MainNpc.CountdownTalkPrevStateMainNpc.CountdownTalkPrevState():
+                case 0, 3:
+                    run Sub_grp_Event15()
+                case 1:
+                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSwingStickLight', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false)
+                case 2:
+                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cUseCracker', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false)
+        case 8:
+            MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cDefault')
+            if MainNpc.NpcIsEquipedHandToolMainNpc.NpcIsEquipedHandTool(1):
+                MainNpc.NpcChangeChangeHandToolStateMainNpc.NpcChangeChangeHandToolState('cChangeHandToolSimple', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false, HandToolItem=65534)
+            else:
+                MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+ 
+local flow Sub_grp_Event15():
+    if not MainNpc.NpcIsCreateAngleMainNpc.NpcIsCreateAngle():
+        MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false, false, 2, 0.0, '')
+    elif MainNpc.NpcIsEquipedHandToolMainNpc.NpcIsEquipedHandTool(1):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSpNpcNewYearWait', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false)
+    else:
+        MainNpc.NpcChangeChangeHandToolStateMainNpc.NpcChangeChangeHandToolState('cChangeHandToolSimple', '', 'SNPC_sza_GEvent_Countdown', 'Root', false, false, HandToolItem=5741)
+ 

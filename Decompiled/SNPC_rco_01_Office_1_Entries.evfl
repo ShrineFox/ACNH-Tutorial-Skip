@@ -1,0 +1,276 @@
+flow ChkGetHousing():
+    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 7:
+        if System.EventFlags['cLand:HaveHousingKitCount'] < 4:
+            SubflowResults[0] = 0
+        else:
+            SubflowResults[0] = 1
+    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 8:
+        if System.EventFlags['cLand:HaveHousingKitCount'] < 3:
+            SubflowResults[0] = 0
+        else:
+            SubflowResults[0] = 1
+    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 9:
+        if System.EventFlags['cLand:HaveHousingKitCount'] < 2:
+            SubflowResults[0] = 0
+        else:
+            SubflowResults[0] = 1
+    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') >= 10:
+        SubflowResults[0] = 1
+    elif System.EventFlags['cLand:HaveHousingKitCount'] < 1:
+        SubflowResults[0] = 0
+    else:
+        SubflowResults[0] = 1
+ 
+flow IslandDevelopmentIntro():
+    System.EventFlags['cPlayer:RcoTalkAboutOfficeWork'] = true
+    if System.EventFlags['cPlayerTemp:RcoOfficeFirstTalkNow']:
+        # Yes, yes! This is the construction consultation counter!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:011_02', false)
+    else:
+        # Yes, yes! This is the construction consultation counter!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:011_01', false)
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        # Before we begin, allow me to quickly explain the services offered at my counter. In addition to my normal duties, I can also talk about issues relate…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:012_01', false)
+        # And with that information in mind… what do you think? How can I be of assistance to you?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:013_01', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                # Oho! Time to jump into action! By the way, one of my favorite questions is "What should I do?" If you really want to dive in and get some work done, …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:014_01', false)
+                run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
+            case 1:
+                run SNPC_rco_54_IslandDevelopment::Rootrun SNPC_rco_54_IslandDevelopment::Root()
+            case 2:
+                run SNPC_rco_00_Common_Entries::Rco_CmnSel_Cancelrun SNPC_rco_00_Common_Entries::Rco_CmnSel_Cancel()
+    else:
+        if System.EventFlags['cPlayer:ThisPCcreatedbeforeOfficeUpgrading']:
+            if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
+                # However, the services available to you haven't changed! I'll continue to be here to provide advice on island living. Feel free to stop by whenever yo…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:012_02_01', false)
+            else:
+                # Before we begin, allow me to quickly explain the services offered at my counter. In addition to what I did before, I can also discuss moving your hom…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:012_02', false)
+                System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome'] = true
+        else:
+            # Before we begin, allow me to quickly explain the services offered at my counter. This is where I give advice on island living, homes…that sort of thi…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:012_03', false)
+        # And with that information in mind… what do you think? How can I be of assistance to you?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:013_02', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Oho! Ready to jump into action?<10:4> In that case…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:014_02', false)
+            run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
+        else:
+            run SNPC_rco_00_Common_Entries::Rco_CmnSel_Cancelrun SNPC_rco_00_Common_Entries::Rco_CmnSel_Cancel()
+ 
+flow NpcHouseCoordeOpen():
+    SubflowResults[0] = 0
+    run Event124()
+ 
+flow NpcHouseCoordeOpen_Force():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+    SubflowResults[0] = 1
+entrypoint Event124:
+    if not System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']:
+entrypoint Event109:
+        if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
+            # Ah, PLAYER! Hello, hello!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+            System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+        # It sounds like that big music festival Paradise Planning sponsored went off without a hitch, hm? I would've loved to have been involved in something …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1001', false)
+        # That isn't what I wanted to discuss with you though. Now, perhaps it's because I've been dropping hints here and there, but… Word of what you've been…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1002', false)
+        run Sub_Event114()
+    elif System.EventFlags['cPlayer:RcoPMovingUnlockNpcEditWithPhoneCall']:
+        run withNoPhoneCall()
+    else:
+        if System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
+            # That's right! I called earlier because I wanted to discuss an idea with you. It involves everyone's homes.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:992', false)
+        else:
+            System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+            # Hello, hello! Thank you so much for coming, PLAYER. The reason I called earlier is that I had an idea I wanted to run by you regarding everyone's hom…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:991', false)
+        # Perhaps it's because I've been dropping hints here and there, but… Word of what you've been doing for Paradise Planning has spread, and it's started …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:993', false)
+        run Sub_Event114()
+ 
+flow NpcHouseCoordeRestartPMoving():
+    SubflowResults[0] = 0
+    run Event143()
+ 
+flow NpcHouseCoordeRestartPMoving_Force():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+    SubflowResults[0] = 1
+entrypoint Event143:
+    if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
+        # Ah, PLAYER! Hello, hello!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    # Oh, that reminds me! I had an idea that I think will interest you. Now that we have this big, beautiful building for Resident Services, I have a new …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1011', false)
+    System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild'] = false
+    if SubflowResults@2[0] == 0:
+        # Yes, yes! That's my big idea. Anyway, thank you for hearing me out.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1007', false)
+        run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
+ 
+flow OfficeOpening_Force():
+    System.EventFlags['cPlayer:OfficeSzaIntroduction'] = true
+    # Ah, PLAYER! Hello, hello!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+    # Welcome to the new and improved Resident Services tent! Oh! Did I say "tent"? Of course I meant "building." And we couldn't have built it without you…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:001', false)
+    if System.EventFlags['cPlayer:TownNewsHeardTownHallOpenFlag']:
+        # Now, as I mentioned<20:2:cd05><20:2:cd07> in my broadcast…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:002', false)
+    else:
+        # There's one other topic<20:2:cd05><20:2:cd07> I'd like to bring up…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:002_01', false)
+    # <20:2:cd06><20:2:cd08>We need new support staff for a new building, so<20:2:cd05> Isabelle is here to take good care of us.<20:2:cd06>
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:003', false)
+    # You're PLAYER, right?<10:4> Mr. Nook has told me about you!
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:004', false)
+    if System.EventFlags['cLand:BuiltTownOfficeToday']:
+        # I just started today, so I'm sure I'll have my hands full learning all the ins and outs of the new job. But I'm already smitten with island life, so …
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:005_01', false)
+    else:
+        if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cOffice', 7):
+            # I'm fairly new to this job, so I'm sure I'll have my hands full learning all the ins and outs for a while. But I'm already smitten with island life, …
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:005_02', false)
+        else:
+            # I'm sure you know loads more about this island and its residents than I do, PLAYER. But I'm already smitten with island life, so you can count on me …
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:005_03', false)
+    # And there you have it. Isabelle and I will split up duties here to better support you all.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:006', false)
+    # Broadly speaking, I'll take care of anything related to homes or other construction issues. Isabelle will help you with general island matters and re…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:007', false)
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        # Now, with that out of the way, I have something I'd like your help with… When you have a moment, please sit at my counter.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:008_01', false)
+entrypoint Event3:
+    # I hope I can count on your continued support of ISLAND and our new Resident Services…building!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:009', false)
+    System.EventFlags['cPlayerTemp:RcoOfficeFirstTalkNow'] = true
+    System.EventFlags['cPlayer:RcoFirstTalkNewOffice'] = true
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        System.EventFlags['cLand:IslandDevQuestRunning'] = true
+ 
+flow OfficeOpening_Force_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('sza', 1)
+ 
+flow OfficeOpening_NormalTalk():
+    # Ah, PLAYER! Hello, hello!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+    # Welcome to the new and improved Resident Services tent! Oh! Did I say "tent"? Of course I meant "building." And we couldn't have built it without you…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:001', false)
+    if System.EventFlags['cPlayer:TownNewsHeardTownHallOpenFlag']:
+        # Now, as I mentioned in my big broadcast… To provide even better service and support, Isabelle and I will be splitting up the duties here.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:006_01', false)
+    else:
+        # To provide even better service and support to everyone, Isabelle will be joining our staff. The two of us will be splitting up the duties to make sur…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:006_02', false)
+    # Broadly speaking, I'll take care of anything related to homes or other construction issues. Isabelle will help you with general island matters and re…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:007', false)
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        # Now with that out of the way, there's something I want your help with, but it'll take time to discuss. When you have a moment, please come by my coun…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:008_02', false)
+        run Event3()
+    else:
+        run Event3()
+ 
+flow Rco_CmnSel_GetHousing():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 10000, '')
+    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(3349, 1):
+        # Yes, yes… But don't you already have a <item>housing kit with you? For bookkeeping reasons that I'm sure you'd find tedious, I can only give you one …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:208', false)
+    else:
+        # Ah, so you'll help prep some land for a future home? Excellent! I do have to charge a small fee of <90:22:0000>, but if someone moves in, you'll earn…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:201', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            # Understood, understood! We can't accept new residents if we don't have any plots available, so please help when you have the time!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:202', false)
+        elif not EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(10000):
+            # Oh dear, PLAYER… You don't have enough Bells on you. I'm afraid you'll need to pay the entire fee all at once, so come on back when you're ready, hm?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:203', false)
+        elif EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3349):
+            # Well, then… First, I'll just collect the fee. That'll be <90:22:0000>, please.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:205_01', false)
+            EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(-10000, false)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            # Thank you very much! I'll just haaaand over the <item>housing kit you'll need. Use it to claim a plot for a new house, PLAYER.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:205_02', false)
+            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3349, 1)
+            System.EventFlags['cLand:HaveHousingKitCount'] += 1
+            run ChkGetHousing()
+            if SubflowResults@2[0] == 0:
+                # Just use the kit when you find a good location! Off you go now!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:206', false)
+            else:
+                # Just use the kit when you find a good location. Considering our island population and the land we have available, I do believe this will be our last …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:207', false)
+        else:
+            # I would love to be thanking you for your generous cooperation, but I'm afraid your pockets are too full! I need to give you a <item>housing kit to se…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:204', false)
+ 
+flow Rco_Office_Infra():
+    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    if System.EventFlags['cLand:RcoEnableBuyHousingKit']:
+        run ChkGetHousing()
+        if SubflowResults@2[0] == 0:
+            # Let's chat! There are a number of things we can discuss, but… what did you have in mind?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:075_01', false)
+            switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                case 0:
+                    run Rco_CmnSel_GetHousing()
+                case 1:
+                    run SNPC_rco_10_Common_BuildBridgeSlope::Rootrun SNPC_rco_10_Common_BuildBridgeSlope::Root()
+                case 2:
+                    run SNPC_rco_10_Common_MoveNpcFacility::Rootrun SNPC_rco_10_Common_MoveNpcFacility::Root()
+                case 3:
+                    run Rco_SelInfra_Cancel()
+            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+        else:
+            run Sub_Event93()
+    else:
+        run Sub_Event93()
+ 
+flow Rco_SelInfra_Cancel():
+    # Oh? Are you sure? Another time, then, hm?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_06_Office:100', false)
+ 
+local flow Sub_Event114():
+    # With that in mind, I'd like to begin offering a home-design consulting service here.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1003', false)
+    # What this means for you is that whenever you have an idea for remodeling a resident's home… give those ideas to me here, and Nook Inc. will work with…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1004', false)
+    # Everyone on the island is eager to have you work on their homes, so there's no need to be shy! Whenever you have an idea for someone's home, I'll be …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1005', false)
+    # To sum up…whenever you'd like to redecorate or remodel someone's house, tell me, "Let's talk homes."
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1006', false)
+    System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable'] = true
+    System.EventFlags['cLand:UnlockSzaResetHouse'] = true
+    if SubflowResults@2[0] == 0:
+        # Yes, yes! That's my big idea. Anyway, thank you for hearing me out.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1007', false)
+        run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
+ 
+local flow Sub_Event93():
+    # Let's chat! There are a number of things we can discuss, but… what did you have in mind?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:075_02', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+        case 0:
+            run SNPC_rco_10_Common_BuildBridgeSlope::Rootrun SNPC_rco_10_Common_BuildBridgeSlope::Root()
+        case 1:
+            run SNPC_rco_10_Common_MoveNpcFacility::Rootrun SNPC_rco_10_Common_MoveNpcFacility::Root()
+        case 2:
+            run Rco_SelInfra_Cancel()
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+ 
+flow withNoPhoneCall():
+    run Event109()
+ 

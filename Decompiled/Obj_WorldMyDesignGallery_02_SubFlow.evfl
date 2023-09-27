@@ -1,0 +1,28 @@
+flow GetMyIdList():
+    if not System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList']:
+        EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+        EventFlowSystemActor.NetSearchMyDesignEventFlowSystemActor.NetSearchMyDesign('cMyIDList')
+        EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+        else:
+            System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList'] = true
+ 
+flow PreCheckConnection():
+    EventFlowSystemActor.MyDesignExchangeResetErrorEventFlowSystemActor.MyDesignExchangeResetError()
+    EventFlowSystemActor.NetConnectInitEventFlowSystemActor.NetConnectInit('cConnectInet', true)
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        # Do you want to try to connect to the internet again?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0810', true)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+        else:
+            run PreCheckConnection()
+    else:
+        EventFlowSystemActor.NetCheckNSAEventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+ 
+flow WaitForPreview():
+    EventFlowSystemActor.WaitDownloadMyDesignDataForPreviewEventFlowSystemActor.WaitDownloadMyDesignDataForPreview()
+ 

@@ -1,0 +1,441 @@
+flow FishAutumn():
+    if System.EventFlags['cLand:FishFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('FishingConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the fall Fishing Tourney today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_03_01', false)
+            case 1:
+                # The fall Fishing Tourney runs until 6 PM today. Get started in the plaza!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_03_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Fish_1st()
+ 
+flow FishSpring():
+    if System.EventFlags['cLand:FishFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('FishingConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the spring Fishing Tourney today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_01_01', false)
+            case 1:
+                # The spring Fishing Tourney runs until 6 PM today. Get started in the plaza!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_01_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Fish_1st()
+ 
+flow FishSummer():
+    if System.EventFlags['cLand:FishFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('FishingConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the summer Fishing Tourney today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_02_01', false)
+            case 1:
+                # The summer Fishing Tourney runs until 6 PM today. Get started in the plaza!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_02_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Fish_1st()
+ 
+flow FishWinter():
+    if System.EventFlags['cLand:FishFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('FishingConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the winter Fishing Tourney today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_04_01', false)
+            case 1:
+                # The winter Fishing Tourney runs until 6 PM today. Get started in the plaza!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_04_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Fish_1st()
+ 
+flow Fish_1st():
+    switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('FishingConvention'):
+        case 0:
+            # Can you believe it? Today on ISLAND we're hosting our very first Fishing Tourney! The tourney will run from 9 AM to 6 PM. Anyone can participate. Jus…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_00_01', false)
+        case 1:
+            # Can you believe it? Today on ISLAND we're hosting our very first Fishing Tourney! The tourney will run until 6 PM. Anyone can participate. Just check…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:005_00_02', false)
+            System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+        default:
+            return
+ 
+flow Greet_Carnival():
+    # Today we have a professional dancer here to help us celebrate Festivale. If you want to boogie, the plaza's the place to be!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_11_01', false)
+    System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+    System.EventFlags['cPlayer:AnnounceCarnival'] = true
+ 
+flow Greet_Easter():
+    System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+    System.EventFlags['cPlayer:AnnounceEaster'] = true
+    if SubflowResults@2[0] == 0:
+        # **Today is Bunny Day! What's more, we have a special guest who's come a long way to celebrate with us. I hope everyone stops by the plaza to meet him…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:041_03', false)
+    else:
+        # I hope you're excited…because today is Bunny Day! The plaza is all a bustle with activity. Perhaps we have a special visitor? Hint, hint. Either way,…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_01_03', false)
+ 
+flow Greet_Fireworks():
+    if SubflowResults@2[0] == 0:
+        # **Later on today, we'll be putting on a fireworks show! Yes, yes…it's a seasonal tradition. There will be colorful fireworks blooming in the night sk…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:046', false)
+    elif not System.EventFlags['cPlayer:PAnnounceFireworksSza1']:
+        System.EventFlags['cPlayer:PAnnounceFireworksSza1'] = true
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Fireworks'):
+            case 0:
+                # Tonight, we're having a fireworks show! The fireworks will begin at 7 PM, and a stall will be set up in the plaza all day long! I'll be in the plaza …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_03', false)
+            case 1:
+                # Tonight's fireworks show is going on right now! There's even a stall with raffle items set up in the plaza! You can also come to me to submit your id…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_04', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    elif EventFlowSystemActor.FirstFireworksFesEventFlowSystemActor.FirstFireworksFes():
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Fireworks'):
+            case 0:
+                # The first fireworks show of the year starts at 7 PM! Be sure to come out and join in the fun!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_05', false)
+            case 1:
+                # The first fireworks show of the year is going on right now! Be sure to come out and join in the fun!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_06', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    elif EventFlowSystemActor.FinalFireworksFesEventFlowSystemActor.FinalFireworksFes():
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Fireworks'):
+            case 0:
+                if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+                    # The last fireworks show of the year starts at 7 PM! I hope everyone gets to make some summer memories!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_09', false)
+                else:
+                    # The last fireworks show of the year starts at 7 PM! I hope everyone gets to make some memories!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_11', false)
+            case 1:
+                if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+                    # The last fireworks show of the year is going on right now! I hope everyone makes some summer memories!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_10', false)
+                    System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+                else:
+                    # The last fireworks show of the year is going on right now! I hope everyone makes some memories!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_12', false)
+                    System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Fireworks'):
+            case 0:
+                # Tonight's fireworks show starts at 7 PM! Be sure to check out the stall or submit your fireworks design!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_07', false)
+            case 1:
+                # The fireworks show is going on right now! Visit the plaza to check out the stall or submit your fireworks design!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_06_08', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+ 
+flow Greet_Halloween():
+    switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Halloween'):
+        case 0:
+            if SubflowResults@2[0] == 0:
+                # **Halloween is tonight, and from 5 PM to midnight, we're throwing an event to celebrate! Everyone wearing a costume will be passing around candy, so …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:048_04', false)
+            else:
+                # Tonight from 5 PM to midnight, we'll be treating you to a Halloween event. And no, this is not a trick! Will you dress up to get treats or pass out c…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_08_04', false)
+                run Sub_Event120()
+        case 1:
+            System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            if SubflowResults@2[0] == 0:
+                # **It's Halloween, and from now until midnight, we're having an event to celebrate! Everyone is in their costumes and passing around candy, so please …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:048_05', false)
+            else:
+                # Until midnight tonight, we'll be treating you to a special Halloween event. And no, this is not a trick! Will you dress up to get treats or pass out …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_08_05', false)
+                run Sub_Event120()
+        case 2:
+            run Sub_Event120()
+        default:
+            return
+ 
+flow Greet_Thanksgiving():
+    switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('HarvestFestival'):
+        case 0:
+            if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+                # Today is Turkey Day! We'll be hosting a party from 9 AM to midnight to celebrate the harvest. See you then!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_01', false)
+            else:
+                # Today is Turkey Day! We'll be hosting a party from 9 AM to midnight to celebrate spring. See you then!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_02', false)
+            # We've invited a world-class chef to cook for us in the plaza. I hope you can all join in the fun!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_05', false)
+            run Sub_Event133()
+        case 1:
+            if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+                # We're hosting a Turkey Day event from now until midnight to celebrate the fall harvest!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_03', false)
+            else:
+                # We're hosting a Turkey Day event from now until midnight to celebrate the arrival of spring!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_04', false)
+            if System.EventFlags['cLand:HarvestProgress'] < 1:
+                # We've invited a world-class chef to cook for us in the plaza. I hope you can all join in the fun!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_05', false)
+            else:
+                # We've invited a world-class chef to cook for us in the plaza, and he's already gotten started. Don't miss it!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_09_06', false)
+            System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            run Sub_Event133()
+        default:
+            return
+ 
+flow Greet_XmasEve():
+    System.EventFlags['cPlayer:AnnounceChristmasEve'] = true
+    if SubflowResults@2[0] == 0:
+        if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
+            # **It's finally Toy Day!**
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:049_00_01', false)
+        else:
+            # **It's after midnight, and I hope everyone had a wonderful Toy Day.**
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:049_00_02', false)
+        # **I hear a certain someone will be visiting us to deliver gifts. Say hello from me if you find him!**
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:049_01', false)
+    else:
+        # I heard Santa's helper is visiting the island today. I also heard he brought a magic bag full of presents!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:008_10_04', false)
+        if EventFlowSystemActor.CurrentRegionLanguageEventFlowSystemActor.CurrentRegionLanguage('cCurrentMachine') == 0:
+            SubflowResults[15] = 0
+ 
+flow Insect1():
+    if System.EventFlags['cLand:InsectFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the first Bug-Off of the season today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_01_01', false)
+            case 1:
+                # The first Bug-Off of the season runs until 6 PM today!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_01_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Insect_1st()
+ 
+flow Insect2():
+    if System.EventFlags['cLand:InsectFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the second Bug-Off of the season today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_02_01', false)
+            case 1:
+                # The second Bug-Off of the season runs until 6 PM today!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_02_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Insect_1st()
+ 
+flow Insect3():
+    if not System.EventFlags['cLand:InsectFesFinished']:
+        run Insect_1st()
+    elif System.EventFlags['cLand:CountOfficeAfterBuild'] < 365:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention'):
+            case 0:
+                # Today, from 9 AM to 6 PM in the plaza, we're holding a Bug-Off!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_04_03', false)
+            case 1:
+                # Today, in the plaza until 6 PM, we're holding a Bug-Off!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_04_04', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the third Bug-Off of the season today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_03_01', false)
+            case 1:
+                # The third Bug-Off of the season runs until 6 PM today!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_03_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+ 
+flow Insect4():
+    if System.EventFlags['cLand:InsectFesFinished']:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention'):
+            case 0:
+                # Starting in the plaza, we'll be holding the final Bug-Off of the season today from 9 AM to 6 PM!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_04_01', false)
+            case 1:
+                # The final Bug-Off of the season runs until 6 PM today!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_04_02', false)
+                System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+            default:
+                return
+    else:
+        run Insect_1st()
+ 
+flow Insect_1st():
+    switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention'):
+        case 0:
+            # How's this for exciting news? <50:3>ISLAND is hosting its very first Bug-Off! The tourney will run from 9 AM to 6 PM. Anyone can participate. Just ch…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_00_01', false)
+        case 1:
+            # How's this for exciting news? <50:3>ISLAND is hosting its very first Bug-Off! The tourney will run until 6 PM. Anyone can participate. Just check in …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006_00_02', false)
+            System.EventFlags['cLand:TownNewsHeardEventStarted'] = true
+        default:
+            return
+ 
+flow NewYearEve():
+    if EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Countdown') in (0, 1):
+        # Can you believe it? Today is the last day of YEAR! This year has meant so much to me… Oh my! I better change the subject before this microphone gets …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:007_01', false)
+ 
+flow NewYearEveHurry():
+    # Good evening! There's a Countdown event for New Year's Eve in the plaza right now!<10:7:00d20000> The new year is only a few moments away, so head do…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:007_02', false)
+ 
+flow Rco_Greet_Snow():
+    run Event89()
+ 
+flow Root():
+    if SubflowResults@2[0] == 0:
+        switch SubflowResults@8[1]:
+            case 0, 1, 2, 3, 4:
+                if MainNpc.EnvPublicAnnouncementMainNpc.EnvPublicAnnouncement('cEnvAnnounceQueryType_FirstSnow'):
+entrypoint Event89:
+                    # **Hello, everyone! Tom Nook here! Brrr… It's so cold… It's currently WEEKDAY, HH:MM AM/PM on MONTH DAY, YEAR, and my whiskers are nearly frozen… Howe…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:005', false)
+                else:
+                    # **Hello, everyone. This is Tom Nook! It's HH:MM AM/PM this happy WEEKDAY, MONTH DAY, YEAR.**
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:001', false)
+            case 5:
+                if MainNpc.EnvPublicAnnouncementMainNpc.EnvPublicAnnouncement('cEnvAnnounceQueryType_FirstSnow'):
+                    run Rco_Greet_Snow()
+                else:
+                    # **Hello, everyone… This is Tom Nook…<10:4> It's currently HH:MM AM/PM WEEKDAY, MONTH DAY, YEAR. This is a late-night broadcast for all you night owls…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:002', false)
+            case 6:
+                # **Good day, everyone! I'd like to wish you all a happy New Year! May it be a joyous one for us all, hm? It's HH:MM AM/PM this happy WEEKDAY, MONTH DA…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:003', false)
+            case 7:
+                # **Hello, everyone, this is Tom Nook! It's currently HH:MM AM/PM on WEEKDAY, MONTH DAY, YEAR. …Ah! That means it's time for the Lunar New Year! I'd li…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:004', false)
+        if not System.EventFlags['cLand:OfficeConstruction1']:
+            switch SubflowResults@8[21]:
+                case 2:
+                    run Greet_Easter()
+                case 3:
+                    run Greet_Fireworks()
+                case 4:
+                    run Greet_Halloween()
+                case 6:
+                    run Greet_XmasEve()
+                default:
+                    return
+        elif System.EventFlags['cPlayer:PAnnounceHeardOfficeRenual']:
+            # **As I mentioned yesterday, Resident Services is closed today due to construction. I realize this may be a bit of an inconvenience, but I promise the…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_10_Rco_Once:003_01', false)
+        else:
+            # **I realize some of you may not have heard yesterday's broadcast, so please indulge me for a moment. With new residents come new responsibilities—nam…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_10_Rco_Once:003_02', false)
+    else:
+        switch SubflowResults@10[1]:
+            case 0, 1:
+                # Good morning, everyone!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:001_01', false)
+            case 2, 3:
+                # Hello there, everyone!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:001_02', false)
+            case 4:
+                # Good evening, everyone!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:001_03', false)
+            case 5:
+                # Good evening, everyone! I'm here with a late-night broadcast!<10:4> I hope I can make it through this…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:002', false)
+            case 6:
+                # Happy New Year to all of you! I can't wait to see what this year brings.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:003', false)
+            case 7:
+                # Hello, everyone! Today is the start of the Lunar New Year! I wish you all good fortune and happiness.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:004', false)
+            case 8:
+                # Happy Toy Day, everyone! I'm so glad I get to celebrate this day with you!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:006', false)
+            case 9:
+                # Hello, everyone! Did Santa's helper bring everyone what they wanted for Toy Day?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:007', false)
+        # Right now on ISLAND, it's HH:MM AM/PM on WEEKDAY, MONTH DAY, YEAR.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:001', false)
+        switch SubflowResults@8[21]:
+            case 0:
+                switch SubflowResults@9[2]:
+                    case 1:
+                        run FishSpring()
+                        SubflowResults[15] = 1
+                    case 2:
+                        run FishSummer()
+                        SubflowResults[15] = 1
+                    case 3:
+                        run FishAutumn()
+                        SubflowResults[15] = 1
+                    case 4:
+                        run FishWinter()
+                        SubflowResults[15] = 1
+                    case 5:
+                        run Insect1()
+                        SubflowResults[15] = 1
+                    case 6:
+                        run Insect2()
+                        SubflowResults[15] = 1
+                    case 7:
+                        run Insect3()
+                        SubflowResults[15] = 1
+                    case 8:
+                        run Insect4()
+                        SubflowResults[15] = 1
+                    default:
+                        return
+            case 1:
+                run Greet_Carnival()
+                SubflowResults[15] = 1
+            case 2:
+                run Greet_Easter()
+                SubflowResults[15] = 1
+            case 3:
+                run Greet_Fireworks()
+                SubflowResults[15] = 1
+            case 4:
+                run Greet_Halloween()
+                SubflowResults[15] = 1
+            case 5:
+                run Greet_Thanksgiving()
+                SubflowResults[15] = 1
+            case 6:
+                run Greet_XmasEve()
+                SubflowResults[15] = 1
+            case 7:
+                run NewYearEve()
+                SubflowResults[15] = 1
+ 
+local flow Sub_Event120():
+    System.EventFlags['cPlayer:AnnounceHalloween'] = true
+    System.EventFlags['cPlayer:AnnounceHalloween2'] = true
+ 
+local flow Sub_Event133():
+    System.EventFlags['cPlayer:AnnounceHarvest'] = true
+    System.EventFlags['cPlayer:AnnounceHarvest2'] = true
+ 

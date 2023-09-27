@@ -1,0 +1,250 @@
+flow AocChocolate():
+    if EventFlowSystemActor.KindBitParamItemSelectIncludeEventFlowSystemActor.KindBitParamItemSelectInclude('植える', 'cItemSelect'):
+        run NNPC_Select_Creature::Plantrun NNPC_Select_Creature::Plant()
+        run Select_Finish_Disappear()
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('CraftMaterial', 'CraftRemake', 'Ore', 'ShellDrift', 'Honeycomb', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Tool::DIYrun NNPC_Select_Tool::DIY()
+        run Select_Finish_Disappear()
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Flower', '', '', '', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Creature::Flowerrun NNPC_Select_Creature::Flower()
+        run Select_Finish()
+        System.EventFlags['cLifeSupportDaily:EDSendFlower'] = true
+    else:
+        switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='PitFallSeed', ItemKindTypeB='PartyPopper', ItemKindTypeC='Medicine', ItemKindTypeD='FishBait', JudgeTarget='cItemSelect'):
+            case 0:
+                switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='LoveCrystal', ItemKindTypeB='BlowBubble', ItemKindTypeC='EasterEgg', ItemKindTypeD='FierworkHand', JudgeTarget='cItemSelect'):
+                    case 0:
+                        if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('SouvenirChocolate', '', '', '', '', '', '', '', 'cItemSelect'):
+                            run NNPC_Select_Chocolate::Chocolaterun NNPC_Select_Chocolate::Chocolate()
+                            run Select_Finish_Disappear()
+                        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Vine', 'CookingMaterial', '', '', '', '', '', '', 'cItemSelect'):
+                            run NNPC_Select_Etc::Etc_Pluralrun NNPC_Select_Etc::Etc_Plural()
+                            run Select_Finish_Disappear()
+                        else:
+                            run SelectPresent_Part4_Single()
+                    case 1:
+                        run NNPC_Select_Etc::Loverun NNPC_Select_Etc::Love()
+                        run Select_Finish_Disappear()
+                    case 2:
+                        run NNPC_Select_Tool::Nouse_Pluralrun NNPC_Select_Tool::Nouse_Plural()
+                        run Select_Finish_Disappear()
+                    case 3:
+                        run NNPC_Select_Etc::Etc_Pluralrun NNPC_Select_Etc::Etc_Plural()
+                        run Select_Finish_Disappear()
+                    case 4:
+                        run NNPC_Select_Tool::MobileFireWorksrun NNPC_Select_Tool::MobileFireWorks()
+                        run Select_Finish()
+            case 1:
+                run NNPC_Select_Etc::Etc_Pluralrun NNPC_Select_Etc::Etc_Plural()
+                run Select_Finish_Disappear()
+            case 2:
+                run NNPC_Select_Tool::Nouse_Pluralrun NNPC_Select_Tool::Nouse_Plural()
+                run Select_Finish_Disappear()
+            case 3, 4:
+                run NNPC_Select_Etc::Etc_Pluralrun NNPC_Select_Etc::Etc_Plural()
+                run Select_Finish_Disappear()
+ 
+flow Dish_v200():
+    run Event120()
+ 
+flow Eat_v200():
+    if not EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Vegetable', '', '', '', '', '', '', '', 'cItemSelect'):
+        if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Dishes', 'Drink', 'Ftr', '', '', '', '', '', 'cItemSelect'):
+            run Sel_Dish_Jump()
+        else:
+            run Return_Fromv200()
+    elif EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(2295, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+        run Return_Fromv200()
+    else:
+        run NNPC_Select_Creature::VegetableOtherThanPumpkinrun NNPC_Select_Creature::VegetableOtherThanPumpkin()
+        run Select_Finish()
+ 
+flow ItemAdd_Chk():
+    if EventFlowSystemActor.MultiKindItemSelectIncludeChoice4EventFlowSystemActor.MultiKindItemSelectIncludeChoice4(ChoiceNumber=4, ItemKindTypeA='Flower', ItemKindTypeB='', ItemKindTypeC='', JudgeTarget='cItemSelect') in (1, 2, 3):
+        MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(0, 1)
+    else:
+        if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Ftr', 'DoorDeco', 'Music', '', '', '', '', '', 'cItemSelect'):
+entrypoint Event120:
+            if not ((EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(13488, 14029, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')) and (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('Valentine', false))):
+                MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(0, 1)
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Dishes', 'Drink', '', '', '', '', '', '', 'cItemSelect'):
+            run Dish_v200()
+        else:
+            if (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Gyroid', '', '', '', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Net', 'Watering', 'FishingRod', 'FierworkHand', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Tops', 'OnePiece', 'Cap', 'Accessory', 'Umbrella', '', '', '', 'cItemSelect')) or ((EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Helmet', '', '', '', '', '', '', '', 'cItemSelect')) and (MainNpc.NpcIsAbleEquipSelectItemMainNpc.NpcIsAbleEquipSelectItem())) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Shoes', 'Socks', 'Bottoms', 'Bag', 'Helmet', '', '', '', 'cItemSelect')):
+                MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(0, 1)
+ 
+flow ReturnFurniture_Fromv200():
+    if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Sculpture', 'SculptureFake', 'Picture', 'PictureFake', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Furniture::Artrun NNPC_Select_Furniture::Art()
+        MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(0, 1)
+        run Select_Finish()
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Fossil', 'FossilUnknown', '', '', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Furniture::Fossilrun NNPC_Select_Furniture::Fossil()
+        run Select_Finish_Disappear()
+    elif (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Net', 'Watering', 'FishingRod', '', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('SubToolSensu', 'SubToolRemakeable', '', '', '', '', '', '', 'cItemSelect')):
+        run NNPC_Select_Tool::Usefulrun NNPC_Select_Tool::Useful()
+        run Select_Finish()
+    elif (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('SettingLadder', '', '', '', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Axe', 'Slingshot', 'ChangeStick', 'Timer', 'Shovel', '', '', '', 'cItemSelect')):
+        run NNPC_Select_Tool::Nouserun NNPC_Select_Tool::Nouse()
+        run Select_Finish_Disappear()
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Umbrella', '', '', '', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Tool::Umbrellarun NNPC_Select_Tool::Umbrella()
+        run Select_Finish()
+    elif (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Tops', 'OnePiece', 'Cap', 'Accessory', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Helmet', 'Bottoms', 'Socks', 'Shoes', 'Bag', '', '', '', 'cItemSelect')):
+        run NNPC_Select_Equipment::Rootrun NNPC_Select_Equipment::Root()
+        run Select_Finish()
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('HandBag', '', '', '', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Equipment::HandBag_v200run NNPC_Select_Equipment::HandBag_v200()
+        run Select_Finish()
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('GyroidScrap', '', '', '', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Etc::Etcrun NNPC_Select_Etc::Etc()
+        run Select_Finish_Disappear()
+    else:
+        switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='Money', ItemKindTypeB='Trash', ItemKindTypeC='TurnipExpired', ItemKindTypeD='Music', JudgeTarget='cItemSelect'):
+            case 0:
+                run NNPC_Select_Etc::Etcrun NNPC_Select_Etc::Etc()
+                run Select_Finish_Disappear()
+            case 1:
+                run NNPC_Select_Etc::Moneyrun NNPC_Select_Etc::Money()
+            case 2, 3:
+                run NNPC_Select_Etc::Garbagerun NNPC_Select_Etc::Garbage()
+            case 4:
+                run NNPC_Select_Etc::Musicrun NNPC_Select_Etc::Music()
+                run Select_Finish()
+ 
+flow Return_Fromv200():
+    if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Fruit', '', '', '', '', '', '', '', 'cItemSelect'):
+        run NNPC_Select_Creature::Foodrun NNPC_Select_Creature::Food()
+        run Select_Finish_Disappear()
+        return
+    else:
+        run NNPC_Select_Creature::GeneralFoodrun NNPC_Select_Creature::GeneralFood()
+        run Select_Finish()
+ 
+flow Root():
+    # RANDOM: Huh? What is it? // Huh? Do I get something? // Ooh! What are you giving me?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Select/BO_Select_General:003', true)
+    if MainNpc.EventFlags['cNpcTemp:PresentSelectOnlyChocolate']:
+        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemName', 13104, '', '', 'cItemSelect', true)
+    else:
+        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cGiftToNpc', 65534, '', '', 'cItemSelect', true)
+entrypoint Event25:
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        MainNpc.SetPriceCalcItemMainNpc.SetPriceCalcItem(0)
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+        if (EventFlowSystemActor.UISelectedItemIsWrappingEventFlowSystemActor.UISelectedItemIsWrapping('cItemSelect')) and (not EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyWrappingOtoshidama', '', '', '', '', '', '', '', 'cItemSelect')):
+            SubflowResults[0] = 0
+            # RANDOM: What's inside? I'm gonna look! // I wonder what's inside? I'm gonna open … // I can't take it! I'm gonna open it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Select/BO_Select_General:004', true)
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(6, 'Keep')
+            MainNpc.SetItemNameMainNpc.SetItemName(14, 0, 0)
+        else:
+            SubflowResults[0] = 1
+        run ItemAdd_Chk()
+        run SelectPresent_Part2()
+    else:
+        # RANDOM: Huh? Nothing? But… // Aw man… That's a shame! // <50:3><110:3>, you shouldn't tease me.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Select/BO_Select_General:005', true)
+ 
+flow Sel_Dish_Jump():
+    MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
+    switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice4EventFlowSystemActor.MultiKindItemSelectIncludeChoice4(ChoiceNumber=4, ItemKindTypeA='Fish', ItemKindTypeB='Insect', ItemKindTypeC='DiveFish', JudgeTarget='cItemSelect'):
+        case 0:
+            if not EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(13488, 14029, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+                if EventFlowSystemActor.KindBitParamItemSelectIncludeEventFlowSystemActor.KindBitParamItemSelectInclude('食べる', 'cItemSelect'):
+                    run NNPC_Select_Furniture::Dish_Food_Drinkrun NNPC_Select_Furniture::Dish_Food_Drink()
+                    run Select_Finish()
+                    return
+                elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Ftr', 'DoorDeco', 'Gyroid', '', '', '', '', '', 'cItemSelect'):
+                    run NNPC_Select_Furniture::Furniturerun NNPC_Select_Furniture::Furniture()
+                    run Select_Finish()
+                else:
+                    run ReturnFurniture_Fromv200()
+                    return
+            elif EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('Valentine', false):
+                MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag'] = true
+                run NNPC_Select_Furniture::ValentinePresentrun NNPC_Select_Furniture::ValentinePresent()
+                run Select_Finish()
+                return
+            elif EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(13488, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+                run NNPC_Select_Furniture::Dish_Food_Drinkrun NNPC_Select_Furniture::Dish_Food_Drink()
+                run Select_Finish()
+                return
+            else:
+                run NNPC_Select_Furniture::Furniturerun NNPC_Select_Furniture::Furniture()
+                run Select_Finish()
+        case 1:
+            run NNPC_Select_Creature::Fishrun NNPC_Select_Creature::Fish()
+            run Sub_Event32()
+        case 2:
+            run NNPC_Select_Creature::Insectrun NNPC_Select_Creature::Insect()
+            run Sub_Event32()
+        case 3:
+            run NNPC_Select_Creature::DiveFishrun NNPC_Select_Creature::DiveFish()
+            run Sub_Event32()
+ 
+flow SelectPresent_Part2():
+    if EventFlowSystemActor.KindBitParamItemSelectIncludeEventFlowSystemActor.KindBitParamItemSelectInclude('食べる', 'cItemSelect'):
+        run SelectPresent_Part3_CanEat()
+    else:
+        run AocChocolate()
+ 
+flow SelectPresent_Part3_CanEat():
+    run v200_BirthDayCupCake()
+    if EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(13104, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+        run AocChocolate()
+        return
+    elif EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(4526, 4528, 4527, 4525, 65534, 65534, 65534, 65534, 'cItemSelect'):
+        run NNPC_Select_Creature::pumpkinrun NNPC_Select_Creature::pumpkin()
+        run Select_Finish()
+    else:
+        run Eat_v200()
+        return
+ 
+flow SelectPresent_Part4_Single():
+    run Sel_Dish_Jump()
+ 
+flow Select_Finish():
+    if SubflowResults@2[0] == 0:
+        MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+    else:
+        EventFlowSystemActor.SetCalcPriceBySoloEventFlowSystemActor.SetCalcPriceBySolo()
+    if EventFlowSystemActor.UICheckSelectedItemPriceEventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 1000:
+        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            run NNPC_Select_Sell_Gift::Root_OverFlowrun NNPC_Select_Sell_Gift::Root_OverFlow()
+        else:
+            run NNPC_Select_Sell_Gift::Rootrun NNPC_Select_Sell_Gift::Root()
+entrypoint Event20:
+    MainNpc.EventFlags['cNpcMemory:IsReceiptWrappingItem'] = true
+    MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_ToNNPC')
+ 
+flow Select_Finish_Disappear():
+    if SubflowResults@2[0] == 0:
+        MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+    else:
+        EventFlowSystemActor.SetCalcPriceBySoloEventFlowSystemActor.SetCalcPriceBySolo()
+    if EventFlowSystemActor.UICheckSelectedItemPriceEventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1000:
+        run Event20()
+    elif EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+        run NNPC_Select_Sell_Gift::Root_OverFlowrun NNPC_Select_Sell_Gift::Root_OverFlow()
+        run Event20()
+    else:
+        run NNPC_Select_Sell_Gift::Root_Disappearrun NNPC_Select_Sell_Gift::Root_Disappear()
+        run Event20()
+ 
+local flow Sub_Event32():
+    MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(0, 1)
+    run Select_Finish()
+ 
+flow Valentine():
+    # RANDOM: Huh? What is it? // Huh? Do I get something? // Ooh! What are you giving me?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Select/BO_Select_General:003', true)
+    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cValentine', 65534, '', '', '', false)
+    run Event25()
+ 
+flow v200_BirthDayCupCake():
+    if (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('BdayCupcake', '', '', '', '', '', '', '', 'cItemSelect')) and (not MainNpc.EventFlags['cNpcMemory:BirhdayPCupcakeFlag']) and (((EventFlowSystemActor.MainPlayerIsBirthdayEventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime')) and (EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0)) or ((EventFlowSystemActor.IsTheDayAfterTalkPlayerBithdayEventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0))):
+        run NNPC_GEvent_BirthdayP::Give_Capcake_fromGeneralrun NNPC_GEvent_BirthdayP::Give_Capcake_fromGeneral()
+ 

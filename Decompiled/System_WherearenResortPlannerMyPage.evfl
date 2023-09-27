@@ -1,0 +1,177 @@
+flow ExitMyPage():
+    run System_WherearenResortPlannerInspect::WherearenInspectListrun System_WherearenResortPlannerInspect::WherearenInspectList()
+ 
+flow FromMyPage():
+    EventFlowSystemActor.UIPortfolioPromotionAppearEventFlowSystemActor.UIPortfolioPromotionAppear()
+    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
+    EventFlowSystemActor.UIPortfolioPromotionWaitManipulateEventFlowSystemActor.UIPortfolioPromotionWaitManipulate()
+entrypoint Event0:
+    switch EventFlowSystemActor.UIConstructionPortfolioPromotionResultEventFlowSystemActor.UIConstructionPortfolioPromotionResult():
+        case 0:
+            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+            run Process_UpdateSlot()
+            run ExitMyPage()
+        case 1:
+            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+            run Process_UpdateSlot()
+            if SubflowResults@2[0] == 0:
+                run System_WherearenResortPlannerInspect::DownloadOpusDatarun System_WherearenResortPlannerInspect::DownloadOpusData()
+                if SubflowResults@2[0] == 0:
+                    System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromMyPage'] = true
+                    run System_WherearenResortPlannerInspect::InspectHouserun System_WherearenResortPlannerInspect::InspectHouse()
+                else:
+                    run FromMyPage()
+            else:
+                run FromMyPage()
+        case 2:
+            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+            run Process_UpdateSlot()
+            if SubflowResults@2[0] == 0:
+                run Process_StopPromote()
+                if SubflowResults@3[0] in (0, 1):
+                    run FromMyPage()
+                else:
+                    run ExitMyPage()
+            else:
+                run FromMyPage()
+        case 3:
+            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+            run Process_UpdateSlot()
+            if SubflowResults@2[0] == 0:
+                run Process_Promote()
+                switch SubflowResults@5[0]:
+                    case 0:
+                        run FromMyPageFinishUpload()
+                    case 1, 2, 3:
+                        run FromMyPage()
+                    case 4:
+                        run ExitMyPage()
+            else:
+                run FromMyPage()
+        case 4:
+            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+            run Process_UpdateSlot()
+            if SubflowResults@2[0] == 0:
+                run Process_UpdateSNS(is_new=false)
+            run FromMyPage()
+        case 5:
+            EventFlowSystemActor.UIPortfolioPromotionToSettingEventFlowSystemActor.UIPortfolioPromotionToSetting()
+            run System_WherearenResortPlanner_Config::Rootrun System_WherearenResortPlanner_Config::Root()
+            EventFlowSystemActor.UIPortfolioPromotionFromSettingEventFlowSystemActor.UIPortfolioPromotionFromSetting()
+            run FromMyPageConfig()
+ 
+flow FromMyPageConfig():
+    run FromMyPageFinishUpload()
+ 
+flow FromMyPageFinishUpload():
+    EventFlowSystemActor.UIPortfolioPromotionReManipulateAndWaitEventFlowSystemActor.UIPortfolioPromotionReManipulateAndWait()
+    run Event0()
+ 
+flow MyPromotion():
+    if EventFlowSystemActor.NetHasWherearenAuthorIDEventFlowSystemActor.NetHasWherearenAuthorID():
+        EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+        EventFlowSystemActor.NetWherearenSearchOpusListEventFlowSystemActor.NetWherearenSearchOpusList('cMyself')
+        EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            run ExitMyPage()
+        else:
+            run FromMyPage()
+    else:
+        run FromMyPage()
+ 
+flow Process_Promote():
+    run System_WherearenResortPlanner_Net::SignIn_ResortPlannerRootrun System_WherearenResortPlanner_Net::SignIn_ResortPlannerRoot(GetRAID=true)
+    if SubflowResults@2[0] == 0:
+        EventFlowSystemActor.UISetIsPromotionFlowFlagEventFlowSystemActor.UISetIsPromotionFlowFlag(true)
+        EventFlowSystemActor.UIClientListHandlingEventFlowSystemActor.UIClientListHandling()
+        if EventFlowSystemActor.UIClientListResultEventFlowSystemActor.UIClientListResult() in (0, 1, 2, 4):
+            SubflowResults[0] = 2
+        else:
+            EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+            EventFlowSystemActor.NetWherearenUploadOpusDataEventFlowSystemActor.NetWherearenUploadOpusData()
+            if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+                EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+                SubflowResults[0] = 1
+            else:
+                EventFlowSystemActor.NetWherearenSearchOpusListEventFlowSystemActor.NetWherearenSearchOpusList('cMyself')
+                EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+                if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+                    SubflowResults[0] = 4
+                else:
+                    EventFlowSystemActor.UIPortfolioPromotionAppearEventFlowSystemActor.UIPortfolioPromotionAppear()
+                    EventFlowSystemActor.UIPortfolioPromotionWaitManipulateEventFlowSystemActor.UIPortfolioPromotionWaitManipulate()
+                    if EventFlowSystemActor.UIPortfolioPromotionNewTargetFailureEventFlowSystemActor.UIPortfolioPromotionNewTargetFailure():
+                        EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+                        SubflowResults[0] = 4
+                    elif not EventFlowSystemActor.WherearenTodayFlagBoolEventFlowSystemActor.WherearenTodayFlagBool('cTkkrInfoSNS'):
+                        EventFlowSystemActor.WherearenTodayFlagOnEventFlowSystemActor.WherearenTodayFlagOn('cTkkrInfoSNS')
+                        # The post has been added to your profile page! Did you want to share the posted property on social media?
+                        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1105', true)
+                        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                            System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = true
+                            # You can share the posted property to social media at any time from your profile page.
+                            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1106', true)
+                            SubflowResults[0] = 0
+                        else:
+                            System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = false
+                            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+                            run Process_UpdateSNS(is_new=true)
+                            SubflowResults[0] = 3
+                    elif System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled']:
+                        SubflowResults[0] = 0
+                    else:
+                        # The post has been added to your profile page! Did you want to share the posted property on social media?
+                        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1105', true)
+                        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                            System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = true
+                            # You can share the posted property to social media at any time from your profile page.
+                            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1106', true)
+                            SubflowResults[0] = 0
+                        else:
+                            System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = false
+                            EventFlowSystemActor.UIPortfolioPromotionDisappearEventFlowSystemActor.UIPortfolioPromotionDisappear()
+                            run Process_UpdateSNS(is_new=true)
+                            SubflowResults[0] = 3
+        EventFlowSystemActor.UISetIsPromotionFlowFlagEventFlowSystemActor.UISetIsPromotionFlowFlag(false)
+    else:
+        SubflowResults[0] = 1
+ 
+flow Process_StopPromote():
+    EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+    EventFlowSystemActor.NetWherearenDeleteOpusDataEventFlowSystemActor.NetWherearenDeleteOpusData()
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+        SubflowResults[0] = 1
+    else:
+        EventFlowSystemActor.NetWherearenSearchOpusListEventFlowSystemActor.NetWherearenSearchOpusList('cMyself')
+        EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            SubflowResults[0] = 2
+        else:
+            SubflowResults[0] = 0
+ 
+flow Process_UpdateSNS(is_new: bool):
+    EventFlowSystemActor.UIConstructionPortfolioSNSShareHandlingEventFlowSystemActor.UIConstructionPortfolioSNSShareHandling()
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        if is_new:
+            EventFlowSystemActor.NetWherearenPostToSNSEventFlowSystemActor.NetWherearenPostToSNS('cNew')
+        else:
+            EventFlowSystemActor.NetWherearenPostToSNSEventFlowSystemActor.NetWherearenPostToSNS('cLater')
+        EventFlowSystemActor.UIConstructionPortfolioSNSShareDisappearHandlingEventFlowSystemActor.UIConstructionPortfolioSNSShareDisappearHandling()
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            SubflowResults[0] = 1
+        else:
+            SubflowResults[0] = 0
+    else:
+        EventFlowSystemActor.UIConstructionPortfolioSNSShareDisappearHandlingEventFlowSystemActor.UIConstructionPortfolioSNSShareDisappearHandling()
+        SubflowResults[0] = 2
+ 
+flow Process_UpdateSlot():
+    EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+    EventFlowSystemActor.NetWherearenSortOpusDataEventFlowSystemActor.NetWherearenSortOpusData()
+    EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        SubflowResults[0] = 1
+    else:
+        SubflowResults[0] = 0
+ 

@@ -1,0 +1,18 @@
+flow Bpt_Chk_FinishFortunes():
+    if not System.EventFlags['cPlayer:Bpt_FinishFortune_Today']:
+        if System.EventFlags['cPlayer:Bpt_FinishCompatibilityToday']:
+            SubflowResults[0] = 1
+    elif System.EventFlags['cPlayer:Bpt_FinishCompatibilityToday']:
+        # Tomorrow will bring new guidance, I'm sure. If you want to know what it is, please come and see me then. May my crystal guide you for today.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:013', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+    else:
+        SubflowResults[0] = 2
+ 
+flow Bpt_Chk_Have1000Bell():
+    if not EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(1000):
+        # <50:3>PLAYER… I see in my crystal that your wallet does not seem to carry 1,000 Bells. I am sorry, but I cannot give your fortune for free… I do hope…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:012', false)
+        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

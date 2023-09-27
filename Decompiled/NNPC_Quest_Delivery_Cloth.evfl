@@ -1,0 +1,174 @@
+flow Cloth():
+    MainNpc.SetItemNameMainNpc.SetItemName(11, 0, 0)
+    MainNpc.SetNpcNameMainNpc.SetNpcName(3, 1)
+    if MainNpc.DeliveryIsSameClothAsNowWearMainNpc.DeliveryIsSameClothAsNowWear():
+        # What? This is [a|an] <125:0:0000>! I'm wearing one right now! I guess they didn't know I had one of these!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:003', false)
+        MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
+        MainNpc.QuestFlags['cDeliveryItemOpen'] = false
+        run NotWear()
+    else:
+        MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(2, 2)
+        if MainNpc.DeliveryItemIsFavorMainNpc.DeliveryItemIsFavor():
+            # Aww, yeah. So cool! It's [a|an] <125:0:0000>! I've been wanting something like this for a long time! Oh man, should I try it on now?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:001', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                # Cool… I'll try it on right now.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:004', true)
+                run Recommend()
+            else:
+                # Yeah, you're right, I'll take off my clothes, and put other ones on later. When I'm alone, <110:5>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:005', false)
+                run Sub_Event76()
+        else:
+            # Huh… It's [a|an] <125:0:0000>… I never wear this style. Do ya think it'll make me look chill? Or at least maybe hide the snack stains?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:002', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                # Alright, yeah! Gimme one second.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:006', true)
+                run Recommend()
+            else:
+                # Hmm… Yeah… I'll try it on later… When I'm alone, <110:5>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:007', false)
+                run Sub_Event76()
+ 
+flow NotWear():
+    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+        case 3:
+            # But I still really dig the gift <115:1:cd01> picked out for me.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:300', false)
+            run NNPC_Quest_Delivery_End::Thanks2run NNPC_Quest_Delivery_End::Thanks2()
+        case 4:
+            switch MainNpc.CheckClientNpcLookMainNpc.CheckClientNpcLook():
+                case 0:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:301', false)
+                case 1:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:302', false)
+                case 2:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:303', false)
+                case 3:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:304', false)
+                case 4:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:305', false)
+                case 5:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:306', false)
+                case 6:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:307', false)
+                case 7:
+                    # OK, I think I get where <115:1:cd01>'s coming from. I oughta go say I'm sorry too. It's the chill thing to do.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:308', false)
+            run NNPC_Quest_Delivery_End::Thanks3run NNPC_Quest_Delivery_End::Thanks3()
+        default:
+            return
+ 
+flow Recommend():
+    MainNpc.SetDeliveryClothToChangeMainNpc.SetDeliveryClothToChange(0)
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(4, 'Default')
+    MainNpc.SetDeliveryClothInfoMainNpc.SetDeliveryClothInfo(0)
+    # Well? Do I look good?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:100', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # A huh huh huh, really? Thanks!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:101', false)
+        run Sub_grp_Event74()
+    else:
+        # Aw, really? I should hurry up and change, then, huh?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:102', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Maybe you're right? I just gotta get used to this look!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:103', false)
+            run Sub_grp_Event74()
+        else:
+            # Yeah, it's not my style.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:104', false)
+            MainNpc.SetDeliveryClothToChangeMainNpc.SetDeliveryClothToChange(1)
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(4, 'Default')
+            MainNpc.SetDeliveryClothInfoMainNpc.SetDeliveryClothInfo(1)
+            MainNpc.QuestFlags['cDeliveryClothChangeAtLeast'] = true
+            # I mean… just imagine nacho cheese stains on this outfit. They'd clash so bad, a huh huh huh!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:105', false)
+            run NotWear()
+ 
+local flow Sub_Event76():
+    MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
+    MainNpc.QuestFlags['cDeliveryItemOpen'] = false
+    run NotWear()
+ 
+local flow Sub_grp_Event74():
+    if MainNpc.IsBeforeClothFromPlayerMainNpc.IsBeforeClothFromPlayer():
+        MainNpc.QuestFlags['cDeliveryOriginalClothFromPlayer'] = true
+    if MainNpc.DeliveryOriginalIsReadyMadeMainNpc.DeliveryOriginalIsReadyMade():
+        MainNpc.QuestFlags['cDeliveryClothChange'] = true
+    MainNpc.NpcSetShowFlagMainNpc.NpcSetShowFlag()
+    MainNpc.QuestFlags['cDeliveryClothChangeKeep'] = true
+    MainNpc.UpdateNpcUsuallyTopsMainNpc.UpdateNpcUsuallyTops('cTops')
+    run Wear()
+ 
+flow Wear():
+    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+        case 3:
+            switch MainNpc.CheckClientNpcLookMainNpc.CheckClientNpcLook():
+                case 0:
+                    # <50:3><115:1:cd01> is great with clothes. She knew this'd look good on me, and she was right.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:201', false)
+                case 1:
+                    # I dig <115:1:cd01>'s "fab" sense of style, ya know? What's she say? "Trez fabbles"? She's that!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:202', false)
+                case 2:
+                    # Man, how'd <115:1:cd01> know what'd look good on me?<10:4> Man, I don't know what looks good on me.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:203', false)
+                case 3:
+                    # Oh, <115:1:cd01>… She knows me so well!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:204', false)
+                case 4:
+                    # Nice. I tell ya, it's seriously like <115:1:cd01> and me love the same clothes…snacks…everything!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:205', false)
+                case 5:
+                    # Man, <115:1:cd01> is good at sports AND fashion? Wow!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:206', false)
+                case 6:
+                    # I always thought <115:1:cd01> was kinda scary, but maybe that dude's not so bad after all.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:207', false)
+                case 7:
+                    # <50:3><115:1:cd01> is, like, so fashionable. It's super cool of him to give me clothes!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:208', false)
+            run NNPC_Quest_Delivery_End::Thanks2run NNPC_Quest_Delivery_End::Thanks2()
+        case 4:
+            switch MainNpc.CheckClientNpcLookMainNpc.CheckClientNpcLook():
+                case 0:
+                    # Oh man. Our fight was bothering <115:1:cd01> too, wasn't it? OK. I'm gonna go apologize too.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:209', false)
+                case 1:
+                    # It was so nice of <115:1:cd01> to send me a "fab" apology gift… OK! I'm gonna apologize too!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:210', false)
+                case 2:
+                    # Yeah, I forgive <115:1:cd01>. I mean, come on! Right? She's a real cool gal. And that was a nice gift. Ya know what? I'm gonna go apologize to her to…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:211', false)
+                case 3:
+                    # I'm a little surprised that <115:1:cd01> sent me a gift to apologize. But ya know what? That's a real cool thing to do. I'm gonna go apologize to her…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:212', false)
+                case 4:
+                    # Man… <50:3><115:1:cd01> sent me the same present I was thinking about sending him. He's a cool dude, and a real cool Snack Buddy… I'm gonna go apolog…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:213', false)
+                case 5:
+                    # I thought <115:1:cd01> only cared about <135:6:cd00>, but I guess I was wrong! You know what? I'm gonna go apologize too!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:214', false)
+                case 6:
+                    # Wow, an apology gift for me? That fight must have been harshing <115:1:cd01>'s chill skill. OK! I'm gonna go apologize too! Maybe he'll be less grump…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:215', false)
+                case 7:
+                    # <50:3><115:1:cd01> sent me a gift to apologize? Aw, man. So cool. And, like, mature and stuff. Ya know what? I'm gonna go apologize too!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Cloth:216', false)
+            run NNPC_Quest_Delivery_End::Thanks3run NNPC_Quest_Delivery_End::Thanks3()
+        default:
+            return
+ 

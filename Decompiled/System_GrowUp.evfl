@@ -1,0 +1,200 @@
+flow AfterNet():
+    run DateCheckWithSave()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    run CallGrowUpGameWeatherProcess()
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cAfterNet')
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    EventFlowSystemActor.NetReceiveMailEventFlowSystemActor.NetReceiveMail()
+    run Save()
+    EventFlowSystemActor.SpecialDemoStartEventFlowSystemActor.SpecialDemoStart('cReturnMulti')
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_Network', 'VisitEndMileGet', false, false, false)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cFrontOfAirPort', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow BCATProcess():
+    EventFlowSystemActor.SetBcatProcessEventFlowSystemActor.SetBcatProcess()
+    EventFlowSystemActor.NetConnectInitEventFlowSystemActor.NetConnectInit('cConnectInet', true)
+    if not EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.NetReceiveBcatEventFlowSystemActor.NetReceiveBcat()
+ 
+flow CallGrowUpGameWeatherProcess():
+    if EventFlowSystemActor.PassDaysSincePreviousGrowUpEventFlowSystemActor.PassDaysSincePreviousGrowUp():
+        run System_GrowUp_GameProcess::Rootrun System_GrowUp_GameProcess::Root()
+        run System_GrowUp_WeatherControl::FirstLiverun System_GrowUp_WeatherControl::FirstLive()
+    else:
+        if EventFlowSystemActor.BackDaysSincePreviousGrowUpEventFlowSystemActor.BackDaysSincePreviousGrowUp():
+            run System_GrowUp_GameProcess::Root_RewindDayrun System_GrowUp_GameProcess::Root_RewindDay()
+    run System_GrowUp_WeatherControl::Alwaysrun System_GrowUp_WeatherControl::Always()
+ 
+flow CallGrowUpPatchProcess():
+    System.EventFlags['cLand:GrowUpAfterPatch1_1'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_2'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_3'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_4'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_5'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_6'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_7'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_8'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_9'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_10'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch1_11'] = true
+    System.EventFlags['cLand:GrowUpAfterPatch2_0'] = true
+ 
+flow Continue():
+    run DateCheck()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    run CallGrowUpGameWeatherProcess()
+    run ContinueCommon()
+ 
+flow ContinueCommon():
+    run BCATProcess()
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cStart')
+    run System_WherearenGrowUp::WherearenProcessrun System_WherearenGrowUp::WherearenProcess()
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    run NSOProcess()
+    run NSOOptimizeEnd()
+    run Save()
+    if not System.EventFlags['cPlayer:TownNewsReserve']:
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cMainFieldPlayerHouse', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    elif (System.EventFlags['cLand:BuiltTownOffice']) and (not System.EventFlags['cLand:BuiltTownOfficeToday']):
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUpTalk', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    else:
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUpTalkEventPlaza', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow DateCheck():
+    if not EventFlowSystemActor.IsGamePlayTimeEventFlowSystemActor.IsGamePlayTime():
+        run System_DateTimeNg::NoSaverun System_DateTimeNg::NoSave()
+ 
+flow DateCheckWithSave():
+    if not EventFlowSystemActor.IsGamePlayTimeEventFlowSystemActor.IsGamePlayTime():
+        run System_DateTimeNg::Rootrun System_DateTimeNg::Root()
+ 
+flow InGame():
+    run DateCheckWithSave()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    run CallGrowUpGameWeatherProcess()
+    run BCATProcess()
+    run NSOOptimizeBegin()
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cInGame')
+    run System_WherearenGrowUp::WherearenProcessrun System_WherearenGrowUp::WherearenProcess()
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    run NSOProcess()
+    run NSOOptimizeEnd()
+    run Save()
+    if (not System.EventFlags['cLand:BuiltTownOffice']) or (System.EventFlags['cLand:BuiltTownOfficeToday']):
+        EventFlowSystemActor.OverWriteFadeSettingEventFlowSystemActor.OverWriteFadeSetting('cNormalFader', 'cCircle', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.SaveAfterGrowUpEventFlowSystemActor.SaveAfterGrowUp()
+ 
+flow IsJoinNSO():
+    EventFlowSystemActor.CheckAoCWithEnsureNSOEventFlowSystemActor.CheckAoCWithEnsureNSO('AOC_EventFlag_001', 'AOC_EventFlag_002', false, true)
+ 
+flow NSOOptimizeBegin():
+    if (EventFlowSystemActor.GrowUpIntervalEventFlowSystemActor.GrowUpInterval(1)) and (not EventFlowSystemActor.GrowUpIntervalEventFlowSystemActor.GrowUpInterval(2)):
+        System.EventFlags['cPlayerTemp:GrowupNsoServerOptimization'] = true
+ 
+flow NSOOptimizeEnd():
+    System.EventFlags['cPlayerTemp:GrowupNsoServerOptimization'] = false
+ 
+flow NSOProcess():
+    EventFlowSystemActor.NetConnectInitEventFlowSystemActor.NetConnectInit('cConnectInet', true)
+    if not EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.NetCheckNSAEventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+        run IsJoinNSO()
+        if (not EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2)) and (EventFlowSystemActor.NetHasPOPIDEventFlowSystemActor.NetHasPOPID(true)):
+            EventFlowSystemActor.NetGetPOPIDEventFlowSystemActor.NetGetPOPID(true)
+            if (not EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2)) and (EventFlowSystemActor.NetHasPOPIDEventFlowSystemActor.NetHasPOPID(false)):
+                EventFlowSystemActor.NetUpdateFriendListEventFlowSystemActor.NetUpdateFriendList('cBestFriend')
+                EventFlowSystemActor.NetReceiveMailEventFlowSystemActor.NetReceiveMail()
+                EventFlowSystemActor.NetUpdateFriendLandWithIntervalEventFlowSystemActor.NetUpdateFriendLandWithInterval(1)
+                run System_ServerRegistration::UploadProfileCorerun System_ServerRegistration::UploadProfileCore(IgnoreError=true, Terminate=false)
+                EventFlowSystemActor.NetUploadEmoticonEventFlowSystemActor.NetUploadEmoticon(true, 10, true)
+                EventFlowSystemActor.NetUploadCatalogEventFlowSystemActor.NetUploadCatalog(false, true)
+                EventFlowSystemActor.NetUploadRewardUnlockEventFlowSystemActor.NetUploadRewardUnlock(true, true)
+                EventFlowSystemActor.NetUploadResortUnlockEventFlowSystemActor.NetUploadResortUnlock(false, true)
+                EventFlowSystemActor.NetUploadLifeTipsEventFlowSystemActor.NetUploadLifeTips(false, true)
+                EventFlowSystemActor.NetUploadPlayerMemoriesEventFlowSystemActor.NetUploadPlayerMemories(false, true)
+                run System_ServerRegistration::UploadResortProfilerun System_ServerRegistration::UploadResortProfile(IgnoreError=true, Terminate=false)
+ 
+flow NSO_HomeLandCheck():
+    return
+ 
+flow NewGame():
+    run DateCheck()
+    if EventFlowSystemActor.PassDaysSincePreviousGrowUpEventFlowSystemActor.PassDaysSincePreviousGrowUp():
+        run System_GrowUp_GameProcess::Rootrun System_GrowUp_GameProcess::Root()
+    run System_GrowUp_GameProcess::FirstDayrun System_GrowUp_GameProcess::FirstDay()
+    run System_GrowUp_WeatherControl::FirstDayrun System_GrowUp_WeatherControl::FirstDay()
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cStart')
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cMainFieldDemoLanding', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow PlayerSwitch():
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_GrowUp', 'PostPlayerSwitch', false, false, false)
+    run DateCheckWithSave()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    run CallGrowUpGameWeatherProcess()
+    if not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+        EventFlowSystemActor.UnmountAoCEventFlowSystemActor.UnmountAoC()
+    EventFlowSystemActor.SetupSharePlayEventFlowSystemActor.SetupSharePlay(false)
+ 
+flow PostPlayerSwitch():
+    if not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+        EventFlowSystemActor.MountAoCEventFlowSystemActor.MountAoC()
+    run Save()
+    EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cAll')
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cInGame')
+    run System_WherearenGrowUp::WherearenProcessrun System_WherearenGrowUp::WherearenProcess()
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    if not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+        EventFlowSystemActor.NetUpdateFriendListEventFlowSystemActor.NetUpdateFriendList('cBestFriend')
+        EventFlowSystemActor.NetReceiveMailEventFlowSystemActor.NetReceiveMail()
+    run Save()
+    EventFlowSystemActor.DemoSetShareStartFlagEventFlowSystemActor.DemoSetShareStartFlag()
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_SharePlay_Controller', 'Root', false, false, false)
+    if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cEventPlaza', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    else:
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cMainFieldPlayerHouse', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow Save():
+    EventFlowSystemActor.UISaveIconAppearEventFlowSystemActor.UISaveIconAppear()
+    EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+    EventFlowSystemActor.UISaveIconDisappearEventFlowSystemActor.UISaveIconDisappear()
+ 
+flow SharePlayForceBreakup():
+    EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cAll')
+    System.EventFlags['cPlayer:EquipLicenseHelmet'] = false
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_GrowUp', 'PostPlayerSwitch', false, false, false)
+    run DateCheckWithSave()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    run CallGrowUpGameWeatherProcess()
+    EventFlowSystemActor.SetupSharePlayEventFlowSystemActor.SetupSharePlay(true)
+ 
+flow Title():
+    run DateCheck()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUpdateAndLock')
+    if not EventFlowSystemActor.IsDoneBcatProcessEventFlowSystemActor.IsDoneBcatProcess():
+        run BCATProcess()
+    run CallGrowUpGameWeatherProcess()
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cTitle')
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    if EventFlowSystemActor.PlayAccountIsPlayerVillagerEventFlowSystemActor.PlayAccountIsPlayerVillager():
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cTitle', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    else:
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cDateCheck', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow TitleAfterSharePlay():
+    run DateCheck()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUpdateAndLock')
+    EventFlowSystemActor.MountAoCEventFlowSystemActor.MountAoC()
+    run CallGrowUpGameWeatherProcess()
+    EventFlowSystemActor.SaveGrowUpEventFlowSystemActor.SaveGrowUp('cTitle')
+    run CallGrowUpPatchProcess()
+    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cTitle', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 

@@ -1,0 +1,30 @@
+flow ChkGateOpen():
+    if not EventFlowSystemActor.IsVillageGateOpenedEventFlowSystemActor.IsVillageGateOpened():
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    elif System.EventFlags['cPlayer:EquipDustClothWithGateOpen']:
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    else:
+        System.EventFlags['cPlayer:EquipDustClothWithGateOpen'] = true
+        # Warning while Airport Gate Is Open If you get visitors on the island while polishing furniture, you will automatically stop polishing.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5211', true)
+ 
+local flow Sub_Event9():
+    System.EventFlags['cPlayer:WHEREAREN_NoticeAboutDustCloth2'] = true
+    run ChkGateOpen()
+ 
+flow TipsDialog():
+    if not System.EventFlags['cPlayer:WHEREAREN_NoticeAboutDustCloth']:
+        System.EventFlags['cPlayer:WHEREAREN_NoticeAboutDustCloth'] = true
+        if System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02']:
+            # Polishing Indoor Items  Make an item shine  Remove the shine  Change the effect on the item Press  again to remove the effect, or hold down  to …
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0102_01', false)
+            run Sub_Event9()
+        else:
+            # Polishing Indoor Items  Make an item shine  Remove the shine Press  again to remove the effect, or hold down  to do an especially thorough job.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0102', false)
+            run ChkGateOpen()
+    elif (not System.EventFlags['cPlayer:WHEREAREN_NoticeAboutDustCloth2']) and (System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02']):
+        # Changing Effects Now you can change the effect applied to an item by pressing !
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0102_02', false)
+        run Sub_Event9()
+ 

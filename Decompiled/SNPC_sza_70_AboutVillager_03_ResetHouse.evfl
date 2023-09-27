@@ -1,0 +1,30 @@
+flow Root():
+    switch MainNpc.SelectedNpcMoveTypeMainNpc.SelectedNpcMoveType():
+        case 0:
+            if EventFlowSystemActor.IsOnReformReserveFlagEventFlowSystemActor.IsOnReformReserveFlag():
+                if (not EventFlowSystemActor.IsOnNpcInteriorReserveFlagEventFlowSystemActor.IsOnNpcInteriorReserveFlag()) and (not EventFlowSystemActor.IsOnNpcExteriorReserveFlagEventFlowSystemActor.IsOnNpcExteriorReserveFlag()):
+                    # Oh, <115:1:cd00> is working on a few design suggestions that were made for [his|her] house. So, even without my asking, [his|her] house will probably…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:036', false)
+                else:
+                    # Oh, <115:1:cd00> is busy with the design suggestions you made for [his|her] house. I heard [he|she] really liked the plan, so things are already well…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:035', false)
+                run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
+            else:
+                # Oh dear… So there's an issue with <115:1:cd00>'s home? I'll see what I can do about reverting the exterior. For the interior, we'll need to talk to <…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:031', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    # OK. I'll set up a chat with <115:1:cd00> right now.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:032', false)
+                    MainNpc.SzaUgcResetMainNpc.SzaUgcReset('cHouse')
+                    run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
+                else:
+                    run SNPC_sza_70_AboutVillager::AboutVillager_CmnCancel2run SNPC_sza_70_AboutVillager::AboutVillager_CmnCancel2()
+        case 1:
+            # I just remembered! [He|She|] only moved here today! Let's wait a day or two for <115:1:cd00> to unpack.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:033', false)
+            run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
+        case 2:
+            # Oh! Except [he's|she's|] moving off the island tomorrow, so I'm sure [he's|she's|] been busy packing all day. Why don't we cut [him|her|] a little sl…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:034', false)
+            run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
+ 

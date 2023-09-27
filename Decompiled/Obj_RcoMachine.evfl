@@ -1,0 +1,364 @@
+flow ChkApologyMileWithPlayerMoving():
+    if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+        run LoginNormal()
+    elif System.EventFlags['cLand:BuiltTownOfficeToday']:
+        # A notice from the Nook Mileage Program:
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:102_01', false)
+        # We're sorry that the Nook Stop was unavailable all day yesterday due to construction on Resident Services.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:103_01', false)
+        run Cmn_WabiMilage()
+        # We hope you'll continue to use this Nook Stop and the Nook Mileage Program in the future.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:106_01', false)
+    elif not EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cNewYear', 'cGrowUpTime'):
+        run LoginNormal()
+    elif System.EventFlags['cLand:CountOfficeAfterBuild'] != 2:
+        # A New Year's greeting from the Nook Mileage Program:
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:102_02', false)
+        # Happy New Year! We're sorry that the Nook Stop was unavailable all day yesterday due to Resident Services' holiday closure.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:103_02', false)
+        run Cmn_WabiMilage()
+        # We hope you'll continue to use this Nook Stop and the Nook Mileage Program in the new year.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:106_02', false)
+    else:
+        run LoginNormal()
+ 
+flow ChkMydesignPro2():
+    if (System.EventFlags['cPlayer:MainmenuUnlockMydesingPro']) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`):
+        System.EventFlags['cPlayer:AddHowtoBookMydesignPro2'] = true
+        System.EventFlags['cPlayer:RcoMachineExplainMydesignPro2'] = true
+ 
+flow ChkPastDayFromPlayerMoving():
+    if (not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) or (EventFlowSystemActor.SystemCheckPastDaysFromPlayerMadeEventFlowSystemActor.SystemCheckPastDaysFromPlayerMade() < 1):
+        run LoginNormal()
+    elif EventFlowSystemActor.SystemCheckPastDaysFromPlayerMadeEventFlowSystemActor.SystemCheckPastDaysFromPlayerMade() < 2:
+        run ChkApologyMileWithPlayerMoving()
+    else:
+        run LoginNormal()
+ 
+flow ChkRcoMachineSel():
+    if System.EventFlags['cPlayer:RcoPaid1stCharge']:
+        if System.EventFlags['cPlayer:RcoMachineAmiiboCamperUnlock']:
+            SubflowResults[0] = 3
+        else:
+            SubflowResults[0] = 1
+    elif System.EventFlags['cPlayer:RcoMachineAmiiboCamperUnlock']:
+        SubflowResults[0] = 2
+    else:
+        SubflowResults[0] = 0
+ 
+flow ChkRcoNoticeFence():
+    if (not System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cLand:RcmImmQuestComplete']) and (not System.EventFlags['cPlayer:ObjRcoMachineHeardFenceRecipe']):
+        System.EventFlags['cPlayer:ObjRcoMachineHeardFenceRecipe'] = true
+ 
+flow Cmn_WabiMilage():
+    System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] = 6
+    System.EventFlags['cPlayer:RcoMachineDailyLoginCheck'] = true
+    # To make up for that, we're giving any customers who access the Nook Stop today 500 miles.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:104', false)
+    EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(500, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    # Also, regardless of your access history, your daily access bonus will be set at 7+ days tomorrow.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:105', false)
+ 
+flow DeliverFriend():
+    EventFlowSystemActor.CheckFreeCommunicationEventFlowSystemActor.CheckFreeCommunication(true)
+    if EventFlowSystemActor.IsApprovedFreeCommunicationEventFlowSystemActor.IsApprovedFreeCommunication():
+        EventFlowSystemActor.NetUpdateFriendListEventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
+        run ReSelectDestinationFriend()
+    else:
+        run DeliveryCancel()
+ 
+flow DeliverVillager():
+    EventFlowSystemActor.UIMsgCardAdrHandlingEventFlowSystemActor.UIMsgCardAdrHandling('cPlayerResident')
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.UIMsgCardSelectHandlingEventFlowSystemActor.UIMsgCardSelectHandling()
+        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.UIMsgCardEditTextHandlingEventFlowSystemActor.UIMsgCardEditTextHandling('cMessageCard')
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
+                EventFlowSystemActor.CatalogMailSendEventFlowSystemActor.CatalogMailSend()
+                EventFlowSystemActor.ClearCatalogShoppingMsgCardSettingEventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
+                EventFlowSystemActor.UICatalogRestartHandlingEventFlowSystemActor.UICatalogRestartHandling(true)
+                run Restart()
+            else:
+                run Sub_Event226()
+        else:
+            run ReSelectDestination()
+    else:
+        run Sub_Event226()
+ 
+flow DeliveryCancel():
+    EventFlowSystemActor.ClearCatalogShoppingMsgCardSettingEventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
+    EventFlowSystemActor.UICatalogRestartHandlingEventFlowSystemActor.UICatalogRestartHandling(false)
+    run Restart()
+ 
+flow DeliveryError():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    # The item could not be sent. Do you want to try again?
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1116', true)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cCatalogItemPrice', 0)
+        # The item's cost of <90:26:0000> will be returned.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1119', true)
+        EventFlowSystemActor.CountDownCatalogItemPriceEventFlowSystemActor.CountDownCatalogItemPrice(true)
+        run DeliveryCancel()
+    else:
+        run RetryDeliverFriend()
+ 
+flow ExplainMydesignPro2AndRcoSelSeq():
+    if System.EventFlags['cPlayer:RcoMachineExplainMydesignPro2']:
+        run RcoSelSeq()
+    elif System.EventFlags['cPlayer:AddHowtoBookMydesignPro2']:
+        # System Notification You can now redeem Nook Miles to expand the features of your Custom Design Pro Editor app.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:582', false)
+        System.EventFlags['cPlayer:RcoMachineExplainMydesignPro2'] = true
+        run RcoSelSeq()
+    else:
+        run RcoSelSeq()
+ 
+flow LoginNormal():
+    System.EventFlags['cPlayer:RcoMachineDailyLoginCheck'] = true
+    if System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] == 0:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (Day 1: 50 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_01', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(50, false)
+    elif System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] == 1:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (2 days in a row: 80 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_02', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(80, false)
+    elif System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] == 2:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (3 days in a row: 100 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_03', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(100, false)
+    elif System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] == 3:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (4 days in a row: 150 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_04', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(150, false)
+    elif System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] == 4:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (5 days in a row: 200 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_05', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(200, false)
+    elif System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] != 5:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (7+ days in a row: 300 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_07', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(300, false)
+    else:
+        # Once per day, accessing the Nook Stop will award you bonus daily miles. (6 days in a row: 250 bonus miles)
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:101_06', false)
+        EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(250, false)
+ 
+flow RcoMachineATM():
+    EventFlowSystemActor.UIAtmHandlingEventFlowSystemActor.UIAtmHandling(0)
+    if not System.EventFlags['cPlayer:PlayerLoanRepaying']:
+        run RcoSelSeq()
+    elif EventFlowSystemActor.PlayerHasLoanEventFlowSystemActor.PlayerHasLoan():
+        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_FinishLoan', 'cNowDemoEnd', false)
+    else:
+        run RcoSelSeq()
+ 
+flow RcoMachineDailyLogin():
+    System.EventFlags['cPlayer:RcoGotLoginBonusToday'] = true
+    if System.EventFlags['cPlayer:ObjRcoMachineCheck1st']:
+        run ChkApologyMileWithPlayerMoving()
+    else:
+        run ChkPastDayFromPlayerMoving()
+ 
+flow RcoMachineOnlineShopping():
+    EventFlowSystemActor.UICatalogHandlingEventFlowSystemActor.UICatalogHandling()
+    run Restart()
+ 
+flow RcoSelSeq():
+    run ChkRcoMachineSel()
+    switch SubflowResults@8[0]:
+        case 0:
+            # Please select from the following services:
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:002_01', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                case 0:
+                    run RcoMachineOnlineShopping()
+                case 1:
+                    run RcoMachineATM()
+                case 2:
+                    run SelExit()
+        case 1:
+            # Please select from the following services:
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:002', false)
+            switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                case 0:
+                    run Obj_RcoMachine_MileExchange::Rootrun Obj_RcoMachine_MileExchange::Root()
+                case 1:
+                    run RcoMachineOnlineShopping()
+                case 2:
+                    run RcoMachineATM()
+                case 3:
+                    run SelExit()
+        case 2:
+            # Please select from the following services:
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:008', false)
+            switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                case 0:
+                    run RcoMachineOnlineShopping()
+                case 1:
+                    run RcoMachineATM()
+                case 2:
+                    run Obj_RcoMachine_Amiibo::Rootrun Obj_RcoMachine_Amiibo::Root()
+                case 3:
+                    run SelExit()
+        case 3:
+            # Please select from the following services:
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:007', false)
+            switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+                case 0:
+                    run Obj_RcoMachine_MileExchange::Rootrun Obj_RcoMachine_MileExchange::Root()
+                case 1:
+                    run RcoMachineOnlineShopping()
+                case 2:
+                    run RcoMachineATM()
+                case 3:
+                    run Obj_RcoMachine_Amiibo::Rootrun Obj_RcoMachine_Amiibo::Root()
+                case 4:
+                    run SelExit()
+        default:
+            return
+ 
+flow ReSelectDestination():
+    run DeliverVillager()
+ 
+flow ReSelectDestinationFriend():
+    EventFlowSystemActor.UIAddresseeFriendHandlingEventFlowSystemActor.UIAddresseeFriendHandling()
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.UIMsgCardSelectHandlingEventFlowSystemActor.UIMsgCardSelectHandling()
+        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.UIMsgCardEditTextHandlingEventFlowSystemActor.UIMsgCardEditTextHandling('cMessageCard')
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
+                run RetryDeliverFriend()
+            else:
+                run DeliveryCancel()
+        else:
+            run ReSelectDestinationFriend()
+    else:
+        run DeliveryCancel()
+ 
+flow Restart():
+    switch EventFlowSystemActor.IsDeliveryToOthersEventFlowSystemActor.IsDeliveryToOthers('cCatalog'):
+        case 0:
+            run DeliverVillager()
+        case 1:
+            if not EventFlowSystemActor.UIIsCatalogBootSmartPhoneEventFlowSystemActor.UIIsCatalogBootSmartPhone():
+                if System.EventFlags['cLifeSupportAchievement:BuyItemCatalog'] < 100:
+                    run RcoSelSeq()
+                elif System.EventFlags['cPlayer:MainmenuOnlineShopping']:
+                    run RcoSelSeq()
+                else:
+                    # Nook Shopping Notification: Thank you for using Nook Shopping. You have placed 100 orders through this service. To mark this occasion, we're giving y…
+                    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:071', true)
+                    run Obj_RcoMachine_MileExchange::RecipeReceiveing1_Receiverun Obj_RcoMachine_MileExchange::RecipeReceiveing1_Receive()
+                    System.EventFlags['cPlayer:MainmenuOnlineShopping'] = true
+                    EventFlowSystemActor.UIMenuDeviceAppearEventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cCatalog')
+                    # The app has been installed. We hope you continue to enjoy using the Nook Shopping service.
+                    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:072', false)
+                    run Obj_RcoMachine_MileExchange::RecipeReceiveing2_Endrun Obj_RcoMachine_MileExchange::RecipeReceiveing2_End()
+                    EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_ShoppingAppli', 'cNowDemoEnd', false)
+                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 2:
+            run DeliverFriend()
+ 
+flow RetryDeliverFriend():
+    # Connecting to the internet...
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1117', false)
+    fork:
+        branch:
+            EventFlowSystemActor.NetConnectInitEventFlowSystemActor.NetConnectInit('cConnectInet', true)
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(30)
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        run DeliveryError()
+    else:
+        EventFlowSystemActor.NetCheckNSAEventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            run DeliveryError()
+        else:
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            # Sending item... Do not touch  while saving.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1118', false)
+            EventFlowSystemActor.SuspendSharePlayCtrlCheckEventFlowSystemActor.SuspendSharePlayCtrlCheck()
+            EventFlowSystemActor.NetSendMailPreProcEventFlowSystemActor.NetSendMailPreProc('cCatalogGift')
+            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+            fork:
+                branch:
+                    EventFlowSystemActor.NetSendMailEventFlowSystemActor.NetSendMail()
+                branch:
+                    EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(30)
+            if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+                EventFlowSystemActor.NetSendMailAfterFailProcEventFlowSystemActor.NetSendMailAfterFailProc()
+                EventFlowSystemActor.ResumeSharePlayCtrlCheckEventFlowSystemActor.ResumeSharePlayCtrlCheck()
+                run DeliveryError()
+            else:
+                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.ClearCatalogShoppingMsgCardSettingEventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
+                EventFlowSystemActor.UICatalogRestartHandlingEventFlowSystemActor.UICatalogRestartHandling(true)
+                EventFlowSystemActor.ResumeSharePlayCtrlCheckEventFlowSystemActor.ResumeSharePlayCtrlCheck()
+                run Restart()
+ 
+flow Root():
+    # Welcome to Nook Stop, a multimedia terminal from Nook Inc.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:001', false)
+    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        # Only registered residents of ISLAND can use this terminal.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:001_03', false)
+    elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+        # You must be registered as a resident to use this service.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:001_02', false)
+    else:
+        if not System.EventFlags['cPlayer:RcoGotLoginBonusToday']:
+            EventFlowSystemActor.UISonkatsuPointAppearEventFlowSystemActor.UISonkatsuPointAppear()
+            run RcoMachineDailyLogin()
+            EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
+        System.EventFlags['cPlayer:ObjRcoMachineCheck1st'] = true
+        run Obj_RcoMachine_MileExchange_v2_0_0_UnlockDisplay::UnlockDisplayChkrun Obj_RcoMachine_MileExchange_v2_0_0_UnlockDisplay::UnlockDisplayChk()
+        if not System.EventFlags['cPlayer:RcoPaid1stCharge']:
+            run RcoSelSeq()
+        elif not System.EventFlags['cPlayer:RcoMachineEnableExchange']:
+            # System Notification: Your account is now registered for miles-redemption services. We hope you continue to enjoy the many benefits of the Nook Mileag…
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:016', false)
+            if System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
+                System.EventFlags['cPlayer:OBJRcoMachineChkPlusEnable'] = true
+            System.EventFlags['cPlayer:RcoMachineEnableExchange'] = true
+            run ChkRcoNoticeFence()
+            run RcoSelSeq()
+        elif not System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
+            run ExplainMydesignPro2AndRcoSelSeq()
+        elif not System.EventFlags['cPlayer:OBJRcoMachineChkPlusEnable']:
+            # System Notification: Congratulations on upgrading to the Nook Miles+ program! With this upgrade, you'll have access to even more redemption options. …
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:016_01', false)
+            System.EventFlags['cPlayer:OBJRcoMachineChkPlusEnable'] = true
+            run RcoSelSeq()
+        elif not System.EventFlags['cPlayer:TanuportAmiiboBromideUnlock']:
+            run ExplainMydesignPro2AndRcoSelSeq()
+        elif System.EventFlags['cPlayer:PrintServiceExplain']:
+            run ExplainMydesignPro2AndRcoSelSeq()
+        else:
+            # System Notification You can now order posters of models you've called to Photopia via Special Goods in Nook Shopping. We hope you continue to enjoy u…
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:581', false)
+            System.EventFlags['cPlayer:PrintServiceExplain'] = true
+            run RcoSelSeq()
+ 
+flow SelExit():
+    EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
+    # Thank you for your patronage.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:003', false)
+ 
+flow SelExitFromMileExchange():
+    run SelExit()
+ 
+flow SmaphoCatalogOpenErrorOutsideArea():
+    # Hm? It says "Outside service area." Guess I can't use it here.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:311', false)
+ 
+local flow Sub_Event226():
+    EventFlowSystemActor.ClearCatalogShoppingMsgCardSettingEventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
+    EventFlowSystemActor.UICatalogRestartHandlingEventFlowSystemActor.UICatalogRestartHandling(false)
+    run Restart()
+ 

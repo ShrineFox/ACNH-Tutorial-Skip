@@ -1,0 +1,157 @@
+flow Chk_CommuneShopStatus():
+    if (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSloDonation') != 0) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneCmlDonation') != 0) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneFoxDonation') != 0) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneBptDonation') != 0) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSkkDonation') != 0) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneAlpDonation') != 0) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneTtlDonation') != 0):
+        SubflowResults[0] = 2
+    else:
+        SubflowResults[0] = 0
+        if not ((EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSloDonation') in (0, 1)) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneCmlDonation') in (0, 1)) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneFoxDonation') in (0, 1)) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneBptDonation') in (0, 1)) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSkkDonation') in (0, 1)) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneAlpDonation') in (0, 1)) and (EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneTtlDonation') != 2)):
+            SubflowResults[0] = 1
+ 
+flow FadeOut():
+    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+    Player.PlayerDemoTurnPlayer.PlayerDemoTurn('cSouth')
+    Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+    EventFlowSystemActor.NpcWarpCommuneEventFlowSystemActor.NpcWarpCommune()
+    run AI_NPC_Spn_Commune::Spn_Posrun AI_NPC_Spn_Commune::Spn_Pos()
+    EventFlowSystemActor.PooWarpCommuneEventFlowSystemActor.PooWarpCommune(false)
+    run AI_NPC_Poo_Commune::Poo_Posrun AI_NPC_Poo_Commune::Poo_Pos()
+    MainNpc.SetupWorkMotionForSpnPooMainNpc.SetupWorkMotionForSpnPoo()
+    EventFlowSystemActor.AlpSetupKeepBuckBoxEventFlowSystemActor.AlpSetupKeepBuckBox()
+    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(true, '')
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(69)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=false)
+ 
+flow NormalCommuneExpansion():
+    run Event2()
+ 
+flow Root():
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(69)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('CommuneExpansion', 'cDefault', 'Npc:spn', false, false, false, 0)
+    run Chk_CommuneShopStatus()
+    run ShopOpenEventSkip()
+    SubNpc.TurnBodySubNpc.TurnBody(10, 180.0)
+    if not System.EventFlags['cPlayer:SpnFirstTalkedAtCommuneIsland']:
+        if System.EventFlags['cPlayer:SpnExpandEventAfterJuneBride']:
+            # Hey, thanks for your help with the wedding photos. Everything works better when you got help. Now, there was another thing I wanted to jaw with you a…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:011', false)
+        else:
+            if System.EventFlags['cPlayer:SpnTalkAtHomelandToday']:
+                # Well, hey there, <110:3>! So happy you made it! I mean…we were on the same flight. So I guess I shoulda known you'd be here. Har har!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1001', false)
+            else:
+                # Heya! So glad you made it after all, PLAYER!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1002', false)
+        # Now, I have to do this officially before we can do anything else. Welcome to Harv's Island! Aw, I know it's kinda old-fashioned, but I want everyone …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1003', false)
+        if SubflowResults@3[0] in (0, 1):
+            # We're all working so hard to build this free-living collective here. I sure hope you find it agreeable.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1004', false)
+        else:
+            # We all worked so hard to build this free-living collective here. I sure hope you find it agreeable.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1004_01', false)
+        # Oh! What are you thinking, Harv? You haven't done introductions! [target N0>N1][target N1>N0,P0>N1]This is my old pal Harriet. [target N0>P0,P0>N0]Sh…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1005', false)
+        # [target N1>N0]They most certainly can NOT call me that, Harv. [target N0>N1,P0>N1]Only YOU can call me that! [target N0>P0,N1>P0]Sorry, sugar. I'm Ha…
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:003', false)
+        # [target P0>N0]Well, uh…there you have it.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:004', false)
+        if SubflowResults@3[0] in (0, 1):
+            # Now, here's the business part, where it gets kinda ugly. I hate even talking about Bells, you know? But a co-op can't build itself without a little c…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1006', false)
+        else:
+            # So, where was I?<10:4> Oh, right! Standing in the dream collective we all built as a community! Now, we've got all kinds of lovely co-ops for you to …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1006_01', false)
+        # Oh, picklesticks! I forgot one other thing. Sorry, pal. Ol' Harv's brain is on permanent island time. I'm sure you saw it on the way in, but I wanted…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:1007', true)
+        System.EventFlags['cPlayer:SpnFirstTalkedAtCommuneIsland'] = true
+        run Sub_Event43()
+    elif SubflowResults@3[0] in (0, 1):
+        if System.EventFlags['cPlayer:SpnExpandEventAfterJuneBride']:
+            # Hey, thanks for your help with the wedding photos. Everything works better when you got help. Now, there was another thing I wanted to jaw with you a…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:011', false)
+        # So did you get the li'l note I sent ya? <10:4>Well, you must have, since you're here! I'm so excited to share this with you!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:001', false)
+        switch SubflowResults@3[0]:
+            case 0:
+                # This…this right here is going to be the heart of our new collective. I've really put my soul into this!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:001_01', false)
+                run Event2()
+            case 1:
+                # This…this right here is the heart of our new collective. I've really put my soul into this!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:021_01', false)
+                run Event2()
+            default:
+                return
+    else:
+        # Hey, you made it! I'm so glad you're here. This…<10:4>this is the collective I've been dreaming about for ages! Maybe folks'll call it Harv's plaza…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:041', false)
+entrypoint Event2:
+        # Aw, but I've had plenty of help from all kinds of folks along the way. [target N0>N1][target N1>N0,P0>N1]Like my old pal Harriet here! [target N0>P0,…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:002', false)
+        # [target N1>N0]They most certainly can NOT call me that, Harv. [target N0>N1,P0>N1]Only YOU can call me that! [target N0>P0,N1>P0]Sorry, sugar. I'm Ha…
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:003', false)
+        # [target P0>N0]Well, uh…there you have it.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:004', false)
+        if SubflowResults@3[0] in (0, 1):
+            switch SubflowResults@3[0]:
+                case 0:
+                    # So, where was I?<10:4> Oh, right! My dream collective! Well, this is what I envision as the heart of the movement. A central plaza filled with co-ops.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:005', false)
+                    # Now, here's the business part, where it gets kinda ugly. I hate even talking about Bells, you know? But a co-op can't build itself without a little c…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:006', false)
+                    run Sub_Event7()
+                case 1:
+                    # So, where was I?<10:4> Oh, right! My dream collective! Well, as you can see, we've made a little bit of progress already. But my vision is a lot bigg…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:025', false)
+                    # And, well, here's where it gets a li'l awkward. Because we gotta talk Bells and finance and all that. We're operating as a collective, so we're, like…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:026', false)
+                    run Sub_Event7()
+                default:
+                    return
+        else:
+            # Anyways, you're here! Look around— do some shopping! Have fun! Tell folks about Harv's Plaza…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:044', true)
+            run Sub_Event43()
+ 
+flow Root_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('poo', 1)
+ 
+flow ShopOpenEventSkip():
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSloDonation') not in (0, 1):
+        System.EventFlags['cPlayer:DoneCommuneSloOpenEvent'] = true
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneCmlDonation') not in (0, 1):
+        System.EventFlags['cPlayer:DoneCommuneCmlOpenEvent'] = true
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneFoxDonation') not in (0, 1):
+        System.EventFlags['cPlayer:DoneCommuneFoxOpenEvent'] = true
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneBptDonation') not in (0, 1):
+        System.EventFlags['cPlayer:DoneCommuneBptOpenEvent'] = true
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSkkDonation') not in (0, 1):
+        System.EventFlags['cPlayer:DoneCommuneSkkOpenEvent'] = true
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneAlpDonation') not in (0, 1):
+        System.EventFlags['cPlayer:DoneCommuneAlpOpenEvent'] = true
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneTtlDonation') == 2:
+        System.EventFlags['cPlayer:DoneCommuneTtlOpenEvent'] = true
+ 
+local flow Sub_Event43():
+    System.EventFlags['cLand:CompleteCommuneExpandEvent'] = true
+    System.EventFlags['cPlayer:ReserveCommuneExpansion'] = false
+    System.EventFlags['cPlayer:SpnTalkAtCommuneToday'] = true
+    System.EventFlags['cPlayer:PooTalkFirst'] = true
+    System.EventFlags['cPlayer:PooTalkToday'] = true
+    System.EventFlags['cPlayer:PooTalkFirstToday'] = true
+    System.EventFlags['cPlayer:CommuneCompleteExpandEvent_Player'] = true
+    System.EventFlags['cPlayer:SpnSendMailCommuneExpansion'] = true
+    System.EventFlags['cLand:UnlockCommuneExpandedBGM'] = true
+    if SubflowResults@3[0] != 0:
+        System.EventFlags['cPlayer:SpnCommuneATMNoticeDone'] = true
+    run FadeOut()
+ 
+local flow Sub_Event7():
+    # Well, I suppose that's my sales pitch. Sorry—I never was cut out for sales! But I'd be mighty grateful if you were interested in helping us realize t…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:007', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            # Aw, that's great! Out of this world! I knew I could count on you to help me, <110:3>. I actually got another old pal to volunteer as well. You know m…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/SP_spn_11_Commune_LandExpansion:008', true)
+            run Sub_Event43()
+ 

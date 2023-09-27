@@ -1,0 +1,27 @@
+flow CommuneExpansionDemo():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_doc_52_CommuneIsland', EntryName='Doc_CommuneExpansionWalk')
+ 
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    if EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('JuneBride', false):
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cFirstDemoSpn', false)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cCommuneExpansion', false)
+    if EventFlowSystemActor.DuringTransitionByUIStageEventFlowSystemActor.DuringTransitionByUIStage():
+        MainNpc.NpcAISetPosMainNpc.NpcAISetPos(0.0, 0.0, 0.0, true, false)
+ 
+flow JuneBrideDemo_First():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_doc_52_CommuneIsland', EntryName='Doc_FirstJuneBrideWalk')
+ 
+flow Root():
+    if System.EventFlags['cPlayerTemp:DocCommuneIslandFirstTalkDone']:
+        MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_doc_52_CommuneIsland', 'Root', false, true, true, 1, 0.0, '')
+    else:
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_doc_52_CommuneIsland', 'Root')
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSpeak', '', 'SNPC_doc_52_CommuneIsland', 'Root', false, true)
+ 

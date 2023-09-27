@@ -1,0 +1,38 @@
+flow Pyn_TalkFromBack():
+    run Event1()
+ 
+flow Root():
+    if not MainNpc.NpcIsTalkedFromBehindMainNpc.NpcIsTalkedFromBehind():
+        if System.EventFlags['cLand:PynVisitToday']:
+            run SNPC_pyn_01_EasterPreVisit::Rootrun SNPC_pyn_01_EasterPreVisit::Root()
+        else:
+            run SNPC_pyn_02_EasterDay::Rootrun SNPC_pyn_02_EasterDay::Root()
+    elif EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+entrypoint Event1:
+        if System.EventFlags['cPlayer:PynTalkBackTodayFlag']:
+            run Sub_grp_Event2()
+        else:
+            System.EventFlags['cPlayer:PynTalkBackTodayFlag'] = true
+            # Excuse me, but could you please stop staring at my back? It's rude.<10:4> Won't find anything back there, anyway…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/pyn/SP_pyn:001', false)
+    else:
+        if System.EventFlags['cPlayerVisit:DC_PynTalkBackTodayFlag']:
+            run Sub_grp_Event2()
+        else:
+            System.EventFlags['cPlayerVisit:DC_PynTalkBackTodayFlag'] = true
+            # Excuse me, but could you please stop staring at my back? It's rude.<10:4> Won't find anything back there, anyway…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/pyn/SP_pyn:001', false)
+ 
+local flow Sub_grp_Event2():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # Hey! I know what you're doing. You can't fool me twice. If you want to talk, my face is in the front.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/pyn/SP_pyn:002', false)
+        case 1:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+            # Seriously, cut that out! Last warning. Instead of looking, why don't you try listening for once?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/pyn/SP_pyn:003', false)
+        case 2:
+            # Did you not get the memo?! Stop looking back there! …Glad you think this is funny, kid.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/pyn/SP_pyn:004', false)
+ 

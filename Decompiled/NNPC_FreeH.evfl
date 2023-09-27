@@ -1,0 +1,173 @@
+flow ChkReact1stPresent():
+    if (MainNpc.EventFlags['cNpcSave:TalkLifeStart1P1st']) and (not MainNpc.EventFlags['cNpcSave:React1stNpcPresent']):
+        switch MainNpc.CheckNpcLookMainNpc.CheckNpcLook():
+            case 3:
+                if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(6840, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', false, false):
+                    MainNpc.EventFlags['cNpcSave:React1stNpcPresent'] = true
+                    # Whoa! Sweet umbrella! Wait, did you make that with the DIY recipe I gave you? Great job! Way to knock it out of the park!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:011', false)
+                    switch MainNpc.EnvWeatherNNpcTalkCustomMainNpc.EnvWeatherNNpcTalkCustom():
+                        case `Fine`, `Blossom`:
+                            if EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`):
+                                # Do you like it? You're usin' it, so I guess so. Plus having some portable shade's gotta be nice, <110:5>.
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:012_01', false)
+                            else:
+                                # You must REALLY like it to be usin' it this late. Hey, I ain't gonna judge. You do you, <110:5>.
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:012_04', false)
+                        case `Cloudy`:
+                            pass
+                        case `Rain`, `HeavyRain`:
+                            # Do you like it? I mean, you're using it, so I guess so. That, or you're just tryin' to keep dry, <110:5>!
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:012_02', false)
+                        case `Snow`, `HeavySnow`:
+                            # You like it? You're usin' it, so I guess so. Or you just wanna keep the snow out of your eyes, <110:5>.
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:012_03', false)
+                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+            case 5:
+                if not Player.PlayerIsUseCoordinatePlayer.PlayerIsUseCoordinate():
+                    if System.EventFlags['cPlayer:1stPresentHatType'] == 0:
+                        if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(5136, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+                            run Sub_Event67()
+                    elif System.EventFlags['cPlayer:1stPresentHatType'] == 1:
+                        if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(5128, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+                            run Sub_Event67()
+                    elif System.EventFlags['cPlayer:1stPresentHatType'] == 2:
+                        if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(5148, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+                            run Sub_Event67()
+                    elif System.EventFlags['cPlayer:1stPresentHatType'] == 3:
+                        if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(11521, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+                            run Sub_Event67()
+                    elif System.EventFlags['cPlayer:1stPresentHatType'] != 4:
+                        if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(5293, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+                            run Sub_Event67()
+                    else:
+                        if EventFlowSystemActor.PlayerIsEquipItemEventFlowSystemActor.PlayerIsEquipItem(5258, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+                            run Sub_Event67()
+            default:
+                return
+ 
+flow ForMarketBuilding_Chk():
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (MainNpc.NpcIsSittingMainNpc.NpcIsSitting() == 4) and (MainNpc.EventFlags['cNpcTemp:MarketBuildingTalk']):
+        MainNpc.EventFlags['cNpcSave:MarketBuildingSupport'] = true
+        switch MainNpc.CheckNpcLookMainNpc.CheckNpcLook():
+            case 3:
+                if System.EventFlags['cLand:RcmShopMaterialComplete']:
+                    # Oh, that reminds me! I heard you were helpin' build us a shop!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/Free/AN_FreeH_ForMarketBuilding:011', false)
+                    run NNPC_ApproachE::FromFreeH_AN2run NNPC_ApproachE::FromFreeH_AN2()
+                else:
+                    # Oh yeah! I heard you were gettin' stuff together for a shop!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/G4_An/Free/AN_FreeH_ForMarketBuilding:001', false)
+                    run NNPC_ApproachE::FromFreeH_AN1run NNPC_ApproachE::FromFreeH_AN1()
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+            case 5:
+                if System.EventFlags['cLand:RcmShopMaterialComplete']:
+                    if System.EventFlags['cPlayer:DecideShopArea']:
+                        # I heard you helped get our shop going. Way to take ISLAND into the big leagues, <110:5>!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Free/HA_FreeH_ForMarketBuilding:012', false)
+                        run NNPC_ApproachE::FromFreeH_HA2run NNPC_ApproachE::FromFreeH_HA2()
+                    else:
+                        # I heard you've been helping build us a shop. You're gonna be ISLAND's MVP in no time, <110:5>!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Free/HA_FreeH_ForMarketBuilding:011', false)
+                        run NNPC_ApproachE::FromFreeH_HA1run NNPC_ApproachE::FromFreeH_HA1()
+                else:
+                    # Word is you're getting stuff together to build us a shop! Good hustle!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Free/HA_FreeH_ForMarketBuilding:001', false)
+                    run NNPC_ApproachE::FromFreeH_HA1run NNPC_ApproachE::FromFreeH_HA1()
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+            default:
+                return
+ 
+flow HintTalkChk():
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (MainNpc.NpcBirthTypeMainNpc.NpcBirthType('cFirst')) and (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`)):
+        run ChkReact1stPresent()
+        if not System.EventFlags['cPlayer:NnpcFinishHintTalk']:
+            run LifeStartHint()
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif not MainNpc.EventFlags['cNpcSave:FinishTalkTransition']:
+            run Transition()
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow LifeStartHint():
+    System.EventFlags['cLand:SpotPrologueTimes'] += 1
+    if System.EventFlags['cLand:SpotPrologueTimes'] != 1:
+        run Sub_Event2()
+    else:
+        if System.EventFlags['cPlayer:MainmenuRecipe']:
+            System.EventFlags['cLand:SpotPrologueTimes'] += 1
+            run Sub_Event2()
+        else:
+            # 
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_LifeStart_Hint:002', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Progress_Chk():
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and ((MainNpc.NpcLivingDaysMainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and ((MainNpc.NpcLivingDays(7)) or (MainNpc.NpcBirthTypeMainNpc.NpcBirthType('cFirst'))) and (MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4)):
+        run NNPC_FreeH_Progress::Progress_MyHouseBuiltrun NNPC_FreeH_Progress::Progress_MyHouseBuilt()
+        run NNPC_FreeH_Progress::Progress_MigrantsQuestrun NNPC_FreeH_Progress::Progress_MigrantsQuest()
+        run NNPC_FreeH_Progress::Progress_OfficeBuiltrun NNPC_FreeH_Progress::Progress_OfficeBuilt()
+        run NNPC_FreeH_Progress::Progress_ShopBuilt2run NNPC_FreeH_Progress::Progress_ShopBuilt2()
+        run NNPC_FreeH_Progress::Progress_ShopBuiltrun NNPC_FreeH_Progress::Progress_ShopBuilt()
+        run NNPC_FreeH_Progress::Progress_MuseumBuiltCaferun NNPC_FreeH_Progress::Progress_MuseumBuiltCafe()
+        run NNPC_FreeH_Progress::Progress_MuseumBuilt2run NNPC_FreeH_Progress::Progress_MuseumBuilt2()
+        run NNPC_FreeH_Progress::Progress_MuseumBuiltrun NNPC_FreeH_Progress::Progress_MuseumBuilt()
+        run NNPC_FreeH_Progress::Progress_MuseumTentrun NNPC_FreeH_Progress::Progress_MuseumTent()
+        run NNPC_FreeH_Progress::Progress_TailorBuiltrun NNPC_FreeH_Progress::Progress_TailorBuilt()
+        run NNPC_FreeH_Progress::Progress_BridgeBuiltrun NNPC_FreeH_Progress::Progress_BridgeBuilt()
+        run NNPC_FreeH_Progress::Progress_SlopeBuiltrun NNPC_FreeH_Progress::Progress_SlopeBuilt()
+        run NNPC_FreeH_Progress::Progress_OtherPlayerMoveInrun NNPC_FreeH_Progress::Progress_OtherPlayerMoveIn()
+        run NNPC_FreeH_Progress::Progress_MyHouseBuilt2run NNPC_FreeH_Progress::Progress_MyHouseBuilt2()
+ 
+flow Progress_FreeBSpot():
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and ((MainNpc.NpcLivingDaysMainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and ((MainNpc.NpcLivingDays(7)) or (MainNpc.NpcBirthTypeMainNpc.NpcBirthType('cFirst'))) and (MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4)):
+        run NNPC_FreeH_Progress::Progress_MyHouseBuiltrun NNPC_FreeH_Progress::Progress_MyHouseBuilt()
+        run NNPC_FreeH_Progress::Progress_MyHouseBuilt2run NNPC_FreeH_Progress::Progress_MyHouseBuilt2()
+ 
+flow Progress_InHouse_Chk():
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and ((MainNpc.NpcLivingDaysMainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and ((MainNpc.NpcLivingDays(7)) or (MainNpc.NpcBirthTypeMainNpc.NpcBirthType('cFirst'))) and (MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4)):
+        run NNPC_FreeH_Progress::Progress_MyHouseBuiltrun NNPC_FreeH_Progress::Progress_MyHouseBuilt()
+ 
+flow Progress_NpcHouseBuilt():
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (MainNpc.NpcBirthTypeMainNpc.NpcBirthType('cFirst')) and (MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4)):
+        if not MainNpc.EventFlags['cNpcSave:NnpcHouseBuilt']:
+            MainNpc.EventFlags['cNpcMemory:FirstNpcEarlyAcquaintanceFlag'] = true
+        elif ((System.EventFlags['cPlayer:MakeVillagePlayerFlag']) or (MainNpc.EventFlags['cNpcMemory:FirstNpcEarlyAcquaintanceFlag'])) and (not MainNpc.EventFlags['cNpcMemory:TalkProgressNpcHouseBuilt']):
+            # 
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_Progress:001', false)
+            MainNpc.EventFlags['cNpcMemory:TalkProgressNpcHouseBuilt'] = true
+            MainNpc.EventFlags['cNpcSave:NnpcHouseBuiltToday'] = false
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event2():
+    if System.EventFlags['cLand:SpotPrologueTimes'] == 2:
+        # 
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_LifeStart_Hint:003', false)
+    elif System.EventFlags['cLand:SpotPrologueTimes'] != 3:
+        # 
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_LifeStart_Hint:005', false)
+        System.EventFlags['cPlayer:NnpcFinishHintTalk'] = true
+    else:
+        # 
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_LifeStart_Hint:004', false)
+ 
+local flow Sub_Event67():
+    MainNpc.EventFlags['cNpcSave:React1stNpcPresent'] = true
+    # Hey, isn't that the hat I gave you? Looks great! Really shows off your head-muscle, <110:5>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:011', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Transition():
+    MainNpc.EventFlags['cNpcSave:TalkTransitionTimes'] += 1
+    if MainNpc.EventFlags['cNpcSave:TalkTransitionTimes'] != 1:
+        if MainNpc.EventFlags['cNpcSave:TalkTransitionTimes'] != 2:
+            # 
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_Transition:003', false)
+            MainNpc.EventFlags['cNpcSave:FinishTalkTransition'] = true
+        else:
+            # 
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_Transition:002', false)
+    else:
+        # 
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeH_Transition:001', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

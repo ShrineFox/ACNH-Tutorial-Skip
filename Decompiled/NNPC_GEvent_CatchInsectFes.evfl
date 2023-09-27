@@ -1,0 +1,154 @@
+flow `Month_1.3`():
+    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+        run Northern()
+    else:
+        run Southern()
+ 
+flow `Month_1.4`():
+    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+        run `Northern_1.4`()
+    else:
+        run `Southern_1.4`()
+ 
+flow NNPC_AfterEV():
+    if not MainNpc.EventFlags['cNpcMemory:GEventTalkAfterFlag']:
+        MainNpc.EventFlags['cNpcMemory:GEventTalkAfterFlag'] = true
+        switch EventFlowSystemActor.RandomChoice3(3):
+            case 0:
+                # How did the Bug-Off go for you? Did you catch lots? I just played with the bugs all day, so I'm pretty darn happy!
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:008', true)
+            case 1:
+                # Guess the Bug-Off is over, huh? It's time to let the bugs we caught go home.
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:009', true)
+            case 2:
+                # The Bug-Off was so fun. I just chilled, hung out with all sorts of bugs, and talked to them about life.
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:007', true)
+        EventFlowSystemActor.ExitFlowchart()
+ 
+flow NNPC_BeforeEV():
+    switch EventFlowSystemActor.RandomChoice3(3):
+        case 0:
+            # Today's the day of the Bug-Off! I hope it starts soon.
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:001', true)
+        case 1:
+            # The Bug-Off is today. I'm gonna try and make as many new bug friends as I can, <110:5>!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:002', true)
+        case 2:
+            # The Bug-Off starts at 9 o'clock, but I'm good to go whenever. Whenever, buddy. When. Ever.
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:003', true)
+    EventFlowSystemActor.ExitFlowchart()
+ 
+flow NNPC_OpenEV():
+    if MainNpc.EventFlags['cNpcMemory:GEventTalkProgressFlag']:
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+            case 0:
+                # I just saw a bug. But it flew off when I walked over to say hi. What a total downer, <110:5>.
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:010', true)
+            case 1:
+                # Bug-Off is a good time to meet new bugs and ask 'em, "You got a job?" or "Whaddaya do all day?"
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:011', true)
+            case 2:
+                # The Bug-Off is a special, super-chill holiday that means different things to different folks.
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:012', true)
+            case 3:
+                # The bugs are so good at tag! I'm "it" right now! Ready or not, bugs! Here I come!
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:013', true)
+        EventFlowSystemActor.ExitFlowchart()
+    else:
+        MainNpc.EventFlags['cNpcMemory:GEventTalkProgressFlag'] = true
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+            case 0:
+                # The Bug-Off's started. It's important to get going early so you have more time to chill and eat snacks later.
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:004', true)
+            case 1:
+                # I practiced catching bugs in my dreams last night. I had so many bugs in my pockets. So wiggly!
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:005', true)
+            case 2:
+                # Happy Bug-Off, <110:3>!<10:4> Today's the best day! I get to play tag with every bug on the island.
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:006', true)
+            case 3:
+                run `Month_1.3`()
+            case 4:
+                run `Month_1.4`()
+        EventFlowSystemActor.ExitFlowchart()
+ 
+flow Northern():
+    switch EventFlowSystemActor.EnvMonth():
+        case `June`:
+            # Every day is Bug-Off when you're <110:10>! A huh huh huh! My lawyer says I'm "legally required" to say that's not true. She's really strict…even thou…
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:104', false)
+        case `July`:
+            # Is everyone as excited for the Bug-Off as I am? <10:4>Probably not! But that's OK, <110:5>!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:105', false)
+        case `August`:
+            # So how's your Bug-Off going?<10:4> I can't tell you how I'm doing. It's a secret between me and the bugs!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:106', false)
+        case `September`:
+            # I'm not too worried about how I do in the Bug-Off. I'll just wander around with a net catching everything I can!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:107', false)
+        default:
+            return
+ 
+flow `Northern_1.4`():
+    switch EventFlowSystemActor.EnvMonth():
+        case `June`:
+            # I'm gonna catch a superduper-cool bug during this Bug-Off and impress everyone, <110:5>! Then I'll tell the bug I'm looking for a new roommate, and w…
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:201', false)
+        case `July`:
+            # I've got a real good feeling about today's Bug-Off. I'm coming for ya, bug friends! It's on, <110:5>!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:202', false)
+        case `August`:
+            # This is gonna be one hot Bug-Off! Remember to take care of yourself when it gets this warm. Have one glass of water for every milkshake you drink, an…
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:203', false)
+        case `September`:
+            # The last Bug-Off of the summer? Already? I thought it was still June! I won't be too lonely though. I'll still see all my bug pals tomorrow.
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:204', false)
+        default:
+            return
+ 
+flow Root():
+    if EventFlowSystemActor.SystemCheckNowStage('cField'):
+        switch EventFlowSystemActor.EventCheck('InsectConvention'):
+            case 0:
+                run NNPC_BeforeEV()
+            case 1:
+                run NNPC_OpenEV()
+            case 2:
+                if EventFlowSystemActor.EnvHourCompare(19, -1, true, true) in (0, 1):
+                    run NNPC_AfterEV()
+            default:
+                return
+ 
+flow Southern():
+    switch EventFlowSystemActor.EnvMonth():
+        case `January`:
+            # So how's your Bug-Off going?<10:4> I can't tell you how I'm doing. It's a secret between me and the bugs!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:106', false)
+        case `February`:
+            # I'm not too worried about how I do in the Bug-Off. I'll just wander around with a net catching everything I can!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:107', false)
+        case `November`:
+            # Every day is Bug-Off when you're <110:10>! A huh huh huh! My lawyer says I'm "legally required" to say that's not true. She's really strict…even thou…
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:104', false)
+        case `December`:
+            # Is everyone as excited for the Bug-Off as I am? <10:4>Probably not! But that's OK, <110:5>!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:105', false)
+        default:
+            return
+ 
+flow `Southern_1.4`():
+    switch EventFlowSystemActor.EnvMonth():
+        case `January`:
+            # This is gonna be one hot Bug-Off! Remember to take care of yourself when it gets this warm. Have one glass of water for every milkshake you drink, an…
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:207', false)
+        case `February`:
+            # The last Bug-Off of <110:17>? Already? That can't be right… I won't be too lonely though. I'll still see all my bug pals tomorrow.
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:208', false)
+        case `November`:
+            # I'm gonna catch a superduper-cool bug during this Bug-Off and impress everyone, <110:5>! Then I'll tell the bug I'm looking for a new roommate, and w…
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:205', false)
+        case `December`:
+            # I've got a real good feeling about today's Bug-Off. I'm coming for ya, bug friends! It's on, <110:5>!
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_CatchInsectFes:206', false)
+        default:
+            return

@@ -1,0 +1,37 @@
+flow ChangeFgFailed():
+    # This tree is already as big as it will get here.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Telepathy:038', false)
+ 
+flow ChangeFgFailedInSitNpc():
+    # You can't change the size of that tree while someone is sitting there.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Telepathy:042', false)
+ 
+flow FirstTimeInteriorEdit():
+    if System.EventFlags['cWherearenPlayer:NoticeAboutGardenInteriorMode']:
+        if (not System.EventFlags['cWherearenPlayer:NoticeAboutCreateRoad']) and (System.EventFlags['cWherearenPlayer:Unlock_CreateRoad']):
+            System.EventFlags['cWherearenPlayer:NoticeAboutCreateRoad'] = true
+            # Making Paths Want to set up a path? Just press  to enter path-building mode.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0101_04', false)
+        if (not System.EventFlags['cWherearenPlayer:NoticeAboutChangeBridge']) and (EventFlowSystemActor.StructureIsExistBridgeSlopeCurrentFieldEventFlowSystemActor.StructureIsExistBridgeSlopeCurrentField(3)):
+            System.EventFlags['cWherearenPlayer:NoticeAboutChangeBridge'] = true
+            # Redesigning Infrastructure You can change the look of bridges and inclines by placing the cursor on them and pressing .
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0101_05', true)
+    else:
+        System.EventFlags['cWherearenPlayer:NoticeAboutGardenInteriorMode'] = true
+        if System.EventFlags['cWherearenPlayer:Unlock_CreateRoad']:
+            System.EventFlags['cWherearenPlayer:NoticeAboutCreateRoad'] = true
+            if EventFlowSystemActor.StructureIsExistBridgeSlopeCurrentFieldEventFlowSystemActor.StructureIsExistBridgeSlopeCurrentField(3):
+                System.EventFlags['cWherearenPlayer:NoticeAboutChangeBridge'] = true
+                # Designing an Outdoor Space  Enter fence/path-building mode  Change time and weather  Change the season  Place furniture or plants Redesigning Inf…
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0101_03', true)
+            else:
+                # Designing an Outdoor Space  Enter fence/path-building mode  Change time and weather  Change the season  Place furniture or plants Redesigning a H…
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0101_01', true)
+        elif EventFlowSystemActor.StructureIsExistBridgeSlopeCurrentFieldEventFlowSystemActor.StructureIsExistBridgeSlopeCurrentField(3):
+            System.EventFlags['cWherearenPlayer:NoticeAboutChangeBridge'] = true
+            # Designing an Outdoor Space  Enter fence-building mode  Change time and weather  Change the season  Place furniture or plants Redesigning Infrastr…
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0101_02', true)
+        else:
+            # Designing an Outdoor Space  Enter fence-building mode  Change time and weather  Change the season  Place furniture or plants Redesigning a Home's…
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0101', true)
+ 

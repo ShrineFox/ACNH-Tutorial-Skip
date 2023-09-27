@@ -1,0 +1,219 @@
+flow FirstTalkInShip():
+    System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = false
+    if System.EventFlags['cPlayer:FoxTalkTodayFlag']:
+        if System.EventFlags['cPlayer:FoxInvitedShipFlag']:
+            # Ah, PLAYER! I'm so glad you made it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:002', false)
+            run Sub_Event57()
+        else:
+            # Look at that! <50:3>PLAYER! You found me! It means a lot to me that you came. Did I mention the Cousin's Discount yet? 'Cause you're gettin' it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:003', false)
+            run Sub_Event57()
+    else:
+        System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
+        if not System.EventFlags['cPlayer:TunekichiTalkBefore']:
+            System.EventFlags['cPlayer:TunekichiTalkBefore'] = true
+            # Hello, and welcome aboard Jolly Redd's Treasure Trawler! How are ya? The name's Redd. I work in sales. And you are…<10:4> <50:3>PLAYER! What a great …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:001_01', false)
+            run Sub_Event3()
+        elif System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag']:
+            System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag'] = false
+            # Hello, and welcome aboard Jolly Redd's Treasure Trawler! Wait, I know you! You visited me at one of my little side businesses. It's me, Redd! And you…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:001_04', false)
+            run Sub_Event3()
+        else:
+            if System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag']:
+                # I'd know that shining face anywhere. How ya been, PLAYER? You made the right choice buyin' that art from me earlier. I've had a lot of folks asking a…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:004', false)
+            else:
+                # Well, if it isn't PLAYER! Long time no see!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:005', false)
+            # You know, I gotta be real honest. I kinda think I'm fallin' for ISLAND. I mean, ISLAND wants art, and I got art to sell. Might be something to this. …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:006_01', false)
+            run Sub_Event57()
+ 
+flow FirstTalkInShip_Check():
+    System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = false
+    # You have an eye for quality! That's… Oh, we haven't met. Welcome aboard Jolly Redd's Treasure Trawler!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:008', false)
+    if System.EventFlags['cPlayer:TunekichiTalkBefore']:
+        if System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag']:
+            System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag'] = false
+            # Wait, I'm wrong! We HAVE met! I remember now. You were at one of my little side businesses. It's me, Redd! And your name is… <50:3>PLAYER! Good to se…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:009_01', false)
+            # So here's the pitch. Ready? At Jolly Redd's Treasure Trawler, we sell only the finest. And there's nothing finer than fine art and rare furniture, am…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:010', false)
+        else:
+            # Well, if it isn't PLAYER! It's been a while!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:011', false)
+            # You know, I gotta be real honest. I kinda think I'm fallin' for ISLAND. I mean, ISLAND wants art, and I got art to sell. Might be something to this. …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:012', false)
+            # So here's the pitch. Ready? At Jolly Redd's Treasure Trawler, we sell only the finest. And there's nothing finer than fine art and rare furniture, am…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:013', false)
+    else:
+        System.EventFlags['cPlayer:TunekichiTalkBefore'] = true
+        # The name's Redd. I work in sales. And you are…<10:4> <50:3>PLAYER! What a great name! Intelligent. Strong. I can already tell we're gonna be pals. No…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:009', false)
+        # So here's the pitch. Ready? At Jolly Redd's Treasure Trawler, we sell only the finest. And there's nothing finer than fine art and rare furniture, am…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:010', false)
+    # So yeah, that about covers it. Now how about we talk about what you were lookin' at.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:014', false)
+ 
+flow FirstTalk_Setting():
+    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        if System.EventFlags['cPlayerVisit:FoxTalkFlag']:
+            SubflowResults[0] = 0
+        else:
+            SubflowResults[0] = 3
+    elif not System.EventFlags['cPlayer:FoxFirstTalkInShipFlag']:
+        SubflowResults[0] = 1
+    elif System.EventFlags['cPlayer:FoxTalkTodayFlag']:
+        SubflowResults[0] = 0
+    else:
+        SubflowResults[0] = 2
+ 
+flow Root_EnterShop():
+    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('EnterMessage', 1)
+    System.EventFlags['cPlayer:FoxForcedTalkTodayFlag'] = true
+    if System.EventFlags['cPlayer:FoxFirstTalkInShipFlag']:
+        System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
+        # Well, if it isn't my favorite cousin. Glad to have you back aboard Jolly Redd's Treasure Trawler!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:021', false)
+        if (System.EventFlags['cPlayer:FoxBuyArtTodayFlag']) or (System.EventFlags['cLand:FoxArtStockCount'] <= 0):
+            # Unfortunately, my last piece of art JUST walked off the boat. I still have some furniture though. Take a look!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:024', false)
+        elif System.EventFlags['cLand:FoxArtStockCount'] > 2:
+            # Oh, store policy—I know it, you know it. We have a limit of one art piece per customer per day. Choose wisely!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:022', false)
+        else:
+            # We've had a run on art today and stock is dwindling. You'd better act fast before it's all gone!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:023', false)
+    else:
+        System.EventFlags['cPlayer:FoxFirstTalkInShipFlag'] = true
+        run FirstTalkInShip()
+ 
+flow Root_ItemCheck():
+    run FirstTalk_Setting()
+    if SubflowResults@4[0] not in (0, 2, 3):
+        run FirstTalkInShip_Check()
+    MainNpc.ShopCheckItemSetMainNpc.ShopCheckItemSet('CheckItemIndex', 'cGallery')
+    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cFoxPrice', 0)
+    Player.TurnNeckPlayer.TurnNeck(13, false)
+    if MainNpc.FoxBuySelectTypeMainNpc.FoxBuySelectType() == 0:
+        run SNPC_fox_02_ItemCheck::BuyFtrrun SNPC_fox_02_ItemCheck::BuyFtr()
+    else:
+        run SNPC_fox_02_ItemCheck::BuyArtrun SNPC_fox_02_ItemCheck::BuyArt()
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
+        System.EventFlags['cPlayer:FoxFirstTalkInShipFlag'] = true
+    else:
+        System.EventFlags['cPlayerVisit:FoxTalkFlag'] = true
+ 
+flow Root_LeaveShop():
+    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('LeaveMessage', 1)
+    System.EventFlags['cPlayer:FoxForcedTalk2TodayFlag'] = true
+    System.EventFlags['cPlayerTemp:FoxExitBalloon'] = true
+    if System.EventFlags['cPlayer:FoxBuyTodayFlag']:
+        if System.EventFlags['cPlayerTemp:FoxBuyNowFlag']:
+            # You won't regret it!<10:7:003c0000>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:051', true)
+        else:
+            # Come again!<10:7:003c0000>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:052', true)
+    else:
+        # …Thanks.<10:7:003c0000>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:053', true)
+    EventFlowSystemActor.NextGoToEventFlowSystemActor.NextGoTo('Entrance', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow Root_Talk():
+    run FirstTalk_Setting()
+    switch SubflowResults@4[0]:
+        case 0:
+            if MainNpc.FoxBuyGalleryForThisIslandMainNpc.FoxBuyGalleryForThisIsland():
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                    case 0:
+                        run Talk_AfterBuy()
+                    case 1:
+                        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                            # You've got a real instinct for deals, you know that? I've lost count of how many folks come to me, then walk off in tears when they can't get a deal …
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:202', false)
+                        else:
+                            # Buying art is all about love at first sight and going with your gut, don'tcha think? And yeah, sometimes that means you end up with something you wer…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:205', false)
+                    case 2:
+                        # I know how much you wanna get that art home, but you gotta be patient. We'll box it up real carefully and get it to you quick as we can. Meanwhile, w…
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:203', false)
+            else:
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                    case 0:
+                        if System.EventFlags['cPlayer:FoxBuyTodayFlag']:
+                            run Talk_AfterBuy()
+                        else:
+                            run Talk_BeforeBuy()
+                    case 1:
+                        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                            # Art this delicate's gotta be handled with care, which is why my prices always include the cost of shipping. What's with the look? You didn't think sh…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:204', false)
+                        else:
+                            # Let me tell ya, selling art is a tough business. The other day someone accused me of selling 'em a fake and wanted a refund. Can you believe it? Alri…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:206', false)
+                    case 2:
+                        if System.EventFlags['cLand:FoxArtStockCount'] <= 0:
+                            # What a day! I sold every piece of art I brought with me. Should've gotten here earlier if you wanted some. But don't let that get you down. I've stil…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:207', false)
+                        elif System.EventFlags['cLand:FoxArtStockCount'] > 1:
+                            # No touching the art, please. But if you see somethin' you're interested in, feel free to take a closer look. Just, you know, keep the closeness of th…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:209', false)
+                        else:
+                            # The art's been flying off the shelves today. I'm down to my last piece, and even that's been drawin' interest. What I'm getting at is you should act …
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:208', false)
+        case 1:
+            System.EventFlags['cPlayer:FoxFirstTalkInShipFlag'] = true
+            run FirstTalkInShip()
+        case 2:
+            System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
+            # Thank you so much for comin' aboard. Take a look around and let me know if you have questions.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:201', false)
+        case 3:
+            System.EventFlags['cPlayerVisit:FoxTalkFlag'] = true
+            # Thank you so much for comin' aboard. Take a look around and let me know if you have questions.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:201', false)
+ 
+flow Root_Visit():
+    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+        case `BlathersMuseumNoArt`:
+            run SNPC_fox_01_PreVisit::PreVisitrun SNPC_fox_01_PreVisit::PreVisit()
+        case `BlathersMuseumArt`, `BlathersCafe`:
+            run SNPC_fox_01_PreVisit::BeforeOpenrun SNPC_fox_01_PreVisit::BeforeOpen()
+        default:
+            return
+ 
+local flow Sub_Event3():
+    # So here's the pitch. Ready? At Jolly Redd's Treasure Trawler, we sell only the finest. And there's nothing finer than fine art and rare furniture, am…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:001_02', false)
+    # So take a look around. We've got masterpieces by the great masters, plus stuff for your master bedroom. Let me know if you have any questions.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:001_03', false)
+ 
+local flow Sub_Event57():
+    # So here's the pitch. Ready? At Jolly Redd's Treasure Trawler, we sell only the finest. And there's nothing finer than fine art and rare furniture, am…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:006_02', false)
+    # So take a look around. We've got masterpieces by the great masters, plus stuff for your master bedroom. Let me know if you have any questions.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:007', false)
+ 
+flow Talk_AfterBuy():
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        # RANDOM: I actually started out selling furnitur… // I love seeing a customer's eyes light u…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:211', false)
+    else:
+        # RANDOM: You came all the way here just to buy f… // Just you wait. Next time I come to ISLA…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:221', false)
+ 
+flow Talk_BeforeBuy():
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        # RANDOM: You wouldn't believe how much interest … // When you've been at this as long as I h…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:212', false)
+    else:
+        # RANDOM: You're a long way from home, cousin. Re… // Let me know if you see somethin' you li…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:222', false)
+ 

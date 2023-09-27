@@ -1,0 +1,148 @@
+flow EnvSound01():
+    System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_01'] = true
+    SubflowResults[0] = 0
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundGetDemo', 'cTalk', 'Player', false, false, false, 0)
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
+    Player.TurnNeckPlayer.TurnNeck(0, false)
+entrypoint Event58:
+    switch SubflowResults@3[0]:
+        case 0:
+            # <150:5>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:011', false)
+        case 1:
+            # <150:5>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:021', false)
+        case 2:
+            # <150:5>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:031', false)
+    switch SubflowResults@3[0]:
+        case 0:
+            # Listen closely<150:5>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:012', true)
+            EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(2.0, 0, 0.0)
+            Player.TurnNeckPlayer.TurnNeck(11, false)
+        case 1:
+            # Certainly is quiet<150:5>don't you think?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:022', true)
+            EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(2.0, 0, 0.0)
+        case 2:
+            # Have you been able<150:5>to meet new sounds?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:032', true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(120)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(172)
+    switch SubflowResults@3[0]:
+        case 0:
+            # Do you hear the world's sounds? The waves breaking<150:5>as the wind chases them ashore<150:5>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:013', true)
+        case 1:
+            # What are your thoughts on the sounds of life? Do you enjoy<150:5> lively sounds as much as I do? The rustling of cities<150:5>of forests<150:5> and o…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:023', true)
+        case 2:
+            # I've listened to many sounds<150:5> But I know there are many more I have yet to meet<150:5>
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:033', true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(90)
+    switch SubflowResults@3[0]:
+        case 0:
+            # The sound of birdsong<150:5>can connect you to nature. Just by listening. If you allow the sounds of nature to surround you<150:5>then peace and rela…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:014', true)
+        case 1:
+            # Ahhh<150:5> All the sounds of life upon the face of the world<150:5> I hope that you find them as nice as I do.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:024', true)
+        case 2:
+            # Can you imagine what sounds<150:5>must swim beyond this ocean?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:034', true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundGetDemo', 'cTalk', 'Player', false, false, false, 0)
+    MainNpc.StandUpChairMainNpc.StandUpChair()
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
+    Player.TurnNeckPlayer.TurnNeck(0, false)
+    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+    switch SubflowResults@3[0]:
+        case 0:
+            # I believe<150:5>that I am going to head back now. Will you meet me here again sometime, my friend?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:015', true)
+        case 1:
+            # I believe<150:5>that I am going to head back now. Will you meet me here again sometime, my friend?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:025', true)
+        case 2:
+            # I believe it's time<150:5>that I head back. I'm glad I was able to be with you<150:5> and listen to the waves.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:035', true)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+    fork:
+        branch:
+            MainNpc.NpcRailMoveMainNpc.NpcRailMove(9, false, false, -1, -1, 0)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(160)
+            run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', SoundDucking='cWorldDucking', FadeSpeed='cNormal')
+    MainNpc.NpcSetVisibleActionMainNpc.NpcSetVisibleAction(false)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundGetDemoPlayerCenter', '', 'Player', false, false, false, 0)
+    Player.TurnNeckPlayer.TurnNeck(11, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+    switch SubflowResults@3[0]:
+        case 0:
+            # It's so wonderful to be surrounded by the sounds of nature...
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1303_01', true)
+        case 1:
+            # Sometimes it's great to be where you can hear excitement happening all around you...
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1303_02', true)
+        case 2:
+            # There is so much to hear in the world...so many different sounds...
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1303_03', true)
+    Player.PlayerChairStandupPlayer.PlayerChairStandup(0)
+    Player.TurnBodyPlayer.TurnBody(12, 0.0)
+    Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundGetDemoPlayerUp', 'cDefault', 'Player', false, false, false, 0)
+    Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('IdeaBulb', true, '', 0, false)
+    switch SubflowResults@3[0]:
+        case 0:
+            # I could fill someone's home with these sounds! In Decorating Mode, I'd just have to press !
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1304_01', true)
+        case 1:
+            # These soundscapes could really liven up a home! In Decorating Mode, I'd just have to press !
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1304_02', true)
+        case 2:
+            # Any soundscape can be great in the right home! In Decorating Mode, I'd just have to press !
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1304_03', true)
+    System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp'] = false
+    System.EventFlags['cWherearenPlayer:ManSetAfterTalkEnvSound'] = true
+    System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
+    EventFlowSystemActor.SystemBGMVolumeResetEventFlowSystemActor.SystemBGMVolumeReset(0.0, 0, 0.0)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(173)
+ 
+flow EnvSound02():
+    System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_02'] = true
+    SubflowResults[0] = 1
+entrypoint Event45:
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundGetDemo', 'cTalk', 'Player', false, false, false, 0)
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    run Event58()
+ 
+flow EnvSound03():
+    System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_03'] = true
+    SubflowResults[0] = 2
+    run Event45()
+ 
+flow EnvSound03_Swim():
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundDemoSwim', 'SoundGetDemoSwimTalk', 'Npc:man', false, false, false, 0)
+    # <150:5> Hello, PLAYER, my friend. Do you enjoy the ocean? All life depends upon it. It is<150:5>our home. Please wait<150:5>one moment. I'll come ash…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:030', true)
+    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(1.0, 0, 0.0)
+    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', SoundDucking='cWorldDucking', FadeSpeed='cNormal')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    MainNpc.ManWarpToLogMainNpc.ManWarpToLog()
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EnvSoundGetDemo', '', 'Player', false, false, false, 0)
+    EventFlowSystemActor.RequestRecreateFtrEventFlowSystemActor.RequestRecreateFtr()
+    Player.TurnNeckPlayer.TurnNeck(11, false)
+    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+    run EnvSound03()
+ 
+flow Root():
+    # RANDOM: There's a spot open<150:5>just for you. // You're welcome<150:5>to sit with me.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_02_WherearenEvent:001', true)
+ 

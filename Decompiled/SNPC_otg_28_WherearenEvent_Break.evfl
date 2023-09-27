@@ -1,0 +1,69 @@
+flow ProcIntroEventEnd():
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+ 
+flow Root():
+    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+    # Welcome back! How did things go? I have to think you're pretty used to the work now, right?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:081', false)
+    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+    # It's payday again! Here's <90:44:0000>, just for you.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:082', true)
+    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+    # I want to thank you again for all the hard work you've been putting in. You're such a big help! That said…it's not good for anyone to work themselves…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:083', true)
+    SubflowResults[3] = 0
+    run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    # Go enjoy a change of pace for as long as you like. I suggest taking a walk around the whole island. Maybe I'll go out for a stroll too. I could use t…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:084', true)
+    System.EventFlags['cWherearenPlayer:SeqOtgTalkAboutSoloWork'] = true
+    System.EventFlags['cWherearenPlayer:SeqFacilityIntroOngoing'] = true
+    System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = true
+    System.EventFlags['cPlayer:KppTalkAboutVine'] = true
+    run ProcIntroEventEnd()
+ 
+flow Root_Choco():
+    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+    # Welcome back! You've gotten used to the job by now, huh?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:321', false)
+    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+    # Here's your payment for this time: <90:44:0000>.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:322', true)
+    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+    # Say, have you ever bought the <item>souvenir chocolates we sell here?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:323', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # They are SO tasty! If you like them, maybe buy a few boxes before the next time you fly back to ISLAND. They'd make great presents and are sure to ma…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:324', true)
+    else:
+        # Oh… Wait! Could it be you didn't even notice them? We always have <item>souvenir chocolates available for sale here in the office! And I tell you, th…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:325', true)
+    System.EventFlags['cWherearenPlayer:SeqOtgTalkAboutChocolate'] = true
+    SubflowResults[3] = 2
+    run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+ 
+flow Root_FacilityInto():
+    # Oh, PLAYER! You startled me.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:091', true)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            MainNpc.TurnBodyMainNpc.TurnBody(12, 180.0)
+            MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+            # Well, I got lost in thought looking at this property.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:092', false)
+            MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+            # Have you noticed all of the unused properties around here? Before I set up shop, someone else was working on developing the island. They built all of…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:093', false)
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+            # Lately I've been thinking about how we could put these properties to use. Maybe some new facilities! If we had EVEN MORE to offer our clients, I'm su…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:094', false)
+            # OK, OK…pump the brakes, Lottie. Sorry—I just get so excited when I think about business development! We're going to need more clients to make these f…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:095', true)
+            System.EventFlags['cWherearenPlayer:SeqFacilityIntroOngoing'] = false
+            System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
+            run ProcIntroEventEnd()
+ 

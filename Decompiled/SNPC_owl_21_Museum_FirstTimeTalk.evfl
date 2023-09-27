@@ -1,0 +1,62 @@
+flow Root():
+    if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+        System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
+    System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
+    System.EventFlags['cPlayer:OwlFinished1stTalk'] = true
+    System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
+    # Hootie hoo and hello to you! Welcome to the <10:13><50:4>ISLAND</10:13> Museum!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:111', false)
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        # You must be the island's esteemed representative. <50:3>PLAYER, is it? It was you who set up my tent, yes? Why, I landed here with nary a ruffled fea…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:112_01', false)
+    else:
+        if System.EventFlags['cPlayer:2P_CreatedAfterOwlMoving']:
+            # You must be our newest resident. <50:3>PLAYER, is it?<10:4> Jolly good to meet you! Blathers at your service. I am the curator of this fine museum.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:112_02', false)
+        else:
+            # It's a pleasure to meet you!<10:4> Blathers at your service. I am the curator of this fine museum.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:112_03', false)
+    if EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersNotMovedIn`, `BlathersTent`, `BlathersMuseumNoArt`):
+        # Here our focus is on the collection and exhibition of items scientific, paleontological, and educative. Indeed, insects, fish, and fossils are of spe…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:113', false)
+    else:
+        if System.EventFlags['cLand:Museum2BuiltSkippedMuseum1']:
+            System.EventFlags['cLand:OwlFoundDiveFish'] = true
+        if System.EventFlags['cLand:OwlFoundDiveFish']:
+            # Our primary focus is on the collection and exhibition of items important to the fields of paleontology, science… Ack! Oh, dear me, was I caught in an…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1503', false)
+            System.EventFlags['cPlayer:OwlPaintingDiveFish'] = true
+            System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
+        else:
+            # Here our focus is on the collection and exhibition of items scientific, paleontological, and artistic. Insects, fish, fossils, and works of art are o…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:116', false)
+        System.EventFlags['cPlayer:Owl1stTalkMuseum2'] = true
+    # Yes, I believe that is about the long and, eh, not-so-short of it…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:114', false)
+    if System.EventFlags['cLand:OwlFoundFossil']:
+        System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
+        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+            case `BlathersMuseumNoArt`:
+                # Ah, except to say… We are open all night and all day. Indeed, the <10:13><50:4>ISLAND</10:13> Museum never sleeps. So do stop by at any time!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:115_01', false)
+                System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
+            case `BlathersMuseumArt`, `BlathersCafe`:
+                SubflowResults[4] = 0
+                run SNPC_owl_25_Museum_Poster::Owl_GetPosterrun SNPC_owl_25_Museum_Poster::Owl_GetPoster()
+                switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+                    case `BlathersMuseumNoArt`, `BlathersMuseumArt`:
+                        # Ah, except to say… We are open all night and all day. Indeed, the <10:13><50:4>ISLAND</10:13> Museum never sleeps. So do stop by at any time!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:115_01', false)
+                        System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
+                    case `BlathersCafe`:
+                        # What's more, up the stairs and to the left is a café established in partnership with the museum. The museum and the café both are open to the public …
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1101', false)
+                        System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
+                    default:
+                        return
+            default:
+                return
+    else:
+        # Ah, except to say…there have been no reports as of yet that fossils have been found on the island. Still, I am ever the optimist and await news with …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:115_02', false)
+ 

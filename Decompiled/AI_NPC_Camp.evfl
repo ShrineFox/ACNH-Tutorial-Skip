@@ -1,0 +1,16 @@
+flow ExitStrc():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cExitReaction', '', '', '', false, false)
+ 
+flow Root():
+    if not ((EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cLand:CampFirstCamperVisit'])):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCampWander', '', 'NNPC_Spot_Camp', 'Root', false, false)
+    elif (EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0)) or (EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()) or (System.EventFlags['cPlayer:CampFirstTalk_FirstVisitor']):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCampWander', '', 'NNPC_Spot_Camp', 'Root', false, false)
+    elif System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(13, true)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(18, true)
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('NNPC_Spot_Camp', 'Root')
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSpeak', '', 'NNPC_Spot_Camp', 'Root', false, true)
+    else:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCampWander', '', 'NNPC_Spot_Camp', 'Root', false, false)
+ 

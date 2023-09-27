@@ -1,0 +1,144 @@
+flow BuyArt():
+    run SNPC_rcm::Check_ShopEnablerun SNPC_rcm::Check_ShopEnable()
+    if MainNpc.FoxIsSoldOutMainNpc.FoxIsSoldOut():
+        if MainNpc.FoxCheckItemBuyPlayerMainNpc.FoxCheckItemBuyPlayer():
+            # Don't worry, we'll get that shipped out to you as quick as we can. I'm even gonna skip shipping insurance. All the paperwork just slows things down, …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:120', false)
+            run Sub_grp_Event66()
+        else:
+            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFoxGalleryBuyPlayerName', 'cDegit', 0, 0, '')
+            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFoxGalleryBuyPlayerLand', 'cDegit', 0, 0, '')
+            if MainNpc.FoxCheckItemBuyVillagerMainNpc.FoxCheckItemBuyVillager():
+                # Gorgeous, huh? I actually just sold this <125:0:0000> to <115:0:cd00>. Hey, how'd you like to get a closer look before I gotta box it up?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:121', false)
+                run Sub_grp_Event66()
+            else:
+                # Beautiful, eh? <50:3><115:0:cd00> from <115:5:cd00> bought that <125:0:0000>. I'm gonna have to box it up pretty soon. You wanna get a closer look be…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:122', false)
+                run Sub_grp_Event66()
+    elif MainNpc.FoxBuyGalleryForThisIslandMainNpc.FoxBuyGalleryForThisIsland():
+        # It's really hard to resist that <125:0:0000>, isn't it? But store policy is one art purchase per customer per day. You can look all you want though!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:123', false)
+        run Sub_grp_Event66()
+    elif System.EventFlags['cPlayer:FoxBuyArtTodayFlag']:
+        # It's just amazing how easily that <125:0:0000> draws the eye, isn't it? But our policy is one art purchase per customer per day, even if you bought a…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:124', false)
+        run Sub_grp_Event66()
+    else:
+        if MainNpc.FoxItemCheckMainNpc.FoxItemCheck():
+            # Can't get that one out of your mind? I know just what that's like. But I say why get it out of your mind at all? My offer's still good, y'know. For o…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:105', false)
+        else:
+            MainNpc.FoxItemCheckMainNpc.FoxItemCheck()
+            if SubflowResults@4[0] not in (0, 2, 3):
+                # Wanna buy maybe the finest piece I've ever had in stock? Well, this <125:0:0000> is it. I could charge you what it's worth, but I'm not gonna do that…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:106', false)
+            elif System.EventFlags['cPlayerTemp:FoxCheckArtCount'] < 3:
+                if System.EventFlags['cPlayerTemp:FoxCheckArtCount'] < 2:
+                    if System.EventFlags['cPlayerTemp:FoxCheckArtCount'] < 1:
+                        # I won't lie. An awful lot of folks have been asking me about buyin' that <125:0:0000> there. But maybe the price scared 'em off, so…I'll sell it to y…
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:101', false)
+                    else:
+                        # Wow, you really know your art. You can just FEEL the aura on that <125:0:0000>, huh? I mean, you couldn't buy that kind of aura! Well, YOU could. And…
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:102', false)
+                else:
+                    # Y'know, I catch myself staring at that <125:0:0000> a lot. Honestly, I just wish someone would buy it so I could get more work done. I shouldn't…but …
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:103', false)
+                System.EventFlags['cPlayerTemp:FoxCheckArtCount'] += 1
+            else:
+                # So you think you want <50:1> <125:0:0000>, huh? Believe it or not, that's actually my favorite piece here. I really don't wanna sell it, but…it's you…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:104', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                run Sub_grp_Event19()
+            case 1:
+                run LookArtMode()
+                # Admiring the detail? Can't blame you. It's extremely…detailed. Brilliant stuff. And the best part? All that detail could be yours for just <90:21:000…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:107', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run Sub_grp_Event19()
+                else:
+                    # I understand, I understand. It's a lot to take in all at once. No rush.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:108', false)
+            case 2:
+                # I get it—it's a big decision. Take your time and look around some more. I'll be here.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:109', false)
+ 
+flow BuyFtr():
+    run SNPC_rcm::Check_ShopEnablerun SNPC_rcm::Check_ShopEnable()
+    if MainNpc.FoxItemCheckMainNpc.FoxItemCheck():
+        # So you still got your eyes on <50:1> <125:0:0000>, huh? Y'know, my offer still stands. All yours for a mere <90:24:0000>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:133', false)
+    else:
+        MainNpc.FoxItemCheckMainNpc.FoxItemCheck()
+        if SubflowResults@4[0] not in (0, 2, 3):
+            # If you wanted to buy this <110:17>'s hottest style, look no further than [a|an]<125:0:0000>. OK, usually I would only give out the Cousin's Discount …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:134', false)
+        elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            # The charm and elegance of the very finest <135:1:cd00>, wrapped up into [a|an]<125:0:0000>… Much as I wanna charge ya full price, I had a real tasty …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:131', false)
+        else:
+            # Like the best <135:4:cd00> albums, it's impossible to get enough of [a|an]<125:0:0000>. Tell ya what—and this is just 'cause it's my favorite <110:17…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:132', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        # Really?! Well, it's your decision. These kinds of deals don't come around every day though!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:135', false)
+    elif not MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.0):
+        # But…you don't have enough Bells. Look, I love hagglin', but I still gotta keep my shop afloat, y'know?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:136', false)
+    elif EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
+        # Yes! That's the right choice. I'll just get those Bells from you…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:138', false)
+        MainNpc.ShopBuyDoneMainNpc.ShopBuyDone(false, false, false, false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+        # Yep, <90:24:0000>! It's all there. Been a real pleasure doin' business with ya!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:139', false)
+        run EndCommon()
+    else:
+        # Ha! That's what I wanna… Wait a minute. You don't have any room in your pockets, cousin! Look, a bargain like this may never come around again. Go cl…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:137', false)
+ 
+flow EndCommon():
+    System.EventFlags['cPlayerTemp:FoxBuyNowFlag'] = true
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        System.EventFlags['cPlayer:FoxBuyTodayFlag'] = true
+    else:
+        System.EventFlags['cPlayerVisit:DC_FoxBuyTodayFlag'] = true
+ 
+flow LookArtMode():
+    EventFlowSystemActor.UIShopMoneyDisappearEventFlowSystemActor.UIShopMoneyDisappear()
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.RunCheckArtCameraEventFlowSystemActor.RunCheckArtCamera()
+    EventFlowSystemActor.HoldGalleryCameraEventFlowSystemActor.HoldGalleryCamera()
+    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+ 
+local flow Sub_grp_Event19():
+    if MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.0):
+        # Ha! You are NOT gonna regret this. I'll just take those Bells from you…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:111', true)
+        MainNpc.ShopBuyDoneMainNpc.ShopBuyDone(false, false, false, false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+        MainNpc.FoxSoldOutTagVisibleMainNpc.FoxSoldOutTagVisible()
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+        # Yep, it's all there. Congratulations! You are now the proud owner of [a|an]<125:0:0000>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:112', false)
+        # Been a pleasure doin' business with you, cousin! I'll get your art packed up and shipped out tomorrow.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:113', false)
+        MainNpc.FoxSetBuyItemMainNpc.FoxSetBuyItem()
+        System.EventFlags['cLand:FoxArtStockCount'] += -1
+        System.EventFlags['cPlayer:FoxBuyArtTodayFlag'] = true
+        System.EventFlags['cLifeSupportAchievement:BuyatTsunekichiShop'] += 1
+        run EndCommon()
+    else:
+        # But…you don't have enough Bells. Look, I love hagglin', but I still gotta keep my shop afloat, y'know?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:110', false)
+ 
+local flow Sub_grp_Event66():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run LookArtMode()
+        # One glance and suddenly it's like you've known the artist for years. Gonna be sad to see this one go.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:125', false)
+    else:
+        # No problem at all! Please take a look at the rest of our stock, and let me know if you have any questions.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox:126', false)
+ 

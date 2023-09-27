@@ -1,0 +1,181 @@
+flow Spn_FirstJuneBride():
+    System.EventFlags['cPlayer:SpnFirstTalkedAtCommuneIsland'] = true
+    System.EventFlags['cPlayer:SpnTalkAtCommuneToday'] = true
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('DemoJB_Cut1', 'cDefault', 'Npc:spn', false, false, false, 0)
+    MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+    Npc_1.TurnBodyNpc_1.TurnBody(0, 0.0)
+    Npc_2.TurnBodyNpc_2.TurnBody(0, 0.0)
+    # …Hey, I hear you. We're still groovy, and the anniversary shoot's gonna happen. I'm just, like, behind a little.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:000_01', false)
+    fork:
+        branch:
+            # Hmmm… Well, OK, but…what'll we do about the lovely sets? Prepping them ourselves could get a bit ticklish…
+            Npc_1.OpenMessageWindowNpc_1.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:000_02', false)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('Worried', true, '', 0, false)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(175)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    if System.EventFlags['cLand:CompleteCommuneExpandEvent']:
+        fork:
+            branch:
+                if System.EventFlags['cPlayer:StandByPhoneCallJuneBrideSpn']:
+                    # Hey there! Thanks for coming. So… I need to borrow you for a minute.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001', false)
+                else:
+                    # Hey there. You got some good timing, you know that? Can I, like, borrow you for a minute?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_00', false)
+            branch:
+                EventFlowSystemActor@alw.WaitFrameEventFlowSystemActor@alw.WaitFrame(10)
+                Npc_1.TurnBodyNpc_1.TurnBody(10, 0.0)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+                Npc_2.TurnBodyNpc_2.TurnBody(10, 0.0)
+            branch:
+                EventFlowSystemActor@poo.WaitFrameEventFlowSystemActor@poo.WaitFrame(10)
+                Npc_3.TurnBodyNpc_3.TurnBody(10, 0.0)
+        fork:
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+                # OK, so this here is Reese…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_01', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+                Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('Greeting', true, '', 0, false)
+            branch:
+                Player.TurnBodyPlayer.TurnBody(1, 0.0)
+            branch:
+                EventFlowSystemActor@BGM.WaitFrameEventFlowSystemActor@BGM.WaitFrame(30)
+                EventFlowSystemActor@BGM.BGMPropertyControlEventFlowSystemActor@BGM.BGMPropertyControl(91)
+            branch:
+                Npc_3.TurnBodyNpc_3.TurnBody(1, 0.0)
+        fork:
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(2, 0.0)
+                # and her main squeeze, Cyrus.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_02', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+                Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('Greeting', true, '', 0, false)
+            branch:
+                Player.TurnBodyPlayer.TurnBody(2, 0.0)
+            branch:
+                Npc_3.TurnBodyNpc_3.TurnBody(2, 0.0)
+        fork:
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+            branch:
+                Npc_3.TurnBodyNpc_3.TurnBody(10, 0.0)
+        run Sub_grp_Event52()
+    else:
+        fork:
+            branch:
+                if System.EventFlags['cPlayer:StandByPhoneCallJuneBrideSpn']:
+                    # Hey there! Thanks for coming. So… I need to borrow you for a minute.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001', false)
+                else:
+                    # Hey there. You got some good timing, you know that? Can I, like, borrow you for a minute?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_00', false)
+            branch:
+                EventFlowSystemActor@alw.WaitFrameEventFlowSystemActor@alw.WaitFrame(10)
+                Npc_1.TurnBodyNpc_1.TurnBody(10, 0.0)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+                Npc_2.TurnBodyNpc_2.TurnBody(10, 0.0)
+        fork:
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
+                # OK, so this here is Reese…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_01', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+                Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('Greeting', true, '', 0, false)
+            branch:
+                Player.TurnBodyPlayer.TurnBody(1, 0.0)
+            branch:
+                EventFlowSystemActor@BGM.WaitFrameEventFlowSystemActor@BGM.WaitFrame(30)
+                EventFlowSystemActor@BGM.BGMPropertyControlEventFlowSystemActor@BGM.BGMPropertyControl(91)
+        fork:
+            branch:
+                MainNpc.TurnBodyMainNpc.TurnBody(2, 0.0)
+                # and her main squeeze, Cyrus.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_02', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+                Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('Greeting', true, '', 0, false)
+            branch:
+                Player.TurnBodyPlayer.TurnBody(2, 0.0)
+        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+        run Sub_grp_Event52()
+ 
+flow Spn_FirstJuneBride_Init():
+    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']) and (not System.EventFlags['cPlayer:SpnJuneBrideTalkEventFrag']):
+        MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('alw', 1)
+        MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('alp', 2)
+        if System.EventFlags['cLand:CompleteCommuneExpandEvent']:
+            MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('pooB', 3)
+ 
+local flow Sub_Event60():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    System.EventFlags['cPlayer:SpnExpandEventAfterJuneBride'] = true
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cFirstJuneBrideStudio', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+local flow Sub_grp_Event52():
+    fork:
+        branch:
+            Player.TurnBodyPlayer.TurnBody(0, 0.0)
+        branch:
+            Npc_1.TurnNeckNpc_1.TurnNeck(2, false)
+            Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+        branch:
+            Npc_2.TurnNeckNpc_2.TurnNeck(1, false)
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+    if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] < 1:
+        # They're married and in love, um… a whole bunch. Far-out, right? Anyway, they wanna get some anniversary photos made. Fancy ones. With sets and stuff.…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:001_03', false)
+    else:
+        # June's wedding season, and they're looking to take some anniversary photos again this year.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:029', false)
+    fork:
+        branch:
+            if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] < 1:
+                # Thing is, I'm cool with lending out my studio, but my wedding sets are running sliiiiiightly behind schedule. I'd ordered decorations and painted the…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:002', false)
+            else:
+                # Anyway, I wanted to ask you to take care of the sets for the wedding pictures again. Same deal as before—I'll provide furniture and whatnot, you prov…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:030', false)
+        branch:
+            Npc_1.TurnBodyNpc_1.TurnBody(10, 0.0)
+            Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('EmotEnd', true, '', 0, true)
+        branch:
+            Npc_2.TurnBodyNpc_2.TurnBody(10, 0.0)
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, true)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            if System.EventFlags['cLand:CompleteCommuneExpandEvent']:
+                fork:
+                    branch:
+                        # Really?! Wow, you are solid on down. Come on, let's go!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:003', true)
+                    branch:
+                        Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('Smiling', true, '', 0, true)
+                    branch:
+                        Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+                    branch:
+                        Npc_3.CharacterEmoticonActionNpc_3.CharacterEmoticonAction('Smiling', true, '', 0, true)
+                run Sub_Event60()
+            else:
+                fork:
+                    branch:
+                        # Really?! Wow, you are solid on down. Come on, let's go!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/spn/GEvent/SP_spn_GEvent_JuneBride:003', true)
+                    branch:
+                        Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('Smiling', true, '', 0, true)
+                    branch:
+                        Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+                run Sub_Event60()
+ 

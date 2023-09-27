@@ -1,0 +1,504 @@
+flow ChackNpcFace():
+    switch MainNpc.IsNpcTypeMainNpc.IsNpcType():
+        case 0:
+            if (not MainNpc.NpcRaceMainNpc.NpcRace('bul')) and (not MainNpc.NpcRaceMainNpc.NpcRace('ant')) and (not MainNpc.NpcRaceMainNpc.NpcRace('elp')):
+                SubflowResults[1] = 0
+            else:
+                SubflowResults[1] = 1
+        case 1:
+            if (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('cml', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('alp', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('ttlA', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('plo', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('plk', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('plm', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('ott', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('dod', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('doc', 'cCustomer')):
+                SubflowResults[1] = 0
+            else:
+                SubflowResults[1] = 1
+        default:
+            return
+ 
+flow EndShareHouse():
+    run Demo_Common_Wherearen::StoryEventChk_StartingWorkrun Demo_Common_Wherearen::StoryEventChk_StartingWork()
+    if SubflowResults@9[16] == 0:
+        # Having a roommate is real fun, but… Sometimes I really miss not having to share my <135:1:cd00>.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:114', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Would I? I dunno. I haven't really thought about it… OK, now I have! Can I get a new vacation home too?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:115', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run ShareHouseTag()
+                # Yaaay! This is gonna be awesome! Alright, you head back. I gotta tell <115:1:cd00> the big news!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:116', true)
+                MainNpc.WherearenSetNpcVisitInfoMainNpc.WherearenSetNpcVisitInfo()
+                if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcGarden'):
+                    System.EventFlags['cWherearenPlayer:RequestEndShareHouseDemo'] = 1
+                    MainNpc.MessageSuspendMainNpc.MessageSuspend()
+                    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cNormalFader', FadeSpeed='cSlow', FadeColor='cBlack', SoundDucking='cWorldDucking')
+                    EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cEraseForNpcOrder')
+                    EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cUnregistAmiibo')
+                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(3)
+                else:
+                    System.EventFlags['cWherearenPlayer:RequestEndShareHouseDemo'] = 2
+                    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+                    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('NNPC_Spot_WherearenEndShareHouseDemo', 'KeepFaderOff_FromHouse', false, false, false)
+                    EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cUnregistAmiibo')
+                    run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(TargetStage='cWherearenNpcGarden', FadeColorString='cBlack', FadeInKindString='cNormalFader', FadeInSpeed='cSlow', FadeOutKindString='cCircle', FadeOutSpeed=0.0)
+            else:
+                # Hmm? OK, I'll do more thinking… Done! You're right. Things are cool how they are. Thanks for listening!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:117', false)
+        else:
+            # It only happens once in a while, though. And I always get the last of it. Otherwise, yeah! REAL fun!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:118', false)
+    else:
+        # A roommate? I already have one! I can watch scary movies now that I have a roommate, 'cause I can hide behind them during the scary parts!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:114_01', false)
+ 
+flow EnterGarden(Main: actor, Sub: actor):
+    MainNpc@EnterGarden(Main).NpcAISettingMainNpc@EnterGarden(Main).NpcAISetting(4, false)
+    if EventFlowSystemActor.EnterGardenPatternEventFlowSystemActor.EnterGardenPattern() not in (0, 1, 2):
+        Npc_2.TurnNeckNpc_2.TurnNeck(11, false)
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    Npc_1.TurnNeckNpc_1.TurnNeck(11, false)
+    Player.TurnNeckPlayer.TurnNeck(11, false)
+    EventFlowSystemActor.CollisionWherearenAirWallEventFlowSystemActor.CollisionWherearenAirWall(false)
+    EventFlowSystemActor.SetLookAtTargetObjectEventFlowSystemActor.SetLookAtTargetObject('cWherearenNpcHouse')
+    Player.TurnBodyPlayer.TurnBody(12, 180.0)
+    Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+    fork:
+        branch:
+            if EventFlowSystemActor.EnterGardenPatternEventFlowSystemActor.EnterGardenPattern() in (0, 1, 2):
+                EventFlowSystemActor@player.WaitFrameEventFlowSystemActor@player.WaitFrame(24)
+            else:
+                EventFlowSystemActor@player.WaitFrameEventFlowSystemActor@player.WaitFrame(60)
+            Player.PlayerDemoMovePlayer.PlayerDemoMove('cForward', 10)
+            Player.TurnBodyPlayer.TurnBody(13, 180.0)
+            Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+            Player.TurnBodyPlayer.TurnBody(11, 0.0)
+            Player.TurnNeckPlayer.TurnNeck(13, false)
+        branch:
+            MainNpc@EnterGarden(Main).NpcMoveDirectionMainNpc@EnterGarden(Main).NpcMoveDirection(180.0, 50.0, 1, false, true)
+            MainNpc@EnterGarden(Main).TurnBodyMainNpc@EnterGarden(Main).TurnBody(13, 0.0)
+        branch:
+            if EventFlowSystemActor.EnterGardenPatternEventFlowSystemActor.EnterGardenPattern() in (0, 1, 2):
+                EventFlowSystemActor@mnc.WaitFrameEventFlowSystemActor@mnc.WaitFrame(24)
+            else:
+                EventFlowSystemActor@mnc.WaitFrameEventFlowSystemActor@mnc.WaitFrame(60)
+            SubNpc@EnterGarden(Sub).NpcMoveDirectionSubNpc@EnterGarden(Sub).NpcMoveDirection(180.0, 50.0, 1, false, true)
+            SubNpc@EnterGarden(Sub).TurnBodySubNpc@EnterGarden(Sub).TurnBody(13, 0.0)
+            EventFlowSystemActor@mnc.WaitFrameEventFlowSystemActor@mnc.WaitFrame(9)
+        branch:
+            if EventFlowSystemActor.EnterGardenPatternEventFlowSystemActor.EnterGardenPattern() == 3:
+                EventFlowSystemActor@housemate.WaitFrameEventFlowSystemActor@housemate.WaitFrame(30)
+                Npc_2.NpcMoveDirectionNpc_2.NpcMoveDirection(180.0, 50.0, 1, false, true)
+                Npc_2.TurnBodyNpc_2.TurnBody(13, 0.0)
+    EventFlowSystemActor.CollisionWherearenAirWallEventFlowSystemActor.CollisionWherearenAirWall(true)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('LandingTalk', 'cDefault', 'Place:SafeArea', false, false, false, 0)
+    SubNpc@EnterGarden(Sub).NpcAISetRequestSpeakFuncSubNpc@EnterGarden(Sub).NpcAISetRequestSpeakFunc('cLeaveWherearenGarden', false)
+    EventFlowSystemActor.ReserveEnterGardenPatternEventFlowSystemActor.ReserveEnterGardenPattern(0)
+ 
+flow EnterGardenWithoutCustomer():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    EventFlowSystemActor.CollisionWherearenAirWallEventFlowSystemActor.CollisionWherearenAirWall(false)
+    fork:
+        branch:
+            Player.TurnBodyPlayer.TurnBody(12, 180.0)
+            Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+            Player.PlayerDemoMovePlayer.PlayerDemoMove('cForward', 10)
+            Player.TurnBodyPlayer.TurnBody(0, 0.0)
+        branch:
+            MainNpc.NpcMoveDirectionMainNpc.NpcMoveDirection(180.0, 50.0, 1, false, true)
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.CollisionWherearenAirWallEventFlowSystemActor.CollisionWherearenAirWall(true)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveWherearenGarden', false)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('LandingTalk', 'cDefault', 'Place:SafeArea', false, false, false, 0)
+    EventFlowSystemActor.ReserveEnterGardenPatternEventFlowSystemActor.ReserveEnterGardenPattern(0)
+ 
+flow FaceToFace():
+    run ChackNpcFace()
+    fork:
+        branch:
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            run TurnNPC()
+        branch:
+            run TurnPlayer()
+        branch:
+            if not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcRoom1'):
+                Npc_1.TurnNeckNpc_1.TurnNeck(11, false)
+                if EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cOfficer'):
+                    Npc_1.TurnBodyNpc_1.TurnBody(12, 150.0)
+                else:
+                    Npc_1.TurnBodyNpc_1.TurnBody(12, 180.0)
+            elif MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+                Npc_1.TurnNeckNpc_1.TurnNeck(11, false)
+                Npc_1.TurnBodyNpc_1.TurnBody(12, 150.0)
+        branch:
+            if (not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcRoom1')) and ((not ((EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 0) or (EventFlowSystemActor.WherearenNpcOrderTypeEventFlowSystemActor.WherearenNpcOrderType() in (0, 2, 3)))) or (EventFlowSystemActor.EnterGardenPatternEventFlowSystemActor.EnterGardenPattern() == 3)):
+                Npc_2.TurnNeckNpc_2.TurnNeck(11, false)
+                Npc_2.TurnBodyNpc_2.TurnBody(12, 180.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+ 
+flow FreeTalk():
+    if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+        switch MainNpc.WherearenNpcOrderRelationKindMainNpc.WherearenNpcOrderRelationKind():
+            case 0, 3:
+                EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(true, 0)
+                # RANDOM: I kinda expected I'd end up best friend… // I thought this place was only for vacat… // <115:1:cd00> really looks out for me! T… // Having a roommate is tough. Like the ot…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:112', false)
+            case 1:
+                EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+                # RANDOM: The best part of roommates is always ha… // Having a roommate is really good when t… // Did you know <115:1:cd00> rolls around … // I really wasn't sure what it'd be like …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:113', false)
+            default:
+                return
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcGarden'):
+        # RANDOM: I really like playing inside my vacatio… // I love having my own yard. It's got bug… // You gotta know a lot to take care of a … // I've never had my own yard to run aroun…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:119', false)
+    else:
+        # RANDOM: I really like how I can just chill out … // I can't believe I've got a vacation hom… // I never wanna leave this place. It's so… // This place couldn't possibly get any co…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:111', false)
+ 
+flow GoToShareHouseOrder():
+    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OrderCut0', '', true)
+    EventFlowSystemActor.RequestWaterFallDuckingEventFlowSystemActor.RequestWaterFallDucking(2)
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
+    EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+ 
+flow KeepFtr_ExtensionDisable():
+    # Make it look cool, OK?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:104_01', false)
+    fork:
+        branch:
+            if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+        branch:
+            MainNpc.MessageSuspendMainNpc.MessageSuspend()
+    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
+    run Omakase()
+    MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cReform', '', 'cKeepFtr', '', '')
+    EventFlowSystemActor.WherearenSetNpcOrderStartStageEventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcGarden')
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cConfirm')
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(126)
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        EventFlowSystemActor.WherearenSetNpcOrderStartStageEventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcGarden')
+        System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = true
+        if MainNpc.IsWherearenMainFieldNpcShareHousePositionMainNpc.IsWherearenMainFieldNpcShareHousePosition():
+            MainNpc.ReserveEnterGardenPatternMainNpc.ReserveEnterGardenPattern(3)
+        else:
+            MainNpc.ReserveEnterGardenPatternMainNpc.ReserveEnterGardenPattern(2)
+        run Demo_Common_Wherearen::SetCamera_GardenVisitrun Demo_Common_Wherearen::SetCamera_GardenVisit()
+        EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cUnregistAmiibo')
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
+        EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(127)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcStageSelected', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+    else:
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
+        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(12)
+        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0, false)
+        EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(true, '')
+        Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+        EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cEraseForNpcOrder')
+        EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cUnregistAmiibo')
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        EventFlowSystemActor.SoundFadeOutDuckingOffEventFlowSystemActor.SoundFadeOutDuckingOff()
+        EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(54)
+        EventFlowSystemActor.SystemBGMVolumeFadeInEventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(127)
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+        EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+        EventFlowSystemActor.UIMainMenuSetInvalidFrameEventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+        EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('')
+        if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+            EventFlowSystemActor.SetNpcAIBlackBoardByLabelEventFlowSystemActor.SetNpcAIBlackBoardByLabel('-Wherearen:Housemate', 'ReformStart', 0, 1)
+ 
+flow Move():
+    # Move? To a new place? But I really like it here. Oh, except I might like it there MORE. Alright, let's do it!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:108', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # Oh, man! I wonder what my new place is gonna be like. I'm so excited!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:108_01', true)
+        run Omakase()
+        MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cMoving', '', '', '', '')
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
+        run NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamerarun NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamera()
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
+        EventFlowSystemActor.RequestWaterFallDuckingEventFlowSystemActor.RequestWaterFallDucking(0)
+        EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+    else:
+        run ReformCancel()
+ 
+flow Omakase():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    if not EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+        EventFlowSystemActor.ChangeWherearenWorkModeEventFlowSystemActor.ChangeWherearenWorkMode(false, true)
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(54)
+    fork:
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('Assent', true, '', 0, false)
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+ 
+flow OrderStart():
+    EventFlowSystemActor.SystemBGMVolumeFadeInEventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(127)
+    System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = false
+    switch EventFlowSystemActor.WherearenNpcOrderTypeEventFlowSystemActor.WherearenNpcOrderType():
+        case 0:
+            if System.EventFlags['cWherearenPlayer:SeqMncGardenEditTalk']:
+                # Whoa! Is this really gonna be my vacation home? REALLY-really? Ah huh huh! This is gonna be so fun!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:001', true)
+                run SNPC_mnc_19_WherearenEvent_GardenEdit::ChkMncTalkrun SNPC_mnc_19_WherearenEvent_GardenEdit::ChkMncTalk()
+            else:
+                run SNPC_mnc_19_WherearenEvent_GardenEdit::VisitTalk_GardenEditrun SNPC_mnc_19_WherearenEvent_GardenEdit::VisitTalk_GardenEdit()
+            run FaceToFace()
+            # OK, I'm gonna get out of your way. It's time for a snack break anyway. I can't wait to move in, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:001_01', true)
+            EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+            EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, 'OrderThemeAppear')
+            EventFlowSystemActor.UIMainMenuSetInvalidFrameEventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+            EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('cGarden')
+        case 1:
+            Npc_2.SetNpcNameNpc_2.SetNpcName(0, 0)
+            # And we made it! Welcome to my vacation home, <115:1:cd00>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:128_01', false)
+            # Yaaay! This place is great! Ah huh huh! We're gonna have SO MUCH FUN, <110:6>!
+            Npc_2.OpenMessageWindowNpc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:128_02', false)
+            run FaceToFace()
+            # This is gonna be the best vacation home EVER once you're done with it, <150:6>. I just know it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:128_03', true)
+            if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
+                MainNpc.SetNpcNameMainNpc.SetNpcName(0, 1)
+                SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+                fork:
+                    branch:
+                        # Go design your heart out, PLAYER! Oh, hey, since they'll be using the place together from now on… You might want to make it more roomie friendly by m…
+                        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:211', true)
+                    branch:
+                        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+                        Player.TurnBodyPlayer.TurnBody(11, 0.0)
+                        Player.TurnNeckPlayer.TurnNeck(1, false)
+                run Sub_Event147()
+            else:
+                run Sub_Event147()
+        case 2:
+            # I'll get out of your way and let you work.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:129_01', true)
+            run FaceToFace()
+            # Alright, I'm gonna leave you to it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:129_01_01', true)
+            EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+            EventFlowSystemActor.UIMainMenuSetInvalidFrameEventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+            EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('cGarden')
+        case 3:
+            # I wasn't sure I'd like this new spot… but I like it a WHOOOOOOOOOLE lot!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:124', true)
+            run FaceToFace()
+            # You're dependable, so I'm gonna depend on you if I need any more remodeling work… And maybe also for a ride to an appointment I got next week.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:124_01', true)
+            EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+            EventFlowSystemActor.UIMainMenuSetInvalidFrameEventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+            EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('cGarden')
+ 
+flow PlayerVisit():
+    if MainNpc.ExistSelectRewardItemWherearenNPCMainNpc.ExistSelectRewardItemWherearenNPC():
+        switch MainNpc.IsNpcTypeMainNpc.IsNpcType():
+            case 0:
+                run Sub_grp_Event170()
+            case 1:
+                if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+                    run SkipGift()
+                else:
+                    run Sub_grp_Event170()
+            default:
+                return
+    else:
+        run SkipGift()
+ 
+flow Reform():
+    # That sounds great! You can never have too many snack drawers.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:102_01', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run KeepFtr_ExtensionDisable()
+    else:
+        run ReformCancel()
+ 
+flow ReformCancel():
+    # Changed your mind, huh? That's OK, I do that a lot. Except when I don't.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:107', false)
+ 
+flow Return():
+    # OK! I hope you'll come back and play sometime, though. See you then!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:148', true)
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+    System.EventFlags['cWherearenPlayer:VisitHouseReturn'] = true
+    run Demo_Common_Wherearen::CheckReturnWithTakumirun Demo_Common_Wherearen::CheckReturnWithTakumi()
+    if SubflowResults@2[0] == 0:
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+    else:
+        System.EventFlags['cWherearenPlayer:ReturnWithOtg'] = true
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+ 
+flow SalesTalk_PiC():
+    # Have you smelled these smells we got goin' on out here? WOW! Anyway, what's up?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:101', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        case 0:
+            run FreeTalk()
+        case 1:
+            if System.EventFlags['cWherearenPlayer:Unlock_ShareHouse']:
+                # How's my home? I dunno. I haven't asked it… Is something up?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:101_01', false)
+                switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                    case 0:
+                        run Reform()
+                    case 1:
+                        run Move()
+                    case 2:
+                        if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+                            run EndShareHouse()
+                        else:
+                            run StartShareHouse()
+                    case 3:
+                        # Oh! That's, uh…not what I thought you were gonna say. But that's OK! I'll see you around, <110:6>!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:110_01', false)
+            else:
+                # How's my home? I dunno. I haven't asked it… Is something up?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:101_02', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    case 0:
+                        run Reform()
+                    case 1:
+                        run Move()
+                    case 2:
+                        # Oh! That's, uh…not what I thought you were gonna say. But that's OK! I'll see you around, <110:6>!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:110_01', false)
+        case 2:
+            run Return()
+        case 3:
+            # My vacation house is neat, isn't it? I'll introduce ya to the builder if you want one of your own!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:110', false)
+ 
+flow ShareHouseTag():
+    switch MainNpc.WherearenNpcOrderRelationKindMainNpc.WherearenNpcOrderRelationKind():
+        case 0:
+            EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(true, 0)
+        case 1:
+            EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+        default:
+            return
+ 
+flow SkipGift():
+    if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+        run NNPC_Spot_WherearenEvent_Once::FirstVisitCustomer_Talkrun NNPC_Spot_WherearenEvent_Once::FirstVisitCustomer_Talk()
+    else:
+        run SalesTalk_PiC()
+ 
+flow StartShareHouse():
+    # Roommates! Yes! That sounds like so much fun! I'm in, <110:6>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:109', false)
+    if MainNpc.IsNpcTypeMainNpc.IsNpcType() == 0:
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            run ReformCancel()
+        elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+            fork:
+                branch:
+                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+                branch:
+                    # Wow! My very own roommate… I wonder what they'll be like!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:109_01', true)
+            run Sub_Event320()
+        else:
+            # Wow! My very own roommate… I wonder what they'll be like!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:109_01', true)
+            run Sub_Event320()
+ 
+local flow Sub_Event147():
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+    EventFlowSystemActor.UIMainMenuSetInvalidFrameEventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+    EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('cGarden')
+ 
+local flow Sub_Event320():
+    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
+    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = false
+    run Omakase()
+    MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cShareHouse', '', '', '', '')
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(126)
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
+        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(12)
+        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0, false)
+        MainNpc.ArrangeCharacterForOrderMainNpc.ArrangeCharacterForOrder()
+        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeqEventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(3)
+    else:
+        run GoToShareHouseOrder()
+ 
+local flow Sub_grp_Event170():
+    if MainNpc.EventFlags['cWherearenNpcMemory:GiveGiftFaild']:
+        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            run SkipGift()
+        else:
+            run NNPC_Spot_WherearenMainField::GiveGiftRerun NNPC_Spot_WherearenMainField::GiveGiftRe()
+    elif MainNpc.EventFlags['cWherearenNpcMemory:GiveGiftDone']:
+        run SkipGift()
+    elif MainNpc.EventFlags['cWherearenNpcMemory:GiveDrinkDone']:
+        run NNPC_Spot_WherearenMainField::GiveGiftrun NNPC_Spot_WherearenMainField::GiveGift()
+    else:
+        run SkipGift()
+ 
+flow TurnNPC():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcRoom1'):
+        if SubflowResults@2[1] == 0:
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+        else:
+            MainNpc.TurnBodyMainNpc.TurnBody(12, 60.0)
+    elif SubflowResults@2[1] == 0:
+        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    else:
+        MainNpc.TurnBodyMainNpc.TurnBody(12, 300.0)
+ 
+flow TurnPlayer():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcRoom1'):
+        if SubflowResults@2[1] == 0:
+            Player.TurnBodyPlayer.TurnBody(0, 0.0)
+        else:
+            Player.TurnBodyPlayer.TurnBody(12, 300.0)
+    elif SubflowResults@2[1] == 0:
+        Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    else:
+        Player.TurnBodyPlayer.TurnBody(12, 60.0)
+ 
+flow VisitTogether():
+    System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = false
+    run EnterGarden(Main=MainNpc, Sub=SubNpc)
+    switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+        case 0:
+            # Aaaaaaand here we are!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:123', false)
+            run FaceToFace()
+            # Welcome to <110:10>'s vacation-house place!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:123_01', false)
+        case 2:
+            run OrderStart()
+        default:
+            return
+ 
+flow VisitTogether_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('-Wherearen:Officer', 1)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    if EventFlowSystemActor.EnterGardenPatternEventFlowSystemActor.EnterGardenPattern() == 3:
+        MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('-Wherearen:Housemate', 2)
+ 

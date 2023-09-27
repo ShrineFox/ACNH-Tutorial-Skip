@@ -1,0 +1,80 @@
+flow Report():
+    EventFlowSystemActor.UIIllegalReportHandlingEventFlowSystemActor.UIIllegalReportHandling(9)
+    if EventFlowSystemActor.UIIllegalReportResultEventFlowSystemActor.UIIllegalReportResult():
+        if EventFlowSystemActor.NetWherearenIsFollowedAuthorEventFlowSystemActor.NetWherearenIsFollowedAuthor():
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            EventFlowSystemActor.NetWherearenRemoveFollowListEventFlowSystemActor.NetWherearenRemoveFollowList('cInspect')
+            System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = true
+        # The property you were touring has been reported. The tour will end, and you will now return to the Showroom.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:106', false)
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+        EventFlowSystemActor.StopMeasurePlayTimeEventFlowSystemActor.StopMeasurePlayTime('cWherearenInspect')
+        EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenInspect', 0)
+        EventFlowSystemActor.UIWherearenInspectFootPrintAllClearEventFlowSystemActor.UIWherearenInspectFootPrintAllClear()
+        run Event16()
+ 
+local flow Sub_grp_Event2():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cSuspend')
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cFinish')
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        System.EventFlags['cWherearenPlayer:OtgWithoutMakeup'] = false
+        EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow WherearenClose():
+    if not System.EventFlags['cWherearenPlayer:OtgGetStartingSalary']:
+        # You can't save yet.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:100', false)
+    elif not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+        switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+            case 0, 1:
+                # Ready to wrap things up for now? (Next time you start the game, you will begin from your home.)
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:101', false)
+                run Sub_grp_Event2()
+            case 2:
+                if System.EventFlags['cWherearenPlayer:NoticeAboutInsectEdit']:
+                    # Ready to wrap things up for now? (Design status, excluding bugs, will be saved so you can continue later.)
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:110', false)
+                    run Sub_grp_Event2()
+                else:
+                    # Ready to wrap things up for now? (Your design will be saved so you can continue to work on it later.)
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:102', false)
+                    run Sub_grp_Event2()
+            case 3:
+                if System.EventFlags['cWherearenPlayer:IsParty']:
+                    run SNPC_otg_18_WherearenEvent_Party::Leave_WherearenPartyrun SNPC_otg_18_WherearenEvent_Party::Leave_WherearenParty()
+            case 6:
+                # You can't save right now. Try saving once you return to the office.
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:108', false)
+            default:
+                return
+    elif EventFlowSystemActor.NetWherearenIsMyOpusDataEventFlowSystemActor.NetWherearenIsMyOpusData():
+        # You can't report your own properties.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:109', false)
+    else:
+        EventFlowSystemActor.NetCaptureScreenshotEventFlowSystemActor.NetCaptureScreenshot()
+        # You are currently touring a site. What would you like to do?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:103', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                # Would you like to end the tour and go back to the Showroom?
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:104', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+                    EventFlowSystemActor.StopMeasurePlayTimeEventFlowSystemActor.StopMeasurePlayTime('cWherearenInspect')
+                    EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenInspect', 0)
+                    if EventFlowSystemActor.CheckMeasuredPlayTimeEventFlowSystemActor.CheckMeasuredPlayTime('cWherearenInspect', 20):
+                        System.EventFlags['cPlayerTemp:WHEREAREN_NeedsInspectReply'] = true
+entrypoint Event16:
+                    run System_WherearenResortPlanner::Setting_ReturnInspectrun System_WherearenResortPlanner::Setting_ReturnInspect()
+                    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerApp', 'cWherearenInspectBack', 'cWherearenInspectBack', 'cBlack', 1.0, 1.0)
+            case 1:
+                # Would you like to send in a report on the property you are touring?
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:105', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run Report()
+            default:
+                return
+ 

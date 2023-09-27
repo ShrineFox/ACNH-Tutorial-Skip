@@ -1,0 +1,57 @@
+flow GreetV_Again1():
+    MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Again1', '', '', '')
+ 
+flow GreetV_Again2():
+    MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Again2', '', '', '')
+ 
+flow GreetV_Field1():
+    switch MainNpc.EnvWeatherNNpcTalkCustomMainNpc.EnvWeatherNNpcTalkCustom():
+        case `Fine`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cFineWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+        case `Cloudy`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cCloudWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+        case `Rain`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cRainWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+        case `HeavyRain`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cRainWeather', 'cHardRainWeather', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+        case `Snow`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cSnowWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+        case `HeavySnow`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cSnowWeather', 'cHardSnowWeather', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+        case `Blossom`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cFineWeather', 'cBlossomShower', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Field1', '', '', '')
+ 
+flow GreetV_XX2():
+    switch MainNpc.EnvWeatherNNpcTalkCustomMainNpc.EnvWeatherNNpcTalkCustom():
+        case `Fine`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cFineWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Fine2', '', '', '')
+        case `Cloudy`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cCloudWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Fine2', '', '', '')
+        case `Rain`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cRainWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Rain2', '', '', '')
+        case `HeavyRain`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cRainWeather', 'cHardRainWeather', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Rain2', '', '', '')
+        case `Snow`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cSnowWeather', '', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Snow2', '', '', '')
+        case `HeavySnow`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cSnowWeather', 'cHardSnowWeather', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Snow2', '', '', '')
+        case `Blossom`:
+            MainNpc.NpcSelectMessageMainNpc.NpcSelectMessage('cWildCard', 'cFineWeather', 'cBlossomShower', '', 'TalkNNpc/B1_Bo/Greet/BO_GreetV_Fine2', '', '', '')
+ 
+flow Root():
+    if MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] >= 1:
+        if MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] < 4:
+            run GreetV_Again1()
+        else:
+            MainNpc.EventFlags['cNpcMemory:Again2Count'] += 1
+            run GreetV_Again2()
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInNpcHouseToday'] < 1:
+            run NNPC_Talk_Greet::Greet_House1run NNPC_Talk_Greet::Greet_House1()
+        else:
+            run NNPC_Talk_Greet::Greet_House2run NNPC_Talk_Greet::Greet_House2()
+    elif MainNpc.ContinuousNpcTalkCountMainNpc.ContinuousNpcTalkCount(1):
+        run GreetV_XX2()
+    else:
+        run GreetV_Field1()
+ 

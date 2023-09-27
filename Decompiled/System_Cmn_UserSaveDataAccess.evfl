@@ -1,0 +1,56 @@
+flow Cmn_UserAcc_Connect():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    # Linking current user with the resident data. Do not touch .
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:005', false)
+    fork:
+        branch:
+            if SubflowResults@2[1] != 0:
+                EventFlowSystemActor.ResetNAEventFlowSystemActor.ResetNA()
+            if EventFlowSystemActor.IsSelectedVillageLeaderEventFlowSystemActor.IsSelectedVillageLeader():
+                EventFlowSystemActor.ReconnectPlayerVIllagerEventFlowSystemActor.ReconnectPlayerVIllager('cVillageLeader')
+            else:
+                EventFlowSystemActor.ReconnectPlayerVIllagerEventFlowSystemActor.ReconnectPlayerVIllager('cSpecified')
+            EventFlowSystemActor.SavePlayerRegionLanguageUpdateEventFlowSystemActor.SavePlayerRegionLanguageUpdate()
+            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
+    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    # The data has been updated.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:006', false)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+ 
+flow Cmn_UserAcc_ResetOnline():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    # Now reinitializing all internet-related features. Do not touch .
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:007', false)
+    fork:
+        branch:
+            EventFlowSystemActor.ResetNAEventFlowSystemActor.ResetNA()
+            EventFlowSystemActor.SavePlayerRegionLanguageUpdateEventFlowSystemActor.SavePlayerRegionLanguageUpdate()
+            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
+    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    # The data has been updated.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:006', false)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+ 
+flow Cmn_User_Delete():
+    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    # Deleting resident save data. Do not touch .
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:002', false)
+    fork:
+        branch:
+            if SubflowResults@2[0] == 0:
+                EventFlowSystemActor.SaveRemoveEventFlowSystemActor.SaveRemove('cPlayer')
+            else:
+                EventFlowSystemActor.SaveRemoveEventFlowSystemActor.SaveRemove('cSpecifiedPlayer')
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
+    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    # The save data has been deleted.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:003', true)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+ 

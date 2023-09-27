@@ -1,0 +1,306 @@
+flow Flow_Amiibo():
+    if not System.EventFlags['cPlayer:CampFirstTalk']:
+        if System.EventFlags['cPlayer:CampInvite']:
+            # RANDOM: Man, thanks a bunch for inviting me! // Thanks for the call! I'm real happy you… // I'm here to hang out. Thanks for the in…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:201', false)
+            System.EventFlags['cPlayer:CampFirstTalk'] = true
+        else:
+            EventFlowSystemActor.SetPlayerNameCallCamperNpcEventFlowSystemActor.SetPlayerNameCallCamperNpc()
+            # RANDOM: Hiii, <115:0:cd00> called me, so I roll… // <50:3><115:0:cd00> invited me over, and… // I'm here 'cause <115:0:cd00> called me!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:202', false)
+            System.EventFlags['cPlayer:CampFirstTalk'] = true
+    elif MainNpc.CheckNpcMoveInMainNpc.CheckNpcMoveIn('cDefault'):
+        if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+            run Talk_Move()
+        else:
+            run Talk_Free()
+    elif MainNpc.CheckCamperNpcMovePointMainNpc.CheckCamperNpcMovePoint() not in (0, 1, 2):
+        if (EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()) or (MainNpc.IsSameNpcLivingMainNpc.IsSameNpcLiving()) or (EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0):
+            run Talk_Free()
+        elif System.EventFlags['cPlayer:Camp_InduceFailFlag']:
+            run NNPC_Spot_Camp_Invite::Flow_ReInviterun NNPC_Spot_Camp_Invite::Flow_ReInvite()
+        else:
+            run Talk_Invite_Amiibo()
+    elif System.EventFlags['cLand:CampQuestClear']:
+        if MainNpc.CheckCamperNpcMovePointMainNpc.CheckCamperNpcMovePoint() in (1, 2):
+            if (EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (not System.EventFlags['cPlayer:Camp_InduceFailFlag']):
+                run Talk_Invite_Amiibo()
+            elif EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+                run NNPC_Spot_Camp_Quest::Talk_Ftrrun NNPC_Spot_Camp_Quest::Talk_Ftr()
+            else:
+                run Talk_Free()
+    elif System.EventFlags['cLand:CampQuestInProgress']:
+        if (System.EventFlags['cPlayer:CampQuestAccept']) and (MainNpc.HasCamperQuestItemMainNpc.HasCamperQuestItem()):
+            run NNPC_Spot_Camp_Quest::Talk_QuestClearrun NNPC_Spot_Camp_Quest::Talk_QuestClear()
+        elif EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+            run NNPC_Spot_Camp_Quest::Talk_QuestProgressrun NNPC_Spot_Camp_Quest::Talk_QuestProgress()
+        else:
+            run Talk_Free()
+    elif System.EventFlags['cPlayer:CampQuestRecipiFailed']:
+        if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 5794):
+            run NNPC_Spot_Camp_Quest::Talk_QuestStart_Rerun NNPC_Spot_Camp_Quest::Talk_QuestStart_Re()
+        else:
+            run Talk_Free()
+    elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        run NNPC_Spot_Camp_Quest::Talk_QuestStartrun NNPC_Spot_Camp_Quest::Talk_QuestStart()
+    else:
+        run Talk_Free()
+ 
+flow Flow_FirstCamperZK():
+    if not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        run Flow_FirstCamperZK_2P()
+    elif not System.EventFlags['cPlayer:CampFirstTalk_FirstVisitor']:
+        System.EventFlags['cPlayer:CampFirstTalk_FirstVisitor'] = true
+        # Buongiorno! The name's <110:10>. Glad to see I'm the first one using this campsite.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:001', false)
+        # And you live on this island, don't you?<10:4> I figured. Yeah, I'm pretty good at reading people. I can even tell that you're really gonna enjoy havi…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:001_01', false)
+    elif System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing']:
+        if not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitComplete']:
+            if System.EventFlags['cPlayer:TalkFirstCamperAfterRequestSetHousing']:
+                # I'm just sitting pretty until a certain deal goes through… Come straight here when you have news, OK?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:004_02', false)
+            else:
+                # Hey, you!<10:4> So tell me… Did I get the part…of newest resident on this island?! I can see by the look in your eyes that you vouched for me with th…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:004_01', false)
+                System.EventFlags['cPlayer:TalkFirstCamperAfterRequestSetHousing'] = true
+        elif System.EventFlags['cLand:ReportFirstCamperAboutSetHousing']:
+            # RANDOM: I don't even live here yet, but I'm alr… // I feel like visiting this place has mad… // I'm a simple <110:15:cd00> at heart… I …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:007', false)
+        else:
+            if System.EventFlags['cPlayer:TalkFirstCamperAfterRequestSetHousing']:
+                # There you are! I've just been waiting here…patiently… Who am I kidding? I need to know! Did you find me a place to live?<10:4> Oh. You did! That's co…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:005_01', false)
+            else:
+                # Ahoy! That's a little bit of local flavor for you. It means, "What's up, <110:5>!" You got good news for me, or what? Seriously?! You got me a person…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:005', false)
+            System.EventFlags['cLand:ReportFirstCamperAboutSetHousing'] = true
+            System.EventFlags['cPlayer:TalkFirstCamperAfterSetHousing'] = true
+    elif System.EventFlags['cLand:RcoMeetFirstVisitorComplete']:
+        # Have you talked to the executive producer about my role yet? I mean, about me moving here? While you get things settled, I'll just wait here and visu…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:004', false)
+    elif not EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+        switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+            case 0:
+                # <50:3><110:5>, this <110:32> is so great… What makes it so great? Well, I'm glad I asked myself. It's the fun and the sun, the weather and the wind, …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:002_01', false)
+            case 1:
+                # <50:3><110:5>, I've gotten really used to the <110:33> life… I don't even want to go home. And I have <90:2:0100>-thread count sheets on my bed there!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:002_02', false)
+            case 2:
+                # I don't know, maybe I'm just imagining things, but I feel like everyone wants me to move here… It's just this vibe, you know? Like when you can tell …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:002_03', false)
+        switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+            case 0, 1:
+                # Wow. I'm honored. An exclusive invitation to an exclusive island for celebrities and entourages. There's just one little thing… I'd hate for it to be…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:003', false)
+                switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+                    case 0, 1:
+                        # Guten tag! <10:4>My fate is in your hands. Ha HA!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:003_01', false)
+                        EventFlowSystemActor.Set6thVillagerEventFlowSystemActor.Set6thVillager(0)
+                        System.EventFlags['cPlayer:IslandDevQuestOrderFirstCamperMyself'] = true
+                        System.EventFlags['cLand:RcoMeetFirstVisitorComplete'] = true
+    elif System.EventFlags['cPlayer:Talk1stCamperMultiplay']:
+        # RANDOM: You know what the best part of camping … // It's been a little while since I've bee… // You ever notice how taking a step away … // You know, there's nothing like ISLAND i… // Becoming a huge star is all about netwo…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp:301', false)
+    else:
+        # Wow! <50:3>ISLAND is one hoppin' island, PLAYER. Not that I mind. I love any and all opportunities I get to hand out my business card. It's embossed.…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:101', false)
+        System.EventFlags['cPlayer:Talk1stCamperMultiplay'] = true
+ 
+flow Flow_FirstCamperZK_2P():
+    if not System.EventFlags['cPlayer:CampFirstTalk_FirstVisitor']:
+        System.EventFlags['cPlayer:CampFirstTalk_FirstVisitor'] = true
+        # RANDOM: Hi there! Are you from this island? I'm… // It's a buncha fun camping on this islan… // I'm on a camping trip, trying to meet g…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:101', false)
+    elif not System.EventFlags['cLand:RcoMeetFirstVisitorComplete']:
+        # RANDOM: You know what the best part of camping … // It's been a little while since I've bee… // You ever notice how taking a step away … // You know, there's nothing like ISLAND i… // Becoming a huge star is all about netwo…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp:301', false)
+    elif not System.EventFlags['cLand:ReportFirstCamperAboutSetHousing']:
+        # What's up, stranger? Are you one of the fabulous ISLAND locals? The name's <110:10>, and there's a good chance you'll have the good fortune of being …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:006', false)
+    elif System.EventFlags['cPlayer:TalkFirstCamperAfterSetHousing']:
+        # RANDOM: I don't even live here yet, but I'm alr… // I feel like visiting this place has mad… // I'm a simple <110:15:cd00> at heart… I …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:007', false)
+    else:
+        # RANDOM: I've got something important to tell yo… // I think it's time I took this whole cam… // Hey, spread the news! I'm moving to ISL…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B4_Zk/Spot/ZK_Spot_Camp_First:008', false)
+        System.EventFlags['cPlayer:TalkFirstCamperAfterSetHousing'] = true
+ 
+flow Flow_Normal():
+    if System.EventFlags['cLand:CampFirstCamperVisit']:
+        run Flow_FirstCamperZK()
+    elif not System.EventFlags['cPlayer:CampFirstTalk']:
+        # RANDOM: Hi there! Are you from this island? I'm… // It's a buncha fun camping on this islan… // I'm on a camping trip, trying to meet g…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:101', false)
+        System.EventFlags['cPlayer:CampFirstTalk'] = true
+    elif MainNpc.CheckNpcMoveInMainNpc.CheckNpcMoveIn('cDefault'):
+        if (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30)) and (System.EventFlags['cPlayer:CampGameClear'] != 3) and (not ((System.EventFlags['cPlayerTemp:CampGameStartFailed']) and (EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1))):
+            run NNPC_Spot_Camp_Game::Rootrun NNPC_Spot_Camp_Game::Root()
+        elif EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+            run Talk_Move()
+        else:
+            run Talk_Free()
+    elif (EventFlowSystemActor.CheckMoveOutNpcIsMoveKitVillagerEventFlowSystemActor.CheckMoveOutNpcIsMoveKitVillager()) or (MainNpc.IsSameNpcLivingMainNpc.IsSameNpcLiving()):
+        if (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(38)) and (System.EventFlags['cPlayer:CampGameClear'] != 3) and (not ((System.EventFlags['cPlayerTemp:CampGameStartFailed']) and (EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1))):
+            run NNPC_Spot_Camp_Game::Rootrun NNPC_Spot_Camp_Game::Root()
+        else:
+            run Talk_Free()
+    elif System.EventFlags['cPlayer:Camp_InduceFailFlag']:
+        switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(50, 20, 30):
+            case 0:
+                if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+                    run Talk_Free()
+                else:
+                    run NNPC_Spot_Camp_Invite::Flow_ReInviterun NNPC_Spot_Camp_Invite::Flow_ReInvite()
+            case 1:
+                run Talk_Free()
+            case 2:
+                if (System.EventFlags['cPlayer:CampGameClear'] != 3) and (not ((System.EventFlags['cPlayerTemp:CampGameStartFailed']) and (EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1))):
+                    run NNPC_Spot_Camp_Game::Rootrun NNPC_Spot_Camp_Game::Root()
+                else:
+                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70):
+                        if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+                            run Talk_Free()
+                        else:
+                            run NNPC_Spot_Camp_Invite::Flow_ReInviterun NNPC_Spot_Camp_Invite::Flow_ReInvite()
+                    else:
+                        run Talk_Free()
+    else:
+        switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(20, 50, 30):
+            case 0:
+                if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+                    run Talk_Free()
+                else:
+                    run Talk_Invite_Normal()
+            case 1:
+                run Talk_Free()
+            case 2:
+                if (System.EventFlags['cPlayer:CampGameClear'] != 3) and (not ((System.EventFlags['cPlayerTemp:CampGameStartFailed']) and (EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1))):
+                    run NNPC_Spot_Camp_Game::Rootrun NNPC_Spot_Camp_Game::Root()
+                else:
+                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+                        if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+                            run Talk_Free()
+                        else:
+                            run Talk_Invite_Normal()
+                    else:
+                        run Talk_Free()
+ 
+flow Root():
+    MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_CampSiteTalk')
+    System.EventFlags['cPlayerTemp:CampCurrentSceneTalkDone'] = true
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        if System.EventFlags['cLand:AmiiboCampSiteCall']:
+            run Flow_Amiibo()
+        else:
+            run Flow_Normal()
+    elif MainNpc.CheckNpcMoveInMainNpc.CheckNpcMoveIn('cDefault'):
+        # RANDOM: Wanna hear about the science experiment… // The food is definitely the best part ab… // Sometimes I set up a tent in my living …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:003', false)
+    elif System.EventFlags['cLand:AmiiboCampSiteCall']:
+        # RANDOM: This island is so comfy, I could stay h… // This island smells kinda like where I g… // I really like this island place! I'm go… // The best thing 'bout camping is the eat… // Laying on the floor at home is fun… But…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:002', false)
+    else:
+        # RANDOM: This island is so comfy, I could stay h… // This island smells kinda like where I g… // I really like this island place! I'm go…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:001', false)
+ 
+flow Talk_Free():
+    if System.EventFlags['cLand:AmiiboCampSiteCall']:
+        # RANDOM: Man, isn't this tent great? It's a real… // I try real hard to make sure I don't fo… // Camping food is all about s'mores! Choc…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:302', false)
+    else:
+        # RANDOM: Man, isn't this tent great? It's a real… // I try real hard to make sure I don't fo… // Camping food is all about s'mores! Choc… // You can hear way more outside noises in… // The best thing about camping is making …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:301', false)
+ 
+flow Talk_Invite_Amiibo():
+    switch MainNpc.CheckCamperNpcMovePointMainNpc.CheckCamperNpcMovePoint():
+        case 1:
+            # Your island's cozy, everybody's nice, they smell good, and they feed me stuff. Man, I could stay here forever!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:504', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                # A huh huh huh, that sounds cool. Invite me again sometime!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:505', false)
+                System.EventFlags['cPlayer:Camp_InduceFailFlag'] = true
+            else:
+                # Yeah, it's real neat here! Real darn neat. You're so lucky that you get to live here, <110:6>.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:506', false)
+        case 2:
+            # This island's my favoritest place that doesn't got a menu to color while you wait for pie.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:507', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                # That's a neat idea! Ya oughta invite me back someday so I've got time to think about it, OK? Once I got elected sheriff 'cause I didn't think about w…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:508', false)
+                System.EventFlags['cPlayer:Camp_InduceFailFlag'] = true
+            else:
+                # You're lucky! You live here, and don't gotta leave unless space aliens make ya. I wanna come back someday!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:509', false)
+        case 3:
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                case 0:
+                    # <50:3>ISLAND's got it all. Nice folks, cool stuff, great snacks, and friendly bugs…I could stay here forever!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:601_01', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        run NNPC_Spot_Camp_Invite::Flow_Inviterun NNPC_Spot_Camp_Invite::Flow_Invite()
+                    else:
+                        # I will! Maybe I'll tell my friends they should come here too. This island's cool, but our place is special too!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:602_01', false)
+                case 1:
+                    # The folks on ISLAND made me a buncha souvenirs, and it made me so happy. What a neat island with some real neat folks! I almost don't wanna leave, <1…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:601_02', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        run NNPC_Spot_Camp_Invite::Flow_Inviterun NNPC_Spot_Camp_Invite::Flow_Invite()
+                    else:
+                        # Thanks. Yeah, time to head for home. My friends'd be sad if I didn't come back!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:602_02', false)
+                case 2:
+                    # I was looking at my souvenir and I got to thinkin'… It'd be real cool if I could hang out here and make stuff with you guys. Just, ya know, all the t…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:601_03', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        run NNPC_Spot_Camp_Invite::Flow_Inviterun NNPC_Spot_Camp_Invite::Flow_Invite()
+                    else:
+                        # Yeah, I've got a place I call home already. And I can make some pretty cool furniture on my island! Maybe I can show you if you come visit someday, <…
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:602_03', false)
+        default:
+            return
+ 
+flow Talk_Invite_Normal():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # I've only been here a day, but I love this island almost as much as peanut butter chocolate chip cookies. I hope I get to live on an island like this…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:501_01', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run NNPC_Spot_Camp_Invite::Flow_Inviterun NNPC_Spot_Camp_Invite::Flow_Invite()
+            else:
+                # Thanks! I know if I keep camping around, I'm gonna find the perfect island, <110:6>.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:502_01', false)
+        case 1:
+            # I picked this as the place to go after I threw a handful of jelly at a map and it mostly splatted here. Camping sounded like more fun than cleaning u…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:501_02', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run NNPC_Spot_Camp_Invite::Flow_Inviterun NNPC_Spot_Camp_Invite::Flow_Invite()
+            else:
+                # Yeah, I'm gonna go back home and see about cleaning up that jelly. I hope we can meet again!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:502_02', false)
+        case 2:
+            # I came to camp on this island 'cause I had a dream that I lived here and I had fun every day. Whaddaya think about my dream, <110:3>?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:501_03', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run NNPC_Spot_Camp_Invite::Flow_Inviterun NNPC_Spot_Camp_Invite::Flow_Invite()
+            else:
+                # I will! It was a good dream, and the real island is even better, <110:6>.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:502_03', false)
+ 
+flow Talk_Move():
+    if MainNpc.CheckNpcMoveInMainNpc.CheckNpcMoveIn('cMainPlayer'):
+        # RANDOM: I gotta think of a real cool way to do … // Well, if I'm moving here, I gotta start… // A new life on a new island… It's real e…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:401', false)
+    elif MainNpc.InducePlayerExistMainNpc.InducePlayerExist():
+        MainNpc.SetInvitePlayerNameMainNpc.SetInvitePlayerName()
+        # RANDOM: Guess what! I got important news! I'm m… // I'm gonna be moving to this island real… // <50:3><115:0:cd00> invited me to move t…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:402', false)
+    else:
+        # RANDOM: Man, I'm gonna be moving to this island… // Big news! Big, big news! The biggest of… // <50:3><110:3>! I got a thing to say, bu…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp:403', false)
+ 

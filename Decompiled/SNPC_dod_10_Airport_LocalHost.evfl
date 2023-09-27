@@ -1,0 +1,88 @@
+flow EntryPoint_LocalHost():
+    if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() in (0, 1):
+        # Alright, gimme a sec to set up local play.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:111', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            EventFlowSystemActor.NetUpdateFriendListEventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
+            # Saving. Do not touch .
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+            run Sub_Event8()
+        else:
+            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
+    else:
+        # You got it! I'll turn off the internet connection and set things up for local play.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:112', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            EventFlowSystemActor.NetUpdateFriendListEventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
+            # Saving. Do not touch .
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            # Disconnecting from the internet and preparing local wireless connection...
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:002', false)
+            EventFlowSystemActor.NetShutdownEventFlowSystemActor.NetShutdown('cNetShutdown', false)
+            run Sub_Event8()
+        else:
+            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
+ 
+local flow Sub_Event47():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.OpenVillageGateEventFlowSystemActor.OpenVillageGate(false)
+    run SNPC_dod_AirPort::EntryPoint_CheckOpenGateFirstrun SNPC_dod_AirPort::EntryPoint_CheckOpenGateFirst()
+ 
+local flow Sub_Event8():
+    EventFlowSystemActor.NetInitLocalEventFlowSystemActor.NetInitLocal('cInitLocal', false)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
+    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    # So, you want me to fling open the gates and let anyone using local play to come on in? Or set a special Dodo Code™ to keep out the riffraff?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:113', true)
+    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+        case 0:
+            EventFlowSystemActor.NetCreateSessionVillageEventFlowSystemActor.NetCreateSessionVillage('cOpenLocal')
+            EventFlowSystemActor.UIVersionGuideDisappearEventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+            if System.EventFlags['cPlayer:EquipLicenseHelmet']:
+                # Underst—OH!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:116_02', false)
+                run SNPC_dod_AirPort::LandMakingRemove_Hostrun SNPC_dod_AirPort::LandMakingRemove_Host()
+                # Openin' the gate now!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:122', false)
+                run Sub_Event47()
+            else:
+                # You got it! Openin' the gate now…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:116_01', false)
+                run Sub_Event47()
+        case 1:
+            EventFlowSystemActor.UIVersionGuideDisappearEventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+            # Roger!<10:4> Alright—gimme a four-digit number.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:114', true)
+            EventFlowSystemActor.UISoftwareKeyboardHandlingEventFlowSystemActor.UISoftwareKeyboardHandling('cPasswordLocal', true)
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                SubflowResults[0] = 1
+                EventFlowSystemActor.NetCreateSessionVillageEventFlowSystemActor.NetCreateSessionVillage('cLocalKey')
+                EventFlowSystemActor.UIVersionGuideDisappearEventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+                if System.EventFlags['cPlayer:EquipLicenseHelmet']:
+                    # You got it…OH!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:115_02', false)
+                    run SNPC_dod_AirPort::LandMakingRemove_Hostrun SNPC_dod_AirPort::LandMakingRemove_Host()
+                    # Openin' the gate now!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:122', false)
+                    run Sub_Event47()
+                else:
+                    # You got it! Openin' the gate now…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:115_01', false)
+                    run Sub_Event47()
+            else:
+                EventFlowSystemActor.NetEndSessionVillageEventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+                run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+        case 2:
+            EventFlowSystemActor.NetEndSessionVillageEventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+            run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+ 

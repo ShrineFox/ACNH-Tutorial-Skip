@@ -1,0 +1,18 @@
+flow Gatekeep():
+    if EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+        # Hey! Hold on a sec! You can't leave without showing Lottie how great you look in your uniform!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_07_WherearenOffice:005', true)
+    else:
+        # Uh, hello? Where are you going? Your uniform's in the locker on the second floor.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_07_WherearenOffice:004', true)
+ 
+flow Root():
+    if not System.EventFlags['cWherearenPlayer:SeqUniformTutorialOngoing']:
+        run SNPC_mnc_16_WherearenEvent_DIYCatalog::Root_DIYCatalogMergerun SNPC_mnc_16_WherearenEvent_DIYCatalog::Root_DIYCatalogMerge()
+    elif EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+        # Wow, that uniform is perfect for you. You are looking good, my friend!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_07_WherearenOffice:003', true)
+    else:
+        # Hurry up! Go get changed! You want to head up to the second floor!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_07_WherearenOffice:002', true)
+ 

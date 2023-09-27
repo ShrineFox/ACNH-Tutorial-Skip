@@ -1,0 +1,32 @@
+flow Init():
+    run AI_NPC_Indoor::BBRegistrun AI_NPC_Indoor::BBRegist()
+ 
+flow Root():
+    MainNpc.SetIsStartNeedActivityMainNpc.SetIsStartNeedActivity('cOff')
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cVisitNPCHouse'):
+        if not MainNpc.SystemIsVisitQuestPlayerEnteredMainNpc.SystemIsVisitQuestPlayerEntered():
+            MainNpc.SetNpcFeelMainNpc.SetNpcFeel('cNormal', 120, false)
+            if (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+                MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Quest_VisitN_Home', 'Home_Talk', false, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+            else:
+                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cVisitWelcome', '', 'NNPC_Quest_VisitN_Home', 'Home_Talk', false, true)
+        elif (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Quest_VisitN_Home', 'Home_Talk', false, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+            MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cVisitFollower', '', 'NNPC_Quest_VisitN_Home', 'Home_Talk', false, true)
+ 
+flow TouchedFurniture():
+    run AI_NPC_Indoor::TouchedFurniturerun AI_NPC_Indoor::TouchedFurniture()
+ 
+flow VisitNFurniture():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Home_Buy', FlowName='NNPC_Quest_VisitN_Home')
+ 
+flow VisitNGoHome():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='End', FlowName='NNPC_Quest_VisitN_End')
+ 
+flow VisitNWelcome():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitN_Home')
+ 

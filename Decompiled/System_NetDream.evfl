@@ -1,0 +1,25 @@
+flow CancelDream():
+    EventFlowSystemActor.NetCancelDownloadDreamEventFlowSystemActor.NetCancelDownloadDream()
+    EventFlowSystemActor.ReturnStageForDreamEndEventFlowSystemActor.ReturnStageForDreamEnd('cDream', 'cDream', 'cBlack', 1.0, 1.0)
+ 
+flow EnterDream():
+    EventFlowSystemActor.NetWaitDemoEventFlowSystemActor.NetWaitDemo('cEnterDream')
+    EventFlowSystemActor.NetEnterDreamEventFlowSystemActor.NetEnterDream()
+ 
+flow ExitDream():
+    EventFlowSystemActor.NetWaitDemoEventFlowSystemActor.NetWaitDemo('cExitDream')
+    if EventFlowSystemActor.NetDreamingTimeEventFlowSystemActor.NetDreamingTime(20):
+        EventFlowSystemActor.NetReplyDreamEventFlowSystemActor.NetReplyDream('cHistory')
+    EventFlowSystemActor.NetReturnFromDreamEventFlowSystemActor.NetReturnFromDream()
+ 
+flow Root():
+    switch EventFlowSystemActor.NetDemoTypeEventFlowSystemActor.NetDemoType():
+        case 4:
+            run EnterDream()
+        case 5:
+            run ExitDream()
+        case 6:
+            run CancelDream()
+        default:
+            return
+ 

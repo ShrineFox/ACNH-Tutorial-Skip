@@ -1,0 +1,91 @@
+flow Packing_Chk():
+    if MainNpc.IsWrappingReturnDeliveryItemMainNpc.IsWrappingReturnDeliveryItem():
+        MainNpc.QuestFlags['cDeliveryWrappingAgain'] = true
+ 
+local flow Sub_Event235():
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Default')
+    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+        case 0:
+            # You're right. I oughta be the one who returns what I borrowed. Sorry for asking you when you're busy, <110:3>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:506', false)
+        case 1:
+            # You're the forgetful type, huh? Just like me! I'm like… Where'd my snacks go?<10:4> I forget! Anyway, sorry for asking you when you're busy, <110:3>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:507', false)
+        case 2:
+            # <115:1:cd00> might be freaking out about it, wondering where it is. Sorry for asking you when you're busy, <110:4>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:508', false)
+        case 3:
+            # Ya know what? I'll get to see their surprised face if I take it over there myself. Sorry for asking you when you're busy, <110:3>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:509', false)
+        case 4:
+            # Apologies should be done in person. And with snacks in hand. I'm gonna go do this myself! Sorry for asking you when you're busy, <110:3>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:510', false)
+    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(-1)
+    MainNpc.NpcQuestControlMainNpc.NpcQuestControl('cFinish')
+ 
+flow TimeOver():
+    run Packing_Chk()
+    MainNpc.SetNpcNameMainNpc.SetNpcName(8, 0)
+    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+        case 0:
+            # <50:3><110:4>? You didn't return the package to <115:1:cd00>, did you? Ugh… Give me back the package. I can do it faster.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:501', false)
+        case 1:
+            # You haven't returned that thing to <115:1:cd00> yet, have you? Man, I'll just go myself. Can I have it back, please?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:502', false)
+        case 2:
+            # Hey. You haven't delivered that package to <115:1:cd00> yet, have ya? Can I get it back from you? I think I oughta go deliver it myself.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:503', false)
+        case 3:
+            # What?! You didn't deliver the present to <115:1:cd00> yet? Can I have it back? I'll go deliver it myself.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:504', false)
+        case 4:
+            # You haven't delivered my apology gift to <115:1:cd00> yet? Man, I was depending on you. You know what? It's cool. I'll go deliver it myself and apolo…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:505', false)
+    if MainNpc.HasDeliveryItemMainNpc.HasDeliveryItem():
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(10, true)
+        run Sub_Event235()
+    elif MainNpc.QuestFlags['cDeliveryWrappingAgain']:
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(11, true)
+        run Sub_Event235()
+    elif MainNpc.HasOpenedDeliveryItemMainNpc.HasOpenedDeliveryItem():
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(11, true)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Default')
+        switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+            case 0:
+                # Huuuh?! Why is this open?!<10:4> I worked so hard wrapping it up all pretty! Man, <110:4>! Don't open stuff that's not yours!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:511', false)
+            case 1:
+                # Why's this open?! Man, I gotta rewrap it now! What a hassle. <50:3><110:3>! Don't open stuff that's not yours!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:512', false)
+            case 2:
+                # Why is this open?! Ahhh! Now I have to redo it! But… I'm so bad at that. I always end up wrapping up my head. <50:3><110:4>! Don't open stuff that's …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:513', false)
+            case 3:
+                # Huh? Why is this… Why is this…<10:4><10:10> WHY IS THIS OPEN?!<10:9> Man… Part of the fun of presents is unwrapping them! You shouldn't open stuff th…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:514', false)
+            case 4:
+                # Why is this…open?! If it's not wrapped, they'll think I'm, like, uncouth! Or whatever the word is! I can't think real clear right now! <50:3><110:4>!…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:515', false)
+        MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(-2)
+        MainNpc.NpcQuestControlMainNpc.NpcQuestControl('cFinish')
+    else:
+        switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+            case 0:
+                # What?! You don't…have it anymore?! That's bad news!<10:4> <10:10>REAL. BAD. NEWS!<10:9> <50:3><115:1:cd00> is gonna think I'm the one who lost it! Ug…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:516', false)
+            case 1:
+                # What? You lost it?! I told you that was <115:1:cd00>'s! Oh man, what do I do now?! [He's|She's] gonna be so disappointed when [he|she] finds out!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:517', false)
+            case 2:
+                # Huh?! You don't have it?!<10:4> That's a downer.<10:4> Total. Complete. Downer. Hmm… Guess I just need to go apologize. I hope <115:1:cd00> forgives …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:518', false)
+            case 3:
+                # Y-y-you LOST it?! My present? Oh man. Ohhh man. This is no good. Reeeaaal nooo good. Time to go find something else <115:1:cd00> would like!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:519', false)
+            case 4:
+                # What?! You lost it?! Aw, man. I asked you to deliver it so we could hurry and make up… I gotta go find another present, I guess.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:520', false)
+        MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(-3)
+        MainNpc.NpcQuestControlMainNpc.NpcQuestControl('cFinish')
+ 

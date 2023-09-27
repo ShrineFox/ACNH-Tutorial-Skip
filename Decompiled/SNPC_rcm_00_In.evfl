@@ -1,0 +1,66 @@
+flow Rcm_InNormal():
+    if (EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() not in (`InResServiceTent`, `NooksCrannyInitial`)) and (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('BlackFriday', false)) and (not System.EventFlags['cPlayer:NoticeBlackFridayToday']):
+        System.EventFlags['cPlayer:NoticeBlackFridayToday'] = true
+        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+            # Ah, PLAYER! Welcome!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3005', false)
+        else:
+            # Ah, a visitor! Welcome, welcome! In the market for a souvenir, hm? We hope you find something you like!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3006', false)
+        # Your timing is impeccable!__ ...impeccable!__ Right now, we're running a special Nook Friday sale! From now through November 30th, everything in the …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3007', false)
+        System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
+    else:
+        # Hello!__ ...hello!__ Welcome to Nook's Cranny!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:201', false)
+ 
+flow Rcm_Market1_First():
+    # Welcome!__ ...welcome!__  Oh, PLAYER! You've come to shop!__ ...shop!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:202', false)
+    # We've got all sorts of furniture and goods. I'm sure you'll find something useful here!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:204', false)
+    # Take your time, and have a nice look around!__ ...look around!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:205', false)
+    System.EventFlags['cPlayer:RcmHeardAboutNewOpen1'] = true
+    run Event1()
+ 
+flow Rcm_Market2_First():
+    # Welcome!__ ...welcome!__  Oh, PLAYER! You've come to shop!__ ...shop!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:202', false)
+    # We've got all sorts of furniture and goods. I'm sure you'll find something useful here!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:204', false)
+    # We're very proud of our selection. Please take your time and look around!__ ...look around!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:206', false)
+    if EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('BlackFriday', false):
+        # Ah! I should also let you know… Right now, we're running a special Nook Friday sale! From now through November 30th, everything in the shop is marked…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3008', false)
+        System.EventFlags['cPlayer:NoticeBlackFridayToday'] = true
+    System.EventFlags['cPlayer:RcmHeardAboutNewOpen2'] = true
+entrypoint Event1:
+    System.EventFlags['cPlayer:RcmTalked1stAfterPrologue'] = true
+    System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
+ 
+flow Root():
+    MainNpc.SetTwinsTagMainNpc.SetTwinsTag()
+    SubNpc.TurnBodySubNpc.TurnBody(10, 0.0)
+    System.EventFlags['cPlayer:RcmForcedTalkTodayFlag'] = true
+    System.EventFlags['cLandTemp:RcmEnterBalloon'] = true
+    System.EventFlags['cLandTemp:RctEnterBalloon'] = true
+    run SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talkrun SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talk()
+    switch SubflowResults@6[1]:
+        case 0:
+            run Rcm_InNormal()
+        case 1:
+            run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1()
+        case 2:
+            run Rcm_Market1_First()
+        case 3:
+            run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen2run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen2()
+        case 4:
+            run Rcm_Market2_First()
+        case 5:
+            run SNPC_rcm_02_BeforeRenual::Rcm_BeforeRenualFor2run SNPC_rcm_02_BeforeRenual::Rcm_BeforeRenualFor2()
+ 
+flow Root_Init():
+    run SNPC_rcm::EntrySubCastrun SNPC_rcm::EntrySubCast()
+ 

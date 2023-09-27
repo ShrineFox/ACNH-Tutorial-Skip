@@ -1,0 +1,63 @@
+flow FacilityName_Chk():
+    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cCafe')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
+        if EventFlowSystemActor.ExistWherearenFacilityRoomNameEventFlowSystemActor.ExistWherearenFacilityRoomName('cCafe'):
+            EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacilityRoom', 0, 'cCafe')
+            # <20:2:cd06><50:3><150:4:cd00>… That's a real nice theme for a school!<10:4> OOPS! Café! I meant to say café, not school! Café! What a neat…café! Wait…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:204', false)
+        else:
+            EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cCafe')
+            # <20:2:cd06>It's a café, but it also has this kinda stuff. <50:3><150:3:cd00> is real fancy, huh?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:203', false)
+        run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
+        if SubflowResults@3[1] not in (0, 2):
+            run NewBuildOrder()
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow LookFtr():
+    run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
+    switch SubflowResults@3[1]:
+        case 0:
+            MainNpc.WherearenGalleryWatchItemMainNpc.WherearenGalleryWatchItem(0)
+            run FacilityName_Chk()
+            # RANDOM: [A|An]<125:0:0000>! So cool! So! Cool! … // I really dig things like this, ya know?… // A huh huh! Nice! Someone put out [a|an]… // This really feels like a resort café… t… // Sometimes I try to profile the folks wh…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:202', true)
+        case 1:
+            MainNpc.WherearenGalleryWatchItemMainNpc.WherearenGalleryWatchItem(0)
+            run FacilityName_Chk()
+            # RANDOM: [A|An]<125:0:0000>! So cool! So! Cool! … // I really dig things like this, ya know?… // A huh huh! Nice! Someone put out [a|an]… // This really feels like a resort café… t… // Sometimes I try to profile the folks wh…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:202', false)
+            run NewBuildOrder()
+        case 2:
+            MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+            run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+ 
+flow NewBuildOrder():
+    if EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        run NNPC_Spot_WherearenMainFieldVisitor::NewBuildInFacilityrun NNPC_Spot_WherearenMainFieldVisitor::NewBuildInFacility()
+ 
+flow Root():
+    run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
+    switch SubflowResults@3[1]:
+        case 0:
+            run FacilityName_Chk()
+            # RANDOM: <20:2:cd06>Since the café has a gallery… // <20:2:cd06>Can just anybody use this pl… // <20:2:cd06>I don't know much about mode… // <20:2:cd06>This place is wild. It's way… // I wonder who thought up putting a place…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:201', true)
+        case 1:
+            run FacilityName_Chk()
+            # RANDOM: <20:2:cd06>Since the café has a gallery… // <20:2:cd06>Can just anybody use this pl… // <20:2:cd06>I don't know much about mode… // <20:2:cd06>This place is wild. It's way… // I wonder who thought up putting a place…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:201', false)
+            run NewBuildOrder()
+        case 2:
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+            MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+            run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+ 
+flow StandSleep():
+    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
+ 
+flow Walk():
+    run Root()
+ 

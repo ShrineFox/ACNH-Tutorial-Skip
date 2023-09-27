@@ -1,0 +1,154 @@
+flow BestFriend():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(26):
+        run NNPC_FreeC::Furniture_Chkrun NNPC_FreeC::Furniture_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(21):
+        run NNPC_FreeC::Room_Chkrun NNPC_FreeC::Room_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(9):
+        run NNPC_FreeA::Week_Chkrun NNPC_FreeA::Week_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(20):
+        run NNPC_FreeA::ClothesN2_Chkrun NNPC_FreeA::ClothesN2_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeA::AlwaysAB_Chkrun NNPC_FreeA::AlwaysAB_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(75):
+        run NNPC_FreeA::Always_Chkrun NNPC_FreeA::Always_Chk()
+    run NNPC_FreeA::HouseQuestions_Chkrun NNPC_FreeA::HouseQuestions_Chk()
+ 
+flow Free_Always():
+    switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+        case 0, 1:
+            if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+                run NNPC_FreeA::AlwaysAB_Chkrun NNPC_FreeA::AlwaysAB_Chk()
+            else:
+                run NNPC_FreeA::Always_Chkrun NNPC_FreeA::Always_Chk()
+        case 2, 3, 4:
+            run NNPC_FreeA::Always_Chkrun NNPC_FreeA::Always_Chk()
+        case 5:
+            run NNPC_FreeA::Week_Chkrun NNPC_FreeA::Week_Chk()
+ 
+flow Free_House1():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeD::Rumor_Action_Chkrun NNPC_FreeD::Rumor_Action_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeD::RumorN_Chkrun NNPC_FreeD::RumorN_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeD::RumorO_Favorite_Chkrun NNPC_FreeD::RumorO_Favorite_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeD::RumorP_Favorite_Chkrun NNPC_FreeD::RumorP_Favorite_Chk()
+    run Free_House2()
+ 
+flow Free_House2():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(25):
+        run NNPC_FreeA::ClothesN1_Chkrun NNPC_FreeA::ClothesN1_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(25):
+        run NNPC_FreeA::ClothesP_Chkrun NNPC_FreeA::ClothesP_Chk()
+    run Free_House3()
+ 
+flow Free_House3():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeD::KeywordBrun NNPC_FreeD::KeywordB()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+        run NNPC_FreeD::KeywordArun NNPC_FreeD::KeywordA()
+    if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5):
+        if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(20):
+            run NNPC_FreeA::Want_Chkrun NNPC_FreeA::Want_Chk()
+        if (MainNpc.NpcIsSittingMainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5)) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(20)):
+            run NNPC_FreeI::Present_Chkrun NNPC_FreeI::Present_Chk()
+    run Free_House4()
+ 
+flow Free_House4():
+    System.EventFlags['cPlayerTemp:NnpcTalkSelectCount'] = 0
+    run ReSelection()
+ 
+flow Free_HouseG():
+    MainNpc.SetNpcNameMainNpc.SetNpcName(15, 0)
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # <50:3><115:1:cd00>'s place is so completely chill. It's so relaxing. If I had a snack and a cozy spot, I could take a nap.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomG:006', false)
+        case 1:
+            # <115:1:cd00>'s house has so much fancy furniture! Do you think [he|she] ever worries about getting crumbs on any of it?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomG:007', false)
+        case 2:
+            # <50:3><115:1:cd00> looks real chill right now. Maybe because we're here?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeC_RoomG:008', false)
+ 
+flow Free_HouseH():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        run NNPC_FreeC::RoomN_withGrun NNPC_FreeC::RoomN_withG()
+    else:
+        run NNPC_FreeC::FunitureN_Chkrun NNPC_FreeC::FunitureN_Chk()
+ 
+flow Friend():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(25):
+        run NNPC_FreeC::Furniture_Chkrun NNPC_FreeC::Furniture_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(33):
+        run NNPC_FreeC::Room_Chkrun NNPC_FreeC::Room_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+        run NNPC_FreeA::Week_Chkrun NNPC_FreeA::Week_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(57):
+        run NNPC_FreeA::ClothesN2_Chkrun NNPC_FreeA::ClothesN2_Chk()
+    run NNPC_FreeA::HouseQuestions_Chkrun NNPC_FreeA::HouseQuestions_Chk()
+ 
+flow GoodFriend():
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(25):
+        run NNPC_FreeC::Furniture_Chkrun NNPC_FreeC::Furniture_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(27):
+        run NNPC_FreeC::Room_Chkrun NNPC_FreeC::Room_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(18):
+        run NNPC_FreeA::Week_Chkrun NNPC_FreeA::Week_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(18):
+        run NNPC_FreeA::ClothesN2_Chkrun NNPC_FreeA::ClothesN2_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(67):
+        run NNPC_FreeA::Always_Chkrun NNPC_FreeA::Always_Chk()
+    run NNPC_FreeA::HouseQuestions_Chkrun NNPC_FreeA::HouseQuestions_Chk()
+ 
+flow ReSelect1():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        if MainNpc.EventFlags['cNpcMemory:TalkReSelectLast'] != 2:
+            run NNPC_FreeA::ReSelection_Weekrun NNPC_FreeA::ReSelection_Week()
+        else:
+            run ReSelect2()
+    elif MainNpc.EventFlags['cNpcMemory:TalkReSelectLast'] != 4:
+        run NNPC_FreeC::Room_Chkrun NNPC_FreeC::Room_Chk()
+    else:
+        run ReSelect2()
+ 
+flow ReSelect2():
+    run ReSelect1()
+ 
+flow ReSelection():
+    if System.EventFlags['cPlayerTemp:NnpcTalkSelectCount'] < 10:
+        System.EventFlags['cPlayerTemp:NnpcTalkSelectCount'] += 1
+        switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+            case 0, 1:
+                run BestFriend()
+            case 2, 3, 4:
+                run GoodFriend()
+            case 5:
+                run NNPC_Free_House::Friendrun NNPC_Free_House::Friend()
+    else:
+        run ReSelect1()
+ 
+flow Rnd_Chk():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious5EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+        case 1:
+            run Free_House2()
+        case 2:
+            run Free_House3()
+        case 3:
+            run Free_House4()
+        case 4:
+            run Free_Always()
+        default:
+            return
+ 
+flow Root():
+    run NNPC_FreeD::Moving_Chkrun NNPC_FreeD::Moving_Chk()
+    run Rnd_Chk()
+    run NNPC_FreeH::Progress_InHouse_Chkrun NNPC_FreeH::Progress_InHouse_Chk()
+    run NNPC_FreeEF::FreeF_Chkrun NNPC_FreeEF::FreeF_Chk()
+    run NNPC_FreeEF::Event_Chkrun NNPC_FreeEF::Event_Chk()
+    run NNPC_FreeEF::Snpc_Chkrun NNPC_FreeEF::Snpc_Chk()
+    run NNPC_FreeEF::HHA_Chkrun NNPC_FreeEF::HHA_Chk()
+    run Free_House1()
+ 

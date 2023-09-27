@@ -1,0 +1,25 @@
+flow FirstMeeting_FlagProcess():
+    MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship'] = true
+    MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage'] = true
+    MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday'] = true
+    MainNpc.SetNpcFeelMainNpc.SetNpcFeel('cNormal', 120, false)
+    run NNPC_Talk_Situation::Facility_Chkrun NNPC_Talk_Situation::Facility_Chk()
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    if not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage']:
+        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+            if MainNpc.NpcIsMovingRoomMainNpc.NpcIsMovingRoom() == 0:
+                MainNpc.EventFlags['cNpcMemory:FirstGreetingAtNpcHome'] = true
+            if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
+                run NNPC_Reaction_First_Acquaintance::Rootrun NNPC_Reaction_First_Acquaintance::Root()
+                run FirstMeeting_FlagProcess()
+            else:
+                run NNPC_Reaction_First_Stranger::Rootrun NNPC_Reaction_First_Stranger::Root()
+                run FirstMeeting_FlagProcess()
+        else:
+            if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
+                run NNPC_Reaction_First_V::FirstV_Acquaintancerun NNPC_Reaction_First_V::FirstV_Acquaintance()
+            else:
+                run NNPC_Reaction_First_V::FirstV_Strangerrun NNPC_Reaction_First_V::FirstV_Stranger()
+ 

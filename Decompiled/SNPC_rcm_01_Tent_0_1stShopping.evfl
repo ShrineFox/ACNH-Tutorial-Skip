@@ -1,0 +1,45 @@
+flow Rcm_Tent1stShoppingAgain():
+    EventFlowSystemActor.UIShopBuyAppearEventFlowSystemActor.UIShopBuyAppear('cMamekichi')
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        run SNPC_rcm_00_Common::CmnCloseShoppingUIrun SNPC_rcm_00_Common::CmnCloseShoppingUI()
+        # Anything catch your eye?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:006', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # If there's something you'd like to purchase, we can do business later.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:008', false)
+            run Rcm_Tent1stShoppingEnd()
+        else:
+            # Sure! Take a look.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:007', false)
+            run Rcm_Tent1stShoppingAgain()
+    else:
+        run SNPC_rcm_00_Common::CmnCloseShoppingUIrun SNPC_rcm_00_Common::CmnCloseShoppingUI()
+        # Anything catch your eye?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:004', false)
+        run Rcm_Tent1stShoppingEnd()
+ 
+flow Rcm_Tent1stShoppingEnd():
+    # We're not just sellers. We'll also buy things from you, including stuff gathered on this island. And because we want to support efforts to beautify t…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:005', false)
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+ 
+flow Root():
+    System.EventFlags['cPlayer:RcmTalked1stAfterPrologue'] = true
+    if System.EventFlags['cLand:TodayStartTown1P']:
+        # Ah, welcome, welcome! You don't waste any time, do you? Oho!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:001_01', false)
+    else:
+        # Ah, welcome, welcome! I'm so happy that you've made your way here.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:001_02', false)
+    # We're still setting up, but for starters we intend to offer a small selection of goods for our island residents. Space is limited right now, but we'l…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:002', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # Great!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:003_02', false)
+        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+        run Rcm_Tent1stShoppingAgain()
+    else:
+        # Of course! I understand. Stop by anytime.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_01_TentCommon:003_01', false)
+        run Rcm_Tent1stShoppingEnd()
+ 

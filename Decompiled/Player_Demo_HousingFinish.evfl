@@ -1,0 +1,328 @@
+flow HF_ImmQ_Calling():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(0, 'Phone_Incoming')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    # …My phone is ringing.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:000', true)
+    Player.SmartPhonePlayer.SmartPhone(0)
+    Player.SmartPhonePlayer.SmartPhone(4)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(1, 'Phone_Incoming')
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(2, 'Phone_Unlock')
+    Player.SmartPhonePlayer.SmartPhone(2)
+    EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cRco', true)
+    if System.EventFlags['cPlayer:RcoReciveMigrantEvPhone1st']:
+        # ‹Er, PLAYER?<10:4> It's me again. Sorry for the repeated calls. I forgot to tell you something important!›
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:003_01', false)
+        # ‹You see, you'll need to get a wreath made from flowers… There are plenty of pretty flowers growing up on the cliffs of the island, so tootle up ther…
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:003_02', true)
+    else:
+        # ‹Hello? That you, PLAYER?<10:4> Yes, yes, this is Tom Nook! How goes your search for housing land?›
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:001', false)
+        switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+            case 0, 1:
+                # ‹Stupendous! I'm relieved to hear that everything is going according to plan. Be sure to check the box in front of the plot for each home. It'll show…
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:002_01', false)
+                if SubflowResults@2[0] != 0:
+                    # ‹…Ah, yes! You're going to need a wreath made from flowers as well. There are plenty of beautiful flowers blooming up on the cliffs of ISLAND. Climb …
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:002_02', false)
+                    System.EventFlags['cPlayer:RcoHeardLadderExplain'] = true
+                # ‹Once you've set up the plots for all 3 homes and placed the required items, come report back to me! I'll be waiting in Resident Services. Thanks aga…
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:002_03', true)
+    Player.SmartPhonePlayer.SmartPhone(3)
+    Player.SmartPhonePlayer.SmartPhone(4)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(2, 'Phone_Unlock')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhonePlayer.SmartPhone(1)
+    System.EventFlags['cPlayer:RcoReciveMigrantEvPhone1st'] = true
+ 
+flow HF_ImmQ_Calling_Init():
+    MainNpc.NpcAITalkCastSettingMainNpc.NpcAITalkCastSetting('Prologue_Rco')
+ 
+flow HF_ImmQ_Check():
+    if (not System.EventFlags['cPlayer:RcoReciveMigrantEvPhone1st']) or (SubflowResults@2[0] == 1):
+        run HF_ImmQ_Calling()
+        EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cNone', true)
+ 
+flow HousingFinish_ANTent_Built():
+    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
+    # <10:12><50:3><115:1:cd00>'s got a place for [his|her] tent now!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:954', true)
+    System.EventFlags['cLand:Prologue4BuiltNpcAN'] = true
+    if System.EventFlags['cLand:Prologue4BuiltNpcHA']:
+        run Event11()
+ 
+flow HousingFinish_Bridge():
+    # I picked a spot for a bridge! Let the land connect!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:958', false)
+    if EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(7211, 1, true):
+        System.EventFlags['cLand:ImmQ_SetBridge'] = true
+        System.EventFlags['cPlayer:ImmQSetBridgeKitMySelf'] = true
+        System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet'] = true
+        System.EventFlags['cPlayer:RcoImmQClear1QuestToday'] = true
+    else:
+        System.EventFlags['cLand:RcoBuildBridgeSlopeStatusCounter'] = 2
+        if not System.EventFlags['cPlayer:RcoTalkAboutHaniwa']:
+            if EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+                System.EventFlags['cPlayer:RcoTalkAboutHaniwa'] = true
+            else:
+                run PhoneCallAboutGyroid()
+ 
+flow HousingFinish_CampSiteMove():
+    # I picked a new location for the campsite! I hope we get even more visitors now!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:960_05', false)
+    System.EventFlags['cLand:RcoMoveReservedAnyone'] = 2
+    System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = true
+ 
+flow HousingFinish_CampSite_Built():
+    # I picked a spot for the campsite! I hope lots of folks come by to visit.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:957', true)
+    System.EventFlags['cLand:RcoBuildCampsiteComplete'] = true
+    System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf'] = true
+ 
+flow HousingFinish_HATent_Built():
+    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
+    # <10:12><50:3><115:1:cd00>'s got a place for [his|her] tent now!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:954', true)
+    System.EventFlags['cLand:Prologue4BuiltNpcHA'] = true
+    if System.EventFlags['cLand:Prologue4BuiltNpcAN']:
+entrypoint Event11:
+        # Looks like everyone has a spot picked out for their tents now. I need to get back to the plaza.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Player:954_01', false)
+        EventFlowSystemActor.SetNpcAIBlackBoardByLabelEventFlowSystemActor.SetNpcAIBlackBoardByLabel('rco', 'isSpeak', 1, 1)
+ 
+flow HousingFinish_MovingOtherP_PcHouse_Built():
+    # I picked a spot for my house! Now I have a home base for my island adventures!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:961', false)
+    System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving'] = false
+    System.EventFlags['cPlayer:BuiltMyHome'] = true
+    System.EventFlags['cPlayer:PlayerMovingEnable'] = true
+    if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Basement`:
+        System.EventFlags['cPlayer:PlayerMovingDefaultHouseHasBasement'] = true
+ 
+flow HousingFinish_MuseumMove():
+    # I've picked a new location for the museum!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:960_02', false)
+    System.EventFlags['cLand:RcoMoveReservedAnyone'] = 2
+    System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = true
+ 
+flow HousingFinish_NPCHouseMove():
+    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
+    # I've picked a new place for <115:1:cd00>'s home! I sure hope [he|she] likes it.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:960_01', false)
+    System.EventFlags['cLand:RcoMoveReservedAnyone'] = 2
+    System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = true
+ 
+flow HousingFinish_NnpcImmigrateQuestA():
+    # I picked a spot for plot 1!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:956', false)
+    System.EventFlags['cLand:ImmQ_A_SetHousing'] = true
+    System.EventFlags['cPlayer:ImmQSetHousingAbyMySelf'] = true
+    run Event124()
+ 
+flow HousingFinish_NnpcImmigrateQuestB():
+    SubflowResults[0] = 1
+    # I picked a spot for plot 2!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:956_01', false)
+    System.EventFlags['cLand:ImmQ_B_SetHousing'] = true
+    System.EventFlags['cPlayer:ImmQSetHousingBbyMySelf'] = true
+entrypoint Event124:
+    System.EventFlags['cLand:CountNnpcHouseSpaceSet'] += 1
+    run HF_ImmQ_Check()
+ 
+flow HousingFinish_NnpcImmigrateQuestC():
+    # I picked a spot for plot 3!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:956_02', false)
+    System.EventFlags['cLand:ImmQ_C_SetHousing'] = true
+    System.EventFlags['cPlayer:ImmQSetHousingCbyMySelf'] = true
+    run Event124()
+ 
+flow HousingFinish_NnpcNewProperty():
+    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 7:
+        # I picked a spot for a future home to be built. I hope it works!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:955_01', false)
+        System.EventFlags['cLand:CountNnpcHouseSpaceSet'] += 1
+        System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitComplete'] = true
+        System.EventFlags['cPlayer:SetHousingKitForFirstCamper'] = true
+        EventFlowSystemActor.Set6thVillagerEventFlowSystemActor.Set6thVillager(1)
+    else:
+        # I picked a spot for a home to be built in the future. A new island neighbor is potentially a new island friend!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:955', true)
+        System.EventFlags['cLand:CountNnpcHouseSpaceSet'] += 1
+        System.EventFlags['cLand:HaveHousingKitCount'] += -1
+ 
+flow HousingFinish_OwlTent_Built():
+    # Blathers can set up his place now!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:952', true)
+    System.EventFlags['cLand:Plorogue4BuiltMuseum'] = true
+    System.EventFlags['cPlayer:DecidedMuseumTentPlace'] = true
+    System.EventFlags['cPlayer:RcoTalkAfterMuseumTent'] = true
+ 
+flow HousingFinish_PcHouseMove():
+    # I've picked a spot for my home! Starting tomorrow, I'll be getting a fresh start in a new location.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:960', false)
+    System.EventFlags['cLand:RcoMoveReservedAnyone'] = 2
+    System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = true
+ 
+flow HousingFinish_PcTent_Built():
+    System.EventFlags['cLand:Prologue4BuiltPlayer'] = true
+    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+        # I set up my tent! That's a big first step!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:951', true)
+    else:
+        # I set up my tent! Now I have a home base for my new island life!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:951_01', false)
+    if System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] <= 2:
+        System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 3
+ 
+flow HousingFinish_ShopMove():
+    # I've picked a new location for the shop!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:960_03', false)
+    System.EventFlags['cLand:RcoMoveReservedAnyone'] = 2
+    System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = true
+ 
+flow HousingFinish_Shop_Built():
+    # This is where the shop will go! I bet this island is about to become a whole lot livelier!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:953', true)
+    System.EventFlags['cLand:Prologue4BuiltShop'] = true
+    System.EventFlags['cLand:HghStayMarket'] = true
+    System.EventFlags['cPlayer:DecideShopArea'] = true
+ 
+flow HousingFinish_Slope():
+    # I picked a spot for an incline! That's a step-up for this island!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:959', false)
+    System.EventFlags['cLand:RcoBuildBridgeSlopeStatusCounter'] = 2
+    if not System.EventFlags['cPlayer:RcoTalkAboutHaniwa']:
+        if EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+            System.EventFlags['cPlayer:RcoTalkAboutHaniwa'] = true
+        else:
+            run PhoneCallAboutGyroid()
+ 
+flow HousingFinish_TailorMove():
+    # I've picked a new location for the tailor shop!
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:960_04', false)
+    System.EventFlags['cLand:RcoMoveReservedAnyone'] = 2
+    System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = true
+ 
+flow HousingFinish_Tailor_Built():
+    # This is where the tailor shop will go! A wave of fashion will wash over us!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSys/SYS_Player:953_01', false)
+    System.EventFlags['cLand:TailorReserved'] = true
+    System.EventFlags['cPlayer:KinuyoTailorBuildFlag'] = true
+    System.EventFlags['cLand:EnableHghStayField'] = false
+ 
+flow PhoneCallAboutGyroid():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(0, 'Phone_Incoming')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    # …My phone is ringing.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:201', true)
+    Player.SmartPhonePlayer.SmartPhone(0)
+    Player.SmartPhonePlayer.SmartPhone(4)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(1, 'Phone_Incoming')
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(2, 'Phone_Unlock')
+    Player.SmartPhonePlayer.SmartPhone(2)
+    EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cRco', true)
+    # ‹Hello? <50:3>PLAYER?<10:4> Tom Nook here!›
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:202', false)
+    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
+    # ‹Did you find a good spot for the <125:0:0000>?›
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:203', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            # ‹Wonderful! Now, as part of the kit you set up, Lloid will stay and collect donations for the construction fees.›
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:204', false)
+            # ‹Island residents can contribute little by little. Once we reach our goal, construction will begin!›
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:205', false)
+            # ‹Of course, you can feel free to make whatever hefty donations you want, PLAYER. And if you don't make any hefty donations, our goal might never beco…
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:206', false)
+            # ‹Anyhoo… All construction donations should go to Lloid. And we'll talk again soon, hm?›
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/rco/SP_rco_20_PhoneCall:207', false)
+            Player.SmartPhonePlayer.SmartPhone(3)
+            Player.SmartPhonePlayer.SmartPhone(4)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+            Player.SmartPhoneSEPlayer.SmartPhoneSE(2, 'Phone_Unlock')
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+            Player.SmartPhonePlayer.SmartPhone(1)
+            EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cNone', true)
+            System.EventFlags['cPlayer:RcoTalkAboutHaniwa'] = true
+ 
+flow RecipeGetA():
+    if System.EventFlags['cLand:ImmQ_A_OutdoorPattern']:
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3675)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 1170)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 1266)
+    else:
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3398)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3397)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3229)
+    run RecipeGet_Fruit()
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 2559)
+ 
+flow RecipeGetB():
+    if System.EventFlags['cLand:ImmQ_B_OutdoorPattern']:
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 2586)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3396)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 331)
+    else:
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 1626)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 1627)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 333)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3205)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 1565)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3206)
+    run RecipeGet_Flower()
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 2615)
+ 
+flow RecipeGetC():
+    if System.EventFlags['cLand:ImmQ_C_OutdoorPattern']:
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 4035)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 4038)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 2326)
+    else:
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 4040)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 4042)
+        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 880)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 2605)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 1913)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 4073)
+ 
+flow RecipeGet_Flower():
+    switch EventFlowSystemActor.VillageFlowerEventFlowSystemActor.VillageFlower('cBirthday'):
+        case 0:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5467)
+        case 1:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5641)
+        case 2:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 4293)
+        case 3:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5468)
+        case 4:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5437)
+        case 5:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5436)
+        case 6:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5670)
+        case 7:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('None', 5466)
+ 
+flow RecipeGet_Fruit():
+    switch EventFlowSystemActor.LandFruitEventFlowSystemActor.LandFruit():
+        case 0:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 4011)
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 4012)
+        case 1:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 3976)
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 3975)
+        case 2:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 1263)
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 4546)
+        case 3:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 4128)
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 4127)
+        case 4:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 4134)
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('SeqRcoAlbeit', 2596)
+ 

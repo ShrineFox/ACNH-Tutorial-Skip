@@ -1,0 +1,76 @@
+flow Enter():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, true)
+    MainNpc.NpcEnterMainNpc.NpcEnter('Entrance', -2, 0.0)
+ 
+flow Enter2F():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(12, true)
+    MainNpc.NpcEnterMainNpc.NpcEnter('To_1F', -2, 0.0)
+ 
+flow EnterShare():
+    fork:
+        branch:
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(12, true)
+            MainNpc.NpcEnterMainNpc.NpcEnter('Entrance', -2, -5.0)
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+            SubNpc.NpcAISettingSubNpc.NpcAISetting(12, true)
+            SubNpc.NpcEnterSubNpc.NpcEnter('Entrance', -2, 5.0)
+            SubNpc.TurnBodySubNpc.TurnBody(10, 0.0)
+ 
+flow ForceTalk():
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(54)
+    EventFlowSystemActor.SystemBGMVolumeFadeInEventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+    System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_House'] = false
+    Player.TurnBodyPlayer.TurnBody(11, 0.0)
+    MainNpc.TurnBodyMainNpc.TurnBody(11, 0.0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, true)
+    # The second story is already done?! It's like you put a house on top of my house! Now I have a house house!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:129_06', false)
+    run NNPC_Spot_WherearenGarden::FaceToFacerun NNPC_Spot_WherearenGarden::FaceToFace()
+    # Alrighty, go ahead and decorate this room too, <110:6>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:129_07', false)
+ 
+flow ForceTalk_Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+    if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+        MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, true, false, false)
+ 
+flow ReflectRoomSketch():
+    if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+        fork:
+            branch:
+                Npc_1.TurnNeckNpc_1.TurnNeck(11, false)
+                Npc_1.TurnBodyNpc_1.TurnBody(12, 180.0)
+                Npc_1.CharacterEmoticonActionNpc_1.CharacterEmoticonAction('Clapping', true, '', 0, false)
+            branch:
+                MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+                MainNpc.TurnBodyMainNpc.TurnBody(12, 180.0)
+                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Clapping', true, '', 0, false)
+            branch:
+                Player.TurnNeckPlayer.TurnNeck(11, false)
+                Player.TurnBodyPlayer.TurnBody(12, 180.0)
+                Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('Nodding', true, '', 0, false)
+        run Sub_Event39()
+    else:
+        fork:
+            branch:
+                MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+                MainNpc.TurnBodyMainNpc.TurnBody(12, 180.0)
+                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Clapping', true, '', 0, false)
+            branch:
+                Player.TurnNeckPlayer.TurnNeck(11, false)
+                Player.TurnBodyPlayer.TurnBody(12, 180.0)
+                Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('Nodding', true, '', 0, false)
+        run Sub_Event39()
+ 
+flow ReflectRoomSketch_Init():
+    if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
+        MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, true, false, false)
+ 
+local flow Sub_Event39():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
+ 

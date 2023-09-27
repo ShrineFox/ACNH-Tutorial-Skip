@@ -1,0 +1,24 @@
+flow Init():
+    if MainNpc.WherearenNpcOrderRelationKindMainNpc.WherearenNpcOrderRelationKind() == 0:
+        MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+        MainNpc.ServiceMotionControlMainNpc.ServiceMotionControl(false)
+ 
+flow Root():
+    MainNpc.NpcAIDefaultSettingMainNpc.NpcAIDefaultSetting(1)
+    if (EventFlowSystemActor.IsWherearenResumeFirstShareHouseEventFlowSystemActor.IsWherearenResumeFirstShareHouse()) and (MainNpc.WherearenNpcActorFreeQuery2MainNpc.WherearenNpcActorFreeQuery2('cSecondCustomer')):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'NNPC_Spot_WherearenMainField', 'Root', false, false)
+    else:
+        switch MainNpc.WherearenNpcOrderRelationKindMainNpc.WherearenNpcOrderRelationKind():
+            case 0, 1:
+                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'NNPC_Spot_WherearenMainField', 'Root', false, false)
+            case 3:
+                if MainNpc.WherearenIsSuspendedNpcMainNpc.WherearenIsSuspendedNpc():
+                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'NNPC_Spot_WherearenMainField', 'Root', false, false)
+                else:
+                    if MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea():
+                        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSwimWait', '', 'NNPC_Spot_WherearenMainField', 'Root', false, false)
+                    else:
+                        MainNpc.WherearenMainFieldActionStartMainNpc.WherearenMainFieldActionStart()
+            default:
+                return
+ 

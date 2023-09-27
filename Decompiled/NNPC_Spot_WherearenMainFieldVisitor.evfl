@@ -1,0 +1,323 @@
+flow Approach():
+    run OrderStateChk()
+    switch SubflowResults@5[0]:
+        case 1:
+            MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship'] = true
+            SubflowResults[1] = 1
+            if MainNpc.EventFlags['cWherearenNpcMemory:ApproachRefuse']:
+                # RANDOM: Hi, <150:6>! Is this about you building… // Let's chat! // I've got ideas! // Maybe another time. // Are you talking to me 'cause you wanna … // Let's chat! // I've got ideas! // Maybe another time.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:313', false)
+            else:
+                # RANDOM: Hey! You're <150:6> from Paradise Plann… // Let's chat! // I've got ideas! // Maybe another time. // Hey! You're <150:6> from Paradise Plann… // Let's chat! // I've got ideas! // Maybe another time. // Hey! You're <150:6> from Paradise Plann… // Let's chat! // I've got ideas! // Maybe another time.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:309', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                case 0:
+                    # RANDOM: Yaaay! Let's go now! // Yaaay, thank you! Let's talk now!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:310', true)
+                    run NPCOrder()
+                case 1:
+                    # RANDOM: Whoa! You wanna do things to my house?!… // Ideas? You mean for my vacation house? …
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:311', true)
+                    run PlayerProposal()
+                case 2:
+                    # RANDOM: Aww, OK. Maybe some other time. // OK. I guess. If it has to be. And it do…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:312', false)
+                    MainNpc.EventFlags['cWherearenNpcMemory:ApproachRefuse'] = true
+        case 2, 3:
+            run OrderStop()
+        case 4:
+            run LookforHouseMate()
+        default:
+            return
+ 
+flow ClosePhotoUI():
+    fork:
+        branch:
+            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+        branch:
+            MainNpc.MessageSuspendMainNpc.MessageSuspend()
+ 
+flow FromApproach():
+    run Event110()
+ 
+flow LookforHouseMate():
+    if (MainNpc.WherearenIsBuiltNpcMainNpc.WherearenIsBuiltNpc()) and (MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether()):
+        run NNPC_Spot_WherearenMainField::SeaNPC_Chkrun NNPC_Spot_WherearenMainField::SeaNPC_Chk()
+        if (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea()):
+            fork:
+                branch:
+                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                branch:
+                    # What's up?<10:4> You have a roommate for me? But I already got one! I don't think we could fit another roommate in our place. There's a lotta folks a…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:205', false)
+            run ClosePhotoUI()
+        else:
+            # What's up?<10:4> You have a roommate for me? But I already got one! I don't think we could fit another roommate in our place. There's a lotta folks a…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:205', false)
+            run ClosePhotoUI()
+    else:
+        EventFlowSystemActor.WherearenSetTagCustomerNpcNameEventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 2)
+        if MainNpc.WherearenIsBuiltNpcMainNpc.WherearenIsBuiltNpc():
+            run NNPC_Spot_WherearenMainField::SeaNPC_Chkrun NNPC_Spot_WherearenMainField::SeaNPC_Chk()
+            if (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea()):
+                fork:
+                    branch:
+                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                    branch:
+                        if (MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc()) and (EventFlowSystemActor@sub.WherearenIsShareHouseOrderNpcVillagerNpcEventFlowSystemActor@sub.WherearenIsShareHouseOrderNpcVillagerNpc()):
+                            # You want me to be roommates with <115:1:cd02>? Is that the same <115:1:cd02> as the one from my island? Hmm, I dunno… I really like my vacationing ho…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:204_01', false)
+                        else:
+                            # Hi! What's up?<10:4> A roommate? Ya mean other than the bugs in the floor? With <115:1:cd02>? Are they a bug? Hmm, I dunno. I guess a roommate sounds…
+                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:204', false)
+                run Sub_grp_Event9()
+            else:
+                if (MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc()) and (EventFlowSystemActor.WherearenIsShareHouseOrderNpcVillagerNpcEventFlowSystemActor.WherearenIsShareHouseOrderNpcVillagerNpc()):
+                    # You want me to be roommates with <115:1:cd02>? Is that the same <115:1:cd02> as the one from my island? Hmm, I dunno… I really like my vacationing ho…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:204_01', false)
+                    run Sub_grp_Event9()
+                else:
+                    # Hi! What's up?<10:4> A roommate? Ya mean other than the bugs in the floor? With <115:1:cd02>? Are they a bug? Hmm, I dunno. I guess a roommate sounds…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:204', false)
+                    run Sub_grp_Event9()
+        else:
+            if (MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc()) and (EventFlowSystemActor.WherearenIsShareHouseOrderNpcVillagerNpcEventFlowSystemActor.WherearenIsShareHouseOrderNpcVillagerNpc()):
+                # Hi! What's up?<10:4> Huh. I could have a roommate of my very own? Who ya thinkin' about? <50:3><115:1:cd02>?! Wow! A huh huh, that sounds like a bunc…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:201_01', false)
+            else:
+                # Huh? You want me to move in with someone? I dunno… Buuut…I've been working real hard on my snack archive, and it'd be neat to show it to a captive au…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:201', false)
+            run Sub_grp_Event9()
+ 
+flow NPCOrder():
+    run Event110()
+ 
+flow NPC_Emotion():
+    switch MainNpc.CheckNpcLookMainNpc.CheckNpcLook():
+        case 0, 3, 4:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Clapping', true, '', 0, false)
+        case 1, 5:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('HappyDance', true, '', 0, false)
+        case 2, 6, 7:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+ 
+flow NewBuild():
+    SubflowResults[1] = 0
+    run Demo_Common_Wherearen::KKFesCheckrun Demo_Common_Wherearen::KKFesCheck()
+    System.EventFlags['cWherearenPlayer:ProposeNPCHouse'] = false
+    if MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc():
+        # I'm jealous you get to work in such a pretty place. I wish I had to do stuff here too!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:306', false)
+    else:
+        if MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship']:
+            if EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0:
+                # RANDOM: Hey! You! From Paradise Planning! Vacat… // I know you! Um… You're… Um… You're that… // Hey, buddy! What's new? // Hi! That outfit must mean you're workin…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:101', false)
+            else:
+                # RANDOM: Hi! Good to see you again. How's that w… // Whaddaya like about working for Paradis… // The only thing better than talking to a… // I never thought I'd meet someone from P…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:108', false)
+        else:
+            if EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0:
+                # RANDOM: Yaaay! This place is fun. Hey, are you … // I had a way-cool dream where I met some… // Whatcha need? Oh! You're with Paradise … // Huh? YOU'RE Paradise Planning?<10:4> Oh…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:100', false)
+            else:
+                # RANDOM: Hey, you do vacation house things, don'… // Hi! We've never met! I promise. You wor… // Did you know you have a face that says … // Nice to meet you! Do you work for Parad…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:107', false)
+            MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship'] = true
+entrypoint Event18:
+    if System.EventFlags['cWherearenPlayer:Unlock_ThemeFreeEdit']:
+        if MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc():
+            # Hey, I wanna build a vacation house somewhere around here. Can ya help me out?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:308', false)
+        else:
+            # RANDOM: Since you're here, do you think you cou… // Let's chat! // I've got ideas! // Maybe another time. // That reminds me! I want a vacation hous… // Let's chat! // I've got ideas! // Maybe another time. // So…vacation houses. They're cool. And e… // Let's chat! // I've got ideas! // Maybe another time. // I heard that vacation houses grow on th… // Let's chat! // I've got ideas! // Maybe another time.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:105', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                # RANDOM: Yaaay! Let's get started! Today! Right … // Yes! You got this. And then after you'r… // If I know anything about vacation homes… // Yaaay! Can we start now? 'Cause I wanna…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:104', true)
+                run NPCOrder()
+            case 1:
+                # RANDOM: Hey, if your head's fulla ideas, that m… // Hang on—you have ideas? I…didn't know w… // That's probably for the best… I'd just … // Sounds good! Let's split the work evenl…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:106', true)
+entrypoint Event32:
+                EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
+                EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(54)
+                if SubflowResults@2[1] == 0:
+                    MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', '')
+                else:
+                    MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', 'cApproach')
+                EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
+                System.EventFlags['cWherearenPlayer:ProposeNPCHouse'] = true
+                run Sub_grp_Event88()
+            case 2:
+                # RANDOM: No? OK… I'll just be doing whatever it … // Oh… Well, that's just how the cookie cr… // That's fine. I don't need one of your v… // No, huh? But what if I were to say I'm …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:103', false)
+    else:
+        if MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc():
+            # Hey, I wanna build a vacation house somewhere around here. Can ya help me out?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:307', false)
+        else:
+            # RANDOM: Since you're here, do you think you cou… // Let's chat! // Maybe another time. // That reminds me! I want a vacation hous… // Leave it all to me! // Maybe another time. // So…vacation houses. They're cool. And e… // Let's chat! // Maybe another time. // I heard that vacation houses grow on th… // Leave it all to me! // Maybe another time.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:102', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # RANDOM: Yaaay! Let's get started! Today! Right … // Yes! You got this. And then after you'r… // If I know anything about vacation homes… // Yaaay! Can we start now? 'Cause I wanna…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:104', true)
+entrypoint Event110:
+            EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
+            EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(54)
+            if SubflowResults@2[1] == 0:
+                MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', '')
+            else:
+                MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', 'cApproach')
+            EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
+            run Sub_grp_Event88()
+        else:
+            # RANDOM: No? OK… I'll just be doing whatever it … // Oh… Well, that's just how the cookie cr… // That's fine. I don't need one of your v… // No, huh? But what if I were to say I'm …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:103', false)
+ 
+flow NewBuildInFacility():
+    SubflowResults[1] = 0
+    System.EventFlags['cWherearenPlayer:ProposeNPCHouse'] = false
+    if MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship']:
+        # RANDOM: Hi! Good to see you again. How's that w… // Whaddaya like about working for Paradis… // The only thing better than talking to a… // I never thought I'd meet someone from P…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:108', false)
+        run Event18()
+    else:
+        # RANDOM: Hey, you do vacation house things, don'… // Hi! We've never met! I promise. You wor… // Did you know you have a face that says … // Nice to meet you! Do you work for Parad…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:107', false)
+        MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship'] = true
+        run Event18()
+ 
+flow OrderStateChk():
+    switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+        case 0:
+            if System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
+                SubflowResults[0] = 2
+            else:
+                SubflowResults[0] = 1
+        case 1:
+            if (EventFlowSystemActor.WherearenNpcOrderTypeEventFlowSystemActor.WherearenNpcOrderType() == 1) and (EventFlowSystemActor.WherearenLookForHousemateStateEventFlowSystemActor.WherearenLookForHousemateState() == 0):
+                SubflowResults[0] = 4
+        case 4:
+            SubflowResults[0] = 3
+        default:
+            return
+ 
+flow OrderStop():
+    if MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc():
+        # I'm jealous you get to work in such a pretty place. I wish I had to do stuff here too!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:306', false)
+        # Hey, I wanna build a vacation house somewhere around here. Can ya help me out?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:314', false)
+    else:
+        if MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship']:
+            # RANDOM: Hey! You! From Paradise Planning! Vacat… // I know you! Um… You're… Um… You're that… // Hey, buddy! What's new? // Hi! That outfit must mean you're workin…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:101', false)
+        else:
+            # RANDOM: Yaaay! This place is fun. Hey, are you … // I had a way-cool dream where I met some… // Whatcha need? Oh! You're with Paradise … // Huh? YOU'RE Paradise Planning?<10:4> Oh…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:100', false)
+            MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship'] = true
+        # RANDOM: Hey, can I ask you about houses on vaca… // Sorry, but I can't. // I'm busy right now... // Ooh! Idea time! I wanna ask you for you… // Sorry, but I can't. // I'm busy right now...
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:116', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            # RANDOM: Oh, sorry! Looks like you're busy with … // Oh? You're busy? With stuff? OK! I'll a…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:117', false)
+ 
+flow PlayerProposal():
+    run Event32()
+ 
+flow PrivateMode():
+    switch EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false):
+        case 0, 3:
+            # RANDOM: This island is real nice. And it'd be r… // I'm gonna play all day. I'm gonna eat s… // Ooh, I should go look at the resort sou… // Folks who got vacation houses can come …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:118', false)
+        case 1:
+            # RANDOM: It seems like everyone's gettin' ready … // Is something happening today? Everyone …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:119', false)
+        case 2:
+            # RANDOM: This festival's great! I've danced so m… // The festival is gettin' real wild! Ther…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:120', false)
+    MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship'] = true
+ 
+flow Root():
+    if (MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc()) and (not MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone']):
+        # RANDOM: A huh huh huh! This is fun! What should… // Maybe I'll bury myself in the sand! Don… // Sniff, sniff… Sniiiiff… I'm just gettin… // I'm feeling kinda sleepy. It happens so…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:305', false)
+        MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone'] = true
+        MainNpc.EventFlags['cWherearenNpcMemory:HasAcquaintanceship'] = true
+    elif EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+        run OrderStateChk()
+        switch SubflowResults@5[0]:
+            case 1:
+                run NewBuild()
+            case 2, 3:
+                run OrderStop()
+            case 4:
+                run LookforHouseMate()
+            default:
+                return
+    else:
+        run PrivateMode()
+ 
+flow Root_Init():
+    if ((not MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc()) or (MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone'])) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 2) and (EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode()) and (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 0) and (not System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+ 
+flow SetOrderCamera():
+    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OrderCut0', '', true)
+    EventFlowSystemActor.RequestWaterFallDuckingEventFlowSystemActor.RequestWaterFallDucking(0)
+ 
+local flow Sub_grp_Event88():
+    fork:
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('Assent', true, '', 0, false)
+            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(14)
+            run NPC_Emotion()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(126)
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(12)
+        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0, false)
+        MainNpc.ArrangeCharacterForOrderMainNpc.ArrangeCharacterForOrder()
+        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeqEventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, false)
+        EventFlowSystemActor.WaitToRequestOrderDemoEventFlowSystemActor.WaitToRequestOrderDemo()
+    else:
+        run SetOrderCamera()
+        EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+ 
+local flow Sub_grp_Event9():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        if (MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc()) and (EventFlowSystemActor.WherearenIsShareHouseOrderNpcVillagerNpcEventFlowSystemActor.WherearenIsShareHouseOrderNpcVillagerNpc()):
+            # OK! Oh boy, <115:1:cd02>'s gonna be real surprised! I can't wait, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:202_01', false)
+        else:
+            # OK! But now why do I suddenly feel like I've got butterflies in my tummy? A huh huh huh! Butterflies tickle!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:202', false)
+        run ClosePhotoUI()
+        if MainNpc.WherearenNpcOrderRelationKindMainNpc.WherearenNpcOrderRelationKind() == 3:
+            MainNpc.WherearenSetHousemateMainNpc.WherearenSetHousemate()
+            EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cFinishLookForHousemate')
+            if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+                MainNpc.ArrangeCharacterForOrderMainNpc.ArrangeCharacterForOrder()
+                EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeqEventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, false)
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(3)
+            else:
+                if MainNpc.WherearenIsBuiltNpcMainNpc.WherearenIsBuiltNpc():
+                    run ClosePhotoUI()
+                EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OrderCut0', '', true)
+                EventFlowSystemActor.RequestWaterFallDuckingEventFlowSystemActor.RequestWaterFallDucking(2)
+                EventFlowSystemActor.ReserveSkipSceneStartDemoEventFlowSystemActor.ReserveSkipSceneStartDemo()
+                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    else:
+        # It's OK. Snack compatibility is hard. You gotta get it juuust right, so I'm glad you're taking it seriously.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:203', false)
+        run ClosePhotoUI()
+ 

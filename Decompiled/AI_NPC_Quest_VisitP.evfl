@@ -1,0 +1,60 @@
+flow ExitStrc():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cExitReaction', '', '', '', false, false)
+ 
+flow Init():
+    run AI_NPC_Indoor::BBRegistrun AI_NPC_Indoor::BBRegist()
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cVisitPHouse'):
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('VisitPHide', 0)
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('VisitPGreet', 0)
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('VisitPMove', 0)
+        if MainNpc.SystemIsInviteQuestNpcEnteredMainNpc.SystemIsInviteQuestNpcEntered():
+            if not EventFlowSystemActor.DuringTransitionByUIStageEventFlowSystemActor.DuringTransitionByUIStage():
+                MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('VisitPMove', 1)
+        elif MainNpc.SystemVisitQuestKindMainNpc.SystemVisitQuestKind('cPlayer'):
+            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('VisitPHide', 1)
+        else:
+            MainNpc.SystemSetInviteQuestEnterTimeMainNpc.SystemSetInviteQuestEnterTime()
+            MainNpc.SystemSetInviteQuestNpcEnterFlagMainNpc.SystemSetInviteQuestNpcEnterFlag()
+            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('VisitPGreet', 1)
+ 
+flow Root():
+    MainNpc.NpcAIDefaultSettingMainNpc.NpcAIDefaultSetting(1)
+    MainNpc.SetIsStartNeedActivityMainNpc.SetIsStartNeedActivity('cOff')
+    if not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cVisitPHouse'):
+        MainNpc.SetIsStartNeedActivityMainNpc.SetIsStartNeedActivity('cOn')
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('VisitPHide', 1):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cVisitPHide', '', 'NNPC_Quest_VisitP_Home', 'Home_In', true, false)
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('VisitPGreet', 1):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('VisitPGreet', 0)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cVisitPGreet', '', 'NNPC_Quest_VisitP_Home', 'Home_Talk', false, true)
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('VisitPMove', 1):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cVisitPMove', '', 'NNPC_Quest_VisitP_Home', 'Home_Talk', false, true)
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('VisitPMove', 0)
+    elif (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+        MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Quest_VisitP_Home', 'Home_Talk', false, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+        MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+    elif MainNpc.EventFlags['cNpcTemp:AtHomeAI']:
+        MainNpc.SetNpcTalkFlowNameMainNpc.SetNpcTalkFlowName('NNPC_Quest_VisitP_Home', 'Home_Talk')
+        MainNpc.SetIsStartNeedActivityMainNpc.SetIsStartNeedActivity('cOnKeepTalkFlow')
+    else:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cVisitWander', '', 'NNPC_Quest_VisitP_Home', 'Home_Talk', false, false)
+ 
+flow TouchedFurniture():
+    run AI_NPC_Indoor::TouchedFurniturerun AI_NPC_Indoor::TouchedFurniture()
+ 
+flow VisitPCall():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitP_Home')
+ 
+flow VisitPGoHome():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='End', FlowName='NNPC_Quest_VisitP_End')
+ 
+flow VisitPGreet():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitP_Home')
+ 

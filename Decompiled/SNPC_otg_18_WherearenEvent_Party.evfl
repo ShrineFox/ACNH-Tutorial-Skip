@@ -1,0 +1,483 @@
+flow Cheers_1():
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenCheers', -1)
+    fork:
+        branch:
+            Player.PlayerRequestSimplePlayer.PlayerRequestSimple('NpcSpCheersDemo', true)
+        branch:
+            MainNpc.RequestSimpleMainNpc.RequestSimple('NpcSpCheersDemo', true)
+        branch:
+            SubNpc.RequestSimpleSubNpc.RequestSimple('NpcSpCheersDemo', true)
+        branch:
+            Npc_2.RequestSimpleNpc_2.RequestSimple('NpcSpCheersDemo', true)
+    fork:
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('HappyFlower', true, '', 0, false)
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('BigSmile', false, '', 0, false)
+        branch:
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Clapping', false, '', 0, false)
+        branch:
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('FaintSmile', false, '', 0, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(150)
+    fork:
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        branch:
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        branch:
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+ 
+flow EndPartyTalk_1():
+    fork:
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('RequestWillingness', false, '', 0, false)
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('OtgPretty', false, '', 0, false)
+        branch:
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('MncHappy', false, '', 0, false)
+        branch:
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('ManHappy', false, '', 0, false)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    fork:
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        branch:
+            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+        branch:
+            Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+    run NotLook()
+    run LookCenterInOffice()
+    EventFlowSystemActor.WherearenPartyNpcSitDownEventFlowSystemActor.WherearenPartyNpcSitDown()
+    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(true, '')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(false)
+ 
+flow Leave():
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:WHEREAREN_PartyEndFlag') in (0, 1):
+        # Oh? Heading out?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:091', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            if (System.EventFlags['cWherearenPlayer:SeqParty2Done']) and (not System.EventFlags['cWherearenPlayer:SeqParty3Done']):
+                # Then let's call it here. I'm stuffed!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:093', true)
+            else:
+                # RANDOM: Then let's call it here. Wow! That was … // Then let's call it here. Great party! // Then let's call it here.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:092', true)
+            run Leave_Common()
+        else:
+            # OK! Then let's have some more fun!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:094', true)
+            run PlayerMove()
+    else:
+        # Where are you going? Let's have fun here!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:095', true)
+        run PlayerMove()
+ 
+flow Leave_Common():
+    System.EventFlags['cWherearenPlayer:IsParty'] = false
+    System.EventFlags['cWherearenPlayer:IsFParty'] = false
+    EventFlowSystemActor.AfterPartyBGMEndEventFlowSystemActor.AfterPartyBGMEnd()
+    EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('SNPC_otg_01_WherearenOffice', 'OrderClose_Complete', 'cNextDemoEnd_Simple', false)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPartyReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow Leave_Player():
+    # Maybe it's time to wrap up this party and return to the office.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1322', true)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run Leave_Common()
+ 
+flow Leave_WherearenParty():
+    if not Player.PlayerCheckWaitTypePlayer.PlayerCheckWaitType('cStand'):
+        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('SNPC_otg_18_WherearenEvent_Party', 'Leave_Player', 'cNextDemoEnd_Simple', false)
+    elif EventFlowSystemActor.IsWherearenPartyEndPatternEventFlowSystemActor.IsWherearenPartyEndPattern():
+        EventFlowSystemActor.SetNpcAIBlackBoardByLabelEventFlowSystemActor.SetNpcAIBlackBoardByLabel('otg', 'IsEndSpeak', 1, 1)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(1)
+    else:
+        # Maybe it's time to wrap up this party and return to the office.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Player:1322', true)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Leave_Common()
+        else:
+            run PlayerMove()
+ 
+flow LookCamera():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, true)
+    fork:
+        branch:
+            Player.TurnNeckPlayer.TurnNeck(11, false)
+            Player.TurnBodyPlayer.TurnBody(15, 0.0)
+            Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+        branch:
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            MainNpc.TurnBodyMainNpc.TurnBody(15, 0.0)
+            MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
+            SubNpc.TurnBodySubNpc.TurnBody(15, 0.0)
+            SubNpc.NpcWaitTurnSubNpc.NpcWaitTurn()
+        branch:
+            Npc_2.TurnNeckNpc_2.TurnNeck(11, false)
+            Npc_2.TurnBodyNpc_2.TurnBody(15, 0.0)
+            Npc_2.NpcWaitTurnNpc_2.NpcWaitTurn()
+ 
+flow LookCenterInFacility():
+    fork:
+        branch:
+            Player.TurnNeckPlayer.TurnNeck(11, false)
+            Player.TurnBodyPlayer.TurnBody(15, 0.0)
+            Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+        branch:
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            MainNpc.TurnBodyMainNpc.TurnBody(15, 0.0)
+            MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
+            SubNpc.TurnBodySubNpc.TurnBody(15, 0.0)
+            SubNpc.NpcWaitTurnSubNpc.NpcWaitTurn()
+        branch:
+            Npc_2.TurnNeckNpc_2.TurnNeck(11, false)
+            Npc_2.TurnBodyNpc_2.TurnBody(15, 0.0)
+            Npc_2.NpcWaitTurnNpc_2.NpcWaitTurn()
+ 
+flow LookCenterInOffice():
+    fork:
+        branch:
+            Player.TurnNeckPlayer.TurnNeck(11, false)
+            Player.TurnBodyPlayer.TurnBody(12, 355.0)
+            Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
+        branch:
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            MainNpc.TurnBodyMainNpc.TurnBody(12, 340.0)
+            MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
+            SubNpc.TurnBodySubNpc.TurnBody(12, 10.0)
+            SubNpc.NpcWaitTurnSubNpc.NpcWaitTurn()
+        branch:
+            Npc_2.TurnNeckNpc_2.TurnNeck(11, false)
+            Npc_2.TurnBodyNpc_2.TurnBody(12, 30.0)
+            Npc_2.NpcWaitTurnNpc_2.NpcWaitTurn()
+ 
+flow LookOtg():
+    fork:
+        branch:
+            Player.TurnBodyPlayer.TurnBody(11, 0.0)
+            Player.TurnNeckPlayer.TurnNeck(0, false)
+        branch:
+            MainNpc.TurnBodyMainNpc.TurnBody(11, 0.0)
+            MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        branch:
+            SubNpc.TurnBodySubNpc.TurnBody(11, 0.0)
+            SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+            Npc_2.TurnBodyNpc_2.TurnBody(11, 0.0)
+            Npc_2.TurnNeckNpc_2.TurnNeck(0, false)
+ 
+flow NotLook():
+    fork:
+        branch:
+            Player.TurnNeckPlayer.TurnNeck(16, false)
+            Player.TurnNeckPlayer.TurnNeck(11, false)
+        branch:
+            MainNpc.TurnNeckMainNpc.TurnNeck(16, false)
+            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+        branch:
+            SubNpc.TurnNeckSubNpc.TurnNeck(16, false)
+            SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
+        branch:
+            Npc_2.TurnNeckNpc_2.TurnNeck(16, false)
+            Npc_2.TurnNeckNpc_2.TurnNeck(11, false)
+ 
+flow Party1():
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    # Awww, aren't you sweet! Thank you! That means a lot to us. And please reach out if you need anything!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:001', true)
+    run Demo_Common_PhoneCall::FinishCallrun Demo_Common_PhoneCall::FinishCall()
+    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+    # Welcome back, PLAYER! You know, I've been getting lots of calls lately from happy clients you've worked with. They go on and on about how tickled the…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:002', false)
+    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+    # Anyway, time to reap the rewards! You've earned <90:44:0000>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:003', true)
+    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    # By the way, did you know that your last project was a bit of a milestone project, PLAYER? That's right…<10:4> It was the tenth vacation home you've d…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:004', true)
+    EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+    run StartPartyInOffice()
+ 
+flow Party1_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('man', 1)
+ 
+flow Party2():
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    # Mm-hmm… Uh-huh… Yes, of course! We can do that for you. Feel free to drop by anytime. Thank you!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:101', true)
+    run Demo_Common_PhoneCall::FinishCallrun Demo_Common_PhoneCall::FinishCall()
+    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+    # Welcome back! That call was an inquiry about our vacation homes. The caller saw a photo of one that you designed, and they asked about getting a home…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:102', false)
+    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+    # Speaking of good vibes, it's pay time! You earned <90:44:0000>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:103', true)
+    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    # Can you believe that last project brings you to the 20-homes mark?! Great work, PLAYER! We decided it'd be nice to celebrate as a team again, so I re…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:104', true)
+    EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+    if System.EventFlags['cWherearenPlayer:ChoiceRestaurant']:
+        run StartPartyInRestraurant()
+    else:
+        run StartPartyInCafe()
+ 
+flow Party2_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('man', 1)
+ 
+flow Party3():
+    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+    # Welcome back, PLAYER!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:200', false)
+    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+    # Here you go! You earned <90:44:0000> this time.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:201', true)
+    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+    # This last job was the 30th vacation home you've been in charge of! That means we've grown our client base considerably and we've cleared our goal tow…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:202', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # Sounds great to me! Let's head over to the restaurant to celebrate.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:203', true)
+        EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+        run StartPartyInRestraurant()
+    else:
+        # Sounds great to me! Let's head over to the café to celebrate.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:204', true)
+        EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+        run StartPartyInCafe()
+ 
+flow PartyF():
+    # Oh yeah! I've received a number of calls from clients who are simply overjoyed with your work. Folks really like the designs you put together for the…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:404', true)
+    EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+    run StartPartyInOffice()
+ 
+flow PartyInOffice():
+    if System.EventFlags['cWherearenPlayer:SeqParty1Done']:
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(186)
+        # Now that we're all together…let's take a moment to celebrate all of PLAYER's amazing work!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:411', false)
+        # Does everyone have their glass? In that case…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:412', true)
+        run LookCenterInOffice()
+        # <10:12>CHEERS!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:413', true)
+        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('PartyCheers', 'cDefault', 'CameraTag:Party', false, false, false, 0)
+        EventFlowSystemActor.SystemBGMVolumeChangeEventFlowSystemActor.SystemBGMVolumeChange(3.0, 1.0, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        run SNPC_otg_25_WherearenEvent_PartyAtRestaurant::Cheers_3run SNPC_otg_25_WherearenEvent_PartyAtRestaurant::Cheers_3()
+        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Party', 'cDefault', 'CameraTag:Party', false, false, false, 0)
+        EventFlowSystemActor.SystemBGMVolumeResetEventFlowSystemActor.SystemBGMVolumeReset(1.0, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        run LookOtg()
+        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        # Any of this feel familiar? This is where we had our first party as well. Back then, you were just starting out. But nowadays, you're a real pro!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:414', false)
+        fork:
+            branch:
+                # It's impressive, PLAYER. Well done.
+                Npc_1.OpenMessageWindowNpc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:415', false)
+            branch:
+                Player.TurnNeckPlayer.TurnNeck(1, false)
+        fork:
+            branch:
+                # <150:5>Very impressive.
+                Npc_2.OpenMessageWindowNpc_2.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:417', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+                Player.TurnNeckPlayer.TurnNeck(2, false)
+        fork:
+            branch:
+                # We've only been able to come so far together by working together. I promise to do my very best to support you. Keep up the good work, PLAYER!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:416', true)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+                Player.TurnNeckPlayer.TurnNeck(0, false)
+        System.EventFlags['cWherearenPlayer:SeqPartyFDone'] = true
+        System.EventFlags['cWherearenPlayer:IsFParty'] = true
+        EventFlowSystemActor.SetMemoryEventPlayerWherearenPartyEventFlowSystemActor.SetMemoryEventPlayerWherearenParty(3)
+        run LookCamera()
+        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('PartyCheers', 'cDefault', 'CameraTag:Party', false, false, false, 0)
+        EventFlowSystemActor.SystemBGMVolumeChangeEventFlowSystemActor.SystemBGMVolumeChange(3.0, 1.0, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        EventFlowSystemActor.AfterPartyBGMStartEventFlowSystemActor.AfterPartyBGMStart()
+        run EndPartyTalk_1()
+    else:
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(186)
+        # Here we go, PLAYER… Congrats on designing 10 homes!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:011', true)
+        # Way to go, PLAYER! I can't believe you've already got 10 homes under your belt!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:012', true)
+        # Con<150:5>grats.
+        Npc_2.OpenMessageWindowNpc_2.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:013', true)
+        # Everyone has a glass of juice ready, right? Well then…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:014', true)
+        run LookCenterInOffice()
+        # <10:12>CHEERS!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:015', true)
+        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('PartyCheers', 'cDefault', 'CameraTag:Party', false, false, false, 0)
+        EventFlowSystemActor.SystemBGMVolumeChangeEventFlowSystemActor.SystemBGMVolumeChange(3.0, 1.0, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        run Cheers_1()
+        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Party', 'cDefault', 'CameraTag:Party', false, false, false, 0)
+        EventFlowSystemActor.SystemBGMVolumeResetEventFlowSystemActor.SystemBGMVolumeReset(1.0, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        run LookOtg()
+        # You've done so much for Paradise Planning in such a short amount of time, PLAYER… It feels like we should be doing even more to celebrate, especially…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:016', true)
+        fork:
+            branch:
+                # Right…there's only so much we can do in here. But maybe if we had a bigger venue…
+                SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:017', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+                Player.TurnNeckPlayer.TurnNeck(1, false)
+        SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+        # Of course, you've gotta keep up all that great work if we're going to throw an even BIGGER party!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:018', true)
+        Npc_2.CharacterEmoticonActionNpc_2.CharacterEmoticonAction('Nodding', true, '', 0, false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        fork:
+            branch:
+                # I can't get over how quickly we've grown the business since PLAYER came on board. We're helping our clients live their best lives, turning old proper…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:019', true)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+                Player.TurnNeckPlayer.TurnNeck(0, false)
+        SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+        fork:
+            branch:
+                # Yeah! That school actually makes me want to study!
+                SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:020', false)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+                MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+        Player.TurnNeckPlayer.TurnNeck(1, false)
+        # I always thought those empty properties were such a waste. I'm so glad we've been able to breathe new life into one of them! I'm just so proud to wor…
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:021', true)
+        # Aww, thanks, Niko. But we're not done yet! Just you wait until you see what's up my sleeve. Soon!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:022', true)
+        # Wow! Really?! That's great! I wonder what's next!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:023', true)
+        # I want to keep that a secret until we get official approval, but I promise it'll be worth the wait.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:024', false)
+        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        fork:
+            branch:
+                # Things are looking really good for our vacation-home business too, thanks to PLAYER. That said, we're going to need to dig deep and keep up the hard …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:025', true)
+            branch:
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+                Player.TurnNeckPlayer.TurnNeck(0, false)
+        System.EventFlags['cWherearenPlayer:SeqParty1Done'] = true
+        EventFlowSystemActor.SetMemoryEventPlayerWherearenPartyEventFlowSystemActor.SetMemoryEventPlayerWherearenParty(0)
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14706, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cMan', 'MAIL_SNpc_man', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+        run LookCamera()
+        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('PartyCheers', 'cDefault', 'CameraTag:Party', false, false, false, 0)
+        EventFlowSystemActor.SystemBGMVolumeChangeEventFlowSystemActor.SystemBGMVolumeChange(3.0, 1.0, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        EventFlowSystemActor.AfterPartyBGMStartEventFlowSystemActor.AfterPartyBGMStart()
+        run EndPartyTalk_1()
+ 
+flow PartyInOffice_Init():
+    MainNpc.NpcAITalkCastSettingMainNpc.NpcAITalkCastSetting('WherearenPrologue')
+ 
+flow PartyPatterned():
+    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+    # Welcome back! Here's your payment of <90:44:0000>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:301', false)
+    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+    run PatternedSet()
+    # Did you know that last job brings you to <90:2:0000> vacation homes? To celebrate the occasion, let's all head out somewhere together!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:302', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # Great! Can you pick the venue?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:303', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # OK! Let's head over to the restaurant right now.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:304', true)
+            EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+            run StartPartyInRestraurant()
+        else:
+            # OK! Let's head over to the café right now.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:305', true)
+            EventFlowSystemActor.PartyBGMStartEventFlowSystemActor.PartyBGMStart()
+            run StartPartyInCafe()
+    else:
+        # Understood! Not to worry—it's not mandatory or anything, so don't give it a second thought. Thanks again for your hard work!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:306', true)
+        run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+        run SNPC_otg_01_WherearenOffice::Otg_ReturnHomePosrun SNPC_otg_01_WherearenOffice::Otg_ReturnHomePos()
+ 
+flow PatternedSet():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cWherearenBuildCountPlusOne', 'cDegit', 0, 0, 'cWherearenPlayer:NewBuildCount')
+ 
+flow PlayerChangeWear():
+    Player.PlayerChangeOutfitAndToolForAfterPartyPlayer.PlayerChangeOutfitAndToolForAfterParty()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
+ 
+flow PlayerMove():
+    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:WHEREAREN_PartyEndFlag') in (1, 2):
+        Player.TurnBodyPlayer.TurnBody(11, 0.0)
+        Player.TurnNeckPlayer.TurnNeck(11, false)
+        Player.PlayerDemoMovePlayer.PlayerDemoMove('cNextInfoAngle', 2)
+        System.EventFlags['cPlayerTemp:WHEREAREN_PartyEndFlag'] = 0
+ 
+flow Root():
+    if not System.EventFlags['cWherearenPlayer:SeqParty2Done']:
+        # RANDOM: Are you having fun? // Niko put up the decorations. He worked … // Wardell went out and got us the snacks …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:051', true)
+    elif not System.EventFlags['cWherearenPlayer:SeqParty3Done']:
+        # RANDOM: This place has a really great vibe! You… // We'll work out the event details as we … // You're an essential part of the team! I…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:151', true)
+    elif System.EventFlags['cWherearenPlayer:IsFParty']:
+        # RANDOM: Always remember to work at a healthy pa… // Heehee, Niko is looking pretty pleased,… // The work you do really is amazing, PLAY…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:451', true)
+    elif System.EventFlags['cWherearenPlayer:SeqPartyPatternedDone']:
+        run SNPC_otg_25_WherearenEvent_PartyAtRestaurant::PatternedSetrun SNPC_otg_25_WherearenEvent_PartyAtRestaurant::PatternedSet()
+        # RANDOM: You know, I just realized you worked on… // Goodness, <90:2:0000> vacation homes is… // You know…although we're here to celebra…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:351', true)
+    else:
+        # RANDOM: <50:3>PLAYER, did you get enough to eat? // Heehee. I think Niko's as happy about y… // It's been nice to take a break and cele…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_10_WherearenEvent_Party:251', true)
+ 
+flow StartPartyInCafe():
+    System.EventFlags['cWherearenPlayer:IsParty'] = true
+    System.EventFlags['cPlayerTemp:WHEREAREN_PartyPlace'] = 2
+    System.EventFlags['cPlayerTemp:WHEREAREN_IsPartyPlaceInFacility'] = true
+    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('SNPC_otg_18_WherearenEvent_Party', 'PlayerChangeWear', false, false, false)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPartyInCafe', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow StartPartyInOffice():
+    System.EventFlags['cWherearenPlayer:IsParty'] = true
+    System.EventFlags['cPlayerTemp:WHEREAREN_PartyPlace'] = 0
+    System.EventFlags['cPlayerTemp:WHEREAREN_IsPartyPlaceInFacility'] = false
+    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('SNPC_otg_18_WherearenEvent_Party', 'PlayerChangeWear', false, false, false)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(164)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPartyInOffice', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow StartPartyInRestraurant():
+    System.EventFlags['cWherearenPlayer:IsParty'] = true
+    System.EventFlags['cPlayerTemp:WHEREAREN_PartyPlace'] = 1
+    System.EventFlags['cPlayerTemp:WHEREAREN_IsPartyPlaceInFacility'] = true
+    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('SNPC_otg_18_WherearenEvent_Party', 'PlayerChangeWear', false, false, false)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenRestaurant', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 

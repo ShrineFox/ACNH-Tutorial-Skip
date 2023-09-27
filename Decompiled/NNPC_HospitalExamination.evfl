@@ -1,0 +1,32 @@
+flow Consult():
+    if not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+        run ShareHouseMate_Chk()
+    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cHospitalDoctor', false, false, 1)
+    run FacilityName_Chk()
+    # RANDOM: <20:2:cd0e>My tummy grumbled. I thought… // <20:2:cd0e>Hey, Doctor <115:1:cd01>… I … // <20:2:cd0e>Doctor <115:1:cd01>…please m… // <20:2:cd0e>Doc, I just… I've lost all w… // <20:2:cd0e>Doctor <115:1:cd01>…what can…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:302', true)
+ 
+flow FacilityName_Chk():
+    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cHospital')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cHospital')
+        # <20:2:cd06><50:3><150:3:cd00> has a doctor who seems like they know what they're doing!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:303', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    if not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+        run ShareHouseMate_Chk()
+    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cHospitalDoctor', false, false, 1)
+    run FacilityName_Chk()
+    # RANDOM: <20:2:cd06>Ugh. Bleh… My body feels so … // <20:2:cd0e>Doctor <115:1:cd01> scares m… // <20:2:cd06>Ahh…it's finally my turn. I … // <20:2:cd0e>Doctor <115:1:cd01> looks wo… // <20:2:cd06>I've never lost my appetite …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:301', true)
+ 
+flow ShareHouseMate_Chk():
+    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow StandSleep():
+    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
+ 

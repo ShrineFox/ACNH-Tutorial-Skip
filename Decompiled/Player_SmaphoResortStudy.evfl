@@ -1,0 +1,47 @@
+flow Clear():
+    # Are you sure you want to clear out this room?
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1002', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 1:
+        System.EventFlags['cPlayerTemp:ClearVirtualRoom'] = true
+        EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(0, 'cWherearenStudyAllDelete', 'cWherearenStudyAllDelete', 'cBlack', 1.0, 1.0)
+ 
+flow Close():
+    EventFlowSystemActor.TelopEndEventFlowSystemActor.TelopEnd()
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ResortStudyCapture', 'cDefault', 'Place:EditArea', false, true, false, 0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(24)
+    EventFlowSystemActor.WherearenStudyCaptureRequestEventFlowSystemActor.WherearenStudyCaptureRequest()
+    EventFlowSystemActor.UIStudyDialogHandlingEventFlowSystemActor.UIStudyDialogHandling('cFinishEdit')
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.UIStudyDialogHandlingEventFlowSystemActor.UIStudyDialogHandling('cExplanation')
+        EventFlowSystemActor.WherearenResortStudyInputEventFlowSystemActor.WherearenResortStudyInput()
+        System.EventFlags['cPlayerTemp:WHEREAREN_EnterSceneByResortStudyApp'] = true
+        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cWherearenStudyBack', 'cWherearenStudyBack', 'cBlack', 1.0, 1.0)
+    else:
+        EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
+ 
+flow EditVirtualRoom():
+    if EventFlowSystemActor.CheckOpenResortStudyEditModeEventFlowSystemActor.CheckOpenResortStudyEditMode():
+        EventFlowSystemActor.UnlockRoomSketchItemEventFlowSystemActor.UnlockRoomSketchItem()
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenVirtualRoom', 'cWherearenStudyGo', 'cWherearenStudyGo', 'cBlack', 1.0, 1.0)
+    else:
+        # …It doesn't seem like you can connect right now.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_PhoneApp:501', false)
+ 
+flow Output():
+    if System.EventFlags['cPlayer:NoticeAboutRoomSketch']:
+        EventFlowSystemActor.UIStudyDialogHandlingEventFlowSystemActor.UIStudyDialogHandling('cOutput')
+        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.WherearenResortStudyOutputEventFlowSystemActor.WherearenResortStudyOutput()
+            System.EventFlags['cWherearenPlayer:RoomSketchPaste'] = true
+            EventFlowSystemActor.SystemReenterStageEventFlowSystemActor.SystemReenterStage(7, 'cWherearenStudyOutput', 'cWherearenStudyOutput', 'cBlack', 1.0, 1.0)
+            EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+    else:
+        # There is no room data in the app, so you can't import anything right now.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_PhoneApp:502', false)
+ 
+flow Root():
+    if EventFlowSystemActor.CheckResortStudyModeInNowSituationEventFlowSystemActor.CheckResortStudyModeInNowSituation():
+        run EditVirtualRoom()
+    else:
+        run Output()
+ 

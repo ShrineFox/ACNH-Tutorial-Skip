@@ -1,0 +1,481 @@
+flow BGMChangeCheck():
+    if System.EventFlags['cLand:BuiltTownOffice']:
+        System.EventFlags['cLand:SzaTaled1stTimeAnyPlayer'] = true
+        System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 99
+    elif System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] <= 8:
+        if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`):
+            System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 9
+    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
+        if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`):
+            System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 11
+    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') < 4:
+        System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 12
+    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') < 5:
+        System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 13
+    elif System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] <= 14:
+        System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 14
+ 
+flow BocKabuBuyCount():
+    if System.EventFlags['cPlayer:BocAllowAddBuyCount']:
+        System.EventFlags['cPlayer:BocBuyCount'] += 1
+        System.EventFlags['cPlayer:BocAllowAddBuyCount'] = false
+ 
+flow CanGiveMileTicketTrialForMoving():
+    if (System.EventFlags['cLand:ValidateVillageSave']) and (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']):
+        System.EventFlags['cLand:PlayerMovingEnableShopMaterialCollect'] = true
+        if (not System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']) and ((System.EventFlags['cPlayer:MakeVillagePlayerFlag']) or (not System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving'])):
+            System.EventFlags['cPlayer:CanGetMileTicketTrialForMoving'] = true
+ 
+flow CheckPhoneCallIslandCreater():
+    if System.EventFlags['cLand:TkkFirstLive']:
+        if System.EventFlags['cPlayer:MainmenuConstructLicense']:
+            if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (not EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)) and (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`) and (System.EventFlags['cPlayer:StandByRcoVisitMyHomeAfterTkkFirstLive']):
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(4318, 1, 'cVillageRemakePattern', 0)
+                EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 4, 'cNone', 'cFastToday', 'cReward', false, false)
+                System.EventFlags['cPlayer:StandByRcoVisitMyHomeAfterTkkFirstLive'] = false
+        elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+            System.EventFlags['cPlayer:StandByPhoneCallIslandCreater'] = false
+            System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = false
+        elif not System.EventFlags['cPlayer:StandByRcoVisitMyHomeAfterTkkFirstLive']:
+            System.EventFlags['cPlayer:StandByPhoneCallIslandCreater'] = true
+            System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+        elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+            System.EventFlags['cPlayer:StandByRcoVisitMyHomeAfterTkkFirstLive'] = false
+            System.EventFlags['cPlayer:StandByPhoneCallIslandCreater'] = true
+            System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(4318, 1, 'cVillageRemakePattern', 0)
+            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 4, 'cNone', 'cFastToday', 'cReward', false, false)
+ 
+flow CheckPhoneCallJuneBride():
+    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']) and ((not System.EventFlags['cPlayer:SpnTalkAtHomelandToday']) or (System.EventFlags['cPlayer:VisitedCommune'])) and (not System.EventFlags['cPlayer:StandByPhoneCallJuneBrideSpn']) and (not System.EventFlags['cPlayer:SpnJuneBrideTalkEventFrag']):
+        System.EventFlags['cPlayer:StandByPhoneCallJuneBride'] = true
+        System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+ 
+flow CheckPhoneCallPrintService():
+    if System.EventFlags['cPlayer:StandByPhoneCallPrintService']:
+        System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+ 
+flow CheckPhoneCallPurchaseBox():
+    if System.EventFlags['cPlayer:StandByPhoneCallPurchaseBox']:
+        System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+ 
+flow CheckPhoneCallSharePlay():
+    if (EventFlowSystemActor.PlayerVillagerCountEventFlowSystemActor.PlayerVillagerCount(2)) and (not System.EventFlags['cPlayer:MainmenuCall']):
+        System.EventFlags['cPlayer:StandByPhoneCallSharePlay'] = true
+        System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+ 
+flow CheckSendCommuneExpandLetter():
+    if (System.EventFlags['cLand:TkkFirstLive']) and (System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']) and (not System.EventFlags['cPlayer:StandByPhoneCallJuneBride']):
+entrypoint Event337:
+        if (not System.EventFlags['cPlayer:ReserveCommuneExpansion']) and (not System.EventFlags['cPlayer:SpnSendMailCommuneExpansion']):
+            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSpn', 'MAIL_SNpc_spn', 1, 'cNone', 'cFastToday', '', false, false)
+            System.EventFlags['cPlayer:ReserveCommuneExpansion'] = true
+            System.EventFlags['cPlayer:SpnSendMailCommuneExpansion'] = true
+ 
+flow CheckSendCommuneExpandLetter_Already():
+    if (System.EventFlags['cLand:CompleteCommuneExpandEvent']) and (System.EventFlags['cPlayer:SpnFirstTalkedAtCommuneIsland']) and (not System.EventFlags['cPlayer:CommuneCompleteExpandEvent_Player']):
+        run Event337()
+ 
+flow CheckSendVegetableBasket():
+    if (not System.EventFlags['cPlayer:SloGetVegetableBasketDIY']) and (System.EventFlags['cPlayer:SloVegetableCount'] >= 3) and (System.EventFlags['cPlayer:ValidatePlayerSaveFlag']):
+        EventFlowSystemActor.NpcSetRewardRecipeEventFlowSystemActor.NpcSetRewardRecipe(13608, false)
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cSlo', 'MAIL_SNpc_slo', 2, 'cNone', 'cFastToday', 'cReward', false, true)
+        System.EventFlags['cPlayer:SloGetVegetableBasketDIY'] = true
+ 
+flow CheckUnlockIslandRegulation():
+    if System.EventFlags['cLand:TkkFirstLive']:
+        System.EventFlags['cLand:v200_Enabled_ChangeRegulation'] = true
+ 
+flow ChkDisableLoginTips():
+    if (System.EventFlags['cLand:OfficeConstruction1']) or ((EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`) and (EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cEndOfTheYear', 'cGrowUpTime'))):
+        System.EventFlags['cLand:RcoTipsDisableNoticeLoginBonus'] = true
+ 
+flow ChkEnableLoginTips():
+    if (System.EventFlags['cPlayer:ObjRcoMachineCheck1st']) and (System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] == 0):
+        System.EventFlags['cPlayer:RcoTipsRcoMachineLoginBonus'] = true
+ 
+flow ChkEndTipsPurchaseBox():
+    if (System.EventFlags['cPlayer:PhoneCallByRcm']) or (System.EventFlags['cPlayer:PhoneCallByRct']):
+        System.EventFlags['cPlayer:RcoTipsPurchaseBoxUsed'] = true
+ 
+flow ChkGoldenToolRecipe_GoldenNet():
+    if (not System.EventFlags['cPlayer:GoldenNetRecipeSent']) and (System.EventFlags['cPlayer:CompleteInsects']):
+        EventFlowSystemActor.NpcSetRewardRecipeEventFlowSystemActor.NpcSetRewardRecipe(8179, false)
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cFarwayMuseum', 'MAIL_SP_FarawayMuseum', 1, 'cNone', 'cFastToday', 'cReward', false, true)
+        System.EventFlags['cPlayer:GoldenNetRecipeSent'] = true
+ 
+flow ChkGoldenToolRecipe_GoldenRod():
+    if (not System.EventFlags['cPlayer:GoldenRodRecipeSent']) and (System.EventFlags['cPlayer:CompleteFish']):
+        EventFlowSystemActor.NpcSetRewardRecipeEventFlowSystemActor.NpcSetRewardRecipe(8660, false)
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cFarwayMuseum', 'MAIL_SP_FarawayMuseum', 2, 'cNone', 'cFastToday', 'cReward', false, true)
+        System.EventFlags['cPlayer:GoldenRodRecipeSent'] = true
+ 
+flow ChkMayDayTour_PhoneCall_MailPost():
+    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)) and (not System.EventFlags['cPlayer:PAnnounceMayDayTour']) and (not System.EventFlags['cPlayer:GetMayDayTicket']) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 7, 'cNone', 'cFastToday', 'cNone', false, false)
+        System.EventFlags['cPlayer:PAnnounceMayDayTour'] = true
+        System.EventFlags['cPlayer:StandByPhoneCallMayDayTour'] = true
+        System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+ 
+flow ChkPhoneCallRcoNpcCoodinate():
+    if (System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']) and (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (not System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`) and (not EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)):
+        System.EventFlags['cPlayer:StandByCallByRcoNpcHouseCoodinate'] = true
+        System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
+ 
+flow ChkStartGamePhoneCall():
+    run CheckPhoneCallIslandCreater()
+    run CheckPhoneCallSharePlay()
+    run CheckPhoneCallPrintService()
+    run CheckPhoneCallPurchaseBox()
+    run CheckPhoneCallJuneBride()
+    run ChkPhoneCallRcoNpcCoodinate()
+    run ChkMayDayTour_PhoneCall_MailPost()
+ 
+flow ChkUnlockBuyATM():
+    if (not System.EventFlags['cPlayer:UnlockBuyATM']) and (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Basement`) and (System.EventFlags['cPlayer:PcHousingLoanFinish']):
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 22, 'cNone', 'cFastToday', '', false, false)
+        System.EventFlags['cPlayer:UnlockBuyATM'] = true
+ 
+flow ChkUnlockBuyStoreRoom():
+    if (not System.EventFlags['cPlayer:UnlockBuyStoreroom']) and (System.EventFlags['cPlayer:RcoStorageExpansionLevel']):
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 23, 'cNone', 'cFastToday', '', false, false)
+        System.EventFlags['cPlayer:UnlockBuyStoreroom'] = true
+ 
+flow EnablePlayerMoving():
+    if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`):
+        System.EventFlags['cPlayer:PlayerMovingEnable'] = true
+ 
+flow EnableTailorBuild():
+    if (System.EventFlags['cLand:CountTailorBuild'] >= 3) and (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cPlayer:KinuyoTalkBoforeFlag']):
+        System.EventFlags['cLand:EnableTailorBuild'] = true
+ 
+flow Enable_BuildOfficeIntroduction():
+    if (System.EventFlags['cLand:RcmImmQuestComplete']) and (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 5) and (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersTent`, `BlathersMuseumNoArt`, `BlathersMuseumArt`)):
+        System.EventFlags['cLand:RcoNoticeBuildInfomationOffice'] = true
+ 
+flow FixMcat11233():
+    if (System.EventFlags['cPlayer:MainmenuRecipe']) and (not EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 4376)):
+        System.EventFlags['cPlayer:PAnnounce_SummerShell'] = false
+ 
+flow Flag_Autumn():
+    System.EventFlags['cPlayer:PAnnounce_AutumnMushroom'] = false
+    System.EventFlags['cPlayer:PAnnounce_AutumnRedLeaf'] = false
+ 
+flow Flag_Nuts():
+    if not MainNpc.EnvPublicAnnouncementMainNpc.EnvPublicAnnouncement('cEnvAnnounceQueryType_Acorn'):
+        System.EventFlags['cPlayer:PAnnounce_AutumnNuts'] = false
+ 
+flow Flag_Ornaments():
+    System.EventFlags['cPlayer:PAnnounce_WinterOrnament'] = false
+ 
+flow Flag_Spring():
+    System.EventFlags['cPlayer:PAnnounce_SpringSakura'] = false
+ 
+flow Flag_SpringBamboo():
+    if not MainNpc.EnvPublicAnnouncementMainNpc.EnvPublicAnnouncement('cEnvAnnounceQueryType_BambooSpring'):
+        System.EventFlags['cPlayer:PAnnounce_SpringBamboo'] = false
+ 
+flow Flag_Summer():
+    System.EventFlags['cPlayer:PAnnounce_SummerShell'] = false
+ 
+flow Flag_Winter():
+    System.EventFlags['cPlayer:PAnnounce_WinterSnowFlake'] = false
+    System.EventFlags['cPlayer:PAnnounce_WinterSnowball'] = false
+ 
+flow HgsFriendship():
+    if System.EventFlags['cPlayer:HgsAllowAddFriendship']:
+        System.EventFlags['cPlayer:HgsCloseness'] += 1
+        System.EventFlags['cPlayer:HgsAllowAddFriendship'] = false
+ 
+flow HouseFacilityMoveReset():
+    if System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild']:
+        System.EventFlags['cPlayer:RcoMoveHouseReserved'] = false
+        System.EventFlags['cPlayer:RcoMoveSomeBuiding'] = false
+        System.EventFlags['cPlayer:RcoMoveHousingSetSomeBuild'] = false
+ 
+flow ImmQEndChk():
+    if (System.EventFlags['cLand:ImmQ_A_Complete']) and (System.EventFlags['cLand:ImmQ_B_Complete']) and (System.EventFlags['cLand:ImmQ_C_Complete']):
+        System.EventFlags['cLand:RcmImmQuestComplete'] = true
+        System.EventFlags['cLand:RcmImmQuestRunning'] = false
+        if not System.EventFlags['cLand:TodayImmQNotClear']:
+            System.EventFlags['cLand:ImmQClearNextDay'] = true
+            if (System.EventFlags['cPlayer:ImmQRunningForPlayer']) and (not System.EventFlags['cPlayer:ImmQTalkAboutPrize']):
+                System.EventFlags['cPlayer:RcoStayMyHouseImmQClear'] = true
+    else:
+        System.EventFlags['cLand:TodayImmQNotClear'] = true
+ 
+flow ImmQFtrChk():
+    if System.EventFlags['cLand:RcmImmQuestRunning']:
+        run ImmQFtrChkA()
+        run ImmQFtrChkB()
+        run ImmQFtrChkC()
+    run ImmQEndChk()
+ 
+flow ImmQFtrChkA():
+    if (not System.EventFlags['cLand:ImmQ_A_Complete']) and (EventFlowSystemActor.IsSettlerQuestOutsideCompleteEventFlowSystemActor.IsSettlerQuestOutsideComplete(0, 3)) and (System.EventFlags['cLand:ImmQ_A_Interior1Donate']) and (System.EventFlags['cLand:ImmQ_A_Interior2Donate']) and (System.EventFlags['cLand:ImmQ_A_Interior3Donate']) and (not System.EventFlags['cLand:TodayImmQNotClear']):
+        EventFlowSystemActor.CompleteSettlerQuestSubjectEventFlowSystemActor.CompleteSettlerQuestSubject(0)
+        EventFlowSystemActor.DecideSettlerNpcEventFlowSystemActor.DecideSettlerNpc(0)
+ 
+flow ImmQFtrChkB():
+    if (not System.EventFlags['cLand:ImmQ_B_Complete']) and (EventFlowSystemActor.IsSettlerQuestOutsideCompleteEventFlowSystemActor.IsSettlerQuestOutsideComplete(1, 3)) and (System.EventFlags['cLand:ImmQ_B_Interior1Donate']) and (System.EventFlags['cLand:ImmQ_B_Interior2Donate']) and (System.EventFlags['cLand:ImmQ_B_Interior3Donate']) and (not System.EventFlags['cLand:TodayImmQNotClear']):
+        EventFlowSystemActor.CompleteSettlerQuestSubjectEventFlowSystemActor.CompleteSettlerQuestSubject(1)
+        EventFlowSystemActor.DecideSettlerNpcEventFlowSystemActor.DecideSettlerNpc(1)
+ 
+flow ImmQFtrChkC():
+    if (not System.EventFlags['cLand:ImmQ_C_Complete']) and (EventFlowSystemActor.IsSettlerQuestOutsideCompleteEventFlowSystemActor.IsSettlerQuestOutsideComplete(2, 3)) and (System.EventFlags['cLand:ImmQ_C_Interior1Donate']) and (System.EventFlags['cLand:ImmQ_C_Interior2Donate']) and (System.EventFlags['cLand:ImmQ_C_Interior3Donate']) and (not System.EventFlags['cLand:TodayImmQNotClear']):
+        EventFlowSystemActor.CompleteSettlerQuestSubjectEventFlowSystemActor.CompleteSettlerQuestSubject(2)
+        EventFlowSystemActor.DecideSettlerNpcEventFlowSystemActor.DecideSettlerNpc(2)
+ 
+flow IslandEvaluationUpdateChk():
+    if (System.EventFlags['cLand:IslandEvaluationUnlock']) and (not System.EventFlags['cLand:SzaIslandEvaluationTodayRankUpdate']):
+        run System_IslandEvaluationCheck::ChkEvaluationImprovementrun System_IslandEvaluationCheck::ChkEvaluationImprovement()
+        System.EventFlags['cLand:SzaIslandEvaluationTodayRankUpdate'] = true
+ 
+flow MuseumGrouUpChk():
+    if (System.EventFlags['cLand:MuseumConstructionToday']) or (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`)):
+        System.EventFlags['cLand:MarketSellRecipeScoopStick'] = true
+        if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`):
+            System.EventFlags['cLand:UnlockBuyRecipePitfallSeed'] = true
+ 
+flow MyHomeChk():
+    if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`):
+        System.EventFlags['cPlayer:BuiltMyHome'] = true
+ 
+flow NoticePriceDownBuildMoving():
+    if not System.EventFlags['cPlayer:SendLetterBuildMovingPricedown']:
+        System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true
+        if (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`) and (System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']):
+            if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+                EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 27, 'cNone', 'cFastToday', 'cNone', false, false)
+            else:
+                EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 28, 'cNone', 'cFastToday', 'cNone', false, false)
+ 
+flow OwsChkMonthlyFlag():
+    switch EventFlowSystemActor.EnvConstellationEventFlowSystemActor.EnvConstellation('cGrowUpTime'):
+        case `Capricorn`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 1:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 1
+        case `Aquarius`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 2:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 2
+        case `Pisces`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 3:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 3
+        case `Aries`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 4:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 4
+        case `Taurus`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 5:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 5
+        case `Gemini`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 6:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 6
+        case `Cancer`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 7:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 7
+        case `Leo`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 8:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 8
+        case `Virgo`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 9:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 9
+        case `Libra`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 10:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 10
+        case `Scorpius`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 11:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 11
+        case `Sagittarius`:
+            if System.EventFlags['cPlayer:OwsThisZodiac'] != 12:
+                System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = false
+                System.EventFlags['cPlayer:OwsThisZodiac'] = 12
+ 
+flow PostRcoLetter105():
+    if System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']:
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(5851, 1, 'cVillageRemakePattern', 0)
+    else:
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9561, 1, 'cVillageRemakePattern', 0)
+    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 5, 'cNone', 'cFastToday', 'cReward', false, false)
+    System.EventFlags['cPlayer:RcoOfficeBuiltLetter'] = true
+ 
+flow Process_Anytime():
+    run MyHomeChk()
+    run ChkGoldenToolRecipe_GoldenNet()
+    run ChkGoldenToolRecipe_GoldenRod()
+    run RemakeUnlock()
+    run EnableTailorBuild()
+    run Obj_RcoMachine_MileExchange_v2_0_0_UnlockDisplay::UnlockDisplayChkrun Obj_RcoMachine_MileExchange_v2_0_0_UnlockDisplay::UnlockDisplayChk()
+    run CheckSendCommuneExpandLetter_Already()
+    run RcoOfficeBuiltLetter()
+    run ChkEndTipsPurchaseBox()
+ 
+flow Process_Daily():
+    run HgsFriendship()
+    run BocKabuBuyCount()
+    run RcoMachineDailyLoginChk()
+    run OwsChkMonthlyFlag()
+    run HouseFacilityMoveReset()
+    run System_AirlineNoveltySendCheck::Rootrun System_AirlineNoveltySendCheck::Root()
+    run FixMcat11233()
+    run SendTapBedLetter()
+    run SendTapThankyouLetter()
+    run CanGiveMileTicketTrialForMoving()
+    run EnablePlayerMoving()
+    run SendTapNoticeLeaveTap()
+    run ChkUnlockBuyATM()
+    run ChkUnlockBuyStoreRoom()
+    run Obj_Radio_RadioGymnastics::AddRewardCountrun Obj_Radio_RadioGymnastics::AddRewardCount()
+ 
+flow Process_Only_PAnnounce():
+    run SeasonMaterialHintReset()
+    run ChkStartGamePhoneCall()
+    run BGMChangeCheck()
+    run ImmQFtrChk()
+    run Enable_BuildOfficeIntroduction()
+    run ShopGrowUpCheck()
+    run IslandEvaluationUpdateChk()
+    run MuseumGrouUpChk()
+    run CheckUnlockIslandRegulation()
+    run CheckSendCommuneExpandLetter()
+    run ChkUnlockBuyATM()
+    run ChkUnlockBuyStoreRoom()
+    run Obj_Radio_RadioGymnastics::SendRewardrun Obj_Radio_RadioGymnastics::SendReward()
+    run CheckSendVegetableBasket()
+    run NoticePriceDownBuildMoving()
+ 
+flow RcoMachineDailyLoginChk():
+    run ChkDisableLoginTips()
+    if EventFlowSystemActor.PlayerPastDaysFromLastPlayEventFlowSystemActor.PlayerPastDaysFromLastPlay(2):
+        System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] = 0
+        run Sub_Event47()
+    elif System.EventFlags['cPlayer:RcoMachineDailyLoginCheck']:
+        System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] += 1
+        run Sub_Event47()
+    elif not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+        run SkipResetLoginChk()
+    elif (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) or (System.EventFlags['cPlayer:ValidatePlayerSaveFlag']):
+        run SkipResetLoginChk()
+ 
+flow RcoOfficeBuiltLetter():
+    if (System.EventFlags['cPlayer:ThisPCcreatedbeforeOfficeUpgrading']) and (System.EventFlags['cPlayer:WatchedRcoAnnouceAfter200ver']) and (not System.EventFlags['cPlayer:RcoOfficeBuiltLetter']) and (not System.EventFlags['cPlayer:TownNewsHeardTownHallOpenFlag']) and (System.EventFlags['cLand:BuiltTownOffice']):
+        run PostRcoLetter105()
+ 
+flow RemakeUnlock():
+    if (System.EventFlags['cLand:ImmQClearNextDay']) and (System.EventFlags['cPlayer:MainmenuRecipe']) and ((not System.EventFlags['cPlayer:EnableDiyRemake']) or (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving'])) and (not System.EventFlags['cPlayer:RcoHeardInviteRemakeWS']):
+        System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial'] = true
+ 
+flow ResetFlag_Autumn():
+    run Flag_Spring()
+    run Flag_Summer()
+    run Flag_Winter()
+    run Flag_SpringBamboo()
+ 
+flow ResetFlag_Spring():
+    run Flag_Summer()
+    run Flag_Autumn()
+    run Flag_Winter()
+    run Flag_Nuts()
+ 
+flow ResetFlag_Summer():
+    run Flag_Spring()
+    run Flag_Autumn()
+    run Flag_Winter()
+    run Flag_Nuts()
+    run Flag_SpringBamboo()
+ 
+flow ResetFlag_Winter():
+    run Flag_Spring()
+    run Flag_Summer()
+    run Flag_Autumn()
+    run Flag_Nuts()
+    run Flag_SpringBamboo()
+ 
+flow Root():
+    run Process_Anytime()
+    if not System.EventFlags['cPlayer:PAnnouceProcessDoneToday']:
+        run Process_Daily()
+        System.EventFlags['cPlayer:PAnnouceProcessDoneToday'] = true
+    if not ((System.EventFlags['cLand:PAnnounceToday']) and (EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0))):
+        run Process_Only_PAnnounce()
+ 
+flow SeasonMaterialHintReset():
+    if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+        switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+            case `January`:
+                run ResetFlag_Winter()
+            case `February`:
+                run Flag_Ornaments()
+                run ResetFlag_Winter()
+            case `March`, `April`, `May`:
+                run ResetFlag_Spring()
+                run Flag_Ornaments()
+            case `June`, `July`, `August`:
+                run ResetFlag_Summer()
+                run Flag_Ornaments()
+            case `September`, `October`, `November`:
+                run ResetFlag_Autumn()
+                run Flag_Ornaments()
+            case `December`:
+                run ResetFlag_Winter()
+    else:
+        switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+            case `January`:
+                run ResetFlag_Summer()
+            case `February`:
+                run Flag_Ornaments()
+                run ResetFlag_Summer()
+            case `March`, `April`, `May`:
+                run ResetFlag_Autumn()
+                run Flag_Ornaments()
+            case `June`, `July`, `August`:
+                run ResetFlag_Winter()
+                run Flag_Ornaments()
+            case `September`, `October`, `November`:
+                run ResetFlag_Spring()
+                run Flag_Ornaments()
+            case `December`:
+                run ResetFlag_Summer()
+ 
+flow SendTapBedLetter():
+    if (not System.EventFlags['cPlayer:ReceiveTapBedLetter']) and (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`)) and (not System.EventFlags['cPlayer:PlayerHouseBuiltToday']) and (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 5):
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(13221, 1, 'cVillageRemakePattern', 0)
+        if System.EventFlags['cPlayer:TapDreamFirstTalk']:
+            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cTap', 'MAIL_SNpc_tap', 3, 'cNone', 'cFastToday', 'cReward', false, true)
+        else:
+            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cTap', 'MAIL_SNpc_tap', 2, 'cNone', 'cFastToday', 'cReward', false, true)
+        System.EventFlags['cPlayer:ReceiveTapBedLetter'] = true
+ 
+flow SendTapNoticeLeaveTap():
+    if (not System.EventFlags['cPlayer:TapUpdatedDreamFirstTalk']) and (System.EventFlags['cPlayer:TapDreamFirstTalk']) and (not System.EventFlags['cPlayer:TapUnlockLeaveTap']) and (not System.EventFlags['cPlayer:ReceiveLeaveTapLetter']) and (System.EventFlags['cPlayer:ValidatePlayerSaveFlag']):
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cTap', 'MAIL_SNpc_tap', 4, 'cNone', 'cFastToday', 'cNone', false, false)
+        System.EventFlags['cPlayer:ReceiveLeaveTapLetter'] = true
+ 
+flow SendTapThankyouLetter():
+    if (System.EventFlags['cPlayer:TapSendThankyouLetter']) and (System.EventFlags['cPlayer:ValidatePlayerSaveFlag']):
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(13228, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cTap', 'MAIL_SNpc_tap', 1, 'cNone', 'cFastToday', 'cReward', false, false)
+        System.EventFlags['cPlayer:TapSendThankyouLetter'] = false
+ 
+flow ShopGrowUpCheck():
+    if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `NooksCrannyUpgraded`:
+        System.EventFlags['cLand:Market2Built'] = true
+ 
+flow SkipResetLoginChk():
+    System.EventFlags['cPlayer:RcoMachineDailyLoginDays'] = 0
+    run ChkEnableLoginTips()
+ 
+local flow Sub_Event47():
+    System.EventFlags['cPlayer:RcoMachineDailyLoginCheck'] = false
+    run ChkEnableLoginTips()
+ 

@@ -1,0 +1,51 @@
+flow AmiiboDeviceCamera():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('AmiiboDevice', 'cDefault', 'CameraTag:AmiiboDevice', false, false, false, 0)
+ 
+flow AmiiboDeviceCamera_Direct():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('AmiiboDevice_Direct', 'cDefault', 'CameraTag:AmiiboDevice', false, false, false, 0)
+ 
+flow Root():
+    # Can we chat before you head out? I want to show you something.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:281', false)
+    EventFlowSystemActor.SetLookAtTargetObjectEventFlowSystemActor.SetLookAtTargetObject('cWherearenAmiiboDevice')
+    MainNpc.TurnNeckMainNpc.TurnNeck(13, false)
+    run AmiiboDeviceCamera()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    fork:
+        branch:
+            # Look on top of the counter! Spot anything new?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:281_01', false)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeckPlayer.TurnNeck(13, false)
+    # That's an <item>amiibo scanner!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:283', false)
+    MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    fork:
+        branch:
+            # I have a relative who's good with machines. When I told him things were going well with my company, he sent it over as a gift!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:284', false)
+        branch:
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeckPlayer.TurnNeck(0, false)
+entrypoint Event12:
+    # That <item>amiibo scanner is going to be a critical part of our business! Using Animal Crossing series amiibo, you can contact clients directly and o…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:285', false)
+    # That's all for now! I can't wait to see what you do with that <item>amiibo scanner in the future!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:286', true)
+    System.EventFlags['cWherearenPlayer:SeqAvailableAmiiboDone'] = true
+    System.EventFlags['cWherearenPlayer:Unlock_Amiibo'] = true
+ 
+flow Root_AmiiboDevice():
+    run AmiiboDeviceCamera_Direct()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    # I had a feeling that would catch your attention!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:282', false)
+    # That's an <item>amiibo scanner!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:283', false)
+    # I have a relative who's good with machines. When I told him things were going well with my company, he sent it over as a gift!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:284', false)
+    run Event12()
+ 

@@ -1,0 +1,92 @@
+flow Appear():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'UnderShooting', false, true)
+ 
+flow Camera_Core(Command: str, Target: str):
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(21, true)
+    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand(Command, Target, false)
+ 
+flow Camera_EntranceTalk():
+    run Camera_Core(Command='Demo:EntranceTalk', Target='Place:SafeArea')
+ 
+flow Camera_LandingTalk():
+    run Camera_Core(Target='Place:SafeArea', Command='Demo:LandingTalk')
+ 
+flow Cardboard():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_mnc_12_WherearenEvent_DustCloth')
+ 
+flow Init():
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('UnlockDust', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('AddDust', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ReqVisible', 0)
+    if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 0:
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveWherearenNpcHouse', false)
+ 
+flow Leave():
+    if System.EventFlags['cWherearenPlayer:NewBuildCount'] != 0:
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Gate', FlowName='SNPC_mnc_02_WherearenGarden')
+    else:
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_10_WherearenEvent_HouseEdit', EntryName='Gatekeep')
+ 
+flow Root():
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('UnlockDust', 1):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('UnlockDust', 0)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_mnc_12_WherearenEvent_DustCloth')
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('AddDust', 1):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('AddDust', 0)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_12_WherearenEvent_DustCloth', EntryName='AddDustCloth')
+    elif System.EventFlags['cWherearenPlayer:IsMncChangeStageForPhotoMode']:
+        if System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoSkip']:
+            System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoSkip'] = false
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='OrderDone', FlowName='SNPC_mnc_02_WherearenGarden')
+        else:
+            run Appear()
+    elif not System.EventFlags['cWherearenPlayer:SeqHouseEditTutorialDone']:
+        System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_House'] = false
+        if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenNpcRoom0'):
+            run Camera_EntranceTalk()
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_mnc_10_WherearenEvent_HouseEdit')
+        else:
+            run Sub_Event0()
+    elif System.EventFlags['cWherearenPlayer:SeqKabetasuEventReady']:
+        if (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 3, 4, 5, 6, 7)) and (EventFlowSystemActor.WherearenNpcOrderTypeEventFlowSystemActor.WherearenNpcOrderType() == 0):
+            System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_House'] = false
+            run Camera_EntranceTalk()
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_mnc_15_WherearenEvent_Kabetasu')
+        else:
+            MainNpc.NpcReservrForEraseMainNpc.NpcReservrForErase()
+    elif System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_House']:
+        System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_House'] = false
+        if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+            run Camera_LandingTalk()
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='AfterMoveToRoom', FlowName='SNPC_mnc_14_WherearenEvent_FirstVisitCustomer')
+        elif System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_01']:
+            if System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02']:
+                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'Root', false, false)
+            else:
+                run Camera_LandingTalk()
+                run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_12_WherearenEvent_DustCloth', EntryName='AddDustClothTalk')
+        else:
+            run Camera_LandingTalk()
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_12_WherearenEvent_DustCloth', EntryName='DustClothTalk')
+    else:
+        if System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_AfterCompleteDemo'] != 2:
+            if System.EventFlags['cWherearenPlayer:NewBuildCount'] != 0:
+                if (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() in (0, 1, 3, 4, 5, 6, 7)) and (EventFlowSystemActor.CalledWherearenOfficerNpcEventFlowSystemActor.CalledWherearenOfficerNpc()):
+                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'Root', false, false)
+                else:
+                    run Sub_Event0()
+            else:
+                if System.EventFlags['cWherearenPlayer:InCompleteDemo']:
+                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
+                else:
+                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'Root', false, false)
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_02_WherearenGarden', 'Root', false, false)
+ 
+local flow Sub_Event0():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
+    MainNpc.NpcAISetPosMainNpc.NpcAISetPos(0.0, 0.0, 0.0, false, false)
+ 

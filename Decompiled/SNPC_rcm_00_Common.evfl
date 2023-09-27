@@ -1,0 +1,367 @@
+flow AfterNewServiceExlpain():
+    # Sorry about that. That explanation went on for a bit… How can I help?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:014', false)
+    run Event0()
+ 
+flow BlackFriday():
+    if (EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `NooksCrannyUpgraded`) and (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('BlackFriday', false)) and (not System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']):
+        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+            if not System.EventFlags['cPlayer:NoticeBlackFridayToday']:
+                System.EventFlags['cPlayer:NoticeBlackFridayToday'] = true
+                run Sub_Event172()
+        elif not System.EventFlags['cPlayerVisit:NoticeBlackFriday']:
+            System.EventFlags['cPlayerVisit:NoticeBlackFriday'] = true
+            run Sub_Event172()
+ 
+flow BuyCancelNoAsk():
+    run Event43()
+ 
+flow CmnCloseShoppingUI():
+    fork:
+        branch:
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        branch:
+            EventFlowSystemActor@Sub.UIShopBuyDisappearEventFlowSystemActor@Sub.UIShopBuyDisappear()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+ 
+flow End_Shopping():
+    run CmnCloseShoppingUI()
+    if not System.EventFlags['cPlayerTemp:RcmBoughtGrocery']:
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+        if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+            # Ah, changed your mind? Please let me know if there's anything else I can help with!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:903_01', true)
+            run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+        else:
+            if System.EventFlags['cPlayerTemp:RcmShopshelfCheck']:
+                EventFlowSystemActor.CloseMarketShowcaseEventFlowSystemActor.CloseMarketShowcase()
+            # I'll be here if you need anything else.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:903_02', false)
+            run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+    elif EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+        # Thank you! Please don't hesitate to ask me for assistance.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:903_03', false)
+        run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+    else:
+        if System.EventFlags['cPlayerTemp:RcmShopshelfCheck']:
+            EventFlowSystemActor.CloseMarketShowcaseEventFlowSystemActor.CloseMarketShowcase()
+        # Thank you!__ ...thank you!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:903_04', false)
+        run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+ 
+flow FishingRodBuy():
+    # Oh! Interested in a fishing rod? You can build one for free, you know, in President Nook's DIY workshop. So I'd suggest that route. This one costs <9…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:096', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run Event42()
+    else:
+        run BuyCancelNoAsk()
+ 
+flow ItemFullBuyRecipecard():
+    run Event1()
+ 
+flow ItemFullBuySolo():
+    run Event1()
+ 
+flow NotEnoughMoneySolo():
+    run Event33()
+ 
+flow Rcm_Cmn_BuySel_Cancel():
+    run Event21()
+ 
+flow Rcm_Common_Buy():
+    # Here's what we have to sell today.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:091', false)
+    run Rcm_Common_BuyAgain2()
+ 
+flow Rcm_Common_BuyAgain():
+    EventFlowSystemActor.UIShopBuyReselectionAppearEventFlowSystemActor.UIShopBuyReselectionAppear()
+    run Event39()
+ 
+flow Rcm_Common_BuyAgain2():
+    EventFlowSystemActor.UIShopBuyAppearEventFlowSystemActor.UIShopBuyAppear('cMamekichi')
+entrypoint Event39:
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cRcShopItemPrice', 0)
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cRcShopItem5Price', 1)
+        if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('FishingRod', '', '', '', '', '', '', '', 'cItemSelect'):
+            if System.EventFlags['cPlayer:MainmenuRecipe']:
+                run Sub_Event22()
+            else:
+                run FishingRodBuy()
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
+            run SNPC_rcm_11_BuyDIYbook::Rootrun SNPC_rcm_11_BuyDIYbook::Root()
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyDIYRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
+            run SNPC_rcm_12_BuyDIYcard::Rootrun SNPC_rcm_12_BuyDIYcard::Root()
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyHowtoBook', '', '', '', '', '', '', '', 'cItemSelect'):
+            run SNPC_rcm_16_BuyHowToBook::Rootrun SNPC_rcm_16_BuyHowToBook::Root()
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Candy', '', '', '', '', '', '', '', 'cItemSelect'):
+            run SNPC_rcm_15_BuyCandy::Rootrun SNPC_rcm_15_BuyCandy::Root()
+        elif (not EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('VegeSeedling', 'BlowBubble', 'FierworkHand', '', '', '', '', '', 'cItemSelect')) and (not EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('FlowerSeed', 'TreeSeedling', 'Fruit', 'Medicine', 'WrappingPaper', 'PartyPopper', 'CraftRemake', '', 'cItemSelect')):
+            if (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('MarineSuit', '', '', '', '', '', '', '', 'cItemSelect')) and (not System.EventFlags['cPlayer:RcmTalkAboutMarinesuitFlag']):
+                run SNPC_rcm_14_BuyMarinesuit::Rootrun SNPC_rcm_14_BuyMarinesuit::Root()
+            else:
+                run Sub_Event22()
+        else:
+            run SNPC_rcm_13_BuyMultipleItems::Rootrun SNPC_rcm_13_BuyMultipleItems::Root()
+    else:
+        run End_Shopping()
+ 
+flow Rcm_Common_BuyCheck():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+entrypoint Event71:
+        if SubflowResults@2[0] == 0:
+            if MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.0):
+                run Sub_grp_Event84()
+            else:
+                run NotEnoughMoneySolo()
+        else:
+            if MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(5.0):
+                run Sub_grp_Event84()
+            else:
+entrypoint Event33:
+                # Thank you for your purcha—<10:7:00140000> Oh! You, ah, don't have enough money in your pockets. Our shop doesn't offer a line of credit, so please co…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:111', false)
+                run Sub_grp_Event82()
+    else:
+entrypoint Event21:
+        # Understood! Please let me know if you need anything else.__ ...else!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:902_01', false)
+        run Sub_grp_Event82()
+ 
+flow Rcm_Common_BuyCheckUI():
+    run Event71()
+ 
+flow Rcm_Common_TurnipChk():
+    if EventFlowSystemActor.EnvDayOfWeekEventFlowSystemActor.EnvDayOfWeek() == `Sunday`:
+        # On Sundays we take a little break from buying turnips.<10:4> Please check back in with us tomorrow.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:082', false)
+        run Event6()
+    else:
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cKabuka', '"cDegit"', 0, 0, '""')
+        # The current price for turnips is <90:20:0000> per turnip!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:081', false)
+        run Event6()
+ 
+flow Rcm_Groceries_Buy_Cancel():
+    run Event46()
+ 
+flow Rcm_Groceries_Buy_Process():
+    run Event42()
+ 
+flow Rcm_OpenShoppingUI():
+    EventFlowSystemActor.MarketShowcaseEventFlowSystemActor.MarketShowcase('cOpen')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    # Curious about what's in the cabinet? Here's what we have today!__ ...today!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:061', false)
+    run BlackFriday()
+    run Rcm_Common_BuyAgain2()
+ 
+flow Rcm_OpenShoppingUI_EX():
+    EventFlowSystemActor.MarketShowcaseEventFlowSystemActor.MarketShowcase('cOpen')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    run Rcm_Common_BuyAgain2()
+ 
+flow Root():
+    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+        case `InResServiceTent`:
+            if System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']:
+                # How can I help you?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:003', false)
+            else:
+                if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+                    # Welcome, PLAYER! How can I help you today?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:001', false)
+                else:
+                    # Oho! And what do we have here? I'm impressed that you traveled all the way to our fair island! What can I do you for today?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:002', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                case 0:
+                    run SNPC_rcm_00_Common_Sell::Rootrun SNPC_rcm_00_Common_Sell::Root()
+                case 1:
+                    run Rcm_Common_Buy()
+                case 2:
+                    run rcm_Common_End()
+        case `NooksCrannyInitial`:
+            run SkipBlackFridayNotice()
+        case `NooksCrannyUpgraded`:
+            if not EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('BlackFriday', false):
+                run SkipBlackFridayNotice()
+            elif System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']:
+                run SkipBlackFridayNotice()
+            elif EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+                if System.EventFlags['cPlayer:NoticeBlackFridayToday']:
+                    run SkipBlackFridayNotice()
+                else:
+                    System.EventFlags['cPlayer:NoticeBlackFridayToday'] = true
+                    # Ah, PLAYER! Welcome!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3005', false)
+                    run Sub_Event161()
+            elif System.EventFlags['cPlayerVisit:NoticeBlackFriday']:
+                run SkipBlackFridayNotice()
+            else:
+                System.EventFlags['cPlayerVisit:NoticeBlackFriday'] = true
+                # Ah, a visitor! Welcome, welcome! In the market for a souvenir, hm? We hope you find something you like!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3006', false)
+                run Sub_Event161()
+ 
+flow SkipBlackFridayNotice():
+    if System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']:
+        # Yes! Yes, of course!__ ...of course!__ What do you need?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:013', false)
+    else:
+        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+            # <50:3>PLAYER, welcome!__ ...welcome!__ What do you need today?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:011', false)
+        else:
+            # Oho! And what do we have here? I'm impressed that you traveled all the way to our fair island! What can I do you for today?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:012', false)
+entrypoint Event0:
+    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        case 0:
+            run SNPC_rcm_00_Common_Sell::Rootrun SNPC_rcm_00_Common_Sell::Root()
+        case 1:
+            run Rcm_Common_TurnipChk()
+        case 2:
+            run rcm_Common_TodaysFurniture()
+        case 3:
+            run rcm_Common_End()
+ 
+local flow Sub_Event161():
+    # Your timing is impeccable!__ ...impeccable!__ Right now, we're running a special Nook Friday sale! From now through November 30th, everything in the …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3007', false)
+    System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
+ 
+local flow Sub_Event172():
+    # Ah! I should also let you know… Right now, we're running a special Nook Friday sale! From now through November 30th, everything in the shop is marked…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3008', false)
+    System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
+ 
+local flow Sub_Event22():
+    # [A|An]<125:0:0000> would be <90:26:0000>.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:094', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+entrypoint Event42:
+        run Rcm_Common_BuyCheckUI()
+        System.EventFlags['cPlayerTemp:RcmBoughtGrocery'] = true
+        run SNPC_rcm_14_BuyMarinesuit::MarinesuitLecture_v200run SNPC_rcm_14_BuyMarinesuit::MarinesuitLecture_v200()
+        if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('Candy', '', '', '', '', '', '', '', 'cItemSelect'):
+            run SNPC_rcm_15_BuyCandy::Buy_Afterrun SNPC_rcm_15_BuyCandy::Buy_After()
+entrypoint Event43:
+        # Anything else look interesting?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:092', false)
+    else:
+entrypoint Event46:
+        # Oh! Changed your mind? Anything else catch your eye?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:902_02', false)
+    SubflowResults[0] = 0
+    run Rcm_Common_BuyAgain()
+ 
+local flow Sub_Event79():
+    # We pay twice the usual amount for hot items, so go ahead and bring 'em in!__ ...bring 'em in!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:121_02', false)
+entrypoint Event6:
+    # Is there anything else I can do for you today?__ ...today?__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:019', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        case 0:
+            run SNPC_rcm_00_Common_Sell::Rootrun SNPC_rcm_00_Common_Sell::Root()
+        case 1:
+            run Rcm_Common_TurnipChk()
+        case 2:
+            run rcm_Common_TodaysFurniture()
+        case 3:
+            # Understood!__ ...understood!__ Please let me know if you need help with anything else!__ ...anything else!__
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:904', false)
+ 
+local flow Sub_grp_Event76():
+    if SubflowResults@2[0] == 0:
+        MainNpc.ShopBuyDoneMainNpc.ShopBuyDone(false, false, false, false)
+        System.EventFlags['cLifeSupportAchievement:BuyItemRcm'] += 1
+    else:
+        MainNpc.ShopBuyDoneMainNpc.ShopBuyDone(false, true, false, false)
+        System.EventFlags['cLifeSupportAchievement:BuyItemRcm'] += 5
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItem5Price', 0)
+    if not System.EventFlags['cPlayerTemp:RcmShopshelfCheck']:
+        # Excellent purchase!__ ...purchase!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:113', false)
+        # Yes, thank you for the <90:26:0000>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:114', false)
+        if (EventFlowSystemActor.MultiFromItemSelectIncludeEventFlowSystemActor.MultiFromItemSelectInclude('Carnival', '', '', '', '', '', '', '', 'cItemSelect')) and (System.EventFlags['cPlayer:EnableEmoticonUI']) and (not System.EventFlags['cPlayer:BuyReactionBook17']) and (not System.EventFlags['cPlayer:RcmChkCarnivalFtr']):
+            if EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(0, 0, 'Carnival', false):
+                # Ah! I should inform you that this particular item was inspired by today's Festivale event. And…if you're interested, we have a collection of Reaction…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3004', false)
+            else:
+                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cCarnivalMonth', 'cDegit', 0, 0, '')
+                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cCarnivalDay', 'cDegit', 0, 0, '')
+                # Ah! I should inform you that this item was inspired by the upcoming Festivale event on <90:35:cd00> <90:36:cd00>! And…if you're interested, we have a…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3002', false)
+            System.EventFlags['cPlayer:RcmChkCarnivalFtr'] = true
+    elif (EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()) or (EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `InResServiceTent`):
+        # Excellent purchase!__ ...purchase!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:113', false)
+    elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
+        # Excellent purchase!__ ...purchase!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:113', true)
+    else:
+        # Excellent purchase!__ ...purchase!__
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:113', false)
+ 
+local flow Sub_grp_Event82():
+    fork:
+        branch:
+            if System.EventFlags['cPlayerTemp:RcmShopshelfCheck']:
+                EventFlowSystemActor.CloseMarketShowcaseEventFlowSystemActor.CloseMarketShowcase()
+        branch:
+            EventFlowSystemActor@Sub.UIMoneyDisappearEventFlowSystemActor@Sub.UIMoneyDisappear()
+        branch:
+            EventFlowSystemActor@Sub1.MessageSuspendEventFlowSystemActor@Sub1.MessageSuspend()
+        branch:
+            EventFlowSystemActor@Sub2.UIShopBuyDisappearEventFlowSystemActor@Sub2.UIShopBuyDisappear()
+    run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+ 
+local flow Sub_grp_Event84():
+    if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyDIYRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
+        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            run ItemFullBuyRecipecard()
+        else:
+            run Sub_grp_Event76()
+    else:
+        if (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyRecipe', '', '', '', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyHowtoBook', '', '', '', '', '', '', '', 'cItemSelect')):
+            run Sub_grp_Event76()
+        else:
+            if SubflowResults@2[0] == 0:
+                if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
+                    run Sub_grp_Event76()
+                else:
+                    run ItemFullBuySolo()
+            else:
+                if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cShopping5', 65534):
+                    run Sub_grp_Event76()
+                else:
+entrypoint Event1:
+                    # Thank you for your purcha—<10:7:00140000> Whoa! You're already carrying so many things! Maybe you can come back after you make room in your pockets._…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:112', false)
+                    run Sub_grp_Event82()
+ 
+flow rcm_Common_End():
+    # Well then, please don't hesitate to ask if you need assistance!__ ...assistance!__
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:905', false)
+ 
+flow rcm_Common_TodaysFurniture():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cExpensivePurchase1', 'cDegit', 0, 0, '')
+    switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+        case `NooksCrannyInitial`:
+            # The high-value hot item of the day is <50:1><125:0:0000>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:121', false)
+            run Sub_Event79()
+        case `NooksCrannyUpgraded`:
+            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cExpensivePurchase2', 'cDegit', 1, 0, '')
+            # The hot items of the day are: [a|an] <125:0:0000> and [a|an]<125:0:0001>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:121_01', false)
+            run Sub_Event79()
+        default:
+            return
+ 

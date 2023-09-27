@@ -1,0 +1,48 @@
+flow Root():
+    fork:
+        branch:
+            if (not EventFlowSystemActor@NetActor.IsMyVillageEventFlowSystemActor@NetActor.IsMyVillage()) and (EventFlowSystemActor@NetActor.NetModeEventFlowSystemActor@NetActor.NetMode() not in (0, 1)):
+                EventFlowSystemActor@NetActor.NetMeasureBitRateEventFlowSystemActor@NetActor.NetMeasureBitRate()
+            else:
+                EventFlowSystemActor@NetActor.WaitFrameEventFlowSystemActor@NetActor.WaitFrame(20)
+            EventFlowSystemActor@NetActor.WaitFrameEventFlowSystemActor@NetActor.WaitFrame(20)
+        branch:
+            EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cDoc', true)
+            EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
+            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut0End', 'Cut0', 'Keep', false, false, false, 0)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(3)
+            fork:
+                branch:
+                    # <100:6><100:3:cd01>This is your captain. We're almost to <110:33>, so please prepare for landing.<100:3:cd02></100:6><10:8:00500000> <100:6><100:3:cd…
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/doc/SP_doc_30_Flight_Announce:110', false)
+                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+                    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(2)
+                    # <60:8:008d008e008f008f00900090008d>
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/doc/SP_doc_30_Flight_Announce:140', false)
+                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+                    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+                    # <100:6><100:3:cd01>We'll be making a water landing, but that's OK because this is a seaplane.<100:3:cd02></100:6><10:8:00020000>
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/doc/SP_doc_30_Flight_Announce:151', false)
+                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+                    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+                branch:
+                    EventFlowSystemActor@BgmActor.BGMPropertyControlEventFlowSystemActor@BgmActor.BGMPropertyControl(48)
+                    EventFlowSystemActor@BgmActor.WaitFrameEventFlowSystemActor@BgmActor.WaitFrame(400)
+                    EventFlowSystemActor@BgmActor.NetDemoNextStepEventFlowSystemActor@BgmActor.NetDemoNextStep('cStartArriveDemo')
+                    EventFlowSystemActor@BgmActor.SoundTriggerEmitEventFlowSystemActor@BgmActor.SoundTriggerEmit('Flight_Landing', -1)
+                    EventFlowSystemActor@BgmActor.WaitFrameEventFlowSystemActor@BgmActor.WaitFrame(140)
+                    EventFlowSystemActor@BgmActor.FadeOutEventFlowSystemActor@BgmActor.FadeOut('cNormalFader', 'cCircle', 'cBlack', 0.25, 1.0, true)
+                    EventFlowSystemActor@BgmActor.WaitFrameEventFlowSystemActor@BgmActor.WaitFrame(60)
+                    EventFlowSystemActor@BgmActor.BGMPropertyControlEventFlowSystemActor@BgmActor.BGMPropertyControl(46)
+            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+            EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(46)
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUp', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    else:
+        EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cVisitFriend', 0)
+        System.EventFlags['cPlayer:VisitFriendMileageGet'] = true
+        run SNPC_dod_AirPort::DALNoveltyCountUprun SNPC_dod_AirPort::DALNoveltyCountUp()
+        EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cArriveVisitor')
+ 

@@ -1,0 +1,186 @@
+flow BackToAuthorOpus():
+    EventFlowSystemActor.UIMyDesignExchangeInfoHandlingEventFlowSystemActor.UIMyDesignExchangeInfoHandling('cSaveFromNet')
+    if EventFlowSystemActor.MyDesignExchangeNetworkErrorEventFlowSystemActor.MyDesignExchangeNetworkError():
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    elif EventFlowSystemActor.UIMyDesignDownloadWindowChoiceResultEventFlowSystemActor.UIMyDesignDownloadWindowChoiceResult() == 0:
+        run BackToList()
+    else:
+        # The Custom Designs app will now open. Please select a save slot.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2439', true)
+        if EventFlowSystemActor.IsMyDesignProInMyDesignExchangeEventFlowSystemActor.IsMyDesignProInMyDesignExchange():
+            EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                run BackToList()
+            else:
+                run BackToAuthorOpus()
+        else:
+            EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                run BackToList()
+            else:
+                run BackToAuthorOpus()
+ 
+flow BackToList():
+    run Event29()
+ 
+flow BackToOpus():
+    EventFlowSystemActor.UIMyDesignExchangeInfoHandlingEventFlowSystemActor.UIMyDesignExchangeInfoHandling('cSaveFromNet')
+    if EventFlowSystemActor.MyDesignExchangeNetworkErrorEventFlowSystemActor.MyDesignExchangeNetworkError():
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    elif EventFlowSystemActor.UIMyDesignDownloadWindowChoiceResultEventFlowSystemActor.UIMyDesignDownloadWindowChoiceResult() == 0:
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    else:
+        # The Custom Designs app will now open. Please select a save slot.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2439', true)
+        if EventFlowSystemActor.IsMyDesignProInMyDesignExchangeEventFlowSystemActor.IsMyDesignProInMyDesignExchange():
+            EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            else:
+                run BackToOpus()
+        else:
+            EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            else:
+                run BackToOpus()
+ 
+flow MyOpus():
+    run Obj_WorldMyDesignGallery_02_SubFlow::WaitForPreviewrun Obj_WorldMyDesignGallery_02_SubFlow::WaitForPreview()
+    EventFlowSystemActor.UIMyDesignExchangeInfoHandlingEventFlowSystemActor.UIMyDesignExchangeInfoHandling('cSaveFromNet')
+    if EventFlowSystemActor.MyDesignExchangeNetworkErrorEventFlowSystemActor.MyDesignExchangeNetworkError():
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    else:
+        switch EventFlowSystemActor.UIMyDesignDownloadWindowChoiceResultEventFlowSystemActor.UIMyDesignDownloadWindowChoiceResult():
+            case 0:
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            case 1:
+                # The Custom Designs app will now open. Please select a save slot.
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2439', true)
+                if EventFlowSystemActor.IsMyDesignProInMyDesignExchangeEventFlowSystemActor.IsMyDesignProInMyDesignExchange():
+                    EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
+                    switch EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                        default:
+                            return
+                else:
+                    EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
+                    switch EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                        default:
+                            return
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            case 2:
+                EventFlowSystemActor.UINetConnectWaitAppearEventFlowSystemActor.UINetConnectWaitAppear()
+                EventFlowSystemActor.NetDeleteMyDesignEventFlowSystemActor.NetDeleteMyDesign()
+                EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
+                if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+                    System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList'] = false
+                    run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+                else:
+                    System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList'] = false
+                    # The custom design has been deleted.
+                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2435', false)
+                    run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+ 
+flow SearchByAuthorID():
+    EventFlowSystemActor.UISoftwareKeyboardHandlingEventFlowSystemActor.UISoftwareKeyboardHandling('cMyDesignSearchAuthorId', true)
+    if not EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    elif EventFlowSystemActor.IsMatchedOwnDesignerIdAndInputDesignerIdEventFlowSystemActor.IsMatchedOwnDesignerIdAndInputDesignerId():
+        # You entered your own creator ID. Do you want to view your own designs, PLAYER?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2432', true)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run SearchByAuthorID()
+        else:
+            run Obj_WorldMyDesignGallery_05_MyOpus::Rootrun Obj_WorldMyDesignGallery_05_MyOpus::Root()
+    else:
+        run Obj_WorldMyDesignGallery_02_SubFlow::PreCheckConnectionrun Obj_WorldMyDesignGallery_02_SubFlow::PreCheckConnection()
+        if EventFlowSystemActor.NetIsValidIDEventFlowSystemActor.NetIsValidID('cDesignerID'):
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            # Searching custom designs...
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2431', false)
+            EventFlowSystemActor.NetSearchMyDesignEventFlowSystemActor.NetSearchMyDesign('cUserID')
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+            if EventFlowSystemActor.MyDesignExchangeNetworkErrorEventFlowSystemActor.MyDesignExchangeNetworkError():
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            elif EventFlowSystemActor.NetIsFoundMyDesignEventFlowSystemActor.NetIsFoundMyDesign('cUserID'):
+entrypoint Event29:
+                EventFlowSystemActor.UIMyDesignExchangeListHandlingEventFlowSystemActor.UIMyDesignExchangeListHandling()
+                if EventFlowSystemActor.MyDesignExchangeNetworkErrorEventFlowSystemActor.MyDesignExchangeNetworkError():
+                    run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+                else:
+                    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                        run Obj_WorldMyDesignGallery_02_SubFlow::WaitForPreviewrun Obj_WorldMyDesignGallery_02_SubFlow::WaitForPreview()
+                        run BackToAuthorOpus()
+                    else:
+                        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            else:
+                EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cDesignerIDFromSwkbd', 0)
+                run Sub_Event17()
+        else:
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            # Searching custom designs...
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2431', false)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cDesignerIDFromSwkbd', 0)
+            run Sub_Event17()
+ 
+flow SearchByMyDesignID():
+    run Obj_WorldMyDesignGallery_02_SubFlow::PreCheckConnectionrun Obj_WorldMyDesignGallery_02_SubFlow::PreCheckConnection()
+    if EventFlowSystemActor.NetHasDesignerIDEventFlowSystemActor.NetHasDesignerID():
+        run Obj_WorldMyDesignGallery_02_SubFlow::GetMyIdListrun Obj_WorldMyDesignGallery_02_SubFlow::GetMyIdList()
+    EventFlowSystemActor.UISoftwareKeyboardHandlingEventFlowSystemActor.UISoftwareKeyboardHandling('cMyDesignSearchID', true)
+    if EventFlowSystemActor.MyDesignExchangeNetworkErrorEventFlowSystemActor.MyDesignExchangeNetworkError():
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    elif not EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    elif EventFlowSystemActor.NetIsValidIDEventFlowSystemActor.NetIsValidID('cMyDesignID'):
+        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+        # Searching custom designs...
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2431', false)
+        EventFlowSystemActor.NetSearchMyDesignEventFlowSystemActor.NetSearchMyDesign('cDesignID')
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+        elif not EventFlowSystemActor.NetIsFoundMyDesignEventFlowSystemActor.NetIsFoundMyDesign('cDesignID'):
+            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cNetMyDesignId', 0)
+            run Sub_Event32()
+        elif EventFlowSystemActor.IsSpecifiedMyDesignPostedEventFlowSystemActor.IsSpecifiedMyDesignPosted():
+            # You have entered the design ID of one of your own designs. Do you want to view your designs?
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2440', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+            else:
+                run MyOpus()
+        else:
+            run Obj_WorldMyDesignGallery_02_SubFlow::WaitForPreviewrun Obj_WorldMyDesignGallery_02_SubFlow::WaitForPreview()
+            run BackToOpus()
+    else:
+        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+        # Searching custom designs...
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2431', false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cMyDesignIDFromSwkbd', 0)
+        run Sub_Event32()
+ 
+local flow Sub_Event17():
+    # There are no designs for creator ID <140:17:cd00>. Would you like to enter the ID again?
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2434', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    else:
+        run SearchByAuthorID()
+ 
+local flow Sub_Event32():
+    # There is no design listed with the ID of <140:15:cd00>. Would you like to enter the ID again?
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:2433', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+    else:
+        run SearchByMyDesignID()
+ 

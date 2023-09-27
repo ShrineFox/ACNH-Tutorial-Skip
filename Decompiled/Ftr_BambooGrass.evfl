@@ -1,0 +1,67 @@
+flow Conditional():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious9EventFlowSystemActor.RandomChoiceExcludePrevious9(9, false):
+        case 0:
+            if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+                # It's a yellow piece of tanzaku that reads..."I wish for everlasting happiness and harmony!"
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:002', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 1:
+            if EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersTent`, `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`):
+                # It's a tattered piece of tanzaku that reads..."Grant me the willpower to continue cohabitating with bugs."
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:012', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 2:
+            if System.EventFlags['cPlayer:JohnnyHelpCount'] >= 1:
+                # It's a soaking-wet piece of tanzaku that reads..."Grant me the sea legs of the sturdiest sailor."
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:013', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 3:
+            if EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) >= 5:
+                # It's a green piece of tanzaku that reads..."Please grant me inspiration for new recipes. Oh, and books!"
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:004', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 4:
+            if EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) >= 5:
+                # It's an orange piece of tanzaku that reads..."I wanna be a hero! And a snack would be nice too."
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:006', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 5:
+            if EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) >= 5:
+                # It's a pink piece of tanzaku that reads..."I want to be a superstar!"
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:007', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 6:
+            if EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) >= 6:
+                # It's an unusually long tanzaku that seems to be a wish list with "rad" and "sweet" scribbled in the margins.
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:011', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 7:
+            if EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) >= 8:
+                # It's a scented piece of tanzaku that reads..."I still dream of walking the red carpet."
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:017', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 8:
+            if EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) >= 8:
+                # It's a blue piece of tanzaku that reads..."I hope someday I have a bigger lawn to tell folks to get off."
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:018', false)
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Conditional_Chk():
+    if (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() == `BlathersNotMovedIn`) and (System.EventFlags['cPlayer:JohnnyHelpCount'] < 1) and (EventFlowSystemActor.VillagerNpcNumEventFlowSystemActor.VillagerNpcNum(false) < 5) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`)):
+        run Event0()
+ 
+flow Root():
+    # Let's see...
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_BambooGrass:001', false)
+    run Conditional_Chk()
+    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70):
+entrypoint Event11:
+        run Conditional()
+        run Event11()
+    else:
+entrypoint Event0:
+        EventFlowSystemActor.NpcSelectMessageEventFlowSystemActor.NpcSelectMessage('cWildCard', '', '', '', 'TalkFtr/FTR_BambooGrass', '', '', '')
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        return
+ 

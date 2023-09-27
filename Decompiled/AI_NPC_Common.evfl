@@ -1,0 +1,19 @@
+flow ContinueSpeak(FlowName: str, EntryName: str):
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cContinueSpeak', '', '', '', false, true)
+    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow(FlowName, EntryName)
+ 
+flow Speak(FlowName: str, EntryName: str):
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSpeak', '', '', '', false, true)
+    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow(FlowName, EntryName)
+ 
+flow VisitSpeak(FlowName: str, EntryName: str):
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('isSpeak', 1):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
+    else:
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('isSpeak', 1)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(7, false)
+        run ContinueSpeak(FlowName=FlowName, EntryName=EntryName)
+ 
+flow VisitSpeakInit():
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('isSpeak', 0)
+ 

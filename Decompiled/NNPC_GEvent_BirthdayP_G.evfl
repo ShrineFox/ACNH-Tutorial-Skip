@@ -1,0 +1,76 @@
+flow Chat():
+    if not System.EventFlags['cPlayer:BirthdayPCandleFlag']:
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # OK. What ya do here is ya stand in front of the cake and blow out the candles with !
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:001', true)
+            case 1:
+                # Hurry and blow out the candles with .
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:002', true)
+            case 2:
+                # I'm gonna hold my eyes open so I don't blink and miss it when you blow out those candles with ! Hurry, though. I don't want my eyeballs to dry out.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:003', true)
+    elif not System.EventFlags['cLandTemp:PlayerBirthdayPinataEnd']:
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # Isn't that piñata real nice? <50:3><110:6>, we made it as a cool surprise for you!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:020', true)
+            case 1:
+                # Whaddaya think is inside that piñata?<10:4> A huh huh, it's a surprise!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:021', true)
+            case 2:
+                # I hope you whack open that piñata real quick… It's fulla secret snackies!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:022', true)
+    elif EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(20):
+        if not MainNpc.TodayIsNpcBirthdayMainNpc.TodayIsNpcBirthday():
+            switch EventFlowSystemActor.PlayerBirthdayIsSpecialDayEventFlowSystemActor.PlayerBirthdayIsSpecialDay():
+                case 0:
+                    # Having your birthday on New Year's sounds like it'd be really fun! Happy New Year!<10:4> Happy birthday!<10:4> That's a lotta "happy" going around.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:014', true)
+                case 1:
+                    # Having your birthday on February 29th sounds so cool… Your birthday is, like, this rare and magical event, right? Wild. Just…wild. A huh huh huh. Hey…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:015', true)
+                case 2:
+                    # It's an extra special day for someone with their birthday on February 29th. You're so lucky, <110:4>. Like, once every four years, you get to say, "H…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:016', true)
+                case 3:
+                    # So, your birthday's <90:42> <90:43>? That's easy to remember. Even I can't forget a date like that! <50:3><110:4>, thanks for having a birthday with …
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:017', true)
+                case 4:
+                    # It must be real cool to have your birthday this time of year. It's like all those decorations are for you.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:018', true)
+                case 5:
+                    # Today's a wild day to have a birthday, huh? I mean, it coulda been any day at all, but this is the one ya got! <50:3><110:3>, you're lucky. A lotta f…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:019', true)
+                case 6:
+                    run Sub_grp_Event9()
+        elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            # A huh huh huh… It's my birthday today too! You know what the odds are of that?<10:4> One in 365! Crazy, huh?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:011', true)
+        else:
+            # <50:3><110:3>? It's my birthday today too! Wait… Did you copy my birthday?! Oh man, that's not cool. Naaaah, I'm just mess'n with ya. Happy birthday,…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:012', true)
+    else:
+        run Sub_grp_Event9()
+ 
+flow Root():
+    run Chat()
+ 
+local flow Sub_grp_Event9():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious5EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+        case 0:
+            # <50:3><110:4>… You seem a little different today. Oh, I know what it is… It's because you're older than you were yesterday, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:005', true)
+        case 1:
+            # <50:3><110:4>! Happy birthday!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:006', true)
+        case 2:
+            # Piñatas are so fun! You got so many <item>birthday cupcakes too! Um, <110:3>? Do you need help eating them, <110:6>?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:007', true)
+        case 3:
+            # I just love birthday decorations! They're like holiday decorations, but for cake…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:008', true)
+        case 4:
+            # We were talking about your present… I said we oughta getcha one year's supply of <135:3:cd00>. Or a 50- gallon drum of <135:3:cd00>. But everyone els…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP_G:009', true)
+ 

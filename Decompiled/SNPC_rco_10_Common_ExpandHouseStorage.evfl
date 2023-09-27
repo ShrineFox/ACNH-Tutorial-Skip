@@ -1,0 +1,144 @@
+flow NotEnoughMoney():
+    # I love your enthusiasm! But I'm afraid I have to remind you that the entire fee must be paid up front. You don't appear to have the full amount with …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1114', false)
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+ 
+flow NoticeExpandStorage_Force():
+    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+    run NoticeExpandStorage_Normal()
+ 
+flow NoticeExpandStorage_Force_Init():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+ 
+flow NoticeExpandStorage_Normal():
+    # Hello, hello! I'm guessing you didn't miss my missive, then!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1101', false)
+    # As I mentioned, I've begun providing expanded home storage to those with large homes.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1101_01', false)
+    if System.EventFlags['cPlayer:PlayerLoanRepaying']:
+        # However, the entire construction fee must be paid up front, so I can't offer this to those paying a home loan.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1101_02_01', false)
+    else:
+        # Unfortunately, such construction would not come cheap, so I'd need the entire cost to be paid up front.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1101_02_00', false)
+    # Now, I imagine that, as your house has grown, you've placed quite a few things into storage, hm? But then, before you know it, your storage is full! …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1101_03', false)
+    System.EventFlags['cPlayer:RcoStandbyNoticeStorageExpansion'] = false
+ 
+flow Root():
+    if System.EventFlags['cPlayer:PlayerLoanRepaying']:
+        # I'm very sorry, but…I can't accept a storage-expansion request from anyone still paying on a home loan. Loan payments can be made via the Nook Stop a…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1115', false)
+    else:
+        if System.EventFlags['cPlayer:RcoStorageExpansionLevel']:
+            if System.EventFlags['cPlayer:RcoStorageExpansion_v200_AddLevel'] < 2:
+                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+                if System.EventFlags['cPlayer:RcoExplainStorageExpandCostIncrease']:
+                    if System.EventFlags['cPlayer:RcoStorageExpansion_v200_AddLevel'] < 1:
+                        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 700000, '')
+                    else:
+                        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 900000, '')
+                    # Ready to further expand your home storage? Yes, yes. Of course. You can't use a loan for the fee, so you'll need to provide <90:23:0000> up-front… Wo…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1311', false)
+                else:
+                    System.EventFlags['cPlayer:RcoExplainStorageExpandCostIncrease'] = true
+                    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 700000, '')
+                    # Ready to expand your home storage yet again? Yes, yes. Of course. It should be said again: the greater the expansion, the greater the complexity…the …
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1313', false)
+            else:
+                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 1200000, '')
+                # Another home-storage expansion, hm? Yes, yes. Every home has a limit for potential storage space. This next expansion would be your final. It would a…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1312', true)
+                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+                # The logistics will be tricky. You'll want to ensure high-quality work… Quality requires an up-front payment of <90:24:0000>. Would you like to pay th…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1312_01', false)
+        else:
+            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+            # Oho! Curious about the home- storage expansion service, hm? Expanded storage would let you store many, many more things than you can currently. Now, …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1111', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            # Yes, yes! Take your time and think it over. It's quite a large expense. Come back anytime!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1113', false)
+            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+                run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+        elif System.EventFlags['cPlayer:RcoStorageExpansionLevel']:
+            switch EventFlowSystemActor.FlagSystemIntValue4EventFlowSystemActor.FlagSystemIntValue4(4, 'cPlayer:RcoStorageExpansion_v200_AddLevel'):
+                case 0:
+                    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(700000):
+                        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(700000, true)
+                        run Sub_Event12()
+                    else:
+                        run NotEnoughMoney()
+                case 1:
+                    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(900000):
+                        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(900000, true)
+                        run Sub_Event12()
+                    else:
+                        run NotEnoughMoney()
+                case 2:
+                    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(1200000):
+                        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(1200000, true)
+                        run Sub_Event12()
+                    else:
+                        run NotEnoughMoney()
+                default:
+                    return
+        elif EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(500000):
+            EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(500000, true)
+            run Sub_Event12()
+        else:
+            run NotEnoughMoney()
+ 
+local flow Sub_Event12():
+    # Excellent! I'll start on the paperwork for the expansion right away. I believe that I'll have everything finished by tomorrow morning. Oh! This is so…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1112', false)
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    System.EventFlags['cPlayer:RcoStorageExpansionReserved'] = true
+    System.EventFlags['cPlayer:PlayerMovingReservedStorageExpand'] = false
+ 
+flow v200_AddNoticeExpandStorage_Force():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+    run v200_AddNoticeExpandStorage_Normal()
+ 
+flow v200_AddNoticeExpandStorage_Force_Init():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+ 
+flow v200_AddNoticeExpandStorage_Normal():
+    if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
+        # Ah, PLAYER! Hello, hello!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    # Say! I sent you a notice about this through the mail already, but… You can expand your home storage even further now! Exciting, hm?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1301', false)
+    # Just like last time, you'll need to pay the construction fees up-front. With a few additional upgrades, we could boost your maximum storage by a cons…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1302', false)
+    System.EventFlags['cPlayer:RcoStandbyNotice_v200_AddStorage'] = false
+ 
+flow v200_AfterExpandStorage_Force():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+    run v200_AfterExpandStorage_Normal()
+ 
+flow v200_AfterExpandStorage_Force_Init():
+    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+ 
+flow v200_AfterExpandStorage_Normal():
+    if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
+        # Ah, PLAYER! Hello, hello!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    if System.EventFlags['cPlayer:PlayerMovingAfterStorageExpansion']:
+        # Say, PLAYER, you ordered a home-storage expansion before you moved here, yes?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1351', false)
+    # You have more storage in your home now, yes, yes? Perfect for storing all sorts of furniture and things!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1321', false)
+    if EventFlowSystemActor.FlagSystemIntValue4EventFlowSystemActor.FlagSystemIntValue4(4, 'cPlayer:RcoStorageExpansion_v200_AddLevel') in (0, 1, 2):
+        # I think we can expand your home storage even further. In case you feel cramped again, that is. If you want to discuss another storage expansion, I'm …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1322', false)
+    else:
+        # By the way, I won't be able to expand your home storage any further. We've reached the limit. You, on the other hand, seem to have no limit. Not only…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:1323', false)
+    System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion'] = false
+    System.EventFlags['cPlayer:PlayerMovingAfterStorageExpansion'] = false
+ 

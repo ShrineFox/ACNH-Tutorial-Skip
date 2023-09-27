@@ -1,0 +1,52 @@
+flow End_Shopping():
+    run SNPC_rcm_00_Common::CmnCloseShoppingUIrun SNPC_rcm_00_Common::CmnCloseShoppingUI()
+    if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+        run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+    else:
+        if System.EventFlags['cPlayerTemp:RcmShopshelfCheck']:
+            EventFlowSystemActor.CloseMarketShowcaseEventFlowSystemActor.CloseMarketShowcase()
+        run SNPC_rcm::Rcm_SeqCloserun SNPC_rcm::Rcm_SeqClose()
+ 
+flow RcmHowToBookBuySel():
+    # Let's see… That's <90:24:0000>. What do you think?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:104', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+        case 0:
+            run SNPC_rcm_00_Common::Rcm_Common_BuyCheckUIrun SNPC_rcm_00_Common::Rcm_Common_BuyCheckUI()
+        case 1:
+            if EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(14030, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+                if EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(0, 0, 'Carnival', false):
+                    # Great choice! You'll be able to learn all kinds of fun, new Reactions from <50:1><125:0:0000>. Oh! But if you want that collection, you better hurry.…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3003', false)
+                else:
+                    # Great choice! You'll be able to learn all kinds of fun, new Reactions from <50:1><125:0:0000>. Oh! But if you want that collection, you better hurry!…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3001', false)
+                run RcmHowToBookBuySel()
+        case 2:
+            run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancelrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
+ 
+flow Root():
+    if EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(14030, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cCarnivalMonth', 'cDegit', 0, 0, '')
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cCarnivalDay', 'cDegit', 0, 0, '')
+        if System.EventFlags['cPlayer:RcmChkReactionBook']:
+            # Seems like you're interested in [a|an] <125:0:0000>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:101', false)
+        else:
+            if EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(0, 0, 'Carnival', false):
+                # Great choice! You'll be able to learn all kinds of fun, new Reactions from <50:1><125:0:0000>. Oh! But if you want that collection, you better hurry.…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3003', false)
+            else:
+                # Great choice! You'll be able to learn all kinds of fun, new Reactions from <50:1><125:0:0000>. Oh! But if you want that collection, you better hurry!…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:3001', false)
+            System.EventFlags['cPlayer:RcmChkReactionBook'] = true
+            System.EventFlags['cPlayer:RcmChkCarnivalFtr'] = true
+        run RcmHowToBookBuySel()
+        System.EventFlags['cPlayerTemp:RcmBoughtGrocery'] = true
+        EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Emoticon_ByBook')
+        EventFlowSystemActor.GetReactionEventFlowSystemActor.GetReaction('cBook1_7')
+        System.EventFlags['cPlayer:BuyReactionBook17'] = true
+        run End_Shopping()
+    else:
+        run SNPC_rcm_00_Common::BuyCancelNoAskrun SNPC_rcm_00_Common::BuyCancelNoAsk()
+ 

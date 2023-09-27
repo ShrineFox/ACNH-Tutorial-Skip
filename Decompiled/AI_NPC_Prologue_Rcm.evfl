@@ -1,0 +1,26 @@
+flow Init():
+    if (System.EventFlags['cLandTemp:IsFirstPrologue']) and (System.EventFlags['cLand:SetPrologueBonfire']):
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('PrologueStep', 2)
+    else:
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('PrologueStep', 0)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('IsMove', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('HasTent', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('isSpeak', 0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('PreCampfire', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('Visible', 1)
+    MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+    MainNpc.ServiceMotionControlMainNpc.ServiceMotionControl(false)
+ 
+flow Root():
+    if not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('Visible', 1):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('PrologueStep', 1):
+        run AI_NPC_Prologue_Rct::Root_2ndSteprun AI_NPC_Prologue_Rct::Root_2ndStep(TalkEventFlowName='Tutorials_Prologue4_Orientation2_RcmRct', OffsetX=2, OffsetZ=0, WaitFrame=1, PreCampfireAS='Thinking', PreCampfireAngle=0.0, Type=0)
+    else:
+        MainNpc.NpcAddBlackBoardMainNpc.NpcAddBlackBoard('PrologueStep', 1)
+        MainNpc.NpcAITalkCastSettingMainNpc.NpcAITalkCastSetting('Prologue_Rcm')
+        run AI_NPC_Common::Speakrun AI_NPC_Common::Speak(EntryName='Root', FlowName='Tutorials_Prologue2_Arrival')
+ 

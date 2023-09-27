@@ -1,0 +1,123 @@
+flow Bridge():
+    if System.EventFlags['cPlayerTemp:WHEREAREN_MncCheck_Bridge']:
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_01_Wherearen', EntryName='Bridge')
+ 
+flow ChkWorkMotionUndo():
+    if (System.EventFlags['cPlayerTemp:WHEREAREN_ChocolateDemoReserve']) or (System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing']) or ((not System.EventFlags['cPlayerTemp:WHEREAREN_DocMainEreaFirstTalkDone']) and (System.EventFlags['cWherearenPlayer:TutorialDone']) and (System.EventFlags['cWherearenPlayer:MncMovetoBridge'])):
+        MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+ 
+flow Chk_OpDemo():
+    if not System.EventFlags['cWherearenPlayer:TutorialDone']:
+        if not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('OpDemoState', 1):
+            MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', '', '', false, true, true, 1, 45.0, '')
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('OpDemoState', 2):
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='OpDemo_MncForceTalk', FlowName='Demo_Wherearen_Op')
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('OpDemoState', 4):
+            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'Demo_Wherearen_Op', 'OpDemo_MncTalkWait', false, true, true, 1, 45.0, '')
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cMncGoOffice', '', 'Demo_Wherearen_Op', 'OpDemo_MncTalkMove', false, true)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Init():
+    run InitOpDemo()
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('FirstTalk', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('FirstSharehouseResume', 0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    run InitShareOrder()
+    if (not System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialDone']) and (System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialOngoing']):
+        if EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+            MainNpc.MncWarpTakeOrderPosMainNpc.MncWarpTakeOrderPos()
+    elif System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialOngoing']:
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cEnterWherearenPier', false)
+ 
+flow InitOpDemo():
+    if not System.EventFlags['cWherearenPlayer:TutorialDone']:
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('OpDemoState', 0)
+        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('EmoticonIndex', 15)
+ 
+flow InitShareOrder():
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('SitDownLookForHouseMate', 0)
+    if EventFlowSystemActor.WherearenLookForHousemateStateEventFlowSystemActor.WherearenLookForHousemateState() == 0:
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cSitDownMncLookForHouseMate', false)
+ 
+flow Root():
+    run Chk_OpDemo()
+    run ChkWorkMotionUndo()
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('FirstTalk', 1):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('FirstTalk', 0)
+        if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 2, 3, 5, 6, 7):
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_01_Wherearen', EntryName='ForceTalk')
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('FirstSharehouseResume', 1):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('FirstSharehouseResume', 0)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_22_WherearenEvent_ShareHouse', EntryName='Resume_LookForHousemateStart')
+    elif System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Bridge']:
+        if System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialOngoing']:
+            System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Bridge'] = false
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_11_WherearenEvent_TakeOder', EntryName='Root')
+        else:
+            if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 2, 3, 5, 6, 7):
+                MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_mnc_01_Wherearen', EntryName='ForceTalk')
+    elif System.EventFlags['cPlayerTemp:WHREAREN_TakeOrderAfter']:
+        MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_mnc_01_Wherearen', 'Root', false, true, true, 1, 0.0, '')
+    else:
+        if System.EventFlags['cPlayerTemp:WHEREAREN_ChocolateDemoReserve']:
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+        switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+            case 0, 4:
+                run AI_NPC_Wherearen_Common::DoOfficerWaitrun AI_NPC_Wherearen_Common::DoOfficerWait(FlowName='SNPC_mnc_01_Wherearen', EntryName='Root')
+            case 1:
+                switch EventFlowSystemActor.WherearenNpcOrderTypeEventFlowSystemActor.WherearenNpcOrderType():
+                    case 0:
+                        if System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing']:
+                            run Sub_Event43()
+                        else:
+                            if EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cCustomer'):
+                                run Sub_Event43()
+                            else:
+                                run AI_NPC_Wherearen_Common::DoOfficerWaitrun AI_NPC_Wherearen_Common::DoOfficerWait(FlowName='SNPC_mnc_01_Wherearen', EntryName='Root')
+                    case 1:
+                        switch EventFlowSystemActor.WherearenLookForHousemateStateEventFlowSystemActor.WherearenLookForHousemateState():
+                            case 0:
+                                MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+                                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_mnc_03_WherearenOrder', 'LookforHouseMate', false, true)
+                            case 1:
+                                if MainNpc.IsOtgOpenFadeMainNpc.IsOtgOpenFade():
+                                    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_mnc_03_WherearenOrder', 'OpenFadeMatchingTalk')
+                                else:
+                                    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+                                    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_mnc_03_WherearenOrder', 'OpenSceneMatchingTalk')
+                                MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+                                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cOtgStandby', '', '', '', false, true)
+                            case 2:
+                                if MainNpc.IsOtgOpenFadeMainNpc.IsOtgOpenFade():
+                                    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_mnc_03_WherearenOrder', 'OpenFadeOrder')
+                                else:
+                                    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+                                    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_mnc_03_WherearenOrder', 'OrderTalk')
+                                MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+                                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cOtgStandby', '', '', '', false, true)
+                    case 2:
+                        run AI_NPC_Wherearen_Common::DoOfficerWaitrun AI_NPC_Wherearen_Common::DoOfficerWait(FlowName='SNPC_mnc_01_Wherearen', EntryName='Root')
+                    case 3:
+                        if EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cCustomer'):
+                            run Sub_Event43()
+                        else:
+                            run AI_NPC_Wherearen_Common::DoOfficerWaitrun AI_NPC_Wherearen_Common::DoOfficerWait(FlowName='SNPC_mnc_01_Wherearen', EntryName='Root')
+            default:
+                return
+ 
+local flow Sub_Event43():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    if MainNpc.IsOtgOpenFadeMainNpc.IsOtgOpenFade():
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_otg_02_WherearenOrder', 'Root')
+    else:
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_otg_02_WherearenOrder', 'NotFade')
+    MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cOtgStandby', '', '', '', false, true)
+ 

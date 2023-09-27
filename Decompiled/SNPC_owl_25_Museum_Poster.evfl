@@ -1,0 +1,455 @@
+flow ChkNoticeUnlockPoster():
+    SubflowResults[3] = 0
+    run ChkNoticeUnlockPosterBug()
+    run ChkNoticeUnlockPosterFish()
+    run ChkNoticeUnlockPosterSealife()
+    run ChkNoticeUnlockPosterFossil()
+    run ChkNoticeUnlockPosterPainting()
+ 
+flow ChkNoticeUnlockPosterBug():
+    if (System.EventFlags['cLand:MuseumPosterflagbug']) and (not System.EventFlags['cPlayer:MuseumPosterUnlockMyselfBug']):
+        SubflowResults[3] = 1
+        System.EventFlags['cPlayer:MuseumPosterUnlockMyselfBug'] = true
+ 
+flow ChkNoticeUnlockPosterFish():
+    if (System.EventFlags['cLand:MuseumPosterflagfish']) and (not System.EventFlags['cPlayer:MuseumPosterUnlockMyselfFish']):
+        if SubflowResults@7[3] == 0:
+            SubflowResults[3] = 2
+        else:
+            SubflowResults[3] = 6
+        System.EventFlags['cPlayer:MuseumPosterUnlockMyselfFish'] = true
+ 
+flow ChkNoticeUnlockPosterFossil():
+    if (System.EventFlags['cLand:MuseumPosterflagfossil']) and (not System.EventFlags['cPlayer:MuseumPosterUnlockMyselfFossil']):
+        if SubflowResults@7[3] == 0:
+            SubflowResults[3] = 4
+        else:
+            SubflowResults[3] = 6
+        System.EventFlags['cPlayer:MuseumPosterUnlockMyselfFossil'] = true
+ 
+flow ChkNoticeUnlockPosterPainting():
+    if (System.EventFlags['cLand:MuseumPosterflagpainting']) and (not System.EventFlags['cPlayer:MuseumPosterUnlockMyselfPainting']):
+        if SubflowResults@7[3] == 0:
+            SubflowResults[3] = 5
+        else:
+            SubflowResults[3] = 6
+        System.EventFlags['cPlayer:MuseumPosterUnlockMyselfPainting'] = true
+ 
+flow ChkNoticeUnlockPosterSealife():
+    if (System.EventFlags['cLand:MuseumPosterflagsea']) and (not System.EventFlags['cPlayer:MuseumPosterUnlockMySelfSea']):
+        if SubflowResults@7[3] == 0:
+            SubflowResults[3] = 3
+        else:
+            SubflowResults[3] = 6
+        System.EventFlags['cPlayer:MuseumPosterUnlockMySelfSea'] = true
+ 
+flow Chk_PosterSelUnlock():
+    run ChkNoticeUnlockPoster()
+    if SubflowResults@7[3] in (1, 2, 3, 4, 5, 6):
+        if System.EventFlags['cPlayer:MuseumPosterUnlockBuySel']:
+            switch SubflowResults@7[3]:
+                case 1:
+                    # Ah yes! I sent you another poster. This one is to commemorate the completion of our…bug collection. At least, I think I sent you a poster of the bug …
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:024', false)
+                    run Sub_Event153()
+                case 2:
+                    # Ah yes! I sent you another poster, this time to celebrate the completion of our marvelous fish collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:024_01', false)
+                    run Sub_Event153()
+                case 3:
+                    # Ah yes! I sent you another poster, this time to mark the completion of our beautiful sea creature collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:024_02', false)
+                    run Sub_Event153()
+                case 4:
+                    # Ah yes! I sent you another poster, this time to celebrate the completion of our prestigious fossil collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:024_03', false)
+                    run Sub_Event153()
+                case 5:
+                    # Ah yes! I sent you another poster, this time to celebrate the completion of our illustrious art collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:024_04', false)
+                    run Sub_Event153()
+                case 6:
+                    # Ah yes! I sent you more posters to celebrate the completion of each of our collections!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:024_05', false)
+                    run Sub_Event153()
+                default:
+                    return
+        else:
+            System.EventFlags['cPlayer:MuseumPosterUnlockBuySel'] = true
+            if SubflowResults@7[3] in (0, 1, 2, 3, 4, 5):
+                # Ah! That reminds me. I sent something to you in the mail. Did you happen to see it?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:021', false)
+            else:
+                # Ah! That reminds me. I sent a few things to you in the mail. Did you happen to get them?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:021_pl', false)
+            switch SubflowResults@7[3]:
+                case 1:
+                    # It was a poster commemorating the completion of our…bug collection. Or…I think it was. I couldn't bear to look at it!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:022', false)
+                    run Sub_Event146()
+                case 2:
+                    # It was a poster commemorating the completion of our marvelous fish collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:022_01', false)
+                    run Sub_Event146()
+                case 3:
+                    # It was a poster commemorating the completion of our beautiful sea creature collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:022_02', false)
+                    run Sub_Event146()
+                case 4:
+                    # It was a poster commemorating the completion of our prestigious fossil collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:022_03', false)
+                    run Sub_Event146()
+                case 5:
+                    # It was a poster commemorating the completion of our illustrious art collection!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:022_04', false)
+                    run Sub_Event146()
+                case 6:
+                    # They were posters commemorating each of our completed collections!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:022_05', false)
+                    run Sub_Event146()
+                default:
+                    return
+ 
+flow Owl_BuyPoster():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 5000, '')
+    if System.EventFlags['cPlayerTemp:OwlSellPosterCount'] < 2:
+        MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+        # It will be <90:23:0000> to buy [a|an] <125:0:0000>. Would you like one?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:018', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Sub_grp_Event65()
+        else:
+            run Sub_Event32()
+    else:
+        MainNpc.OwlPosterBuySelectMainNpc.OwlPosterBuySelect()
+        # Each poster costs <90:23:0000>. Which one would you like?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:010', false)
+        switch EventFlowSystemActor.PosterBuyChoiceEventFlowSystemActor.PosterBuyChoice():
+            case 0:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12039, 1, 'cVillageRemakePattern', 0)
+                run Sub_grp_Event65()
+            case 1:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12040, 1, 'cVillageRemakePattern', 0)
+                run Sub_grp_Event65()
+            case 2:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12985, 1, 'cVillageRemakePattern', 0)
+                run Sub_grp_Event65()
+            case 3:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12961, 1, 'cVillageRemakePattern', 0)
+                run Sub_grp_Event65()
+            case 4:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14589, 1, 'cVillageRemakePattern', 0)
+                run Sub_grp_Event65()
+            case 5:
+                run Sub_Event32()
+ 
+flow Owl_Common_PutInOrSend():
+    switch SubflowResults@3[2]:
+        case 0:
+            MainNpc.SetEventRewardToPlayerBaggageMainNpc.SetEventRewardToPlayerBaggage('cFree')
+            EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastToday', 'cReward')
+        case 1:
+            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastToday', 'cReward', false, false)
+            EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastToday', 'cReward')
+        case 2:
+            EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward', false, false)
+            EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
+ 
+flow Owl_GetPoster():
+    if (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersMuseumArt`, `BlathersCafe`)) and (System.EventFlags['cPlayer:OwlMultiDonateExplain']) and (System.EventFlags['cPlayer:OwlShowDiveFishReport']):
+        run Owl_Poster_CompJudge()
+        if System.EventFlags['cPlayerTemp:OwlGetPosterCount'] != 0:
+            if SubflowResults@2[4] == 0:
+                # Oh yes! I would be remiss if I didn't mention the posters I have to mark each collection's completion. Every resident may claim one poster per comple…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1100', false)
+            else:
+                # Oh yes! I just remembered something I wanted to tell you.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:001', false)
+                if (EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete()) and (not System.EventFlags['cPlayer:FutaExplanationDonationComp']):
+                    # Thanks to the philanthropy of our contributors, we have filled ALL of our permanent exhibits. As the spirit of giving has made our halls complete, I …
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:001_01', false)
+                    System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
+                if System.EventFlags['cPlayerTemp:OwlGetPosterCount'] < 2:
+                    # I decided to have a series of posters made to celebrate the completion of our collections. I felt it would be a good way to show my gratitude to ever…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:002', false)
+                else:
+                    # I decided to have a series of posters made to celebrate the completion of our collections. I felt it would be a good way to show my gratitude to ever…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:002_pl', false)
+            switch EventFlowSystemActor.FlagSystemIntValue6EventFlowSystemActor.FlagSystemIntValue6(6, 'cPlayerTemp:OwlGetPosterCount'):
+                case 1:
+                    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+                        run Sub_Event24()
+                    else:
+                        run Sub_Event241()
+                case 2:
+                    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 2:
+                        run Sub_Event24()
+                    else:
+                        run Sub_Event241()
+                case 3:
+                    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
+                        run Sub_Event24()
+                    else:
+                        run Sub_Event241()
+                case 4:
+                    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 4:
+                        run Sub_Event24()
+                    else:
+                        run Sub_Event241()
+                case 5:
+                    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 5:
+                        run Sub_Event24()
+                    else:
+                        run Sub_Event241()
+                default:
+                    return
+ 
+flow Owl_New_GetPoster():
+    if SubflowResults@3[2] == 0:
+        MainNpc.SetEventRewardToPlayerBaggageMainNpc.SetEventRewardToPlayerBaggage('cFree')
+    else:
+        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastToday', 'cReward', false, false)
+ 
+flow Owl_Poster_CompJudge():
+    System.EventFlags['cPlayerTemp:OwlGetPosterCount'] = 0
+    run Owl_Poster_CompJudge_Bug()
+    run Owl_Poster_CompJudge_Fish()
+    run Owl_Poster_CompJudge_Sealife()
+    run Owl_Poster_CompJudge_Fossil()
+    run Owl_Poster_CompJudge_Painting()
+ 
+flow Owl_Poster_CompJudge_Bug():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindInsect'):
+        if System.EventFlags['cLand:MuseumPosterflagbug']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagbug']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+        else:
+            if not System.EventFlags['cLand:MuseumPosterTodayflagbug']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+ 
+flow Owl_Poster_CompJudge_Fish():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindFish'):
+        if System.EventFlags['cLand:MuseumPosterflagfish']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagfish']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+        else:
+            if not System.EventFlags['cLand:MuseumPosterTodayflagfish']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+ 
+flow Owl_Poster_CompJudge_Fossil():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindFossil'):
+        if System.EventFlags['cLand:MuseumPosterflagfossil']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagfossil']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+        else:
+            if not System.EventFlags['cLand:MuseumPosterTodayflagfossil']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+ 
+flow Owl_Poster_CompJudge_Painting():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindArt'):
+        if System.EventFlags['cLand:MuseumPosterflagpainting']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagpainting']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+        else:
+            if not System.EventFlags['cLand:MuseumPosterTodayflagpainting']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+ 
+flow Owl_Poster_CompJudge_Sealife():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindSeafood'):
+        if System.EventFlags['cLand:MuseumPosterflagsea']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagsea']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+        else:
+            if not System.EventFlags['cLand:MuseumPosterTodayflagsea']:
+                System.EventFlags['cPlayerTemp:OwlGetPosterCount'] += 1
+ 
+flow Owl_Poster_SellJudge():
+    System.EventFlags['cPlayerTemp:OwlSellPosterCount'] = 0
+    if System.EventFlags['cLand:MuseumPosterflagbug']:
+        System.EventFlags['cPlayerTemp:OwlSellPosterCount'] += 1
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12039, 1, 'cVillageRemakePattern', 0)
+    if System.EventFlags['cLand:MuseumPosterflagfish']:
+        System.EventFlags['cPlayerTemp:OwlSellPosterCount'] += 1
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12040, 1, 'cVillageRemakePattern', 0)
+    if System.EventFlags['cLand:MuseumPosterflagsea']:
+        System.EventFlags['cPlayerTemp:OwlSellPosterCount'] += 1
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12985, 1, 'cVillageRemakePattern', 0)
+    if System.EventFlags['cLand:MuseumPosterflagfossil']:
+        System.EventFlags['cPlayerTemp:OwlSellPosterCount'] += 1
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12961, 1, 'cVillageRemakePattern', 0)
+    if System.EventFlags['cLand:MuseumPosterflagpainting']:
+        System.EventFlags['cPlayerTemp:OwlSellPosterCount'] += 1
+        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14589, 1, 'cVillageRemakePattern', 0)
+ 
+flow Owl_SendPoster():
+    run Owl_SendPoster_Bug()
+    run Owl_SendPoster_Fish()
+    run Owl_SendPoster_Sealife()
+    run Owl_SendPoster_Fossil()
+    run Owl_SendPoster_Painting()
+ 
+flow Owl_SendPoster_Bug():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindInsect'):
+        if System.EventFlags['cLand:MuseumPosterflagbug']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagbug']:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12039, 1, 'cVillageRemakePattern', 0)
+                System.EventFlags['cPlayer:MuseumPosterTodayflagbug'] = true
+                run Owl_New_GetPoster()
+        elif not System.EventFlags['cLand:MuseumPosterTodayflagbug']:
+            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12039, 1, 'cVillageRemakePattern', 0)
+            if SubflowResults@3[2] in (0, 1):
+                System.EventFlags['cLand:MuseumPosterflagbug'] = true
+            else:
+                System.EventFlags['cLand:MuseumPosterTodayflagbug'] = true
+            EventFlowSystemActor.EventFlagOnAllLiverEventFlowSystemActor.EventFlagOnAllLiver('cPlayer:MuseumPosterTodayflagbug')
+            run Owl_Common_PutInOrSend()
+ 
+flow Owl_SendPoster_Fish():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindFish'):
+        if System.EventFlags['cLand:MuseumPosterflagfish']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagfish']:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12040, 1, 'cVillageRemakePattern', 0)
+                System.EventFlags['cPlayer:MuseumPosterTodayflagfish'] = true
+                run Owl_New_GetPoster()
+        elif not System.EventFlags['cLand:MuseumPosterTodayflagfish']:
+            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12040, 1, 'cVillageRemakePattern', 0)
+            if SubflowResults@3[2] in (0, 1):
+                System.EventFlags['cLand:MuseumPosterflagfish'] = true
+            else:
+                System.EventFlags['cLand:MuseumPosterTodayflagfish'] = true
+            EventFlowSystemActor.EventFlagOnAllLiverEventFlowSystemActor.EventFlagOnAllLiver('cPlayer:MuseumPosterTodayflagfish')
+            run Owl_Common_PutInOrSend()
+ 
+flow Owl_SendPoster_Fossil():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindFossil'):
+        if System.EventFlags['cLand:MuseumPosterflagfossil']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagfossil']:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12961, 1, 'cVillageRemakePattern', 0)
+                System.EventFlags['cPlayer:MuseumPosterTodayflagfossil'] = true
+                run Owl_New_GetPoster()
+        elif not System.EventFlags['cLand:MuseumPosterTodayflagfossil']:
+            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12961, 1, 'cVillageRemakePattern', 0)
+            if SubflowResults@3[2] in (0, 1):
+                System.EventFlags['cLand:MuseumPosterflagfossil'] = true
+            else:
+                System.EventFlags['cLand:MuseumPosterTodayflagfossil'] = true
+            EventFlowSystemActor.EventFlagOnAllLiverEventFlowSystemActor.EventFlagOnAllLiver('cPlayer:MuseumPosterTodayflagfossil')
+            run Owl_Common_PutInOrSend()
+ 
+flow Owl_SendPoster_Painting():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindArt'):
+        if System.EventFlags['cLand:MuseumPosterflagpainting']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagpainting']:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14589, 1, 'cVillageRemakePattern', 0)
+                System.EventFlags['cPlayer:MuseumPosterTodayflagpainting'] = true
+                run Owl_New_GetPoster()
+        elif not System.EventFlags['cLand:MuseumPosterTodayflagpainting']:
+            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14589, 1, 'cVillageRemakePattern', 0)
+            if SubflowResults@3[2] in (0, 1):
+                System.EventFlags['cLand:MuseumPosterflagpainting'] = true
+            else:
+                System.EventFlags['cLand:MuseumPosterTodayflagpainting'] = true
+            EventFlowSystemActor.EventFlagOnAllLiverEventFlowSystemActor.EventFlagOnAllLiver('cPlayer:MuseumPosterTodayflagpainting')
+            run Owl_Common_PutInOrSend()
+ 
+flow Owl_SendPoster_Sealife():
+    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindSeafood'):
+        if System.EventFlags['cLand:MuseumPosterflagsea']:
+            if not System.EventFlags['cPlayer:MuseumPosterTodayflagsea']:
+                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12985, 1, 'cVillageRemakePattern', 0)
+                System.EventFlags['cPlayer:MuseumPosterTodayflagsea'] = true
+                run Owl_New_GetPoster()
+        elif not System.EventFlags['cLand:MuseumPosterTodayflagsea']:
+            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12985, 1, 'cVillageRemakePattern', 0)
+            if SubflowResults@3[2] in (0, 1):
+                System.EventFlags['cLand:MuseumPosterflagsea'] = true
+            else:
+                System.EventFlags['cLand:MuseumPosterTodayflagsea'] = true
+            EventFlowSystemActor.EventFlagOnAllLiverEventFlowSystemActor.EventFlagOnAllLiver('cPlayer:MuseumPosterTodayflagsea')
+            run Owl_Common_PutInOrSend()
+ 
+flow Root():
+    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    run Owl_Poster_SellJudge()
+    run Owl_BuyPoster()
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+ 
+local flow Sub_Event146():
+    # I wanted to make something to show my gratitude to all who pitched in to grow this museum. Oh, and these posters will also be available for purchase,…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:023', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event153():
+    # These posters will also be available for purchase, should that interest you. Just let me know!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:025', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event24():
+    # Ah! Unfortunately you don't seem to have enough pocket space at this very moment. In that case, I suppose the post will have to suffice. Do keep an e…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:003', false)
+    SubflowResults[2] = 1
+    run Sub_Event86()
+ 
+local flow Sub_Event241():
+    MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(12039, false, 'cVillageRemakePattern', 0)
+    MainNpc.MessageSuspendMainNpc.MessageSuspend()
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+    SubflowResults[2] = 0
+    run Sub_Event86()
+ 
+local flow Sub_Event32():
+    # Oh, you don't want a poster? That's perfectly alright. Please let me know if you ever change your mind!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:011', false)
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    run SNPC_owl_00_Common::Againrun SNPC_owl_00_Common::Again()
+ 
+local flow Sub_Event86():
+    run Owl_SendPoster()
+    System.EventFlags['cPlayer:MuseumPosterUnlockBuySel'] = true
+    run ChkNoticeUnlockPoster()
+    if SubflowResults@2[4] == 0:
+        # These posters are also available for purchase, should that interest you. Just let me know!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1100_01', false)
+    else:
+        # Also, these posters will be available for purchase, should that interest you. Just let me know!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:004', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_grp_Event65():
+    if not EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(5000):
+        # Eh wot? It appears you're short on Bells at the moment. I'm afraid I can't discount these, even for you.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:013', false)
+    elif EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+        # Eh wot? But you don't have enough pocket space. You'll have to come back after you've made room.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:014', false)
+    else:
+        if System.EventFlags['cPlayerTemp:OwlSellPosterCount'] >= 2:
+            MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+            # That will be <90:26:0000> for your <125:0:0000>. Do I have that right?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:012', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Thank you very much!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:015', true)
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(2118, false, 'cVillageRemakePattern', 0)
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Default')
+            EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(5000, true)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+            MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+            System.EventFlags['cLifeSupportDaily:BuyItem'] += 5000
+            System.EventFlags['cLifeSupportAchievement:HowmuchBuyItem'] += 5000
+            if System.EventFlags['cPlayerTemp:OwlSellPosterCount'] < 2:
+                EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                run SNPC_owl_00_Common::Againrun SNPC_owl_00_Common::Again()
+            else:
+                # Are there any other posters you'd like to purchase?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:016', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run Owl_BuyPoster()
+                else:
+                    # Understood. Please let me know if you ever wish to purchase another poster. I would be only too pleased!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:017', false)
+        else:
+            # Oh, you don't want a poster? That's perfectly alright. Please let me know if you ever change your mind!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:011', false)
+ 

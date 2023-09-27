@@ -1,0 +1,122 @@
+flow CampSitePlate_0():
+    # Future campsite.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:005', false)
+ 
+flow CampSitePlate_1():
+    # Campsite
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:006', false)
+ 
+flow ImmQBoard(ItemPrice: int = 0):
+    System.EventFlags['cPlayerTemp:ImmQPutInFtrNum'] = 0
+    switch GeneralObject.SettlerQuestGeneralObject.SettlerQuest():
+        case 1:
+            if System.EventFlags['cLand:ImmQ_A_Complete']:
+                run ImmQBoard_Clear(TagType='cReserveHouseSettlerA')
+            else:
+                # Getaway Package Plot 1                            –Nook Inc.
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_MigrantsQuest:101_01', false)
+                run Sub_grp_Event34(ItemPrice=ItemPrice)
+        case 2:
+            if System.EventFlags['cLand:ImmQ_B_Complete']:
+                run ImmQBoard_Clear(TagType='cReserveHouseSettlerB')
+            else:
+                # Getaway Package Plot 2                            –Nook Inc.
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_MigrantsQuest:101_02', false)
+                run Sub_grp_Event34(ItemPrice=ItemPrice)
+        case 3:
+            if System.EventFlags['cLand:ImmQ_C_Complete']:
+                run ImmQBoard_Clear(TagType='cReserveHouseSettlerC')
+            else:
+                # Getaway Package Plot 3                            –Nook Inc.
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_MigrantsQuest:101_03', false)
+                run Sub_grp_Event34(ItemPrice=ItemPrice)
+        default:
+            return
+ 
+flow ImmQBoard_Clear(TagType: str):
+    GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem(TagType, '"cDegit"', 0, 0, '""')
+    # This spot reserved for <50:3><115:1:cd00>'s new home.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_MigrantsQuest:103', false)
+ 
+flow Market_Reserve():
+    # This spot reserved for Nook's Cranny.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:007', false)
+ 
+flow Museum_Moving():
+    # This spot reserved for ISLAND's museum.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:008_01', false)
+ 
+flow Museum_Reserve():
+    # This spot reserved for Blathers's tent.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:008', false)
+ 
+flow NpcHousePlate():
+    GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem('cNpcNameplate', '"cDegit"', 0, 0, '""')
+    # <50:3><115:1:cd00>'s House
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:001', false)
+ 
+flow NpcHouse_Moving():
+    GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem('cNpcNameplate', '"cDegit"', 0, 0, '""')
+    # This spot reserved for <115:1:cd00>'s new home.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:003_01', false)
+ 
+flow NpcTentPlate():
+    GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem('cNpcNameplate', '"cDegit"', 0, 0, '""')
+    # <50:3><115:1:cd00>
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:001_01', false)
+ 
+flow PlayerHouse_Moving():
+    GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem('cPlayerNameplate', '"cDegit"', 0, 0, '""')
+    # This spot reserved for <115:0:cd00>'s new home.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:021', false)
+ 
+flow Property_0_Selling():
+    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 6:
+        run ImmQBoard()
+    else:
+        # Plot available.                            –Nook Inc.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:002', false)
+ 
+flow Property_1_Sold():
+    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 6:
+        run ImmQBoard()
+    else:
+        GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem('cNpcNameplate', '"cDegit"', 0, 0, '""')
+        # This spot reserved for <50:3><115:1:cd00>'s new home.                            –Nook Inc.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:003', false)
+ 
+flow Sign_Cafe():
+    # The Roost Open 24-7
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:031', false)
+ 
+local flow Sub_grp_Event34(ItemPrice: int):
+    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cPlayer:MakeVillagePlayerFlag']):
+        # To All Construction Helpers: Please check the nearby box for info on the items needed for this plot.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_MigrantsQuest:102', false)
+ 
+flow Tailor_Reserve():
+    # This spot reserved for Able Sisters.                            –Nook Inc.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:009', false)
+ 
+flow TodaysFurniture():
+    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+        # Due to unusual circumstances, we will be closed today.                                    –Nook's Cranny
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111_02', false)
+    elif not EventFlowSystemActor.IsDuringBusinessHoursEventFlowSystemActor.IsDuringBusinessHours('Market'):
+        run System_Door_Market::Market_ClosedTimerun System_Door_Market::Market_ClosedTime()
+    elif EventFlowSystemActor.EnvHourOverGrowUpEventFlowSystemActor.EnvHourOverGrowUp():
+        # Due to circumstances, our operating hours for today have changed.                                    –Nook's Cranny
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:111_01', false)
+    else:
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cExpensivePurchase1', 'cDegit', 0, 0, '')
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cExpensivePurchase2', 'cDegit', 1, 0, '')
+        switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+            case `NooksCrannyInitial`:
+                # Today's Hot Item (Inquire inside!) <50:3><125:0:0000>
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:011', false)
+            case `NooksCrannyUpgraded`:
+                # Today's Hot Items (Inquire inside!) <50:3><125:0:0000> <50:3><125:0:0001>
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Sign:012', false)
+            default:
+                return
+ 

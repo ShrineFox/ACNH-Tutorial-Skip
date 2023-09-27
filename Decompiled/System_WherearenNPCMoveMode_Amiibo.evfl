@@ -1,0 +1,94 @@
+flow CallVillager():
+    EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+    # You can't invite the Villager to Photopia.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1610', false)
+ 
+flow LoadNFP_Error():
+    EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+    switch EventFlowSystemActor.NfpErrorTypeEventFlowSystemActor.NfpErrorType():
+        case 0:
+            # This amiibo is not supported.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1614', false)
+        case 1:
+            # The device used is not an amiibo.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1613', false)
+        case 2:
+            # Could not read this amiibo.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1601', true)
+ 
+flow PostLoadNFP():
+    if not EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cExistSpace'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # There's no free space available to invite this character.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1608', false)
+    elif EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cIsFullNpc'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # Sorry, but this resort is at maximum capacity. You can't invite any more guests right now.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:3501', false)
+    elif not EventFlowSystemActor.IsAcceptableAmiiboEventFlowSystemActor.IsAcceptableAmiibo():
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # This amiibo is not supported.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1614', false)
+    elif EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # Would you like to call Timmy or Tommy?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1609', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.ChangeAmiiboNPCEventFlowSystemActor.ChangeAmiiboNPC('cRcm')
+            run Sub_Event11()
+        else:
+            EventFlowSystemActor.ChangeAmiiboNPCEventFlowSystemActor.ChangeAmiiboNPC('cRct')
+            run Sub_Event11()
+    else:
+        if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cVillager'):
+            run CallVillager()
+        else:
+            run Sub_Event11()
+ 
+flow PostOpenNFP(NpadId: int = 0, ReadPadId: int = 0):
+    if System.EventFlags['cWherearenPlayer:Unlock_Amiibo']:
+        if not System.EventFlags['cWherearenPlayer:NoticeAboutAmibo_NpcMode']:
+            EventFlowSystemActor.UIAmiiboPreviousNoticeGuideCreateEventFlowSystemActor.UIAmiiboPreviousNoticeGuideCreate()
+            System.EventFlags['cWherearenPlayer:NoticeAboutAmibo_NpcMode'] = true
+        if not EventFlowSystemActor.NfcDisabledEventFlowSystemActor.NfcDisabled():
+            EventFlowSystemActor.CheckNfpControllerEventFlowSystemActor.CheckNfpController(NpadId)
+            if (NpadId < 0) and (not System.EventFlags['cPlayerTemp:NFPControllerAssertDone']):
+                # The controller you are using cannot be used to read amiibo. Please use a controller that is compatible with amiibo. Note that the Pro Controller cann…
+                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1602', false)
+                System.EventFlags['cPlayerTemp:NFPControllerAssertDone'] = true
+        elif not System.EventFlags['cPlayerTemp:NFPFlightModeAssertDone']:
+            # When Airplane Mode is on, amiibo can't be read. Hold down  to access Quick Settings, where you can turn off Airplane Mode.
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1612', false)
+            System.EventFlags['cPlayerTemp:NFPFlightModeAssertDone'] = true
+ 
+local flow Sub_Event11():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
+    if EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cIsExistAnotherTkk'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # <115:1:cd00> is busy right now…
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:3505', false)
+    elif EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cIsAmiiboNpc'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # <115:1:cd00> has already been invited.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:3504', false)
+    elif EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cIsResidentNpc'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # <115:1:cd00> owns this home.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:3503', false)
+    elif EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2EventFlowSystemActor.WherearenAmiiboNpcFreeQuery2('cIsOfficerNpc'):
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # You're here with <115:1:cd00>! You can't invite them again.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:3502', false)
+    elif EventFlowSystemActor.IsCallableAmiiboNpcEventFlowSystemActor.IsCallableAmiiboNpc('cWherearen'):
+        if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cOtg'):
+            if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cOtgMakeUp'):
+                System.EventFlags['cWherearenPlayer:OtgWithoutMakeup'] = false
+            else:
+                System.EventFlags['cWherearenPlayer:OtgWithoutMakeup'] = true
+        EventFlowSystemActor.CreateWherearenAmiiboNpcEventFlowSystemActor.CreateWherearenAmiiboNpc()
+    else:
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
+        EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOffEventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+        # <50:3><115:1:cd00> can't be invited to Photopia.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1606', true)
+ 

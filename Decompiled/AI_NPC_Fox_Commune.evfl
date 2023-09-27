@@ -1,0 +1,39 @@
+flow Check_CommuneFox():
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('CheckItemIndex', 0):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_fox_11_Commune_Art', 'Root')
+        if (not System.EventFlags['cPlayer:FoxCommuneTalkExplainFlag']) or (MainNpc.NpcCommuneShopOpenMainNpc.NpcCommuneShopOpen() in (1, 2)):
+            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CancelShopCamera', 1)
+ 
+flow Check_Stall():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(18, true)
+    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_fox_11_Commune_Lorrery', 'Root')
+ 
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.SetSightRangeMainNpc.SetSightRange(0, 64)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckItemIndex', -1)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ItemPrice', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CancelShopCamera', 0)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cItemCheck', true)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cFireWorksStall', true)
+ 
+flow Root():
+    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CancelShopCamera', 0)
+    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        if MainNpc.NpcCommuneShopOpenMainNpc.NpcCommuneShopOpen() == 0:
+            if EventFlowSystemActor.CommuneShopEventEventFlowSystemActor.CommuneShopEvent('cFoxShop'):
+                run Demo_Common_Commune::FoxOpen_FoxPosrun Demo_Common_Commune::FoxOpen_FoxPos()
+                MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+                MainNpc.NpcChangeConversationPretenseStateMainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Fox_Shop_fox', false, true, ArgInt0=0, ArgStr0='spn')
+            else:
+                MainNpc.NpcChangeSpVisitorTurnStateMainNpc.NpcChangeSpVisitorTurnState('cSpVisitorTurn', '', 'SNPC_fox_11_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=true, ArgInt0=30, ArgInt1=1, ArgInt2=15, ArgInt3=0, ArgStr0='', ArgStr1='')
+        else:
+            MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_fox_02_Commune', 'Root', true, true, ArgInt0=0)
+    else:
+        MainNpc.NpcChangeSpVisitorTurnStateMainNpc.NpcChangeSpVisitorTurnState('cSpVisitorTurn', '', 'SNPC_fox_11_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=true, ArgInt0=30, ArgInt1=1, ArgInt2=15, ArgInt3=0, ArgStr0='', ArgStr1='')
+ 

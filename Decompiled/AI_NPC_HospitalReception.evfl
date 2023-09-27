@@ -1,0 +1,18 @@
+flow Init():
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cCallHospitalPatient', false)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CallRequest', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CallCount', 0)
+ 
+flow Root():
+    run SetupDoctorEventCall()
+    MainNpc.NpcAIDefaultSettingMainNpc.NpcAIDefaultSetting(1)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+    MainNpc.SetNpcTalkFlowNameMainNpc.SetNpcTalkFlowName('NNPC_HospitalReception', 'Root')
+    MainNpc.ChangeHouseModeMainNpc.ChangeHouseMode()
+ 
+flow SetupDoctorEventCall():
+    if (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')) and (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 0) and (not System.EventFlags['cWherearenPlayer:DoctorEventStart']) and (EventFlowSystemActor.FlagSystemIntValue4EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:HospitalReceptionFlag') in (1, 2, 3)):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CallRequest', 1)
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CallCount', 180)
+ 

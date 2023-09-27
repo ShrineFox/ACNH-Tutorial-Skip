@@ -1,0 +1,74 @@
+flow QuestGive_Chk():
+    if MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cMyQuest', true, false):
+        switch MainNpc.NpcHaveQuestTypeMainNpc.NpcHaveQuestType(''):
+            case 1:
+                if MainNpc.HasNpcRequestedItemMainNpc.HasNpcRequestedItem():
+                    run StandingUp_Chk()
+            case 2:
+                if not MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cLost', true, false):
+                    run StandingUp_Chk()
+                elif MainNpc.HasNpcRequestedItemMainNpc.HasNpcRequestedItem():
+                    run StandingUp_Chk()
+            case 3:
+                if not MainNpc.QuestFlags['cDeliveryEnd']:
+                    run StandingUp_Chk()
+            case 4:
+                if MainNpc.HasNpcRequestedItemMainNpc.HasNpcRequestedItem():
+                    run StandingUp_Chk()
+            default:
+                return
+    elif not (((not MainNpc.IsDeliveryQuestReceiverMainNpc.IsDeliveryQuestReceiver()) or (MainNpc.QuestFlags['cDeliveryEnd'])) and (((MainNpc.NpcHaveQuestTypeMainNpc.QuestFlags['cDeliveryEnd'])) and (((MainNpc.NpcHaveQuestType('cNotInclude') in (1, 3, 4, 5, 6, 7, 0)) and (MainNpc.QuestFlags['cLostUseHint'])) or (not MainNpc.HasNpcRequestedItemMainNpc.QuestFlags['cLostUseHint'])) or (not MainNpc.HasNpcRequestedItem()))):
+        run StandingUp_Chk()
+ 
+flow Root():
+    if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+        run QuestGive_Chk()
+        if (MainNpc.NpcActivityTypeMainNpc.NpcActivityType() == 1) and (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField')):
+            MainNpc.NpcSetReactionTypeMainNpc.NpcSetReactionType('cSitting')
+            if MainNpc.EventFlags['cNpcTemp:ContinuousReactionTalkCount'] < 3:
+                switch MainNpc.NpcIsSittingMainNpc.NpcIsSitting():
+                    case 0:
+                        # <60:1:006500660067>
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Sitting:001', false)
+                        run Sub_Event10()
+                    case 1:
+                        # <60:1:00680069006a>
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Sitting:002', false)
+                        run Sub_Event17()
+                    case 2:
+                        # <60:1:006b006c006d>
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Sitting:003', false)
+                        run Sub_Event17()
+                    case 3:
+                        MainNpc.SetItemNameMainNpc.SetItemName(32, 0, 0)
+                        # <60:1:006e006f0070>
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Sitting:004', false)
+                        run Sub_Event10()
+                    default:
+                        return
+ 
+flow StandingUp_Chk():
+    switch MainNpc.NpcIsSittingMainNpc.NpcIsSitting():
+        case 0:
+            # RANDOM: Hey, <110:3>! Lemme stand up, <110:6>. // Whoa, it's <110:3>! How you doing, <110… // Heya, <110:3>! It's hard to think when …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/BO_Connect_StandingUp:201', false)
+            run Sub_Event24()
+        case 1, 2, 3, 5:
+            # RANDOM: Heya, <110:3>! I'm real happy you wanna… // Heeeey! It's <110:3>! You came to chat?… // Heya, <110:3>! It's hard to think when …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/BO_Connect_StandingUp:202', false)
+            run Sub_Event24()
+        default:
+            return
+ 
+local flow Sub_Event10():
+    MainNpc.EventFlags['cNpcMemory:AcquaintanceshipFlagOff'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event17():
+    MainNpc.EventFlags['cNpcMemory:SitBenchFlag'] = true
+    run Sub_Event10()
+ 
+local flow Sub_Event24():
+    MainNpc.EventFlags['cNpcMemory:StandingUpFlag'] = true
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

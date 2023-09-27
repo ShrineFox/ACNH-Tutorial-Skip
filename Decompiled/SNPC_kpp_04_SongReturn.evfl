@@ -1,0 +1,63 @@
+flow Root():
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(56)
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ReturnInStart', '', 'Npc:kpp', false, false, false, 0)
+    EventFlowSystemActor.KappeiTourShowerTimingEventFlowSystemActor.KappeiTourShowerTiming(880)
+    EventFlowSystemActor.WaitFaderSleepEventFlowSystemActor.WaitFaderSleep()
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ReturnInEnd', 'ReturnIn', 'KeepFollow', false, false, false, 0)
+    if EventFlowSystemActor.KappeiTourTypeEventFlowSystemActor.KappeiTourType('cStarPiece'):
+        SubNpc.ChangeSeaWeatherSubNpc.ChangeSeaWeather(170, 610, 240, 340, 0, 270)
+    else:
+        SubNpc.ChangeSeaWeatherSubNpc.ChangeSeaWeather(170, 610, 240, 340, 0, 270)
+    SubNpc.SettingKppReactionPlayerSubNpc.SettingKppReactionPlayer('cEnable')
+    MainNpc.NpcRequestActionMainNpc.NpcRequestAction(4)
+    MainNpc.KppBarcarollePrepareMainNpc.KppBarcarollePrepare('ReturnA')
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(135)
+    MainNpc.KppBarcarolleControlMainNpc.KppBarcarolleControl('ReturnA')
+    if MainNpc.KppBarcarolleCancelMainNpc.KppBarcarolleCancel():
+        SubflowResults[0] = 0
+        run SongCancel()
+    else:
+        SubNpc.SettingKppReactionPlayerSubNpc.SettingKppReactionPlayer('cDisable')
+        MainNpc.NpcRequestActionMainNpc.NpcRequestAction(0)
+        EventFlowSystemActor.MessageAutoPassEventFlowSystemActor.MessageAutoPass(0, true)
+        # RANDOM: Dig up anythin' good today? // If ye think it's all a dream…maybe it I… // A trip isn't over till ye're back home …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/kpp/Song/SP_kpp_Song_Return2:001', false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        SubNpc.SettingKppReactionPlayerSubNpc.SettingKppReactionPlayer('cEnable')
+        MainNpc.NpcRequestActionMainNpc.NpcRequestAction(4)
+        MainNpc.KppBarcarollePrepareMainNpc.KppBarcarollePrepare('ReturnB')
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(136)
+        MainNpc.KppBarcarolleControlMainNpc.KppBarcarolleControl('ReturnB')
+        if MainNpc.KppBarcarolleCancelMainNpc.KppBarcarolleCancel():
+            SubflowResults[0] = 1
+            run SongCancel()
+        else:
+            EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(56)
+            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ReturnOut', 'ReturnOut', 'KeepFollow', false, false, false, 0)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(160)
+            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Boat_Stop', -1)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+            run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cReturnFromKppTourIsland', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeOutSpeed=0.0, FadeInSpeed='cNormal')
+ 
+flow Root_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('NpcPlayer', 1)
+ 
+flow SongCancel():
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(130)
+    SubNpc.SettingKppReactionPlayerSubNpc.SettingKppReactionPlayer('cDisable')
+    MainNpc.NpcRequestActionMainNpc.NpcRequestAction(0)
+    EventFlowSystemActor.AcceptFlowSwitchTagEventFlowSystemActor.AcceptFlowSwitchTag()
+    fork:
+        branch:
+            EventFlowSystemActor.MessageAutoPassEventFlowSystemActor.MessageAutoPass(0, true)
+            if SubflowResults@2[0] == 0:
+                # RANDOM: Yar? Ye be wantin' to return to yer isl… // Yar har har! Ye gettin' homesick? Well,… // How dare ye? I'm here havin' a good sin… // Say it ain't so! Ye wouldn't stop an ol…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/kpp/Song/SP_kpp_Song_Cancel:003', false)
+            else:
+                # RANDOM: Avast, ye squirrelly squid! Ye wanna en… // There be only a wee bit more song… Ye n… // We be almost thar, ye know… So I'm gonn… // If ye need to use th' bathroom, yer out…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/kpp/Song/SP_kpp_Song_Cancel:004', false)
+        branch:
+            EventFlowSystemActor.WaitFlowSwitchTagEventFlowSystemActor.WaitFlowSwitchTag()
+            run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cReturnFromKppTourIsland', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=-2.0)
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(56)
+ 

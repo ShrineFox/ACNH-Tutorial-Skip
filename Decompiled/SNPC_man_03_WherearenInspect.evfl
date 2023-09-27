@@ -1,0 +1,146 @@
+flow Follow():
+    EventFlowSystemActor.NetWherearenAddFollowListEventFlowSystemActor.NetWherearenAddFollowList('cInspect')
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        switch EventFlowSystemActor.NetWherearenAddFollowFailReasonEventFlowSystemActor.NetWherearenAddFollowFailReason():
+            case 0:
+                SubflowResults[0] = 1
+            case 1:
+                SubflowResults[0] = 2
+            case 2:
+                SubflowResults[0] = 3
+    else:
+        SubflowResults[0] = 0
+ 
+flow ForceTalk():
+    # Let me know when you're headed home<150:5>
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:000', false)
+    System.EventFlags['cPlayerTemp:WHEREAREN_ManTalkReserve_Inspect'] = false
+    run InspectRewards()
+    EventFlowSystemActor.StartMeasurePlayTimeEventFlowSystemActor.StartMeasurePlayTime('cWherearenInspect')
+ 
+flow InspectRewards():
+    if (not EventFlowSystemActor.NetWherearenIsMyOpusDataEventFlowSystemActor.NetWherearenIsMyOpusData()) and (System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] < 3):
+        if System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] == 0:
+            if EventFlowSystemActor.NetWherearenIsGetInspectRewardEventFlowSystemActor.NetWherearenIsGetInspectReward('cBronze'):
+                # Touring is an important part<150:5>of the job<150:5>I've seen you working hard.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:040', false)
+                System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] = 1
+        elif System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] == 1:
+            if EventFlowSystemActor.NetWherearenIsGetInspectRewardEventFlowSystemActor.NetWherearenIsGetInspectReward('cSilver'):
+                # You're passionate<150:5>about touring. You're a very hard worker.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:041', false)
+                System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] = 2
+        elif (System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] == 2) and (EventFlowSystemActor.NetWherearenIsGetInspectRewardEventFlowSystemActor.NetWherearenIsGetInspectReward('cGold')):
+            # You have done<150:5>many, many tours<150:5> You're quite dedicated, my friend.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:042', false)
+            System.EventFlags['cPlayer:WHEREAREN_GetInspectRewardsNum'] = 3
+ 
+flow Leave():
+    run Root()
+ 
+flow MyDesignShowCase():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cWherearenInspectOwnerName', 'cDegit', 0, 0, '')
+    if System.EventFlags['cPlayer:WHEREAREN_TapFirstCheckMydesingShowcase']:
+        # Do you wish to see the custom designs of <115:0:cd00>? They're also<150:5>the creator of this property.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:045', false)
+    else:
+        System.EventFlags['cPlayer:WHEREAREN_TapFirstCheckMydesingShowcase'] = true
+        # You can take home custom designs you discover on your tours. Aren't <115:0:cd00>'s designs nice?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:044', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run Obj_WorldMyDesignGallery::EntryPoint_NoSignInNorun Obj_WorldMyDesignGallery::EntryPoint_NoSignInNo()
+    else:
+        # OK.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:002', false)
+ 
+flow Report():
+    # Press the  Button to report uploaded content that makes you uncomfortable.
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:021', false)
+ 
+flow Return():
+    # You're leaving?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:010', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # OK<150:5> Let's leave this place.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:011', true)
+        EventFlowSystemActor.StopMeasurePlayTimeEventFlowSystemActor.StopMeasurePlayTime('cWherearenInspect')
+        EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenInspect', 0)
+        if EventFlowSystemActor.CheckMeasuredPlayTimeEventFlowSystemActor.CheckMeasuredPlayTime('cWherearenInspect', 20):
+            System.EventFlags['cPlayerTemp:WHEREAREN_NeedsInspectReply'] = true
+        run System_WherearenResortPlanner::Setting_ReturnInspectrun System_WherearenResortPlanner::Setting_ReturnInspect()
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerApp', 'cWherearenInspectBack', 'cWherearenInspectBack', 'cBlack', 1.0, 1.0)
+    else:
+        # Mrrm<150:5> OK.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:012', false)
+ 
+flow Root():
+    if EventFlowSystemActor.NetWherearenIsMyOpusDataEventFlowSystemActor.NetWherearenIsMyOpusData():
+        # What is it?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:001_01', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Return()
+        else:
+            # OK.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:002', false)
+    elif EventFlowSystemActor.NetWherearenCanOpenMyDesignEventFlowSystemActor.NetWherearenCanOpenMyDesign():
+        # What is it?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:001', false)
+        switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            case 0:
+                run Return()
+            case 1:
+                run Sub_Event30()
+            case 2:
+                run MyDesignShowCase()
+            case 3:
+                run Report()
+            case 4:
+                # OK.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:002', false)
+    else:
+        # What is it?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:001_02', false)
+        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+            case 0:
+                run Return()
+            case 1:
+                run Sub_Event30()
+            case 2:
+                run Report()
+            case 3:
+                # OK.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:002', false)
+ 
+local flow Sub_Event30():
+    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cWherearenInspectOwnerName', 'cDegit', 0, 0, '')
+    if EventFlowSystemActor.NetWherearenIsFollowedAuthorEventFlowSystemActor.NetWherearenIsFollowedAuthor():
+        # Mrrm<150:5> I believe you're already following <115:0:cd00>.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:030', false)
+    else:
+        # Follow <115:0:cd00>?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:031', true)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            EventFlowSystemActor.MessageAutoPassEventFlowSystemActor.MessageAutoPass(1, true)
+            # Please<150:5>wait.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:046', false)
+            run Follow()
+            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+            switch SubflowResults@4[0]:
+                case 0:
+                    # The list of folks you follow now includes <115:0:cd00>.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:033', false)
+                    System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = true
+                case 1:
+                    # Your follow list is<150:5>very full. Organize your list first, OK?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:034', false)
+                case 2:
+                    # Mrrm<150:5> I believe you're already following <115:0:cd00>.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:030', false)
+                case 3:
+                    # Failed to follow. Should this error persist, please restart Happy Home Network and try again.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:035', false)
+        else:
+            # OK.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_03_WherearenInspect:032', false)
+ 

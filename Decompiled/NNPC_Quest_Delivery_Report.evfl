@@ -1,0 +1,253 @@
+flow FinishSet():
+    MainNpc.NpcQuestControlMainNpc.NpcQuestControl('cFinish')
+    System.EventFlags['cLifeSupportDaily:AchieveQuest'] = true
+    System.EventFlags['cLifeSupportAchievement:AchieveVillagersQuest'] += 1
+    MainNpc.EventFlags['cNpcMemory:OrderQuest'] = true
+ 
+flow Report():
+    MainNpc.SetNpcNameMainNpc.SetNpcName(8, 0)
+    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+        case 0:
+            run ReportA()
+        case 1:
+            run ReportB()
+        case 2:
+            run ReportC()
+        case 3:
+            run ReportD()
+        case 4:
+            run ReportE()
+    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(3)
+ 
+flow ReportA():
+    if MainNpc.QuestFlags['cDeliveryQuizPlay']:
+        # <50:3><110:4>! Hey! It's real cool you helped me with <115:1:cd00>. Thanks!
+        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:002', true, true)
+        run FinishSet()
+    else:
+        # Hey, <110:4>! Thanks for delivering that package to <115:1:cd00>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:001', false)
+        if (MainNpc.QuestFlags['cDeliveryItemOpen']) and (not MainNpc.QuestFlags['cDeliveryWrappingAgain']):
+            # It's been a while since I borrowed it. Was <115:1:cd00>, like, real mad?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:004', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if MainNpc.QuestFlags['cDeliveryWiseUp']:
+                    # You opened it?! Whoa. It's not cool to open other folks' stuff! C'mon!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:006', true, true)
+                else:
+                    # Huh, you opened it?! Wha— I mean— Wha— I can't— WHY would you open <115:1:cd00>'s package?!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:007', true, true)
+            else:
+                # Whaa?! You forgot?! Maaaaaaaan! Ah, no worries. I can't get mad. I'm as forgetful as you, <110:5>!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:005', true, true)
+            run FinishSet()
+        else:
+            # It's been a long time since I borrowed it. Did <115:1:cd00> say, um, say anything?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:003', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                switch MainNpc.DeliveryQuestReceiveNpcLookMainNpc.DeliveryQuestReceiveNpcLook():
+                    case 0:
+                        # Whew, that's good! She's usually super nice, but seems like she'd be scary if she got angry! Thanks so much for helping me out, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:008', true, true)
+                    case 1:
+                        # I'm glad she's not mad! I've seen her roaming around the island with that shovel…y'know? Thanks so much for helping me out, <110:6>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:009', true, true)
+                    case 2:
+                        # Whew! Yeah, I'd expect that from <115:1:cd00>. She's so mature compared to some folks. Thanks so much for helping me out, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:010', true, true)
+                    case 3:
+                        # I'm so glad I'm not in trouble! She gets angry the same way a shark does, y'know? Thanks so much for helping me out, <110:6>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:011', true, true)
+                    case 4:
+                        # Yeah, that guy's too chill to ever get mad about anything. Actually, a huh huh huh, knowing him, he probably forgot I borrowed anything anyway. Thank…
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:012', true, true)
+                    case 5:
+                        # Whew, thank goodness! If he got mad, I feel like he'd challenge me to a weird <135:6:cd00> showdown. Thanks so much for helping me out, <110:6>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:013', true, true)
+                    case 6:
+                        # Oh, whew! He's scary enough, even when he's not angry! Thanks so much for helping me out, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:014', true, true)
+                    case 7:
+                        # Yay! <115:1:cd00> is usually pretty chill.<10:4> Usually.  Thanks, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:015', true, true)
+            else:
+                # Whaa?! You forgot?! Maaaaaaaan! Ah, no worries. I can't get mad. I'm as forgetful as you, <110:5>!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:005', true, true)
+            run FinishSet()
+ 
+flow ReportB():
+    if MainNpc.QuestFlags['cDeliveryQuizPlay']:
+        # <50:3><110:3>! Hey. Thanks for getting over to <115:1:cd00>'s place so quick!
+        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:102', false, false)
+        run FinishSet()
+    else:
+        # Hey, <110:3>! Thanks for delivering that package to <115:1:cd00>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:101', false)
+        if (MainNpc.QuestFlags['cDeliveryItemOpen']) and (not MainNpc.QuestFlags['cDeliveryWrappingAgain']):
+            # What'd <115:1:cd00> say when you handed over the package?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:104', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if MainNpc.QuestFlags['cDeliveryWiseUp']:
+                    # You OPENED it?! Whaaaat? That belongs to <115:1:cd00>!  We'll get in TROUBLE!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:106', true, true)
+                else:
+                    # You opened <115:1:cd00>'s present?! I worked real hard to wrap it up! Promise you won't do that kind of thing again, OK?
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:107', true, true)
+            else:
+                # Huh? You forgot? Oh, <110:3>. Man… I kinda wanna know, but I guess it's all cool as long as it's back home, <110:6>!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:105', true, true)
+            run FinishSet()
+        else:
+            # Did <115:1:cd00> say anything when you delivered the package?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:103', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if MainNpc.QuestFlags['cDeliverySameBought']:
+                    # [He|She|] already bought a new one? Oh, shoot… I shoulda delivered it sooner. I feel real bad…
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:108', true, true)
+                else:
+                    # A huh huh, I bet <115:1:cd00> didn't even notice it was missing!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:109', true, true)
+            else:
+                # Huh? You forgot? Oh, <110:3>. Man… I kinda wanna know, but I guess it's all cool as long as it's back home, <110:6>!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:105', true, true)
+            run FinishSet()
+ 
+flow ReportC():
+    if MainNpc.QuestFlags['cDeliveryQuizPlay']:
+        # Thanks a bunch for helping me out with <115:1:cd00>!
+        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:202', false, false)
+        run FinishSet()
+    else:
+        # Thanks for making that delivery to <115:1:cd00>!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:201', false)
+        if (MainNpc.QuestFlags['cDeliveryItemOpen']) and (not MainNpc.QuestFlags['cDeliveryWrappingAgain']):
+            # What did <115:1:cd00> say when you handed over the package?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:204', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if MainNpc.QuestFlags['cDeliveryWiseUp']:
+                    # You…opened it?! You can't just open it! That was for <115:1:cd00>! OK, I guess you CAN open stuff that's not for you, but DON'T DO IT! It's rude! And…
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:206', true, true)
+                else:
+                    # You opened it? Man, you shouldn't have done that! It was a package for <115:1:cd00>! Folks who do bad stuff get ate up by Snowsquatches! I want you t…
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:207', true, true)
+            else:
+                # You forget? <50:3><110:3>… Sometimes you're too funny. I wonder what was inside? I'm gonna ask <115:1:cd00> next time we're together!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:205', true, true)
+            run FinishSet()
+        else:
+            # What'd <115:1:cd00> say when you handed over the package?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:203', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if MainNpc.QuestFlags['cDeliveryGetFree']:
+                    # That package was a present for you? A huh huh, that's crazy! And you, you were the one that took it? That's just…that's crazy! 
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:208', true, true)
+                else:
+                    # I'm glad we were able to get it back to where it belonged. I knew you were the right person for the job! Thanks, <110:5>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:209', true, true)
+            else:
+                # You forget? <50:3><110:3>… Sometimes you're too funny. I wonder what was inside? I'm gonna ask <115:1:cd00> next time we're together!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:205', true, true)
+            run FinishSet()
+ 
+flow ReportD():
+    # Hey, <110:4>. Good to see ya. Did you deliver the package to <115:1:cd00>?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:301', false)
+    if (MainNpc.QuestFlags['cDeliveryItemOpen']) and (not MainNpc.QuestFlags['cDeliveryWrappingAgain']):
+        # How'd it go? Did <115:1:cd00> like my gift?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:303', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            if MainNpc.QuestFlags['cDeliveryWiseUp']:
+                # You opened it? But why would… I wrapped it so careful.
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:305', true, true)
+            else:
+                # Why'd you open <115:1:cd00>'s present?! Folks don't give unwrapped gifts! Great. Now [he'll|she'll] think I'm weird…
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:306', true, true)
+        else:
+            # You…don't remember? Oh man! I wanted to hear what <115:1:cd00> thought! Guess I'll have to ask myself, <110:5>!
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:304', true, true)
+        run FinishSet()
+    else:
+        # Soooo? How'd it go? I wanna know if <115:1:cd00> liked the gift!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:302', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            # You…don't remember? Oh man! I wanted to hear what <115:1:cd00> thought! Guess I'll have to ask myself, <110:5>!
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:304', true, true)
+            run FinishSet()
+        elif MainNpc.DeliveryQuestItemKindMainNpc.DeliveryQuestItemKind() == 0:
+            if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                switch MainNpc.DeliveryQuestReceiveNpcLookMainNpc.DeliveryQuestReceiveNpcLook():
+                    case 0:
+                        # I knew she'd dig it. I'm real good at guessing what she'll like. Thanks for the help, <110:5>.
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:312', true, true)
+                        run FinishSet()
+                    case 1:
+                        # I'm so glad she liked it. That's cool. Or I guess she'd say, "That's FAB!" A huh huh huh. "Fab."<10:4> A huh huh…that's not even a word…<10:4> Fab… W…
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:313', true, true)
+                        run FinishSet()
+                    case 2:
+                        # I can't believe <115:1:cd00> liked what I picked out. That's really cool. Thanks for letting me know, <110:3>! 
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:314', true, true)
+                        run FinishSet()
+                    case 3:
+                        # She liked it, huh? Cool. She's got the same taste in things as Grandma, a huh huh huh. Thanks, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:315', true, true)
+                        run FinishSet()
+                    case 4:
+                        # Cool! I'm glad he dug it! But he's real chill, so…like…he'd probably dig it no matter what, ya know? Thanks for the help, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:316', true, true)
+                        run FinishSet()
+                    case 5:
+                        # Cool. <50:3><115:1:cd00> is a great dude, but he can be pretty picky sometimes. <10:4>And kinda weird too… He's always talking about these sports tha…
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:317', true, true)
+                        run FinishSet()
+                    case 6:
+                        # Very cool! He's not the kinda guy who'd care about my feelings, so he must've really dug it. Thanks for letting me know how it went, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:318', true, true)
+                        run FinishSet()
+                    case 7:
+                        # Wow. That's real high praise coming from a stylish dude like <115:1:cd00>! Thanks for the update, <110:5>!
+                        MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:319', true, true)
+                        run FinishSet()
+            else:
+                # Oh, I gotcha. I'm glad [he|she|] doesn't hate it. Thanks for doing the delivery thing, <110:5>.
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:308', true, true)
+                run FinishSet()
+        else:
+            if MainNpc.QuestFlags['cDeliveryClothChangeKeep']:
+                # Tried it on? That's real cool. Folks only try on gifts they like a bunch! I'll have to go see later!
+                MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:307', true, true)
+            else:
+                if MainNpc.QuestFlags['cDeliveryClothChangeAtLeast']:
+                    # Wow. Guess I was wrong. I thought it'd be <115:1:cd00>'s new favorite outfit. Oh well!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:310', true, true)
+                else:
+                    # [He|She|] didn't try it on? Strange. I thought [he'd|she'd|] really like it.
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:309', true, true)
+            run FinishSet()
+ 
+flow ReportE():
+    # Thanks for delivering the package to <115:1:cd00>! You're the best, <110:5>!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:401', false)
+    if (MainNpc.QuestFlags['cDeliveryItemOpen']) and (not MainNpc.QuestFlags['cDeliveryWrappingAgain']):
+        # So…um…how'd it go? Was <115:1:cd00> still angry?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:403', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            # You forget?! Man…how do you forget?<10:4> Remembering is the most important bit!
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:404', true, true)
+        elif MainNpc.QuestFlags['cDeliveryWiseUp']:
+            # You opened it?! Why would you do that? I wrapped it up all pretty and stuff so we could make up…
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:405', true, true)
+        else:
+            # You…OPENED IT?<10:4> Why would— I mean— You just— You handed over an open present?! OK, I gotta chill… Gotta… Gotta think of my happy place… My house…
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:406', true, true)
+    else:
+        # So…how did it go? Did it seem like <115:1:cd00> was still, umm… angry?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:402', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Cool! Very cool. Sounds like [he|she|]'s not angry anymore? That's great! I guess we'll be able to make up, thanks to you! You're the best, <110:3>!
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:407', true, true)
+        else:
+            # You forget?! Man…how do you forget?<10:4> Remembering is the most important bit!
+            MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_After:404', true, true)
+    run FinishSet()
+ 

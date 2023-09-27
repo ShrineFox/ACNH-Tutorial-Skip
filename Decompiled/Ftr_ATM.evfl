@@ -1,0 +1,37 @@
+flow EnterUI_Commune():
+    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+    EventFlowSystemActor.UIAtmHandlingEventFlowSystemActor.UIAtmHandling(0)
+    if (System.EventFlags['cPlayer:PlayerLoanRepaying']) and (EventFlowSystemActor.PlayerHasLoanEventFlowSystemActor.PlayerHasLoan()):
+        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_FinishLoan', 'cNowDemoEnd', false)
+ 
+flow EnterUI_Visitor():
+    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+    EventFlowSystemActor.UIAtmHandlingEventFlowSystemActor.UIAtmHandling(1)
+ 
+flow Root():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    if (EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming()) or (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')):
+        # Temporarily out of service for maintenance.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_ATM:001', false)
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland'):
+        if not System.EventFlags['cPlayer:CommuneATMChkToday']:
+            # This is a Bank of Nook ABD.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_ATM:004', false)
+            System.EventFlags['cPlayer:CommuneATMChkToday'] = true
+        run EnterUI_Commune()
+    elif EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+            # You must be registered as a resident to use this service.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_ATM:003', false)
+        else:
+            run EnterUI_Commune()
+    elif not System.EventFlags['cPlayer:PlayerLoanRepaying']:
+        run EnterUI_Visitor()
+    elif System.EventFlags['cPlayerVisit:NoticeATMOtherIsland']:
+        run EnterUI_Visitor()
+    else:
+        # Notice from the Bank of Nook This ABD can only process deposits and withdrawals.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_ATM:002', false)
+        System.EventFlags['cPlayerVisit:NoticeATMOtherIsland'] = true
+        run EnterUI_Visitor()
+ 

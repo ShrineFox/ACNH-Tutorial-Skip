@@ -1,0 +1,22 @@
+flow Root():
+    if System.EventFlags['cPlayer:ShizueCmnExplanationTownflag']:
+        # You'd like to submit a new design for the flag? Great!<10:4> Let's see what you came up with!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:011', true)
+    else:
+        # You want to change the flag in front of Resident Services? And the one at the airport too? Fantastic! Our flag is the physical embodiment of everythi…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:010', true)
+        System.EventFlags['cPlayer:ShizueCmnExplanationTownflag'] = true
+    EventFlowSystemActor.UIMyDesignSelectHandlingEventFlowSystemActor.UIMyDesignSelectHandling(0, 1, 0, 0, 0)
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cFlag')
+        # Oh my, PLAYER! It's perfect in every way! It truly captures the essence of ISLAND. From this point forward, your design will be our new flag.<10:4> T…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:012', false)
+        EventFlowSystemActor.NpcPlayerActivityEventFlowSystemActor.NpcPlayerActivity('cActivityType_ChangeFlag')
+        MainNpc.SzaAchievementChangeSymbolMainNpc.SzaAchievementChangeSymbol('cFlag')
+        System.EventFlags['cLand:SzaChangeSymbol'] = true
+        EventFlowSystemActor.SetMemoryEventLandEventFlowSystemActor.SetMemoryEventLand('cBlancoEventLand:LE_UpdateLandFlag')
+    else:
+        # Did you change your mind?<10:4> Not a problem. If there's anything else you need, you can find me right here!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:006', false)
+    run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
+ 

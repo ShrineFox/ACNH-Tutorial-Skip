@@ -1,0 +1,104 @@
+flow Cancell():
+    # Huh?! C'mon, don't tease! Tell me!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:104', true)
+    run Event14()
+ 
+flow Retype():
+    # Aw, dang. Did I get it wrong? Can ya spell it out again? Slower this time?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:103', true)
+    run Event14()
+ 
+flow Root():
+    if MainNpc.EventFlags['cNpcSave:InputPhrase']:
+        if MainNpc.CheckNpcApproachTypeMainNpc.CheckNpcApproachType():
+            # I need a new catchphrase. Somethin' more…sophisticational than "<110:5>," ya know?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:002', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Sub_Event25()
+            else:
+                # Huh… Well, if ya say so, I'll just keep on saying "<110:5>" forever!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:006', true)
+                System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+        else:
+            # Hmm… <50:3><110:5>… <50:3><110:5>! <50:3><110:5>? Whaddaya think, <110:3>? Does my catchphrase sound a little too, I dunno…bleh?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:004', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Sub_Event25()
+            else:
+                # Oh, wow! You think it's GREAT? Man, ya put my fears to bed AND ya tucked 'em in! Since ya dig it, <110:3>, I'll just keep saying "<110:5>"! 
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:008', true)
+                System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+    elif MainNpc.CheckNpcApproachTypeMainNpc.CheckNpcApproachType():
+        # How's stuff, <110:6>? Aw… I said "<110:5>" again. I've been tryin' not to do that. Feels like it's gettin' old. Whaddaya think, <110:6>?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:001', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Sub_Event25()
+        else:
+            # Oh yeah? Ya think so? If you like it, there's no way I'm gonna change it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:005', true)
+            System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+    else:
+        # The other day, <110:11:cd00> said my catchphrase is boring! Whaddaya think about that? Is "<110:5>" boring?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:003', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Sub_Event25()
+        else:
+            # Cool. Real cool. If you like <110:5>, then I'll keep it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:007', false)
+            System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+ 
+local flow Sub_Event25():
+    # Can ya help me make up a new one? I want one that's ME, but um… a smarter, cooler version of me!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:100', true)
+entrypoint Event14:
+    EventFlowSystemActor.UISoftwareKeyboardHandlingEventFlowSystemActor.UISoftwareKeyboardHandling('cPhrase', true)
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cPhrase', 0)
+        if MainNpc.NpcCheckSameWordFromSwkbdMainNpc.NpcCheckSameWordFromSwkbd('cPhrase'):
+            # "<50:3><110:5>"? I like the sound of tha— Wait! I already say that! So…I don't need to change it?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:102', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                    case 0:
+                        # I'm way down for just saying my usual thing! If ya need me, just listen for my "<110:5>." <50:3><110:6>!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:300', false)
+                    case 1:
+                        # Ya think so? Then I'll keep saying "<110:5>"! Easy! I secretly didn't wanna change it up anyway, <110:6>.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:301', false)
+                    case 2:
+                        # Cool, cool. I kinda always thought "<110:5>" was nice anyway… Good luck to anyone who wants stop me from saying "<110:6>" now!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:302', false)
+                EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cPhrase')
+                MainNpc.EventFlags['cNpcSave:InputPhrase'] = true
+                System.EventFlags['cPlayer:InputApproachBanCount'] = 1
+            else:
+                run Retype()
+        else:
+            # OK, let's try it out! Umm… <50:3><110:5>! So? Whaddaya think?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:101', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                    # Let's try it… <50:3><110:6>! Wow, it's perfect!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:200', false)
+                else:
+                    # OK, I'm gonna try it out… <50:3><110:5>! I like it! I like it!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:201', false)
+                EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cPhrase')
+                MainNpc.EventFlags['cNpcSave:InputPhrase'] = true
+                MainNpc.EventFlags['cNpcSave:PlayerNamePhrase'] = true
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                    case 0:
+                        # Thanks! I'm gonna say it all the time! I mean it. ALL the time. <50:3><110:6>! A huh huh huh…
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:202', false)
+                    case 1:
+                        # Thanks for the help, <110:6>!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:203', false)
+                    case 2:
+                        # Ain't nothin' like having a brand-new catchphrase! I can't wait to start saying "<110:5>" all the time!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_Habit:204', false)
+                System.EventFlags['cPlayer:InputApproachBanCount'] = 1
+            else:
+                run Retype()
+    else:
+        run Cancell()
+ 

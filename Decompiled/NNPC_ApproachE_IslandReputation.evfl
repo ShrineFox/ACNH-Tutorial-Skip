@@ -1,0 +1,84 @@
+flow Root():
+    MainNpc.SetIslandReputationApproachVillagerIndexMainNpc.SetIslandReputationApproachVillagerIndex(1)
+    MainNpc.EventFlags['cNpcSave:AppE_Rep_HappenToday'] = true
+    if MainNpc.EventFlags['cNpcSave:AppE_Happen1st']:
+        # Hey, <110:29>! Are you getting ready for K.K.'s concert, <110:6>?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:111', false)
+        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            # I'll let ya know if I find, like, a JUICE 'N SNACKS sign with big neon-green letters and maybe a clown picture. Oh, I just noticed your pocket deal. …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:112', false)
+        else:
+            if MainNpc.EventFlags['cNpcSave:AppE_GetItem1st']:
+                # I found something that should be put in the resting spot. Here ya go!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:113_02', true)
+            else:
+                # I found something that oughta be put in the resting spot, probably. Here ya go!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:113_01', true)
+            if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+                MainNpc.NpcDecideRewardByConditionMainNpc.NpcDecideRewardByCondition(10, 0, false, true)
+                MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+                MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+                MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Keep')
+                # Here's a recipe for the perfect resting-spot thing. It's a recipe for... [a|an]<125:0:0000>. Handmade stuff makes me feel all warm and fuzzy. Like ge…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:114_03', true)
+                run Sub_Event28()
+            else:
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious4EventFlowSystemActor.RandomChoiceExcludePrevious4(4, false):
+                    case 0:
+                        MainNpc.NpcDecideRewardByConditionMainNpc.NpcDecideRewardByCondition(6, 0, false, true)
+                        run Sub_Event34()
+                    case 1:
+                        MainNpc.NpcDecideRewardByConditionMainNpc.NpcDecideRewardByCondition(8, 0, false, true)
+                        run Sub_Event34()
+                    case 2:
+                        MainNpc.NpcDecideRewardByConditionMainNpc.NpcDecideRewardByCondition(9, 0, false, true)
+                        run Sub_Event34()
+                    case 3:
+                        MainNpc.NpcDecideRewardByConditionMainNpc.NpcDecideRewardByCondition(7, 0, false, true)
+                        MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+                        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+                        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Keep')
+                        # That <125:0:0000> was made in my hometown. With it around, I'd get to smell the smells of home, but on this island! That'd feel nice, <110:6>.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:114_02', true)
+                        run Sub_Event28()
+    else:
+        MainNpc.EventFlags['cNpcSave:AppE_Happen1st'] = true
+        if (MainNpc.CheckNpcLookMainNpc.CheckNpcLook() not in (0, 1, 2, 4, 6, 7)) and (MainNpc.EventFlags['cNpcSave:MarketBuildingSupport']):
+            # Hi, <110:29>! I heard a real cool rumor about you, <110:6>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:101_02', false)
+        else:
+            # Hi, <110:29>! I heard a real cool rumor about you, <110:6>.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:101_01', false)
+        # You're gonna make ISLAND famous so K.K. will perform here, yeah? I used to think K.K. was singing just to me whenever I wanted, but then I figured ou…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:102', false)
+        # Maaaaaaan, I've got an idea! Since a concert's gonna happen, let's have a place where folks can take a break. It'll be like this… "Whew! I'm tuckered…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:103', false)
+        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            # I'll let you know if I find something that'll be good for a rest spot. You got a lotta stuff in your pockets. You should find a good spot to set some…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:104_01', false)
+        else:
+            # Ooh, I know! Here, take this.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:104_02', true)
+            MainNpc.NpcDecideRewardByConditionMainNpc.NpcDecideRewardByCondition(6, 0, false, true)
+            MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+            MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Keep')
+            # This <125:0:0000> is perfect for a rest-spot decoration!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:105', true)
+            run Sub_Event28()
+ 
+local flow Sub_Event28():
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(2, 'Default')
+    System.EventFlags['cLand:CountAppE_RepTalk'] += 1
+    MainNpc.EventFlags['cNpcSave:AppE_GetItem1st'] = true
+    System.EventFlags['cPlayer:NnpcAppE_Rep_OccuredToday'] = true
+    System.EventFlags['cPlayer:NnpcApproachNoIslandRepCount'] = 0
+ 
+local flow Sub_Event34():
+    MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Keep')
+    # This <125:0:0000> is perfect for a resting-spot decoration!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachE_MainSeq:114_01', true)
+    run Sub_Event28()
+ 

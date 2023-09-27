@@ -1,0 +1,93 @@
+flow Greet_Museum_Art():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Oh! Hey, <110:4>! Funny running into you here! A huh huh huh… So funny…<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:001', false)
+    else:
+        # Whoa! How funny to run into you here! It's just like the dream I had where we were eating <135:7:cd00> and doing <135:6:cd00>… Do…do you have plans a…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:005', false)
+ 
+flow Greet_Museum_Fish():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Oh! Hey, <110:4>! Funny running into you here! A huh huh huh… So funny…<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:001', false)
+    else:
+        # Hey! Good to see ya! And look! The delicious fishies seem happy to see you too!<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:003', false)
+ 
+flow Greet_Museum_Fossil():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Oh! Hey, <110:4>! Funny running into you here! A huh huh huh… So funny…<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:001', false)
+    else:
+        # Wah! Wh-what… Oh, it's you, <110:4>! I thought a fossil had finally moved!<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:004', false)
+ 
+flow Greet_Museum_Insect():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Oh! Hey, <110:4>! Funny running into you here! A huh huh huh… So funny…<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:001', false)
+    else:
+        # Hey, <110:5>! You here to say hi to the bugs? A huh huh, me too!<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:002', false)
+ 
+flow Greet_Store():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Oh! Hey, <110:4>! Funny running into you here! A huh huh huh… So funny…<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:001', false)
+    else:
+        # You buying stuff too?<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:006', false)
+ 
+flow Greet_Tailor():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Oh! Hey, <110:4>! Funny running into you here! A huh huh huh… So funny…<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:001', false)
+    else:
+        # What're you here to check out? Can you pick something out for me?<10:15:0100>
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Greet/BO_Greet_Spot:007', false)
+ 
+flow Root():
+    MainNpc.NpcSetTalkManualChoiceMainNpc.NpcSetTalkManualChoice()
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMuseumInsect'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] < 1:
+            run Greet_Museum_Insect()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+        else:
+            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMuseumFish'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] < 1:
+            run Greet_Museum_Fish()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+        else:
+            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMuseumFossil'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] < 1:
+            run Greet_Museum_Fossil()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+        else:
+            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMametubu'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] < 1:
+            run Greet_Store()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+        else:
+            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTailor'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] < 1:
+            run Greet_Tailor()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+        else:
+            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMuseumArt'):
+        if MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] < 1:
+            run Greet_Museum_Art()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+        else:
+            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
+            MainNpc.EventFlags['cNpcMemory:TalkCountInFacilityToday'] += 1
+ 

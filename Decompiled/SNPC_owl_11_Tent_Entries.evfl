@@ -1,0 +1,85 @@
+flow FromDonatedFossil1st_Known():
+    if EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(20):
+        # A magnificent specimen indeed!<10:4> Once we open the museum, do consider donating it.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:152', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, '"Default"')
+        if System.EventFlags['cLand:OwlFoundFossil']:
+            run SNPC_owl_00_Common::Againrun SNPC_owl_00_Common::Again()
+        else:
+            run SNPC_owl_01_Museum_Donation::Eplanation_ExpertOpinionrun SNPC_owl_01_Museum_Donation::Eplanation_ExpertOpinion()
+    else:
+        if EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(19):
+            # My feathers, what a fabulous fossil! And would you believe we needed but one more item to complete the application to build the museum? This <125:0:0…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:154', false)
+        else:
+            # My feathers, what a fabulous fossil! This <125:0:0000> would be a sizable step toward opening the museum… I wonder…would you, perhaps, consider donat…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:153', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run SNPC_owl_02_Museum_Judgment::Donation_Acceptrun SNPC_owl_02_Museum_Judgment::Donation_Accept()
+            run owl_Tent_AfterDonation()
+        else:
+            run SNPC_owl_02_Museum_Judgment::Donation_Declinerun SNPC_owl_02_Museum_Judgment::Donation_Decline()
+ 
+flow Owl_TentDonationAgainAsk():
+    # By the by, I wonder if you have anything else that could be donated and—if so—might I take it for you?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:161', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run SNPC_owl_01_Museum_Donation::OwlTentDonationAgainrun SNPC_owl_01_Museum_Donation::OwlTentDonationAgain()
+    else:
+        # As you wish. Please come back any time!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:162', false)
+        run Owl_TentDonationAgainAsk_NoFossil()
+ 
+flow Owl_TentDonationAgainAsk_NoFossil():
+    # With this, we need <90:1:0000> <50:8:000000120064006f006e006100740069006f006e007300100064006f006e006100740069006f006e00120064006f006e006100740069006f…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:111', false)
+ 
+flow owl_DonatedFossil1st_Known():
+    System.EventFlags['cPlayerTemp:OwlKnownFossil'] = true
+    # <10:12>Hoo!<10:9> Indeed, there can be no doubt. This is…a fossil! Incredible! Wonderful! Remarkable! My intuition was impeccable… There are fossils …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:151_02', false)
+    if EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersNotMovedIn`, `BlathersTent`):
+        run FromDonatedFossil1st_Known()
+    else:
+        # Be that as it may…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:151_03', false)
+        run SNPC_owl_01_Museum_Donation::Fossil_DonationTypeChkrun SNPC_owl_01_Museum_Donation::Fossil_DonationTypeChk()
+ 
+flow owl_DonatedFossil1st_Unknown():
+    # <10:12>Hoo!<10:9> Indeed, there can be no doubt. This is…a fossil! Incredible! Wonderful! Remarkable! My intuition was impeccable… There are fossils …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:151_01', false)
+    run SNPC_owl_02_Museum_Judgment::Fossil_Checkrun SNPC_owl_02_Museum_Judgment::Fossil_Check()
+    if EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersNotMovedIn`, `BlathersTent`):
+        run FromDonatedFossil1st_Known()
+    else:
+        run SNPC_owl_01_Museum_Donation::Fossil_DonationTypeChkrun SNPC_owl_01_Museum_Donation::Fossil_DonationTypeChk()
+ 
+flow owl_Tent_AfterDonation():
+    System.EventFlags['cPlayer:OwlDonationDone'] = true
+    if EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(20):
+        System.EventFlags['cPlayer:FutaReadyForMuseum'] = true
+        System.EventFlags['cPlayer:FutaReadyForMuseumToday'] = true
+        System.EventFlags['cLand:MuseumGrowupEnable1'] = true
+        # Hm…I do believe this means… Yes! Huzzah! Hooray! We have acquired the number of specimens required!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:191', false)
+        if System.EventFlags['cLand:MuseumTentBuiltToday']:
+            # My feathers, I am at a loss for words! Never would I have imagined we could reach our donation goal…on this, my very first day on the island! The gen…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:191_01', false)
+            System.EventFlags['cLand:MuseumGrowupEnable1'] = true
+            System.EventFlags['cLand:FinishMuseumPreparation1stDay'] = true
+        else:
+            # At last we can submit our application to build a proper museum! Oh! Oh my! I must make haste and prepare for the museum opening! There's so much to d…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:191_02', false)
+    else:
+        System.EventFlags['cLand:DonationAmountForMuseum'] += -1
+        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 0, 0, 'cLand:DonationAmountForMuseum')
+        if System.EventFlags['cLand:OwlFoundFossil']:
+            if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation3'):
+                run Owl_TentDonationAgainAsk()
+            else:
+                run Owl_TentDonationAgainAsk_NoFossil()
+        elif EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation2'):
+            run Owl_TentDonationAgainAsk()
+        else:
+            run Owl_TentDonationAgainAsk_NoFossil()
+ 

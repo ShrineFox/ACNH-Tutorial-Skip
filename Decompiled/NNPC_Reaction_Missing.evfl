@@ -1,0 +1,51 @@
+flow Root():
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        if MainNpc.NpcCheckPastDaysMainNpc.NpcCheckPastDays('cLastTalk', 30):
+            if EventFlowSystemActor.PlayerPastDaysFromLastPlayEventFlowSystemActor.PlayerPastDaysFromLastPlay(30):
+                if MainNpc.NpcCheckPastDaysMainNpc.NpcCheckPastDays('cLastTalk', 365):
+                    run Sub_Event9()
+                else:
+                    MainNpc.NpcPastDaysFromLastTalkDateToTagMainNpc.NpcPastDaysFromLastTalkDateToTag()
+                    # RANDOM: Hey, it's <110:4>! I haven't seen you i… // <50:3><110:4>! Where have you been? I f… // Huh? There you are! <50:3><110:4>! Man!…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing30:004', false)
+                    run Sub_Event5()
+            elif MainNpc.NpcCheckPastDaysMainNpc.NpcCheckPastDays('cLastTalk', 365):
+                run Sub_Event9()
+            else:
+                MainNpc.NpcPastDaysFromLastTalkDateToTagMainNpc.NpcPastDaysFromLastTalkDateToTag()
+                # RANDOM: <50:3><110:4>! Where have you BEEN? I h… // <50:3><110:4>… Can you…see me? I though… // <50:3><110:4>! Long time no see! How lo…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing30:005', false)
+                run Sub_Event5()
+        else:
+            if MainNpc.NpcCheckPastDaysMainNpc.NpcCheckPastDays('cLastTalk', 7):
+                if not EventFlowSystemActor.PlayerPastDaysFromLastPlayEventFlowSystemActor.PlayerPastDaysFromLastPlay(7):
+                    # RANDOM: Yaaay! You finally talked to me! I keep… // I know you've been on this island somew… // Huh? It's been a while since we've talk…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing7:002', false)
+                    run Sub_Event5()
+                elif not EventFlowSystemActor.PlayerPastDaysFromLastPlayEventFlowSystemActor.PlayerPastDaysFromLastPlay(30):
+                    MainNpc.NpcPastDaysFromLastTalkDateToTagMainNpc.NpcPastDaysFromLastTalkDateToTag()
+                    # RANDOM: Hey, it's <110:4>! Man, I haven't seen … // <50:3><110:3>! Where have you been for … // <50:3><110:4>! Where have you BEEN? Som…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing7:001', false)
+                    run Sub_Event5()
+ 
+local flow Sub_Event5():
+    MainNpc.SetNpcFeelMainNpc.SetNpcFeel('cNormal', 120, false)
+    run NNPC_Talk_Situation::Facility_Chkrun NNPC_Talk_Situation::Facility_Chk()
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_Event9():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+        MainNpc.NpcPastDaysFromLastTalkDateToTagMainNpc.NpcPastDaysFromLastTalkDateToTag()
+        if MainNpc.NpcPastYMFromLastTalkDateMainNpc.NpcPastYMFromLastTalkDate():
+            # Yaaay, welcome back! I haven't seen you in <90:1:0002> <50:8:0200000a0079006500610072007300080079006500610072000a00790065006100720073>! I tell ya… Yo…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing30:001', false)
+            run Sub_Event5()
+        else:
+            # YAAAY! Look! It's been <90:1:0002> <50:8:0200000a0079006500610072007300080079006500610072000a00790065006100720073> and <90:1:0001> <50:8:0100000c006d…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing30:002', false)
+            run Sub_Event5()
+    else:
+        # RANDOM: <50:3><110:29>?! WOW! Welcome back! Thi… // Excuse me! Have you seen someone named …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Missing30:003', false)
+        run Sub_Event5()
+ 

@@ -1,0 +1,40 @@
+flow HedgePresent():
+    # Yes, yes! So like you to jump into the action.<10:4> You are a shining example for the rest of ISLAND. Now, as you've demonstrated your eco-mindfulne…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_61_Event_EarthDay:0004', false)
+    MainNpc.SmartPhoneMainNpc.SmartPhone(0)
+    run Demo_Common_PhoneCall::SendingDataWithPrun Demo_Common_PhoneCall::SendingDataWithP()
+    MainNpc.SmartPhoneMainNpc.SmartPhone(1)
+    Player.SmartPhonePlayer.SmartPhone(1)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('Slo001', 12758)
+    System.EventFlags['cPlayer:RcoEarthDayGetHedge'] = true
+    # Keep up the good work! I'd truly love to have you continue taking part in our Nature Day activities!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_61_Event_EarthDay:0005', false)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    if System.EventFlags['cPlayer:RcoEarthDayAnnouncement']:
+        if (not System.EventFlags['cPlayer:RcoEarthDayGetHedge']) and (System.EventFlags['cPlayer:EarthdayDailyAllClear']) and (System.EventFlags['cPlayer:MainmenuRecipe']) and (not EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('Slo001', 12758)):
+            # Ah!<10:4> Looks like you've taken part in the Nature Day activities. So glad to see that, PLAYER.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_61_Event_EarthDay:0006', false)
+            System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+            run HedgePresent()
+    elif System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
+        # <50:3>PLAYER! For a limited time, we're going to have a special Nature Day promotion for Nook Miles+ members. During the event, we'll be giving out m…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_61_Event_EarthDay:0002', false)
+        System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+        System.EventFlags['cPlayer:RcoEarthDayAnnouncement'] = true
+        if System.EventFlags['cPlayer:RcoEarthDayGetHedge']:
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif not System.EventFlags['cPlayer:EarthdayDailyAllClear']:
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        elif (System.EventFlags['cPlayer:MainmenuRecipe']) and (not EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('Slo001', 12758)):
+            # What's this? You've already taken part in the Nature Day activities, haven't you, PLAYER?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_61_Event_EarthDay:0003', false)
+            run HedgePresent()
+    elif not System.EventFlags['cPlayer:RcoEarthDayAnnouncementPre']:
+        # <50:3>PLAYER! I've decided to start an eco-friendly initiative to celebrate Nature Day! In fact, at this very moment, we are in the midst of prepping…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_61_Event_EarthDay:0001', false)
+        System.EventFlags['cPlayer:RcoEarthDayAnnouncementPre'] = true
+        System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

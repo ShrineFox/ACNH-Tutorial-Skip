@@ -1,0 +1,326 @@
+flow AfterSetZociacRecipe():
+    System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe'] = true
+    run Event33()
+ 
+flow Chat():
+    # RANDOM: If you see a shooting star, why not try… // Did you know that shooting stars often … // Did you know that each of the constella…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:010', false)
+ 
+flow ChkHaveZodiacPiece():
+    run HaveZodiacChk()
+    if SubflowResults@2[2] == 0:
+        run Chat()
+    else:
+        # Might I help you with something?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:011', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cAsterism', 65534, '', '', 'cItemSelect', false)
+            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+                MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
+                MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+                EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+                # Of course! What you have there is… [a|an]<125:0:0000>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:012', false)
+                run TalkAboutZodiac()
+                # Oh! Please pardon me! I didn't mean to talk so long! You must have other places to be… But let me return this before you go.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:063', false)
+                MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, 'Default')
+                # If you happen across any other items related to the stars, I'd be delighted to tell you what I know of them!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:064', false)
+            else:
+                # Well, toodle-hoo! I hope the rest of your night is delightful!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:013', false)
+        else:
+            run Chat()
+ 
+flow ChkZodiacRecipe():
+    switch EventFlowSystemActor.EnvConstellationEventFlowSystemActor.EnvConstellation('cGrowUpTime'):
+        case `Capricorn`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5957):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5957, false)
+                run AfterSetZociacRecipe()
+        case `Aquarius`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5956):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5956, false)
+                run AfterSetZociacRecipe()
+        case `Pisces`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5963):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5963, false)
+                run AfterSetZociacRecipe()
+        case `Aries`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5954):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5954, false)
+                run AfterSetZociacRecipe()
+        case `Taurus`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5961):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5961, false)
+                run AfterSetZociacRecipe()
+        case `Gemini`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5960):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5960, false)
+                run AfterSetZociacRecipe()
+        case `Cancer`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5959):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5959, false)
+                run AfterSetZociacRecipe()
+        case `Leo`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5964):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5964, false)
+                run AfterSetZociacRecipe()
+        case `Virgo`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5955):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5955, false)
+                run AfterSetZociacRecipe()
+        case `Libra`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 3774):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(3774, false)
+                run AfterSetZociacRecipe()
+        case `Scorpius`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5962):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5962, false)
+                run AfterSetZociacRecipe()
+        case `Sagittarius`:
+            if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 5958):
+                run NotSetZodiacRecipe()
+            else:
+                MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(5958, false)
+                run AfterSetZociacRecipe()
+ 
+flow GetStarPiece():
+    # Oh, hootie-toot! I happened upon this just the other night when the stars twinkled «ever so »beautifully. What a sight, wouldn't you agree? Anyhoo, i…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:014', false)
+    switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(60, 20, 20):
+        case 0:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5983, false, 'cVillageRemakePattern', 0)
+            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(5983, 5)
+            run Event36()
+        case 1:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5984, true, 'cVillageRemakePattern', 0)
+            run Event36()
+        case 2:
+            run SetZodiacStarPiece()
+            run Event36()
+ 
+flow HaveZodiacChk():
+    SubflowResults[2] = 1
+    if (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5985, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5957, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5986, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5956, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5987, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5963, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5988, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5954, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5989, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5961, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5990, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5960, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5991, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5959, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5992, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5964, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5993, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5955, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5994, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(3774, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5995, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5962, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5996, 1)) and (not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5958, 1)):
+        SubflowResults[2] = 0
+ 
+flow NotSetZodiacRecipe():
+    run Event39()
+ 
+flow PresentRecipe():
+    if not System.EventFlags['cPlayer:OwsPresentFirstRecipe']:
+        # Oh, I nearly forgot! I recently ran across this DIY recipe in one of my books on the stars. It seems there's a magic wand that, if you make a wish an…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:108', false)
+        # I'd like to give it to you as a token of our new friendship. I do hope you'll try it out sometime!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:109', false)
+        MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(2544, false)
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+        # And if I find any other interesting recipes, I'll be sure to write them down for you!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:110', false)
+        # Thank you for this lovely chat! I'm sure we'll meet again the next time I come to look at the stars.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:111', false)
+        System.EventFlags['cPlayer:OwsPresentFirstRecipe'] = true
+        System.EventFlags['cPlayer:OwsPresentTodayRecipe'] = true
+    elif System.EventFlags['cPlayer:OwsPresentThisZodiacRecipe']:
+entrypoint Event39:
+        if EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('Ows01', 65534):
+            run GetStarPiece()
+        else:
+            MainNpc.DecideEventRewardDIYRecipeMainNpc.DecideEventRewardDIYRecipe('Ows01')
+entrypoint Event33:
+            # Hootie-toot, I almost forgot! I came across a recipe for an astronomical project in a book and jotted it down. I would like you to have it. Do let me…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:003', false)
+            MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+entrypoint Event36:
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+            # Well, have a splendid rest of the night! I know I shall.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:004', false)
+            System.EventFlags['cPlayer:OwsPresentTodayRecipe'] = true
+    else:
+        run ChkZodiacRecipe()
+ 
+flow Root(ItemPrice: int = 0):
+    if not System.EventFlags['cPlayer:OwsFirstTalk']:
+        System.EventFlags['cPlayer:OwsTalkedToday'] = true
+        System.EventFlags['cPlayer:OwsFirstTalk'] = true
+        # Hootie-toot and a very good evening to you! Are you a resident of this island?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:101', false)
+        # Ah ha! You must be the famous PLAYER! It's lovely to meet you—I'm Celeste! Perhaps you've met my brother, Blathers? He's a museum curator. You'd know…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:102', false)
+        # I came here to examine the night sky at Blathers's suggestion, but…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:103', false)
+        if EventFlowSystemActor.EnvSpecialWeatherEventFlowSystemActor.EnvSpecialWeather() in (`NormalWeather`, `HeavyShower_MorningBefore`, `HeavyShower_AfternoonBefore`, `Rainbow`, `DoubleRainbow`, `AuroraBorealis_Before1800`, `AuroraBorealis`, `SpecialWeather8`, `SpecialWeather9`):
+            # It's so much better than I had dared hope! Each star is as clear and distinct as if it had been hand drawn! I wonder if we might even see a shooting …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:104', false)
+            # Have you ever heard that a wish upon a falling star will bring you good fortune, PLAYER? The stars above, falling all the way to earth just to hear o…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:105', false)
+            # If you look up at the sky with  and happen to see a shooting star, then press  to make a wish.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:106', false)
+        else:
+            # The night sky on this island is just stunning! I am simply gobsmacked by its beauty. What's more, signs suggest that tonight there will be a meteor s…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:104_01', false)
+            # Have you ever heard that a wish upon a falling star will bring you good fortune, PLAYER? The stars above, falling all the way to earth just to hear o…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:105', false)
+            # Look up at the sky with , and should you spot a shooting star tonight, press  to make a wish.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:106_01', false)
+        # If you do that, you just might earn yourself some good fortune!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:107', false)
+        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            # Oh, I'm sorry! I've gone and talked your poor ear off! Thank you so much for the chat. I'm sure we'll meet again the next time I come to look at the …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:112', false)
+        else:
+            run PresentRecipe()
+    elif not System.EventFlags['cPlayer:OwsTalkedToday']:
+        System.EventFlags['cPlayer:OwsTalkedToday'] = true
+        if EventFlowSystemActor.EnvSpecialWeatherEventFlowSystemActor.EnvSpecialWeather() in (`NormalWeather`, `HeavyShower_MorningBefore`, `HeavyShower_AfternoonBefore`, `Rainbow`, `DoubleRainbow`, `AuroraBorealis_Before1800`, `AuroraBorealis`, `SpecialWeather8`, `SpecialWeather9`):
+            # RANDOM: Oh, good evening! Aren't the stars just…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:001', false)
+            if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+                # Well, have a splendid rest of the night! I know I shall.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:004', false)
+            else:
+                run PresentRecipe()
+        else:
+            # Good evening, PLAYER. Have you been admiring the sky? So many shooting stars tonight! Would you care to watch nature's most beautiful performance wit…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:002', false)
+            if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1:
+                run PresentRecipe()
+    elif System.EventFlags['cPlayer:OwsPresentTodayRecipe']:
+        run ChkHaveZodiacPiece()
+    elif EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+        run ChkHaveZodiacPiece()
+    else:
+        run PresentRecipe()
+ 
+flow SetZodiacStarPiece():
+    switch EventFlowSystemActor.EnvConstellationEventFlowSystemActor.EnvConstellation('cGrowUpTime'):
+        case `Capricorn`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5985, true, 'cVillageRemakePattern', 0)
+        case `Aquarius`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5986, true, 'cVillageRemakePattern', 0)
+        case `Pisces`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5987, true, 'cVillageRemakePattern', 0)
+        case `Aries`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5988, true, 'cVillageRemakePattern', 0)
+        case `Taurus`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5989, true, 'cVillageRemakePattern', 0)
+        case `Gemini`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5990, true, 'cVillageRemakePattern', 0)
+        case `Cancer`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5991, true, 'cVillageRemakePattern', 0)
+        case `Leo`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5992, true, 'cVillageRemakePattern', 0)
+        case `Virgo`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5993, true, 'cVillageRemakePattern', 0)
+        case `Libra`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5994, true, 'cVillageRemakePattern', 0)
+        case `Scorpius`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5995, true, 'cVillageRemakePattern', 0)
+        case `Sagittarius`:
+            MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(5996, true, 'cVillageRemakePattern', 0)
+ 
+flow ShowZodiacChk():
+    SubflowResults[1] = 0
+    SubflowResults[0] = 0
+    if (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5985, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5957, 1, true)):
+        SubflowResults[0] = 1
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5986, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5956, 1, true)):
+        SubflowResults[0] = 2
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5987, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5963, 1, true)):
+        SubflowResults[0] = 3
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5988, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5954, 1, true)):
+        SubflowResults[0] = 4
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5989, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5961, 1, true)):
+        SubflowResults[0] = 5
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5990, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5960, 1, true)):
+        SubflowResults[0] = 6
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5991, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5959, 1, true)):
+        SubflowResults[0] = 7
+    elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5992, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5964, 1, true)):
+        SubflowResults[0] = 8
+    elif (not EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5993, 1, true)) and (not EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5955, 1, true)):
+        SubflowResults[1] = 1
+        if (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5994, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(3774, 1, true)):
+            SubflowResults[0] = 0
+        elif (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5995, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5962, 1, true)):
+            SubflowResults[0] = 1
+        elif (not EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5996, 1, true)) and (not EventFlowSystemActor.UIPocketMenuItemSelectedEventFlowSystemActor.UIPocketMenuItemSelected(5958, 1, true)):
+            SubflowResults[1] = 0
+            SubflowResults[0] = 0
+        else:
+            SubflowResults[0] = 2
+    else:
+        SubflowResults[0] = 9
+ 
+flow TalkAboutZodiac():
+    run ShowZodiacChk()
+    if SubflowResults@2[1] == 0:
+        switch SubflowResults@10[0]:
+            case 1:
+                # There are many tales and stories about Capricorn. This is my favorite: Long ago and far away… The gods were enjoying a fantastical banquet by a river…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:051', false)
+            case 2:
+                # There are many tales and stories about Aquarius. This is my favorite: Long ago and far away… The gods found themselves in need of a cupbearer to refr…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:052', false)
+            case 3:
+                # There are many tales and stories about Pisces. This is my favorite: Long ago and far away… The gods were enjoying a fantastical banquet by a river wh…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:053', false)
+            case 4:
+                # There are many tales and stories about Aries. This is my favorite: Long ago and far away… There was a pair of royal twins named Phrixus and Helle who…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:054', false)
+            case 5:
+                # There are many tales and stories about Taurus. This is my favorite: Long ago and far away… An extraordinarily beautiful princess called Europa was pi…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:055', false)
+            case 6:
+                # There are many tales and stories about Gemini. This is my favorite: Long ago and far away… The great god Zeus had twin sons named Castor and Pollux, …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:056', false)
+            case 7:
+                # There are many tales and stories about Cancer. This is my favorite: Long ago and far away… There was a monster called the Hydra poisoning a spring th…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:057', false)
+            case 8:
+                # There are many tales and stories about Leo. This is my favorite: Long ago and far away… There was a mighty lion with unbreakable skin that menaced th…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:058', false)
+            case 9:
+                # There are many tales and stories about Virgo. This is my favorite: Long ago and far away… Persephone, daughter of Demeter, was picking flowers when s…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:059', false)
+            default:
+                return
+    else:
+        switch SubflowResults@10[0]:
+            case 0:
+                # There are many tales and stories about Libra. This is my favorite: Long ago and far away… The goddess of justice, Astrea, had a set of scales that co…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:060', false)
+            case 1:
+                # There are many tales and stories about Scorpio. This is my favorite: Long ago and far away… There was a very skilled hunter named Orion who boasted o…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:061', false)
+            case 2:
+                # There are many tales and stories about Sagittarius. This is my favorite: Long ago and far away… The half-man, half-horse creatures called centaurs we…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/ows/SP_ows:062', false)
+            default:
+                return
+ 

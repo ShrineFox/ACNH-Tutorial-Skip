@@ -1,0 +1,32 @@
+flow Root():
+    EventFlowSystemActor.UIMelodyEditCreateEventFlowSystemActor.UIMelodyEditCreate()
+    if System.EventFlags['cPlayer:ShizueCmnExplanationTowntune']:
+        # You'd like to compose a new tune for ISLAND right now? That's great news! I knew I could count on you, maestro! Let's hear your lovely tune.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:005', true)
+    else:
+        # I'm certain you've heard the current ISLAND island tune! You really can't miss it. It plays in multiple locations across the island, and it reminds u…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:004', true)
+        System.EventFlags['cPlayer:ShizueCmnExplanationTowntune'] = true
+    EventFlowSystemActor.UIMelodyEditHandlingEventFlowSystemActor.UIMelodyEditHandling()
+    switch EventFlowSystemActor.UIResultMelodyEditEventFlowSystemActor.UIResultMelodyEdit():
+        case 0:
+            EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cMelody')
+            # Well, I do have a little musical knowledge… Allow me to preview the tune you created!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:007', true)
+            MainNpc.SzaPlayMelodyMainNpc.SzaPlayMelody()
+            # How inspiring! Your new island tune makes me so proud to call ISLAND my home! Now then, we'll start using it right away! I hope you enjoy hearing it …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:009', true)
+            EventFlowSystemActor.NpcPlayerActivityEventFlowSystemActor.NpcPlayerActivity('cActivityType_ChangeMelody')
+            MainNpc.SzaAchievementChangeSymbolMainNpc.SzaAchievementChangeSymbol('cMelody')
+            EventFlowSystemActor.SetMemoryEventLandEventFlowSystemActor.SetMemoryEventLand('cBlancoEventLand:LE_UpdateLandMelody')
+        case 1:
+            # Well, I do have a little musical knowledge… Allow me to preview the tune you created!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:007', true)
+            MainNpc.SzaPlayMelodyMainNpc.SzaPlayMelody()
+            # This tune sounds very…familiar. Well, no sense fixing something that isn't broken! We'll keep it for now.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:008', false)
+        case 2:
+            # Did you change your mind?<10:4> Not a problem. If there's anything else you need, you can find me right here!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:006', false)
+    run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
+ 

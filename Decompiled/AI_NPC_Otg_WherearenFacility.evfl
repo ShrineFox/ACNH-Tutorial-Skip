@@ -1,0 +1,26 @@
+flow Init():
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveWherearenFacility', false)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ReqVisible', 0)
+ 
+flow Leave():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Gate', FlowName='SNPC_otg_03_WherearenFacility')
+ 
+flow RequestCheck():
+    if (MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('ReqVisible', 1)) or (System.EventFlags['cWherearenPlayer:IsFacilityEditEndIndoorDemo'] >= 1):
+        MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_otg_03_WherearenFacility', 'Root', false, true, ArgInt0=0)
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('ReqVisible', 0)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    run RequestCheck()
+    if System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility']:
+        System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = false
+        if not System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoTakePicture']:
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(21, true)
+            MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+            EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:FacilityRoomEditStart', 'Place:SafeArea', false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_03_WherearenFacility', EntryName='Visit')
+    else:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_otg_03_WherearenFacility', 'Root', false, true)
+ 

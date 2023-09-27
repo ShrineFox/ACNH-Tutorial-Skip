@@ -1,0 +1,254 @@
+flow GstGiveSpirits():
+    MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(4702, false, 'cVillageRemakePattern', 0)
+    run Gst_ClearProcess()
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(15, 'Default')
+    EventFlowSystemActor.DeleteTargetItemEventFlowSystemActor.DeleteTargetItem(4702, 5, false)
+    # Perfect! That's all five pieces.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:030', true)
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(16, 'Default')
+    MainNpc.NpcGstChangeMainNpc.NpcGstChange(0)
+    # <10:12>                       TA-DA! Ahh, back to normal. Whew! Thank goodness. And thank YOU! I feel wonderful!
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:031', false)
+    run Gst_Choose_Category()
+    # Oh! Right! I need to give you the reward I promised.
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:032', false)
+    switch SubflowResults@4[0]:
+        case 0:
+            # What's it going to be?<10:4> Well, who doesn't love furniture?
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:033_01', false)
+        case 1:
+            # What's it going to be?<10:4> I know! I'll give you some wallpaper!
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:033_02', false)
+        case 2:
+            # What's it going to be?<10:4> Oh! I know! Flooring! Everyone loves flooring.
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:033_03', false)
+        case 3:
+            # What's it going to be?<10:4> I'm thinking some type of clothing…
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:033_04', false)
+    # I can get you something you don't have yet, or I can get you something expensive. So what's it going to be?
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:035', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # OK! You got it! Something new… Something you don't have yet… Well, whether or not you've already got a lot of stuff, I think I have just the item for…
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:036_01', false)
+        run Gst_Choose_Item_NotHave()
+    else:
+        # OK! You got it! So we're looking for something a little on the expensive side, huh? I'm not that great at judging the value of items, so I'm not tota…
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:036_02', false)
+        run Gst_Choose_Item_Rich()
+    SubNpc.SetItemNameSubNpc.SetItemName(1, 4, 0)
+    SubNpc.SetDeliveryItemSubNpc.SetDeliveryItem(1, true)
+    SubNpc.SetEventRewardToPlayerBaggageSubNpc.SetEventRewardToPlayerBaggage('cFree')
+    # Here, have… [a|an]<125:4:0000>! I'll put this item in your pocket, OK?
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:037', false)
+    # Let me just say, I hope our paths cross again sometime. Until then, farewell!
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:038', false)
+    MainNpc.NpcGstChangeMainNpc.NpcGstChange(2)
+    EventFlowSystemActor.SetMemoryEventPlayerEventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_Gst_Help')
+ 
+flow Gst_Choose_Category():
+    if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() not in (`Homeless`, `PlacedTent`):
+        run Moving_SubPlayer()
+    elif (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']):
+        run Moving_SubPlayer()
+    elif EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(75):
+        SubflowResults[0] = 0
+    else:
+        SubflowResults[0] = 3
+ 
+flow Gst_Choose_Item_NotHave():
+    switch SubflowResults@4[0]:
+        case 0:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Furniture`, 10001, 0, true)
+        case 1:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Wallpaper`, 10000, 0, true)
+        case 2:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Flooring`, 10000, 0, true)
+        case 3:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Clothing`, 10000, 0, true)
+ 
+flow Gst_Choose_Item_Rich():
+    switch SubflowResults@4[0]:
+        case 0:
+            if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`InResServiceTent`, `NooksCrannyInitial`):
+                MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Furniture`, 15001, 3500, false)
+            else:
+                MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Furniture`, 100001, 6600, false)
+        case 1:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Wallpaper`, 10000, 2000, false)
+        case 2:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Flooring`, 10000, 2000, false)
+        case 3:
+            MainNpc.GstDecideRewardMainNpc.GstDecideReward(`Clothing`, 10000, 3500, false)
+ 
+flow Gst_ClearProcess():
+    System.EventFlags['cPlayer:GstQuestClearFlag'] = true
+    System.EventFlags['cPlayer:GstQuestStartFlag'] = false
+    System.EventFlags['cLifeSupportAchievement:HelpGst'] += 1
+ 
+flow Gst_Hit():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # Hey! You know that I am not a spirit piece…right, PLAYER?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:065_01', true)
+        case 1:
+            # Ummmm… This is just me. Please don't confuse me for a piece of my spirit, OK?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:065_02', true)
+        case 2:
+            # Hey! You can't collect me! You should be collecting my spirit pieces!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:065_03', true)
+ 
+flow Gst_HoleChat():
+    if (MainNpc.CountHoleMainNpc.CountHole(2)) and (not System.EventFlags['cPlayerTemp:GstTalkHoleChat']):
+        System.EventFlags['cPlayerTemp:GstTalkHoleChat'] = true
+        # Seems like it'd be hard to walk with all these holes in the ground… Not that I'd knoooow.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:070', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Gst_Quest():
+    run Gst_HoleChat()
+    if not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(4702, 5):
+        if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(4702, 4):
+            # Wow! Only one piece left! Almost done! Keep going!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:015', false)
+        elif EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(4702, 3):
+            # Three pieces! That's pretty good!<10:4> Keep it up!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:014', false)
+        elif EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(4702, 2):
+            # Two pieces so far, eh? Keep it up!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:013', false)
+        elif EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(4702, 1):
+            # Oof… Only one piece so far, I see… Oh! Um… Don't mind me. I'm just babbling, that's all. Good luck on your search!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:012', false)
+        else:
+            # Oh, no. Really? Not a single one? Bah! Don't mind my whining. It's just… Well, I'm counting on you.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:011', false)
+    elif EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+        # Well! You've collected all the pieces of my spirit! But…I'm afraid I'm a little shy about the possibility of other folks seeing my spirit transformat…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:040', true)
+    else:
+        # You did it! You found all the pieces of my spirit! Come on! Hand them over! Hurry!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:016', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run GstGiveSpirits()
+        else:
+            # What? Oh, stop kidding around. You are kidding around, right? You do realize they…belong…to me?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:017', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run GstGiveSpirits()
+            else:
+                # Wh-what? Please! I need them!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:018', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    run GstGiveSpirits()
+                else:
+                    # I…I don't understand. What possible use could you have for my spirit?!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:019', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        run GstGiveSpirits()
+                    else:
+                        # But I NEEEEED my spirit pieces! Please! Please give them back!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:020', false)
+                        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                            run GstGiveSpirits()
+                        else:
+                            do:
+                                # …Listen, you need to give those to me…or E L S E.
+                                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:021', false)
+                            while EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 1
+                            run GstGiveSpirits()
+ 
+flow Gst_Share():
+    if System.EventFlags['cLandTemp:GstQuestStartLandFlag']:
+        if System.EventFlags['cPlayer:GstQuestStartFlag']:
+            run Gst_Quest()
+        else:
+            # What are you looking at? There's a very, very good reason why I'm like this right now…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:061', false)
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+    elif System.EventFlags['cPlayer:GstQuestClearFlag']:
+        # AIIIEEEEEEE! Oh. It's just you, PLAYER. Whew. Thanks for your help earlier.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:060', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+    else:
+        run Gst_Start()
+ 
+flow Gst_Start():
+    # RANDOM: <10:12>AA«IIIIIIIIEEEEEEEEEE!» A G-G-«G… // <10:12>N-N-«NOOOOOOOOOO!» A G-G-«GHOOOO… // <10:12>Y«EEEEEEEEEEEKKKKK!» A G-G-«GHOO…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:001', true)
+    MainNpc.NpcGstChangeMainNpc.NpcGstChange(1)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    # RANDOM: Please! I haven't done anything wrong! … // What do you want from me, ghost?! This … // I-I can't believe it… I mean, I did sus…
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:002', false)
+    if System.EventFlags['cPlayer:GstQuestBreakFlag']:
+        # Oh! <50:3>PLAYER! Please don't scare me like that! My heart can't take it! Aaaaand the pieces of my spirit took off again. I managed to sort it out e…
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:050', false)
+        # Could I…bother you to collect the pieces of my spirit this time? I'll prepare a reward for you and everything! Promise!
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:051', false)
+    else:
+        if not System.EventFlags['cLand:GstTalkAnyone']:
+            # Huh? A human? A real, live human? I've been on this island for a looong time, but I've never seen a human… Oh, you just moved here? Ohh! OK! Well, th…
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:003', false)
+            run Sub_Event2()
+        elif System.EventFlags['cPlayer:GstTalkBefore']:
+            # Oh, PLAYER! Please do NOT startle me like that! My heart nearly stopped… And there goes my spirit again! Great. I can't go around looking like this… …
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:045', false)
+            # Um… I'm so sorry to ask, but…is there any chance you can collect the pieces of my spirit again? Otherwise I'll be stuck like this for the rest of my …
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:046', false)
+        else:
+            # What? A human? Like with bones and things? I've been on this island for quite some time, and I've never seen the likes of you before… Oh, you just mo…
+            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:004', false)
+            run Sub_Event2()
+    # Now let's see here… There are… five pieces of my spirit in all. You should be able to find them floating around the island. You'll need a net to catc…
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:007', false)
+    if not EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'Net', ''):
+        # Huh? You don't seem to have a net… Well, maybe just make a quick one using one of the branches lying around?
+        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:052', false)
+    # I'm counting on you! Thank you!
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:053', false)
+    run Gst_StartProcess()
+ 
+flow Gst_StartProcess():
+    System.EventFlags['cLand:GstTalkAnyone'] = true
+    System.EventFlags['cPlayer:GstTalkBefore'] = true
+    System.EventFlags['cPlayer:GstQuestStartFlag'] = true
+    System.EventFlags['cLandTemp:GstQuestStartLandFlag'] = true
+ 
+flow Moving_SubPlayer():
+    switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(75, 10, 15):
+        case 0:
+            SubflowResults[0] = 0
+        case 1:
+            if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+                SubflowResults[0] = 1
+            else:
+                SubflowResults[0] = 2
+        case 2:
+            SubflowResults[0] = 3
+ 
+flow Root():
+    if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+        run Gst_Share()
+    elif System.EventFlags['cPlayer:GstQuestStartFlag']:
+        run Gst_Quest()
+    else:
+        run Gst_Start()
+ 
+flow Root_Init():
+    if not EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+        MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('gstA', 1)
+ 
+local flow Sub_Event2():
+    # I… Well, I'll just be honest with you… I love the darkness, especially nighttime. But I'm afraid of ghosts! Whew! This little run-in with you has me …
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:005', false)
+    # Ummm… I'm sorry to ask this of you, but… Could you maybe collect the pieces of my spirit that flew away? Otherwise I'll be like this forever. And I c…
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:006', false)
+ 
+flow tst():
+    run Moving_SubPlayer()
+    run Gst_Choose_Item_Rich()
+    MainNpc.SetItemNameMainNpc.SetItemName(1, 4, 0)
+    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+    MainNpc.SetEventRewardToPlayerBaggageMainNpc.SetEventRewardToPlayerBaggage('cFree')
+    # Here, have… [a|an]<125:4:0000>! I'll put this item in your pocket, OK?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/gst/SP_gst:037', false)
+ 

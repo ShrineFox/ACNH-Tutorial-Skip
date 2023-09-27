@@ -1,0 +1,24 @@
+flow Appear():
+    MainNpc.NpcChangeBlockWanderStateMainNpc.NpcChangeBlockWanderState('cBlockWander', '', 'SNPC_chm_Wherearen', 'Root', true, true, ArgFlag0=false, ArgInt0=0, ArgInt1=3, ArgInt2=11, ArgInt3=11)
+ 
+flow Disappear():
+    MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
+ 
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    if not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+ 
+flow Root():
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        if (not EventFlowSystemActor.IsWherearenResumeFirstShareHouseEventFlowSystemActor.IsWherearenResumeFirstShareHouse()) and (EventFlowSystemActor.WherearenLookForHousemateStateEventFlowSystemActor.WherearenLookForHousemateState() != 0):
+            run Appear()
+        else:
+            run Disappear()
+    elif MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('Demo_SchoolEvent', 'chm_Lesson')
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSchoolEvent', '', '', '', false, true)
+    else:
+        MainNpc.NpcReservrForEraseMainNpc.NpcReservrForErase()
+ 

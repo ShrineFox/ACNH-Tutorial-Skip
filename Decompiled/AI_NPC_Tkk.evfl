@@ -1,0 +1,23 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cTkkAGuitarWait')
+    MainNpc.NpcAISetLookIKParamKeyMainNpc.NpcAISetLookIKParamKey('NeckOnly')
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cSitDownTkk', true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(14, true)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+ 
+flow Root():
+    run SetupTalk()
+    if MainNpc.TkkFreeQuery2MainNpc.TkkFreeQuery2('cTkkQueryType_PlayReady'):
+        MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', 'SNPC_tkk', 'Root', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
+    else:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cTkkWait', '', 'SNPC_tkk', 'Root', false, true)
+ 
+flow SetupTalk():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+ 
+flow SitDown_tkk():
+    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_tkk_Live', 'Root')
+ 

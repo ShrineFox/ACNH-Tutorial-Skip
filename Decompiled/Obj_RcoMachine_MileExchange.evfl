@@ -1,0 +1,279 @@
+flow BuySelect():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(false)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    else:
+        run ReChangeItem()
+ 
+flow ChkPocket40():
+    if (System.EventFlags['cPlayer:UpgradePocket30']) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`):
+        System.EventFlags['cPlayer:SellPocket40'] = true
+ 
+flow Cmn_AppUpdateDemo():
+    # Your order has been processed.<10:4> Please place your NookPhone near the terminal to receive the app data.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:061', true)
+    run RecipeReceiveing1_Receive()
+    if SubflowResults@10[3] not in (0, 1, 2, 4, 5, 6, 7, 8, 9):
+        # Your app has been installed. Thank you for using the Nook Stop.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:064', false)
+    elif SubflowResults@10[2] in (0, 1, 3, 4, 5, 6, 7, 8, 9):
+        # Your app has been updated. Thank you for using the Nook Stop.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:062', false)
+    else:
+        run Jump_RecipeGet()
+ 
+flow Cmn_PrintOutDemo():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    fork:
+        branch:
+            # Now generating [a|an] <125:0:0000>…<10:8:00370000>
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:025', true)
+        branch:
+            GeneralObject.StartAnimationGeneralObject.StartAnimation('PrintOut', 'cHold')
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+ 
+flow ExchangeCancel():
+    # Would you like to make another selection?
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:015', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run ReChangeItem()
+    else:
+        run Obj_RcoMachine::SelExitrun Obj_RcoMachine::SelExit()
+ 
+flow ExchangeDIYRecipeCard():
+    if System.EventFlags['cPlayer:MainmenuRecipe']:
+        if EventFlowSystemActor.HasCraftRecipeSelectFlowEventFlowSystemActor.HasCraftRecipeSelectFlow('cItemSelect'):
+            # The <125:0:0000> DIY recipe is <90:40:cd00>. You already have this recipe. Are you sure you want to redeem your miles for it?
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:027', false)
+        else:
+            # The <125:0:0000> DIY recipe is <90:40:cd00>. Do you want to redeem your miles for it?
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:028', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            run ReChangeItem()
+        elif EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 5794):
+            EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(true)
+            run Cmn_PrintOutDemo()
+            # Your DIY recipe has been issued.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:029', true)
+            Player.PlayerChangeDemoStatePlayer.PlayerChangeDemoState('cTicketTake')
+            run RcoMachineMileExchangeAgain()
+        else:
+            # You cannot receive your redemption item because your pockets are full. Please organize your belongings, and try again later.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:024', false)
+    else:
+        run RcoMachine_Cmn_NoDIY()
+ 
+flow ExchangeHowToBook():
+    run Obj_RcoMachine_MileExchange_Process::MileExchange_SetHowtoItemrun Obj_RcoMachine_MileExchange_Process::MileExchange_SetHowtoItem()
+    if EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(9221, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+        if System.EventFlags['cPlayer:MainmenuRecipe']:
+            run Not_MyDesignShowCase_v200()
+        else:
+            run RcoMachine_Cmn_NoDIY()
+    elif SubflowResults@10[2] in (0, 1, 2, 3, 5, 6, 7, 8, 9):
+        run Not_MyDesignShowCase_v200()
+    else:
+        run MileExchange_MyDesignShowcase()
+ 
+flow ExchangeMilePlaneTicket():
+    if (not EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(9964, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')) and (not System.EventFlags['cPlayer:DodExplainAboutMysteryTour']) and (not System.EventFlags['cPlayer:RcoMachineExplainAboutPlaneTicket']):
+        # Nook Miles+ members can get special travel tickets called <item>Nook Miles Tickets. Please stop by the counter at the airport for details.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:021', false)
+        System.EventFlags['cPlayer:RcoMachineExplainAboutPlaneTicket'] = true
+    # Redeem <90:40:cd00> for [a|an]<125:0:0000>?
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:012', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        run ReChangeItem()
+    elif EventFlowSystemActor.MultiItemSelectIncludeEventFlowSystemActor.MultiItemSelectInclude(9964, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+        if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 9964):
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(true)
+            run Cmn_PrintOutDemo()
+            # Your <item>Bell voucher has been printed. Please take it to Nook's Cranny when you want to redeem it for Bells.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:026_02', true)
+            run Sub_Event71()
+        else:
+            # You cannot receive your redemption item because your pockets are full. Please organize your belongings, and try again later.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:024', false)
+    elif EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 5851):
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(true)
+        run Cmn_PrintOutDemo()
+        # Your <item>Nook Miles Ticket has been printed. Please bring it with you to the <50:4>ISLAND Airport when you want to redeem it.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:026_01', true)
+        run Sub_Event71()
+    else:
+        # You cannot receive your redemption item because your pockets are full. Please organize your belongings, and try again later.
+        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:024', false)
+ 
+flow Jump_ExistingItem():
+    switch SubflowResults@4[2]:
+        case 0:
+            run Cmn_PrintOutDemo()
+            # Your order has been printed.
+            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:031', true)
+            Player.PlayerChangeDemoStatePlayer.PlayerChangeDemoState('cTicketTake')
+            switch SubflowResults@10[1]:
+                case 0:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Hair_Pop')
+                case 1:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Hair_Cool')
+                case 2:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Hair_Color')
+                case 3:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Pocket30')
+                case 4:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Pocket40')
+                case 5:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_ItemRing')
+                case 6:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Body_Color')
+                case 7:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Eye_Color')
+                case 8:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_Hair_Rock')
+                case 9:
+                    EventFlowSystemActor.ReservePlayerTicketGetDemoEventFlowSystemActor.ReservePlayerTicketGetDemo('Player_GetDemo_MileExchange', 'Get_ReactionSet1')
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        case 1:
+            run MileExchange_GetApp_MyDesignPRO()
+        case 2:
+            run MileExchange_Get_ToolRecipesData()
+        case 3:
+            run MileExchange_MyDesignPRO2()
+ 
+flow Jump_RecipeGet():
+    # The recipe data is now stored in your app. Thanks for using the Nook Stop.
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:063', false)
+ 
+flow MileExchange_Cmn_Sel():
+    # Redeem <90:40:cd00> for [a|an]<125:0:0000>?
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:012', false)
+    run BuySelect()
+ 
+flow MileExchange_GetApp_MyDesignPRO():
+    System.EventFlags['cPlayer:MainmenuUnlockMydesingPro'] = true
+    run Cmn_AppUpdateDemo()
+    run RecipeReceiveing2_End()
+    EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_MileExchange', 'Get_App_MydesignPRO', 'cNowDemoEnd', true)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow MileExchange_Get_ToolRecipesData():
+    run Cmn_AppUpdateDemo()
+    run RecipeReceiveing2_End()
+    EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_MileExchange', 'Get_Reipe_Tools', 'cNowDemoEnd', true)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow MileExchange_MyDesignPRO2():
+    System.EventFlags['cPlayer:UnlockMydesignPro2'] = true
+    run Cmn_AppUpdateDemo()
+    run RecipeReceiveing2_End()
+    EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_MileExchange', 'Get_MydesignPRO2', 'cNowDemoEnd', true)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow MileExchange_MyDesignShowcase():
+    # This adds Custom Designs Portal access to the NookPhone's Custom Designs app. An active Nintendo Switch Online membership is required to use the Cust…
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:590', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(false)
+        System.EventFlags['cPlayer:MainmenuMydesignShowcase'] = true
+        run Cmn_AppUpdateDemo()
+        run RecipeReceiveing2_End()
+        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_MileExchange', 'Get_MydesignShowcase', 'cNowDemoEnd', true)
+    else:
+        run ReChangeItem()
+ 
+flow Not_MyDesignShowCase_v200():
+    # Redeem <90:40:cd00> for [a|an]<125:0:0000>?
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:012', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(false)
+        if SubflowResults@10[3] != 0:
+            run Obj_RcoMachine_MileExchange_v2_0_0::ME_GetProcess_v2_0_0run Obj_RcoMachine_MileExchange_v2_0_0::ME_GetProcess_v2_0_0()
+        elif SubflowResults@10[2] in (0, 1, 2, 3, 4):
+            run Jump_ExistingItem()
+        else:
+            run Obj_RcoMachine_MileExchange_v2_0_0::ME_GetProcess_v2_0_0run Obj_RcoMachine_MileExchange_v2_0_0::ME_GetProcess_v2_0_0()
+    else:
+        run ReChangeItem()
+ 
+flow RcoMachineMileExchangeAgain():
+    # Would you like to make another selection?
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:015', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run ReChangeItem()
+    else:
+        run Obj_RcoMachine::SelExitrun Obj_RcoMachine::SelExit()
+ 
+flow RcoMachine_Cmn_NoDIY():
+    # A special app must be installed on your NookPhone before you can redeem DIY recipes. Please take part in the DIY workshop in Resident Services to obt…
+    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:030', false)
+    run RcoMachineMileExchangeAgain()
+ 
+flow ReChangeItem():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.UIShopBuyHandlingEventFlowSystemActor.UIShopBuyHandling('cSonkatsuPoint')
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cLifeSupportPoint', 0)
+        if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('MilePlaneTicket', '', '', '', '', '', '', '', 'cItemSelect'):
+            run ExchangeMilePlaneTicket()
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DummyHowtoBook', '', '', '', '', '', '', '', 'cItemSelect'):
+            run ExchangeHowToBook()
+        elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
+            run ExchangeDIYRecipeCard()
+        else:
+            if EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('LicenseItem', '', '', '', '', '', '', '', 'cItemSelect'):
+                # This <125:0:0000> is an add-on construction permit for the Island Designer app. The price is <90:40:cd00>. Would you like to redeem miles for this pe…
+                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:013', false)
+            else:
+                # Redeem <90:40:cd00> for [a|an]<125:0:0000>?
+                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:012', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+                run ReChangeItem()
+            elif EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('LicenseItem', '', '', '', '', '', '', '', 'cItemSelect'):
+                run ReceiveConstructionLisence()
+            else:
+                EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(false)
+                EventFlowSystemActor.MilagePackageSendEventFlowSystemActor.MilagePackageSend()
+                # Your redemption request has been processed. Your selection will be mailed to your home.
+                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_RcoMachine:014', false)
+                run RcoMachineMileExchangeAgain()
+    else:
+        EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
+        run Obj_RcoMachine::RcoSelSeqrun Obj_RcoMachine::RcoSelSeq()
+ 
+flow ReceiveConstructionLisence():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.SonkatsuBuyDoneEventFlowSystemActor.SonkatsuBuyDone(false)
+    run Cmn_AppUpdateDemo()
+    run RecipeReceiveing2_End()
+    run Obj_RcoMachine_MileExchange_Process::ReceiveLisenceEnablerun Obj_RcoMachine_MileExchange_Process::ReceiveLisenceEnable()
+ 
+flow RecipeReceiveing1_Receive():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhonePlayer.SmartPhone(0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhonePlayer.SmartPhone(4)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    Player.SmartPhoneSEPlayer.SmartPhoneSE(2, 'Phone_Recieving')
+    run Obj_RcoMachine_MileExchange_v2_0_0::Cmn_PhoneApp_InstallDemorun Obj_RcoMachine_MileExchange_v2_0_0::Cmn_PhoneApp_InstallDemo()
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhonePlayer.SmartPhone(5)
+ 
+flow RecipeReceiveing2_End():
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    Player.SmartPhonePlayer.SmartPhone(1)
+ 
+flow Root():
+    run ChkPocket40()
+    EventFlowSystemActor.UISonkatsuPointAppearEventFlowSystemActor.UISonkatsuPointAppear()
+    run ReChangeItem()
+ 
+local flow Sub_Event71():
+    Player.PlayerChangeDemoStatePlayer.PlayerChangeDemoState('cTicketTake')
+    run RcoMachineMileExchangeAgain()
+ 

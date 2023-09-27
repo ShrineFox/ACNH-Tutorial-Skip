@@ -1,0 +1,360 @@
+flow CampSiteBuild():
+    if System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp']:
+        run SNPC_rco_10_Common_WhatShouldIDo::Rco_Hint_WaitingOpenCampSiterun SNPC_rco_10_Common_WhatShouldIDo::Rco_Hint_WaitingOpenCampSite()
+    else:
+entrypoint Event23:
+        # Ah, PLAYER! Hello, hello!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        # Our campsite is impressive!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:201_01', false)
+        # I'm already getting inquiries and applications from tourists who want to stay here. It won't be long until we start getting some guests. When we have…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:202', false)
+        # What we need is for visitors to be completely wowed by the wonders of life on our island. I'd appreciate anything you can do to help improve the isla…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:163_02', false)
+        System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp'] = true
+ 
+flow CampSiteBuild_Force():
+    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    run Event23()
+ 
+flow CampSiteBuild_Others():
+    return
+ 
+flow CampSiteComplete_Others():
+    return
+ 
+flow CampSiteRequest():
+    # Ah! I take it this means you are ready to hear the details of my plan to draw K.K. here to hold a concert… I call it Project K!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:000_01', false)
+    # This plan of mine is divided into three main stages. First, we need more visitors to come to our island.<10:4> Next, we need more folks to move here.…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:101', false)
+    # So…for the first step, we'll increase the number of tourists by adding a campsite to our island! A campsite will make it easier for visitors to exper…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:102', false)
+    # With that in mind…could you get out your phone, PLAYER?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:103', true)
+    MainNpc.SmartPhoneMainNpc.SmartPhone(0)
+    run Demo_Common_PhoneCall::SendingDataWithPrun Demo_Common_PhoneCall::SendingDataWithP()
+    MainNpc.SmartPhoneMainNpc.SmartPhone(1)
+    Player.SmartPhonePlayer.SmartPhone(1)
+    EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('CampSite', 65534)
+    # And done! I've sent you the recipe for a <item>campsite construction kit! I want you to craft that and pick a great spot on the island for our new ca…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:104', false)
+    System.EventFlags['cLand:RcoBuildCampsiteOngoing'] = true
+    System.EventFlags['cPlayer:IslandDevQuestGetRecipeCampKit'] = true
+    System.EventFlags['cPlayer:RcoAwaitingExplanation'] = false
+ 
+flow CampSiteRequestComplete():
+    if System.EventFlags['cPlayer:IslandDevQuestTalkAfterCampSet']:
+        run SNPC_rco_10_Common_WhatShouldIDo::Rco_Hint_WaitingOpenCampSiterun SNPC_rco_10_Common_WhatShouldIDo::Rco_Hint_WaitingOpenCampSite()
+    else:
+entrypoint Event20:
+        # Ah, PLAYER! Hello, hello!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        # Have you found a good location for our campsite?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:151', false)
+        switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+            case 0, 1:
+                # Splendid!<10:4> I can't wait to see the spot you picked out. Now that the location is settled, I can proceed with construction. Tomorrow we'll have a…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:152', false)
+                System.EventFlags['cPlayer:IslandDevQuestTalkAfterCampSet'] = true
+ 
+flow CampSiteRequestComplete_Force():
+    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    run Event20()
+ 
+flow CampSiteRequestRunning():
+    # We are going to build a campsite so that visitors can experience how wonderful life is on this island.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:111', false)
+    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5166, 1):
+        # Once you've crafted the <item>campsite construction kit, your next step will be finding a location to deploy it. I'll leave that up to you. I'm sure …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:111_02', false)
+    else:
+        # First, craft a <item>campsite construction kit, and then find a good location to deploy it.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:111_01', false)
+ 
+flow CampSiteRequest_Others():
+    return
+ 
+flow FirstCamperHouseComplete():
+    if System.EventFlags['cPlayer:SzaHeardAboutHousingKit']:
+        # I think word of mouth about this island will spread once more folks start living here. We need any visitors who come to ISLAND to be blown away by ho…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:551', false)
+    else:
+        if System.EventFlags['cPlayer:RcoHeardAbout1stCamperToday']:
+            # Ah, PLAYER! Welcome back!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000_02', false)
+        else:
+            # Ah, PLAYER! Hello, hello!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        # Well? Did you find a place for us to build a new home?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:501', false)
+        switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+            case 0, 1:
+                # Oho! Fine news indeed! We don't want to keep our customer waiting, so I'll proceed with construction at supersonic speed. We want our new island frie…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:502', false)
+                # Hmmmm… This has got me thinking. We can't predict when someone will want to move here. But scrambling to secure a plot only when the need arises is m…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:503', false)
+                System.EventFlags['cPlayer:SzaHeardAboutHousingKit'] = true
+                System.EventFlags['cLand:RcoEnableBuyHousingKit'] = true
+ 
+flow FirstCamperHouseComplete_Force():
+    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    run FirstCamperHouseComplete()
+ 
+flow FirstCamperHouseComplete_Others():
+    return
+ 
+flow IslandEvaluationRunning():
+    if System.EventFlags['cPlayer:RcoHeardAboutEvalutationDetail']:
+        # We're on the last part of Project K, the grand plan to hold a K.K. concert on this island! If we can raise the image of this island and get some exce…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:751', false)
+    else:
+        # Yes, yes! I'll explain the last major task for Project K, then!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:000_02', false)
+        # We've started gathering feedback from folks on and off the island. Our focus right now should be… improving the image of the island and gaining that …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:701', false)
+        if System.EventFlags['cPlayer:SzaHeardAboutHousingKit']:
+            # Infrastructure is important, but let's plant flowers and use decorations to make this place look snazzy!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:702_01', false)
+        else:
+            # Ah! That reminds me… Scrambling to prepare plots when someone wants to move here is a difficult way of doing things, yes? That's why, as part of impr…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:702_02', false)
+            System.EventFlags['cPlayer:SzaHeardAboutHousingKit'] = true
+            System.EventFlags['cLand:RcoEnableBuyHousingKit'] = true
+        # Well then, thanks for your help, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:000_11', false)
+        System.EventFlags['cPlayer:IslandEvaluationUnlockMyself'] = true
+        System.EventFlags['cLand:IslandEvaluationUnlock'] = true
+        System.EventFlags['cPlayerTemp:SzaIslandEvaluationUnlockNow'] = true
+        System.EventFlags['cPlayer:RcoHeardAboutEvalutationDetail'] = true
+        System.EventFlags['cPlayer:RcoAwaitingExplanation'] = false
+        run System_IslandEvaluationCheck::ChkEvaluationImprovement_Firstrun System_IslandEvaluationCheck::ChkEvaluationImprovement_First()
+ 
+flow IslandEvaluationStartForce():
+    # Ah, PLAYER! Hello, hello!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+    run Rco_StartEvaluationCmn()
+    # <20:2:cd04>Don't you worry, Mr. Nook!<20:2:cd05> As long as we all work together, I'm sure we'll reach our goal of having K.K. hold a concert here!
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:604', false)
+    # <20:2:cd08>You feel the same way I do, don't you, PLAYER?
+    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:605', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            # <20:2:cd03><20:2:cd05>Isabelle, <20:2:cd07><20:2:cd06>PLAYER… Thank you. Thank you so much. I'm more determined than ever! We're not done, PLAYER. An…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:606', false)
+entrypoint Event155:
+            System.EventFlags['cPlayer:RcoHeardAboutEvaluationStart'] = true
+            System.EventFlags['cPlayer:RcoAwaitingExplanation'] = true
+ 
+flow IslandEvaluationStartForce_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('sza', 1)
+ 
+flow IslandEvaluationStartNosza():
+    run Rco_StartEvaluationCmn()
+    # Well, we've done alright so far, so I'm sure it WILL work out. Though we won't be able to host a K.K. concert without your help. I'm going to keep co…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:607', false)
+    run Event155()
+ 
+flow KkProject_Intro():
+    if System.EventFlags['cPlayerTemp:RcoOfficeFirstTalkNow']:
+        # Oho! You're already eager to hear how you can help out, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:001_01', false)
+    else:
+        # Oho! Curious to know how you can help out, hm?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:001_02', false)
+    # Well, we've got a fine building for Resident Services now. And you've no doubt admired the plaza, hm? It's primed and ready for major events, if I ha…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:002', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # Ohoho! Got your attention, hm? Our goal…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:003_01', false)
+    else:
+        # What?! Don't be so quick to dismiss my plans! At the very least, you should hear me out! You see, our goal…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:003_02', false)
+    # is to have the incredibly popular musician K.K. Slider come and put on a show here on ISLAND! <50:3>PLAYER, I'm sure you know who K.K. is, yes?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:004', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # I always knew you had excellent taste, PLAYER! By the way, his song "K.K. Lament" is my go-to karaoke song!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:005_01', false)
+    else:
+        # Whaaa?! Are you serious? His songs are constantly playing on the radio, and yet somehow you've never heard of K.K.… Wait, then this means you have ye…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:005_02', false)
+    # Ah, sorry about that. As you might guess, I'm a big fan. It's easy to get sidetracked talking about him… Back to our goal. If we hold a K.K. concert …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:006', false)
+    System.EventFlags['cPlayer:RcoHeardAboutKkProject1st'] = true
+    System.EventFlags['cPlayer:RcoAwaitingExplanation'] = true
+ 
+flow MeetFirstCamperRequest():
+    # Ah, PLAYER! Hello, hello!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+    if System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp']:
+        # Isabelle mentioned it in today's broadcast, but…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:301_01', false)
+    else:
+        # Our campsite is impressive!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:201_01', false)
+        # And Isabelle mentioned it in today's broadcast, but…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:301_02', false)
+    # Today we have our first guest over at the campsite! <50:3>PLAYER, if you have time, or even if you don't have time, make time, and go check in on our…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:302_01', false)
+    # The bright future of this island depends on you, PLAYER!<10:4> I have faith in you! Yes, yes!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:302_02', false)
+    System.EventFlags['cPlayer:IslandDevQuestTalkAboutFirstCamper'] = true
+    System.EventFlags['cLand:RcoMeetFirstVisitorOngoing'] = true
+    System.EventFlags['cPlayer:RcoHeardAbout1stCamperToday'] = true
+ 
+flow MeetFirstCamperRequest_Force():
+    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+    run MeetFirstCamperRequest()
+ 
+flow Rco_Sel_GetHousingKit4Camper():
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # Thank you, PLAYER! I knew you'd agree to it.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:406', false)
+        if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cItemName', 3349):
+            # You'll need a <item>housing kit to set aside a plot for their home, so I'll give you that now.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:407_02', true)
+            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cNormalFader', 'cNormalFader', 'cBlack', 0.5, 0.5, true)
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(3349, 1)
+            # It's in with your belongings now, so find a good spot for a home and then come back to see me. Well then… Off you go!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:408', false)
+            System.EventFlags['cPlayer:GetHousingKitForFirstCamper'] = true
+            System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing'] = true
+            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        else:
+            # You'll need a <item>housing kit to set aside a plot for their home. Come back when you have room to carry it!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:407_01', false)
+            System.EventFlags['cPlayer:ItemFullHousingKitForFirstCamper'] = true
+    else:
+        # Ohhh, I see… Well, if you're busy, it doesn't have to be right now. When you have time, let me know. I'll give you the <item>housing kit you'll need …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:409', false)
+        System.EventFlags['cPlayer:ItemFullHousingKitForFirstCamper'] = true
+ 
+flow Rco_StartEvaluationCmn():
+    if System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']:
+        # <50:3>PLAYER, we're getting more inquiries about the campsite you helped build!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:601_01', false)
+    else:
+        # I have news to share! I've been getting more inquiries from folks who want to camp at our campsite!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:601_02', false)
+    # <20:2:cd07>Yes, yes! My plan to draw visitors easily with a campsite has proven itself to be a masterpiece!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:602', false)
+    if System.EventFlags['cPlayer:SzaHeardAboutHousingKit']:
+        # We've laid the groundwork to increase tourism and, I hope, the number of island residents… Now, if that positive, word-of-mouth marketing about ISLAN…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:603_01', false)
+    else:
+        # I believe we've laid the groundwork for folks to start talking about our wonderful little island… All that's left is to increase the island's populat…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:603_02', false)
+ 
+flow Root():
+    if not System.EventFlags['cPlayer:RcoHeardAboutKkProject1st']:
+        run KkProject_Intro()
+    elif not System.EventFlags['cLand:RcoBuildCampsiteOngoing']:
+        run CampSiteRequest()
+    elif not System.EventFlags['cLand:RcoBuildCampsiteComplete']:
+        if System.EventFlags['cPlayer:IslandDevQuestGetRecipeCampKit']:
+            run CampSiteRequestRunning()
+        else:
+            run CampSiteRequest_Others()
+    elif not System.EventFlags['cLand:CampSiteBuilt']:
+        if System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']:
+            run CampSiteRequestComplete()
+        else:
+            run CampSiteComplete_Others()
+    elif System.EventFlags['cLand:RcoMeetFirstVisitorRequest']:
+        run Root2CampSiteVisitor()
+    elif System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']:
+        run CampSiteBuild()
+    else:
+        run CampSiteBuild_Others()
+ 
+flow Root2CampSiteVisitor():
+    if not System.EventFlags['cLand:RcoMeetFirstVisitorComplete']:
+        if System.EventFlags['cLand:RcoMeetFirstVisitorOngoing']:
+            run SNPC_rco_10_Common_WhatShouldIDo::Rco_Hint_WaitingInvite1stCamperrun SNPC_rco_10_Common_WhatShouldIDo::Rco_Hint_WaitingInvite1stCamper()
+        else:
+            run MeetFirstCamperRequest()
+    elif not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing']:
+        if System.EventFlags['cPlayer:IslandDevQuestOrderFirstCamperMyself']:
+            run SetFirstCamperHouseRequest()
+        else:
+            run SetFirstCamperHouseRequest_Others()
+    elif not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitComplete']:
+        if System.EventFlags['cPlayer:GetHousingKitForFirstCamper']:
+            run SetFirstCamperHouseRunning()
+        else:
+            run SetFirstCamperHouseRunning_Others()
+    elif (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 6) or (System.EventFlags['cLand:TanuportAmiiboCampUnlock']):
+        run Root3IslandEvaluation()
+    elif System.EventFlags['cPlayer:SetHousingKitForFirstCamper']:
+        run FirstCamperHouseComplete()
+    else:
+        run FirstCamperHouseComplete_Others()
+ 
+flow Root3IslandEvaluation():
+    if System.EventFlags['cPlayer:RcoHeardAboutEvaluationStart']:
+        run IslandEvaluationRunning()
+    else:
+        run IslandEvaluationStartNosza()
+ 
+flow SetFirstCamperHouseRequest():
+    if System.EventFlags['cPlayer:IslandDevQuestTalkAboutFirstCamper']:
+        if System.EventFlags['cPlayer:ItemFullHousingKitForFirstCamper']:
+            # So, PLAYER, if you have time, I'd like you to find a spot for a permanent home for our camper.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:410', false)
+            run Rco_Sel_GetHousingKit4Camper()
+        else:
+            if System.EventFlags['cPlayer:RcoHeardAbout1stCamperToday']:
+                # Ah, PLAYER! Welcome back!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000_02', false)
+            else:
+                # Ah, PLAYER! Hello, hello!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+            # My senses tell me you've been to see our guest at the campsite, hm?<10:4> How did it go?!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:401', false)
+            run Sub_Event79()
+    elif System.EventFlags['cPlayer:ItemFullHousingKitForFirstCamper']:
+        # So, PLAYER, if you have time, I'd like you to find a spot for a permanent home for our camper.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:410', false)
+        run Rco_Sel_GetHousingKit4Camper()
+    else:
+        # Ah, PLAYER! Hello, hello!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        if System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp']:
+            # Isabelle mentioned it in today's broadcast, but…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:301_01', false)
+        else:
+            # Our campsite is impressive!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:201_01', false)
+            # And Isabelle mentioned it in today's broadcast, but…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:301_02', false)
+        # Today we have our first guest over at the campsite! <50:3>PLAYER, if you have time, or even if you don't have time, make time, and go check in on our…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:402', false)
+        run Sub_Event79()
+ 
+flow SetFirstCamperHouseRequest_Others():
+    return
+ 
+flow SetFirstCamperHouseRunning():
+    # I'm counting on you to find a good spot so our camper can move in and become a resident. Converting campers to residents, seeing them enjoying island…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:451', false)
+ 
+flow SetFirstCamperHouseRunning_Others():
+    return
+ 
+local flow Sub_Event79():
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            if System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp']:
+                # What? Really?! <50:3>PLAYER! You've done it! And so quickly!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:403_01', false)
+            else:
+                # What? You've already convinced our visitor to move here?! Good work, PLAYER! And you got it done so quickly!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:403_02', false)
+            # Then this means we have no time to waste… Hmmm, our next course of action will be…building a new home!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:404', false)
+            # Now, PLAYER… Since you closed the deal with our visitor, you should be the one to pick the location for a new home…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_07_IslandDevelopment:405', false)
+            run Rco_Sel_GetHousingKit4Camper()
+ 

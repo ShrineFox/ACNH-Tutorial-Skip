@@ -1,0 +1,43 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+ 
+flow Root():
+    if (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')) and (EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('HarvestFestival') not in (0, 1, 2)):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', 'SNPC_bey_event', 'Root', false, true)
+    elif (not EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()) and (not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0)) and (System.EventFlags['cLand:HarvestProgress'] <= 0):
+        run SetNoCooking()
+        if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+            MainNpc.NpcAISetPosMainNpc.NpcAISetPos(0.0, 15.0, 0.0, true, false)
+        MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_tuk', 'Root', false, false, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+    else:
+        switch EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('HarvestFestival'):
+            case 0, 2:
+                run SetNoCooking()
+                MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_tuk', 'Root', false, false, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+            case 1:
+                if System.EventFlags['cLand:HarvestProgress'] <= 0:
+                    run SetNoCooking()
+                    MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_tuk', 'Root', false, false, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+                else:
+                    if MainNpc.NpcIsEquipedHandToolMainNpc.NpcIsEquipedHandTool(2):
+                        run SetCooking()
+                        MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_tuk', 'Root', false, false, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+                    else:
+                        MainNpc.NpcChangeChangeHandToolStateMainNpc.NpcChangeChangeHandToolState('cChangeHandToolSimple', '', 'SNPC_tuk', 'Root', false, false, HandToolItem=13783)
+            default:
+                return
+ 
+flow SetCooking():
+    MainNpc.ServiceMotionControlMainNpc.ServiceMotionControl(true)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', true)
+    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        System.EventFlags['cLandTemp:TukBehaviorControlFlag'] = true
+ 
+flow SetNoCooking():
+    MainNpc.ServiceMotionControlMainNpc.ServiceMotionControl(false)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNormal', true)
+    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        System.EventFlags['cLandTemp:TukBehaviorControlFlag'] = false
+ 

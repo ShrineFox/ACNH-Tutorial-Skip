@@ -1,0 +1,152 @@
+flow Give_Capcake():
+    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemName', 2779, '', '', 'cItemSelect', false)
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+entrypoint Event64:
+        if MainNpc.EventFlags['cNpcMemory:BirthdayPAttendance']:
+            # Uh…<110:3>? Isn't this one of the <item>birthday cupcakes we gave you at the birthday party?! I see the part where I licked the icing—mostly on accid…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:018', true)
+        else:
+            # Say whaaaaat? A <item>birthday cupcake! Looks so yummy… Thanks, <110:3>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:009', true)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
+        EventFlowSystemActor.SystemDeletePlayerItemEventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
+        MainNpc.EventFlags['cNpcMemory:BirhdayPCupcakeFlag'] = true
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_ToNNPC')
+        MainNpc.DecideEventRewardMainNpc.DecideEventReward('cCupcakeReward')
+        if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+            if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+                # Actually, I've got a present for you too. I hope ya like it…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:010', true)
+            else:
+                # You're giving me a present? Don't worry! I've got a present for you too!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:011', true)
+            MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+            MainNpc.WrapDeliveryItemMainNpc.WrapDeliveryItem('cPresentBox')
+            MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, '"Default"')
+            MainNpc.SetBirthdayPresentFlagMainNpc.SetBirthdayPresentFlag()
+            MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(5)
+            MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+            run Talk_End()
+        else:
+            if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+                # I have a present for you too, but it looks like your pockets are full! No worries, though. I'll send it to your house later. Man. Those are some FULL…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:012', false)
+            else:
+                # I have a present for you too, but them pockets are FULL… What the heck do you got in them?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:013', false)
+            MainNpc.NpcMailSendRandomMainNpc.NpcMailSendRandom('MAIL_XX_BirthDayP', 7, 9, 'cNone', 'cFastTomorrow', 'cReward', false)
+            MainNpc.SetBirthdayPresentFlagMainNpc.SetBirthdayPresentFlag()
+            run Talk_End()
+    else:
+        # Oh? You're not giving me anything? That's a shame.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:014', true)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Give_Capcake_fromGeneral():
+    if SubflowResults@2[0] == 0:
+        MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+        run Event64()
+    else:
+        run Event64()
+ 
+flow Root():
+    if ((not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) or ((System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (MainNpc.NpcBirthTypeMainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) or ((System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (MainNpc.NpcBirthType('cFirst')))) and (not MainNpc.EventFlags['cNpcMemory:BirthdayPAttendance']) and ((not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0)) or (EventFlowSystemActor.IsHoldPlayerBirthdayThisYearEventFlowSystemActor.IsHoldPlayerBirthdayThisYear())) and (not MainNpc.EventFlags['cNpcMemory:BirhdayPTalkFlag']):
+        MainNpc.EventFlags['cNpcMemory:BirhdayPTalkFlag'] = true
+        if (EventFlowSystemActor.IsHoldPlayerBirthdayThisYearEventFlowSystemActor.IsHoldPlayerBirthdayThisYear()) and (EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'BdayCupcake', '')):
+            switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+                case 0:
+                    # Hey, <110:3>! It's your birthday today! Well, happy birthday, <110:6>!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:001', false)
+                case 1:
+                    # Hey, <110:4>. Happy birthday!<10:4> It is your birthday, yeah?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:002', false)
+                case 2:
+                    # Happy birthday, <110:4>! I've been dying to tell you that, but it wasn't your birthday until today.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:003', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Give_Capcake()
+            else:
+                run Sub_grp_Event12()
+        else:
+            switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+                case 0:
+                    # <50:3><110:3>! Glad I found you. I wanted to tell ya happy birthday!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:015', false)
+                case 1:
+                    # <50:3><110:4>! Happy birthday!<10:4> …It is your birthday…right?
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:016', false)
+                case 2:
+                    # Happy birthday! I'm glad I got to tell you today because, wow, I don't got it together enough to send a card.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:017', false)
+            if EventFlowSystemActor.IsHoldPlayerBirthdayThisYearEventFlowSystemActor.IsHoldPlayerBirthdayThisYear():
+                run Sub_grp_Event12()
+            else:
+                run Talk_End()
+ 
+flow Root_NextDay():
+    if (not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']) and (not MainNpc.EventFlags['cNpcMemory:BirthdayPAttendance']) and (not MainNpc.EventFlags['cNpcMemory:BirhdayPTalkFlag']):
+        MainNpc.EventFlags['cNpcMemory:BirhdayPTalkFlag'] = true
+        if (EventFlowSystemActor.IsHoldPlayerBirthdayThisYearEventFlowSystemActor.IsHoldPlayerBirthdayThisYear()) and (EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'BdayCupcake', '')):
+            switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+                case 0:
+                    # Oh, <110:4>! It was your birthday yesterday, right? I wanted to tell you yesterday, but… I got lost on the way? Long story. Anyway, happy birthday!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:021', false)
+                case 1:
+                    # It was, like, your birthday yesterday. Is that right, <110:4>?<10:4> Happy day-after-your-birthday!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:022', false)
+                case 2:
+                    # <50:3><110:3>! Happy birthday!<10:4> …Sorry I'm a day late. I got lost on the way to your place, a huh huh!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:023', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run Give_Capcake()
+            else:
+                run Sub_grp_Event46()
+        else:
+            switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+                case 0:
+                    # It was your birthday yesterday, and I missed it 'cause I fell asleep talking to my bug friends in the walls. But I'm here now. And I wanna wish you a…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:025', false)
+                case 1:
+                    # It was your birthday yesterday, right, <110:4>? I didn't get the chance yesterday, so I'll say it now! Happy birthday!!! 
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:026', false)
+                case 2:
+                    # Sorry I missed out on yesterday. Crazy stuff going on. But, ya know, whatever. Right? But yesterday! YESTERDAY, I missed the chance to tell you "happ…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:027', false)
+            if EventFlowSystemActor.IsHoldPlayerBirthdayThisYearEventFlowSystemActor.IsHoldPlayerBirthdayThisYear():
+                run Sub_grp_Event46()
+            else:
+                run Talk_End()
+ 
+local flow Sub_grp_Event12():
+    if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+        # You say "birthday"…and I hear… "birthday cake"… <50:3><110:4>. I'm not kidding. This is a serious condition.<10:4> Cured only by eating birthday cake!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:007', true)
+    else:
+        # I like cupcakes. EATING cupcakes is pretty good too. I wonder if anyone has a cupcake I could eat?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:008', true)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+local flow Sub_grp_Event46():
+    if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+        # You say "birthday"…and I hear… "birthday cake"… <50:3><110:4>. I'm not kidding. This is a serious condition.<10:4> Cured only by eating birthday cake!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:007', true)
+    else:
+        # I like cupcakes. EATING cupcakes is pretty good too. I wonder if anyone has a cupcake I could eat?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:008', true)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Talk_End():
+    switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+        case 0:
+            # So, uh, do you feel any older today, <110:3>?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:004', true)
+        case 1:
+            # Ya know how we swing around the sun every 365 days, so we're right back where we were a year ago? Well, I hope we're friends no matter how many trips…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:005', true)
+        case 2:
+            # Hey, I got an idea. Let's be friends forever. I mean, if you don't have anything else on your schedule?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayP:006', true)
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 

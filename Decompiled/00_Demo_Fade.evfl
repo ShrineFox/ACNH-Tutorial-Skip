@@ -1,0 +1,194 @@
+flow FadeIn_Cmn(IsWait: bool):
+    EventFlowSystemActor.WaitFadeMinimumCountEventFlowSystemActor.WaitFadeMinimumCount()
+    EventFlowSystemActor.SoundFadeOutDuckingOffEventFlowSystemActor.SoundFadeOutDuckingOff()
+    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(IsWait)
+ 
+flow FadeOut_Cmn(SoundDucking: str, FadeType: str, FadeColor: str, FadeSpeed: str):
+    if EventFlowSystemActor.SoundDuckingTypeCheckEventFlowSystemActor.SoundDuckingTypeCheck(SoundDucking, 'cWorldDucking'):
+        run Sub_grp_Event0(FadeType=FadeType, FadeColor=FadeColor, FadeSpeed=FadeSpeed)
+    else:
+        if EventFlowSystemActor.SoundDuckingTypeCheckEventFlowSystemActor.SoundDuckingTypeCheck(SoundDucking, 'cAllDucking'):
+            if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeType, 'cCircle'):
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+                    run Sub_Event66(FadeType=FadeType, FadeColor=FadeColor)
+                else:
+                    if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(9)
+                        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.5, 1.5, false)
+                        EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(2)
+                    else:
+                        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                            EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(11)
+                            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.75, 0.75, false)
+                            EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                        else:
+                            run Sub_Event66(FadeType=FadeType, FadeColor=FadeColor)
+            elif not EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeType, 'cNormalFader'):
+                EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(4)
+                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, false)
+            elif (not EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColor, 'cBlack')) and (EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColor, 'cWhite')):
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+                    run Sub_Event93(FadeType=FadeType, FadeColor=FadeColor)
+                else:
+                    if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(3)
+                        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+                        EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                    else:
+                        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                            EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(5)
+                            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.10000000149011612, 0.10000000149011612, false)
+                            EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                        else:
+                            run Sub_Event93(FadeType=FadeType, FadeColor=FadeColor)
+            elif EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+                run Sub_Event80(FadeType=FadeType, FadeColor=FadeColor)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(3)
+                    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+                    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                else:
+                    if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(5)
+                        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.10000000149011612, 0.10000000149011612, false)
+                        EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                    else:
+                        run Sub_Event80(FadeType=FadeType, FadeColor=FadeColor)
+        else:
+            if EventFlowSystemActor.SoundDuckingTypeCheckEventFlowSystemActor.SoundDuckingTypeCheck(SoundDucking, 'cNoDucking'):
+                if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeType, 'cCircle'):
+                    if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+                        run Sub_Event39(FadeType=FadeType, FadeColor=FadeColor)
+                    else:
+                        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.5, 1.5, false)
+                            EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(2)
+                        else:
+                            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.75, 0.75, false)
+                                EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                            else:
+                                run Sub_Event39(FadeType=FadeType, FadeColor=FadeColor)
+                elif not EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeType, 'cNormalFader'):
+                    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, false)
+                elif EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColor, 'cBlack'):
+                    if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+                        run Sub_Event109(FadeType=FadeType, FadeColor=FadeColor)
+                    else:
+                        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+                            EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                        else:
+                            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.10000000149011612, 0.10000000149011612, false)
+                                EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                            else:
+                                run Sub_Event109(FadeType=FadeType, FadeColor=FadeColor)
+                elif EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColor, 'cWhite'):
+                    if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+                        run Sub_Event115(FadeType=FadeType, FadeColor=FadeColor)
+                    else:
+                        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+                            EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                        else:
+                            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.10000000149011612, 0.10000000149011612, false)
+                                EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                            else:
+                                run Sub_Event115(FadeType=FadeType, FadeColor=FadeColor)
+            else:
+                run Sub_grp_Event0(FadeType=FadeType, FadeColor=FadeColor, FadeSpeed=FadeSpeed)
+ 
+local flow Sub_Event109(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.5, 0.5, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event115(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.5, 0.5, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event17(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(1)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.5, 0.5, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event31(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(1)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.5, 0.5, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event39(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event54(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(7)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event66(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(10)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event80(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(4)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.5, 0.5, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_Event93(FadeType: str, FadeColor: str):
+    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(4)
+    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.5, 0.5, false)
+    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+ 
+local flow Sub_grp_Event0(FadeType: str, FadeColor: str, FadeSpeed: str):
+    if EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeType, 'cCircle'):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+            run Sub_Event54(FadeType=FadeType, FadeColor=FadeColor)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(6)
+                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.5, 1.5, false)
+                EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(2)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(8)
+                    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.75, 0.75, false)
+                    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                else:
+                    run Sub_Event54(FadeType=FadeType, FadeColor=FadeColor)
+    elif not EventFlowSystemActor.FaderKindCheckEventFlowSystemActor.FaderKindCheck(FadeType, 'cNormalFader'):
+        EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(1)
+        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, false)
+    elif (not EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColor, 'cBlack')) and (EventFlowSystemActor.FaderColorCheckEventFlowSystemActor.FaderColorCheck(FadeColor, 'cWhite')):
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+            run Sub_Event31(FadeType=FadeType, FadeColor=FadeColor)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+                EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(0)
+                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+                EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+            else:
+                if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                    EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(2)
+                    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.10000000149011612, 0.10000000149011612, false)
+                    EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+                else:
+                    run Sub_Event31(FadeType=FadeType, FadeColor=FadeColor)
+    elif EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cNormal'):
+        run Sub_Event17(FadeType=FadeType, FadeColor=FadeColor)
+    else:
+        if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cFast'):
+            EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(0)
+            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 1.0, 1.0, false)
+            EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+        else:
+            if EventFlowSystemActor.FadeSpeedLevelCheckEventFlowSystemActor.FadeSpeedLevelCheck(FadeSpeed, 'cSlow'):
+                EventFlowSystemActor.SoundFadeOutDuckingOnEventFlowSystemActor.SoundFadeOutDuckingOn(2)
+                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut(FadeType, FadeType, FadeColor, 0.10000000149011612, 0.10000000149011612, false)
+                EventFlowSystemActor.SetFadeMinimumCountEventFlowSystemActor.SetFadeMinimumCount(4)
+            else:
+                run Sub_Event17(FadeType=FadeType, FadeColor=FadeColor)
+ 

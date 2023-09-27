@@ -1,0 +1,531 @@
+flow CallFacilityNPC():
+    if EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() == 0:
+        if EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder() == 0:
+            # Great! Now, the next thing to think about will be…who can we invite to work here? We can always change the staff later, but who would you hire right …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:112', false)
+        else:
+            # So let's decide who'll be working here.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:112_01', false)
+        EventFlowSystemActor.UIPostCastHandlingEventFlowSystemActor.UIPostCastHandling()
+        EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.10000000149011612, 0, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(3)
+        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Complete_Edit', -1)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(33)
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(184)
+        switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+            case 0:
+                # OK! I'll go call our new teacher!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113', false)
+            case 1:
+                # OK! I'll go call the hospital staff!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_01', false)
+            case 2:
+                # OK! I'll go call the restaurant staff!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_02', false)
+            case 3:
+                # OK! I'll go call the café staff!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_03', false)
+            case 4:
+                # OK! I'll go call the shop manager!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_04', false)
+    else:
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(13)
+        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(184)
+        switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+            case 0:
+                # Nice job! I'll call everyone back to the school.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_06', false)
+            case 1:
+                # Nice job! I'll call everyone back to the hospital.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_07', false)
+            case 2:
+                # Nice job! I'll call everyone back to the restaurant.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_08', false)
+            case 3:
+                # Nice job! I'll call everyone back to the café.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_09', false)
+            case 4:
+                # Nice job! I'll call everyone back to the apparel shop.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:113_10', false)
+    run SetFacilityName()
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(60)
+    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(62)
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_RequestOkay', -1)
+    fork:
+        branch:
+            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Edit_Finish_Facility', -1)
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('RequestOkay', true, '', 0, false)
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('RequestOkay', true, '', 0, false)
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(62)
+    EventFlowSystemActor.RequestCompleteDemoBGMDuckingEventFlowSystemActor.RequestCompleteDemoBGMDucking()
+    System.EventFlags['cWherearenPlayer:IsFacilityEditEndIndoorDemo'] = 1
+    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenFacilityEntrance'):
+        EventFlowSystemActor.EditSceneBGMEndEventFlowSystemActor.EditSceneBGMEnd()
+        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cOrderDemoLogoWherearen', 'cOrderDemoLogoWherearen', 'cBlack', 1.0, 1.0, true)
+        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeqEventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, false)
+        if EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder() not in (0, 1, 2, 3):
+            EventFlowSystemActor.ReplaceWherearenTorsoEventFlowSystemActor.ReplaceWherearenTorso()
+        EventFlowSystemActor.ReserveDemoFtrActionEventFlowSystemActor.ReserveDemoFtrAction()
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        EventFlowSystemActor.WherearenOperateNpcWithoutOfficerEventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cCreateForNpcOrder')
+        EventFlowSystemActor.SetNpcAIBlackBoardByLabelEventFlowSystemActor.SetNpcAIBlackBoardByLabel('otg', 'ReqVisible', 1, 0)
+        EventFlowSystemActor.SetNpcAIBlackBoardByLabelEventFlowSystemActor.SetNpcAIBlackBoardByLabel('NpcPlayer', 'ReqCompDemo', 1, 1)
+    else:
+        EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Complete_Intro_0', 'Place:SafeArea', true)
+        EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('NNPC_Spot_WherearenCompleteDemo', 'HiddenPlayer', false, false, false)
+        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeqEventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, true)
+        System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+        System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoReserve'] = true
+        EventFlowSystemActor.EditSceneBGMEndEventFlowSystemActor.EditSceneBGMEnd()
+        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilityCompleteDemo', 'cOrderDemoLogoWherearen', 'cOrderDemoLogoWherearen', 'cBlack', 1.0, 1.0)
+ 
+flow Check(PreCheck: bool):
+    SubflowResults[0] = 0
+    if not EventFlowSystemActor.WherearenEditEndTermsEventFlowSystemActor.WherearenEditEndTerms('cPlacedAllMustItem'):
+        if not PreCheck:
+            EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cUnplacedMustItemRoom', 0, '')
+            switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+                case 0, 4:
+                    # Oh… It looks like we don't have all the furniture we need. We'll need to try a bit harder.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:105_01', false)
+                case 1, 2:
+                    # Oh… It looks like we don't have all the necessary furniture in place in the <150:2:cd00>. We'll need to try a bit harder.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:105', false)
+                case 3:
+                    if (not EventFlowSystemActor.WherearenIsExpandedFacilityEventFlowSystemActor.WherearenIsExpandedFacility('cCafe')) and (EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() in (0, 1)):
+                        # Oh… It looks like we don't have all the furniture we need. We'll need to try a bit harder.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:105_01', false)
+                    else:
+                        # Oh… It looks like we don't have all the necessary furniture in place in the <150:2:cd00>. We'll need to try a bit harder.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:105', false)
+    elif not EventFlowSystemActor.WherearenEditEndTermsEventFlowSystemActor.WherearenEditEndTerms('cIsEnteredCafe2FonExpandOrder'):
+        if PreCheck:
+            SubflowResults[0] = 2
+        else:
+            # Oh, you haven't even seen the upstairs expansion yet! Go up and check the space out.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:119', false)
+    elif EventFlowSystemActor.WherearenEditEndTermsEventFlowSystemActor.WherearenEditEndTerms('cPlacedOverLimit'):
+        if (not PreCheck) and (EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder() == 4):
+            # I understand why you'd want to have many products available…but maybe there are too many mannequins. If there are too many, Wardell will have a hard …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:108', false)
+    elif not EventFlowSystemActor.WherearenEditEndTermsEventFlowSystemActor.WherearenEditEndTerms('cCanPlaceNpcAllRoom'):
+        if PreCheck:
+            if not EventFlowSystemActor.WherearenEditEndTermsEventFlowSystemActor.WherearenEditEndTerms('cCanNotPlaceNpcNowRoom'):
+                SubflowResults[0] = 2
+        elif EventFlowSystemActor.WherearenEditEndTermsEventFlowSystemActor.WherearenEditEndTerms('cCanNotPlaceNpcNowRoom'):
+            # Oh. This room…seems to have too many things in it. Folks might have trouble moving around, so let's try reducing the number of things.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:106', false)
+        else:
+            # Oh dear… Seems like there are some rooms with too many things in them. Folks might have trouble moving around, so let's try reducing the number of th…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:107', false)
+    elif PreCheck:
+        SubflowResults[0] = 1
+    else:
+        run PostEditEvent()
+        if EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder() in (0, 1, 2, 3):
+            run EditEnd()
+        else:
+            # Good work! Now, this apparel shop… What kind of clothes are we thinking of having?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_01', false)
+            switch EventFlowSystemActor.GeneralTalkChoice6EventFlowSystemActor.GeneralTalkChoice6():
+                case 0:
+                    EventFlowSystemActor.WherearenSetShopTailorClothTypeEventFlowSystemActor.WherearenSetShopTailorClothType('cCute')
+                    # Cute clothes…right! I'll let Wardell know later, and he'll procure your order.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_03', false)
+                case 1:
+                    EventFlowSystemActor.WherearenSetShopTailorClothTypeEventFlowSystemActor.WherearenSetShopTailorClothType('cSimple')
+                    # Simple clothes…right! I'll let Wardell know later, and he'll procure your order.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_04', false)
+                case 2:
+                    EventFlowSystemActor.WherearenSetShopTailorClothTypeEventFlowSystemActor.WherearenSetShopTailorClothType('cElegant')
+                    # Showy clothes…right! I'll let Wardell know later, and he'll procure your order.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_05', false)
+                case 3:
+                    EventFlowSystemActor.WherearenSetShopTailorClothTypeEventFlowSystemActor.WherearenSetShopTailorClothType('cCool')
+                    # Cool clothes…right! I'll let Wardell know later, and he'll procure your order.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_06', false)
+                case 4:
+                    EventFlowSystemActor.WherearenSetShopTailorClothTypeEventFlowSystemActor.WherearenSetShopTailorClothType('cActive')
+                    # Loose clothes…right! I'll let Wardell know later, and he'll procure your order.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_07', false)
+                case 5:
+                    EventFlowSystemActor.WherearenSetShopTailorClothTypeEventFlowSystemActor.WherearenSetShopTailorClothType('cNone')
+                    # Got it! I'll let Wardell know so he can get going on that.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_02', false)
+            if (EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() != 0) and (EventFlowSystemActor.WherearenIsChangedShopTailorClothTypeEventFlowSystemActor.WherearenIsChangedShopTailorClothType()):
+                # By the way, those clothes you picked out with the new image will probably come in tomorrow.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:104_08', false)
+            run EditEnd()
+ 
+flow EditEnd():
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditEnd')
+    run CallFacilityNPC()
+ 
+flow Gate():
+    # Wait a second! You didn't tell me what you want to do yet!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:201', false)
+ 
+flow NPCCheckAct():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5):
+        MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+        MainNpc.TurnBodyMainNpc.TurnBody(17, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+ 
+flow PostEditEvent():
+    System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = false
+    switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+        case 0:
+            if System.EventFlags['cWherearenPlayer:SeqSchoolEditOngoing']:
+                run SNPC_otg_15_WherearenEvent_School::PostEditrun SNPC_otg_15_WherearenEvent_School::PostEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 1:
+            if System.EventFlags['cWherearenPlayer:SeqHospitalEditOngoing']:
+                run SNPC_otg_20_WherearenEvent_Hospital::PostEditrun SNPC_otg_20_WherearenEvent_Hospital::PostEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 2, 3:
+            if System.EventFlags['cWherearenPlayer:SeqRestaurantEditOngoing']:
+                run SNPC_otg_19_WherearenEvent_RestaurantCafe::PostEditrun SNPC_otg_19_WherearenEvent_RestaurantCafe::PostEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 4:
+            if System.EventFlags['cWherearenPlayer:SeqTailorEditOngoing']:
+                run SNPC_otg_21_WherearenEvent_Tailor::PostEditrun SNPC_otg_21_WherearenEvent_Tailor::PostEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+ 
+flow PreEditEvent():
+    System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = false
+    run ReactionEnterFacility()
+    switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+        case 0:
+            if System.EventFlags['cWherearenPlayer:SeqSchoolEditOngoing']:
+                run SNPC_otg_15_WherearenEvent_School::PreEditrun SNPC_otg_15_WherearenEvent_School::PreEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 1:
+            if System.EventFlags['cWherearenPlayer:SeqHospitalEditOngoing']:
+                run SNPC_otg_20_WherearenEvent_Hospital::PreEditrun SNPC_otg_20_WherearenEvent_Hospital::PreEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 2:
+            if System.EventFlags['cWherearenPlayer:SeqRestaurantEditOngoing']:
+                if System.EventFlags['cWherearenPlayer:Unlock_Faclility_Restaurant']:
+                    run SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEdit_LaterRestaurantrun SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEdit_LaterRestaurant()
+                    System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+                else:
+                    run SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEditrun SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEdit()
+                    System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 3:
+            if System.EventFlags['cWherearenPlayer:SeqRestaurantEditOngoing']:
+                if System.EventFlags['cWherearenPlayer:Unlock_Faclility_Cafe']:
+                    run SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEdit_LaterCaferun SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEdit_LaterCafe()
+                    System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+                else:
+                    run SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEditrun SNPC_otg_19_WherearenEvent_RestaurantCafe::PreEdit()
+                    System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+        case 4:
+            if System.EventFlags['cWherearenPlayer:SeqTailorEditOngoing']:
+                run SNPC_otg_21_WherearenEvent_Tailor::PreEditrun SNPC_otg_21_WherearenEvent_Tailor::PreEdit()
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+ 
+flow PreExtension():
+    if (not EventFlowSystemActor.IsResumeWherearenOrderEventFlowSystemActor.IsResumeWherearenOrder()) and (EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() == 2):
+        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+        Player.TurnBodyPlayer.TurnBody(0, 0.0)
+        switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+            case 1:
+                # Time to get to work! This time we'll be turning the second floor here into a patient ward. A fully furnished and equipped hospital should really help…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:002_03', false)
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+            case 2:
+                # Let's get working! We've just added an upper floor that we're going to turn into a private room. Folks love having the option to dine in private, whe…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:002_01', false)
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+            case 3:
+                # Let's get to work! We now have a second floor that we're going to turn into a gallery. We don't need anything specific to be in it, so this will be m…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:002_02', false)
+                System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone'] = true
+            default:
+                return
+ 
+flow ReInput():
+    # Er… You're going back and forth a bit, aren't you? But that's OK! Just let me know the name.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_06', false)
+    run Event184()
+ 
+flow ReactionEnterFacility():
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    MainNpc.NpcAISetPosMainNpc.NpcAISetPos(0.0, 10.0, 0.0, true, false)
+    MainNpc.TurnBodyMainNpc.TurnBody(12, 180.0)
+    MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+    fork:
+        branch:
+            EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+        branch:
+            Player.PlayerMoveToTargetPlayer.PlayerMoveToTarget(true, 0.0, -20.0, 0.0, 0.0, false, '')
+        branch:
+            MainNpc.NpcMoveDirectionMainNpc.NpcMoveDirection(180.0, 10.0, 0, false, true)
+    MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+ 
+flow ReactionStartTakePicture():
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(57)
+    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(60)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(149)
+    MainNpc.NpcWarpCreatePosMainNpc.NpcWarpCreatePos()
+    fork:
+        branch:
+            MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', true)
+            MainNpc.TurnBodyMainNpc.TurnBody(12, 180.0)
+        branch:
+            Player.TurnBodyPlayer.TurnBody(12, 180.0)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(181)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.HousingDeliveryPhotographyBGMStartEventFlowSystemActor.HousingDeliveryPhotographyBGMStart()
+    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+    fork:
+        branch:
+            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+            MainNpc.TurnBodyMainNpc.TurnBody(10, 180.0)
+            MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
+            MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+        branch:
+            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+            Player.TurnBodyPlayer.TurnBody(0, 180.0)
+ 
+flow Root():
+    if System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoTakePicture']:
+        run UnderShooting()
+    elif EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() == 0:
+        # How are things going?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:101', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                run Sub_Event294()
+            case 1:
+                run Sub_Event214()
+            case 2:
+                # I get it. Just do your best!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:103', false)
+    else:
+        # So, how's it going?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:114', false)
+        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+            case 0:
+                run Sub_Event294()
+            case 1:
+                run Sub_Event214()
+            case 2:
+                # You want to cancel decorating?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:109', false)
+                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    # Then let's head back to the office.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:110', true)
+                    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cCancel')
+                    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+                    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+                    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+                else:
+                    # Oh? Well, keep at it, and give it your best!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:111', false)
+            case 3:
+                # I get it. Just do your best!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:103', false)
+ 
+flow SetFacilityName():
+    EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacilityNormal', 0, 'cEditNow')
+    if EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() == 0:
+        # Wait—before we do this…we need to give our new <150:1:cd00> a name! If you have any ideas, I want to hear them! Or if you don't right now, that's OK.…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_01', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Sub_Event88()
+        else:
+            # Got it. Feel free to let me know later, when we're at the office.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_09', false)
+    elif EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
+        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cEditNow')
+        # Wait… Before that…do you want to give this <150:1:cd00> a new name? Right now, we're calling it <150:3:cd00>.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:124_01', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Sub_Event88()
+        else:
+            # OK! If you do want to change its name, let me know later, when we're at the office.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:124_03', false)
+    else:
+        # Wait… Before that…what do you want to do about a name for this <150:1:cd00>?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:124_02', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            run Sub_Event88()
+        else:
+            # Got it. Feel free to let me know later, when we're at the office.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_09', false)
+ 
+flow SettingFinishRoomEdit():
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cPhotoModeEnd')
+    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.5, 0, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    EventFlowSystemActor.HousingDeliveryPhotographyBGMEndEventFlowSystemActor.HousingDeliveryPhotographyBGMEnd()
+    System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoTakePicture'] = false
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cCompleteDemoStart')
+    EventFlowSystemActor.ReserveNpcCommandEventFlowSystemActor.ReserveNpcCommand('WherearenCeremony')
+    System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoCeremony'] = true
+    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
+    EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilityCeremony', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+ 
+flow StartTakePicture():
+    run ReactionStartTakePicture()
+    if EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() == 0:
+        switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+            case 0:
+                MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', true, true, 0)
+                # Well…I called everyone. Once I got our teacher in here, it seemed like we needed some students too! And now everyone is learning, thanks to you! <10:…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:122', false)
+            case 1:
+                MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cHospitalDoctor', true, true, 0)
+                # I brought the hospital staff. I also went ahead and recruited a few patients too. I really like how it all turned out! It'll look great in photos. An…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:122_02', false)
+            case 2:
+                MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cRestaurantCook', true, true, 0)
+                # I brought the restaurant staff! I also thought it would be good to bring a few diners along. This place really turned out fantastic. I can't wait to …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:122_03', false)
+            case 3:
+                MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cCafeWaiter', true, true, 0)
+                # The new staff is here! I also found some customers to take the place for a spin. I can't believe how gorgeous this café turned out to be. It's going …
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:122_04', false)
+            case 4:
+                MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cTailorClerk', true, true, 0)
+                # Here's your new shop manager! And here are a handful of excited customers too. Heehee! I wasn't sure how this place would turn out, but look at it! I…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:122_05', false)
+    else:
+        # OK, I brought everyone. Let me know if you want to get a celebratory photo or head back to the office.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:122_01', false)
+    System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoTakePicture'] = true
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(180)
+    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cPhotoModeStart')
+ 
+local flow Sub_Event214():
+    # Got it! You want to change the exterior, yes?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:102', false)
+    EventFlowSystemActor.UICustomFacilityHandlingEventFlowSystemActor.UICustomFacilityHandling('cAfterTheSecond')
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        # Wow! That looks fabulous. Great job!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:115', false)
+    else:
+        # Need a little more time to think on it? That's fine!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:115_01', false)
+ 
+local flow Sub_Event294():
+    run Check(PreCheck=true)
+    switch SubflowResults@3[0]:
+        case 0:
+            run NPCCheckAct()
+        case 1:
+            if EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() != 0:
+                EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.10000000149011612, 0, 0.0)
+                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(3)
+                EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Complete_Edit', -1)
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        case 2:
+            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    run Check(PreCheck=false)
+ 
+local flow Sub_Event88():
+    # Alright! What were you thinking?
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_02', false)
+entrypoint Event184:
+    switch EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder():
+        case 0:
+            EventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandlingEventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandling(0, true)
+        case 1:
+            EventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandlingEventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandling(1, true)
+        case 2:
+            EventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandlingEventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandling(2, true)
+        case 3:
+            EventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandlingEventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandling(3, true)
+        case 4:
+            EventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandlingEventFlowSystemActor.UISoftwareKeyboardFacilitiesNameHandling(4, true)
+    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cWherearenSwkbdFacilityName', 0)
+        # I like it! You definitely want to name it <150:3:cd00>?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_03', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Great! We've got ourselves a name!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_04', false)
+            EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cFacilitiesName')
+        else:
+            # Oh!<10:4> Do you want to come up with a different name? Or do you want to put this off until later?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_05', false)
+            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                run ReInput()
+            else:
+                # Got it. Feel free to let me know later, when we're at the office.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_08', false)
+    else:
+        # Oh, I get it. So you won't give it a new name, then?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_07', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            # Got it. Feel free to let me know later, when we're at the office.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123_08', false)
+        else:
+            run ReInput()
+ 
+flow UnderShooting():
+    if EventFlowSystemActor.WherearenFacilityOrderTypeEventFlowSystemActor.WherearenFacilityOrderType() == 0:
+        # What's up?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:117', false)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            if (EventFlowSystemActor.WherearenFacilityTypeOnOrderEventFlowSystemActor.WherearenFacilityTypeOnOrder() not in (0, 1, 2, 4)) and (not System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']):
+                # Then let's head outside! The beachfront dining area should be ready by now.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:126', true)
+                run SettingFinishRoomEdit()
+            else:
+                # Great! Let's go outside.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:123', true)
+                run SettingFinishRoomEdit()
+        else:
+            # Really? Well, let me know if you want to get some celebratory photos.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:118', false)
+    else:
+        # What's up?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:117_01', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            case 0:
+                # Let's head outside!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:124', false)
+                run SettingFinishRoomEdit()
+            case 1:
+                # Alright, let's go back!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:125', true)
+                EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cPhotoModeEnd')
+                System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoTakePicture'] = false
+                EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cCompleteDemoStart')
+                EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cCompleteDemoEnd')
+                EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+                System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+                EventFlowSystemActor.HousingDeliveryPhotographyBGMEndEventFlowSystemActor.HousingDeliveryPhotographyBGMEnd()
+                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+            case 2:
+                # Oh, really? Well, let me know if there's anything else.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:118_01', false)
+ 
+flow Visit():
+    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = false
+    if System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoTakePicture']:
+        run StartTakePicture()
+    else:
+        run PreEditEvent()
+        if not System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone']:
+            run PreExtension()
+            if not System.EventFlags['cPlayerTemp:WHEREAREN_PostEditEventDone']:
+                # Alright, let's get working!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:001', false)
+        EventFlowSystemActor.UIMainMenuSetInvalidFrameEventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+        EventFlowSystemActor.UIThemeAppearEventFlowSystemActor.UIThemeAppear('cFacility')
+        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cEditStart')
+        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeqEventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, false)
+ 

@@ -1,0 +1,198 @@
+flow Confirm():
+    switch MainNpc.NpcLostQuestTypeMainNpc.NpcLostQuestType():
+        case 0:
+            # Man, I wonder where my shopping bag coulda went? I bet I dropped him while I was out. I'm sorry, Mr. Shopping Bag! Please come home!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:048', false)
+        case 1:
+            # My bag's gone! He's gotta be on the island somewhere, <110:5>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:049', false)
+        case 2:
+            # I hope my picture book turns up soon. It wasn't anywhere in my house, so it's gotta be outside somewhere. I hope it's not scared, <110:5>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:050', false)
+        case 3:
+            # I hope my diary turns up. I wish I could remember where I sat it down. Oh man, I bet it's looking for me too, <110:5>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:051', false)
+ 
+flow End():
+    if not MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cLost', true, false):
+        run Give2()
+    elif MainNpc.HasNpcRequestedItemMainNpc.HasNpcRequestedItem():
+        run Give1()
+    else:
+        run Confirm()
+ 
+flow Give1():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # You already found it?!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:038', false)
+    else:
+        # Whoa!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:039', false)
+entrypoint Event22:
+    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cQuest', 65534, '', '', 'cItemSelect', false)
+    if not MainNpc.IsSelectNpcRequestedItemMainNpc.IsSelectNpcRequestedItem():
+        if MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cLost', true, false):
+            if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                # Huh? You're not gonna show me?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:040', false)
+            else:
+                # Hurry up and show me!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:041', false)
+        elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            # Did you make a mistake?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:045', false)
+        else:
+            # I thought you wanted to show me something?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:046', false)
+    elif MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cLost', false, false):
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, true)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+        if MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cLost', true, false):
+            switch MainNpc.NpcLostQuestTypeMainNpc.NpcLostQuestType():
+                case 0:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # That's him! That's my shopping bag! I'd know his smell anywhere!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:001', false)
+                    else:
+                        # You did it! You found him!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:002', false)
+                case 1:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # Cool! It's my bag! You found him! Oh man… Everything's still in here!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:003', false)
+                    else:
+                        # You found him! Oh man, oh maaaan!<10:4> And everything's still here!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:004', false)
+                case 2:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # Wow! You found it! My favorite picture book!<10:4> Now I can eat snacks and look at my favorite pictures!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:006', false)
+                    else:
+                        # Cool! You found the picture book I was looking for! There's a lot of good bug pictures in here.<10:4> A LOT.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:007', false)
+                case 3:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # That's my diary! See? It has my smell on it!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:008', false)
+                    else:
+                        # Whoa! My diary! It finally came home to me! I've been dying to smell it again! Sniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiffff! Ahhhh… That's the stuff.
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:009', false)
+        else:
+            switch MainNpc.NpcLostQuestTypeMainNpc.NpcLostQuestType():
+                case 0:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # This is the shopping bag I thought I lost! You found him!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:011', false)
+                    else:
+                        # YAY! You found the shopping bag I was freaking out about! I missed him so much!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:012', false)
+                case 1:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # You found— It's my shopping bag! Oh man, shopping bag! Never leave me again, OK?
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:013', false)
+                    else:
+                        # My favorite bag! I've been looking everywhere for him! I can't believe you found him!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:014', false)
+                case 2:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # Hey! It's my picture book! I couldn't find it anywhere! 
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:016', false)
+                    else:
+                        # Is this… It is! It's my picture book that I lost!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:017', false)
+                case 3:
+                    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                        # It's my diary! I thought I'd lost it!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:018', false)
+                    else:
+                        # Whoa! It's my diary! I thought it was gone for good!
+                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:019', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
+        run NNPC_Quest_AllReward::Rootrun NNPC_Quest_AllReward::Root()
+        if MainNpc.NpcIsQuestClientMainNpc.NpcIsQuestClient('cLost', true, false):
+            if MainNpc.NpcLostQuestTypeMainNpc.NpcLostQuestType() in (0, 2):
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                    # Thanks for finding it! I gotta repay you!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:021', false)
+                else:
+                    # Thanks so much! I oughta give you something, huh? Here!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:022', false)
+            elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                # Yaaay! Thanks! You really saved me! Here, take this!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:023', false)
+            else:
+                # Thank you sooo much! You REALLY helped me out, so I gotta thank you!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:024', false)
+        else:
+            MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(2)
+            if MainNpc.NpcLostQuestTypeMainNpc.NpcLostQuestType() in (0, 2):
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                    # Thanks for getting this to me! You deserve a reward!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:026', false)
+                else:
+                    # Thanks for bringing this to me! Here, I want ya to have this.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:027', false)
+            elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                # Thanks! I've been looking for it FOREVER! Here, lemme give you a reward!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:028', false)
+            else:
+                # Oh man. Oh man. OH MAN! I've been looking everywhere for this! Lemme give you a reward!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:029', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, '"Default"')
+        switch MainNpc.NpcQuestRewardMainNpc.NpcQuestReward():
+            case 0:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                    # Ya like it?! It's [a|an] <125:4:0000>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:031', false, true)
+                else:
+                    # One of my favorites… [A|An]<125:4:0000>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:032', false, true)
+            case 1:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                    # I hope you'll enjoy [a|an]<125:4:0000>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:033', false, true)
+                else:
+                    # There ya go! It's [a|an] <125:4:0000>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:034', false, true)
+            case 2:
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                    # I hope ya like that. It's [a|an] <125:4:0000>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:035', false, true)
+                else:
+                    # Thanks again! It's [a|an] <125:4:0000>!
+                    MainNpc.QuestStartOpenMessageWindowMainNpc.QuestStartOpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:036', false, true)
+        MainNpc.NpcQuestControlMainNpc.NpcQuestControl('cFinish')
+        System.EventFlags['cLifeSupportDaily:AchieveQuest'] = true
+        System.EventFlags['cLifeSupportAchievement:AchieveVillagersQuest'] += 1
+        MainNpc.EventFlags['cNpcMemory:StoodUpFlag'] = false
+        MainNpc.EventFlags['cNpcMemory:OrderQuest'] = true
+        System.EventFlags['cLand:LostPropertyFound'] = false
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('NNPC_SolveRequest')
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+    else:
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+        MainNpc.SetNpcNameMainNpc.SetNpcName(2, 0)
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # Hmm, sorry, but this isn't mine.<10:4> I maybe saw <115:1:cd00> with it once? Maybe?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:053', false)
+            case 1:
+                # Nope, not mine! It maybe looks like <115:1:cd00>'s kinda thing, <110:6>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:054', false)
+            case 2:
+                # Nope. This isn't mine. Do ya think it might be <115:1:cd00>'s?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:055', false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, '"Default"')
+        MainNpc.QuestFlags['cLostUseHint'] = true
+ 
+flow Give2():
+    if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        # Huh? I did?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:043', false)
+        run Event22()
+    else:
+        # Can you, um, show me what you're talking about?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_LostProperty_End:044', false)
+        run Event22()
+ 

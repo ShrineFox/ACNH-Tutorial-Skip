@@ -1,0 +1,80 @@
+flow Check_Goods():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_rcm_00_Groceries', 'Root')
+ 
+flow Check_rcm():
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('CheckItemIndex', 0):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_rcm', 'Check')
+ 
+flow Close_rcm():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_rcm_00_Close')
+ 
+flow Enter_rcm():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(13, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(18, true)
+    run AI_NPC_Common::Speakrun AI_NPC_Common::Speak(EntryName='Root', FlowName='SNPC_rcm_00_In')
+    System.EventFlags['cLandTemp:RcmEnterBalloon'] = true
+    System.EventFlags['cLandTemp:ShopEnterMessageFlag'] = true
+ 
+flow Init():
+    MainNpc.SetSightRangeMainNpc.SetSightRange(0, 64)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckItemIndex', -1)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('DemoSpeak', 0)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cItemCheck', true)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('GoodsRail', 2)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveRcm', true)
+    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cEnterRcm', true)
+    if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+        MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+        switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+            case `NooksCrannyInitial`:
+                MainNpc.NpcAISetPosByRailMainNpc.NpcAISetPosByRail(6, 0, true, -80.0)
+                run Sub_grp_Event24()
+            case `NooksCrannyUpgraded`:
+                MainNpc.NpcAISetPosByRailMainNpc.NpcAISetPosByRail(3, 0, true, 0.0)
+                run Sub_grp_Event24()
+            default:
+                return
+    else:
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cShopClose', false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, false)
+        run Sub_grp_Event24()
+ 
+flow Leave_rcm():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_rcm_00_Out')
+ 
+flow Rcm_Wait():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(19, true)
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cRcm', '', 'SNPC_rcm', 'Root', false, true)
+    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+ 
+flow Root():
+    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`InResServiceTent`, `NooksCrannyUpgraded`):
+            run Rcm_Wait()
+        elif (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (MainNpc.HghFreeQuery2MainNpc.HghFreeQuery2('cHghQueryType_HghStayMarket')):
+            MainNpc.NpcChangeConversationPretenseStateMainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_rcm', 'Root', false, true, ArgInt0=0, ArgStr0='hgh')
+        else:
+            run Rcm_Wait()
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('DemoSpeak', 1):
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('DemoSpeak', 0)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+        run AI_NPC_Common::Speakrun AI_NPC_Common::Speak(EntryName='ForceRenualOpen', FlowName='SNPC_rcm')
+    else:
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, true)
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cRcm', '', 'SNPC_rcm', 'Root', false, true)
+        MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+ 
+local flow Sub_grp_Event24():
+    if MainNpc.HghFreeQuery2MainNpc.HghFreeQuery2('cHghQueryType_HghStayMarket'):
+        MainNpc.NpcAISetPosByRailMainNpc.NpcAISetPosByRail(5, 0, false, 0.0)
+        System.EventFlags['cLandTemp:HghStayMarketNow'] = true
+ 

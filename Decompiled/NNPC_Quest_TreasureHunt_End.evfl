@@ -1,0 +1,172 @@
+flow End():
+    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        run ForVisitor()
+    elif System.EventFlags['cPlayer:TreasurePlayerWin']:
+        run End_Win()
+    else:
+        run End_Lose()
+ 
+flow End_Lose():
+    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(2545, 1):
+        if MainNpc.NpcIsTreasureHuntLimitOver2MainNpc.NpcIsTreasureHuntLimitOver2():
+            MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+        run End_Lose_HasTreasure()
+    else:
+        if MainNpc.NpcIsTreasureHuntLimitOver2MainNpc.NpcIsTreasureHuntLimitOver2():
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                case 0:
+                    # <50:3><110:3>? Man, like, where have you BEEN  this whole time? The treasure-hunting clock ran out while you were gone! Better luck next time, <110:5…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:300', true)
+                case 1:
+                    # Maaaan… I've been waiting for you, <110:3>! You ran out of time to find the treasure. When we do this again, keep an eye on the clock!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:301', true)
+                case 2:
+                    # Where have you been?! I've been here waiting for you. The treasure hunt ended, like… a while ago. Sorry, but ya lose this round, <110:5>.
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:302', true)
+        else:
+            MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(-1)
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                case 0:
+                    # Aw, that's a shame! I win this round since you didn't find the treasure in time, <110:6>! Thanks for playing with me!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:200', true)
+                case 1:
+                    # You're, like, outta time! You didn't find the treasure, so you lose this round. Let's go treasure hunting again sometime soon, <110:6>!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:201', true)
+                case 2:
+                    # Ya didn't find the treasure in time, man! That means I win this round! Thanks for playing with me today!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:202', true)
+        MainNpc.EventFlags['cNpcMemory:UncollectedFishishTreasureHunt'] = true
+        run Treasure_Finish()
+ 
+flow End_Lose_HasTreasure():
+    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(0, true)
+    if System.EventFlags['cPlayer:TreasureHuntJustMissed'] != 1:
+        # You found it! Aw, man, the clock's already run out. Sorry, but I gotta take that back.
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:401', false)
+    else:
+        System.EventFlags['cPlayer:TreasureHuntJustMissed'] = 0
+        # You were suuuper close, but you didn't make it back to me in time! Sorry, <110:3>! Guess that means I win this time! I'll be taking that treasure bac…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:502', false)
+    MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Default')
+    # Thanks for playing! Let's do this again sometime, <110:6>.
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:402', false)
+    run Treasure_Finish()
+ 
+flow End_Win():
+    if MainNpc.EventFlags['cNpcTemp:TreasureHuntGiveCancel']:
+        # I wonder what's in it? I used to know, but I forgot! Gimme the treasure and I'll open it!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:012', false)
+    else:
+        if System.EventFlags['cPlayer:TreasureHuntJustMissed'] != 2:
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                case 0:
+                    # Yaaay, you found the treasure! You're real good at treasure hunting, <110:4>! A huh huh huh, I guess I lose this time! No worries. Here, gimme the bo…
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:001', true)
+                case 1:
+                    # Wow, <110:4>! You're real good at  hunting for treasure! Here, if you hand me the box, I can open it!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:002', true)
+                case 2:
+                    # Cool! You're a treasure-hunting master! OK, give me the treasure so I can open it!
+                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:003', true)
+        else:
+            System.EventFlags['cPlayer:TreasureHuntJustMissed'] = 0
+            # Congratulations, <110:3>! You found the treasure! You cut it real close, though. OK, hand it over so I can open it, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:501', false)
+    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cQuest', 65534, '', '', 'cItemSelect', false)
+    if MainNpc.IsSelectNpcRequestedItemMainNpc.IsSelectNpcRequestedItem():
+        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # Let's see… I wonder what's inside?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:004', false)
+            case 1:
+                # A huh huh huh! Let's see what the treasure is!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:005', false)
+            case 2:
+                # Cool… Here we go… Aaand the treasure iiis…
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:006', false)
+        run NNPC_Quest_AllReward::Rootrun NNPC_Quest_AllReward::Root()
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(6, '"Default"')
+        switch MainNpc.NpcQuestRewardMainNpc.NpcQuestReward():
+            case 0:
+                # TA-DAA! You won…[a|an] <125:4:0000>! Here ya go, <110:4>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:007', false)
+            case 1:
+                # TA-DAA! Your very own… <125:4:0000>! Here you go! Very cool!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:008', false)
+            case 2:
+                # TA-DAA! Your brand-new <125:4:0000>! The treasure is all yours, <110:3>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:009', false)
+        MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
+        MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, '"Default"')
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # Whew, that was fun! Let's play again, <110:4>! <50:3><110:6>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:100', true)
+            case 1:
+                # <50:3><110:4>! Thanks for playing with me! I won't lose next time, <110:6>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:101', true)
+            case 2:
+                # Man, <110:4>! That was a lot of fun, huh?
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:102', true)
+        MainNpc.NpcSetQuestRewardToPlayerBaggageMainNpc.NpcSetQuestRewardToPlayerBaggage('cSwap')
+        MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+        run Treasure_Finish()
+    else:
+        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            # I can't open the box if ya don't give it to me!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:010', false)
+        else:
+            # What's wrong? Don't ya want to know what's inside?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_End:011', false)
+        MainNpc.EventFlags['cNpcTemp:TreasureHuntGiveCancel'] = true
+ 
+flow ForVisitor():
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        case 0:
+            # Hey. I'm playing a treasure-hunting game with <110:16> right now! I'll talk with ya later, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_Talk:100', false)
+        case 1:
+            # Sorry! I'm, like, right in the middle of a treasure hunt with <110:16>! Let's have some snacks together later, <110:6>!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_Talk:101', false)
+        case 2:
+            # I'm on a treasure hunt with <110:16> right now! I'll have time to chill with you once we're done!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_Talk:102', false)
+ 
+flow Root():
+    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        run ForVisitor()
+    elif System.EventFlags['cPlayer:TreasurePlayerWin']:
+        run End_Win()
+    elif EventFlowSystemActor.NpcQuestIsLimitOverEventFlowSystemActor.NpcQuestIsLimitOver('cTreasure'):
+        run End_Lose()
+    else:
+        run Talk()
+ 
+flow Talk():
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            case 0:
+                # A huh huh huh! The treasure is now buried! Good luck on your hunt!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_Talk:200', false)
+            case 1:
+                # Where could the treasure be? I hid it really well! I promise it's somewhere on this island!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_Talk:201', false)
+            case 2:
+                # The treasure is…somewhere on the island! You gotta dig, dig, dig, <110:3>!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_TreasureHunt_Talk:202', false)
+    else:
+        run ForVisitor()
+ 
+flow Treasure_Finish():
+    MainNpc.NpcQuestControlMainNpc.NpcQuestControl('cFinish')
+    MainNpc.NpcTreasureToDustMainNpc.NpcTreasureToDust()
+    System.EventFlags['cLifeSupportDaily:AchieveQuest'] = true
+    System.EventFlags['cLifeSupportAchievement:AchieveVillagersQuest'] += 1
+    System.EventFlags['cPlayer:HasPlayedTreasureHunt'] = true
+    EventFlowSystemActor.SetSharePlayChangeConditionEventFlowSystemActor.SetSharePlayChangeCondition(false)
+    EventFlowSystemActor.SetSharePlaySubToolConditionEventFlowSystemActor.SetSharePlaySubToolCondition(true)
+    MainNpc.EventFlags['cNpcMemory:OrderQuest'] = true
+    MainNpc.EventFlags['cNpcTemp:TreasureHuntGiveCancel'] = false
+ 

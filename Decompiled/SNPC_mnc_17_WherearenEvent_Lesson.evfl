@@ -1,0 +1,109 @@
+flow Root_Lesson01():
+    System.EventFlags['cWherearenPlayer:SeqMncEventLesson01'] = false
+    if System.EventFlags['cWherearenPlayer:BridgeFromGrowUp']:
+        # <50:3>PLAYER! Let's show today who's boss!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:100_02', false)
+    else:
+        # There you are, PLAYER! Let's show today who's boss!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:100_01', false)
+    # Check it out… I came up with some DIY recipes! All the different stuff you've shown me really inspired me. So thanks! As promised, I want to teach yo…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:001', true)
+    System.EventFlags['cPlayerTemp:WHEREAREN_LessonEventStart'] = true
+    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+    run SNPC_mnc_01_Wherearen::bridgeTalkCloserun SNPC_mnc_01_Wherearen::bridgeTalkClose()
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('Demo_SchoolEvent', 'LessonStart', false, false, false)
+    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:EventLessonStart', 'Place:EditArea', false)
+    EventFlowSystemActor.RequestLessonDemoForSoundEventFlowSystemActor.RequestLessonDemoForSound()
+    run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cWherearenSchool', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeOutSpeed=0.0, FadeInSpeed='cNormal')
+ 
+flow Root_Lesson02():
+    System.EventFlags['cWherearenPlayer:SeqMncEventLesson02'] = false
+    if System.EventFlags['cWherearenPlayer:BridgeFromGrowUp']:
+        # <50:3>PLAYER! Let's show today who's boss!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:100_02', false)
+    else:
+        # There you are, PLAYER! Let's show today who's boss!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:100_01', false)
+    switch EventFlowSystemActor.FlagSystemIntValue7EventFlowSystemActor.FlagSystemIntValue7(7, 'cWherearenPlayer:MncBoxProgress'):
+        case 0:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('WherearenMncBoxPlain', 65534)
+            System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_Plain'] = true
+            # Listen to this: I invented DIY recipes for some counters and a pillar! I call them the simple island counters and the <item>simple pillar. I named th…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:101', true)
+            run Demo_Common_PhoneCall::SendingDataWithP_Mncrun Demo_Common_PhoneCall::SendingDataWithP_Mnc()
+            # Cool! That does it. Try making them yourself sometime.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:102', true)
+            run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+            # Speaking of which, it looks like somebody put some DIY stuff in my materials box. Actually, I know exactly who it was.<10:4> It's got to be…Wardell! …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:103', true)
+            run Sub_Event15()
+        case 1:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('WherearenMncBoxConcrete', 65534)
+            System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_Concrete'] = true
+            # By the way, have you got a second? I made more new DIY recipes! I'll send them to your NookPhone, so take a look.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:111_01', true)
+            run Demo_Common_PhoneCall::SendingDataWithP_Mncrun Demo_Common_PhoneCall::SendingDataWithP_Mnc()
+            # OK, there you go! There are my recipes for some concrete island counters and a <item>concrete pillar. Try making 'em sometime!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:112_01', true)
+            run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+            # When I look through my materials box, I get so many ideas! I'll make some real good ones next time.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:113_01', true)
+            run Sub_Event15()
+        case 2:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('WherearenMncBoxBrick', 65534)
+            System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_Brick'] = true
+            # Oh, right! I perfected some new DIY recipes! I'll send them by NookPhone again.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:111_02', true)
+            run Demo_Common_PhoneCall::SendingDataWithP_Mncrun Demo_Common_PhoneCall::SendingDataWithP_Mnc()
+            # Okeydokey! My recipes for some brick island counters and a <item>brick pillar are yours! Try 'em out sometime!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:112_02', true)
+            run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+            # When I line up different materials on my workbench, ideas start coming to me like…boom!<10:4> Bang!<10:4> BAM!<10:4> Just wait until you see what I c…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:113_02', true)
+            run Sub_Event15()
+        case 3:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('WherearenMncBoxSteel', 65534)
+            System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_Steel'] = true
+            # Oh yeah, I had something to tell you. I invented more new DIY recipes! Can I send them to your NookPhone?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:111_03', true)
+            run Demo_Common_PhoneCall::SendingDataWithP_Mncrun Demo_Common_PhoneCall::SendingDataWithP_Mnc()
+            # OK, it worked! Those recipes are for some steel island counters and a <item>steel pillar. Go "do it yourself" and make some!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:112_03', true)
+            run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+            # Lately, I can't wait to open up my materials box. I think I'm seriously hooked on DIY.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:113_03', true)
+            run Sub_Event15()
+        case 4:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('WherearenMncBoxMarble', 65534)
+            System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_Marble'] = true
+            # By the way, I finished my newest DIY recipes, so here, enjoy! I'll send 'em by NookPhone again!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:111_04', true)
+            run Demo_Common_PhoneCall::SendingDataWithP_Mncrun Demo_Common_PhoneCall::SendingDataWithP_Mnc()
+            # That does it! These're recipes for some marble island counters and a <item>marble pillar! Make them, or I'll cry! Not really.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:112_04', true)
+            run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+            # I think I've got the hang of DIY now, so I believe I'll try making something real cool and complicated next time. No, I WILL make something cool and …
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:113_04', true)
+            run Sub_Event15()
+        case 5:
+            EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('WherearenMncBoxComplete', 65534)
+            System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_02'] = true
+            # So. Funny story. I talked to Wardell, and he told me something veeery interesting… The one putting those DIY materials in my box was actually you all…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:121', true)
+            run Demo_Common_PhoneCall::SendingDataWithP_Mncrun Demo_Common_PhoneCall::SendingDataWithP_Mnc()
+            # Perfect! Those are the recipes for two golden island counters and a <item>golden pillar. I know you'll enjoy making those!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:122', true)
+            run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+            # I really hope we keep growing closer together—not just as work friends, but as DIY friends too! It's you and me, PLAYER!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_08_WherearenEvent_Lesson:123', true)
+            System.EventFlags['cWherearenPlayer:MncBoxProgress'] += 1
+            System.EventFlags['cWherearenPlayer:MncBoxRemovePresent'] = true
+        default:
+            return
+ 
+local flow Sub_Event15():
+    System.EventFlags['cWherearenPlayer:MncBoxProgress'] += 1
+    EventFlowSystemActor.SetMncBoxMaterielEventFlowSystemActor.SetMncBoxMateriel()
+    System.EventFlags['cWherearenPlayer:MncBoxReadMemo'] = false
+    System.EventFlags['cWherearenPlayer:MncBoxRemovePresent'] = true
+ 

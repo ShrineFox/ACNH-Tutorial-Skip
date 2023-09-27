@@ -1,0 +1,21 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ForceVisible', 0)
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('AfterAnnouncement', 0)
+ 
+flow Root():
+    if EventFlowSystemActor.CheckEventStateAtSceneCreateTimeEventFlowSystemActor.CheckEventStateAtSceneCreateTime('Halloween') not in (0, 2, 3):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('ForceVisible', 1)
+    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('ForceVisible', 1):
+        if MainNpc.CheckCurrentNpcAIStateMainNpc.CheckCurrentNpcAIState('cInvisible') == 0:
+            if MainNpc.CanMoveUnitMainNpc.CanMoveUnit(false, true):
+                MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('AfterAnnouncement', 0)
+            else:
+                if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('AfterAnnouncement', 1):
+                    MainNpc.NpcAISetPosMainNpc.NpcAISetPos(0.0, 0.0, 0.0, false, true)
+                    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('AfterAnnouncement', 0)
+        MainNpc.NpcChangeBlockWanderStateMainNpc.NpcChangeBlockWanderState('cBlockWander', '', 'SNPC_pkn', 'Root', true, true, ArgFlag0=false, ArgInt0=0, ArgInt1=6, ArgInt2=0, ArgInt3=0)
+    else:
+        MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_pkn', 'Root', true, true, ArgInt0=0)
+ 

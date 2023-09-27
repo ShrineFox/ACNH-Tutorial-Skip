@@ -1,0 +1,111 @@
+flow RcmCmnGreeting():
+    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    if System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']:
+        # How can I help you?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:014', false)
+    else:
+        # Welcome, PLAYER! How can I help you today?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:013', false)
+ 
+flow RcmConfirmConsultation():
+    System.EventFlags['cPlayer:RcmTookQuestReq'] = true
+    # Very good! I'll get right to the point. I'm hoping that you might be interested in collaborating on a new venture—building a new shop! After all, our…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:012_01', false)
+    # Ah, but here's the thing… Building materials are hard to get. So can we set them aside for building a shop? I really don't see it, since we'll need t…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:012_02', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        case 0, 1:
+            # Thank you so much!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:012_03', false)
+            # Now, I know this is a lot, but I put together a list of the items I'd like you to gather. We'll need 30 pieces each of regular <item>wood, <item>hard…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:012_04', false)
+ 
+flow RcmSelectWithConsultation():
+    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        case 0:
+            run SNPC_rcm_00_Common_Sell::Rootrun SNPC_rcm_00_Common_Sell::Root()
+        case 1:
+            run SNPC_rcm_00_Common::Rcm_Common_Buyrun SNPC_rcm_00_Common::Rcm_Common_Buy()
+        case 2:
+            run RcmConfirmConsultation()
+        case 3:
+            run SNPC_rcm_00_Common::rcm_Common_Endrun SNPC_rcm_00_Common::rcm_Common_End()
+ 
+flow RcmTentRequestSel4B():
+    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        case 0:
+            run SNPC_rcm_21_MaterialCollecting::Rootrun SNPC_rcm_21_MaterialCollecting::Root()
+        case 1:
+            run SNPC_rcm_00_Common_Sell::Rootrun SNPC_rcm_00_Common_Sell::Root()
+        case 2:
+            run SNPC_rcm_00_Common::Rcm_Common_Buyrun SNPC_rcm_00_Common::Rcm_Common_Buy()
+        case 3:
+            run SNPC_rcm_00_Common::rcm_Common_Endrun SNPC_rcm_00_Common::rcm_Common_End()
+ 
+flow ReportTent():
+    if System.EventFlags['cLand:Prologue4BuiltShop']:
+        # <50:3>PLAYER! You put up the <item>shop construction kit! We've got our work cut out for us if we're going to open by tomorrow, but I can't wait!
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:024', false)
+        System.EventFlags['cPlayer:Prologue4RcmBuiltShop'] = true
+    else:
+        run RcmCmnGreeting()
+        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+            case 0:
+                # I can't wait to see where you decide to put our new shop! Remember, once you find a place, please put up the <item>shop construction kit I gave you.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:023', false)
+            case 1:
+                run SNPC_rcm_00_Common_Sell::Rootrun SNPC_rcm_00_Common_Sell::Root()
+            case 2:
+                run SNPC_rcm_00_Common::Rcm_Common_Buyrun SNPC_rcm_00_Common::Rcm_Common_Buy()
+            case 3:
+                run SNPC_rcm_00_Common::rcm_Common_Endrun SNPC_rcm_00_Common::rcm_Common_End()
+ 
+flow Request():
+    if System.EventFlags['cPlayer:RcmDeclinedQuestReq']:
+        if System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']:
+            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+            # How can I help you?
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:011', false)
+            run RcmSelectWithConsultation()
+        else:
+            # Ah, good to see you again, PLAYER. Before we get started, I did want to give you the tiniest reminder about my proposal… Please let me know when it w…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:010', false)
+            run Sub_Event47()
+    else:
+        if System.EventFlags['cPlayerTemp:RcmTalkSceneFlag']:
+            # Oh, PLAYER! By the way…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:001_00', false)
+        else:
+            # Hello there, PLAYER!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:001', false)
+        if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+            # How is your home since the move? If you ever need help, you can always talk to President Nook. By the way…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:001_01_01', false)
+        else:
+            # Congratulations on your new home!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:001_01', false)
+        # I have something I would like to chat about…if you have a moment, that is. It is a bit of a proposal, so if now's not a good time, I understand compl…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:001_10', false)
+        run Sub_Event47()
+ 
+flow Root():
+    run RcmCmnGreeting()
+    run RcmTentRequestSel4B()
+ 
+local flow Sub_Event47():
+    System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        run RcmConfirmConsultation()
+    else:
+        if System.EventFlags['cPlayer:RcmDeclinedQuestReq']:
+            # Ah, certainly. Happy to talk about it when the time is right for you.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:002_02', false)
+        else:
+            # Of course. Not a problem at all. Just let me know when you have a spare moment or two!
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:002', false)
+            System.EventFlags['cPlayer:RcmDeclinedQuestReq'] = true
+        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+        # Now then, how can I help you today?
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_02_TentRequest:002_01', false)
+        run RcmSelectWithConsultation()
+ 

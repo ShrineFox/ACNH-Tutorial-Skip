@@ -1,0 +1,44 @@
+flow AfterSharePlay():
+    run SaveGameCloseCore()
+    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_GrowUp', 'TitleAfterSharePlay', false, false, false)
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUp', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow Root():
+    run SaveGameCloseCore()
+    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cGrowUp', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+ 
+flow SaveGameCloseCore():
+    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    # Saving. Do not touch .
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+    if EventFlowSystemActor.NetHasPOPIDEventFlowSystemActor.NetHasPOPID(false):
+        run ServerAccess()
+    EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+    EventFlowSystemActor.NetShutdownEventFlowSystemActor.NetShutdown('cNetShutdown', false)
+    EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cAll')
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    EventFlowSystemActor.StopMeasurePlayTimeEventFlowSystemActor.StopMeasurePlayTime('cWherearenIslands')
+    EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cSysEndSingleMode', 0)
+    # Save complete. See you later!
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:012', false)
+    EventFlowSystemActor.EventFlagTempAllClearEventFlowSystemActor.EventFlagTempAllClear()
+ 
+flow ServerAccess():
+    if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+        run System_ServerRegistration::UploadProfileCorerun System_ServerRegistration::UploadProfileCore(IgnoreError=true)
+        if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+            EventFlowSystemActor.NetUploadEmoticonEventFlowSystemActor.NetUploadEmoticon(true, 10, true)
+            if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+                EventFlowSystemActor.NetUploadCatalogEventFlowSystemActor.NetUploadCatalog(true, true)
+                if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+                    EventFlowSystemActor.NetUploadRewardUnlockEventFlowSystemActor.NetUploadRewardUnlock(true, true)
+                    if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+                        EventFlowSystemActor.NetUploadResortUnlockEventFlowSystemActor.NetUploadResortUnlock(false, true)
+                        if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+                            EventFlowSystemActor.NetUploadLifeTipsEventFlowSystemActor.NetUploadLifeTips(false, true)
+                            if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+                                EventFlowSystemActor.NetUploadPlayerMemoriesEventFlowSystemActor.NetUploadPlayerMemories(false, true)
+                                if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() == 2:
+                                    run System_ServerRegistration::UploadResortProfilerun System_ServerRegistration::UploadResortProfile(IgnoreError=true, Terminate=false)
+ 

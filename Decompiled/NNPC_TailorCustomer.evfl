@@ -1,0 +1,41 @@
+flow FacilityName_Chk():
+    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cTailor')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cTailor')
+        # <20:2:cd06>At <150:3:cd00>, shopping is fun! So is running around in circles with your arms out while ya make noises like an airplane! But they got n…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:100', false)
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Root():
+    if not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+        run ShareHouseMate_Chk()
+    run FacilityName_Chk()
+    # RANDOM: <20:2:cd06>Whichever direction you look… // <20:2:cd06>A huh huh huh, just smelling… // OK, which one should I get? <20:2:cd06>… // Maybe I oughta just go ahead and buy it… // <20:2:cd06>I want this, I want that… Th…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:101', true)
+ 
+flow ShareHouseMate_Chk():
+    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow StandSleep():
+    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
+ 
+flow Walk():
+    run Root()
+ 
+flow WatchTorso():
+    switch MainNpc.ClassifyWatchTorsoTypeMainNpc.ClassifyWatchTorsoType():
+        case 0:
+            # RANDOM: This clothing is great! I put it on and… // It takes a stylish, sophistical grown- … // This would look great on me! I oughta b…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:102', true)
+        case 1:
+            # RANDOM: When ya buy pants, ya always gotta ask … // Ya know what I'll never understand? Pan… // How do ya pick a size for your pants? T…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:103', true)
+        case 2:
+            # RANDOM: SO STYLISH! If I had this on, I bet eve… // A huh huh! So great! If I was a cool fa… // If I knew the fashion word that means "…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:104', true)
+        case 3:
+            # RANDOM: <20:2:cd06>Whichever direction you look… // <20:2:cd06>A huh huh huh, just smelling… // OK, which one should I get? <20:2:cd06>… // Maybe I oughta just go ahead and buy it… // <20:2:cd06>I want this, I want that… Th…
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:101', true)
+ 

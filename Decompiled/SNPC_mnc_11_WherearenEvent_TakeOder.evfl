@@ -1,0 +1,33 @@
+flow Root():
+    # Hey, hey, there you are! You're starting on your next job, yeah? Well, Niko's here to help!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:001', false)
+    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+    MainNpc.TurnBodyMainNpc.TurnBody(12, 0.0)
+    # Look over there!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:002', true)
+    Player.TurnBodyPlayer.TurnBody(12, 0.0)
+    System.EventFlags['cPlayerTemp:WHREAREN_TakeOrderAfter'] = true
+    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('TakeOrderDemo', 'TakeOrder', 'CameraTag:TakeOrder', false, false, false, 0)
+    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(159)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(50)
+    # Visitors like to hang out on the beach over there. And who can blame them? So they've come all this way, they're soakin' up the vibes… They MUST be t…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:003', true)
+    MainNpc.TalkCameraMainNpc.TalkCamera(true, 'TakeOrderReturn', 0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    Player.TurnBodyPlayer.TurnBody(11, 0.0)
+    Player.TurnNeckPlayer.TurnNeck(0, false)
+    # All you have to do is look in their eyes…and it's almost like you can read their minds! Yep, the ones who are dreaming of living in paradise have it …
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:004', true)
+    System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialOngoing'] = false
+    System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialDone'] = true
+ 
+flow Talk_Field():
+    if EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+        # RANDOM: All those dreamers on the beach look li… // Pay attention to their hearts, and if y…
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:011', true)
+    else:
+        # RANDOM: Your next challenge is selling, right? …
+        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:012', true)
+ 

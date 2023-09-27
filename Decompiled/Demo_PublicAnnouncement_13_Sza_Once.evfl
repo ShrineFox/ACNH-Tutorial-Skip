@@ -1,0 +1,52 @@
+local flow Sub_Event18():
+    # These tours are a little different than the ones they offer at the airport. You'll get to board a boat and enjoy the ocean breeze as you make your wa…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1303', false)
+    # There are lots of uninhabited islands out there that can only be reached by boat. Rumor has it there are plenty of DIY materials on these islands, an…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1304', false)
+    # Sounds mysterious, doesn't it? These boat tours are available once a day using miles. Interested residents should head down to the island pier and sp…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1305', false)
+ 
+flow TownNews_Heard1stTime():
+    # Hello, everyone!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:001_01', false)
+    # For those hearing this broadcast for the first time, allow me to introduce myself. I'm Isabelle!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:001_02', false)
+    # Once a day, I share updates on what's happening around the island. It's the island-wide broadcast!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:001_03', false)
+    # I'll pack as much useful information as I can into these broadcasts, so I hope you find them helpful!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:001_04', false)
+    if (System.EventFlags['cPlayer:ThisPCcreatedbeforeOfficeUpgrading']) and (not System.EventFlags['cPlayer:RcoOfficeBuiltLetter']):
+        run Demo_PublicAnnouncement_Process::PostRcoLetter105run Demo_PublicAnnouncement_Process::PostRcoLetter105()
+    # Moving on…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:001_05', true)
+    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    run Demo_PublicAnnouncement_00_Cmn::Rootrun Demo_PublicAnnouncement_00_Cmn::Root()
+ 
+flow TownNews_KK1stLive():
+    # The incredible, amazing musician K.K. Slider is here visiting ISLAND! Not only that, but Mr. Slider has graciously agreed to put on a special concert…
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:302', false)
+    # I hope you all enjoy the show!
+    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:303', true)
+ 
+flow TownNews_StartKppTour():
+    if SubflowResults@3[20] in (1, 2):
+        if SubflowResults@2[14] == 0:
+            if SubflowResults@4[18] not in (0, 1):
+                # I'd like to tell everyone about a new kind of tour available.
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1301_02', false)
+        else:
+            # Moving on, I'd like to tell everyone about a new kind of tour available.
+            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1301_01', false)
+        SubflowResults[14] = 1
+        switch SubflowResults@3[20]:
+            case 1:
+                # Starting today, residents can go on a boat tour to uninhabited islands!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1302_01', false)
+                run Sub_Event18()
+            case 2:
+                # Did you know that residents can now take boat tours out to uninhabited islands? It's true!
+                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1302_02', false)
+                run Sub_Event18()
+            default:
+                return
+ 

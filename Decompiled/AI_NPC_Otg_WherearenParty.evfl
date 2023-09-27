@@ -1,0 +1,32 @@
+flow Init():
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    MainNpc.NpcAISettingMainNpc.NpcAISetting(21, true)
+    MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('IsEndSpeak', 0)
+ 
+flow Leave():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
+ 
+flow Leave_NotEntrance():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave_NotEntrance')
+ 
+flow Root():
+    if System.EventFlags['cPlayerTemp:WHEREAREN_IsPartyPlaceInFacility']:
+        if (EventFlowSystemActor.SystemCheckPreStageEventFlowSystemActor.SystemCheckPreStage('cWhrerearenOffice')) and (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')):
+            EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Party', 'Place:EditArea', false)
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_otg_25_WherearenEvent_PartyAtRestaurant')
+        elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsEndSpeak', 1):
+            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('IsEndSpeak', 0)
+            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWherearenPartyInFacility', '', 'SNPC_otg_18_WherearenEvent_Party', 'Root', false, false)
+    elif (EventFlowSystemActor.SystemCheckPreStageEventFlowSystemActor.SystemCheckPreStage('cWhrerearenOffice')) and (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')):
+        EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Party', 'CameraTag:Party', false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='PartyInOffice')
+    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsEndSpeak', 1):
+        MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('IsEndSpeak', 0)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
+    else:
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWherearenPartyInOffice', '', 'SNPC_otg_18_WherearenEvent_Party', 'Root', false, false)
+ 

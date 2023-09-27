@@ -1,0 +1,47 @@
+flow BecomeTalkCast():
+    run State_TalkCast()
+ 
+flow EndTalk():
+    return
+ 
+flow End_Hit():
+    if (MainNpc.NpcIsHitByNetMainNpc.NpcIsHitByNet()) and (MainNpc.NpcIsFleaHolderMainNpc.NpcIsFleaHolder()):
+        run State_Speak(FlowName='NNPC_Talk_Force', EntryName='Flea')
+        MainNpc.NpcClearHitParamMainNpc.NpcClearHitParam()
+    elif MainNpc.NpcHitNumMainNpc.NpcHitNum(3):
+        run State_Speak(FlowName='NNPC_Talk_Force', EntryName='Hit')
+        MainNpc.NpcClearHitParamMainNpc.NpcClearHitParam()
+    else:
+        MainNpc.NpcSetHitTimerMainNpc.NpcSetHitTimer(60)
+        run Root()
+ 
+flow Push():
+    run State_Speak(FlowName='NNPC_Talk_Force', EntryName='Push')
+ 
+flow Root():
+    run State_Wait()
+ 
+flow StartTalk():
+    run State_Talk()
+ 
+flow State_Conversation():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cConversation', '', '', '', false, true)
+ 
+flow State_Hit():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cHit', '', '', '', false, true)
+ 
+flow State_Speak(FlowName: str, EntryName: str):
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSpeak', '', '', '', false, true)
+ 
+flow State_Talk():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cTalk', '', '', '', false, true)
+ 
+flow State_TalkCast():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cTalkCast', '', '', '', false, true)
+ 
+flow State_Wait():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', '', '', false, true)
+ 
+flow State_Wander():
+    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWander', '', '', '', false, true)
+ 

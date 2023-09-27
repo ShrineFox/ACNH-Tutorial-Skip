@@ -1,0 +1,137 @@
+flow Check():
+    run Check_ShopEnable()
+    run Regulation()
+    MainNpc.SetTwinsTagMainNpc.SetTwinsTag()
+    System.EventFlags['cPlayerTemp:RcmViaItemCheck'] = true
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        run SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talkrun SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talk()
+        switch SubflowResults@6[1]:
+            case 0:
+                run SNPC_rcm_00_Common_ItemCheck::Rootrun SNPC_rcm_00_Common_ItemCheck::Root()
+            case 1:
+                run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1()
+                run SNPC_rcm_00_Common_ItemCheck::Rootrun SNPC_rcm_00_Common_ItemCheck::Root()
+            case 2:
+                run SNPC_rcm_00_In::Rcm_Market1_Firstrun SNPC_rcm_00_In::Rcm_Market1_First()
+                run SNPC_rcm_00_Common_ItemCheck::Rootrun SNPC_rcm_00_Common_ItemCheck::Root()
+            case 3:
+                run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen2run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen2()
+                run SNPC_rcm_00_Common_ItemCheck::Rootrun SNPC_rcm_00_Common_ItemCheck::Root()
+            case 4:
+                run SNPC_rcm_00_In::Rcm_Market2_Firstrun SNPC_rcm_00_In::Rcm_Market2_First()
+                run SNPC_rcm_00_Common_ItemCheck::Rootrun SNPC_rcm_00_Common_ItemCheck::Root()
+            case 5:
+                run SNPC_rcm_02_BeforeRenual::Rcm_BeforeRenualFor2run SNPC_rcm_02_BeforeRenual::Rcm_BeforeRenualFor2()
+        run Rcm_SeqClose()
+    else:
+        run SNPC_rcm_00_Common_ItemCheck::Rootrun SNPC_rcm_00_Common_ItemCheck::Root()
+ 
+flow Check_Init():
+    run EntrySubCast()
+ 
+flow Check_ShopEnable():
+    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow EntrySubCast():
+    if (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMametubu')) and (EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (not EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()):
+        if MainNpc.NpcLabelMainNpc.NpcLabel('rcm'):
+            MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('rct', 1)
+        else:
+            MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('rcm', 1)
+ 
+flow ForceRenualOpen():
+    run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1_ConvHghrun SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1_ConvHgh()
+ 
+flow ForceRenualOpen_Init():
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('hgh', 1)
+    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('rct', 2)
+ 
+flow Not1stPlayer_ShopRequest():
+    run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
+    run Rcm_SeqClose()
+ 
+flow Rcm_SeqClose():
+    System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
+    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    System.EventFlags['cPlayer:RcmTalkBeforeFlag'] = true
+    System.EventFlags['cPlayerTemp:RcmViaItemCheck'] = false
+    System.EventFlags['cPlayerTemp:RcmShopshelfCheck'] = false
+    System.EventFlags['cPlayerTemp:RcmBoughtGrocery'] = false
+    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow Regulation():
+    EventFlowSystemActor.SetExpensiveReguretionEventFlowSystemActor.SetExpensiveReguretion()
+ 
+flow Root():
+    run Check_ShopEnable()
+    run Regulation()
+    MainNpc.SetTwinsTagMainNpc.SetTwinsTag()
+    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        run SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talkrun SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talk()
+        switch SubflowResults@6[1]:
+            case 0:
+                switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+                    case `InResServiceTent`:
+                        if not System.EventFlags['cPlayer:RcmTalked1stAfterPrologue']:
+                            run SNPC_rcm_01_Tent_0_1stShopping::Rootrun SNPC_rcm_01_Tent_0_1stShopping::Root()
+                            run Rcm_SeqClose()
+                        elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
+                            run Not1stPlayer_ShopRequest()
+                        elif not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+                            run Not1stPlayer_ShopRequest()
+                        elif not System.EventFlags['cLand:IslandProducedByPlayerMoving']:
+                            run ShopRequest_PlayerMoving()
+                        elif System.EventFlags['cLand:PlayerMovingEnableShopMaterialCollect']:
+                            run ShopRequest_PlayerMoving()
+                        else:
+                            run Not1stPlayer_ShopRequest()
+                    case `NooksCrannyInitial`:
+                        if System.EventFlags['cPlayer:TwinTurnipExplanation']:
+                            run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
+                            run Rcm_SeqClose()
+                        else:
+                            run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1()
+                            run Rcm_SeqClose()
+                    case `NooksCrannyUpgraded`:
+                        run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
+                        run Rcm_SeqClose()
+            case 1:
+                run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1()
+                run Rcm_SeqClose()
+            case 2:
+                run SNPC_rcm_00_In::Rcm_Market1_Firstrun SNPC_rcm_00_In::Rcm_Market1_First()
+                run Rcm_SeqClose()
+            case 3:
+                run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen2run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen2()
+                run Rcm_SeqClose()
+            case 4:
+                run SNPC_rcm_00_In::Rcm_Market2_Firstrun SNPC_rcm_00_In::Rcm_Market2_First()
+                run Rcm_SeqClose()
+            case 5:
+                run SNPC_rcm_02_BeforeRenual::Rcm_BeforeRenualFor2run SNPC_rcm_02_BeforeRenual::Rcm_BeforeRenualFor2()
+                run Rcm_SeqClose()
+    else:
+        run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
+        run Rcm_SeqClose()
+ 
+flow Root_Init():
+    run EntrySubCast()
+ 
+flow ShopRequest_PlayerMoving():
+    if not System.EventFlags['cPlayer:RcmTookQuestReq']:
+        run SNPC_rcm_01_Tent_1_Entries::Requestrun SNPC_rcm_01_Tent_1_Entries::Request()
+        run Rcm_SeqClose()
+    elif not System.EventFlags['cLand:RcmShopMaterialComplete']:
+        run SNPC_rcm_01_Tent_1_Entries::Rootrun SNPC_rcm_01_Tent_1_Entries::Root()
+        run Rcm_SeqClose()
+    elif not System.EventFlags['cPlayer:Prologue4RcmGetTent']:
+        run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
+        run Rcm_SeqClose()
+    elif System.EventFlags['cPlayer:Prologue4RcmBuiltShop']:
+        run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
+        run Rcm_SeqClose()
+    else:
+        run SNPC_rcm_01_Tent_1_Entries::ReportTentrun SNPC_rcm_01_Tent_1_Entries::ReportTent()
+        run Rcm_SeqClose()
+ 

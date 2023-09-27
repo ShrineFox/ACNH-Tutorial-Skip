@@ -1,0 +1,25 @@
+flow Init():
+    if MainNpc.NpcLabelMainNpc.NpcLabel('rco'):
+        MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveNpcRoomCoodinate', false)
+ 
+flow Leave():
+    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Gate', FlowName='SNPC_rco_12_CoordinateNpcHouse_NpcHouse')
+ 
+flow Root():
+    MainNpc.NpcAIDefaultSettingMainNpc.NpcAIDefaultSetting(1)
+    if not MainNpc.NpcLabelMainNpc.NpcLabel('rco'):
+        if (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')) and (EventFlowSystemActor.SystemCheckPreStageEventFlowSystemActor.SystemCheckPreStage('cIdrOffice')):
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCoordinateInvisible', '', 'NNPC_Spot_CoordinateHouse', 'Root', true, false)
+        else:
+            MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCoordinateWait', '', 'NNPC_Spot_CoordinateHouse', 'Root', true, false)
+    elif (MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit')) and (not EventFlowSystemActor.SystemCheckPreStageEventFlowSystemActor.SystemCheckPreStage('cUIStage')):
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', '', '', false, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
+        MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='ForceTalk', FlowName='SNPC_rco_12_CoordinateNpcHouse_NpcHouse')
+    else:
+        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCoordinateRcoWait', '', 'SNPC_rco_12_CoordinateNpcHouse_NpcHouse', 'Root', true, false)
+ 

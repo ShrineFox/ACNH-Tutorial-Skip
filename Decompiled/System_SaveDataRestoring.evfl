@@ -1,0 +1,83 @@
+flow EndRestoring():
+    if EventFlowSystemActor.NetHasPOPIDEventFlowSystemActor.NetHasPOPID(false):
+        run UserRegist(WithLogin=false, Terminate=false)
+        EventFlowSystemActor.NetReissuePasswordEventFlowSystemActor.NetReissuePassword()
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            System.EventFlags['cLand:NeedUpdatePassword'] = true
+    else:
+        if EventFlowSystemActor.NetHasPOLIDEventFlowSystemActor.NetHasPOLID():
+            System.EventFlags['cLand:NeedUpdatePassword'] = true
+    EventFlowSystemActor.SaveUpdateDeviceIDEventFlowSystemActor.SaveUpdateDeviceID()
+    EventFlowSystemActor.SaveReserveBackupRestoreFlagOffEventFlowSystemActor.SaveReserveBackupRestoreFlagOff()
+    # Saving. Do not touch .
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9016', false)
+    fork:
+        branch:
+            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+            if (EventFlowSystemActor.PlayAccountIsPlayerVillagerEventFlowSystemActor.PlayAccountIsPlayerVillager()) and (not EventFlowSystemActor.SaveCompareBackupAgentNSAIDEventFlowSystemActor.SaveCompareBackupAgentNSAID()):
+                EventFlowSystemActor.SaveRegisterBackupAgentEventFlowSystemActor.SaveRegisterBackupAgent()
+                EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
+                EventFlowSystemActor.SaveEnableBackupSettingEventFlowSystemActor.SaveEnableBackupSetting()
+        branch:
+            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
+    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+ 
+flow RestoringAgain():
+    if EventFlowSystemActor.RestoreFlagCheckEventFlowSystemActor.RestoreFlagCheck():
+        EventFlowSystemActor.UIBootBGChangeDialogEventFlowSystemActor.UIBootBGChangeDialog()
+        # Now checking island backup data...
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9012', false)
+        EventFlowSystemActor.NetForceSetUserEventFlowSystemActor.NetForceSetUser()
+        run EndRestoring()
+        EventFlowSystemActor.NetForceResetUserEventFlowSystemActor.NetForceResetUser()
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        # The island backup data check is complete. Gameplay will now resume.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9013', false)
+ 
+flow StartRestoring():
+    EventFlowSystemActor.UIBootBGChangeDialogEventFlowSystemActor.UIBootBGChangeDialog()
+    # Do you want to begin island backup restoration?
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9001', false)
+    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        # The game will now start.
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9015', false)
+    else:
+        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+        EventFlowSystemActor.SaveStartRestoreSeqEventFlowSystemActor.SaveStartRestoreSeq()
+        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+ 
+flow UserRegist(HasError: bool = false, WithLogin: bool, Terminate: bool):
+    SubflowResults[0] = 0
+    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    # Connecting to the internet...
+    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+    run UserResistCore(Terminate=Terminate)
+    if WithLogin:
+        EventFlowSystemActor.NetLoginNEXEventFlowSystemActor.NetLoginNEX('cLoginNEX', false)
+    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+ 
+flow UserResistCore(Terminate: bool):
+    if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() not in (0, 2):
+        EventFlowSystemActor.NetShutdownEventFlowSystemActor.NetShutdown('cNetShutdown', false)
+    EventFlowSystemActor.NetConnectInitEventFlowSystemActor.NetConnectInit('cConnectInet', true)
+    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+        # Do you want to try to connect to the internet again?
+        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0810', true)
+        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            SubflowResults[0] = 1
+            if Terminate:
+                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
+        else:
+            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            # Connecting to the internet...
+            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+            run UserResistCore(Terminate=Terminate)
+    elif Terminate:
+        EventFlowSystemActor.NetCheckNSAEventFlowSystemActor.NetCheckNSA('cCheckNSA', false)
+    else:
+        EventFlowSystemActor.NetCheckNSAEventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            SubflowResults[0] = 1
+ 
