@@ -1,24 +1,24 @@
 flow Appear():
-    MainNpc.NpcChangeBlockWanderStateMainNpc.NpcChangeBlockWanderState('cBlockWander', '', 'SNPC_slo_Wherearen', 'Root', true, true, ArgFlag0=false, ArgInt0=0, ArgInt1=3, ArgInt2=11, ArgInt3=11)
+    MainNpc.NpcChangeBlockWanderState('cBlockWander', '', 'SNPC_slo_Wherearen', 'Root', true, true, ArgFlag0=false, ArgInt0=0, ArgInt1=3, ArgInt2=11, ArgInt3=11)
  
 flow Disappear():
-    MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
+    MainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
  
 flow Init():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(0, true)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
-    if not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    MainNpc.NpcAISetting(0, true)
+    MainNpc.NpcAISetting(1, true)
+    if not EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        MainNpc.NpcAISetting(4, false)
  
 flow Root():
-    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-        if (not EventFlowSystemActor.IsWherearenResumeFirstShareHouseEventFlowSystemActor.IsWherearenResumeFirstShareHouse()) and (EventFlowSystemActor.WherearenLookForHousemateStateEventFlowSystemActor.WherearenLookForHousemateState() != 0):
+    if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+        if (not EventFlowSystemActor.IsWherearenResumeFirstShareHouse()) and (EventFlowSystemActor.WherearenLookForHousemateState() != 0):
             run Appear()
         else:
             run AI_NPC_Chm_Wherearen::Disappearrun AI_NPC_Chm_Wherearen::Disappear()
-    elif MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
-        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('Demo_SchoolEvent', 'slo_Lesson')
-        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cSchoolEvent', '', '', '', false, true)
+    elif MainNpc.NpcCheckStateSelectTiming('cInit'):
+        MainNpc.SetNpcSpeakFlow('Demo_SchoolEvent', 'slo_Lesson')
+        MainNpc.NpcChangeAIState('cSchoolEvent', '', '', '', false, true)
     else:
-        MainNpc.NpcReservrForEraseMainNpc.NpcReservrForErase()
+        MainNpc.NpcReservrForErase()
  

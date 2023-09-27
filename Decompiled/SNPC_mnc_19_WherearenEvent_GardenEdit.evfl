@@ -1,28 +1,28 @@
 flow ChkMncTalk():
-    if EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cOfficer'):
-        if (not System.EventFlags['cWherearenPlayer:SeqMncGardenThemeTalk']) and (EventFlowSystemActor.IsWherearenNpcOrderIncludeOutdoorMustItemEventFlowSystemActor.IsWherearenNpcOrderIncludeOutdoorMustItem()):
+    if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cOfficer'):
+        if (not System.EventFlags['cWherearenPlayer:SeqMncGardenThemeTalk']) and (EventFlowSystemActor.IsWherearenNpcOrderIncludeOutdoorMustItem()):
             run VisitTalk_GardenTheme()
-        elif (not System.EventFlags['cWherearenPlayer:SeqMncGardenInsectTalk']) and (System.EventFlags['cWherearenPlayer:Unlock_Insect']) and (EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (not EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('chm', 'cCustomer')):
+        elif (not System.EventFlags['cWherearenPlayer:SeqMncGardenInsectTalk']) and (System.EventFlags['cWherearenPlayer:Unlock_Insect']) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (not EventFlowSystemActor.WherearenNpcFreeQuery2('chm', 'cCustomer')):
             run VisitTalk_Insect()
  
 flow TalkSetting():
-    SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
-    MainNpc.SetNpcNameMainNpc.SetNpcName(0, 0)
+    SubNpc.TurnNeck(10, false)
+    MainNpc.SetNpcName(0, 0)
  
 flow VisitTalk_GardenEdit():
     # Whoooaaaa! This is even better than what I'd imagined! And I'd imagined some real wild stuff!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:041', true)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:041', true)
     run TalkSetting()
     fork:
         branch:
             # So you found a good location. That's great, PLAYER! I'll be waiting here till you're done. If things go sour, come talk to me for advice anytime. You…
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:021', false)
+            SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:021', false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            Player.TurnBodyPlayer.TurnBody(1, 0.0)
+            EventFlowSystemActor.WaitFrame(15)
+            Player.TurnBody(1, 0.0)
     # Oh, if you want to set up the yard as well, just press  to enter Decorating Mode. Try it out whenever you want to propose a yard design!
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:022', true)
-    if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`, `BaseHouse`, `HouseExpansion1`, `BackRoom`):
+    SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:022', true)
+    if EventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`, `BaseHouse`, `HouseExpansion1`, `BackRoom`):
         System.EventFlags['cWherearenPlayer:NeedNoticeHouseDesign'] = true
     System.EventFlags['cWherearenPlayer:SeqMncGardenEditTalk'] = true
     System.EventFlags['cPlayer:OtgTipsUnlockGardenEdit'] = true
@@ -32,10 +32,10 @@ flow VisitTalk_GardenTheme():
     fork:
         branch:
             # So, looks like we have some furniture out in the yard. You can open that box by pressing , the same as you would indoors. And don't forget that you …
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_05_WherearenEvent_Sub:021', true)
+            SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_05_WherearenEvent_Sub:021', true)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-            Player.TurnBodyPlayer.TurnBody(1, 0.0)
+            EventFlowSystemActor.WaitFrame(20)
+            Player.TurnBody(1, 0.0)
     System.EventFlags['cWherearenPlayer:SeqMncGardenThemeTalk'] = true
  
 flow VisitTalk_Insect():
@@ -43,14 +43,14 @@ flow VisitTalk_Insect():
     fork:
         branch:
             # Oh, I almost forgot! I've been hanging on to a present for you.
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_05_WherearenEvent_Sub:031', true)
+            SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_05_WherearenEvent_Sub:031', true)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-            Player.TurnBodyPlayer.TurnBody(1, 0.0)
-    SubNpc.SetDeliveryItemAtRandomSubNpc.SetDeliveryItemAtRandom(583, true, 'cVillageRemakePattern', 0)
-    SubNpc.NpcDeliverySubNpc.NpcDelivery(1, 'Keep')
+            EventFlowSystemActor.WaitFrame(20)
+            Player.TurnBody(1, 0.0)
+    SubNpc.SetDeliveryItemAtRandom(583, true, 'cVillageRemakePattern', 0)
+    SubNpc.NpcDelivery(1, 'Keep')
     # This <item>tiger butterfly is from an old guy named Nat! He said to thank you for showing him to the school. He also said, "Try letting it go from yo…
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_05_WherearenEvent_Sub:032', true)
-    SubNpc.NpcDeliverySubNpc.NpcDelivery(2, 'Default')
+    SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_05_WherearenEvent_Sub:032', true)
+    SubNpc.NpcDelivery(2, 'Default')
     System.EventFlags['cWherearenPlayer:SeqMncGardenInsectTalk'] = true
  

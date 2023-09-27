@@ -1,25 +1,25 @@
 flow EditStart():
-    switch EventFlowSystemActor.OtgFacilityFrontCreatePosEventFlowSystemActor.OtgFacilityFrontCreatePos():
+    switch EventFlowSystemActor.OtgFacilityFrontCreatePos():
         case 0:
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_15_WherearenEvent_School', 'Departure', false, true, true, 1, 0.0, '')
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_15_WherearenEvent_School', 'Departure', false, true, true, 1, 0.0, '')
         case 1:
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_20_WherearenEvent_Hospital', 'Departure', false, true, true, 1, 0.0, '')
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_20_WherearenEvent_Hospital', 'Departure', false, true, true, 1, 0.0, '')
         case 2:
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_19_WherearenEvent_RestaurantCafe', 'RestaurantDeparture', false, true, true, 1, 0.0, '')
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_19_WherearenEvent_RestaurantCafe', 'RestaurantDeparture', false, true, true, 1, 0.0, '')
         case 3:
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_19_WherearenEvent_RestaurantCafe', 'CafeDeparture', false, true, true, 1, 0.0, '')
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_19_WherearenEvent_RestaurantCafe', 'CafeDeparture', false, true, true, 1, 0.0, '')
         case 4:
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_21_WherearenEvent_Tailor', 'Departure', false, true, true, 1, 0.0, '')
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_21_WherearenEvent_Tailor', 'Departure', false, true, true, 1, 0.0, '')
         default:
             return
  
 flow Init():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.NpcAISetting(8, true)
  
 flow IntroduceFacility():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
-    switch EventFlowSystemActor.OtgFacilityFrontCreatePosEventFlowSystemActor.OtgFacilityFrontCreatePos():
+    MainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISetting(4, false)
+    switch EventFlowSystemActor.OtgFacilityFrontCreatePos():
         case 0:
             run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_15_WherearenEvent_School', EntryName='IntroduceFacility')
         case 1:
@@ -35,20 +35,20 @@ flow IntroduceFacility():
  
 flow Root():
     if System.EventFlags['cWherearenPlayer:SeqFacilityIntroOngoing']:
-        MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_28_WherearenEvent_Break', 'Root_FacilityInto', false, true, true, 1, 180.0, 'Thinking')
+        MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_28_WherearenEvent_Break', 'Root_FacilityInto', false, true, true, 1, 180.0, 'Thinking')
     elif (not System.EventFlags['cWherearenPlayer:SeqOtgSickDone']) and (System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing']):
-        MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cNpcWorried')
+        MainNpc.SetDefaultWaitAs('cNpcWorried')
         run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_24_WherearenEvent_OtgSick', EntryName='Bridge')
     elif System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_FrontFacility']:
         System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_FrontFacility'] = false
         run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_01_WherearenOffice', EntryName='Force_EditBreak')
-    elif (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 2, 3, 5, 6, 7)) and (EventFlowSystemActor.WherearenResumeOrderTypeEventFlowSystemActor.WherearenResumeOrderType() not in (0, 2)):
-        MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_01_WherearenOffice', 'Root', false, true, true, 1, 0.0, '')
+    elif (EventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 2, 3, 5, 6, 7)) and (EventFlowSystemActor.WherearenResumeOrderType() not in (0, 2)):
+        MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_otg_01_WherearenOffice', 'Root', false, true, true, 1, 0.0, '')
     elif System.EventFlags['cWherearenPlayer:IsFacilityEditStartDemo'] != 1:
-        MainNpc.NpcReservrForEraseMainNpc.NpcReservrForErase()
+        MainNpc.NpcReservrForErase()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
     else:
         System.EventFlags['cWherearenPlayer:IsFacilityEditStartDemo'] = 0
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+        MainNpc.NpcAISetting(2, false)
         run IntroduceFacility()
  

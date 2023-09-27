@@ -1,43 +1,43 @@
 flow CheckInfoMoveMyhome():
-    if (not System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']) and (not System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`)):
+    if (not System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome']) and (not System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (EventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`)):
         # Ah! I have…<10:4>something else I need to talk to you about. At this construction consultation counter, homeowners can talk to me about moving their …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:031', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:031', false)
         System.EventFlags['cPlayer:RcoTalkAboutMoveMyHome'] = true
         # Ah, now to change the subject…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000_03', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000_03', false)
         run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow ChkFirstCamperRequest():
-    if (System.EventFlags['cLand:CampSiteBuilt']) and (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cExist') < 6) and (System.EventFlags['cLand:RcoMeetFirstVisitorComplete']) and (not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing']) and (System.EventFlags['cPlayer:IslandDevQuestOrderFirstCamperMyself']):
+    if (System.EventFlags['cLand:CampSiteBuilt']) and (EventFlowSystemActor.NpcHouseNum('cExist') < 6) and (System.EventFlags['cLand:RcoMeetFirstVisitorComplete']) and (not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing']) and (System.EventFlags['cPlayer:IslandDevQuestOrderFirstCamperMyself']):
         run SNPC_rco_54_IslandDevelopment::SetFirstCamperHouseRequestrun SNPC_rco_54_IslandDevelopment::SetFirstCamperHouseRequest()
         # Ah, now to change the subject…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000_03', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000_03', false)
         run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RcoEntrieChk():
     if System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']:
         run SNPC_rco_05_ChkCeremony::Rootrun SNPC_rco_05_ChkCeremony::Root()
-        if (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)) and (not System.EventFlags['cPlayer:RcoFirstTalkNewOffice']):
+        if (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)) and (not System.EventFlags['cPlayer:RcoFirstTalkNewOffice']):
             run SNPC_rco_01_Office_1_Entries::OfficeOpening_NormalTalkrun SNPC_rco_01_Office_1_Entries::OfficeOpening_NormalTalk()
         elif System.EventFlags['cPlayer:CanGetMileTicketTrialForMoving']:
             run SNPC_rco_03_ChkAfterRemodel::GiveMileTicketForMovingPlayer_Normalrun SNPC_rco_03_ChkAfterRemodel::GiveMileTicketForMovingPlayer_Normal()
         else:
             run SNPC_rco_03_ChkAfterRemodel::Rootrun SNPC_rco_03_ChkAfterRemodel::Root()
             run SNPC_rco_04_ChkFinishLoan::Rootrun SNPC_rco_04_ChkFinishLoan::Root()
-            if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+            if EventFlowSystemActor.NetHasVisitor():
                 if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
                     # Ah, PLAYER! Hello, hello!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
                 # Apologies, but I'm abuzz with activity at the moment due to the off-island company visiting right now.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:801', false)
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:801', false)
+                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
                     # You should use this opportunity to show off our island. Be an excellent host, PLAYER!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:802_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:802_01', false)
                 else:
                     # We can always chat after our company leaves.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:802_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:802_02', false)
             else:
                 run ChkFirstCamperRequest()
                 if System.EventFlags['cPlayer:RcoDIYtrialOngoing']:
@@ -53,7 +53,7 @@ flow RcoEntrieChk():
                         run SNPC_rco_10_Common_ExpandHouseStorage::v200_AddNoticeExpandStorage_Normalrun SNPC_rco_10_Common_ExpandHouseStorage::v200_AddNoticeExpandStorage_Normal()
                     elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion']:
                         run SNPC_rco_10_Common_ExpandHouseStorage::v200_AfterExpandStorage_Normalrun SNPC_rco_10_Common_ExpandHouseStorage::v200_AfterExpandStorage_Normal()
-                    elif EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+                    elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
                         run Sub_grp_Event13()
                     else:
                         if System.EventFlags['cPlayer:RcoTalkAboutOfficeWork']:
@@ -67,37 +67,37 @@ flow RcoEntrieChk():
 flow RcoFirstVisit():
     System.EventFlags['cPlayer:RcoTalked1stAfterPrologue'] = true
     System.EventFlags['cPlayer:RcoTentEnableDIYtrial'] = true
-    if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+    if EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
         if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
             # Ah, PLAYER! Welcome, welcome! This is Resident Services. Here, we provide support for all the residents of ISLAND. I'm sure you've already got the ha…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:011', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:011', false)
         else:
             # Ah, PLAYER! Welcome, welcome! As you can see, it is quite cozy in here. It's funny how "cozy" doesn't always mean "comfortable," hm? Let me know if y…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:001', false)
-            if EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:001', false)
+            if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
                 # If you need some advice about basic island materials, you should talk to Timmy. He can help you procure some of the essentials for thriving in our li…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:001_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:001_01', false)
     else:
         # Ah, PLAYER! Welcome to Resident Services! This is where we support the lives of all island residents. Feel free to chat with me about island life any…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:002', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:002', false)
         System.EventFlags['cPlayer:RcoFirstTalkNewOffice'] = true
     if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:MainmenuRecipe']):
         # Now, normally the first thing we ask of any package-plan members is to attend a special DIY workshop. However, I don't think there's any need for tha…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:012', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:012', false)
         System.EventFlags['cLand:FlightBalloonEnable'] = true
         System.EventFlags['cLand:MessageBottleAvailable'] = true
         if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
             # But, if you have time, it would be wonderful if I could get your help investigating the local wildlife. If you happen to catch any bugs or fish, plea…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:013_01', false)
-        elif EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:013_01', false)
+        elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
             # So why don't you get out there and enjoy deserted-island life, hm?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:013_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:013_02', false)
         else:
             # So why don't you get out there and enjoy life on your new island, hm?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:013_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:013_03', false)
     else:
         # Oh! One more important thing… I'm offering a free DIY workshop that can help you really build out your island experience. I think it would be quite u…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:001_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:001_02', false)
  
 flow RcoFirstVisit_Force():
     System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
@@ -108,9 +108,9 @@ flow RcoFirstVisit_Force_Init():
     run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
  
 flow Root():
-    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    if not EventFlowSystemActor.IsMyVillage():
         # RANDOM: Welcome to ISLAND! Please enjoy a relax… // You are in the ISLAND Resident Services… // Thank you for traveling all the way her…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_10_ForVisitor:001', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_10_ForVisitor:001', false)
     elif System.EventFlags['cLand:FinishiPC1Prologue']:
         run RcoEntrieChk()
         System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
@@ -118,25 +118,25 @@ flow Root():
         run SNPC_rco_00_StartMainGame::Rootrun SNPC_rco_00_StartMainGame::Root()
  
 flow Root_Init():
-    if (not EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0)) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`)) and (not System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']) and (not System.EventFlags['cPlayer:RcoDIYtrialOngoing']) and (not System.EventFlags['cPlayer:RcoTalkAfterMuseumTent']) and (not System.EventFlags['cPlayer:RcoPaid1stCharge']) and (System.EventFlags['cLand:RcmImmQuestOpen']) and (not System.EventFlags['cLand:RcmImmQuestRunning']) and (MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('ForceImmQIntro', 1)):
-        MainNpc.SmartPhoneMainNpc.SmartPhone(0)
-        MainNpc.SmartPhoneMainNpc.SmartPhone(2)
+    if (not EventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.IsSharePlay(0)) and (EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`)) and (not System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']) and (not System.EventFlags['cPlayer:RcoDIYtrialOngoing']) and (not System.EventFlags['cPlayer:RcoTalkAfterMuseumTent']) and (not System.EventFlags['cPlayer:RcoPaid1stCharge']) and (System.EventFlags['cLand:RcmImmQuestOpen']) and (not System.EventFlags['cLand:RcmImmQuestRunning']) and (MainNpc.NpcBlackBoard('ForceImmQIntro', 1)):
+        MainNpc.SmartPhone(0)
+        MainNpc.SmartPhone(2)
  
 flow Skip_ChkNpcCoordeUnlockEv():
     run SNPC_rco_60_Event::Rootrun SNPC_rco_60_Event::Root()
     if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
         # Ah, PLAYER! Hello, hello!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
     run SNPC_rco_00_Common::Rootrun SNPC_rco_00_Common::Root()
  
 local flow Sub_grp_Event13():
     if System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial']:
         run SNPC_rco_01_Tent_1_Entries::RcoRemakeTrialIntrorun SNPC_rco_01_Tent_1_Entries::RcoRemakeTrialIntro()
-    elif (System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild']) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
+    elif (System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
         run SNPC_rco_01_Office_1_Entries::NpcHouseCoordeRestartPMovingrun SNPC_rco_01_Office_1_Entries::NpcHouseCoordeRestartPMoving()
     elif not System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']:
         run Skip_ChkNpcCoordeUnlockEv()
-    elif (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
+    elif (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
         run SNPC_rco_01_Office_1_Entries::NpcHouseCoordeOpenrun SNPC_rco_01_Office_1_Entries::NpcHouseCoordeOpen()
     else:
         run Skip_ChkNpcCoordeUnlockEv()

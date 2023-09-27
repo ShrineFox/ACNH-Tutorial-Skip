@@ -1,55 +1,55 @@
 flow PrologueStep2(TalkEventFlowName: str, WaitAngle: float, Type: int, OffsetX: any, OffsetZ: any, WaitFrame: any):
-    if (not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('HasTent', 1)) and (not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsForceLife', 1)) and (MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsMove', 1)):
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, false)
-        if (MainNpc.CheckCurrentNpcAIStateMainNpc.CheckCurrentNpcAIState('cGoToDestination') == 0) and (MainNpc.NpcAIIsArriveDestinationMainNpc.NpcAIIsArriveDestination() == 0):
-            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('IsMove', 0)
-            MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, WaitAngle, '')
+    if (not MainNpc.NpcBlackBoard('HasTent', 1)) and (not MainNpc.NpcBlackBoard('IsForceLife', 1)) and (MainNpc.NpcBlackBoard('IsMove', 1)):
+        MainNpc.NpcAISetting(8, false)
+        if (MainNpc.CheckCurrentNpcAIState('cGoToDestination') == 0) and (MainNpc.NpcAIIsArriveDestination() == 0):
+            MainNpc.NpcSetAIBlackBoard('IsMove', 0)
+            MainNpc.NpcAISetting(8, true)
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, WaitAngle, '')
         else:
-            MainNpc.NpcChangeGoToDestinationStateMainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', TalkEventFlowName, 'Root', false, true, ArgInt0=1, ArgInt1=OffsetX, ArgInt2=OffsetZ)
+            MainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', TalkEventFlowName, 'Root', false, true, ArgInt0=1, ArgInt1=OffsetX, ArgInt2=OffsetZ)
     else:
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(6, false)
-        if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('BuildingSiteIndex', 0):
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, 180.0, 'Thinking')
+        MainNpc.NpcAISetting(8, true)
+        MainNpc.NpcAISetting(6, false)
+        if MainNpc.NpcBlackBoard('BuildingSiteIndex', 0):
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, 180.0, 'Thinking')
         else:
-            if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsForceLife', 1):
-                MainNpc.SetNpcTalkFlowNameMainNpc.SetNpcTalkFlowName(TalkEventFlowName, '')
+            if MainNpc.NpcBlackBoard('IsForceLife', 1):
+                MainNpc.SetNpcTalkFlowName(TalkEventFlowName, '')
                 if Type == 0:
                     if System.EventFlags['cLandTemp:PrologueStartedCampfire']:
-                        MainNpc.NpcChangeAIStateCstmMainNpc.NpcChangeAIStateCstm(1, TalkEventFlowName, 'Root', 'State:cWait')
-                    elif MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
-                        MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, 180.0, '')
+                        MainNpc.NpcChangeAIStateCstm(1, TalkEventFlowName, 'Root', 'State:cWait')
+                    elif MainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
+                        MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, 180.0, '')
                     else:
-                        MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0='NpcSpArrange')
+                        MainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0='NpcSpArrange')
                 elif not System.EventFlags['cLandTemp:PrologueStartedCampfire']:
-                    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, false)
-                    MainNpc.NpcChangeAIStateCstmMainNpc.NpcChangeAIStateCstm(0, TalkEventFlowName, 'Root', '')
-                elif MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
-                    MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, -45.0, '')
+                    MainNpc.NpcAISetting(8, false)
+                    MainNpc.NpcChangeAIStateCstm(0, TalkEventFlowName, 'Root', '')
+                elif MainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
+                    MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, -45.0, '')
                 else:
-                    MainNpc.NpcChangeAIStateCstmMainNpc.NpcChangeAIStateCstm(3, TalkEventFlowName, 'Root', 'Angle:315')
+                    MainNpc.NpcChangeAIStateCstm(3, TalkEventFlowName, 'Root', 'Angle:315')
             else:
-                MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, WaitAngle, '')
+                MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, WaitAngle, '')
  
 flow Root_Common(TalkEventFlowName: str, WaitAngle: float, Type: int, OffsetX: any, OffsetZ: any, WaitFrame: any):
-    if not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('PrologueStep', 1):
-        MainNpc.NpcAddBlackBoardMainNpc.NpcAddBlackBoard('PrologueStep', 1)
-        MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
-    elif MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('PrologueStep', 2):
+    if not MainNpc.NpcBlackBoard('PrologueStep', 1):
+        MainNpc.NpcAddBlackBoard('PrologueStep', 1)
+        MainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
+    elif MainNpc.NpcBlackBoard('PrologueStep', 2):
         run PrologueStep2(TalkEventFlowName=TalkEventFlowName, OffsetX=OffsetX, OffsetZ=OffsetZ, WaitFrame=WaitFrame, WaitAngle=WaitAngle, Type=Type)
     else:
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(6, false)
-        if not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsMove', 1):
-            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('IsMove', 1)
-            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=WaitFrame, ArgStr0='')
+        MainNpc.NpcAISetting(6, false)
+        if not MainNpc.NpcBlackBoard('IsMove', 1):
+            MainNpc.NpcSetAIBlackBoard('IsMove', 1)
+            MainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=WaitFrame, ArgStr0='')
         elif System.EventFlags['cPlayer:PrologueDone1stTalkAtPlaza']:
-            MainNpc.NpcAddBlackBoardMainNpc.NpcAddBlackBoard('PrologueStep', 1)
+            MainNpc.NpcAddBlackBoard('PrologueStep', 1)
             run PrologueStep2(TalkEventFlowName=TalkEventFlowName, OffsetX=OffsetX, OffsetZ=OffsetZ, WaitFrame=WaitFrame, WaitAngle=WaitAngle, Type=Type)
-        elif MainNpc.NpcAIIsArriveDestinationMainNpc.NpcAIIsArriveDestination() == 0:
-            MainNpc.NpcAddBlackBoardMainNpc.NpcAddBlackBoard('ArrivePlaza', 1)
-            MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, 180.0, '')
+        elif MainNpc.NpcAIIsArriveDestination() == 0:
+            MainNpc.NpcAddBlackBoard('ArrivePlaza', 1)
+            MainNpc.NpcAISetting(8, true)
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, 180.0, '')
         else:
-            MainNpc.NpcChangeGoToDestinationStateMainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', TalkEventFlowName, 'Root', false, true, ArgInt0=1, ArgInt1=OffsetX, ArgInt2=OffsetZ)
+            MainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', TalkEventFlowName, 'Root', false, true, ArgInt0=1, ArgInt1=OffsetX, ArgInt2=OffsetZ)
  

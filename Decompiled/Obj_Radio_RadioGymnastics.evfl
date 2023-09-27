@@ -5,58 +5,58 @@ flow AddRewardCount():
  
 flow ButtonModeStart():
     SubflowResults[0] = 0
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.RadioGymnasticsSetButtonActiveEventFlowSystemActor.RadioGymnasticsSetButtonActive()
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.RadioGymnasticsSetButtonActive()
 entrypoint Event42:
-    if (EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()):
-        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    if (EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor()):
+        EventFlowSystemActor.MessageLockNext(1)
         # Almost ready to start...
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:018', false)
-        EventFlowSystemActor.NetWaitDemoEventFlowSystemActor.NetWaitDemo('cStartGym')
-        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-    EventFlowSystemActor.RadioExerciseBGMStartEventFlowSystemActor.RadioExerciseBGMStart()
+        EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:018', false)
+        EventFlowSystemActor.NetWaitDemo('cStartGym')
+        EventFlowSystemActor.MessageUnlockNext()
+    EventFlowSystemActor.RadioExerciseBGMStart()
     if SubflowResults@2[0] == 0:
-        EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppearEventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(0)
+        EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(0)
     else:
-        EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppearEventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(1)
+        EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(1)
  
 flow ChkRewardEmoticon():
-    if ((not EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()) or (EventFlowSystemActor.NetIsInviteFriendEventFlowSystemActor.NetIsInviteFriend())) and (System.EventFlags['cPlayer:EnableEmoticonUI']) and (System.EventFlags['cPlayer:RadioGymnasticsGetReward'] == 4) and (System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 49):
+    if ((not EventFlowSystemActor.NetIsConnected()) or (EventFlowSystemActor.NetIsInviteFriend())) and (System.EventFlags['cPlayer:EnableEmoticonUI']) and (System.EventFlags['cPlayer:RadioGymnasticsGetReward'] == 4) and (System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 49):
         System.EventFlags['cPlayer:RadioGymnasticsGetReward'] += 1
-        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Emoticons', 'Get_Emoticon_byRadioGymnastics', 'cNextDemoEnd_Simple', false)
+        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Emoticons', 'Get_Emoticon_byRadioGymnastics', 'cNextDemoEnd_Simple', false)
     else:
         return
  
 flow ExplainRadioGym():
     # Group-Stretching Instructions There are two play options: move your body while holding a Joy-Con or press buttons on a controller. You must be using …
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3102', false)
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3102', false)
  
 flow GetEmoticonProccess():
     if System.EventFlags['cPlayer:EnableEmoticonUI']:
-        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Emoticons', 'Get_Emoticon_byRadioGymnastics', 'cNextDemoEnd_Simple', false)
+        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Emoticons', 'Get_Emoticon_byRadioGymnastics', 'cNextDemoEnd_Simple', false)
  
 flow JoyConModeStart():
     SubflowResults[0] = 1
-    EventFlowSystemActor.UIRadioGymnasticStrapGuideHandlingEventFlowSystemActor.UIRadioGymnasticStrapGuideHandling()
+    EventFlowSystemActor.UIRadioGymnasticStrapGuideHandling()
     # Please make sure you have enough room to move your body and that there aren't any people or objects in the way before you begin. Keep your activity w…
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3104', true)
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3104', true)
     run Event42()
  
 flow NotChangedToJoyCon():
     # Please connect your Joy-Con with a wireless connection, then hold Joy-Con (R) in your right hand and select Next.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3106', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3106', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run SoloWithHandHeld()
-    elif EventFlowSystemActor.IsIncludeHandheldEventFlowSystemActor.IsIncludeHandheld():
+    elif EventFlowSystemActor.IsIncludeHandheld():
         # There are no Joy-Con controllers connected.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3106_01', false)
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3106_01', false)
         run NotChangedToJoyCon()
     else:
         run JoyConModeStart()
  
 flow RGJoinFlagOn():
-    if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(1):
-        EventFlowSystemActor.EventFlagAllSharePlayPlayerEventFlowSystemActor.EventFlagAllSharePlayPlayer('cPlayer:JoinedTodayRadioGymnastics')
+    if EventFlowSystemActor.IsSharePlay(1):
+        EventFlowSystemActor.EventFlagAllSharePlayPlayer('cPlayer:JoinedTodayRadioGymnastics')
     else:
         System.EventFlags['cPlayer:JoinedTodayRadioGymnastics'] = true
         run ChkRewardEmoticon()
@@ -65,71 +65,71 @@ flow RGSceneAbort():
     run `00_System_StageChange`::ReturnPreStagerun `00_System_StageChange`::ReturnPreStage(FadeColorString='cBlack', NextInfoKey='', FadeOutKindString='cNormalFader', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=0.0)
  
 flow RadioGymnastics():
-    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    if EventFlowSystemActor.NetIsDreaming():
         # You're dreaming right now, so group stretching will have to wait!
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:019', false)
-    elif not EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+        EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:019', false)
+    elif not EventFlowSystemActor.NetIsConnected():
         if System.EventFlags['cPlayer:RadioGymnasticsFirstExplain']:
             run StartAgain()
         else:
             run SelectMenuFirst()
             run StartNow()
-    elif (EventFlowSystemActor.NetCheckSessionTypeEventFlowSystemActor.NetCheckSessionType() not in (0, 1, 3, 6)) and (EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()):
-        if EventFlowSystemActor.NetIsInviteFriendEventFlowSystemActor.NetIsInviteFriend():
-            if EventFlowSystemActor.NetAllVisitorIsBestFriendEventFlowSystemActor.NetAllVisitorIsBestFriend():
+    elif (EventFlowSystemActor.NetCheckSessionType() not in (0, 1, 3, 6)) and (EventFlowSystemActor.NetHasVisitor()):
+        if EventFlowSystemActor.NetIsInviteFriend():
+            if EventFlowSystemActor.NetAllVisitorIsBestFriend():
                 run Sub_grp_Event15()
             else:
                 # Group stretching will have to wait. Not everyone who is visiting is a Best Friend.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:008', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:008', false)
         else:
             # If you want to do some group stretching, ask the resident of this island to start a session!
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:006', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:006', false)
     else:
         run Sub_grp_Event15()
  
 flow RadioGymnasticsEnd():
-    EventFlowSystemActor.NpcPlayerActivityEventFlowSystemActor.NpcPlayerActivity('cActivityType_RadioExerciseCount')
+    EventFlowSystemActor.NpcPlayerActivity('cActivityType_RadioExerciseCount')
     run `00_System_StageChange`::ReturnPreStagerun `00_System_StageChange`::ReturnPreStage(FadeColorString='cBlack', NextInfoKey='', FadeOutKindString='cNormalFader', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=-2.0)
  
 flow Restart():
     run RadioGymnastics()
  
 flow SceneEnter():
-    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(52)
-    EventFlowSystemActor.RadioGymnasticsSpecialSceneEnterEventFlowSystemActor.RadioGymnasticsSpecialSceneEnter()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.SoundDuckingOn(52)
+    EventFlowSystemActor.RadioGymnasticsSpecialSceneEnter()
+    EventFlowSystemActor.WaitFrame(30)
     if not System.EventFlags['cPlayer:RadioGymnasticsFirstExplain']:
         # Group-Stretching Instructions There are two play options: move your body while holding a Joy-Con or press buttons on a controller. You must be using …
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3102', false)
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3102', false)
         System.EventFlags['cPlayer:RadioGymnasticsFirstExplain'] = true
-    if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(1):
-        if EventFlowSystemActor.IsIncludeNotJoyConEventFlowSystemActor.IsIncludeNotJoyCon():
+    if EventFlowSystemActor.IsSharePlay(1):
+        if EventFlowSystemActor.IsIncludeNotJoyCon():
             run UseProCon_SharePlay()
         else:
             run SharePlaywithJoyCon()
-    elif not EventFlowSystemActor.IsIncludeNotJoyConEventFlowSystemActor.IsIncludeNotJoyCon():
+    elif not EventFlowSystemActor.IsIncludeNotJoyCon():
         run SoloWithHandHeld()
-    elif EventFlowSystemActor.IsIncludeHandheldEventFlowSystemActor.IsIncludeHandheld():
+    elif EventFlowSystemActor.IsIncludeHandheld():
         run SoloWithHandHeld()
     else:
         run UseProCon_Solo()
  
 flow SceneExit():
-    EventFlowSystemActor.UIRadioGymnasticsOperationGuideDisappearEventFlowSystemActor.UIRadioGymnasticsOperationGuideDisappear()
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(124)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    switch Player.RadioGymnasticsGetResultPlayer.RadioGymnasticsGetResult():
+    EventFlowSystemActor.UIRadioGymnasticsOperationGuideDisappear()
+    EventFlowSystemActor.BGMPropertyControl(124)
+    EventFlowSystemActor.WaitFrame(30)
+    switch Player.RadioGymnasticsGetResult():
         case 0, 1, 2:
             run RGJoinFlagOn()
             run RadioGymnasticsEnd()
  
 flow SelectMenu():
-    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+    Player.PlayerWorkbenchThinking()
     # It's a tape deck for group stretching.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:001', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:001', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 1:
-            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageSuspend()
             run ExplainRadioGym()
             run SelectMenu()
         case 2:
@@ -138,36 +138,36 @@ flow SelectMenu():
             return
  
 flow SelectMenuFirst():
-    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+    Player.PlayerWorkbenchThinking()
     # It's a tape deck for group stretching.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:011', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 1:
+    EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:011', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 1:
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow SendReward():
     if System.EventFlags['cPlayer:RadioGymnasticsGetReward'] <= 0:
         if System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 3:
-            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14545, 1, 'cVillageRemakePattern', 0)
+            EventFlowSystemActor.SelectRewardItemDirect(14545, 1, 'cVillageRemakePattern', 0)
             System.EventFlags['cPlayer:UnlockBuyRcoOnePieceAerobics'] = true
             run Sub_Event206()
     elif System.EventFlags['cPlayer:RadioGymnasticsGetReward'] <= 1:
         if System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 10:
-            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14577, 1, 'cVillageRemakePattern', 0)
+            EventFlowSystemActor.SelectRewardItemDirect(14577, 1, 'cVillageRemakePattern', 0)
             System.EventFlags['cPlayer:UnlockBuyRcoYogaMat'] = true
             run Sub_Event206()
     elif System.EventFlags['cPlayer:RadioGymnasticsGetReward'] <= 2:
         if System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 20:
-            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14539, 1, 'cVillageRemakePattern', 0)
+            EventFlowSystemActor.SelectRewardItemDirect(14539, 1, 'cVillageRemakePattern', 0)
             run Sub_Event206()
     elif (System.EventFlags['cPlayer:RadioGymnasticsGetReward'] <= 3) and (System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 30):
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14538, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SelectRewardItemDirect(14538, 1, 'cVillageRemakePattern', 0)
         System.EventFlags['cPlayer:RadioGymnasticsGotAllRewards'] = true
         run Sub_Event206()
  
 flow SharePlaywithJoyCon():
     # How would you like to participate in group stretching?  If you have been advised to limit physical activity or are unsure about working out, choose "…
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3103', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3103', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run ButtonModeStart()
         case 1:
@@ -176,10 +176,10 @@ flow SharePlaywithJoyCon():
             run RGSceneAbort()
  
 flow SoloWithHandHeld():
-    if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+    if EventFlowSystemActor.NetIsConnected():
         # How would you like to participate in group stretching?  If you have been advised to limit physical activity or are unsure about working out, choose "…
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3110', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3110', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run ButtonModeStart()
         else:
             run WithJoyCon()
@@ -191,73 +191,73 @@ flow StartAgain():
     run StartNow()
  
 flow StartNow():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    Player.PlayerChangeStateDemoTalkPlayer.PlayerChangeStateDemoTalk()
+    EventFlowSystemActor.MessageSuspend()
+    Player.PlayerChangeStateDemoTalk()
     run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cRadioGymnastics', FadeOutSpeed=-1.0, FadeInSpeed='cFast', FadeOutKindString='cNormalFader', FadeInKindString='cNormalFader')
  
 local flow Sub_Event206():
-    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 15, 'cRadioGymnastics', 'cFastToday', 'cReward', false, true)
+    EventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 15, 'cRadioGymnastics', 'cFastToday', 'cReward', false, true)
     System.EventFlags['cPlayer:RadioGymnasticsGetReward'] += 1
  
 local flow Sub_grp_Event15():
-    if EventFlowSystemActor.NetIsInviteFriendEventFlowSystemActor.NetIsInviteFriend():
+    if EventFlowSystemActor.NetIsInviteFriend():
         run SelectMenu()
-        if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
-            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+        if EventFlowSystemActor.NetHasVisitor():
+            EventFlowSystemActor.MessageLockNext(1)
             # Getting ready for group stretching...
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:023', false)
-            EventFlowSystemActor.NetDemoLockEventFlowSystemActor.NetDemoLock(3)
-            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-            if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:023', false)
+            EventFlowSystemActor.NetDemoLock(3)
+            EventFlowSystemActor.MessageUnlockNext()
+            if EventFlowSystemActor.CheckErrorType(2):
                 # I think someone is busy right now. Group stretching will have to wait.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:010', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:010', false)
             else:
                 run StartNow()
         else:
             run StartNow()
     else:
         # If you want to do some group stretching, ask the resident of this island to start a session!
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:006', false)
+        EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:006', false)
  
 flow UseProCon_SharePlay():
     # At least one player is not using a Joy-Con controller, so button controls will be used for this group-stretching session.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3107', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3107', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run RGSceneAbort()
     else:
         run ButtonModeStart()
  
 flow UseProCon_Solo():
-    if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+    if EventFlowSystemActor.NetIsConnected():
         # This group-stretching session will start with button controls since you are not using a Joy-Con controller.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3111', false)
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3111', false)
         run ButtonModeStart()
     else:
         # This group-stretching session will start with button controls since you are not using a Joy-Con controller.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3101', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3101', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run RGSceneAbort()
         else:
             run ButtonModeStart()
  
 flow WithJoyCon():
-    if EventFlowSystemActor.IsIncludeNotJoyConEventFlowSystemActor.IsIncludeNotJoyCon():
-        if EventFlowSystemActor.IsIncludeHandheldEventFlowSystemActor.IsIncludeHandheld():
+    if EventFlowSystemActor.IsIncludeNotJoyCon():
+        if EventFlowSystemActor.IsIncludeHandheld():
             run NotChangedToJoyCon()
-        elif EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(1):
+        elif EventFlowSystemActor.IsSharePlay(1):
             run UseProCon_SharePlay()
         else:
             run UseProCon_Solo()
     else:
-        if EventFlowSystemActor.IncludeHorizontalControllerEventFlowSystemActor.IncludeHorizontalController():
-            if EventFlowSystemActor.IsAllSingleHorizontalEventFlowSystemActor.IsAllSingleHorizontal():
+        if EventFlowSystemActor.IncludeHorizontalController():
+            if EventFlowSystemActor.IsAllSingleHorizontal():
                 # Hold a Joy-Con controller in your right hand during group stretching.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3105', false)
+                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3105', false)
             else:
                 # Please hold your Joy-Con in your right hand during group stretching. If using two Joy-Con controllers, hold the Joy-Con (R) in your right hand.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3108', false)
+                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3108', false)
         else:
             # You'll use your Joy-Con (R) during group stretching. Hold the Joy-Con (R) in your right hand, then select Next.
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3109', false)
+            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3109', false)
         run JoyConModeStart()
  

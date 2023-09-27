@@ -14,45 +14,45 @@ flow ChkEvaluationImprovement_First():
     System.EventFlags['cLand:SzaIslandEvaluationImprovementNaturalToday'] = false
  
 flow ChkLifeImprovement():
-    if EventFlowSystemActor.VillageScoreCheckLifeDeltaBeforeDayEventFlowSystemActor.VillageScoreCheckLifeDeltaBeforeDay() >= 10:
+    if EventFlowSystemActor.VillageScoreCheckLifeDeltaBeforeDay() >= 10:
         System.EventFlags['cLand:SzaIslandEvaluationImprovementLifeToday'] = true
-    EventFlowSystemActor.VillageScoreLifeReflectLandSaveEventFlowSystemActor.VillageScoreLifeReflectLandSave()
+    EventFlowSystemActor.VillageScoreLifeReflectLandSave()
  
 flow ChkLifeRank():
-    if EventFlowSystemActor.VillageScoreCheckLifeEventFlowSystemActor.VillageScoreCheckLife() < 80.0:
+    if EventFlowSystemActor.VillageScoreCheckLife() < 80.0:
         SubflowResults[3] = 0
-    elif EventFlowSystemActor.VillageScoreCheckLifeEventFlowSystemActor.VillageScoreCheckLife() < 160.0:
+    elif EventFlowSystemActor.VillageScoreCheckLife() < 160.0:
         SubflowResults[3] = 1
-    elif EventFlowSystemActor.VillageScoreCheckLifeEventFlowSystemActor.VillageScoreCheckLife() < 400.0:
+    elif EventFlowSystemActor.VillageScoreCheckLife() < 400.0:
         SubflowResults[3] = 2
-    elif EventFlowSystemActor.VillageScoreCheckLifeEventFlowSystemActor.VillageScoreCheckLife() >= 665.0:
+    elif EventFlowSystemActor.VillageScoreCheckLife() >= 665.0:
         SubflowResults[3] = 4
     else:
         SubflowResults[3] = 3
  
 flow ChkMinusPoint():
-    if EventFlowSystemActor.VillageScoreVeryMessyEventFlowSystemActor.VillageScoreVeryMessy(180, 1):
+    if EventFlowSystemActor.VillageScoreVeryMessy(180, 1):
         SubflowResults[4] = 1
-    elif EventFlowSystemActor.VillageScoreCheckTreeNumEventFlowSystemActor.VillageScoreCheckTreeNum() >= 220:
+    elif EventFlowSystemActor.VillageScoreCheckTreeNum() >= 220:
         SubflowResults[4] = 2
-    elif EventFlowSystemActor.VillageScorePutUnitIconNumEventFlowSystemActor.VillageScorePutUnitIconNum() >= 15:
+    elif EventFlowSystemActor.VillageScorePutUnitIconNum() >= 15:
         SubflowResults[4] = 3
     else:
         SubflowResults[4] = 0
  
 flow ChkNaturalImprovement():
-    if EventFlowSystemActor.VillageScoreCheckNaturalDeltaBeforeDayEventFlowSystemActor.VillageScoreCheckNaturalDeltaBeforeDay() >= 5:
+    if EventFlowSystemActor.VillageScoreCheckNaturalDeltaBeforeDay() >= 5:
         System.EventFlags['cLand:SzaIslandEvaluationImprovementNaturalToday'] = true
-    EventFlowSystemActor.VillageScoreNaturalReflectLandSaveEventFlowSystemActor.VillageScoreNaturalReflectLandSave()
+    EventFlowSystemActor.VillageScoreNaturalReflectLandSave()
  
 flow ChkNaturalRank():
-    if EventFlowSystemActor.VillageScoreCheckNaturalEventFlowSystemActor.VillageScoreCheckNatural() < 200.0:
+    if EventFlowSystemActor.VillageScoreCheckNatural() < 200.0:
         SubflowResults[2] = 0
-    elif EventFlowSystemActor.VillageScoreCheckNaturalEventFlowSystemActor.VillageScoreCheckNatural() < 270.0:
+    elif EventFlowSystemActor.VillageScoreCheckNatural() < 270.0:
         SubflowResults[2] = 1
-    elif EventFlowSystemActor.VillageScoreCheckNaturalEventFlowSystemActor.VillageScoreCheckNatural() < 350.0:
+    elif EventFlowSystemActor.VillageScoreCheckNatural() < 350.0:
         SubflowResults[2] = 2
-    elif EventFlowSystemActor.VillageScoreCheckNaturalEventFlowSystemActor.VillageScoreCheckNatural() >= 450.0:
+    elif EventFlowSystemActor.VillageScoreCheckNatural() >= 450.0:
         SubflowResults[2] = 4
     else:
         SubflowResults[2] = 3
@@ -148,13 +148,13 @@ flow IslandEvaluationChk():
     run Update_DreamEvaluation()
     run ChkMinusPoint()
     run ChkStarRating()
-    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') < 8:
+    if EventFlowSystemActor.NpcHouseNum('cConstructed') < 8:
         run NotEnoughNNpc()
  
 flow NotEnoughNNpc():
     SubflowResults[1] = 0
     SubflowResults[0] = 0
-    if (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 7) and (SubflowResults@5[2] in (2, 3, 4)) and (SubflowResults@5[3] in (2, 3, 4)):
+    if (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 7) and (SubflowResults@5[2] in (2, 3, 4)) and (SubflowResults@5[3] in (2, 3, 4)):
         SubflowResults[0] = 1
  
 local flow Sub_Event52():

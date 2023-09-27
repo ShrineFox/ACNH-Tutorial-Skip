@@ -1,66 +1,66 @@
 flow GoToNextSeq():
-    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.699999988079071, 0, 0.0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(21)
+    EventFlowSystemActor.SystemBGMVolumeFadeOut(0.699999988079071, 0, 0.0)
+    EventFlowSystemActor.WaitFrame(21)
     run NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamerarun NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamera()
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
+    EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+    EventFlowSystemActor.WaitFrame(6)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
  
 flow NewBuild():
-    if EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cSNPC'):
-        MainNpc.SetReplaceSNPCMsgLabelMainNpc.SetReplaceSNPCMsgLabel()
+    if EventFlowSystemActor.CheckAmiiboNPC('cSNPC'):
+        MainNpc.SetReplaceSNPCMsgLabel()
         System.EventFlags['cPlayerTemp:WHEREAREN_CallSNPCAmiibo'] = true
         # Hello, this is Isabelle. Mm-hmm… Oh goodness! My very own vacation home? A vacation home isn't something I've ever considered before. I'm having a ha…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_Amiibo:101', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_Amiibo:101', true)
     else:
-        if MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc():
+        if MainNpc.IsVillagerNpc():
             # Yeeeello! This is <110:10>! Oh, hi, <150:6>! What's up? A vacation home? On an island? The kind that's surrounded by water? But not THIS island, <110…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:102', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:102', true)
         else:
             # RANDOM: Hello! My name's <110:10>! Who's this? … // Hm…Paradise Planning? No, you called <1… // A huh huh! It's <110:10>, huh huh huh. … // Hello, it's <110:10>! Who's this? Parad…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:101', true)
-    MainNpc.WherearenTakeOnNpcOrderMainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', '')
-    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:101', true)
+    MainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', '')
+    EventFlowSystemActor.WherearenOrderCallback('cStart')
     run GoToNextSeq()
  
 flow Root():
-    switch MainNpc.CheckNpcCharacterSizeMainNpc.CheckNpcCharacterSize():
+    switch MainNpc.CheckNpcCharacterSize():
         case 0:
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Small', '', 'CameraTag:Root', false, false, false, 0)
+            EventFlowSystemActor.CameraSetDemoParam('Small', '', 'CameraTag:Root', false, false, false, 0)
         case 1:
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Normal', '', 'CameraTag:Root', false, false, false, 0)
+            EventFlowSystemActor.CameraSetDemoParam('Normal', '', 'CameraTag:Root', false, false, false, 0)
         case 2:
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Large', '', 'CameraTag:Root', false, false, false, 0)
+            EventFlowSystemActor.CameraSetDemoParam('Large', '', 'CameraTag:Root', false, false, false, 0)
         case 3:
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ExtraLarge', '', 'CameraTag:Root', false, false, false, 0)
-    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7):
+            EventFlowSystemActor.CameraSetDemoParam('ExtraLarge', '', 'CameraTag:Root', false, false, false, 0)
+    EventFlowSystemActor.SystemFaderRelease()
+    EventFlowSystemActor.WaitFrame(30)
+    if EventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7):
         run NewBuild()
     else:
         run ShareHouse()
  
 flow ShareHouse():
-    if MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether():
-        MainNpc.WherearenSetTagHousemateNpcNameMainNpc.WherearenSetTagHousemateNpcName(0)
-        if MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc():
+    if MainNpc.WherearenIsNpcLiveTogether():
+        MainNpc.WherearenSetTagHousemateNpcName(0)
+        if MainNpc.IsVillagerNpc():
             # Whoooo iiiiiis iiiiiiiit? Oh, it's you, <150:6>. Hi! Huh? But I already got a roommate. I don't have enough snacks to share with another one, <110:6>…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:204', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:204', true)
         else:
             # RANDOM: Hey! This is <110:10>. How's stuff? Me?… // Hi! <110:10> here! Hm? Be a roommate? I… // Helloooooooooo! You called <110:10>! Wh… // This is <110:10>. How are ya doing? Ohh…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:202', true)
-        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
-        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.20000000298023224)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:202', true)
+        EventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
+        EventFlowSystemActor.ReturnStage('', 'cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.20000000298023224)
     else:
-        if MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc():
+        if MainNpc.IsVillagerNpc():
             # Hello? Hello? Helloooooooo? Oh, wait… Hello! I had the thingie upside down. Oh, hey, <150:6>! Huh? A roommate? You think I'm roommate material? Not w…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:203', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:203', true)
         else:
             # RANDOM: Helloooo! This is <110:10>! Who's this?… // Hi, I'm <110:10>, and I'm [a|an]<110:15… // <110:10> here. What's your favorite can… // Hello, hello! Who's this? Hey! What's n…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:201', true)
-        MainNpc.WherearenSetHousemateMainNpc.WherearenSetHousemate()
-        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cFinishLookForHousemate')
-        EventFlowSystemActor.ReserveSkipSceneStartDemoEventFlowSystemActor.ReserveSkipSceneStartDemo()
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenAmiibo:201', true)
+        MainNpc.WherearenSetHousemate()
+        EventFlowSystemActor.WherearenOrderCallback('cFinishLookForHousemate')
+        EventFlowSystemActor.ReserveSkipSceneStartDemo()
         run GoToNextSeq()
  

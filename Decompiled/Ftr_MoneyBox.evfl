@@ -1,83 +1,83 @@
 flow AddFreeParam():
-    if (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse')) or (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cOtherPlayerHouse')) or (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField')):
-        Ftr.AddMoneyBoxCountFtr.AddMoneyBoxCount()
+    if (EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse')) or (EventFlowSystemActor.SystemCheckNowStage('cOtherPlayerHouse')) or (EventFlowSystemActor.SystemCheckNowStage('cField')):
+        Ftr.AddMoneyBoxCount()
  
 flow ChkMyMoneyBox():
-    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and ((EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse')) or (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField'))):
+    if (EventFlowSystemActor.IsMyVillage()) and ((EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse')) or (EventFlowSystemActor.SystemCheckNowStage('cField'))):
         SubflowResults[0] = 0
     else:
         SubflowResults[0] = 1
  
 flow EndProcess():
-    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    EventFlowSystemActor.UIMoneyDisappear()
  
 flow PutMoneyDemo():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    Ftr.FtrMoneyBoxRingSEFtr.FtrMoneyBoxRingSE(0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(1000, true)
+    EventFlowSystemActor.MessageSuspend()
+    Ftr.FtrMoneyBoxRingSE(0)
+    EventFlowSystemActor.WaitFrame(20)
+    EventFlowSystemActor.BellCountDown(1000, true)
  
 flow Root(AmountMoney: int = 0):
-    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
-    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    Player.PlayerWorkbenchThinking()
+    if EventFlowSystemActor.NetIsDreaming():
         # I'll just be disappointed when I wake up if I deposit Bells during a dream…
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:013', false)
+        Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:013', false)
     else:
-        Ftr.SetMoneyBoxAmountFtr.SetMoneyBoxAmount(AmountMoney)
+        Ftr.SetMoneyBoxAmount(AmountMoney)
         run ChkMyMoneyBox()
-        if not Ftr.CheckMoneyBoxAmountFtr.CheckMoneyBoxAmount(99000):
-            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
-            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, AmountMoney, '')
-            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 1, 1000, '')
-            if (Ftr.CheckMoneyBoxAmountFtr.CheckMoneyBoxAmount(1)) and (SubflowResults@2[0] == 0):
+        if not Ftr.CheckMoneyBoxAmount(99000):
+            EventFlowSystemActor.UIMoneyAppear()
+            EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, AmountMoney, '')
+            EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 1, 1000, '')
+            if (Ftr.CheckMoneyBoxAmount(1)) and (SubflowResults@2[0] == 0):
                 # Hmm, looks like there's about <90:22:0000> inside…
-                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:001', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:001', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3():
                     case 0:
 entrypoint Event6:
-                        if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(1000):
+                        if EventFlowSystemActor.HasBellCount(1000):
                             run PutMoneyDemo()
                             run AddFreeParam()
                             run SendChat()
                             run EndProcess()
                         else:
                             # I don't have enough Bells…
-                            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:011', false)
+                            Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:011', false)
                             run EndProcess()
                     case 1:
 entrypoint Event20:
-                        if EventFlowSystemActor.MoneyCapacityEventFlowSystemActor.MoneyCapacity(AmountMoney, 'cMoneyBox') in (0, 1):
+                        if EventFlowSystemActor.MoneyCapacity(AmountMoney, 'cMoneyBox') in (0, 1):
                             run TakeMoneyDemo(AmountMoney=AmountMoney)
-                            Ftr.ResetMoneyBoxCountFtr.ResetMoneyBoxCount()
+                            Ftr.ResetMoneyBoxCount()
                             run EndProcess()
                         else:
                             # I can't withdraw Bells when my wallet is this full…
-                            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:012', false)
+                            Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:012', false)
                             run EndProcess()
                     case 2:
                         run EndProcess()
             else:
                 # Should I deposit Bells?
-                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:002', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:002', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run SeqPutMoney()
                 else:
                     run EndProcess()
         elif SubflowResults@2[0] == 0:
-            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+            EventFlowSystemActor.UIMoneyAppear()
             # Whoa. Sure are a lot of Bells in there…
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:015', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:015', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run SeqTakeMoney(AmountMoney=AmountMoney)
             else:
                 run EndProcess()
         else:
             # Whoa. Sure are a lot of Bells in there…
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_MoneyBox:014', false)
+            Player.OpenMessageWindow('TalkFtr/FTR_MoneyBox:014', false)
  
 flow SendChat():
-    if (EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()):
-        EventFlowSystemActor.UISpeakMoneyBoxEventFlowSystemActor.UISpeakMoneyBox()
+    if (EventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.IsMyVillage()):
+        EventFlowSystemActor.UISpeakMoneyBox()
  
 flow SeqPutMoney():
     run Event6()
@@ -86,8 +86,8 @@ flow SeqTakeMoney(AmountMoney: int):
     run Event20()
  
 flow TakeMoneyDemo(AmountMoney: int):
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    Ftr.FtrMoneyBoxRingSEFtr.FtrMoneyBoxRingSE(1)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(AmountMoney, false)
+    EventFlowSystemActor.MessageSuspend()
+    Ftr.FtrMoneyBoxRingSE(1)
+    EventFlowSystemActor.WaitFrame(20)
+    EventFlowSystemActor.BellCountDown(AmountMoney, false)
  

@@ -6,13 +6,13 @@ flow Root():
     run SNPC_rcm::Check_ShopEnablerun SNPC_rcm::Check_ShopEnable()
     run Unlock_v200_Item_Grocery()
     run SNPC_rcm::Regulationrun SNPC_rcm::Regulation()
-    MainNpc.SetTwinsTagMainNpc.SetTwinsTag()
+    MainNpc.SetTwinsTag()
     System.EventFlags['cPlayerTemp:RcmShopshelfCheck'] = true
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, true)
-    Player.TurnBodyPlayer.TurnBody(13, 0.0)
-    Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
-    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    MainNpc.NpcAISetting(9, true)
+    MainNpc.NpcAISetting(5, true)
+    Player.TurnBody(13, 0.0)
+    Player.PlayerWaitTurn()
+    if EventFlowSystemActor.IsMyVillage():
         run SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talkrun SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talk()
         switch SubflowResults@6[1]:
             case 0:
@@ -41,7 +41,7 @@ flow Root_Init():
     run SNPC_rcm::EntrySubCastrun SNPC_rcm::EntrySubCast()
  
 flow UnLockFIXLadderRecipe():
-    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 2615)):
+    if (EventFlowSystemActor.IsMyVillage()) and (EventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (EventFlowSystemActor.PlayerHasCraftRecipe('', 2615)):
         System.EventFlags['cPlayer:UnlockBuyFIXLadderRecipe'] = true
  
 flow Unlock_v200_Item_Grocery():

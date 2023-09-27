@@ -2,18 +2,18 @@ flow AirportEnable_MovingFirstDay():
     if not System.EventFlags['cPlayer:OdekakeFirstTalk']:
         System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
         run FirstExplain()
-    elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+    elif EventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
         if not System.EventFlags['cPlayerTemp:DodTalkSceneFlag']:
             System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
             # Hey hey hey! Welcome to your one and only gateway to the skies, the <50:4><10:13>ISLAND</10:13> Airport.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:999_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:999_01', false)
         # So yeah, we've got a lotta services here, but we can only offer 'em to residents. It can be in a tent, but you gotta live on the island. Come talk to…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:999_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:999_02', false)
     elif not System.EventFlags['cPlayerTemp:DodTalkSceneFlag']:
         System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
         if (System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']) and (not System.EventFlags['cPlayer:DodHeardAboutMileTravelTicket']):
             run MileTicketExplain()
-        elif (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
+        elif (EventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
             if System.EventFlags['cPlayer:UseMayDayTicket']:
                 run FinishedExplainAboutMayDayTicket()
             else:
@@ -26,19 +26,19 @@ flow AirportEnable_MovingFirstDay():
 entrypoint Event200:
             if not System.EventFlags['cPlayer:UnlockWherearen']:
                 # Hey hey hey! Welcome to your one and only gateway to the skies, the <50:4><10:13>ISLAND</10:13> Airport. How can I help you out today?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:002', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:002', false)
                 run Event6()
             elif System.EventFlags['cPlayer:DodSelectWherearen1st']:
                 run ChkEmphasizeWherearen()
                 if SubflowResults@2[4] == 0:
                     # Hey hey hey! Welcome to your one and only gateway to the skies, the <50:4><10:13>ISLAND</10:13> Airport. How can I help you out today?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:002_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:002_01', false)
                     run Event322()
                 else:
                     # Hey hey hey! Welcome to your one and only gateway to the skies, the <50:4><10:13>ISLAND</10:13> Airport. How can I help you out today?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:002_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:002_02', false)
 entrypoint Event322:
-                    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                    switch EventFlowSystemActor.GeneralTalkChoice4():
                         case 0:
                             run SelectIsland()
                         case 1:
@@ -53,12 +53,12 @@ entrypoint Event322:
         run ChkEmphasizeWherearen()
         if SubflowResults@2[4] == 0:
             # Hey there again! What can I do you for?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:003_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:003_01', false)
         else:
             # Hey there again! What can I do you for?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:003_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:003_02', false)
 entrypoint Event322:
-        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        switch EventFlowSystemActor.GeneralTalkChoice4():
             case 0:
                 run SelectIsland()
             case 1:
@@ -69,9 +69,9 @@ entrypoint Event322:
                 run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
     else:
         # Hey there again! What can I do you for?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:003', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:003', false)
 entrypoint Event6:
-        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+        switch EventFlowSystemActor.GeneralTalkChoice3():
             case 0:
                 run SelectIsland()
             case 1:
@@ -114,32 +114,32 @@ flow ChkTourTicket():
  
 flow Cmn_UGC_Notification():
     # So, the first time you connect with folks on another island, whether letting them in or visiting 'em… The legal eagles say I gotta make sure you see …
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:091_01', true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:091_01', true)
+    EventFlowSystemActor.WaitFrame(10)
     # About Local and Online Play During local and online play, other players you play with can see player- generated text and graphics such as: names, cha…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:0802', true)
+    MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:0802', true)
     # Thanks for sticking with me through the yawnfest there. Let's move on to the next step…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:091_02', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:091_02', false)
     System.EventFlags['cPlayer:OdekakeTutorial'] = true
  
 flow Dod_GoToCommune():
-    Player.PlayerChangeDemoStatePlayer.PlayerChangeDemoState('cReserveNextSceneStartToolOff')
+    Player.PlayerChangeDemoState('cReserveNextSceneStartToolOff')
     run v200_ChkCommuneExpand()
     run v200_ChkCommuneDonguri()
-    EventFlowSystemActor.SetMemoryEventPlayerEventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_Goto_CommuneIsland')
+    EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_Goto_CommuneIsland')
     System.EventFlags['cPlayer:PlayerPocketUIEnableInCommuneIsland'] = true
     System.EventFlags['cPlayer:SpnExpandEventAfterJuneBride'] = false
     System.EventFlags['cPlayer:PooTalkAfterJuneBride'] = false
     System.EventFlags['cPlayer:DodSingleFlightToday'] = true
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(75)
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
-    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cPhotoStudioIsland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.BGMPropertyControl(75)
+    EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
+    EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
+    EventFlowSystemActor.SystemRequestChangeStage('cPhotoStudioIsland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow Dod_Go_Sel3B():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:006_03', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:006_03', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -149,8 +149,8 @@ flow Dod_Go_Sel3B():
  
 flow Dod_Go_Sel3B_MayDay():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -160,8 +160,8 @@ flow Dod_Go_Sel3B_MayDay():
  
 flow Dod_Go_Sel4B():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:006_04', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:006_04', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -173,8 +173,8 @@ flow Dod_Go_Sel4B():
  
 flow Dod_Go_Sel4B_MayDay():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302_02', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302_02', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -186,8 +186,8 @@ flow Dod_Go_Sel4B_MayDay():
  
 flow Dod_Go_Sel5B_MayDay():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302_06', false)
-    switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302_06', false)
+    switch EventFlowSystemActor.GeneralTalkChoice5():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -204,7 +204,7 @@ flow ExplainAboutMileTicket():
  
 flow ExplainAboutWorking():
     # It's your gateway to the skies, the ISLAND airport… Oh! It's you, PLAYER!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1005', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1005', false)
     run Event368()
  
 flow FinishedExplainAboutMayDayTicket():
@@ -213,27 +213,27 @@ flow FinishedExplainAboutMayDayTicket():
 flow FirstExplain():
     System.EventFlags['cPlayer:OdekakeFirstTalk'] = true
     # Hey hey hey! Welcome to your one and only gateway to the skies, the <50:4><10:13>ISLAND</10:13> Airport. Nice to meetcha—I'm Orville, ground crew for…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001', false)
     if System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']:
         # If you want to visit another island, invite friends to this one, or go on a Mystery Tour, this is the place to be.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_02', false)
         # Oh! And we've also got a mail service at this airport! Sometimes a letter's just better, you know? If you want to send someone a note, take a gander …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03', false)
         # By the way… you're PLAYER, right? It's a small island. Word gets around.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_01', false)
 entrypoint Event212:
-        if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
+        if (EventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
             System.EventFlags['cPlayer:GetMayDayTicket'] = true
             if System.EventFlags['cPlayer:GetMayDayTicket']:
                 if System.EventFlags['cPlayer:DodHeardAboutMayDayTravelTicket']:
 entrypoint Event104:
                     # I just got a <item>Nook Miles Ticket from Tom Nook with "PLAYER" written on it, which makes it yours. So if you want to use this ticket, you just got…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_02', false)
                     System.EventFlags['cPlayer:DodHeardAboutMileTravelTicket'] = true
                     run Sub_grp_Event139()
                 else:
                     # I got a May Day Ticket here from Tom Nook with "PLAYER" written on it, which makes it yours. It's only good for a limited time, so when you want to u…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1301', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1301', false)
                     System.EventFlags['cPlayer:DodHeardAboutMayDayTravelTicket'] = true
                     System.EventFlags['cPlayer:DodHeardAboutMileTravelTicket'] = true
                     SubflowResults[3] = 1
@@ -244,14 +244,14 @@ entrypoint Event104:
             run ExplainAboutMileTicket()
     else:
         # If you want to visit another island or invite friends to this one, this here's the place to do it.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_01', false)
         # Oh! And we've also got a mail service at this airport! Sometimes a letter's just better, you know? If you want to send someone a note, take a gander …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03', false)
         # By the way… you're PLAYER, right? It's a small island. Word gets around.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_01', false)
-        if EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_01', false)
+        if EventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
             # So yeah, we've got a lotta services here, but we can only offer 'em to residents. It can be in a tent, but you gotta live on the island. Come talk to…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_03', false)
         else:
             run Sub_grp_Event139()
  
@@ -264,25 +264,25 @@ flow FirstSel4B():
 flow GoToCommune():
     if System.EventFlags['cPlayer:DodSelectCommune1st']:
         # Harv's Island? Roger that, good buddy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:900_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:900_02', false)
     else:
         System.EventFlags['cPlayer:DodSelectCommune1st'] = true
         # Huh? Harv's Island…<10:4> Where could… OH! I know! You're talking about that island Harvey lives on! Roger that, good buddy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:900_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:900_01', false)
     # I can set you up right now, but are you ready? All packed and stuff?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:901', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:901', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.MiniGameSilentCancel()
         # «Alright!» Let's get you airborne.<10:8:003c0000> 
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
         if System.EventFlags['cPlayer:EquipLicenseHelmet']:
             run SNPC_dod_AirPort::LandMakingRemove_Soloplayrun SNPC_dod_AirPort::LandMakingRemove_Soloplay()
         # <10:12><100:3:cd01>Dodo One, this is Dodo Tower—Wilbur, you copy? Got a walker who needs wings, over. Roger! Ready when you are!<100:3:cd02><10:8:002…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
         run Dod_GoToCommune()
     else:
         # Ah, gotcha. Well, hope to see you flying with us another time. Toodles!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:903', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:903', false)
  
 flow GoToTourWithTicket():
     run Event1()
@@ -290,74 +290,74 @@ flow GoToTourWithTicket():
 flow MayDayTour():
     if System.EventFlags['cPlayer:MainmenuRecipe']:
         # You're ready to go on a May Day Tour? Roger that!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1303', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1303', false)
         if System.EventFlags['cPlayer:XctGetRewardSec']:
             # This May Day Tour was put together by Tom Nook, and he insists that everyone go empty-handed. We'll hold on to your things here at the counter. But d…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1309', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1309', false)
         else:
             # This May Day Tour is a special trip to a faraway island. It's all organized by Tom Nook! As for what awaits you there… You'll just have to find out w…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1304', false)
-        if Player.PlayerIsUseCoordinatePlayer.PlayerIsUseCoordinate():
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1304', false)
+        if Player.PlayerIsUseCoordinate():
             # By the by, it looks like you're under the effect of a transformation wand at the moment. Since we need you to go empty- handed, we're gonna need to u…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1308', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1308', false)
         # So…wanna stow your luggage and head out on the May Day Tour?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1305', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1305', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.MiniGameSilentCancel()
             # «Alright!» Let's get you airborne.<10:8:003c0000> 
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
             if System.EventFlags['cPlayer:EquipLicenseHelmet']:
                 run SNPC_dod_AirPort::LandMakingRemove_Soloplayrun SNPC_dod_AirPort::LandMakingRemove_Soloplay()
-            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageSuspend()
             run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
-            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+            EventFlowSystemActor.MessageLockNext(1)
             # Saving. Do not touch .
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-            EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
-            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+            EventFlowSystemActor.SaveSimpleSave('cAll')
+            EventFlowSystemActor.MessageSuspend()
             run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+            EventFlowSystemActor.MessageUnlockNext()
             System.EventFlags['cPlayer:UseMayDayTicket'] = true
             System.EventFlags['cPlayer:DodSingleFlightToday'] = true
             # <10:12><100:3:cd01>Dodo One, this is Dodo Tower—Wilbur, you copy? Got a walker who needs wings, over. Roger! Ready when you are!<100:3:cd02><10:8:002…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
-            EventFlowSystemActor.SelectMysteryTourEventFlowSystemActor.SelectMysteryTour(4)
-            EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(75)
-            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
-            EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
-            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cMysteryTourIsland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
+            EventFlowSystemActor.SelectMysteryTour(4)
+            EventFlowSystemActor.BGMPropertyControl(75)
+            EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
+            EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
+            EventFlowSystemActor.SystemRequestChangeStage('cMysteryTourIsland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
         else:
             # Roger that! Just let me know when you're ready to take to the skies!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1306', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1306', false)
     else:
         # So, you're going to go on a May Day Tour, are you? Solid copy! Wait—scrub that! Sorry, but the May Day event is going to require some DIY work from y…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1307', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1307', false)
  
 flow MaydayTicketExplatinAtFirstTalk():
-    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
+    if (EventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
         System.EventFlags['cPlayer:GetMayDayTicket'] = true
         if System.EventFlags['cPlayer:GetMayDayTicket']:
             # I got a May Day Ticket here from Tom Nook with "PLAYER" written on it, which makes it yours. It's only good for a limited time, so when you want to u…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1301', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1301', false)
             System.EventFlags['cPlayer:DodHeardAboutMayDayTravelTicket'] = true
             System.EventFlags['cPlayer:DodHeardAboutMileTravelTicket'] = true
             SubflowResults[3] = 1
  
 flow MileTicketExplain():
     # Hey hey hey! Welcome to your one and only gateway to the skies, the <50:4><10:13>ISLAND</10:13> Airport. Oh, it's you! Good timing!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:011', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:011', false)
     run Event212()
  
 flow MysteryTour():
     # So you wanna use your <item>Nook Miles Ticket? Roger!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:035', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:035', false)
     if System.EventFlags['cPlayer:DodUseFirstFreeTour']:
 entrypoint Event1:
         SubflowResults[2] = 1
         run Sub_Event123()
     elif System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']:
         # In that case, I'll just take this ticket I got from Tom Nook…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:035_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:035_01', false)
         SubflowResults[2] = 0
         run Sub_Event123()
     else:
@@ -365,38 +365,38 @@ entrypoint Event1:
  
 flow Mysterytour_Cancel():
     # Oh yeah, I totally understand! Go get yourself prepped and ready before setting off, friend. Just come on back when you've got all your ducks in a ro…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:039', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:039', false)
  
 flow Mysterytour_Confirm():
     if SubflowResults@2[2] == 0:
         System.EventFlags['cPlayer:DodUseFirstFreeTour'] = true
     else:
-        EventFlowSystemActor.DeleteTargetItemEventFlowSystemActor.DeleteTargetItem(5851, 1, false)
-    EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
+        EventFlowSystemActor.DeleteTargetItem(5851, 1, false)
+    EventFlowSystemActor.MiniGameSilentCancel()
     # «Alright!» Let's get you airborne.<10:8:003c0000> 
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
     if System.EventFlags['cPlayer:EquipLicenseHelmet']:
         run SNPC_dod_AirPort::LandMakingRemove_Soloplayrun SNPC_dod_AirPort::LandMakingRemove_Soloplay()
     System.EventFlags['cPlayer:DodSingleFlightToday'] = true
     System.EventFlags['cPlayer:GotoMysteryTour'] += 1
     if System.EventFlags['cPlayer:GotoMysteryTour'] >= 5:
         System.EventFlags['cPlayer:EnableGotoRareMysteryTour'] = true
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.MessageSuspend()
     run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
-    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    EventFlowSystemActor.MessageLockNext(1)
     # Saving. Do not touch .
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-    EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+    EventFlowSystemActor.SaveSimpleSave('cAll')
+    EventFlowSystemActor.MessageSuspend()
     run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    EventFlowSystemActor.MessageUnlockNext()
     # <10:12><100:3:cd01>Dodo One, this is Dodo Tower—Wilbur, you copy? Got a walker who needs wings, over. Roger! Ready when you are!<100:3:cd02><10:8:002…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
-    EventFlowSystemActor.SelectMysteryTourEventFlowSystemActor.SelectMysteryTour(0)
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(75)
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
-    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cMysteryTourIsland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
+    EventFlowSystemActor.SelectMysteryTour(0)
+    EventFlowSystemActor.BGMPropertyControl(75)
+    EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
+    EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
+    EventFlowSystemActor.SystemRequestChangeStage('cMysteryTourIsland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow Root():
     if System.EventFlags['cLand:VillageDaysCount'] >= 1:
@@ -405,9 +405,9 @@ flow Root():
         run AirportEnable_MovingFirstDay()
     else:
         # Hm…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:021_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:021_01', false)
         # Hang on a sec—how'd you get in here? Coulda swore I locked the front door… Eh, doesn't matter. We're still getting set up in here, so…there's no flig…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:021_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:021_02', false)
  
 flow SelDestWOticket_NoSpn():
     run Event74()
@@ -416,26 +416,26 @@ flow SelDestWOticket_NoSpn_MayDay():
     run Event289()
  
 flow SelDestinationWOticket():
-    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5851, 1):
+    if EventFlowSystemActor.HasTargetItem(5851, 1):
         # By the way, it looks like you've got a <item>Nook Miles Ticket on you, in case you feel like using that.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_02', false)
         run Dod_Go_Sel4B()
     else:
         run Dod_Go_Sel3B()
  
 flow SelDestinationWOticket_MayDay():
-    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5851, 1):
+    if EventFlowSystemActor.HasTargetItem(5851, 1):
         run Dod_Go_Sel5B_MayDay()
     else:
         run Dod_Go_Sel4B_MayDay()
  
 flow SelectIsland():
     # Roger!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005', false)
-    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']) and (System.EventFlags['cPlayer:GetMayDayTicket']) and (not System.EventFlags['cPlayer:UseMayDayTicket']):
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005', false)
+    if (EventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']) and (System.EventFlags['cPlayer:GetMayDayTicket']) and (not System.EventFlags['cPlayer:UseMayDayTicket']):
         if SubflowResults@2[3] == 0:
             # By the way, I got a limited-time-only May Day Ticket with your name on it here, so take advantage of it!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1300', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1300', false)
         if System.EventFlags['cPlayer:CommuneIslandAvailable']:
             if System.EventFlags['cPlayer:DodUseFirstFreeTour']:
                 run SelDestinationWOticket_MayDay()
@@ -447,7 +447,7 @@ flow SelectIsland():
                 run Dod_Go_Sel3B()
         elif System.EventFlags['cPlayer:DodUseFirstFreeTour']:
 entrypoint Event289:
-            if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5851, 1):
+            if EventFlowSystemActor.HasTargetItem(5851, 1):
                 run Sub_Event278()
             else:
                 run Dod_Go_Sel3B_MayDay()
@@ -465,7 +465,7 @@ entrypoint Event289:
                 run SelDestinationWOticket()
             elif System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']:
                 # By the way, I got a <item>Nook Miles Ticket with your name on it behind the desk here, so use that whenever.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_01', false)
                 run Dod_Go_Sel4B()
             elif System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
                 run SelDestinationWOticket()
@@ -473,15 +473,15 @@ entrypoint Event289:
                 run Dod_Go_Sel3B()
         elif System.EventFlags['cPlayer:DodUseFirstFreeTour']:
 entrypoint Event74:
-            if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5851, 1):
+            if EventFlowSystemActor.HasTargetItem(5851, 1):
                 # By the way, it looks like you've got a <item>Nook Miles Ticket on you, in case you feel like using that.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_02', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_02', false)
                 run Sub_Event113()
             else:
                 run Airport_DestinationSel_Pisland()
         elif System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']:
             # By the way, I got a <item>Nook Miles Ticket with your name on it behind the desk here, so use that whenever.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:005_01', false)
             run Sub_Event113()
         elif System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
             run SelDestWOticket_NoSpn()
@@ -489,7 +489,7 @@ entrypoint Event74:
             run Airport_DestinationSel_Pisland()
  
 flow SelectIsland_NoRoger():
-    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']) and (System.EventFlags['cPlayer:GetMayDayTicket']) and (not System.EventFlags['cPlayer:UseMayDayTicket']):
+    if (EventFlowSystemActor.TermEventNow('MayDay', false)) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']) and (System.EventFlags['cPlayer:GetMayDayTicket']) and (not System.EventFlags['cPlayer:UseMayDayTicket']):
         run ChkTourTicket()
         run ChkDestination()
         switch SubflowResults@4[1]:
@@ -516,8 +516,8 @@ flow SelectIsland_NoRoger():
  
 local flow Sub_Event113():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:006_01', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:006_01', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -527,18 +527,18 @@ local flow Sub_Event113():
  
 local flow Sub_Event123():
     # I'm ready to get you in the sky right this minute, but let's just check— you all packed? Tools all ready?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:036', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:036', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Mysterytour_Confirm()
         case 1:
             # Oh, you need to know what a <item>Nook Miles Ticket is good for? Friend, you've asked the right dodo.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:031_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:031_01', false)
             # The <item>Nook Miles Ticket is good for one Mystery Tour, a journey to the farthest reaches of the imagination! Could be anywhere from tiny islands t…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:031_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:031_02', false)
             # Aaaand that about sums up the epic thrill ride we call the Dodo Airlines Mystery Tour! So we can leave right now, if you got your tools ready and eve…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:032', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:032', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run Mysterytour_Confirm()
             else:
                 run Mysterytour_Cancel()
@@ -547,8 +547,8 @@ local flow Sub_Event123():
  
 local flow Sub_Event278():
     # So…just to get the paperwork all official, where didja want to go?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302_04', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1302_04', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run Airport_DestinationSel_Pisland()
         case 1:
@@ -559,40 +559,40 @@ local flow Sub_Event278():
             run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
  
 local flow Sub_grp_Event139():
-    if EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+    if EventFlowSystemActor.IsSharePlay(0):
         # Hey, look—I've been yappin' my beak for a while and you're busy playin' with your human friends. Sorry. But if you wanna visit another island or invi…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_04', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_03_04', false)
     else:
         if not System.EventFlags['cPlayer:DodHeardAboutMayDayTravelTicket']:
             run MaydayTicketExplatinAtFirstTalk()
         if System.EventFlags['cPlayer:UnlockWherearen']:
             if not System.EventFlags['cPlayer:DodSelectWherearen1st']:
                 # Oh, that's right! Also…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1006', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1006', false)
                 System.EventFlags['cPlayer:DodSelectWherearenFromBeginning'] = true
 entrypoint Event368:
                 if System.EventFlags['cPlayer:WHEREAREN_OtgVisitThisIsland']:
                     # President Nook told me you're working at Miss Lottie's place, PLAYER. Exciting! Whenever you need to head over there, tell me, "I want to go to work."
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1007', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1007', false)
                 else:
                     # So, anytime you want to head to Miss Lottie's office, just tell me, "I want to go to work." We'll get you there lickety-split! Dodo Airlines: because…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1008', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1008', false)
                 System.EventFlags['cPlayer:DodSelectWherearen1st'] = true
             run ChkEmphasizeWherearen()
             if SubflowResults@2[4] == 0:
                 # …So. <50:3>PLAYER. You got anything to tell me?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_05', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_05', false)
             else:
                 # …So. <50:3>PLAYER. You got anything to tell me?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_06', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_06', false)
             run FirstSel4B()
         else:
             # …So. <50:3>PLAYER. You got anything to tell me?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_04', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:001_04', false)
             run FirstSel3B()
  
 local flow Sub_grp_Event144():
-    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(5851, 1):
+    if EventFlowSystemActor.HasTargetItem(5851, 1):
         SubflowResults[0] = 2
  
 local flow Sub_grp_Event311():
@@ -607,22 +607,22 @@ local flow Sub_grp_Event48():
  
 flow UGCNoticeChk_Host():
     # Ah, you wanna have company over? Sounds like fun!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:090_02', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:090_02', false)
     run Cmn_UGC_Notification()
     run SNPC_dod_AirPort::EntryPoint_Hostrun SNPC_dod_AirPort::EntryPoint_Host()
  
 flow UGCNoticeChk_Visitor():
     # Ah! So you wanna go visit somebody on another island?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:090_01', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:090_01', false)
     run Cmn_UGC_Notification()
     run SNPC_dod_AirPort::EntryPoint_Visitorrun SNPC_dod_AirPort::EntryPoint_Visitor()
  
 flow v200_ChkCommuneDonguri():
-    if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-        if EventFlowSystemActor.EnvCheckBetweenDateEventFlowSystemActor.EnvCheckBetweenDate(9, 1, 12, 10, 'cLastGrowUpTime'):
+    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+        if EventFlowSystemActor.EnvCheckBetweenDate(9, 1, 12, 10, 'cLastGrowUpTime'):
             run Sub_grp_Event311()
     else:
-        if EventFlowSystemActor.EnvCheckBetweenDateEventFlowSystemActor.EnvCheckBetweenDate(3, 1, 6, 10, 'cLastGrowUpTime'):
+        if EventFlowSystemActor.EnvCheckBetweenDate(3, 1, 6, 10, 'cLastGrowUpTime'):
             run Sub_grp_Event311()
  
 flow v200_ChkCommuneExpand():

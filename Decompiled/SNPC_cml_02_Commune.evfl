@@ -1,99 +1,99 @@
 flow Cmi_Commune_Again_NoMoney():
     # Is your wallet now content, or shall you look at additional wares?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:015', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:015', false)
 entrypoint Event20:
-    EventFlowSystemActor.UIShopBuyReselectionAppearEventFlowSystemActor.UIShopBuyReselectionAppear()
+    EventFlowSystemActor.UIShopBuyReselectionAppear()
     run Event14()
  
 flow Cml_Commune_Again_Buy():
     # Is your wallet now content, or shall you make additional purchases?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:013', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:013', false)
     run Event20()
  
 flow Cml_Commune_Again_Look():
     # I see. Your Bells do not ring for my wares today.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:014', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:014', false)
     run Cmi_Commune_Again_NoMoney()
  
 flow Root():
-    EventFlowSystemActor.CommuneTrailerSetCullingEventFlowSystemActor.CommuneTrailerSetCulling('bpt', 'cON')
+    EventFlowSystemActor.CommuneTrailerSetCulling('bpt', 'cON')
     run cml_Main()
-    EventFlowSystemActor.CommuneTrailerSetCullingEventFlowSystemActor.CommuneTrailerSetCulling('bpt', 'cOFF')
-    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
+    EventFlowSystemActor.CommuneTrailerSetCulling('bpt', 'cOFF')
+    EventFlowSystemActor.StoreNormalCamera(false, '')
  
 local flow Sub_Event8():
     System.EventFlags['cPlayer:CmlCommuneTalkBefore'] = true
     if System.EventFlags['cPlayer:TalkCmlCommuneOpenEvent']:
         # Hello. You may already know my name, but I will be telling you again. You are calling me Saharah.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:003', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:003', false)
     else:
         # Hello. You are calling me Saharah, for it is the name I have carried for as long as I have carried these rugs.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:002', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:002', false)
     # I bring these rugs from my home, which is far, to help you decorate your home, which is…also far. You will buy my rugs at this shop, which I have est…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:004', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:004', false)
  
 flow cml_Main():
-    if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, true) == 0:
+    if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) == 0:
         if System.EventFlags['cPlayer:RollanTalkBeforeFlag']:
             if not System.EventFlags['cPlayer:CmlCommuneTalkBefore']:
                 run Sub_Event8()
             elif System.EventFlags['cPlayer:CmlCommuneBuyToday']:
                 # Again I greet you! Do you require the buying of more? Consider these fine rugs, wallpapers, and floorings.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:005', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:005', false)
             else:
                 # Again hello! Did you require rugs for your naked floors? I have mysterious wallpaper and flooring as well.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:006', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:006', false)
         else:
             System.EventFlags['cPlayer:RollanTalkBeforeFlag'] = true
             run Sub_Event8()
         fork:
             branch:
-                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+                EventFlowSystemActor.UIMoneyAppear()
             branch:
-                EventFlowSystemActor@UI.UIShopBuyAppearEventFlowSystemActor@UI.UIShopBuyAppear('cCommuneIslandInterior')
+                EventFlowSystemActor@UI.UIShopBuyAppear('cCommuneIslandInterior')
 entrypoint Event14:
-        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cCommuneCmlItemPrice', 0)
+        if EventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+            EventFlowSystemActor.SetTagFromUIResult('cCommuneCmlItemPrice', 0)
             # The price is <90:26:0000> for <50:1><125:0:0000>. Is this a deal?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:009', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:009', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() != 0:
                 run Cml_Commune_Again_Look()
-            elif not EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
+            elif not EventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
                 # Ah, greatest of tragedies! Your pockets are too full for new things to be within them! Speak to me again when your pockets contain more emptiness.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:010', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:010', false)
                 fork:
                     branch:
-                        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                        EventFlowSystemActor.UIMoneyDisappear()
                     branch:
-                        EventFlowSystemActor@msg.MessageSuspendEventFlowSystemActor@msg.MessageSuspend()
+                        EventFlowSystemActor@msg.MessageSuspend()
                     branch:
-                        EventFlowSystemActor@UI.UIShopBuyDisappearEventFlowSystemActor@UI.UIShopBuyDisappear()
-            elif MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.2000000476837158):
+                        EventFlowSystemActor@UI.UIShopBuyDisappear()
+            elif MainNpc.ShopHasBellCount(1.2000000476837158):
                 # Now please I will accept the money-payment. Yes, thank you.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:012', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:012', true)
                 run Demo_Common::Demo_Cmn_Shoppingrun Demo_Common::Demo_Cmn_Shopping()
                 # RANDOM: You will like the item. I will like the… // When a customer smiles, my heart and pu… // Please enjoy your purchase as long as y…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:016', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:016', true)
                 System.EventFlags['cPlayer:CmlCommuneBuyToday'] = true
                 run Cml_Commune_Again_Buy()
             else:
                 # Ah, now I must speak the awk-words! Your Bells are not enough in quantity! For these wares of happiness and mystery, I require <90:26:0000>.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:011', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:011', false)
                 run Cmi_Commune_Again_NoMoney()
         else:
             fork:
                 branch:
-                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                    EventFlowSystemActor.UIMoneyDisappear()
                 branch:
-                    EventFlowSystemActor@UI.UIShopBuyDisappearEventFlowSystemActor@UI.UIShopBuyDisappear()
+                    EventFlowSystemActor@UI.UIShopBuyDisappear()
             if System.EventFlags['cPlayer:CmlCommuneBuyToday']:
                 # May our wallets find togetherness in the future. I will see you again.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:008', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:008', false)
             else:
                 # I see. Your Bells do not ring for my wares today. Perhaps a future time, yes.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:007', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:007', false)
     else:
         # It is unfortunate, but today my shop is already closed. Please return again. But at an earlier time.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:001', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/cml/SP_cml_02_Commune:001', false)
  

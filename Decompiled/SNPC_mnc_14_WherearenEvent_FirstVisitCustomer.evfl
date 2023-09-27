@@ -1,150 +1,150 @@
 flow AfterMoveToRoom():
-    MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
-    MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, true)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, true)
-    Player.TurnBodyPlayer.TurnBody(1, 0.0)
-    SubNpc.SetNpcNameSubNpc.SetNpcName(0, 0)
+    MainNpc.TurnBody(1, 0.0)
+    MainNpc.TurnNeck(1, false)
+    MainNpc.NpcAISetting(2, true)
+    MainNpc.NpcAISetting(3, true)
+    Player.TurnBody(1, 0.0)
+    SubNpc.SetNpcName(0, 0)
     # I have all the time in the world, so just shutterbug to your heart's content, <110:6>.
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:065', true)
-    MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:065', true)
+    MainNpc.TurnNeck(10, false)
     # Hey, since we're all here, what if we got some pictures with <115:9:cd00> in there?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:066', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:066', false)
     fork:
         branch:
             # I wouldn't mind at all! I've done my share of modeling, you know. The camera and I get along just fine! And feel free to direct me too. If you want m…
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:067', true)
+            SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:067', true)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+            EventFlowSystemActor.WaitFrame(15)
+            MainNpc.TurnNeck(1, false)
     # Thank you!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:068', false)
-    MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:068', false)
+    MainNpc.TurnNeck(10, false)
     fork:
         branch:
             # Alright! Get us some great pictures, PLAYER! You can do it! I'll be waiting outside, so when you want to head back, say goodbye to the client, OK?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:069', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:069', true)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeckPlayer.TurnNeck(0, false)
+            EventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeck(0, false)
     run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-    MainNpc.NpcSetVisibleActionMainNpc.NpcSetVisibleAction(false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    MainNpc.NpcSetVisibleAction(false)
+    EventFlowSystemActor.WaitFrame(20)
     run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
-    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_WherearenUIDialog', 'NoticeAboutPhotoRegistration', true, false, false)
+    EventFlowSystemActor.ReserveSystemFlowDemo('System_WherearenUIDialog', 'NoticeAboutPhotoRegistration', true, false, false)
  
 flow AfterMoveToRoom_Init():
-    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('-Wherearen:Customer', 1)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+    MainNpc.NpcAITalkSubCastEntry('-Wherearen:Customer', 1)
+    MainNpc.NpcAISetting(2, false)
+    MainNpc.NpcAISetting(3, false)
  
 flow CancelConstructionPortfolio():
     # Not quite ready yet, eh? Well, you know where I'll be.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:053', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:053', true)
  
 flow Departure():
-    EventFlowSystemActor.WherearenSetFirstCustomerInfoEventFlowSystemActor.WherearenSetFirstCustomerInfo(0)
+    EventFlowSystemActor.WherearenSetFirstCustomerInfo(0)
     if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerArrivalTalk']:
         # Oh, you were in the middle of taking pics for the Happy Home Network, right? Do you want to go straight back to <115:9:cd00>'s vacation home?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:056', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:056', false)
     else:
         if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerMncTalk']:
             # Oho! Ready to depart? We're heading to <115:1:cd00>'s, right?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:055', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:055', false)
         else:
             System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerMncTalk'] = true
             # Hey, hey there! You need a ride to <115:9:cd00>'s, right? Lottie caught me up. Shall we go right now?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:051', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:051', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
         run CancelConstructionPortfolio()
-    elif EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
+    elif EventFlowSystemActor.IsWherearenWorkMode():
         if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerHowToGo']:
             # OK! Just pick <115:9:cd00>'s vacation home and say "Visit." I mean, I know where we're going, but hey, it's good practice!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:057', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:057', true)
         else:
             # OK, leave it to me! Hey, you're probably gonna be visiting our clients' vacation homes more and more, right? Anytime you want, you come see me, alrig…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:052', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:052', true)
             System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerHowToGo'] = true
         run SNPC_mnc_01_Wherearen::OpenResortPlannerrun SNPC_mnc_01_Wherearen::OpenResortPlanner()
     else:
         # Wait… What's with the normal duds?! You can't get to work without a proper uniform! Go see Lottie first!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:054', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:054', true)
  
 flow First_RevisitEnter():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
-    EventFlowSystemActor.CollisionWherearenAirWallEventFlowSystemActor.CollisionWherearenAirWall(false)
+    MainNpc.NpcAISetting(4, false)
+    EventFlowSystemActor.CollisionWherearenAirWall(false)
     fork:
         branch:
-            Player.PlayerDemoMovePlayer.PlayerDemoMove('cForward', 9)
-            Player.TurnBodyPlayer.TurnBody(11, 0.0)
-            Player.TurnNeckPlayer.TurnNeck(1, false)
+            Player.PlayerDemoMove('cForward', 9)
+            Player.TurnBody(11, 0.0)
+            Player.TurnNeck(1, false)
         branch:
-            MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
-            MainNpc.NpcMoveDirectionMainNpc.NpcMoveDirection(180.0, 45.0, 1, false, true)
-            MainNpc.TurnBodyMainNpc.TurnBody(11, 0.0)
-            MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+            MainNpc.TurnNeck(11, false)
+            MainNpc.NpcMoveDirection(180.0, 45.0, 1, false, true)
+            MainNpc.TurnBody(11, 0.0)
+            MainNpc.TurnNeck(1, false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
-            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Aha', true, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+            EventFlowSystemActor.WaitFrame(40)
+            SubNpc.CharacterEmoticonAction('Aha', true, '', 0, false)
+            EventFlowSystemActor.WaitFrame(10)
     fork:
         branch:
-            EventFlowSystemActor@player.WaitFrameEventFlowSystemActor@player.WaitFrame(15)
-            Player.PlayerDemoMovePlayer.PlayerDemoMove('cForward', 1)
+            EventFlowSystemActor@player.WaitFrame(15)
+            Player.PlayerDemoMove('cForward', 1)
         branch:
-            EventFlowSystemActor@mnc.WaitFrameEventFlowSystemActor@mnc.WaitFrame(15)
-            MainNpc.NpcMoveDirectionMainNpc.NpcMoveDirection(180.0, 5.0, 0, false, true)
+            EventFlowSystemActor@mnc.WaitFrame(15)
+            MainNpc.NpcMoveDirection(180.0, 5.0, 0, false, true)
         branch:
-            SubNpc.NpcMoveDirectionSubNpc.NpcMoveDirection(0.0, 35.0, 1, false, true)
+            SubNpc.NpcMoveDirection(0.0, 35.0, 1, false, true)
         branch:
-            EventFlowSystemActor@housemate.WaitFrameEventFlowSystemActor@housemate.WaitFrame(30)
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('LandingTalk', 'cDefault', 'Place:SafeArea', false, false, false, 0)
-    Player.TurnBodyPlayer.TurnBody(1, 0.0)
-    Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
-    EventFlowSystemActor.CollisionWherearenAirWallEventFlowSystemActor.CollisionWherearenAirWall(true)
-    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cLeaveWherearenGarden', false)
+            EventFlowSystemActor@housemate.WaitFrame(30)
+            EventFlowSystemActor.CameraSetDemoParam('LandingTalk', 'cDefault', 'Place:SafeArea', false, false, false, 0)
+    Player.TurnBody(1, 0.0)
+    Player.PlayerWaitTurn()
+    EventFlowSystemActor.CollisionWherearenAirWall(true)
+    MainNpc.NpcAISetRequestSpeakFunc('cLeaveWherearenGarden', false)
  
 flow ForceTalkBridge():
-    EventFlowSystemActor.WherearenSetFirstCustomerInfoEventFlowSystemActor.WherearenSetFirstCustomerInfo(0)
-    EventFlowSystemActor.WherearenResetVisitInfoEventFlowSystemActor.WherearenResetVisitInfo()
+    EventFlowSystemActor.WherearenSetFirstCustomerInfo(0)
+    EventFlowSystemActor.WherearenResetVisitInfo()
     # Hey, hey there! You're heading to <115:9:cd00>'s vacation place, right? Go tell Lottie that you're clocking in, then come back to me here, OK?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:084', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:084', true)
  
 flow TalkInGarden():
     # RANDOM: When you get a good pic, close the Came… // When you're done taking pictures, let's…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:081', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:081', true)
  
 flow VisitTalk_FristVisitCustomer():
     if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerArrivalTalk']:
         run NNPC_Spot_WherearenGarden::EnterGardenWithoutCustomerrun NNPC_Spot_WherearenGarden::EnterGardenWithoutCustomer()
         # OK, go take some amazing photos! And you can check your pics in the Happy Home Network app with the  Button. When you're done snapping shots and you…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:083', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:083', true)
     else:
         System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerArrivalTalk'] = true
         run First_RevisitEnter()
-        MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
-        SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
-        Player.TurnNeckPlayer.TurnNeck(1, false)
+        MainNpc.TurnNeck(1, false)
+        SubNpc.TurnNeck(10, false)
+        Player.TurnNeck(1, false)
         # Welcome! Lottie told me to expect you, <110:6>! I was thrilled when she said you'd be coming by. I wanted so much to thank you again. Once I actually…
-        SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:061', true)
-        switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:061', true)
+        switch EventFlowSystemActor.GeneralTalkChoice2():
             case 0, 1:
-                MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+                MainNpc.TurnNeck(10, false)
                 # Hear that, PLAYER? That there is a fan of your work!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:062', false)
-                MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:062', false)
+                MainNpc.TurnNeck(1, false)
                 fork:
                     branch:
                         # Now, if you have any problems at all, please don't hesitate to check in with us at the office. If you want to redecorate or move, we are here to help!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:063', true)
+                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:063', true)
                     branch:
-                        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-                        SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+                        EventFlowSystemActor.WaitFrame(15)
+                        SubNpc.TurnNeck(0, false)
                 # Certainly! If and when I need a hand, I'll definitely reach out. That said, I can't really imagine being dissatisfied with anything here!
-                SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:064', false)
-                SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+                SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:064', false)
+                SubNpc.TurnNeck(10, false)
                 # But I must say, if you have any good ideas about remodeling or moving, please do tell me! By the by, you two came to take pictures, yes? Take as many…
-                SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:064_01', true)
+                SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:064_01', true)
                 System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_House'] = true
-                EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandFirstVisitNpcHouse', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+                EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandFirstVisitNpcHouse', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
  

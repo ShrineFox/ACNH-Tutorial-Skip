@@ -1,45 +1,45 @@
 flow DepartureWherearen():
-    EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
+    EventFlowSystemActor.MiniGameSilentCancel()
     if System.EventFlags['cPlayer:EquipLicenseHelmet']:
         run SNPC_dod_AirPort::LandMakingRemove_Soloplayrun SNPC_dod_AirPort::LandMakingRemove_Soloplay()
     # <10:12><100:3:cd01>Dodo One, this is Dodo Tower—Wilbur, you copy? Got a walker who needs wings, over. Roger! Ready when you are!<100:3:cd02><10:8:002…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
     run Dod_GoToWherearen()
  
 flow Dod_GoToWherearen():
-    Player.PlayerChangeDemoStatePlayer.PlayerChangeDemoState('cReserveNextSceneStartToolOff')
+    Player.PlayerChangeDemoState('cReserveNextSceneStartToolOff')
     System.EventFlags['cPlayer:DodSingleFlightToday'] = true
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(143)
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(159)
-    EventFlowSystemActor.StartMeasurePlayTimeEventFlowSystemActor.StartMeasurePlayTime('cWherearenIslands')
+    EventFlowSystemActor.BGMPropertyControl(143)
+    EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
+    EventFlowSystemActor.BGMPropertyControl(159)
+    EventFlowSystemActor.StartMeasurePlayTime('cWherearenIslands')
     if System.EventFlags['cPlayer:WHEREAREN_VisitDone']:
-        EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
-        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenGrowUp', 'cDALWherearenWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+        EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:doc', '', false)
+        EventFlowSystemActor.SystemRequestChangeStage('cWherearenGrowUp', 'cDALWherearenWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
     else:
         System.EventFlags['cPlayer:WHEREAREN_VisitDone'] = true
-        EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(8)
-        EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('Demo_Wherearen_Op', 'OpDemo_Introduction', false, false, false)
-        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOpeningMessage', 'cDALWherearenWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+        EventFlowSystemActor.SoundSceneChangeFadeOutDucking(8)
+        EventFlowSystemActor.ReserveSystemFlowDemo('Demo_Wherearen_Op', 'OpDemo_Introduction', false, false, false)
+        EventFlowSystemActor.SystemRequestChangeStage('cWherearenOpeningMessage', 'cDALWherearenWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow GoToWherearen():
-    if EventFlowSystemActor.IsWherearenAocAvailableEventFlowSystemActor.IsWherearenAocAvailable():
+    if EventFlowSystemActor.IsWherearenAocAvailable():
         # Ah, so you're going to work! Roger that!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1001', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1001', false)
         # I can set you up right now, but are you ready? All packed and stuff?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1002', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1002', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # «Alright!» Let's get you airborne.<10:8:003c0000> 
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', true)
-            if EventFlowSystemActor.SaveHasWherearenIslandsEventFlowSystemActor.SaveHasWherearenIslands():
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', true)
+            if EventFlowSystemActor.SaveHasWherearenIslands():
                 run DepartureWherearen()
-            elif EventFlowSystemActor.SaveExtensionCheckEventFlowSystemActor.SaveExtensionCheck('cWherearenIslands'):
+            elif EventFlowSystemActor.SaveExtensionCheck('cWherearenIslands'):
                 # Expanding save data for the downloadable content.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4003', false)
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-                EventFlowSystemActor.SaveExtendEventFlowSystemActor.SaveExtend('cWherearenIslands')
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                if EventFlowSystemActor.SaveExtensionIsSuccessEventFlowSystemActor.SaveExtensionIsSuccess():
+                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4003', false)
+                EventFlowSystemActor.WaitFrame(30)
+                EventFlowSystemActor.SaveExtend('cWherearenIslands')
+                EventFlowSystemActor.MessageSuspend()
+                if EventFlowSystemActor.SaveExtensionIsSuccess():
                     run DepartureWherearen()
                 else:
                     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
@@ -47,16 +47,16 @@ flow GoToWherearen():
                 run DepartureWherearen()
         else:
             # Ah, gotcha. Well, hope to see you flying with us another time. Toodles!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:903', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:903', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
     else:
         run NoAoC()
  
 flow NoAoC():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.UIVersionGuideAppearEventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
     # To play the content past this point, you must have the paid downloadable content for this software, Animal Crossing: New Horizons – Happy Home Paradi…
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4000', true)
-    EventFlowSystemActor.UIVersionGuideDisappearEventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4000', true)
+    EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  

@@ -1,13 +1,13 @@
 flow ForcePurgeAttention():
     if not System.EventFlags['cPlayer:OhirakiRollbackTutorial']:
         # The session was forcibly ended because a visitor or host didn't end a conversation or close a window within a set amount of time. Your save data will…
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0805', true)
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0805', true)
         System.EventFlags['cPlayer:OhirakiRollbackTutorial'] = true
  
 flow MultiplaySave():
-    switch EventFlowSystemActor.NetDemoTypeEventFlowSystemActor.NetDemoType():
+    switch EventFlowSystemActor.NetDemoType():
         case 1:
-            if not EventFlowSystemActor.NetIsDemoPlayerEventFlowSystemActor.NetIsDemoPlayer():
+            if not EventFlowSystemActor.NetIsDemoPlayer():
                 run Sub_Event5()
         case 2, 3:
             run Sub_Event5()
@@ -15,34 +15,34 @@ flow MultiplaySave():
             return
  
 local flow Sub_Event5():
-    EventFlowSystemActor.NetWaitDemoEventFlowSystemActor.NetWaitDemo('cStartSave')
-    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    EventFlowSystemActor.NetWaitDemo('cStartSave')
+    EventFlowSystemActor.MessageLockNext(1)
     # Saving. Do not touch .
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-    if EventFlowSystemActor.NetIsInviteFriendEventFlowSystemActor.NetIsInviteFriend():
-        EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cNet')
-        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(3):
-            EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cSaveFailed')
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+    if EventFlowSystemActor.NetIsInviteFriend():
+        EventFlowSystemActor.SaveSimpleSave('cNet')
+        if EventFlowSystemActor.CheckErrorType(3):
+            EventFlowSystemActor.NetDemoNextStep('cSaveFailed')
         else:
-            EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cSaveSuccess')
+            EventFlowSystemActor.NetDemoNextStep('cSaveSuccess')
     else:
-        EventFlowSystemActor.NetWaitDemoEventFlowSystemActor.NetWaitDemo('cEndSave')
-    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.NetDemoNextStepEventFlowSystemActor.NetDemoNextStep('cSaveDone')
+        EventFlowSystemActor.NetWaitDemo('cEndSave')
+    EventFlowSystemActor.MessageUnlockNext()
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.NetDemoNextStep('cSaveDone')
  
 flow VisitEndMileGet():
-    EventFlowSystemActor.WaitFaderSleepEventFlowSystemActor.WaitFaderSleep()
-    EventFlowSystemActor.WaitSpecialDemoEnterEventFlowSystemActor.WaitSpecialDemoEnter('cTravelReturn')
+    EventFlowSystemActor.WaitFaderSleep()
+    EventFlowSystemActor.WaitSpecialDemoEnter('cTravelReturn')
     if System.EventFlags['cPlayer:VisitFriendMileageGet']:
         System.EventFlags['cPlayer:VisitFriendMileageGet'] = false
         if not System.EventFlags['cPlayer:DodTodayFlightMileGet']:
-            EventFlowSystemActor.UISonkatsuPointAppearEventFlowSystemActor.UISonkatsuPointAppear()
-            if EventFlowSystemActor.IsDifferentAreaVisitEventFlowSystemActor.IsDifferentAreaVisit():
-                EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(1200, false)
+            EventFlowSystemActor.UISonkatsuPointAppear()
+            if EventFlowSystemActor.IsDifferentAreaVisit():
+                EventFlowSystemActor.LifeSupportPointCountDown(1200, false)
             else:
-                EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(800, false)
+                EventFlowSystemActor.LifeSupportPointCountDown(800, false)
             System.EventFlags['cPlayer:DodTodayFlightMileGet'] = true
-            EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
-    EventFlowSystemActor.SpecialDemoEndEventFlowSystemActor.SpecialDemoEnd('cReturnMulti')
+            EventFlowSystemActor.UISonkatsuPointDisappear()
+    EventFlowSystemActor.SpecialDemoEnd('cReturnMulti')
  

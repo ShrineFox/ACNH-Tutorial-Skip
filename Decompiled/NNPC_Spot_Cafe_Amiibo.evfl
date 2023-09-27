@@ -1,42 +1,42 @@
 flow NNPC_TYPE_CHK():
-    if not MainNpc.IsVillagerNpcMainNpc.IsVillagerNpc():
-        if MainNpc.IsLivedSameNpcMainNpc.IsLivedSameNpc() == 0:
+    if not MainNpc.IsVillagerNpc():
+        if MainNpc.IsLivedSameNpc() == 0:
             SubflowResults[0] = 3
-        elif MainNpc.IsAcquaintedWithSameNpcMainNpc.IsAcquaintedWithSameNpc():
+        elif MainNpc.IsAcquaintedWithSameNpc():
             SubflowResults[0] = 1
         else:
             SubflowResults[0] = 2
  
 flow Root():
     run NNPC_TYPE_CHK()
-    if MainNpc.MuseumCafeNpcTalkCountMainNpc.MuseumCafeNpcTalkCount() == 0:
-        MainNpc.AddMuseumCafeTalkCountMainNpc.AddMuseumCafeTalkCount()
-        if MainNpc.NpcMuseumCafeCallCountMainNpc.NpcMuseumCafeCallCount() != 0:
+    if MainNpc.MuseumCafeNpcTalkCount() == 0:
+        MainNpc.AddMuseumCafeTalkCount()
+        if MainNpc.NpcMuseumCafeCallCount() != 0:
             # You're real good at inviting me here, you know that, <110:3>?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:011', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:011', false)
         elif SubflowResults@4[0] in (0, 1):
             # RANDOM: I love being invited places. Thanks! // I got so excited by your invite that I … // Coffee! Coffee! I love coffee! Thanks f…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:001', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:001', false)
         else:
             # RANDOM: Hi! Your invite was the best surprise s… // A huh huh huh! You're the one who invit… // Thanks for inviting me! This place is s…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:003', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:003', false)
     else:
-        MainNpc.AddMuseumCafeTalkCountMainNpc.AddMuseumCafeTalkCount()
-        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        MainNpc.AddMuseumCafeTalkCount()
+        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
             # RANDOM: How does drinking coffee with pals make… // What kinds of stuff do you like to put … // They only have coffee here, but I reall… // It's so quiet in here… If I had any sec… // Getting invited to have coffee is almos…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:101', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:101', false)
         else:
             switch SubflowResults@4[0]:
                 case 0:
                     # RANDOM: Brewster asked me to tell my friends ab… // I get all happy and bouncy when I drink… // I feel so grown-up drinking coffee in a…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:201', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:201', false)
                 case 1:
                     # RANDOM: <10:10><10:12>COFFEEEE! <10:9>OK, now w… // I'm so glad I got to have coffee with y… // Chatting with you brings back so many m…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:301', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:301', false)
                 case 2:
                     # RANDOM: A huh huh! Does inviting me for coffee … // It's real weird being back here. Not ex… // Wow… I still can't believe I'm back on …
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:401', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:401', false)
                 case 3:
                     # RANDOM: This island is super lucky. It's got a … // This coffee is so yum-yum-yummy! I wann… // At first I was real jealous of this caf… // I'm always real nervous whenever I get … // Know what's weird? I was kiiiiiinda alr…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:501', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Cafe_Amiibo:501', false)
  

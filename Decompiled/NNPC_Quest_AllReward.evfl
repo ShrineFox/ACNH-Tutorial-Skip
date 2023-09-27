@@ -1,15 +1,15 @@
 flow Gift():
-    MainNpc.NpcDecideVisitPresentMainNpc.NpcDecideVisitPresent(3, 0)
-    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
-    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(9, true)
-    MainNpc.SetItemNameMainNpc.SetItemName(9, 4, 0)
+    MainNpc.NpcDecideVisitPresent(3, 0)
+    MainNpc.NpcAddFriendship(1)
+    MainNpc.SetDeliveryItem(9, true)
+    MainNpc.SetItemName(9, 4, 0)
  
 flow Good():
-    switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+    switch MainNpc.CheckNpcFavorLevel():
         case 0, 1:
             run Lvel3()
         case 2, 3:
-            if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+            if EventFlowSystemActor.PercentChoice(50):
                 run Lvel3()
             else:
                 run Lvel2()
@@ -17,35 +17,35 @@ flow Good():
             run Lvel2()
  
 flow Level1():
-    MainNpc.NpcDecideGeneralQuestRewardMainNpc.NpcDecideGeneralQuestReward(0, 2)
-    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+    MainNpc.NpcDecideGeneralQuestReward(0, 2)
+    MainNpc.NpcAddFriendship(1)
     run Event38()
  
 flow Lvel2():
-    MainNpc.NpcDecideGeneralQuestRewardMainNpc.NpcDecideGeneralQuestReward(0, 1)
-    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(2)
+    MainNpc.NpcDecideGeneralQuestReward(0, 1)
+    MainNpc.NpcAddFriendship(2)
     run Event38()
  
 flow Lvel3():
-    MainNpc.NpcDecideGeneralQuestRewardMainNpc.NpcDecideGeneralQuestReward(0, 0)
-    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(3)
+    MainNpc.NpcDecideGeneralQuestReward(0, 0)
+    MainNpc.NpcAddFriendship(3)
 entrypoint Event38:
-    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
-    MainNpc.SetItemNameMainNpc.SetItemName(1, 4, 0)
-    MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(4)
+    MainNpc.SetDeliveryItem(1, true)
+    MainNpc.SetItemName(1, 4, 0)
+    MainNpc.RegistToReleaseItemList(4)
  
 flow Music():
-    MainNpc.NpcDecideVisitPresentMainNpc.NpcDecideVisitPresent(3, 1)
-    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(3)
-    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(9, true)
-    MainNpc.SetItemNameMainNpc.SetItemName(9, 0, 0)
+    MainNpc.NpcDecideVisitPresent(3, 1)
+    MainNpc.NpcAddFriendship(3)
+    MainNpc.SetDeliveryItem(9, true)
+    MainNpc.SetItemName(9, 0, 0)
  
 flow Normal():
-    switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+    switch MainNpc.CheckNpcFavorLevel():
         case 0, 1:
             run Lvel2()
         case 2, 3:
-            if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+            if EventFlowSystemActor.PercentChoice(50):
                 run Lvel2()
             else:
                 run Level1()
@@ -56,9 +56,9 @@ flow Root():
     if MainNpc.EventFlags['cNpcMemory:ApproachQuestOrdered']:
         run Good()
     else:
-        switch MainNpc.NpcHaveQuestTypeMainNpc.NpcHaveQuestType(''):
+        switch MainNpc.NpcHaveQuestType(''):
             case 1:
-                if (MainNpc.NpcCheckCatchQuestTypeMainNpc.NpcCheckCatchQuestType() in (0, 2)) and (EventFlowSystemActor.UICheckSelectedItemPriceEventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 8000):
+                if (MainNpc.NpcCheckCatchQuestType() in (0, 2)) and (EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 8000):
                     run Normal()
                 else:
                     run Good()
@@ -68,17 +68,17 @@ flow Root():
                 else:
                     run Good()
             case 4:
-                if MainNpc.NpcTreasureQuestDifficultyMainNpc.NpcTreasureQuestDifficulty() == 0:
+                if MainNpc.NpcTreasureQuestDifficulty() == 0:
                     run Normal()
                 else:
                     run Good()
             case 5:
-                if MainNpc.SystemVisitQuestKindMainNpc.SystemVisitQuestKind('cNpc'):
+                if MainNpc.SystemVisitQuestKind('cNpc'):
                     run Lvel3()
                 else:
                     run VisitNow()
             case 6:
-                if MainNpc.SystemVisitQuestKindMainNpc.SystemVisitQuestKind('cPlayer'):
+                if MainNpc.SystemVisitQuestKind('cPlayer'):
                     run Lvel3()
                 else:
                     run VisitNow()
@@ -91,7 +91,7 @@ flow Root():
                 return
  
 flow VisitNow():
-    if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+    if EventFlowSystemActor.RandomChoice2(2) == 0:
         run Level1()
     else:
         run Gift()

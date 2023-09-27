@@ -1,61 +1,61 @@
 flow EnterFacility():
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-    if EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cTailor'):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cTailor')
-        if (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3)):
+    MainNpc.TurnBody(10, 0.0)
+    if EventFlowSystemActor.WherearenExistFacilityName('cTailor'):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cTailor')
+        if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3)):
             # We've got some neat music-fest stuff at <150:3:cd00>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:094', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:094', false)
         else:
             # Hiya! We've got ALL the latest and the goodest waiting just for you here at <150:3:cd00>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:091', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:091', false)
     else:
-        if (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3)):
+        if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3)):
             # Hi! Today we got some items that'd be real good for the music fest!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:095', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:095', false)
         else:
             # Welcome! Thanks for coming to this place today!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:092', false)
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        EventFlowSystemActor.StartMeasurePlayTimeEventFlowSystemActor.StartMeasurePlayTime('cWherearenInspect')
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:092', false)
+    if EventFlowSystemActor.IsInspectingWherearen():
+        EventFlowSystemActor.StartMeasurePlayTime('cWherearenInspect')
  
 flow ExitFacility():
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    MainNpc.TurnBody(10, 0.0)
     # Thanks a bunch, <110:6>! Come back again!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:093', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:093', false)
  
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cTailor')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cTailor')
+    if (EventFlowSystemActor.WherearenExistFacilityName('cTailor')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cTailor')
         # "We can make your clothes not lousy at <150:3:cd00>!" I came up with that motto.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:002', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:002', false)
         run KKFes_Chk()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
+    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+        MainNpc.TurnNeck(10, true)
         # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessageMainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # Hmm, it WOULD be a shame to miss out. Let's invite the customers and all go together!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:108', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:108', true)
             run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
         else:
             # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Root():
-    if not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if not EventFlowSystemActor.IsInspectingWherearen():
         run ShareHouseMate_Chk()
     run FacilityName_Chk()
     # RANDOM: Want some advice? I like stuff that's l… // Our store prides itself on stocking all… // We've got lots of great deals! Some of … // My recommendation is EVERYTHING! Everyt… // We've got a lot of good stuff here. I'm…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:001', true)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:001', true)
     run KKFes_Chk()
  
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    if EventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeck(10, false)
         run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  

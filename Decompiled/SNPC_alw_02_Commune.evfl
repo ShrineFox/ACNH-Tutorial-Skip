@@ -1,47 +1,47 @@
 flow Root():
-    SubNpc.NpcWaitTalkPrepareSubNpc.NpcWaitTalkPrepare()
-    SubNpc.TurnBodySubNpc.TurnBody(10, 0.0)
-    if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, true) != 0:
+    SubNpc.NpcWaitTalkPrepare()
+    SubNpc.TurnBody(10, 0.0)
+    if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) != 0:
         # I'm sorry—we're not open right now. Come see us again some other time!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:005', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:005', false)
     elif not System.EventFlags['cPlayer:AlwCommuneTalkBeforeFlag']:
         if System.EventFlags['cPlayer:TalkAlpCommuneOpenEvent']:
             # Oh! While I have the chance…I want to thank you, PLAYER! This trailer will be a wonderful way for my Cy-Guy to show off his skills. We're going to ha…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:011', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:011', false)
         else:
             if System.EventFlags['cPlayer:AlwJuneBrideTalkBeforeFlag']:
                 # Oh! Hello! You're our "June wedding" designer and photographer friend… PLAYER, right? Thanks again for your help with that. It's nice to see you agai…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:010', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:010', false)
             else:
                 # Oh, hello! I don't think the two of us have met yet. I'm Reese. I hope my husband Cyrus and I can count on your business!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:009', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:009', false)
         System.EventFlags['cPlayer:AlwCommuneTalkBeforeFlag'] = true
         System.EventFlags['cPlayer:DoneCommuneAlpOpenEvent'] = true
         System.EventFlags['cPlayer:AlwJuneBrideTalkBeforeFlag'] = true
     elif System.EventFlags['cPlayer:AlwCommuneTalkTodayFlag']:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # My Cy-Guy is so good at customizing things, and he gets better every day. We have a bright future ahead of us!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:006', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:006', false)
             case 1:
                 # Customizing a piece of furniture can give it a completely different vibe. If an item doesn't fit your larger design plan…just change its colors!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:007', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:007', false)
             case 2:
                 # I grow much more attached to furniture items after I customize them. Picking colors is fun! If you need a gift for a friend, they might love a custom…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:008', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:008', false)
     else:
-        switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+        switch EventFlowSystemActor.EnvTimeZone():
             case `05:00-07:59`, `08:00-11:59`:
                 # Well, good morning! If you have a customization request, just talk to my darling Cy-Guy.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:002', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:002', false)
             case `12:00-15:59`, `16:00-18:59`:
                 # Well, hello there! If you have a customization request, just talk to my darling Cy-Guy.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:003', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:003', false)
             case `19:00-23:59`, `00:00-04:59`:
                 # Well, good evening! If you have a customization request, just talk to my darling Cy-Guy.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:004', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alw/SP_alw_02_Commune:004', false)
         System.EventFlags['cPlayer:AlwCommuneTalkTodayFlag'] = true
  
 flow Root_Init():
-    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('alp', 1)
+    MainNpc.NpcAITalkSubCastEntry('alp', 1)
  

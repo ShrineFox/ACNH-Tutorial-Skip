@@ -1,221 +1,221 @@
 flow Draw_Lottery():
-    EventFlowSystemActor.SetLookAtTargetObjectEventFlowSystemActor.SetLookAtTargetObject('cCommuneFoxBox')
-    Player.TurnNeckPlayer.TurnNeck(13, false)
-    Player.TurnBodyPlayer.TurnBody(13, 0.0)
-    Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
-    Player.PlayerRequestSimplePlayer.PlayerRequestSimple('PlayerDrawLots', true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(35)
-    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    EventFlowSystemActor.SetLookAtTargetObject('cCommuneFoxBox')
+    Player.TurnNeck(13, false)
+    Player.TurnBody(13, 0.0)
+    Player.PlayerWaitTurn()
+    Player.PlayerRequestSimple('PlayerDrawLots', true)
+    EventFlowSystemActor.WaitFrame(35)
+    Player.TurnBody(0, 0.0)
  
 flow FoodComment():
     switch SubflowResults@3[2]:
         case 1:
             if not System.EventFlags['cPlayer:FoxCommuneTalkIceTodayFlag']:
                 # Oh! I'm legally obligated to warn you that there are no refunds if you trip and drop that. Watch your step!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:115', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:115', false)
                 System.EventFlags['cPlayer:FoxCommuneTalkIceTodayFlag'] = true
         case 2:
             if not System.EventFlags['cPlayer:FoxCommuneTalkJuiceTodayFlag']:
                 # Ah! The fine print. No refunds if you trip and spill that. But come back and try for another if you do!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:124', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:124', false)
                 System.EventFlags['cPlayer:FoxCommuneTalkJuiceTodayFlag'] = true
         default:
             return
  
 flow Item_Set():
-    if (EventFlowSystemActor.CatalogItemFromEventFlowSystemActor.CatalogItemFrom('FoxCommuneSubtool')) and (EventFlowSystemActor.CatalogItemFromEventFlowSystemActor.CatalogItemFrom('FoxCommuneBook')) and (EventFlowSystemActor.CatalogItemFromEventFlowSystemActor.CatalogItemFrom('FoxCommuneFood')):
+    if (EventFlowSystemActor.CatalogItemFrom('FoxCommuneSubtool')) and (EventFlowSystemActor.CatalogItemFrom('FoxCommuneBook')) and (EventFlowSystemActor.CatalogItemFrom('FoxCommuneFood')):
         run Sub_Event9()
     else:
         if not System.EventFlags['cPlayer:FoxCommunePlayLotteryTodayFlag']:
             System.EventFlags['cPlayer:FoxCommunePlayLotteryTodayFlag'] = true
-            MainNpc.DecideEventRewardMainNpc.DecideEventReward('cFoxCommune')
-        elif EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+            MainNpc.DecideEventReward('cFoxCommune')
+        elif EventFlowSystemActor.RandomChoice2(2) == 0:
             run Sub_Event9()
         else:
-            MainNpc.DecideEventRewardMainNpc.DecideEventReward('cFoxCommune')
-    MainNpc.SetItemNameMainNpc.SetItemName(1, 4, 0)
+            MainNpc.DecideEventReward('cFoxCommune')
+    MainNpc.SetItemName(1, 4, 0)
  
 flow PlayAgain():
-    if not EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(500):
+    if not EventFlowSystemActor.HasBellCount(500):
         # Now that's what I like to— Haaang on a minute! You don't have <90:20:0000>. Sorry, but even though you're like family, if I bend the rules for you, I…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:007', false)
-    elif EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:007', false)
+    elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         # Hold on! Your pockets are full. Like I said, EVERY ticket's a winner. You gotta have room for your prize!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:008', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:008', false)
     else:
-        EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(500, true)
+        EventFlowSystemActor.BellCountDown(500, true)
         System.EventFlags['cLifeSupportAchievement:HowmuchBuyItem'] += 500
         # Excellent! Wonderful! Now, if you please, reach your hand into the box and pull yourself a ticket!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:009', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:009', true)
         run Draw_Lottery()
         # What'll it be? What'll you win? Let's find out!<10:7:005a0000>
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:010', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:010', false)
         run Item_Set()
         run PrizeComment()
-        MainNpc.MessageSuspendMainNpc.MessageSuspend()
-        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, false)
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
-        MainNpc.SetEventRewardToPlayerBaggageMainNpc.SetEventRewardToPlayerBaggage('cFree')
+        MainNpc.MessageSuspend()
+        MainNpc.SetDeliveryItem(1, false)
+        MainNpc.NpcDelivery(1, 'Default')
+        MainNpc.SetEventRewardToPlayerBaggage('cFree')
         run FoodComment()
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # You're a natural at this! Why don't you pull another? Only <90:20:0000>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:011', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:011', false)
             case 1:
                 # You're on a roll. Care to keep it going for another <90:20:0000>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:012', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:012', false)
             case 2:
                 # Way to pull that ticket! How'd you like to pull another for <90:20:0000>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:013', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:013', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run PlayAgain()
         else:
             # Too excitin', huh? I understand! Well, thanks for playing, and come back again soon!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:005', false)
-            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:005', false)
+            EventFlowSystemActor.UIMoneyDisappear()
  
 flow PrizeComment():
     SubflowResults[2] = 0
-    if MainNpc.EventRewardItemMainNpc.EventRewardItem(14627):
+    if MainNpc.EventRewardItem(14627):
         # Big number 1!<100:3:cd03> Just like that, you've won a <item>peachy-pink folding fan! Congratulations!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:100', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(323):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:100', false)
+    elif MainNpc.EventRewardItem(323):
         # Very nice! It's number 2!<100:3:cd03> Here, your very own <item>sky-blue folding fan! Congratulations!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:101', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(321):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:101', false)
+    elif MainNpc.EventRewardItem(321):
         # One of my favorites, it's number 3!<100:3:cd03> You won a <item>grass-green folding fan! Congratulations!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:102', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(322):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:102', false)
+    elif MainNpc.EventRewardItem(322):
         # Big score! It's number 4!<100:3:cd03> I've got a <item>bitter-orange folding fan with your name on it! Congratulations!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:103', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14635):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:103', false)
+    elif MainNpc.EventRewardItem(14635):
         # A nice, round number 5!<100:3:cd03> That'll win you a tasty <item>vanilla cone! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:104', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:104', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14836):
+    elif MainNpc.EventRewardItem(14836):
         # Is that a 9? No, wait—that's a 6!<100:3:cd03> You won a <item>chocolate cone! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:105', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:105', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14837):
+    elif MainNpc.EventRewardItem(14837):
         # It's lucky number 7!<100:3:cd03> Here's a <item>strawberry cone for the big winner! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:106', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:106', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14734):
+    elif MainNpc.EventRewardItem(14734):
         # We have a number 8!<100:3:cd03> You've won a delicious <item>ramune-soda-lemon cone! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:107', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:107', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14852):
+    elif MainNpc.EventRewardItem(14852):
         # It's nuuumber 9!<100:3:cd03> Here's a <item>melon-cheesecake cone, just for you! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:108', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:108', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14853):
+    elif MainNpc.EventRewardItem(14853):
         # You pulled the number 10!<100:3:cd03> You won your very own <item>orange-mint cone! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:109', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:109', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14636):
+    elif MainNpc.EventRewardItem(14636):
         # Heeere's the number 11!<100:3:cd03> And here's a <item>vanilla soft serve for the lucky winner! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:110', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:110', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(327):
+    elif MainNpc.EventRewardItem(327):
         # There it is! The number 12!<100:3:cd03> Here's a yummy <item>chocolate soft serve! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:111', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:111', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(326):
+    elif MainNpc.EventRewardItem(326):
         # Lucky number 13! Don't let anyone tell you otherwise!<100:3:cd03> You've won a <item>matcha-vanilla soft serve! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:112', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:112', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(325):
+    elif MainNpc.EventRewardItem(325):
         # Big number 14 it is!<100:3:cd03> And here's your <item>berry-vanilla soft serve! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:113', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:113', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(324):
+    elif MainNpc.EventRewardItem(324):
         # And we've got the number 15!<100:3:cd03> Chow down on this <item>rainbow soft serve! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:114', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:114', false)
         SubflowResults[2] = 1
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14638):
+    elif MainNpc.EventRewardItem(14638):
         # Why, it's sweet number 16!<100:3:cd03> That'll get you some <item>canned orange juice! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:116', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:116', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14775):
+    elif MainNpc.EventRewardItem(14775):
         # Number 17, in its prime!<100:3:cd03> You've won yourself some <item>canned grape juice! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:117', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:117', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14776):
+    elif MainNpc.EventRewardItem(14776):
         # Looks like it's the number 18!<100:3:cd03> Here's your <item>canned apple juice! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:118', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:118', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14777):
+    elif MainNpc.EventRewardItem(14777):
         # Number 19!<100:3:cd03> That'll get you some tasty <item>canned green tea! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:119', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:119', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14778):
+    elif MainNpc.EventRewardItem(14778):
         # It's biiig number 20!<100:3:cd03> That wins you some <item>canned tea! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:120', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:120', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14779):
+    elif MainNpc.EventRewardItem(14779):
         # How about that! Number 21!<100:3:cd03> I sure hope you like <item>canned coffee! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:121', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:121', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14780):
+    elif MainNpc.EventRewardItem(14780):
         # It's number 22! The double deuces!<100:3:cd03> A <item>canned sports drink for the lucky winner! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:122', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:122', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14781):
+    elif MainNpc.EventRewardItem(14781):
         # Number 23 sounds great to me!<100:3:cd03> Here's your <item>canned soda! Who knows what's in there?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:123', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:123', false)
         SubflowResults[2] = 2
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14641):
+    elif MainNpc.EventRewardItem(14641):
         # Ah! The number 24! It's like a two- for-one deal on the number 12!<100:3:cd03> Here's your <item>chocolate donut! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:125', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(332):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:125', false)
+    elif MainNpc.EventRewardItem(332):
         # The spectacular number 25!<100:3:cd03> Here's a <item>matcha donut for the winner! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:126', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(334):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:126', false)
+    elif MainNpc.EventRewardItem(334):
         # The one, the only, the number 26!<100:3:cd03> That gets you one of my favorites— a <item>strawberry donut. Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:127', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(337):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:127', false)
+    elif MainNpc.EventRewardItem(337):
         # Wow! The number 27!<100:3:cd03> You won yourself a <item>white-chocolate donut! Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:128', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14639):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:128', false)
+    elif MainNpc.EventRewardItem(14639):
         # Number 28! That's fate!<100:3:cd03> No library is complete without a <item>pocketbook! Happy reading!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:129', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14640):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:129', false)
+    elif MainNpc.EventRewardItem(14640):
         # Outstanding! It's number 29!<100:3:cd03> Now, who doesn't love a <item>pocket magazine! Happy reading!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:130', false)
-    elif MainNpc.EventRewardItemMainNpc.EventRewardItem(14504):
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:130', false)
+    elif MainNpc.EventRewardItem(14504):
         # I can't believe it! It's the number 30!<100:3:cd03> Here's a special prize for a special number—a <item>colorful light stick. Enjoy!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:131', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:131', false)
  
 flow Root():
     SubflowResults[0] = 2
-    Player.TurnBodyPlayer.TurnBody(0, 0.0)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
-    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 500, '')
+    Player.TurnBody(0, 0.0)
+    MainNpc.NpcAISetting(9, true)
+    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 500, '')
     run TalkBranch()
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run PlayAgain()
     elif System.EventFlags['cPlayer:FoxCommunePlayLotteryTodayFlag']:
         # Too excitin', huh? I understand! Well, thanks for playing, and come back again soon!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:005', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:005', false)
     else:
         # No? How could anyone say no to Redd's Raffle? C'mon! You trust your old pal Redd, don'tcha?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:004', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:004', false)
  
 local flow Sub_Event9():
-    switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(10, 75, 15):
+    switch EventFlowSystemActor.PercentChoice3(10, 75, 15):
         case 0:
-            MainNpc.DecideEventRewardMainNpc.DecideEventReward('cFoxCommuneTool')
+            MainNpc.DecideEventReward('cFoxCommuneTool')
         case 1:
-            MainNpc.DecideEventRewardMainNpc.DecideEventReward('cFoxCommuneFood')
+            MainNpc.DecideEventReward('cFoxCommuneFood')
         case 2:
-            MainNpc.DecideEventRewardMainNpc.DecideEventReward('cFoxCommuneBook')
+            MainNpc.DecideEventReward('cFoxCommuneBook')
  
 flow TalkBranch():
-    if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(1, -1, true, true) == 0:
-        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    if EventFlowSystemActor.EnvHourCompare(1, -1, true, true) == 0:
+        EventFlowSystemActor.UIMoneyAppear()
         if System.EventFlags['cPlayer:FoxCommunePlayLotteryTodayFlag']:
             # Back again? I knew you couldn't resist. That'll be <90:20:0000>, please!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:003', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_03_Commune_Lorrery:003', false)
         else:
             run SNPC_fox_11_Commune::CommonTalkrun SNPC_fox_11_Commune::CommonTalk()
     else:

@@ -1,151 +1,151 @@
 flow Entry():
     fork:
         branch:
-            Player.PlayerMoveToTargetPlayer.PlayerMoveToTarget(false, 170.0, 195.0, 0.0, 0.0, false, '')
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('DemoTalk0', 'cDefault', 'Player', false, false, false, 0)
-            Player.TurnNeckPlayer.TurnNeck(11, false)
-            Player.TurnBodyPlayer.TurnBody(12, 180.0)
-            Player.PlayerWaitTurnPlayer.PlayerWaitTurn()
-            Player.TurnBodyPlayer.TurnBody(11, 0.0)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            Player.PlayerMoveToTarget(false, 170.0, 195.0, 0.0, 0.0, false, '')
+            EventFlowSystemActor.CameraSetDemoParam('DemoTalk0', 'cDefault', 'Player', false, false, false, 0)
+            Player.TurnNeck(11, false)
+            Player.TurnBody(12, 180.0)
+            Player.PlayerWaitTurn()
+            Player.TurnBody(11, 0.0)
+            EventFlowSystemActor.WaitFrame(30)
         branch:
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Eh', true, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-            SubNpc.TurnBodySubNpc.TurnBody(10, 0.0)
+            MainNpc.CharacterEmoticonAction('Eh', true, '', 0, false)
+            EventFlowSystemActor.WaitFrame(30)
+            MainNpc.TurnBody(10, 0.0)
+            SubNpc.TurnBody(10, 0.0)
  
 flow InviteRemakeWS():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('IdeaBulb', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+    EventFlowSystemActor.MessageSuspend()
+    MainNpc.CharacterEmoticonAction('IdeaBulb', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
     if System.EventFlags['cPlayer:RcoRemakeTrialOngoing']:
         # By the way, you haven't finished my workshop on customization yet. It's just a hunch, but I believe customization could be very important to your wor…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:028', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:028', true)
     else:
         if (not System.EventFlags['cPlayer:RcoHeardInviteRemakeWS']) and (System.EventFlags['cPlayer:PAnnouceHeardRemakeWsNewsToday']):
             # By the way, as you might have heard on today's broadcast, I'm offering a new workshop on customization. It's just a hunch, but I believe customizatio…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:026', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:026', true)
         else:
             # By the way, you haven't been to my workshop on customization yet. It's just a hunch, but I believe customization could be very important to your work…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:027', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:027', true)
     System.EventFlags['cPlayer:WHEREAREN_RcoHeardRemakeWS'] = true
  
 flow OtgLeave():
-    MainNpc.TurnBodyMainNpc.TurnBody(1, 0.0)
-    Player.TurnNeckPlayer.TurnNeck(1, false)
-    SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
-    EventFlowSystemActor@Leave.WaitFrameEventFlowSystemActor@Leave.WaitFrame(45)
-    SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
-    SubNpc.TurnBodySubNpc.TurnBody(12, 180.0)
-    SubNpc.NpcWaitTurnSubNpc.NpcWaitTurn()
-    EventFlowSystemActor@Leave.WaitFrameEventFlowSystemActor@Leave.WaitFrame(5)
-    EventFlowSystemActor@Leave.OpenVillageGateEventFlowSystemActor@Leave.OpenVillageGate(true)
-    SubNpc.NpcRailMoveSubNpc.NpcRailMove(2, false, false, -1, -1, 1)
-    SubNpc.NpcRequestActionSubNpc.NpcRequestAction(3)
-    EventFlowSystemActor@Leave.CloseVillageGateEventFlowSystemActor@Leave.CloseVillageGate()
+    MainNpc.TurnBody(1, 0.0)
+    Player.TurnNeck(1, false)
+    SubNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
+    EventFlowSystemActor@Leave.WaitFrame(45)
+    SubNpc.TurnNeck(11, false)
+    SubNpc.TurnBody(12, 180.0)
+    SubNpc.NpcWaitTurn()
+    EventFlowSystemActor@Leave.WaitFrame(5)
+    EventFlowSystemActor@Leave.OpenVillageGate(true)
+    SubNpc.NpcRailMove(2, false, false, -1, -1, 1)
+    SubNpc.NpcRequestAction(3)
+    EventFlowSystemActor@Leave.CloseVillageGate()
  
 flow Root():
     run Entry()
     # Ah, PLAYER! You're here!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:001', false)
-    MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:001', false)
+    MainNpc.TurnNeck(1, false)
     fork:
         branch:
             # Lottie, allow me to introduce you to PLAYER.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:002', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:002', true)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-            SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(185)
-    SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(8)
+            EventFlowSystemActor.WaitFrame(20)
+            SubNpc.TurnNeck(0, false)
+    EventFlowSystemActor.BGMPropertyControl(185)
+    SubNpc.TurnNeck(10, false)
+    EventFlowSystemActor.WaitFrame(8)
     fork:
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(4)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Nodding', false, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+            EventFlowSystemActor.WaitFrame(4)
+            MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+            EventFlowSystemActor.WaitFrame(40)
+            MainNpc.CharacterEmoticonAction('Nodding', false, '', 0, false)
+            EventFlowSystemActor.WaitFrame(60)
+            MainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
         branch:
-            Player.TurnNeckPlayer.TurnNeck(1, false)
+            Player.TurnNeck(1, false)
             # Oh, hello! I'm Lottie!
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:003', false)
-            SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+            SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:003', false)
+            SubNpc.TurnNeck(10, false)
             # I used to work with Mr. Nook a long time ago. Before this big island venture he started!
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:004', true)
-    MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
-    Player.TurnNeckPlayer.TurnNeck(0, false)
+            SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:004', true)
+    MainNpc.TurnNeck(10, false)
+    Player.TurnNeck(0, false)
     # Yes, yes…she's quite talented. Lottie can handle anything from interior design to building layouts.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:005', false)
-    MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:005', false)
+    MainNpc.TurnNeck(1, false)
     fork:
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-            SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+            EventFlowSystemActor.WaitFrame(20)
+            SubNpc.TurnNeck(0, false)
         branch:
             # And now she runs her very own vacation-home company!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:006', true)
-    Player.TurnNeckPlayer.TurnNeck(1, false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:006', true)
+    Player.TurnNeck(1, false)
     # Well, I did have a very good teacher.
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:007', false)
-    SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+    SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:007', false)
+    SubNpc.TurnNeck(10, false)
     # It's really coming along though. We just got our new office set up, so we're finally ready to start taking orders for custom vacation homes.
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:008', false)
-    SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+    SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:008', false)
+    SubNpc.TurnNeck(10, false)
     # Right now we need another team member—a go-getter with vision and insight into our clients' needs. When I told Mr. Nook what I was looking for, he sa…
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:010', false)
-    MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
+    SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:010', false)
+    MainNpc.TurnNeck(10, true)
     fork:
         branch:
             # In other words…she needs your help, PLAYER! When she came to me, you were the first one I thought of. After all, you've done such a lovely job with y…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:011', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:011', false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeckPlayer.TurnNeck(0, false)
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+            EventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeck(0, false)
+    MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
     # I'll leave it to you and Lottie, of course, but my instinct has rarely steered me wrong. Yes, yes!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:012', true)
-    SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:012', true)
+    SubNpc.TurnNeck(10, false)
     fork:
         branch:
             # Mr. Nook is quite a reference! If you want to join us, I won't say no! We're close by, so your commute would be a breeze, and I offer a competitive s…
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:013', false)
+            SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:013', false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeckPlayer.TurnNeck(1, false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            EventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeck(1, false)
+    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
         # I think designing vacation homes would be an excellent opportunity for you, PLAYER.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:015', true)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:015', true)
+        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
             # We could do a trial period, if you like. We'd love your help, and I know the others would enjoy meeting you!
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:014', false)
-            switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+            SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:014', false)
+            switch EventFlowSystemActor.GeneralTalkChoice2():
                 default:
                     return
     # Fantastic! That's wonderful! I'll need to get a few things ready before you join our team, so I'll go on ahead. I'll see you there!
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:023', true)
-    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 3, 0.0)
+    SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:023', true)
+    EventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 3, 0.0)
     run OtgLeave()
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(169)
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-    Player.TurnNeckPlayer.TurnNeck(0, false)
+    EventFlowSystemActor.BGMPropertyControl(169)
+    MainNpc.TurnBody(10, 0.0)
+    Player.TurnNeck(0, false)
     # You certainly made her day, hm? This airport has a flight standing by for whenever you're ready to meet up with Lottie. Just tell the staff at the fr…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:024', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:024', false)
     if System.EventFlags['cPlayer:EnableDiyRemake']:
         # Well then, I'll leave you be. Take care, PLAYER!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:025', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:025', true)
     else:
         run InviteRemakeWS()
     System.EventFlags['cPlayer:UnlockWherearen'] = true
     System.EventFlags['cPlayer:RcoTalkWithOtg'] = true
     System.EventFlags['cPlayer:WHEREAREN_OtgVisitThisIsland'] = true
     run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    MainNpc.NpcRequestActionMainNpc.NpcRequestAction(3)
+    EventFlowSystemActor.WaitFrame(20)
+    MainNpc.NpcRequestAction(3)
     run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
  
 flow Root_Init():
-    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('otg', 1)
+    MainNpc.NpcAITalkSubCastEntry('otg', 1)
  

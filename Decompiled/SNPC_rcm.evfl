@@ -1,9 +1,9 @@
 flow Check():
     run Check_ShopEnable()
     run Regulation()
-    MainNpc.SetTwinsTagMainNpc.SetTwinsTag()
+    MainNpc.SetTwinsTag()
     System.EventFlags['cPlayerTemp:RcmViaItemCheck'] = true
-    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    if EventFlowSystemActor.IsMyVillage():
         run SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talkrun SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talk()
         switch SubflowResults@6[1]:
             case 0:
@@ -30,22 +30,22 @@ flow Check_Init():
     run EntrySubCast()
  
 flow Check_ShopEnable():
-    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    if EventFlowSystemActor.NetIsDreaming():
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow EntrySubCast():
-    if (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMametubu')) and (EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (not EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected()):
-        if MainNpc.NpcLabelMainNpc.NpcLabel('rcm'):
-            MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('rct', 1)
+    if (EventFlowSystemActor.SystemCheckNowStage('cMametubu')) and (EventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (not EventFlowSystemActor.NetIsConnected()):
+        if MainNpc.NpcLabel('rcm'):
+            MainNpc.NpcAITalkSubCastEntry('rct', 1)
         else:
-            MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('rcm', 1)
+            MainNpc.NpcAITalkSubCastEntry('rcm', 1)
  
 flow ForceRenualOpen():
     run SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1_ConvHghrun SNPC_rcm_03_RenualOpen::Rcm_RenualOpen1_ConvHgh()
  
 flow ForceRenualOpen_Init():
-    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('hgh', 1)
-    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('rct', 2)
+    MainNpc.NpcAITalkSubCastEntry('hgh', 1)
+    MainNpc.NpcAITalkSubCastEntry('rct', 2)
  
 flow Not1stPlayer_ShopRequest():
     run SNPC_rcm_00_Common::Rootrun SNPC_rcm_00_Common::Root()
@@ -53,7 +53,7 @@ flow Not1stPlayer_ShopRequest():
  
 flow Rcm_SeqClose():
     System.EventFlags['cPlayerTemp:RcmTalkSceneFlag'] = true
-    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    EventFlowSystemActor.UIMoneyDisappear()
     System.EventFlags['cPlayer:RcmTalkBeforeFlag'] = true
     System.EventFlags['cPlayerTemp:RcmViaItemCheck'] = false
     System.EventFlags['cPlayerTemp:RcmShopshelfCheck'] = false
@@ -61,22 +61,22 @@ flow Rcm_SeqClose():
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Regulation():
-    EventFlowSystemActor.SetExpensiveReguretionEventFlowSystemActor.SetExpensiveReguretion()
+    EventFlowSystemActor.SetExpensiveReguretion()
  
 flow Root():
     run Check_ShopEnable()
     run Regulation()
-    MainNpc.SetTwinsTagMainNpc.SetTwinsTag()
-    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    MainNpc.SetTwinsTag()
+    if EventFlowSystemActor.IsMyVillage():
         run SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talkrun SNPC_rcm_03_RenualOpen::Chk_RenualOpen_Talk()
         switch SubflowResults@6[1]:
             case 0:
-                switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+                switch EventFlowSystemActor.ShopLevel():
                     case `InResServiceTent`:
                         if not System.EventFlags['cPlayer:RcmTalked1stAfterPrologue']:
                             run SNPC_rcm_01_Tent_0_1stShopping::Rootrun SNPC_rcm_01_Tent_0_1stShopping::Root()
                             run Rcm_SeqClose()
-                        elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
+                        elif EventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
                             run Not1stPlayer_ShopRequest()
                         elif not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
                             run Not1stPlayer_ShopRequest()

@@ -1,11 +1,11 @@
 flow MainUI():
-    EventFlowSystemActor.UINetConnectWaitDisappearEventFlowSystemActor.UINetConnectWaitDisappear()
-    EventFlowSystemActor.UIMyDesignExchangeMenuHandlingEventFlowSystemActor.UIMyDesignExchangeMenuHandling()
-    switch EventFlowSystemActor.MyDesignExchangeMenuResultEventFlowSystemActor.MyDesignExchangeMenuResult():
+    EventFlowSystemActor.UINetConnectWaitDisappear()
+    EventFlowSystemActor.UIMyDesignExchangeMenuHandling()
+    switch EventFlowSystemActor.MyDesignExchangeMenuResult():
         case 0:
             run Seq_Close()
         case 1:
-            EventFlowSystemActor.MyDesignExchangeResetErrorEventFlowSystemActor.MyDesignExchangeResetError()
+            EventFlowSystemActor.MyDesignExchangeResetError()
             run Obj_WorldMyDesignGallery_04_Search::SearchByMyDesignIDrun Obj_WorldMyDesignGallery_04_Search::SearchByMyDesignID()
         case 2:
             run Obj_WorldMyDesignGallery_04_Search::SearchByAuthorIDrun Obj_WorldMyDesignGallery_04_Search::SearchByAuthorID()
@@ -19,28 +19,28 @@ flow MainUI():
             run Obj_WorldMyDesignGallery_06_Search2::SearchByFavoriteAuthorrun Obj_WorldMyDesignGallery_06_Search2::SearchByFavoriteAuthor()
  
 flow Root():
-    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    EventFlowSystemActor.SystemFaderRelease()
+    EventFlowSystemActor.WaitFrame(30)
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Obj_WorldMyDesignGallery_20_Wherearen::SearchByAuthorIDrun Obj_WorldMyDesignGallery_20_Wherearen::SearchByAuthorID()
-    elif not EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    elif not EventFlowSystemActor.NetIsDreaming():
         run MainUI()
-    elif (EventFlowSystemActor.NetHasDesignerIDEventFlowSystemActor.NetHasDesignerID()) and (EventFlowSystemActor.NetDreamDesignerIsMeEventFlowSystemActor.NetDreamDesignerIsMe()):
+    elif (EventFlowSystemActor.NetHasDesignerID()) and (EventFlowSystemActor.NetDreamDesignerIsMe()):
         run Obj_WorldMyDesignGallery_10_InDream::SearchByMyOpusrun Obj_WorldMyDesignGallery_10_InDream::SearchByMyOpus()
     else:
         run Obj_WorldMyDesignGallery_10_InDream::SearchByAuthorIDrun Obj_WorldMyDesignGallery_10_InDream::SearchByAuthorID()
  
 flow Seq_Close():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cMyDesignBack', 'cMyDesignAppBack', 'cBlack', 0.5, 0.5)
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrame(15)
+    if EventFlowSystemActor.IsInspectingWherearen():
+        EventFlowSystemActor.ReturnStage('', 'cMyDesignBack', 'cMyDesignAppBack', 'cBlack', 0.5, 0.5)
     elif System.EventFlags['cPlayerTemp:EnterSceneByMydesignShowcaseApp']:
-        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cMyDesignBack', 'cMyDesignAppBack', 'cBlack', 0.5, 0.5)
+        EventFlowSystemActor.ReturnStage('', 'cMyDesignBack', 'cMyDesignAppBack', 'cBlack', 0.5, 0.5)
     else:
-        if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
-            EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:MyDesignExchangeInDream', '', false)
+        if EventFlowSystemActor.NetIsDreaming():
+            EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:MyDesignExchangeInDream', '', false)
         else:
-            EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Talk:MyDesignExchange', '', false)
-        EventFlowSystemActor.ReturnStageEventFlowSystemActor.ReturnStage('', 'cMyDesignBack', 'cMyDesignBack', 'cBlack', 0.5, 0.5)
+            EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:MyDesignExchange', '', false)
+        EventFlowSystemActor.ReturnStage('', 'cMyDesignBack', 'cMyDesignBack', 'cBlack', 0.5, 0.5)
  

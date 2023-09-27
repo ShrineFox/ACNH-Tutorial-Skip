@@ -1,145 +1,145 @@
 flow Root():
     if System.EventFlags['cLand:ValidateVillageSave']:
-        GeneralObject.SetTagFromSystemGeneralObject.SetTagFromSystem('cNpcHouseDoor', 'cDegit', 0, 0, '')
-        switch GeneralObject.CheckLockReasonGeneralObject.CheckLockReason():
+        GeneralObject.SetTagFromSystem('cNpcHouseDoor', 'cDegit', 0, 0, '')
+        switch GeneralObject.CheckLockReason():
             case 0:
                 run Sys_Door_Sleep()
-                EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+                EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
             case 1:
                 run Sys_Door_Out()
-                EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+                EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
             case 2:
                 run Sys_Door_Move()
-                EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+                EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
             case 3:
                 run Sys_Door_Sick()
-                EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+                EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
             case 4:
                 # I think someone promised to visit the resident who lives here. I probably shouldn't barge in…
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:VisitN', false)
-                EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:VisitN', false)
+                EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
             case 5:
-                EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=0)
+                EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=0)
     else:
-        EventFlowSystemActor.SetCheckResultStructureDoorEventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+        EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
  
 flow Sys_Door_Move():
-    switch GeneralObject.HouseOwnerLooksGeneralObject.HouseOwnerLooks():
+    switch GeneralObject.HouseOwnerLooks():
         case `Lazy`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_BO', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_BO', false)
         case `Jock`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_HA', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_HA', false)
         case `Cranky`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_KO', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_KO', false)
         case `Smug`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_ZK', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_ZK', false)
         case `Normal`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_FU', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_FU', false)
         case `Peppy`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_GE', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_GE', false)
         case `Snooty`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_OT', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_OT', false)
         case `Sisterly`:
             # I've moved out.                           –<115:1:cd00>
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_AN', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Move_AN', false)
  
 flow Sys_Door_Out():
-    if GeneralObject.HouseIsTentGeneralObject.HouseIsTent():
+    if GeneralObject.HouseIsTent():
         # Looks like no one's here.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_Tent', false)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_Tent', false)
     else:
-        switch GeneralObject.HouseOwnerLooksGeneralObject.HouseOwnerLooks():
+        switch GeneralObject.HouseOwnerLooks():
             case `Lazy`:
                 # I'm out on a snack run!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_BO', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_BO', false)
             case `Jock`:
                 # I'm having fun somewhere else!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_HA', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_HA', false)
             case `Cranky`:
                 # I'm not here!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_KO', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_KO', false)
             case `Smug`:
                 # I'm exploring the island.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_ZK', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_ZK', false)
             case `Normal`:
                 # I'm not at home right now.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_FU', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_FU', false)
             case `Peppy`:
                 # Out playing! Come find me!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_GE', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_GE', false)
             case `Snooty`:
                 # I'm not home right now.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_OT', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_OT', false)
             case `Sisterly`:
                 # I'm out for a bit! If you need me, just try to find me!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_AN', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Out_AN', false)
  
 flow Sys_Door_Sick():
-    if GeneralObject.HouseIsTentGeneralObject.HouseIsTent():
+    if GeneralObject.HouseIsTent():
         # I hear coughing. I better let them be.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_Tent', false)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_Tent', false)
     else:
-        switch GeneralObject.HouseOwnerLooksGeneralObject.HouseOwnerLooks():
+        switch GeneralObject.HouseOwnerLooks():
             case `Lazy`:
                 # I don't feel so good... Come back later.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_BO', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_BO', false)
             case `Jock`:
                 # My bod's sick in bed. Try me some other time.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_HA', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_HA', false)
             case `Cranky`:
                 # Stay away! I'm sick.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_KO', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_KO', false)
             case `Smug`:
                 # Don't come in. I'm sick. I don't want you to catch this cold.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_ZK', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_ZK', false)
             case `Normal`:
                 # I'm really sick right now. You shouldn't come in.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_FU', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_FU', false)
             case `Peppy`:
                 # I picked up a nasty cold. Come back when I'm better.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_GE', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_GE', false)
             case `Snooty`:
                 # I'm very sick. No guests allowed.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_OT', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_OT', false)
             case `Sisterly`:
                 # I caught a cold... I don't want any visitors!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_AN', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sick_AN', false)
  
 flow Sys_Door_Sleep():
-    if GeneralObject.HouseIsTentGeneralObject.HouseIsTent():
+    if GeneralObject.HouseIsTent():
         # Must be sleepy time.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_Tent', false)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_Tent', false)
     else:
-        switch GeneralObject.HouseOwnerLooksGeneralObject.HouseOwnerLooks():
+        switch GeneralObject.HouseOwnerLooks():
             case `Lazy`:
                 # I'm sleeping... Please don't wake me up, OK?                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_BO', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_BO', false)
             case `Jock`:
                 # I'm in workout-recovery mode. Come wake me up later!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_HA', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_HA', false)
             case `Cranky`:
                 # I'm sound asleep. Do NOT wake me up.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_KO', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_KO', false)
             case `Smug`:
                 # Please don't bother me. I need my beauty sleep!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_ZK', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_ZK', false)
             case `Normal`:
                 # I'm sleeping right now. Please come back later.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_FU', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_FU', false)
             case `Peppy`:
                 # I am totally asleep right now, but we can chat about whatever later!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_GE', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_GE', false)
             case `Snooty`:
                 # I'm resting, dears. Please don't interrupt.                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_OT', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_OT', false)
             case `Sisterly`:
                 # I'm sleeping! Stop by when I'm awake!                             –<115:1:cd00>
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_AN', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Door:Sleep_AN', false)
  

@@ -2,26 +2,26 @@ flow GiveGift():
     run StandingUp_Chk()
     fork:
         branch:
-            if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+            if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
         branch:
             # RANDOM: My vacation house is absolutely the bes… // Hey, remember that vacation home you he… // A huh huh! I bet you didn't expect [a|a… // Oh… Oh no! This is terrible! Your pocke… // C-can you hold stuff now? Really? REALL…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002', false)
-    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002', false)
+    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         # Oh… Oh no! This is terrible! Your pockets are so full that I can't give you stuff…AND NOW I'M SAAAD! I d-don't wanna be sad. Go make some room so I c…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002_002', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002_002', false)
         MainNpc.EventFlags['cWherearenNpcMemory:GiveGiftFaild'] = true
         MainNpc.EventFlags['cWherearenNpcMemory:KeepStandingUpFlag'] = false
     else:
         run GiveGiftAction()
  
 flow GiveGiftAction():
-    MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-    MainNpc.SelectRewardItemWherearenNPCMainNpc.SelectRewardItemWherearenNPC()
-    MainNpc.SetItemNameMainNpc.SetItemName(14, 0, 0)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+    MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+    MainNpc.SelectRewardItemWherearenNPC()
+    MainNpc.SetItemName(14, 0, 0)
+    MainNpc.NpcDelivery(1, 'Default')
     # A huh huh! I bet you didn't expect [a|an]<125:0:0000>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002_001', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002_001', false)
     MainNpc.EventFlags['cWherearenNpcMemory:GiveGiftDone'] = true
     MainNpc.EventFlags['cWherearenNpcMemory:KeepStandingUpFlag'] = false
  
@@ -29,130 +29,130 @@ flow GiveGiftRe():
     run StandingUp_Chk()
     fork:
         branch:
-            if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+            if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
         branch:
             # C-can you hold stuff now? Really? REALLY, really? Yaaay! Here's what I wanted to thank you with!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002_003', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:002_003', false)
     MainNpc.EventFlags['cWherearenNpcMemory:GiveGiftFaild'] = false
     run GiveGiftAction()
  
 flow Root():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7):
+    if EventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7):
         run Sub_grp_Event13()
     else:
-        switch MainNpc.WherearenNpcOrderRelationKindMainNpc.WherearenNpcOrderRelationKind():
+        switch MainNpc.WherearenNpcOrderRelationKind():
             case 0:
-                MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+                MainNpc.TurnNeck(10, false)
                 fork:
                     branch:
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
                     branch:
                         # RANDOM: No need to rush! I'll be sitting right … // I wonder what my roommate's gonna be li…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:110', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:110', false)
                 fork:
                     branch:
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
                     branch:
-                        MainNpc.MessageSuspendMainNpc.MessageSuspend()
+                        MainNpc.MessageSuspend()
             case 1, 3:
                 run Sub_grp_Event13()
             default:
                 return
  
 flow Root_Init():
-    if ((not MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc()) or (MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone'])) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 2) and (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 0):
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+    if ((not MainNpc.IsChocolateWherearenNpc()) or (MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone'])) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2) and (EventFlowSystemActor.WherearenOrderStatus() == 0):
+        MainNpc.NpcAISetting(2, false)
+        MainNpc.NpcAISetting(3, false)
  
 flow SalesTalk():
     run Demo_Common_Wherearen::KKFesCheckrun Demo_Common_Wherearen::KKFesCheck()
     run SeaNPC_Chk()
-    if (not EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode()) or (System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']):
-        if (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea()):
+    if (not EventFlowSystemActor.IsWherearenWorkMode()) or (System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']):
+        if (EventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSea()):
             fork:
                 branch:
-                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
                 branch:
                     # Hi, <150:6>! My vacation house is super neat. My bug friends LOVE it. Do you need something?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:006', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:006', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     # RANDOM: My vacation house is SO cozy. I lie on … // My vacation house is so comfy that all … // The vacation house is real neat. It pro… // Yard work is pretty fun once you get st…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:007', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:007', false)
                 case 1:
                     if System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
                         # RANDOM: Can't right now. I gotta stay a little … // Sorry…I gotta take care of a thing. May…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:008', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:008', false)
                     else:
                         run Sub_Event66()
                 case 2:
                     # Yay! I love chatting. But, um…is this one of those chats where I do all the talking and you just stand there staring at me? 'Cause those're the best!…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
         else:
             # Hi, <150:6>! My vacation house is super neat. My bug friends LOVE it. Do you need something?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:006', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:006', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     # RANDOM: My vacation house is SO cozy. I lie on … // My vacation house is so comfy that all … // The vacation house is real neat. It pro… // Yard work is pretty fun once you get st…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:007', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:007', false)
                 case 1:
                     if System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
                         # RANDOM: Can't right now. I gotta stay a little … // Sorry…I gotta take care of a thing. May…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:008', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:008', false)
                     else:
                         run Sub_Event66()
                 case 2:
                     # Yay! I love chatting. But, um…is this one of those chats where I do all the talking and you just stand there staring at me? 'Cause those're the best!…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
-    elif (MainNpc.WherearenIsNpcLiveTogetherMainNpc.WherearenIsNpcLiveTogether()) or (not System.EventFlags['cWherearenPlayer:Unlock_ShareHouse']):
-        if (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea()):
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
+    elif (MainNpc.WherearenIsNpcLiveTogether()) or (not System.EventFlags['cWherearenPlayer:Unlock_ShareHouse']):
+        if (EventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSea()):
             fork:
                 branch:
-                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
                 branch:
                     # Hey, aren't you super-duper busy? Do you need me for something?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:004', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:004', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     run Sub_Event66()
                 case 1:
                     run NNPC_Spot_WherearenGarden::Reformrun NNPC_Spot_WherearenGarden::Reform()
                 case 2:
                     # Yay! I love chatting. But, um…is this one of those chats where I do all the talking and you just stand there staring at me? 'Cause those're the best!…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
         else:
             # Hey, aren't you super-duper busy? Do you need me for something?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:004', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:004', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     run Sub_Event66()
                 case 1:
                     run NNPC_Spot_WherearenGarden::Reformrun NNPC_Spot_WherearenGarden::Reform()
                 case 2:
                     # Yay! I love chatting. But, um…is this one of those chats where I do all the talking and you just stand there staring at me? 'Cause those're the best!…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
-    elif (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea()):
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
+    elif (EventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (not MainNpc.WherearenNpcIsLocatedSea()):
         fork:
             branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
             branch:
                 # Hey, aren't you super-duper busy? Do you need me for something?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:003', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:003', false)
         run Sub_grp_Event2()
     else:
         # Hey, aren't you super-duper busy? Do you need me for something?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:003', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:003', false)
         run Sub_grp_Event2()
  
 flow SeaNPC_Chk():
-    if (MainNpc.WherearenIsBuiltNpcMainNpc.WherearenIsBuiltNpc()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea()):
+    if (MainNpc.WherearenIsBuiltNpc()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 0) and (MainNpc.WherearenNpcIsLocatedSea()):
         fork:
             branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
             branch:
                 # RANDOM: A huh huh huh! Being floaty on the wave… // It's real nice having a floaty. I gotta…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:013', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:013', false)
         if not System.EventFlags['cPlayerTemp:WHEREAREN_SeaTalkedNow']:
             System.EventFlags['cPlayerTemp:WHEREAREN_SeaTalkedNow'] = true
  
@@ -160,36 +160,36 @@ flow SkipGiveItem():
     run Event70()
  
 flow StandingUp_Chk():
-    switch MainNpc.NpcIsSittingMainNpc.NpcIsSitting():
+    switch MainNpc.NpcIsSitting():
         case 0:
             fork:
                 branch:
-                    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                    if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
                 branch:
                     # RANDOM: Hi, <150:6>! Hang on, I'll stand up. // Hey, it's <150:6>! Hold on for about on… // Hi, <150:6>! Hey, ya ever notice how it…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:014', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:014', false)
             run Sub_Event40()
         case 1, 2, 3, 5:
             fork:
                 branch:
-                    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                    if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
                 branch:
                     # RANDOM: Hi, <150:6>! Hold on, I'll stand up, <1… // Hey, it's <150:6>! You here to chat? Ha… // <150:6>! You're doing up, and I'm doing…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:015', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:015', false)
             run Sub_Event40()
         default:
             return
  
 local flow Sub_Event40():
     MainNpc.EventFlags['cWherearenNpcMemory:StandingUpFlag'] = true
-    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+    if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
         fork:
             branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
             branch:
-                MainNpc.MessageSuspendMainNpc.MessageSuspend()
+                MainNpc.MessageSuspend()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
     else:
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
@@ -199,49 +199,49 @@ local flow Sub_Event66():
     fork:
         branch:
             # Of course ya can! We can spend the day <135:8:cd00>! Or, um… not. C'mon, let's go, <110:6>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:005', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:005', true)
         branch:
-            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-    MainNpc.WherearenSetNpcVisitInfoMainNpc.WherearenSetNpcVisitInfo()
-    EventFlowSystemActor.WherearenSetNpcGardenVisitByEventFlowSystemActor.WherearenSetNpcGardenVisitBy('cTalkNpc')
-    EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenVisit', 0)
+            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+    MainNpc.WherearenSetNpcVisitInfo()
+    EventFlowSystemActor.WherearenSetNpcGardenVisitBy('cTalkNpc')
+    EventFlowSystemActor.PlayReport('cWherearenVisit', 0)
     run Demo_Common_Wherearen::SetCamera_GardenVisitrun Demo_Common_Wherearen::SetCamera_GardenVisit()
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-    if MainNpc.IsWherearenMainFieldNpcShareHousePositionMainNpc.IsWherearenMainFieldNpcShareHousePosition():
-        MainNpc.ReserveEnterGardenPatternMainNpc.ReserveEnterGardenPattern(3)
+    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+    if MainNpc.IsWherearenMainFieldNpcShareHousePosition():
+        MainNpc.ReserveEnterGardenPattern(3)
     else:
-        MainNpc.ReserveEnterGardenPatternMainNpc.ReserveEnterGardenPattern(2)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+        MainNpc.ReserveEnterGardenPattern(2)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
  
 local flow Sub_grp_Event101():
     fork:
         branch:
-            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
         branch:
-            MainNpc.MessageSuspendMainNpc.MessageSuspend()
+            MainNpc.MessageSuspend()
  
 local flow Sub_grp_Event13():
-    if (MainNpc.IsChocolateWherearenNpcMainNpc.IsChocolateWherearenNpc()) and (not MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone']):
+    if (MainNpc.IsChocolateWherearenNpc()) and (not MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone']):
         fork:
             branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppearEventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
             branch:
                 # RANDOM: A huh huh huh! This is fun! What should… // Maybe I'll bury myself in the sand! Don… // Sniff, sniff… Sniiiiff… I'm just gettin… // I'm feeling kinda sleepy. It happens so…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:305', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:305', false)
         fork:
             branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappearEventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
             branch:
-                MainNpc.MessageSuspendMainNpc.MessageSuspend()
+                MainNpc.MessageSuspend()
         MainNpc.EventFlags['cWherearenNpcMemory:Chocolate1stTalkDone'] = true
-    elif EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) != 0:
+    elif EventFlowSystemActor.WherearenKKFesStatus(false) != 0:
         run SkipGiveItem()
-    elif MainNpc.WherearenNpcIsLocatedSeaMainNpc.WherearenNpcIsLocatedSea():
+    elif MainNpc.WherearenNpcIsLocatedSea():
         run SkipGiveItem()
-    elif not MainNpc.ExistSelectRewardItemWherearenNPCMainNpc.ExistSelectRewardItemWherearenNPC():
+    elif not MainNpc.ExistSelectRewardItemWherearenNPC():
         run SkipGiveItem()
     elif MainNpc.EventFlags['cWherearenNpcMemory:GiveGiftFaild']:
-        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+        if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
             run SkipGiveItem()
         else:
             run GiveGiftRe()
@@ -253,7 +253,7 @@ local flow Sub_grp_Event13():
         run Sub_grp_Event101()
     else:
 entrypoint Event70:
-        switch EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus():
+        switch EventFlowSystemActor.WherearenOrderStatus():
             case 0:
                 run SalesTalk()
                 run Sub_grp_Event101()
@@ -263,7 +263,7 @@ entrypoint Event70:
                 return
  
 local flow Sub_grp_Event2():
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run Sub_Event66()
         case 1:
@@ -272,5 +272,5 @@ local flow Sub_grp_Event2():
             run NNPC_Spot_WherearenGarden::StartShareHouserun NNPC_Spot_WherearenGarden::StartShareHouse()
         case 3:
             # Yay! I love chatting. But, um…is this one of those chats where I do all the talking and you just stand there staring at me? 'Cause those're the best!…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:012', false)
  

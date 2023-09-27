@@ -1,63 +1,63 @@
 flow BeginningChoice(SellTotal: int = 0):
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
-            if not EventFlowSystemActor.PurchaseBoxFreeQuery2EventFlowSystemActor.PurchaseBoxFreeQuery2('cPurchaseBoxQueryType_SavingFull', SellTotal):
+            if not EventFlowSystemActor.PurchaseBoxFreeQuery2('cPurchaseBoxQueryType_SavingFull', SellTotal):
                 fork:
                     branch:
-                        GeneralObject.StartAnimationGeneralObject.StartAnimation('BoxOpen', 'アクション終了を待たない')
-                        EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(15)
-                        Player.PlayerPurchaseBoxThinkingPlayer.PlayerPurchaseBoxThinking()
+                        GeneralObject.StartAnimation('BoxOpen', 'アクション終了を待たない')
+                        EventFlowSystemActor@Sub.WaitFrame(15)
+                        Player.PlayerPurchaseBoxThinking()
                     branch:
-                        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cSellBox', 65534, '', '', 'cPurchaseBox', false)
-                        EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
-                if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-                    EventFlowSystemActor.ShopSellCalcEventFlowSystemActor.ShopSellCalc(SellTotal, 1.0, false, true)
-                    EventFlowSystemActor.ShopSellDoneEventFlowSystemActor.ShopSellDone(1.0, true)
-                    GeneralObject.StartAnimationGeneralObject.StartAnimation('BoxClose', 'アクション終了を待たない')
+                        EventFlowSystemActor.UIItemSelectWindowHandling('cSellBox', 65534, '', '', 'cPurchaseBox', false)
+                        EventFlowSystemActor.StoreNormalCamera(false, '')
+                if EventFlowSystemActor.UIResultMenuDecide():
+                    EventFlowSystemActor.ShopSellCalc(SellTotal, 1.0, false, true)
+                    EventFlowSystemActor.ShopSellDone(1.0, true)
+                    GeneralObject.StartAnimation('BoxClose', 'アクション終了を待たない')
                     System.EventFlags['cLifeSupportAchievement:SellItemRcm'] += 1
                     System.EventFlags['cPlayer:PurchaseBoxUseTodayFlag'] = true
                     System.EventFlags['cPlayer:UsePurchaseBOXFalg'] = true
                     System.EventFlags['cPlayer:RcoTipsPurchaseBoxUsed'] = true
                 else:
-                    GeneralObject.StartAnimationGeneralObject.StartAnimation('BoxClose', 'アクション終了を待たない')
+                    GeneralObject.StartAnimation('BoxClose', 'アクション終了を待たない')
             elif System.EventFlags['cPlayer:PurchaseBoxUseTodayFlag']:
                 # Looks like I can't sell anything else this way at the moment.
-                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:021', false)
+                Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:021', false)
             else:
                 # Looks like I can't use this if my Bank of Nook account is maxed out.
-                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:020', false)
+                Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:020', false)
         case 1:
             # How to use the drop-off box Drop off items to sell at any time! Just place your items inside the box. Payment will be deposited into your Bank of Noo…
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:101', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:101', false)
             # OK… So, should I sell something?
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:003', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:003', false)
             run BeginningChoice()
         default:
             return
  
 flow Root():
-    EventFlowSystemActor.SetExpensiveReguretionEventFlowSystemActor.SetExpensiveReguretion()
-    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    EventFlowSystemActor.SetExpensiveReguretion()
+    if EventFlowSystemActor.NetIsDreaming():
         # It reads…"Not available at this time."
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:911', false)
-    elif EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+        Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:911', false)
+    elif EventFlowSystemActor.IsMyVillage():
         if System.EventFlags['cPlayer:PurchaseBoxUseOnceFlag']:
             if System.EventFlags['cPlayer:PurchaseBoxUseTodayFlag']:
                 # Should I sell more stuff through the drop-off box?
-                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:002', false)
+                Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:002', false)
             else:
                 # It's the store's drop-off box. Should I sell something?
-                Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:001', false)
+                Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:001', false)
         else:
             System.EventFlags['cPlayer:PurchaseBoxUseOnceFlag'] = true
             # It says it's a "drop-off box." I guess I can drop off anything I want to sell.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:010', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:010', false)
         run BeginningChoice()
     else:
         if System.EventFlags['cPlayer:PurchaseBoxUseOnceFlag']:
             # It's the drop-off box for the shop. Only folks from this island can use it.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:901', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:901', false)
         else:
             # It's some kind of drop-off box. Looks like only residents of this island can use it.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:902', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_PurchaseBox:902', false)
  

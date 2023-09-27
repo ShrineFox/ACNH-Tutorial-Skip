@@ -3,21 +3,21 @@ flow RctCongratMyHome_PlayerMoving():
     System.EventFlags['cPlayer:RctHintCongratsMyhome'] = true
     if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
         # Oh, hey! How's your home been since the move, PLAYER? A home like that is sure to open up many possibilities for you here!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_05', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_05', false)
     else:
         # <50:3>PLAYER! Congratulations on your new home! A home is sure to open up so many new possibilities for you!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_04_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_04_01', false)
     if System.EventFlags['cLand:RcmShopMaterialComplete']:
         # Once our shop is built, I think we'll carry even more stylish furnishings that'll look great in your home… Stop by to do some shopping once we're ope…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_04_03', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_04_03', false)
         System.EventFlags['cPlayer:RctTnx4CollectingMaterials2'] = true
     else:
         # You'll be wanting stylish furniture for your home, which you could always craft as DIY projects, but… I recommend you check into the offerings from N…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_04_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_04_02', false)
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RctCongratMyhome():
-    switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+    switch EventFlowSystemActor.PlayerHouseLevel():
         case `BaseHouse`:
             if not System.EventFlags['cPlayer:RctHintCongratsMyhome']:
                 run RctCongratMyHome_PlayerMoving()
@@ -28,35 +28,35 @@ flow RctCongratMyhome():
             return
  
 flow RctHintCmn():
-    if (System.EventFlags['cLand:MuseumBuilt']) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70)):
+    if (System.EventFlags['cLand:MuseumBuilt']) and (EventFlowSystemActor.PercentChoice(70)):
         # RANDOM: You know, sometimes when I'm out and ab… // Did you know you can dig up flower star… // I've been wondering… Have you noticed h… // Have you spent much time exploring the …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:052', false)
-    elif (not System.EventFlags['cLand:TodayCreateVillage']) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:052', false)
+    elif (not System.EventFlags['cLand:TodayCreateVillage']) and (not EventFlowSystemActor.PercentChoice(80)):
         # I saw a <item>message bottle wash up on the beach here. Of all the beaches in all the world, right? There's mystery and adventure when someone sends …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:051', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:051', false)
     else:
         # RANDOM: Has anyone talked to you about the bull… // Hmm… You know…shaking trees or cutting … // That reminds me, have you used the Nook… // You probably already know that wood com…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:050', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:050', false)
  
 flow Root():
-    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    if not EventFlowSystemActor.IsMyVillage():
         # RANDOM: Welcome to ISLAND! I hope you fully enj… // Are you acquainted with someone on this… // Oh, I know you! You made your home on I…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:009', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:009', false)
     elif System.EventFlags['cPlayer:RctTalkBeforeFalg']:
         run RctCongratMyhome()
         if System.EventFlags['cPlayer:RctOutsideHintToday']:
             # Feel free to chat with me anytime if there's anything you need to help you get used to living here.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:003_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:003_02', false)
         else:
             System.EventFlags['cPlayer:RctOutsideHintToday'] = true
             # Oh, PLAYER! It's good to see you! How are you enjoying island life?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:003_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:003_01', false)
         if System.EventFlags['cPlayer:DecideShopArea']:
             if System.EventFlags['cPlayer:RctTnx4ConfirmingStorePlace']:
                 run RctHintCmn()
             else:
                 # I was hoping to talk to you about the new shop… You did so much for us! From finding materials to setting the location… We couldn't have done it with…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_03', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_03', false)
                 System.EventFlags['cPlayer:RctTnx4ConfirmingStorePlace'] = true
         elif System.EventFlags['cLand:RcmShopMaterialComplete']:
             if System.EventFlags['cPlayer:Prologue4RcmGetTent']:
@@ -64,7 +64,7 @@ flow Root():
                     run RctHintCmn()
                 else:
                     # I wanted to tell you… Thank you so much for helping make our shop dreams come true. I heard you get to pick out a location for it! I can't wait to se…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_02', false)
                     System.EventFlags['cPlayer:RctTnx4CollectingMaterials2'] = true
             else:
                 run RctHintCmn()
@@ -74,53 +74,53 @@ flow Root():
             else:
                 System.EventFlags['cPlayer:RctTnx4CollectingMaterials'] = true
                 # Oh! Hey! I heard you're helping us out by gathering materials to build the shop! You're so kind! I'm sorry to place such a burden on you, but we real…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:061_01', false)
         elif System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']:
             if System.EventFlags['cPlayer:MainmenuRecipe']:
                 run RctHintCmn()
             else:
                 run Sub_grp_Event7()
         else:
-            if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+            if EventFlowSystemActor.RandomChoice2(2) == 0:
                 run Sub_grp_Event7()
             else:
                 # Our boss, Tom Nook, has plenty of guidance to offer over in Resident Services. My older brother Timmy sells useful items, and he also buys things you…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:011', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:011', false)
     else:
         System.EventFlags['cPlayer:RctTalkBeforeFalg'] = true
         System.EventFlags['cPlayer:RctOutsideHintToday'] = true
         if System.EventFlags['cLand:TodayCreateVillage']:
             if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
                 # Oh, PLAYER! It's great to see you! That campfire was a lot of fun!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_01', false)
             else:
                 # Oh, PLAYER! It's great to see you!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_02', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_02', false)
         else:
             # Oh, PLAYER! It's great to see you!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_02', false)
         if System.EventFlags['cLand:Prologue4BuiltShop']:
             if System.EventFlags['cPlayer:DecideShopArea']:
                 # Because of you, we'll be able to open up a nice little shop on this island. It's been a dream of ours for a while. I hope you'll stop in to shop once…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_05', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_05', false)
             else:
                 # My brother and I got some help, and we're moving out of Resident Services and into our own shop! I hope you'll stop in to shop once construction is c…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_06', false)
-        elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
+                MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_06', false)
+        elif EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
             # We're here all night, so feel free to stop by if you need to talk about anything island related. Also, I'll be out and about during the day checking …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_04', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_04', false)
         else:
             # We're keeping Resident Services open at night, so feel free to stop by if you need to talk about anything. For the time being, I'll be out and about …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:001_03', false)
  
 local flow Sub_grp_Event7():
-    if not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
+    if not EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
         # Here's a question for you. Have you heard about the DIY workshop our boss offers in Resident Services? When you learn how to DIY, you can craft your …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:012', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:012', false)
     elif System.EventFlags['cPlayer:RcoDIYtrialOngoing']:
         # You're taking Mr. Nook's DIY workshop, huh, PLAYER? That's great! Knowing how to craft DIY projects will enrich your life. I hope you become a DIY ma…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:013_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:013_02', false)
     else:
         # You know, since you're here, you should take the DIY workshop that Mr. Nook is offering. When you learn about DIY projects, you'll be able to craft y…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:013_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rct/SP_rct:013_01', false)
  

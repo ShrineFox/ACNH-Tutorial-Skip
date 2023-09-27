@@ -1,16 +1,16 @@
 flow Root():
-    if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+    if EventFlowSystemActor.NetHasVisitor():
         if not System.EventFlags['cPlayer:SzaTalkAtOfficeToday']:
             run Sza_Common_Greet()
         # Unfortunately, I'm a bit overwhelmed at the moment, PLAYER. That's the one drawback of being such a popular tourist destination! Would you mind comin…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:801', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:801', false)
     elif System.EventFlags['cPlayer:SzaHeardAboutIslandEvaluation']:
         if System.EventFlags['cPlayer:ExplainIslandRegulation']:
             run Sza_Common_Select()
         elif System.EventFlags['cLand:v200_Enabled_ChangeRegulation']:
             run SNPC_sza_01_Office_1_Entries::Sza_RegulationExplanationrun SNPC_sza_01_Office_1_Entries::Sza_RegulationExplanation()
             # Now then…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002', false)
             run szaNormalSeq()
         else:
             run Sza_Common_Select()
@@ -19,7 +19,7 @@ flow Root():
         if System.EventFlags['cLand:v200_Enabled_ChangeRegulation']:
             run SNPC_sza_01_Office_1_Entries::Sza_RegulationExplanationrun SNPC_sza_01_Office_1_Entries::Sza_RegulationExplanation()
         # Now then…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002', false)
         run szaNormalSeq()
     else:
         run Sza_Common_Select()
@@ -27,30 +27,30 @@ flow Root():
 flow Root_ForVisitor():
     if System.EventFlags['cPlayerVisit:V_Sza_TalkInside1st']:
         # RANDOM: I hope you're enjoying your visit to IS… // If you're anything like me, you might f… // Meeting folks from other islands is one…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:911', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:911', false)
     else:
         System.EventFlags['cPlayerVisit:V_Sza_TalkInside1st'] = true
         # Hello, hello, PLAYER from the famous ISLAND!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:901', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:901', false)
         # RANDOM: Thank you for coming all this way to vi… // Welcome to the ISLAND Resident Services… // I believe I speak for all the residents…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:902', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:902', false)
  
 flow Sza_CmnSel_Again():
     if not System.EventFlags['cLand:IslandEvaluationUnlock']:
         # Can I help you with anything else?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_05', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_05', false)
         run szaSel4B()
     elif System.EventFlags['cPlayer:ExplainIslandRegulation']:
         # Can I help you with anything else?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_03', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_03', false)
         run Sza_CmnSel_v2()
     else:
         # Can I help you with anything else?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_06', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_06', false)
         run szaSel5B()
  
 flow Sza_CmnSel_v2():
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run SNPC_sza_50_IslandEvaluation::Rootrun SNPC_sza_50_IslandEvaluation::Root()
         case 1:
@@ -62,62 +62,62 @@ flow Sza_CmnSel_v2():
  
 flow Sza_Cmn_Cancel():
     # Alright then. If there is anything I can assist you with in the future, please don't hesitate to ask.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003', true)
     if System.EventFlags['cPlayer:RcoAwaitingExplanation']:
         # …Oh! I almost forgot that there's something Mr. Nook would like to discuss with you. When you have a moment, please find him and ask, "What should I …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003_01', false)
  
 flow Sza_Cmn_Christmas():
-    if (EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('XmasEve', 'cMainOnly', false)) and (System.EventFlags['cPlayer:ReiStartQuest1']) and (not System.EventFlags['cPlayer:ReiFinishQuest1']) and (not System.EventFlags['cPlayer:SzaChristmasOrnament']):
-        if EventFlowSystemActor.IsReceiveMargeItemEventFlowSystemActor.IsReceiveMargeItem(5731, 5730, 5732, 65534, 65534, 3):
+    if (EventFlowSystemActor.GlobalEventNow('XmasEve', 'cMainOnly', false)) and (System.EventFlags['cPlayer:ReiStartQuest1']) and (not System.EventFlags['cPlayer:ReiFinishQuest1']) and (not System.EventFlags['cPlayer:SzaChristmasOrnament']):
+        if EventFlowSystemActor.IsReceiveMargeItem(5731, 5730, 5732, 65534, 65534, 3):
             # Oh dear, are you on the hunt for ornaments? I might have a few left over from decorating…<10:4> Let me see!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:1001', true)
-            EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(44)
-            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cNormalFader', 'cNormalFader', 'cBlack', 1.0, 1.0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
-            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(5730, 3)
-            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(5731, 3)
-            EventFlowSystemActor.SetItemToPocketEventFlowSystemActor.SetItemToPocket(5732, 3)
-            EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(44)
-            EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:1001', true)
+            EventFlowSystemActor.SoundDuckingOn(44)
+            EventFlowSystemActor.FadeOut('cNormalFader', 'cNormalFader', 'cBlack', 1.0, 1.0, false)
+            EventFlowSystemActor.WaitFrame(40)
+            EventFlowSystemActor.SetItemToPocket(5730, 3)
+            EventFlowSystemActor.SetItemToPocket(5731, 3)
+            EventFlowSystemActor.SetItemToPocket(5732, 3)
+            EventFlowSystemActor.SoundDuckingOff(44)
+            EventFlowSystemActor.FadeIn(true)
             System.EventFlags['cPlayer:SzaChristmasOrnament'] = true
             # Thanks for waiting! I found a few extras, so I hope you can make good use of them. It's so nice to see you helping out with the Toy Day festivities…y…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:1002', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:1002', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         elif not System.EventFlags['cPlayerTemp:SzaChristmasHintMessage']:
             # Oh dear, are you on the hunt for ornaments? I might have a few left over…but you don't have any room! I always carry around too much stuff too. But I…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:1003', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:1003', true)
             System.EventFlags['cPlayerTemp:SzaChristmasHintMessage'] = true
             SubflowResults[0] = 1
  
 flow Sza_Common_Greet():
     System.EventFlags['cPlayer:SzaTalkAtOfficeToday'] = true
-    if EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cNewYear', 'cNowTime'):
-        if EventFlowSystemActor.MainPlayerIsBirthdayEventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
+    if EventFlowSystemActor.EnvSameDate('cNewYear', 'cNowTime'):
+        if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
             # Happy New Birthday Year to you, PLAYER! Hmm…I was trying to be clever, but that didn't quite work, did it?<10:4> Let me try that again… Happy New Yea…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_06', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_06', false)
             SubflowResults[0] = 1
         else:
             # Happy New Year, PLAYER! I'm just so honored that you chose to spend even a tiny sliver of this special day with me. Let's…resolve to spend more time …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_05', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_05', false)
             SubflowResults[0] = 1
     else:
-        switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+        switch EventFlowSystemActor.EnvTimeZone():
             case `05:00-07:59`, `08:00-11:59`:
                 # Oh, PLAYER! Good morning!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_01', false)
             case `12:00-15:59`:
                 # Oh, PLAYER! Good afternoon!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_02', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_02', false)
             case `16:00-18:59`:
                 # Oh, PLAYER! It's great to see you!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_03', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_03', false)
             case `19:00-23:59`, `00:00-04:59`:
                 # Oh, PLAYER! Good evening!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_04', false)
-        if EventFlowSystemActor.MainPlayerIsBirthdayEventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:000_04', false)
+        if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
             # And happy birthday!<10:4> What? You didn't think I'd forget such a special occasion, did you? I've been hoping to run into you since I woke up this m…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:001_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:001_01', false)
             SubflowResults[0] = 1
  
 flow Sza_Common_Select():
@@ -125,15 +125,15 @@ flow Sza_Common_Select():
         run Sza_Cmn_Christmas()
         if not System.EventFlags['cLand:IslandEvaluationUnlock']:
             # Please don't hesitate to let me know if I can help with something!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_03', false)
             run szaSel4B()
         elif System.EventFlags['cPlayer:ExplainIslandRegulation']:
             # Please don't hesitate to let me know if I can help with something!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_02', false)
             run Sza_CmnSel_v2()
         else:
             # Please don't hesitate to let me know if I can help with something!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_04', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_04', false)
             run szaSel5B()
     else:
         run Sza_Common_Greet()
@@ -142,25 +142,25 @@ flow Sza_Common_Select():
             run szaNormalSeq()
         else:
             # Now then…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002', false)
             run szaNormalSeq()
  
 flow szaNormalSeq():
     if not System.EventFlags['cLand:IslandEvaluationUnlock']:
         # How can I help you today?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_01', false)
         run szaSel4B()
     elif System.EventFlags['cPlayer:ExplainIslandRegulation']:
         # How can I help you today?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_01', false)
         run Sza_CmnSel_v2()
     else:
         # How can I help you today?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_02', false)
         run szaSel5B()
  
 flow szaSel4B():
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run SNPC_sza_01_Towntune::Rootrun SNPC_sza_01_Towntune::Root()
         case 1:
@@ -171,7 +171,7 @@ flow szaSel4B():
             run Sza_Cmn_Cancel()
  
 flow szaSel5B():
-    switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+    switch EventFlowSystemActor.GeneralTalkChoice5():
         case 0:
             run SNPC_sza_50_IslandEvaluation::Rootrun SNPC_sza_50_IslandEvaluation::Root()
         case 1:

@@ -1,82 +1,82 @@
 flow Chk_KitchenFire():
     SubflowResults[0] = 0
-    if (Ftr.IsTargetFtrActionFtr.IsTargetFtrAction('CookingTableTriggerFire')) and (not Ftr.IsOnStarterFtrSwitchFtr.IsOnStarterFtrSwitch()):
+    if (Ftr.IsTargetFtrAction('CookingTableTriggerFire')) and (not Ftr.IsOnStarterFtrSwitch()):
         SubflowResults[0] = 1
  
 flow Cooking():
-    EventFlowSystemActor.UICookTableHandlingEventFlowSystemActor.UICookTableHandling()
-    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+    EventFlowSystemActor.UICookTableHandling()
+    if EventFlowSystemActor.UIResultMenuDecide():
         run Kitchen_CookingDemo()
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(21)
-            Player.PlayerCookingPutawayPlayer.PlayerCookingPutaway()
-            Player.PlayerDemoTurnToStarterPlayer.PlayerDemoTurnToStarter()
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-            EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(22)
-            Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.BGMPropertyControl(21)
+            Player.PlayerCookingPutaway()
+            Player.PlayerDemoTurnToStarter()
+            EventFlowSystemActor.WaitFrame(10)
+            EventFlowSystemActor.BGMPropertyControl(22)
+            Player.PlayerWorkbenchThinking()
             run Cooking()
         else:
             run Kitchen_CookingDemo_Finish()
     else:
-        EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(18)
+        EventFlowSystemActor.SoundDuckingOff(18)
  
 flow CookingRecipeUIDisable():
     # This would be a good place to prep something...
-    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Kitchen:002', false)
-    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(18)
+    Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:002', false)
+    EventFlowSystemActor.SoundDuckingOff(18)
  
 flow KitchenCancel():
-    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(18)
+    EventFlowSystemActor.SoundDuckingOff(18)
  
 flow Kitchen_Borrow():
-    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+    Player.PlayerWorkbenchThinking()
     # Should I borrow this kitchen area to prepare something?
-    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Kitchen:021', false)
+    Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:021', false)
     run Event118()
  
 flow Kitchen_CookingDemo():
-    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(19)
-    EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cCookingTable')
+    EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+    EventFlowSystemActor.BGMPropertyControl(19)
+    EventFlowSystemActor.SaveSetFromUIResult('cCookingTable')
     if SubflowResults@2[0] != 0:
-        Ftr.FtrChangeSwitchFtr.FtrChangeSwitch(true)
-    Player.PlayerCookingPlayer.PlayerCooking()
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(20)
+        Ftr.FtrChangeSwitch(true)
+    Player.PlayerCooking()
+    EventFlowSystemActor.BGMPropertyControl(20)
     if SubflowResults@2[0] != 0:
-        Ftr.FtrChangeSwitchFtr.FtrChangeSwitch(false)
-    Player.PlayerCookingGetDemoPlayer.PlayerCookingGetDemo(false, false)
-    if (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) or (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField')):
-        EventFlowSystemActor.NpcPlayerActivityEventFlowSystemActor.NpcPlayerActivity('cActivityType_CookingCount')
+        Ftr.FtrChangeSwitch(false)
+    Player.PlayerCookingGetDemo(false, false)
+    if (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) or (EventFlowSystemActor.SystemCheckNowStage('cField')):
+        EventFlowSystemActor.NpcPlayerActivity('cActivityType_CookingCount')
     System.EventFlags['cLifeSupportAchievement:CookFood'] += 1
     System.EventFlags['cLifeSupportDaily:DoCooking'] = true
     # Look what I made... [a|an]<125:0:0000>!
-    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Kitchen:031', true)
+    Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:031', true)
  
 flow Kitchen_CookingDemo_Finish():
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(21)
-    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
-    Player.PlayerCookingPutawayPlayer.PlayerCookingPutaway()
-    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(18)
+    EventFlowSystemActor.BGMPropertyControl(21)
+    EventFlowSystemActor.StoreNormalCamera(false, '')
+    Player.PlayerCookingPutaway()
+    EventFlowSystemActor.SoundDuckingOff(18)
  
 flow Kitchen_Normal():
-    Player.PlayerWorkbenchThinkingPlayer.PlayerWorkbenchThinking()
+    Player.PlayerWorkbenchThinking()
     # Should I make something with <50:1> <125:0:0000> here?
-    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Kitchen:001', false)
+    Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:001', false)
 entrypoint Event118:
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run Cooking()
     else:
         run KitchenCancel()
  
 flow Root():
     run Chk_KitchenFire()
-    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(18)
-    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cStartFtrName', 'cDegit', 0, 0, '')
+    EventFlowSystemActor.SoundDuckingOn(18)
+    EventFlowSystemActor.SetTagFromSystem('cStartFtrName', 'cDegit', 0, 0, '')
     if not ((System.EventFlags['cPlayer:MainmenuRecipe']) and (System.EventFlags['cPlayer:MainmenuRecipe_v2'])):
         run CookingRecipeUIDisable()
-    elif not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    elif not EventFlowSystemActor.IsMyVillage():
         run Kitchen_Borrow()
-    elif (not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cOtherPlayerHouse')):
+    elif (not EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (not EventFlowSystemActor.SystemCheckNowStage('cOtherPlayerHouse')):
         run Kitchen_Normal()
     else:
         run Kitchen_Borrow()

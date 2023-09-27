@@ -1,48 +1,48 @@
 flow Init():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(17, false)
-    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cCommuneSitDown', false)
+    MainNpc.NpcAISetting(8, true)
+    MainNpc.NpcAISetting(17, false)
+    MainNpc.NpcAISetRequestSpeakFunc('cCommuneSitDown', false)
  
 flow Poo_Pos():
-    switch EventFlowSystemActor.FlagSystemIntValue5EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace'):
+    switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace'):
         case 0:
-            EventFlowSystemActor.NpcSetPosEventFlowSystemActor.NpcSetPos(625.0, 815.0, 90.0, 'poo')
+            EventFlowSystemActor.NpcSetPos(625.0, 815.0, 90.0, 'poo')
         case 1:
-            EventFlowSystemActor.NpcSetPosEventFlowSystemActor.NpcSetPos(750.0, 600.0, 0.0, 'poo')
+            EventFlowSystemActor.NpcSetPos(750.0, 600.0, 0.0, 'poo')
         case 2:
-            EventFlowSystemActor.NpcSetPosEventFlowSystemActor.NpcSetPos(690.0, 650.0, 0.0, 'poo')
+            EventFlowSystemActor.NpcSetPos(690.0, 650.0, 0.0, 'poo')
         case 3:
-            EventFlowSystemActor.NpcSetPosEventFlowSystemActor.NpcSetPos(753.0, 580.0, 0.0, 'poo')
+            EventFlowSystemActor.NpcSetPos(753.0, 580.0, 0.0, 'poo')
         case 4:
-            EventFlowSystemActor.NpcSetPosEventFlowSystemActor.NpcSetPos(685.0, 580.0, 90.0, 'poo')
+            EventFlowSystemActor.NpcSetPos(685.0, 580.0, 90.0, 'poo')
  
 flow Root():
     if System.EventFlags['cPlayer:ReserveCommuneExpansion']:
         run Demo_Common_Commune::CommuneExpand_PooPosrun Demo_Common_Commune::CommuneExpand_PooPos()
-        MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcChangeConversationPretenseStateMainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', '', 'Root', false, true, ArgInt0=0, ArgStr0='spn')
+        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', '', 'Root', false, true, ArgInt0=0, ArgStr0='spn')
     else:
-        if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
+        if MainNpc.NpcCheckStateSelectTiming('cInit'):
             run Poo_Pos()
-        switch EventFlowSystemActor.FlagSystemIntValue5EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace'):
+        switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace'):
             case 0:
-                MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
+                MainNpc.NpcAISetting(8, true)
+                MainNpc.NpcChangeAIState('cWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
             case 1:
-                MainNpc.NpcAISettingMainNpc.NpcAISetting(8, false)
-                MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
-                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cCommuneWanderWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
+                MainNpc.NpcAISetting(8, false)
+                MainNpc.NpcDisableServiceMotion()
+                MainNpc.NpcChangeAIState('cCommuneWanderWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
             case 2:
-                MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-                MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
-                if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:SpnCheckPlace') in (0, 1):
-                    MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_poo_02_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+                MainNpc.NpcAISetting(8, true)
+                MainNpc.NpcDisableServiceMotion()
+                if EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:SpnCheckPlace') in (0, 1):
+                    MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_poo_02_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
                 else:
-                    MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
+                    MainNpc.NpcChangeAIState('cWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
             case 3:
-                MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-                MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_poo_02_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+                MainNpc.NpcAISetting(8, true)
+                MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_poo_02_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
             case 4:
-                MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-                MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
+                MainNpc.NpcAISetting(8, true)
+                MainNpc.NpcChangeAIState('cWait', '', 'SNPC_poo_02_Commune', 'Root', false, true)
  

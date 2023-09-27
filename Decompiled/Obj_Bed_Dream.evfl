@@ -1,62 +1,62 @@
 flow Bed_CancelDream():
-    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(false, '')
+    EventFlowSystemActor.StoreNormalCamera(false, '')
  
 flow Bed_MyHome():
-    if Player.PlayerBedWaitCanopyPlayer.PlayerBedWaitCanopy():
-        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ToDreamZoomOutLow', 'cDefault', 'Player', true, false, false, 0)
+    if Player.PlayerBedWaitCanopy():
+        EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomOutLow', 'cDefault', 'Player', true, false, false, 0)
     else:
-        EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ToDreamZoomOut', 'cDefault', 'Player', true, false, false, 0)
+        EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomOut', 'cDefault', 'Player', true, false, false, 0)
     # Should I get some sleep?
-    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_Bed:001', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+    Player.OpenMessageWindow('TalkObj/OBJ_Bed:001', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
         run Bed_CancelDream()
-    elif EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+    elif EventFlowSystemActor.IsSharePlay(0):
         # You're playing with friends right now! Save the sleeping for later.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:006', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:006', false)
         run Bed_CancelDream()
-    elif (System.EventFlags['cLandTemp:NpcVisitPlayerHouse']) or (EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()):
+    elif (System.EventFlags['cLandTemp:NpcVisitPlayerHouse']) or (EventFlowSystemActor.NetHasVisitor()):
         # You have company! Save the sleeping for later.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:003', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:003', false)
         run Bed_CancelDream()
-    elif EventFlowSystemActor.IsVillageGateOpenedEventFlowSystemActor.IsVillageGateOpened():
+    elif EventFlowSystemActor.IsVillageGateOpened():
         # Do you really want to drift off to sleep with your airport gate open? You do not. Please close the gate.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:002', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:002', false)
         run Bed_CancelDream()
-    elif EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
+    elif EventFlowSystemActor.NetIsConnected():
         # The gate is closed, but you need to turn off network communications at the airport before you sleep.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:004', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:004', false)
         run Bed_CancelDream()
-    elif Player.PlayerIsEquipToolTowelPlayer.PlayerIsEquipToolTowel():
+    elif Player.PlayerIsEquipToolTowel():
         # Don't forget to finish up any polishing work before you go to sleep!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:008', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:008', false)
         run Bed_CancelDream()
     elif System.EventFlags['cPlayer:EquipLicenseHelmet']:
         # You need to close the Island Designer app before sleeping.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:005', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:005', false)
         run Bed_CancelDream()
-    elif Player.PlayerIsUseCoordinatePlayer.PlayerIsUseCoordinate():
+    elif Player.PlayerIsUseCoordinate():
         # You look very cool, but you'll have to undo your transformation before drifting off to sleep.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:007', false)
+        MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:007', false)
         run Bed_CancelDream()
     else:
         if System.EventFlags['cPlayer:TapDreamFirstTalk']:
             System.EventFlags['cLandTemp:TapIndoorPos'] = true
         else:
             System.EventFlags['cLandTemp:TapIndoorPos'] = false
-        EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
-        EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(43)
-        Player.PlayerClearFoodPowerupPlayer.PlayerClearFoodPowerup()
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        Player.PlayerStartAnimeBedWaitWithHandsClaspedPlayer.PlayerStartAnimeBedWaitWithHandsClasped()
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
-        EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:InIdrDreamZoomOut', '', false)
-        if Player.PlayerBedWaitCanopyPlayer.PlayerBedWaitCanopy():
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ToDreamZoomInLow', 'ToDreamZoomInOut', 'Player', true, false, false, 0)
+        EventFlowSystemActor.MiniGameSilentCancel()
+        EventFlowSystemActor.SoundDuckingOn(43)
+        Player.PlayerClearFoodPowerup()
+        EventFlowSystemActor.MessageSuspend()
+        Player.PlayerStartAnimeBedWaitWithHandsClasped()
+        EventFlowSystemActor.WaitFrame(40)
+        EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:InIdrDreamZoomOut', '', false)
+        if Player.PlayerBedWaitCanopy():
+            EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomInLow', 'ToDreamZoomInOut', 'Player', true, false, false, 0)
         else:
-            EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('ToDreamZoomIn', 'ToDreamZoomInOut', 'Player', true, false, false, 0)
-        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WipeToIdrDream', -1)
-        EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(3.5)
-        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cDreamHouse', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
+            EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomIn', 'ToDreamZoomInOut', 'Player', true, false, false, 0)
+        EventFlowSystemActor.SoundTriggerEmit('WipeToIdrDream', -1)
+        EventFlowSystemActor.NextLPFadeTime(3.5)
+        EventFlowSystemActor.SystemRequestChangeStage('cDreamHouse', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
  
 flow Bed_Wakeup():
     run SNPC_tap_02_InDreaming::Wakeuprun SNPC_tap_02_InDreaming::Wakeup()

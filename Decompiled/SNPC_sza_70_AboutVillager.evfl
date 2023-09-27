@@ -1,32 +1,32 @@
 flow AboutVillager_CmnCancel1():
     # Phew! That's a relief.<10:4> I don't like confrontation...
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:015', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:015', false)
     run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
  
 flow AboutVillager_CmnCancel2():
     # If you're sure… But remember that I take it quite seriously when someone is breaking the rules. If it happens again, please let me know so I can have…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:021', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:021', false)
     run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
  
 flow Root():
     if System.EventFlags['cPlayer:ShizueCmnExplanationComplaint']:
         # Oh! Is there a resident causing you trouble?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:014', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:014', false)
     else:
         System.EventFlags['cPlayer:ShizueCmnExplanationComplaint'] = true
         # What seems to be the problem, PLAYER? Having trouble with another resident? I believe communication is key to solving any dispute. But, if you've alr…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:013', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:013', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Which resident has been troubling you?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:016', false)
-        EventFlowSystemActor.UIMsgCardAdrHandlingEventFlowSystemActor.UIMsgCardAdrHandling('cTroubleList')
-        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
-            EventFlowSystemActor.SetUISelectedNpcVillagerIndexEventFlowSystemActor.SetUISelectedNpcVillagerIndex()
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:016', false)
+        EventFlowSystemActor.UIMsgCardAdrHandling('cTroubleList')
+        if EventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
+            EventFlowSystemActor.SetUISelectedNpcVillagerIndex()
             if System.EventFlags['cLand:UnlockSzaResetHouse']:
                 # What about <115:1:cd00>'s behavior is upsetting you?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:021', false)
-                switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:021', false)
+                switch EventFlowSystemActor.GeneralTalkChoice4():
                     case 0:
                         run SNPC_sza_70_AboutVillager_01_ResetHabit::Rootrun SNPC_sza_70_AboutVillager_01_ResetHabit::Root()
                     case 1:
@@ -37,8 +37,8 @@ flow Root():
                         run AboutVillager_CmnCancel1()
             else:
                 # What about <115:1:cd00>'s behavior is upsetting you?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:017', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:017', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3():
                     case 0:
                         run SNPC_sza_70_AboutVillager_01_ResetHabit::Rootrun SNPC_sza_70_AboutVillager_01_ResetHabit::Root()
                     case 1:

@@ -1,13 +1,13 @@
 flow Check_Availability():
-    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    if EventFlowSystemActor.NetIsDreaming():
         SubflowResults[0] = 1
-    elif not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    elif not EventFlowSystemActor.IsMyVillage():
         SubflowResults[0] = 2
-    elif EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(0):
+    elif EventFlowSystemActor.IsSharePlay(0):
         SubflowResults[0] = 3
-    elif EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+    elif EventFlowSystemActor.NetHasVisitor():
         SubflowResults[0] = 5
-    elif EventFlowSystemActor.IsVillageGateOpenedEventFlowSystemActor.IsVillageGateOpened():
+    elif EventFlowSystemActor.IsVillageGateOpened():
         SubflowResults[0] = 4
  
 flow Root():
@@ -15,28 +15,28 @@ flow Root():
     switch SubflowResults@6[0]:
         case 1:
             # Seems like this phone can't reach anyone right now.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_01', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_01', false)
             run Sub_Event0()
         case 2:
             # I'm here to have fun on ISLAND now, so I'm not going to use this phone.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_02', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_02', false)
             run Sub_Event0()
         case 3:
             # I'm using Party Play right now, so I'll place a call later.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_03', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_03', false)
             run Sub_Event0()
         case 4:
             # I might get company, so I'll place a call some other time.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_04', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_04', false)
             run Sub_Event0()
         case 5:
             # I have company on the island right now, so I'll place a call later.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_05', false)
+            Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:000_05', false)
             run Sub_Event0()
         default:
             return
  
 local flow Sub_Event0():
-    Player.PlayerMuseumCafePlayer.PlayerMuseumCafe(5, false)
+    Player.PlayerMuseumCafe(5, false)
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  

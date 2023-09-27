@@ -1,87 +1,87 @@
 flow AfterSuccessRecovring():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cBoot', 'cNormalFader', 'cNormalFader', 'cBlack', 0.800000011920929, 0.800000011920929)
+    EventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.SystemRequestChangeStage('cBoot', 'cNormalFader', 'cNormalFader', 'cBlack', 0.800000011920929, 0.800000011920929)
  
 flow EndRecoveringMenu():
     # For now, we'll need to pause this process. Please press the HOME Button and close the game.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:125', false)
-    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(3)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:125', false)
+    EventFlowSystemActor.MessageLockNext(3)
     # Please close the game from the HOME Menu.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(-1)
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
+    EventFlowSystemActor.WaitFrame(-1)
  
 flow SavedataRestoring():
     # Welcome, welcome! I'm more than happy to help you restore your island data. Before we begin, this is a serious process, so children may want to get h…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:100_01', false)
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:100_01', false)
+    EventFlowSystemActor.MessageSuspend()
     # Please note that the save-data restoration process can take time. If you are playing in handheld mode using the console screen, please connect the AC…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9017', false)
+    MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9017', false)
     # Now then, our next step is to connect to the internet and search for backup data to restore. Are you ready to check for data?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:100_03', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:100_03', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run SearchAgain()
     else:
         # There are a few conditions we must meet for island backup restoration to work, hm? First, your Nintendo Switch system must be connected to the intern…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:123', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:123', false)
         # Please visit the Nintendo Support website for more info on island backup restoration.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:124', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:124', false)
         run EndRecoveringMenu()
  
 flow SearchAgain():
     # OK! Let's connect to the internet and check…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:100_04', false)
-    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:100_04', false)
+    EventFlowSystemActor.MessageLockNext(1)
     # Connecting to the internet to check for any island data that can be restored…
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:012', false)
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:012', false)
     fork:
         branch:
-            EventFlowSystemActor.SaveListDownloadableBackupInfoEventFlowSystemActor.SaveListDownloadableBackupInfo()
+            EventFlowSystemActor.SaveListDownloadableBackupInfo()
         branch:
-            EventFlowSystemActor@Sub.WaitFrameEventFlowSystemActor@Sub.WaitFrame(60)
-    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+            EventFlowSystemActor@Sub.WaitFrame(60)
+    EventFlowSystemActor.MessageUnlockNext()
+    if EventFlowSystemActor.CheckErrorType(2):
         run Search_InternetError()
-    elif EventFlowSystemActor.SaveIsSucceededDownloadableBackupInfoListupEventFlowSystemActor.SaveIsSucceededDownloadableBackupInfoListup():
+    elif EventFlowSystemActor.SaveIsSucceededDownloadableBackupInfoListup():
 entrypoint Event56:
         # Hmm… I wasn't able to search for recoverable backup data…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:122_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:122_01', false)
         run Sub_Event85()
-    elif EventFlowSystemActor.SaveIsDownloadableBackupInfoGreaterThanEventFlowSystemActor.SaveIsDownloadableBackupInfoGreaterThan(1):
+    elif EventFlowSystemActor.SaveIsDownloadableBackupInfoGreaterThan(1):
         # Hmm… I couldn't find any recoverable backup data…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:122_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:122_02', false)
         run Sub_Event85()
     else:
-        if EventFlowSystemActor.SaveIsDownloadableBackupInfoGreaterThanEventFlowSystemActor.SaveIsDownloadableBackupInfoGreaterThan(2):
-            EventFlowSystemActor.DecideRecoverySaveSingleEventFlowSystemActor.DecideRecoverySaveSingle()
+        if EventFlowSystemActor.SaveIsDownloadableBackupInfoGreaterThan(2):
+            EventFlowSystemActor.DecideRecoverySaveSingle()
             # I found recoverable backup data on the server. The island name is <115:2:cd00>.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:103', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:103', true)
         else:
             SubflowResults[0] = 1
             # I found recoverable backup data for multiple islands on the server.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:105', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:105', false)
 entrypoint Event12:
-            EventFlowSystemActor.SetRecoverySaveChoiceEventFlowSystemActor.SetRecoverySaveChoice()
+            EventFlowSystemActor.SetRecoverySaveChoice()
             # Which island are you interested in restoring?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:106', true)
-            EventFlowSystemActor.DecideRecoverySaveChoiceEventFlowSystemActor.DecideRecoverySaveChoice()
-        EventFlowSystemActor.UIRecoverySaveDataHandlingEventFlowSystemActor.UIRecoverySaveDataHandling()
-        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:106', true)
+            EventFlowSystemActor.DecideRecoverySaveChoice()
+        EventFlowSystemActor.UIRecoverySaveDataHandling()
+        if EventFlowSystemActor.UIResultMenuDecide():
             # OK, this is the final confirmation. Are you sure you want to download and restore data for <115:2:cd00>?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:107', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:107', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Very well! I'll begin the download for <115:2:cd00> data, and we'll get started on restoration. Yes, yes!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:107_01', false)
-                EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:107_01', false)
+                EventFlowSystemActor.MessageLockNext(1)
                 # Downloading and restoring island backup data from the server. Do not touch .
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:009', false)
-                EventFlowSystemActor.SaveDownloadBackupEventFlowSystemActor.SaveDownloadBackup()
-                if EventFlowSystemActor.SaveIsDownloadedBackupEventFlowSystemActor.SaveIsDownloadedBackup():
-                    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:009', false)
+                EventFlowSystemActor.SaveDownloadBackup()
+                if EventFlowSystemActor.SaveIsDownloadedBackup():
+                    EventFlowSystemActor.MessageUnlockNext()
                     # Oh dear… The island backup restoration process seems to have failed.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:126', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:126', false)
                     # Do you want to try checking again?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:131', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:131', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run SearchAgain()
                     else:
                         run EndRecoveringMenu()
@@ -100,12 +100,12 @@ flow ShowListAgain():
  
 local flow Sub_Event85():
     # There are a few conditions we must meet for island backup restoration to work, hm? First, your Nintendo Switch system must be connected to the intern…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:123', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:123', false)
     # Please visit the Nintendo Support website for more info on island backup restoration.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:124', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:124', false)
     # Do you want to try checking again?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:131', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:131', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run SearchAgain()
     else:
         run EndRecoveringMenu()
@@ -115,15 +115,15 @@ local flow Sub_grp_Event29():
         run EndRecoveringMenu()
     else:
         # Understood. Do you want to see about restoring data for a different island instead?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:108', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:108', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run ShowListAgain()
         else:
             run EndRecoveringMenu()
  
 flow SuccessRecovering():
-    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    EventFlowSystemActor.MessageUnlockNext()
     # Thank you for your patience. Your island data has been restored! Now, let's restart the game.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:110', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:110', true)
     run AfterSuccessRecovring()
  

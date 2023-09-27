@@ -1,82 +1,82 @@
 flow Enter():
     fork:
         branch:
-            Player.TurnNeckPlayer.TurnNeck(1, false)
+            Player.TurnNeck(1, false)
         branch:
-            MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+            MainNpc.TurnNeck(1, false)
+            MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
         branch:
-            SubNpc.TurnNeckSubNpc.TurnNeck(11, false)
-            SubNpc.NpcMoveDirectionSubNpc.NpcMoveDirection(201.0, 10.0, 0, false, false)
-            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+            SubNpc.TurnNeck(11, false)
+            SubNpc.NpcMoveDirection(201.0, 10.0, 0, false, false)
+            SubNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
+            EventFlowSystemActor.WaitFrame(20)
  
 flow Exit(RoomSize_Depth: int):
-    MainNpc.TurnNeckMainNpc.TurnNeck(1, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(12)
-    SubNpc.TurnNeckSubNpc.TurnNeck(0, false)
+    MainNpc.TurnNeck(1, false)
+    EventFlowSystemActor.WaitFrame(12)
+    SubNpc.TurnNeck(0, false)
     fork:
         branch:
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
+            MainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-            SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', '', '', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
-    MainNpc.TurnNeckMainNpc.TurnNeck(11, false)
+            EventFlowSystemActor.WaitFrame(20)
+            SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(20)
+    MainNpc.NpcChangeWaitState('cWait', '', '', '', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
+    MainNpc.TurnNeck(11, false)
     if RoomSize_Depth <= 4:
-        MainNpc.NpcRailMoveMainNpc.NpcRailMove(0, false, false, 0, 0, 1)
+        MainNpc.NpcRailMove(0, false, false, 0, 0, 1)
     elif RoomSize_Depth <= 6:
-        MainNpc.NpcRailMoveMainNpc.NpcRailMove(1, false, false, 0, 0, 1)
+        MainNpc.NpcRailMove(1, false, false, 0, 0, 1)
     elif RoomSize_Depth > 8:
-        MainNpc.NpcRailMoveMainNpc.NpcRailMove(3, false, false, 0, 0, 1)
+        MainNpc.NpcRailMove(3, false, false, 0, 0, 1)
     else:
-        MainNpc.NpcRailMoveMainNpc.NpcRailMove(2, false, false, 0, 0, 1)
+        MainNpc.NpcRailMove(2, false, false, 0, 0, 1)
  
 flow Root():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
+    MainNpc.NpcAISetting(9, true)
     run Enter()
-    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('EntranceTalk_EventFtrWall', 'EntranceTalk_EventFtrWall', 'Place:SafeArea', false, false, false, 0)
+    EventFlowSystemActor.CameraSetDemoParam('EntranceTalk_EventFtrWall', 'EntranceTalk_EventFtrWall', 'Place:SafeArea', false, false, false, 0)
     # What happened?! The room's split in two! I didn't know you could do something this weird! So weird!
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:051', true)
+    SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:051', true)
     fork:
         branch:
             # This room is divided by an original Paradise Planning <item>partition wall! You can use a partition with the same design as the wall to section off a…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:141', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:141', true)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            SubNpc.TurnBodySubNpc.TurnBody(0, 0.0)
+            EventFlowSystemActor.WaitFrame(15)
+            SubNpc.TurnBody(0, 0.0)
     # I had no idea you could do this! Or that anyone could! You're such a pro, <110:6>. A huh huh. Design the place however you want. Go nuts. Throw in so…
-    SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:052', true)
+    SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:052', true)
     # I hear you!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:142', true)
-    SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(12)
-    Player.TurnNeckPlayer.TurnNeck(0, false)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:142', true)
+    SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    SubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+    MainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.WaitFrame(12)
+    Player.TurnNeck(0, false)
     fork:
         branch:
             # As far as using <item>partition walls or not, we'll leave it to PLAYER. I…probably could have told you about this feature earlier, but I kinda wanted…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:143', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:143', false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-            SubNpc.TurnNeckSubNpc.TurnNeck(10, false)
+            EventFlowSystemActor.WaitFrame(20)
+            SubNpc.TurnNeck(10, false)
     # After you place it, you can move it the same way as furniture. Try out a bunch of different stuff with it! OK, I'll be waiting out in the yard for yo…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:144', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:144', true)
     run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-    MainNpc.NpcSetVisibleActionMainNpc.NpcSetVisibleAction(false)
-    Player.TurnNeckPlayer.TurnNeck(11, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+    MainNpc.NpcSetVisibleAction(false)
+    Player.TurnNeck(11, false)
+    EventFlowSystemActor.WaitFrame(20)
     run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
     System.EventFlags['cWherearenPlayer:Unlock_Kabetasu'] = true
     System.EventFlags['cWherearenPlayer:SeqKabetasuEventReady'] = false
  
 flow Root_Init():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
-    MainNpc.WherearenCustomerEntrySubCastMainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
+    MainNpc.NpcAISetting(2, false)
+    MainNpc.NpcAISetting(3, false)
+    MainNpc.NpcAISetting(5, false)
+    MainNpc.NpcAISetting(9, false)
+    MainNpc.WherearenCustomerEntrySubCast(1, false, false, false, false, false)
  

@@ -1,77 +1,77 @@
 flow Call_Player():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.TurnBody(10, 0.0)
     # <50:3><150:6>! Please head to the extermination room!<10:4> EXAMINATION room!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:006', true)
-    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CallRequest', 0)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:006', true)
+    MainNpc.NpcSetAIBlackBoard('CallRequest', 0)
     System.EventFlags['cWherearenPlayer:DoctorEventStart'] = true
  
 flow Cancel():
     # OK! Lemme know if you need any things. Or just a thing. I'll be here!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:020', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:020', false)
  
 flow Donation():
-    EventFlowSystemActor.UIPokiAppearEventFlowSystemActor.UIPokiAppear()
+    EventFlowSystemActor.UIPokiAppear()
     # Ooh, a donation?! So…how much?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:016', false)
-    EventFlowSystemActor.UITenKeyHandlingEventFlowSystemActor.UITenKeyHandling('cHospitalDonation')
-    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.HospitalDonationSetTagEventFlowSystemActor.HospitalDonationSetTag(4, 'cLastDonate')
-        switch EventFlowSystemActor.HospitalDonationEventFlowSystemActor.HospitalDonation():
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:016', false)
+    EventFlowSystemActor.UITenKeyHandling('cHospitalDonation')
+    if EventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.HospitalDonationSetTag(4, 'cLastDonate')
+        switch EventFlowSystemActor.HospitalDonation():
             case 0:
                 # Got it—<90:44:0004>! You sure about this?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:018', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:018', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Donation_Yes()
                 else:
                     run Donation_No()
             case 1:
                 # Whoa, that's a lot. You sure you want to donate <90:44:0004>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:018_01', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:018_01', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Donation_Yes()
                 else:
                     run Donation_No()
             case 2:
                 # Wha— <90:44:0004>?! Are you serious?!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:018_02', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:018_02', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Donation_Yes()
                 else:
                     run Donation_No()
     else:
         # Not a problem! Just lemme know if you change your mind back.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:019', false)
-        EventFlowSystemActor.UIPokiDisappearEventFlowSystemActor.UIPokiDisappear()
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:019', false)
+        EventFlowSystemActor.UIPokiDisappear()
  
 flow Donation_No():
     # Not a problem! Just lemme know if you change your mind back.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:019', false)
-    EventFlowSystemActor.UIPokiDisappearEventFlowSystemActor.UIPokiDisappear()
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:019', false)
+    EventFlowSystemActor.UIPokiDisappear()
  
 flow Donation_Yes():
-    EventFlowSystemActor.UpdateHospitalDonationEventFlowSystemActor.UpdateHospitalDonation()
-    if EventFlowSystemActor.IsAchievedHospitalDonationEventFlowSystemActor.IsAchievedHospitalDonation():
+    EventFlowSystemActor.UpdateHospitalDonation()
+    if EventFlowSystemActor.IsAchievedHospitalDonation():
         # Thank you! The doctor's gonna be super happy 'cause of your help.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:024', false)
-        EventFlowSystemActor.HospitalDonationSetTagEventFlowSystemActor.HospitalDonationSetTag(5, 'cGoal')
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:024', false)
+        EventFlowSystemActor.HospitalDonationSetTag(5, 'cGoal')
         # That makes the total donated over <90:44:0005>! Which means… We met our money goal! We can add more rooms! Go talk to Lottie if you wanna hear more a…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:021', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:021', false)
         System.EventFlags['cWherearenPlayer:CompleteHospitalDonation'] = true
         System.EventFlags['cWherearenPlayer:CompleteHospitalDonation_Today'] = true
         System.EventFlags['cPlayer:OtgTipsCompleteHospitalDonation'] = true
-        EventFlowSystemActor.ReservePlayerMutterDemoEventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Wherearen', 'Hospital_DonationClear', 'cNowDemoEnd', false)
-        EventFlowSystemActor.UIPokiDisappearEventFlowSystemActor.UIPokiDisappear()
+        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Wherearen', 'Hospital_DonationClear', 'cNowDemoEnd', false)
+        EventFlowSystemActor.UIPokiDisappear()
     else:
         # Thanks! We're a step closer to our goal now!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:023', false)
-        EventFlowSystemActor.UIPokiDisappearEventFlowSystemActor.UIPokiDisappear()
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:023', false)
+        EventFlowSystemActor.UIPokiDisappear()
  
 flow Examination():
-    MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(13445, 'cNone', false)
+    MainNpc.NpcChangeHandTool(13445, 'cNone', false)
     # A huh huh, OK! Can ya tell me how it is that you feel icky, <110:6>?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:004', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:004', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 1
             run Sub_Event59()
@@ -85,72 +85,72 @@ flow Examination():
             run Cancel()
  
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cHospital')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cHospital')
+    if (EventFlowSystemActor.WherearenExistFacilityName('cHospital')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cHospital')
         # <20:2:cd06><50:3><150:3:cd00> is the best excuse for medical care I've ever worked for!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:003', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:003', false)
         run KKFes_Chk()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow FesDance():
     # Huh? Dancing? Oooh yeah! The music festival's going on at the beach today. Yeah, let's go! I got a bad case of wiggle fever, and I'm gonna cure it by…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:102_01', true)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:102_01', true)
     run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
  
 flow HospitalEvent():
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    MainNpc.TurnBody(10, 0.0)
     if System.EventFlags['cWherearenPlayer:DoctorEventStart']:
         # RANDOM: It's your turn for the doctor to fix yo… // Tell the doctor what your deal is, OK? … // Go say hi to the doctor for me! But als…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:007', false)
-    elif EventFlowSystemActor.FlagSystemIntValue4EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:HospitalReceptionFlag') != 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:007', false)
+    elif EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:HospitalReceptionFlag') != 0:
         # Hi. Thank you for waiting. You're real good at it. You're so good that we'd all like to see you do it a little longer. Hmm…yes. Very impressive.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:006_01', true)
-    elif EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3):
-        if EventFlowSystemActor.IsAchievedHospitalDonationEventFlowSystemActor.IsAchievedHospitalDonation():
-            switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:006_01', true)
+    elif EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3):
+        if EventFlowSystemActor.IsAchievedHospitalDonation():
+            switch EventFlowSystemActor.EnvTimeZone():
                 case `05:00-07:59`, `08:00-11:59`:
                     # Goood morning! Whatcha in for today, <110:6>?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:001_01', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:001_01', false)
                 case `12:00-15:59`, `16:00-18:59`:
                     # Helloooo! Whatcha in for today, <110:6>?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:002_01', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:002_01', false)
                 case `19:00-23:59`, `00:00-04:59`:
                     # Goood evening! Whatcha in for today, <110:6>?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:003_01', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:003_01', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run Examination()
             else:
                 run Cancel()
         else:
-            switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+            switch EventFlowSystemActor.EnvTimeZone():
                 case `05:00-07:59`, `08:00-11:59`:
                     # Goood morning! Whatcha in for today, <110:6>?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:001', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:001', false)
                 case `12:00-15:59`, `16:00-18:59`:
                     # Helloooo! Whatcha in for today, <110:6>?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:002', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:002', false)
                 case `19:00-23:59`, `00:00-04:59`:
                     # Goood evening! Whatcha in for today, <110:6>?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:003', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:003', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     run Examination()
                 case 1:
                     run Donation()
                 case 2:
                     run Cancel()
-    elif EventFlowSystemActor.IsAchievedHospitalDonationEventFlowSystemActor.IsAchievedHospitalDonation():
-        switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+    elif EventFlowSystemActor.IsAchievedHospitalDonation():
+        switch EventFlowSystemActor.EnvTimeZone():
             case `05:00-07:59`, `08:00-11:59`:
                 # Goood morning! Whatcha in for today, <110:6>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:011_01', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:011_01', false)
             case `12:00-15:59`, `16:00-18:59`:
                 # Hellooo! Whatcha in for today, <110:6>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:012_01', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:012_01', false)
             case `19:00-23:59`, `00:00-04:59`:
                 # Goood evening! Whatcha in for today, <110:6>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:013_01', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:013_01', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3():
             case 0:
                 run Examination()
             case 1:
@@ -158,17 +158,17 @@ flow HospitalEvent():
             case 2:
                 run Cancel()
     else:
-        switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+        switch EventFlowSystemActor.EnvTimeZone():
             case `05:00-07:59`, `08:00-11:59`:
                 # Goood morning! Whatcha in for today, <110:6>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:011', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:011', false)
             case `12:00-15:59`, `16:00-18:59`:
                 # Hellooo! Whatcha in for today, <110:6>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:012', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:012', false)
             case `19:00-23:59`, `00:00-04:59`:
                 # Goood evening! Whatcha in for today, <110:6>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:013', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:013', false)
+        switch EventFlowSystemActor.GeneralTalkChoice4():
             case 0:
                 run Examination()
             case 1:
@@ -180,28 +180,28 @@ flow HospitalEvent():
  
 flow IntroductionHospital():
     if not System.EventFlags['cWherearenPlayer:ReceptionTalkAboutHospital']:
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+        MainNpc.TurnNeck(10, false)
         # Hi, <150:6>! Heck, I'm surprised they let me in here! And here's a big secret… I work here! Neat, right?! If you need an examination, just let me kno…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:009', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:009', false)
         System.EventFlags['cWherearenPlayer:ReceptionTalkAboutHospital'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
+    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+        MainNpc.TurnNeck(10, true)
         # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessageMainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # Yeah, let's go! I got a bad case of wiggle fever, and I'm gonna cure it by shakin' my butt!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:102_02', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:102_02', true)
             run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
         else:
             # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Reception():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Sub_Event55()
     else:
         run IntroductionHospital()
@@ -212,7 +212,7 @@ flow Reception():
             run HospitalEvent()
  
 flow Root():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Sub_Event56()
     else:
         run IntroductionHospital()
@@ -223,8 +223,8 @@ flow Root():
             run HospitalEvent()
  
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    if EventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeck(10, false)
         run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
@@ -234,50 +234,50 @@ flow StandSleep():
 local flow Sub_Event55():
     run FacilityName_Chk()
     # RANDOM: Whose turn is it next? I oughta write t… // OK, medical history looks good. Well, n… // <20:2:cd0e>Everyone'll get called once … // <20:2:cd0e>Don't quit taking the medici… // <20:2:cd0e>I'm rootin' for everyone to …
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:002', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:002', false)
     run Event32()
  
 local flow Sub_Event56():
     run FacilityName_Chk()
     # RANDOM: <20:2:cd0e>Is everyone all checked in? … // <20:2:cd0e>Hang in there! I've asked th… // <20:2:cd0e>It's OK if you forgot your r… // <20:2:cd0e>When your name's called, go … // <20:2:cd0e>If ya go outside while you'r…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:001', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:001', false)
 entrypoint Event32:
-    if not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        if EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3):
-            MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
-            if EventFlowSystemActor.IsAchievedHospitalDonationEventFlowSystemActor.IsAchievedHospitalDonation():
+    if not EventFlowSystemActor.IsInspectingWherearen():
+        if EventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3):
+            MainNpc.TurnNeck(10, true)
+            if EventFlowSystemActor.IsAchievedHospitalDonation():
                 # What's up? I can help if you need me to, <110:6>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:014_01', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:014_01', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run FesDance()
                 else:
                     run Cancel()
             else:
                 # What's up? I can help if you need me to, <110:6>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:014', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:014', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3():
                     case 0:
                         run Donation()
                     case 1:
                         run FesDance()
                     case 2:
                         run Cancel()
-        elif not EventFlowSystemActor.IsAchievedHospitalDonationEventFlowSystemActor.IsAchievedHospitalDonation():
-            MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
+        elif not EventFlowSystemActor.IsAchievedHospitalDonation():
+            MainNpc.TurnNeck(10, true)
             # Hi there! What's up? Can I help ya with anything, <110:6>?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:008', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:008', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run Donation()
             else:
                 run Cancel()
  
 local flow Sub_Event59():
-    MainNpc.KarteMainNpc.Karte(0)
+    MainNpc.Karte(0)
     # Wow. That sounds rough. You oughta find a doctor. Oh! I know where there's a doctor! There's one here!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:005', true)
-    MainNpc.KarteMainNpc.Karte(1)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:005', true)
+    MainNpc.Karte(1)
     # I'll call ya when it's your turn to be stared at by a smart person. So just hold tight!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:005_01', true)
-    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CallRequest', 1)
-    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('CallCount', 180)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:005_01', true)
+    MainNpc.NpcSetAIBlackBoard('CallRequest', 1)
+    MainNpc.NpcSetAIBlackBoard('CallCount', 180)
  

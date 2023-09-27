@@ -1,60 +1,60 @@
 flow Cancel_Moving_CharacterMaking():
     # Oh! Do you want to cancel the moving process?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2021', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2021', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Oh! In that case, we'll cancel all processing on our packages. Take care! __ ...care!__
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2023', false)
-        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(3)
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2023', false)
+        EventFlowSystemActor.MessageLockNext(3)
         # Please close the game from the HOME Menu.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(-1)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
+        EventFlowSystemActor.WaitFrame(-1)
     else:
         run Retry_Moving()
  
 flow Cancel_Search_Cmn():
-    EventFlowSystemActor.SaveUnregisterMoveInPlayerBufferEventFlowSystemActor.SaveUnregisterMoveInPlayerBuffer()
-    EventFlowSystemActor.NetMoveSessionFinalizeEventFlowSystemActor.NetMoveSessionFinalize()
+    EventFlowSystemActor.SaveUnregisterMoveInPlayerBuffer()
+    EventFlowSystemActor.NetMoveSessionFinalize()
  
 flow CheckNALink():
-    if (EventFlowSystemActor.NetHasPOPIDEventFlowSystemActor.NetHasPOPID(true)) and (not EventFlowSystemActor.NetIsRegisteredSameNAEventFlowSystemActor.NetIsRegisteredSameNA()):
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        if EventFlowSystemActor.NetIsAvailableNAEventFlowSystemActor.NetIsAvailableNA():
+    if (EventFlowSystemActor.NetHasPOPID(true)) and (not EventFlowSystemActor.NetIsRegisteredSameNA()):
+        EventFlowSystemActor.MessageSuspend()
+        if EventFlowSystemActor.NetIsAvailableNA():
             # The Nintendo Account linked to this user account is different than the Nintendo Account used on the previous system. This means all features that use…
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9103', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9103', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Close the game from the HOME Menu. Then relaunch the game with a user account linked to the same Nintendo Account you used before moving.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9105_01', false)
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(-1)
+                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9105_01', false)
+                EventFlowSystemActor.WaitFrame(-1)
             else:
                 run Jump_Initialize()
         else:
             # The user account you are using does not have a linked Nintendo Account. Do you want to link a Nintendo Account now so you can carry over save data re…
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9101', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9101', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # If you do not link a Nintendo Account before proceeding, all features that use the internet will be reset. Do you want to proceed?
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9102', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9102', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     # Please close the game using the HOME Menu. Then link a user account to the same Nintendo Account you used before moving. Finally, relaunch the game.
-                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9105', false)
-                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(-1)
+                    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9105', false)
+                    EventFlowSystemActor.WaitFrame(-1)
                 else:
                     run Jump_Initialize()
             else:
-                EventFlowSystemActor.NetEnsureNSAEventFlowSystemActor.NetEnsureNSA()
+                EventFlowSystemActor.NetEnsureNSA()
                 run Loop_CheckNALink()
  
 flow Jump_Initialize():
-    EventFlowSystemActor.ResetNAEventFlowSystemActor.ResetNA()
+    EventFlowSystemActor.ResetNA()
     # The save data for features that use the internet has been reset.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9104', false)
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9104', false)
  
 flow Loop_CheckNALink():
     run CheckNALink()
  
 flow Retry_Moving():
     # We'd be happy to help you with your move, then. Have you already sent a Transfer Request from the Nintendo Switch system that has your current island?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2002', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2002', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Return_SearchMoving()
         case 1:
@@ -64,12 +64,12 @@ flow Retry_Moving():
  
 flow Return_HowToMoving():
     # To send a Transfer Request, you'll need to use the Nintendo Switch system with your current home. First, launch the Animal Crossing: New Horizons gam…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2007', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2007', false)
     # Oh! I have one more important detail in case you've already transferred user data from a different system. After you use "Transfer Your User Data," t…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2008', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2008', false)
     # I believe that's everything! Do you think you're ready to begin the moving process?__ ...process?__
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2009', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2009', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Return_SearchMoving()
         case 1:
@@ -79,55 +79,55 @@ flow Return_HowToMoving():
  
 flow Return_SearchMoving():
     # Alright, please take a look at the Nintendo Switch system that has your current island.__ ...island.__ If you see "The Transfer Request has been sent…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2002_01', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(2)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2002_01', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.MessageLockNext(2)
         # Searching for someone that has sent a Transfer Request... (Press  to cancel.)
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:202', false)
-        EventFlowSystemActor.SaveRegisterMoveInPlayerBufferEventFlowSystemActor.SaveRegisterMoveInPlayerBuffer()
-        EventFlowSystemActor.NetMoveSessionSearchEventFlowSystemActor.NetMoveSessionSearch()
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-        if EventFlowSystemActor.MessageUseBCancelEventFlowSystemActor.MessageUseBCancel():
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:202', false)
+        EventFlowSystemActor.SaveRegisterMoveInPlayerBuffer()
+        EventFlowSystemActor.NetMoveSessionSearch()
+        EventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNext()
+        if EventFlowSystemActor.MessageUseBCancel():
             run Cancel_Search_Cmn()
             run Cancel_Moving_CharacterMaking()
-        elif (not EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2)) and (EventFlowSystemActor.NetMoveFoundSessionNumEventFlowSystemActor.NetMoveFoundSessionNum() != 0):
-            EventFlowSystemActor.SetTagMoveInPlayerInfoEventFlowSystemActor.SetTagMoveInPlayerInfo(0, 0)
+        elif (not EventFlowSystemActor.CheckErrorType(2)) and (EventFlowSystemActor.NetMoveFoundSessionNum() != 0):
+            EventFlowSystemActor.SetTagMoveInPlayerInfo(0, 0)
             # I've found <115:0:cd00> from <115:2:cd00>! Can you please confirm if that is correct?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2004', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2004', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # In that case, we can move on to the next part of the process!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2005', false)
-                EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+                MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2005', false)
+                EventFlowSystemActor.MessageLockNext(1)
                 # Prepping for the moving process. (Please continue the process on the system you are moving from.)
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:203', false)
-                EventFlowSystemActor.NetMoveStartWaitEventFlowSystemActor.NetMoveStartWait()
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:203', false)
+                EventFlowSystemActor.NetMoveStartWait()
                 run SaveExpansion()
-                if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+                if EventFlowSystemActor.CheckErrorType(2):
                     run Cancel_Search_Cmn()
-                    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+                    EventFlowSystemActor.MessageSuspend()
+                    EventFlowSystemActor.MessageUnlockNext()
                     # Hm? The moving process failed…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2025', false)
+                    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2025', false)
                     run Cancel_Moving_CharacterMaking()
                 else:
                     # Now performing the moving process. Please wait. Do not touch .
-                    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:204', false)
-                    EventFlowSystemActor.NetMoveFinishWaitEventFlowSystemActor.NetMoveFinishWait()
-                    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-                    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+                    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:204', false)
+                    EventFlowSystemActor.NetMoveFinishWait()
+                    EventFlowSystemActor.MessageSuspend()
+                    EventFlowSystemActor.MessageUnlockNext()
+                    if EventFlowSystemActor.CheckErrorType(2):
                         run Cancel_Search_Cmn()
                         # Hm? The moving process failed…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2025', false)
+                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2025', false)
                         run Cancel_Moving_CharacterMaking()
                     else:
-                        EventFlowSystemActor.NetMoveSessionFinalizeEventFlowSystemActor.NetMoveSessionFinalize()
-                        EventFlowSystemActor.BeginAsMovedOneEventFlowSystemActor.BeginAsMovedOne(true)
-                        EventFlowSystemActor.SaveSwitchMovedOneToVillagerEventFlowSystemActor.SaveSwitchMovedOneToVillager()
-                        EventFlowSystemActor.NoticeGameStartForPlayReportEventFlowSystemActor.NoticeGameStartForPlayReport()
+                        EventFlowSystemActor.NetMoveSessionFinalize()
+                        EventFlowSystemActor.BeginAsMovedOne(true)
+                        EventFlowSystemActor.SaveSwitchMovedOneToVillager()
+                        EventFlowSystemActor.NoticeGameStartForPlayReport()
                         # And there we go! The moving process is complete! However, there is one tiny detail to wrap up regarding your old home, so please wait one moment…__ .…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2010', false)
+                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2010', false)
                         run CheckNALink()
                         run Tutorials_Prologue1_Charactermaking::Continue_AfterMovingrun Tutorials_Prologue1_Charactermaking::Continue_AfterMoving()
             else:
@@ -136,8 +136,8 @@ flow Return_SearchMoving():
         else:
             run Cancel_Search_Cmn()
             # I couldn't find anybody who is trying to move… Should I search again?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2024', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2024', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run Return_SearchMoving()
             else:
                 run Cancel_Moving_CharacterMaking()
@@ -146,23 +146,23 @@ flow Return_SearchMoving():
  
 flow Root():
     # Understood!__ ...stood!__ You're moving off of your previous Animal Crossing: New Horizons island. That's great! __ ...great!__
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2001', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2001', false)
     # Before we continue, are you also considering transferring users between Nintendo Switch systems? If so, you should complete that transfer first by se…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2001_01', false)
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2001_01', false)
+    EventFlowSystemActor.MessageSuspend()
     # The save data transfer process will take some time. If you're playing in handheld mode, please connect the system to the Nintendo Switch AC adapter b…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9112', false)
+    MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9112', false)
     run Retry_Moving()
  
 flow SaveExpansion():
-    if not EventFlowSystemActor.SaveIsAbleToMoveInEventFlowSystemActor.SaveIsAbleToMoveIn():
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
+    if not EventFlowSystemActor.SaveIsAbleToMoveIn():
+        EventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.MessageUnlockNext()
         run Cancel_Search_Cmn()
-        if EventFlowSystemActor.NetMoveMissingSaveExtensionEventFlowSystemActor.NetMoveMissingSaveExtension():
+        if EventFlowSystemActor.NetMoveMissingSaveExtension():
             # Save-data expansion failed.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9114', false)
+            MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9114', false)
         # Hm? The moving process failed…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2025', false)
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2025', false)
         run Cancel_Moving_CharacterMaking()
  

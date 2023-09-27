@@ -1,46 +1,46 @@
 flow Check_Choco():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
-    MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_man_02_WherearenOffice_ItemCheck', 'CheckChoco')
+    MainNpc.NpcAISetting(9, false)
+    MainNpc.NpcAISetting(5, false)
+    MainNpc.SetNpcSpeakFlow('SNPC_man_02_WherearenOffice_ItemCheck', 'CheckChoco')
     run TurnCheckSpeak()
  
 flow Check_man():
-    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('CheckItemIndex', 0):
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, false)
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(5, false)
-        MainNpc.SetNpcSpeakFlowMainNpc.SetNpcSpeakFlow('SNPC_man_02_WherearenOffice_ItemCheck', 'Root')
+    if MainNpc.NpcBlackBoard('CheckItemIndex', 0):
+        MainNpc.NpcAISetting(9, false)
+        MainNpc.NpcAISetting(5, false)
+        MainNpc.SetNpcSpeakFlow('SNPC_man_02_WherearenOffice_ItemCheck', 'Root')
         run TurnCheckSpeak()
  
 flow Init():
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('IsNodding', 0)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckItemIndex', -1)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckRail', 1)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('CheckChoco', -1)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('ChocoIndex', 5)
-    MainNpc.NpcAISetRequestSpeakFuncMainNpc.NpcAISetRequestSpeakFunc('cItemCheck', true)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
+    MainNpc.NpcRegistAIBlackBoard('IsNodding', 0)
+    MainNpc.NpcRegistAIBlackBoard('CheckItemIndex', -1)
+    MainNpc.NpcRegistAIBlackBoard('CheckRail', 1)
+    MainNpc.NpcRegistAIBlackBoard('CheckChoco', -1)
+    MainNpc.NpcRegistAIBlackBoard('ChocoIndex', 5)
+    MainNpc.NpcAISetRequestSpeakFunc('cItemCheck', true)
+    MainNpc.NpcAISetting(8, true)
  
 flow Root():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, true)
-    MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+    MainNpc.NpcAISetting(2, true)
+    MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
     if System.EventFlags['cWherearenPlayer:NpcGeneratePreDustClothTemp']:
-        MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cNpcSpManCloth')
-        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cManDustCloth', '', '', '', false, true)
+        MainNpc.SetDefaultWaitAs('cNpcSpManCloth')
+        MainNpc.NpcChangeAIState('cManDustCloth', '', '', '', false, true)
     elif System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']:
-        MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(12, false)
-        MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
+        MainNpc.NpcChangeInvisibleState('cInvisible', '', '', '', false, true, ArgInt0=0)
+        MainNpc.NpcAISetting(12, false)
+        MainNpc.NpcDisableServiceMotion()
     elif (not System.EventFlags['cWherearenPlayer:SeqUniformTutorialOngoing']) and ((System.EventFlags['cWherearenPlayer:SeqOtgSickDone']) or (not System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing'])):
         run AI_NPC_Wherearen_Common::DoOfficerWaitrun AI_NPC_Wherearen_Common::DoOfficerWait(FlowName='SNPC_man_01_WherearenOffice', EntryName='Root')
     else:
-        MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
-        if EventFlowSystemActor.SystemCheckPreStageEventFlowSystemActor.SystemCheckPreStage('cWherearenOffice2F'):
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_man_01_WherearenOffice', 'Root', false, true, true, 2, 0.0, '')
+        MainNpc.NpcDisableServiceMotion()
+        if EventFlowSystemActor.SystemCheckPreStage('cWherearenOffice2F'):
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', 'SNPC_man_01_WherearenOffice', 'Root', false, true, true, 2, 0.0, '')
         else:
             run AI_NPC_Wherearen_Common::DoOfficerWaitrun AI_NPC_Wherearen_Common::DoOfficerWait(FlowName='SNPC_man_01_WherearenOffice', EntryName='Root')
  
 flow TurnCheckSpeak():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(2, false)
+    MainNpc.NpcAISetting(2, false)
     if not System.EventFlags['cWherearenPlayer:OtgGetStartingSalary']:
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(3, false)
+        MainNpc.NpcAISetting(3, false)
  

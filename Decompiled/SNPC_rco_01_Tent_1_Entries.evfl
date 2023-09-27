@@ -8,149 +8,149 @@ flow AboutBuildMuseumTent_Force_Init():
  
 flow CancelRemakeTrial():
     # Of course, of course. Come see me when you're ready, hm?
-    DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:102', false)
+    DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:102', false)
     System.EventFlags['cPlayerTemp:RcoAccessWorkingTable'] = false
  
 flow DoRemakeTrial(ItemPrice: int = 0):
     # Yes, yes! That's the spirit! Let's get started!
-    DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:103', true)
-    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(45)
-    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+    DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:103', true)
+    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    EventFlowSystemActor.WaitFrame(45)
+    EventFlowSystemActor.FadeIn(true)
     # I believe a brief explanation about customization is in order.<10:4> Honestly, it's incredibly simple. First, you'll need the item you want to custom…
-    DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:201', false)
+    DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:201', false)
     # I do believe you'll find this easier to understand once you try it yourself. So let's get started! Your goal for this session is to make [a|an]<125:0…
-    DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:202', false)
+    DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:202', false)
     if System.EventFlags['cPlayer:UseCloset']:
         # This might be old news to you, but…
-        DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:203_01', false)
+        DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:203_01', false)
     else:
         # The wardrobe you'll make, as well as closets, chests, and other items that store clothing, are quite useful. You can use them to easily change into a…
-        DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:203_02', false)
+        DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:203_02', false)
     # You could use your custom-colored <125:0:0000> to put on your own fashion show… That freedom of expression is just the sort of thing we enjoy here on…
-    DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:204', false)
-    if not EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('', 3436):
+    DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:204', false)
+    if not EventFlowSystemActor.PlayerHasCraftRecipe('', 3436):
         # Oops! You're going to need the DIY recipe for it, first! Let me just send that over now…
-        DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:205_01', true)
+        DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:205_01', true)
         run Demo_Common_PhoneCall::SendingDataOneWay_DynamicJoinrun Demo_Common_PhoneCall::SendingDataOneWay_DynamicJoin()
         # There! All set!
-        DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:205_02', false)
-        EventFlowSystemActor.PlayerSetCraftRecipeEventFlowSystemActor.PlayerSetCraftRecipe('', 3436)
-        DynamicCast_rco.SmartPhoneDynamicCast_rco.SmartPhone(1)
+        DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:205_02', false)
+        EventFlowSystemActor.PlayerSetCraftRecipe('', 3436)
+        DynamicCast_rco.SmartPhone(1)
     # So, come see me after you get [a|an] <125:0:0000>, hm?
-    DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:206', false)
+    DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:206', false)
     System.EventFlags['cPlayer:RcoRemakeTrialOngoing'] = true
     System.EventFlags['cPlayerTemp:RcoAccessWorkingTable'] = false
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RcoAskRemakeTrial(ItemPrice: int = 0):
-    EventFlowSystemActor.NpcEventItemSetEventFlowSystemActor.NpcEventItemSet(3436, 'cTalk', 0, ItemPrice)
-    DynamicCast_rco.RcoStandUpChairDynamicCast_rco.RcoStandUpChair()
+    EventFlowSystemActor.NpcEventItemSet(3436, 'cTalk', 0, ItemPrice)
+    DynamicCast_rco.RcoStandUpChair()
     if not System.EventFlags['cPlayer:RcoRemakeTrialOngoing']:
-        DynamicCast_rco.NpcWaitTalkPrepareDynamicCast_rco.NpcWaitTalkPrepare()
-        DynamicCast_rco.TurnBodyDynamicCast_rco.TurnBody(10, 0.0)
-        DynamicCast_rco.NpcWaitTurnDynamicCast_rco.NpcWaitTurn()
+        DynamicCast_rco.NpcWaitTalkPrepare()
+        DynamicCast_rco.TurnBody(10, 0.0)
+        DynamicCast_rco.NpcWaitTurn()
         System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial'] = false
         System.EventFlags['cPlayer:RcoHeardInviteRemakeWS'] = true
         fork:
             branch:
                 if System.EventFlags['cPlayerTemp:RcoAccessWorkingTable']:
-                    Player.PlayerChangeStateDemoTalkPlayer.PlayerChangeStateDemoTalk()
-                    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+                    Player.PlayerChangeStateDemoTalk()
+                    Player.TurnBody(0, 0.0)
             branch:
                 # Ready to dip your toes into the delightful waters of customization, PLAYER?
-                DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:101', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:101', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3():
             case 0:
                 run DoRemakeTrial(ItemPrice=ItemPrice)
             case 1:
                 # Customization lets you change the color, fabric, or design of many items—the details that matter! Why, how much more meaningful will a handcrafted pi…
-                DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:104', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:104', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run DoRemakeTrial()
                 else:
                     run CancelRemakeTrial()
             case 2:
                 run CancelRemakeTrial()
-    elif EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(3436, 1):
+    elif EventFlowSystemActor.HasTargetItem(3436, 1):
         if System.EventFlags['cPlayer:RcoRemakeTrialGetFurniture']:
             # <50:3>PLAYER, you're already registered for my customization workshop!
-            DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:111', false)
+            DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:111', false)
             # Well, I guess we can start our workshop now that you've got your <125:0:0000> ready!
-            DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:115', false)
+            DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:115', false)
         else:
             System.EventFlags['cPlayer:RcoRemakeTrialGetFurniture'] = true
             # Oh! <50:3>PLAYER! You've got your <125:0:0000>!
-            DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:113', false)
+            DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:113', false)
             # I think that means it's time for you to customize it.
-            DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:114_01', false)
-        if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+            DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:114_01', false)
+        if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
             # One moment… You'll also need some pocket space so you can hold the <item>customization kits you'll use. I'll give you the kits when you use the workb…
-            DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:114_02', false)
+            DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:114_02', false)
             System.EventFlags['cPlayer:RemakeWs_TalkWhenItemFull'] = true
         else:
             # I'll give you the <item>customization kits you'll need in a moment. For now, please step up to the workbench.
-            DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:116', false)
+            DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:116', false)
     else:
-        DynamicCast_rco.NpcWaitTalkPrepareDynamicCast_rco.NpcWaitTalkPrepare()
-        DynamicCast_rco.TurnBodyDynamicCast_rco.TurnBody(10, 0.0)
-        DynamicCast_rco.NpcWaitTurnDynamicCast_rco.NpcWaitTurn()
+        DynamicCast_rco.NpcWaitTalkPrepare()
+        DynamicCast_rco.TurnBody(10, 0.0)
+        DynamicCast_rco.NpcWaitTurn()
         fork:
             branch:
                 if System.EventFlags['cPlayerTemp:RcoAccessWorkingTable']:
-                    Player.PlayerChangeStateDemoTalkPlayer.PlayerChangeStateDemoTalk()
-                    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+                    Player.PlayerChangeStateDemoTalk()
+                    Player.TurnBody(0, 0.0)
             branch:
                 # <50:3>PLAYER, you're already registered for my customization workshop!
-                DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:111', false)
+                DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:111', false)
         # For this workshop, you'll need [a|an] <125:0:0000> to customize. Come talk to me again when you've got what you need, hm?
-        DynamicCast_rco.OpenMessageWindowDynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:112', false)
+        DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:112', false)
         System.EventFlags['cPlayerTemp:RcoAccessWorkingTable'] = false
  
 flow RcoDIYongoing():
-    if not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(2500, 5):
+    if not EventFlowSystemActor.HasTargetItem(2500, 5):
         # Remember, to craft the fishing rod you'll need 5 <item>tree branches. If you don't see enough of them lying on the ground, try shaking a few trees. E…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:911', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:911', false)
     elif System.EventFlags['cPlayer:RcoDIYtrialGetMaterial']:
         # Ah! So you have all of the necessary <item>tree branches. Go ahead and step up to the workbench to get started.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:207', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:207', false)
     else:
         # Ah, PLAYER. Found the necessary materials, hm? Well then! Let's get started on crafting that fishing rod. Yes, yes! To begin, just select a project f…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:921', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:921', true)
         System.EventFlags['cPlayer:RcoDIYtrialGetMaterial'] = true
  
 flow RcoRemakeTrialIntro():
     # Ah, PLAYER! Hello, hello!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
     if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:EnableDiyRemake']):
         if System.EventFlags['cPlayer:PAnnouceHeardRemakeWsNewsToday']:
             # As you may have heard on today's broadcast, I'm offering a workshop on customization.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:011', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:011', false)
         else:
             # I'm looking for folks to participate in a customization workshop.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:011_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:011_01', false)
         # However, if my hunch is correct, you already learned about customization on your previous island, hm?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:012', false)
-        if ((System.EventFlags['cPlayer:RemakeWithRcoOfficeBeforeWS']) and (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrOffice'))) or ((System.EventFlags['cPlayer:RemakeWithRcoTentBeforeWS']) and (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'))):
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:012', false)
+        if ((System.EventFlags['cPlayer:RemakeWithRcoOfficeBeforeWS']) and (EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'))) or ((System.EventFlags['cPlayer:RemakeWithRcoTentBeforeWS']) and (EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'))):
             # Yes, yes, I'm certain I saw your expertise in action at the workbench here, PLAYER!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:013_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:013_01', false)
         # In that case, I hope you continue to enjoy the freedom of expression that only customization can provide!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:014', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:014', false)
         System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial'] = false
         System.EventFlags['cPlayer:RcoHeardInviteRemakeWS'] = true
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(2513, 50, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 9, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+        EventFlowSystemActor.SelectRewardItemDirect(2513, 50, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 9, 'cNone', 'cFastTomorrow', 'cReward', false, false)
     else:
         if System.EventFlags['cPlayer:WHEREAREN_RcoHeardRemakeWS']:
             # As I mentioned at the airport, I'm looking for folks to participate in a customization workshop. Customization will really come in handy when you're …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:001_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:001_03', false)
         else:
             if System.EventFlags['cPlayer:PAnnouceHeardRemakeWsNewsToday']:
                 # As you might have heard on today's broadcast, I'm now offering a new workshop on customization. I think you'll find DIY even more fun when you master…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:001_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:001_01', false)
             else:
                 # I'm looking for folks to participate in a customization workshop. Learning how to customize your creations will make DIY even more fun, so I hope you…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:001_02', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:001_02', false)
         System.EventFlags['cPlayer:RcoEnableRemakeTrial'] = true
         System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial'] = false
         System.EventFlags['cPlayer:RcoHeardInviteRemakeWS'] = true
@@ -166,182 +166,182 @@ flow RcoRemakeTrialIntro_Force_Init():
 flow RcoTentAboutBuildMuseumTent():
     System.EventFlags['cPlayer:RcoTalkAfterMuseumTent'] = false
     # Ah, PLAYER! I take it you found a suitable spot for Blathers to set up, hm?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:016', false)
-    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:016', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2():
         case 0, 1:
             # I knew I could count on you! Thank you! I'll let Blathers know that he can move in as soon as he wants.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:017', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:017', false)
             if not System.EventFlags['cPlayer:RcoPaid1stCharge']:
                 if System.EventFlags['cLand:TodayStartTown1P']:
                     # In any case, you just got here, so I'd hate to see you push yourself too far on day one. But it's no fur off my nose if you want to rack up those Noo…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:018_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:018_01', false)
                 else:
                     # By the way, PLAYER… You are saving up Nook Miles, right? There's no rush to pay me back, of course. I'm just excited to see the program in action!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:018_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:018_02', false)
                 # I've got a few tips for racking up the ol' Nook Miles, so don't hesitate to ask if you need a little advice.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:019', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:019', false)
  
 flow RcoTentAboutMyhome():
     if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']):
         # Oh! You want to talk about your home? Well, of course that would be fine, but I'd feel bad discussing that when you haven't really…settled in yet. I'…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:410', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:410', false)
     elif System.EventFlags['cPlayer:RcoPaid1stCharge']:
         run SNPC_rco_10_Common_AboutMyHome::Rootrun SNPC_rco_10_Common_AboutMyHome::Root()
-    elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+    elif EventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
         # Oh! You want to pay your move-in fees, hm? Well, of course that would be fine, but I'd feel bad discussing that when you haven't really…moved in yet.…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:400', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:400', false)
     else:
-        EventFlowSystemActor.UISonkatsuPointAppearEventFlowSystemActor.UISonkatsuPointAppear()
-        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 5000, '')
-        if EventFlowSystemActor.HasLifeSupportPointEventFlowSystemActor.HasLifeSupportPoint(5000, 'Now'):
+        EventFlowSystemActor.UISonkatsuPointAppear()
+        EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 5000, '')
+        if EventFlowSystemActor.HasLifeSupportPoint(5000, 'Now'):
             # Oh! You'd like to pay your moving fees? Very well! You owe <90:3:0000><50:21:cd00>.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:402', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:402', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Thank you so much!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:404', false)
-                EventFlowSystemActor.LifeSupportPointCountDownEventFlowSystemActor.LifeSupportPointCountDown(-5000, false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:404', false)
+                EventFlowSystemActor.LifeSupportPointCountDown(-5000, false)
                 System.EventFlags['cPlayer:RcoPaid1stCharge'] = true
                 System.EventFlags['cLifeSupportAchievement:PayImmigrationCost'] += 1
                 # Indeed! That is <90:3:0000><50:21:cd00> and not a mile less.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:405', false)
-                EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:405', false)
+                EventFlowSystemActor.UISonkatsuPointDisappear()
                 # With that, your move-in fees have been paid in full. This is a happy day for us both, hm? Yes, yes… You're free and clear of debt, living on a thrivi…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:406', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:406', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3():
                     case 0:
                         # Oho! Just "fine"? But consider— doing "fine" on a formerly deserted island is actually quite good, hm? Together we're reshaping this barren wastela—I…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_01', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_01', false)
                     case 1:
                         # Is that so? That's wonderful to hear! I am so pleased to see that you're enjoying your new island life. Indeed, establishing a sort of utopia was one…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_02', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_02', false)
                     case 2:
                         # Oh, I'm sorry to hear that! Ah, but no one ever said that developing an island paradise would be easy. But we don't do things because they are easy, …
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_03', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_03', false)
                 # Oh! One more thing to share…<10:4> We have a miles-redemption service for the Nook Miles you've collected. When you access the Nook Stop, you'll be a…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_05', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:407_05', false)
                 if System.EventFlags['cLand:RcmImmQuestComplete']:
                     System.EventFlags['cPlayer:ObjRcoMachineHeardFenceRecipe'] = true
                 if System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] <= 8:
                     System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 8
             else:
                 # Yes, yes, of course. There's no need to rush things! Come back later when you've had a chance to save more.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:403', false)
-                EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:403', false)
+                EventFlowSystemActor.UISonkatsuPointDisappear()
         else:
             # Oh! You'd like to pay your moving fees? Well, you owe <90:3:0000><50:21:cd00>. So let's talk when you've had a chance to earn a few more miles, hm? B…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:401', false)
-            EventFlowSystemActor.UISonkatsuPointDisappearEventFlowSystemActor.UISonkatsuPointDisappear()
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:401', false)
+            EventFlowSystemActor.UISonkatsuPointDisappear()
  
 flow RcoTentAskDIYtrial():
     # Yes, yes! The DIY workshop! Each participant will make and keep their own tools and receive a set of DIY recipes. I think it will be quite useful for…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:201', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:201', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             # Yes, yes! That's the island spirit! I happen to be free right this very moment, so let's get started.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:204', true)
-            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(45)
-            EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:204', true)
+            EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+            EventFlowSystemActor.WaitFrame(45)
+            EventFlowSystemActor.FadeIn(true)
             # Welcome to my DIY workshop! Oh, I suppose "workshop" is overselling it a bit, hm? When you see how simple it is to DIY, or "do it yourself," you'll u…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:205', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:205', false)
             # So, today we'll be constructing a fishing rod using common materials that you can find anywhere, yes? For this particular recipe, we require a mere 5…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:206', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:206', false)
             System.EventFlags['cPlayer:RcoHeardDetailDIYtrial'] = true
             System.EventFlags['cPlayer:RcoDIYtrialOngoing'] = true
         case 1:
             # Oh! Of course. DIY is short for Do It Yourself! It's a way for you to create your own goods—like furniture and tools—from scratch. Nook Inc. has neve…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:202', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:202', false)
         case 2:
             # Of course, of course. Come see me when you're ready, hm?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:203', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:203', false)
  
 flow RcoTentFishInsect(MultiComplete: bool = false, CompleteRoomType: int = 0):
     if System.EventFlags['cPlayer:RcoTentDonation']:
         if System.EventFlags['cPlayerTemp:RcoDonationNow']:
             # Oh, another creature?<10:4> Well, let's have a look at that one as well.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:001_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:001_03', false)
         else:
             # Oh, splendid! Let's have a look, shall we?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:001_02', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:001_02', false)
     else:
         # Oh, splendid! Let's have a look, shall we?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:001_01', false)
-    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'RcoDonationForMuseum', 'cItemSelect', false)
-    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
-        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
-        if MainNpc.OwlIsDonationMainNpc.OwlIsDonation('cUISelect'):
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:001_01', false)
+    EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'RcoDonationForMuseum', 'cItemSelect', false)
+    if EventFlowSystemActor.UIResultMenuDecide():
+        MainNpc.SetDeliveryItem(4, false)
+        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+        MainNpc.NpcDelivery(0, 'Keep')
+        if MainNpc.OwlIsDonation('cUISelect'):
             # Well! You found another <125:0:0000>, I see! I am still in possession of the last one you found, so I'll give this one back to you. Please feel free …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:003_01', false)
-            MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, 'Default')
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:003_01', false)
+            MainNpc.NpcDelivery(10, 'Default')
         else:
             # Oh, what a catch! I do believe this is [a|an]<125:0:0000>.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:004', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:004', false)
             if System.EventFlags['cPlayer:RcoTentDonation']:
                 # Would you mind if I sent this magnificent creature along to my museum-curating friend as well?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:005_03', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:005_03', false)
             else:
                 if System.EventFlags['cPlayer:RcoTentDonatinDeclined']:
                     # I do hate to ask again, but…in the interest of science… would you mind letting me keep this <125:0:0000>? I just know that my friend from the museum …
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:005_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:005_02', false)
                 else:
                     # Hmm… If this island can support [a|an]<125:0:0000>… Why, who knows what other fantastic creatures we might find living here! <50:3>PLAYER, I have an …
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:005_01', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                MainNpc.OwlDonationDoneMainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
-                if EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(5):
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:005_01', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
+                if EventFlowSystemActor.MuseumDonationNumCheck(5):
                     # Thank you! I promise that I'll take extra-good care of your <125:0:0000>.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:006_01', true)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:006_01', true)
                 else:
                     # Thank you! I promise that I'll take extra-good care of your <125:0:0000>.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:006_01', false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:006_01', false)
+                MainNpc.NpcDelivery(3, 'Default')
                 System.EventFlags['cPlayer:RcoTentDonation'] = true
                 System.EventFlags['cPlayerTemp:RcoDonationNow'] = true
                 run SNPC_rco_51_DonationReward::Rootrun SNPC_rco_51_DonationReward::Root()
             else:
                 # Oho! That's a no, is it? Then back to you it goes. If you change your mind, I'd love your cooperation, hm?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:010', false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, 'Default')
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:010', false)
+                MainNpc.NpcDelivery(10, 'Default')
                 System.EventFlags['cPlayer:RcoTentDonatinDeclined'] = true
     else:
         # Changed your mind, hm? Well, I'm always here if you change it back.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:002', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:002', false)
  
 flow RcoTentImmQuestIntroNotForce():
     # Ah, PLAYER. Good to see you!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:000_01', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:000_01', false)
     run Demo_Common_PhoneCall::CallInrun Demo_Common_PhoneCall::CallIn()
     # Hello, you've reached Nook Inc. Oh! You saw our ad… I see… Hm…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:000_02', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:000_02', false)
 entrypoint Event7:
     # Yes, of course! Don't worry about a thing. We can set up your getaway package to include a lovely furnished home. Mmm-hmm… Oh, not at all! We'll set …
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:001', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:001', true)
     run Demo_Common_PhoneCall::FinishCallrun Demo_Common_PhoneCall::FinishCall()
     # <50:3>PLAYER! Sorry to keep you waiting. I…suppose you overheard that call I just got… For some time now I've been advertising the ISLAND getaway pac…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:002', false)
-    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:002', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2():
         case 0, 1:
             # Yes, yes, it's quite wonderful! Thank you, thank you! Er… Wonderful, except for one minor little detail…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:003', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:003', false)
             # None of our applicants are too fond of the notion of sleeping in tents, you see. I'm afraid I got caught up in the excitement of persuading them to m…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:004', true)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Sighing', false, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(70)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Shocked', false, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('IdeaBulb', false, '', 0, false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:004', true)
+            EventFlowSystemActor.WaitFrame(10)
+            MainNpc.CharacterEmoticonAction('Sighing', false, '', 0, false)
+            EventFlowSystemActor.WaitFrame(70)
+            MainNpc.CharacterEmoticonAction('Shocked', false, '', 0, false)
+            EventFlowSystemActor.WaitFrame(30)
+            MainNpc.CharacterEmoticonAction('IdeaBulb', false, '', 0, false)
+            EventFlowSystemActor.WaitFrame(30)
             # But, PLAYER…<10:4> Here you are, in my hour of need… It most certainly must be fate. Would you help me get these homes prepared? All three of them? O…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:005', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:005', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0, 1, 2:
                     # Thank you! Thank you so much! I'll never forget this!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:006', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:006', false)
                     # Oh! You're going to need some top secret instructions… When you're ready, come talk to me. Use the phrase "What should I do?" Agent Nook out… Oh, thi…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:007', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:007', false)
                     System.EventFlags['cPlayer:ImmQRunningForPlayer'] = true
                     System.EventFlags['cLand:RcmImmQuestRunning'] = true
                     System.EventFlags['cPlayer:RcoImmQClear1QuestToday'] = true
@@ -358,11 +358,11 @@ flow RcoTentWhatShoudIdo():
     run SNPC_rco_10_Common_WhatShouldIDo::Rootrun SNPC_rco_10_Common_WhatShouldIDo::Root()
  
 flow RcoTent_Force_DisableTalkCamera():
-    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(4, false)
+    if EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
+        MainNpc.NpcAISetting(4, false)
  
 flow RcoTent_Force_PlayerPos():
-    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
-        Player.PlayerMoveToTargetPlayer.PlayerMoveToTarget(false, 157.0, 170.0, 0.0, 0.0, false, '')
-        MainNpc.TalkCameraMainNpc.TalkCamera(true, 'cTalk', 0)
+    if EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
+        Player.PlayerMoveToTarget(false, 157.0, 170.0, 0.0, 0.0, false, '')
+        MainNpc.TalkCamera(true, 'cTalk', 0)
  

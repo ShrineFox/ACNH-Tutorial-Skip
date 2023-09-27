@@ -1,45 +1,45 @@
 flow Dod_ChangeGate():
-    if EventFlowSystemActor.IsVillageGateOpenedEventFlowSystemActor.IsVillageGateOpened():
+    if EventFlowSystemActor.IsVillageGateOpened():
         run Dod_CloseGate()
     else:
         run Dod_OpenGate()
  
 flow Dod_CloseGate():
     # Roger!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
     run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-    EventFlowSystemActor.NetCloseSessionEventFlowSystemActor.NetCloseSession('cCloseSession', false)
+    EventFlowSystemActor.NetCloseSession('cCloseSession', false)
     run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.CloseVillageGateEventFlowSystemActor.CloseVillageGate()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.CloseVillageGate()
+    EventFlowSystemActor.WaitFrame(10)
     # Gotcha. If you want to let more company in, just let me know and I'll open the gate up.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:252', true)
-    EventFlowSystemActor.UIVersionGuideDisappearEventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:252', true)
+    EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
  
 flow Dod_OpenGate():
     # Roger!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
     run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-    EventFlowSystemActor.NetOpenSessionEventFlowSystemActor.NetOpenSession('cOpenSession', false)
+    EventFlowSystemActor.NetOpenSession('cOpenSession', false)
     run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.OpenVillageGateEventFlowSystemActor.OpenVillageGate(false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.OpenVillageGate(false)
+    EventFlowSystemActor.WaitFrame(10)
     # When you're ready to close the gate, just say the word.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:262', true)
-    EventFlowSystemActor.UIVersionGuideDisappearEventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:262', true)
+    EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
  
 flow EntryPoint_GateCheck():
-    if EventFlowSystemActor.IsVillageGateOpenedEventFlowSystemActor.IsVillageGateOpened():
+    if EventFlowSystemActor.IsVillageGateOpened():
         # By the way, is there anything I can do to help you out?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:306', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:306', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run Dod_CloseGate()
         else:
             run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
     else:
         # By the way, is there anything I can do to help you out?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:305', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:305', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run Dod_OpenGate()
         else:
             run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()

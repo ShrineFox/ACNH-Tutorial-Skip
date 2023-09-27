@@ -1,11 +1,11 @@
 flow Again():
-    if not EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
-        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    if not EventFlowSystemActor.MuseumComplete():
+        switch EventFlowSystemActor.MuseumLevel():
             case `BlathersTent`:
-                if EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(20):
+                if EventFlowSystemActor.MuseumDonationNumCheck(20):
                     # Might I help you with anything else?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:093', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:093', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
                     else:
                         run End()
@@ -38,7 +38,7 @@ flow Again():
 flow CafeConstructionAnnouncement():
     if (not System.EventFlags['cLand:MuseumCafeConstruction_4_Opened']) and (System.EventFlags['cLand:MuseumCafeConstruction_1_Confirm']) and (not System.EventFlags['cPlayer:Owl_HeardAboutCafeConstruction']):
         # Hoo hoo! Incidentally, I have some exciting news to share. It is my pleasure to announce that we will be opening a new café to serve patrons of this …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:021', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:021', false)
         System.EventFlags['cPlayer:Owl_HeardAboutCafeConstruction'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
@@ -46,7 +46,7 @@ flow CmnTodayTalk1st():
     System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
     run Greet()
     # Welcome to the <10:13><50:4>ISLAND</10:13> Museum.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:008', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:008', false)
     run SNPC_owl_23_Museum_DiveFish::ChkCompReportrun SNPC_owl_23_Museum_DiveFish::ChkCompReport()
     run SNPC_owl_24_Museum_StampRally::Rootrun SNPC_owl_24_Museum_StampRally::Root()
     run SkipMultiDonateNoticeAtComp()
@@ -54,16 +54,16 @@ flow CmnTodayTalk1st():
  
 flow Comp_Again():
     # Might I help you with anything else?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:091', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:091', false)
     run Comp_Direct()
  
 flow Comp_Again_2():
     # Might I help you with anything else?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1006', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1006', false)
     run Comp_Direct_2()
  
 flow Comp_Direct():
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
         case 1:
@@ -72,7 +72,7 @@ flow Comp_Direct():
             run End()
  
 flow Comp_Direct_2():
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
         case 1:
@@ -88,7 +88,7 @@ flow DiveFish():
             run Painting()
         else:
             run SNPC_owl_23_Museum_DiveFish::TodayTalk1strun SNPC_owl_23_Museum_DiveFish::TodayTalk1st()
-    elif (EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')) and (not System.EventFlags['cLand:OwlWantsPainting']):
+    elif (EventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')) and (not System.EventFlags['cLand:OwlWantsPainting']):
         run SNPC_owl_22_Museum_RenualQuest::QuestCheckrun SNPC_owl_22_Museum_RenualQuest::QuestCheck()
     else:
         run SNPC_owl_23_Museum_DiveFish::Select4_DiveFishrun SNPC_owl_23_Museum_DiveFish::Select4_DiveFish()
@@ -100,55 +100,55 @@ flow DiveFish_Again():
         run SNPC_owl_23_Museum_DiveFish::Select5_DiveFish_Againrun SNPC_owl_23_Museum_DiveFish::Select5_DiveFish_Again()
  
 flow End():
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`:
-            if not EventFlowSystemActor.MuseumDonationNumCheckEventFlowSystemActor.MuseumDonationNumCheck(20):
-                EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 0, 0, 'cLand:DonationAmountForMuseum')
+            if not EventFlowSystemActor.MuseumDonationNumCheck(20):
+                EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 0, 0, 'cLand:DonationAmountForMuseum')
                 # In order to open the museum, we need <90:1:0000> more exhibit <50:8:0000000a006900740065006d00730008006900740065006d000a006900740065006d0073>!<10:4> …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:112_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:112_01', false)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
                 # I cannot offer much in the way of hospitality, but do make yourself comfortable.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:112_02', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:112_02', false)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             else:
                 # I won't be here tomorrow due to the construction, so if you have fossils for me to assess, come by today!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:112_03', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:112_03', false)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         case `BlathersMuseumNoArt`:
             run PaintingReminder()
             if System.EventFlags['cLand:OwlFoundFossil']:
                 # Jolly good. Please enjoy the rest of your visit.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:015', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:015', true)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             else:
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Greeting', false, '', 0, false)
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+                EventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.WaitFrame(5)
+                MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, false)
+                EventFlowSystemActor.WaitFrame(20)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         case `BlathersMuseumArt`:
             run CafeConstructionAnnouncement()
             if System.EventFlags['cLand:OwlFoundFossil']:
                 # Jolly good. Please enjoy the rest of your visit.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:015', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:015', true)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             else:
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Greeting', false, '', 0, false)
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+                EventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.WaitFrame(5)
+                MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, false)
+                EventFlowSystemActor.WaitFrame(20)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         case `BlathersCafe`:
             if System.EventFlags['cLand:OwlFoundFossil']:
                 # Jolly good. Please enjoy the rest of your visit.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:015', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:015', true)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             else:
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Greeting', false, '', 0, false)
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
+                EventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.WaitFrame(5)
+                MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, false)
+                EventFlowSystemActor.WaitFrame(20)
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         default:
             return
@@ -159,29 +159,29 @@ flow FossilNoticeAtToday1stTalk():
             System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
             System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
             # Ah, PLAYER, I have news! A fossil has been found at last here on ISLAND! Hoot hoot hooray! I can begin taking fossil donations and conducting examina…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:052', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:052', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         elif not System.EventFlags['cPlayer:OwlMultiDonateExplain']:
             System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
             # Hoo hoo! It's true! Our fossil hall is officially open, PLAYER. Progress is upon us! Indeed, I've put much thought into streamlining the museum exper…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:051', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:051', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Greet():
-    if EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cNewYear', 'cNowTime'):
+    if EventFlowSystemActor.EnvSameDate('cNewYear', 'cNowTime'):
         # Happy New Year, PLAYER!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:007', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:007', false)
     else:
-        switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+        switch EventFlowSystemActor.EnvTimeZone():
             case `05:00-07:59`, `08:00-11:59`:
                 # Good morning, PLAYER!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:004', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:004', false)
             case `12:00-15:59`, `16:00-18:59`:
                 # Why, hello, PLAYER!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:005', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:005', false)
             case `19:00-23:59`, `00:00-04:59`:
                 # Good evening, PLAYER!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:006', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:006', false)
  
 flow Painting():
     run SNPC_owl_22_Museum_RenualQuest::TodayTalk1strun SNPC_owl_22_Museum_RenualQuest::TodayTalk1st()
@@ -194,7 +194,7 @@ flow PaintingReminder():
     if (System.EventFlags['cLand:OwlWantsPainting']) and (not System.EventFlags['cLand:MuseumGrowupEnable2']) and (System.EventFlags['cPlayer:OwlPaintingQuestExplain']) and (not System.EventFlags['cPlayer:OwlPaintingQuestReminder']):
         System.EventFlags['cPlayer:OwlPaintingQuestReminder'] = true
         # I see. In that case, feel free to wander about as you like. I will await art donations with anticipation.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:003', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_22_Museum_RenualQuest:003', false)
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Painting_Again():
@@ -207,21 +207,21 @@ flow Painting_Again():
  
 flow Select3_Again():
     # Might I help you with anything else?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:094', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:094', false)
     run Select3_Direct()
  
 flow Select3_Comp():
     # How may I be of service?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:010', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:010', false)
     run Comp_Direct()
  
 flow Select3_Comp_2():
     # How may I be of service?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1004', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1004', false)
     run Comp_Direct_2()
  
 flow Select3_Direct():
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
         case 1:
@@ -231,7 +231,7 @@ flow Select3_Direct():
  
 flow Select4():
     # How may I be of service?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:011', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:011', false)
     run Select4_Direct()
  
 flow Select45():
@@ -242,21 +242,21 @@ flow Select45_Again():
  
 flow Select4_2():
     # How may I be of service?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1003', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1003', false)
     run Select4_Direct_2()
  
 flow Select4_Again():
     # Might I help you with anything else?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:092', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:092', false)
     run Select4_Direct()
  
 flow Select4_Again_2():
     # Might I help you with anything else?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1005', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1005', false)
     run Select4_Direct_2()
  
 flow Select4_Direct():
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0:
             run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
         case 1:
@@ -267,7 +267,7 @@ flow Select4_Direct():
             run End()
  
 flow Select4_Direct_2():
-    switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+    switch EventFlowSystemActor.GeneralTalkChoice5():
         case 0:
             run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
         case 1:
@@ -280,12 +280,12 @@ flow Select4_Direct_2():
             run End()
  
 flow SkipMultiDonateNoticeAtComp():
-    if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+    if EventFlowSystemActor.MuseumComplete():
         System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
         System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
  
 flow Talk():
-    if not EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+    if not EventFlowSystemActor.MuseumComplete():
         run FossilNoticeAtToday1stTalk()
         run SNPC_owl_23_Museum_DiveFish::ChkDiveFishNoticeAtToday1stTalkrun SNPC_owl_23_Museum_DiveFish::ChkDiveFishNoticeAtToday1stTalk()
         run SNPC_owl_25_Museum_Poster::Owl_GetPosterrun SNPC_owl_25_Museum_Poster::Owl_GetPoster()
@@ -308,7 +308,7 @@ flow Talk():
     else:
         run SNPC_owl_25_Museum_Poster::Owl_GetPosterrun SNPC_owl_25_Museum_Poster::Owl_GetPoster()
         # Ah, PLAYER! I have news! Thanks to the philanthropy of our contributors, we have filled ALL of our permanent exhibits. As the spirit of giving has ma…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:014', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:014', false)
         System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
         if System.EventFlags['cPlayer:MuseumPosterUnlockBuySel']:
             run Comp_Direct_2()
@@ -320,8 +320,8 @@ flow owlNoFishArt():
  
 flow v200_NonDonateFossil():
     # Might I help you with anything else?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:095', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:095', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
     else:
         run End()

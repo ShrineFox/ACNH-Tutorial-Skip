@@ -1,140 +1,140 @@
 flow CheckOffice():
-    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cSale') < 1:
+    if EventFlowSystemActor.NpcHouseNum('cSale') < 1:
         # I asked Resident Services and…<10:4> there's no land for sale for new houses, so I can't move here! Total shame, but oh well. I still hope we get to …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:405', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:405', false)
         System.EventFlags['cPlayer:Camp_InduceFailSellPlaceNothing'] = true
         System.EventFlags['cPlayer:Camp_InduceFailFlag'] = true
     else:
         # So… I talked to Resident Services and… They said I can move here! So yeah! I'm <110:10>! Your new neighbor! <50:3><110:3>! Wow, starting tomorrow, we…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:406', false)
-        MainNpc.NpcFixedInducementMainNpc.NpcFixedInducement()
-        MainNpc.MoveIntoLandForSaleMainNpc.MoveIntoLandForSale()
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:406', false)
+        MainNpc.NpcFixedInducement()
+        MainNpc.MoveIntoLandForSale()
  
 flow CheckOffice_EmptyHouse():
     # So… I talked to Resident Services, and…they told me I can move here! They said there's a big, empty spot that I could have. Can you believe it? Free …
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:407', false)
-    MainNpc.NpcFixedInducementMainNpc.NpcFixedInducement()
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:407', false)
+    MainNpc.NpcFixedInducement()
  
 flow CheckOffice_Move():
     # Sorry for the wait! I went to talk at the Resident Services folks here… They said there's no more room to build property on this island, so I can't m…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:302', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:302', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
         # Aw, OK. That's weird, I know. I'll give up for now, <110:6>!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:303', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:303', false)
     elif System.EventFlags['cLand:AmiiboCampSiteCall']:
         # Yay! Resident Services just told me I can ask these folks if they want out. Who do you think's my best shot?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:304', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:304', false)
 entrypoint Event62:
-        EventFlowSystemActor.UIMsgCardAdrHandlingEventFlowSystemActor.UIMsgCardAdrHandling('cIslandersMoving')
-        if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
+        EventFlowSystemActor.UIMsgCardAdrHandling('cIslandersMoving')
+        if EventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
             # <50:3><115:1:cd00>, right?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:305', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:305', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     run Sub_Event65()
                 case 1:
                     # OK, 'cause I wanna be sure… Who should I ask?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:307', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:307', false)
                     run NPC_Select()
                 case 2:
                     # Aw, that's a shame. But I'll give up this time, <110:6>.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:308', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:308', false)
         else:
             # Don't see anybody you want me to ask?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:310', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:310', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Uh, can you tell me who to ask, then?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:311', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:311', false)
                 run NPC_Select()
             else:
                 # No worries! Maybe another time!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:312', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:312', false)
     else:
-        EventFlowSystemActor.SelectMoveOutNpcRandomEventFlowSystemActor.SelectMoveOutNpcRandom()
-        MainNpc.SetNpcNameMainNpc.SetNpcName(17, 0)
+        EventFlowSystemActor.SelectMoveOutNpcRandom()
+        MainNpc.SetNpcName(17, 0)
         # Yay! Hey, would it be OK if I talked to <115:1:cd00> about swapping? When I was at Resident Services, someone mentioned [his|her] name, so…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:313', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:313', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run Sub_Event65()
         else:
             # Uh…b-but I thought that…well, OK. That's just how the cookie's gonna crumble, huh. Oh well, <110:5>.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:314', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:314', false)
  
 flow Flow_Invite():
     if System.EventFlags['cLand:AmiiboCampSiteCall']:
         run Sub_Event11()
     else:
-        if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(10):
+        if EventFlowSystemActor.PercentChoice(10):
             if System.EventFlags['cPlayerTemp:CampInviteRejected']:
                 # You know what's even better than being invited to live somewhere? Being invited lots of times! I'll go ask Resident Services if I can move to this is…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:003', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:003', true)
                 run Sub_Event56()
             else:
                 run Sub_Event11()
         else:
-            if ((MainNpc.CanInduceNpcMainNpc.CanInduceNpc()) or (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cSold') >= 10)) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50)):
+            if ((MainNpc.CanInduceNpc()) or (EventFlowSystemActor.NpcHouseNum('cSold') >= 10)) and (EventFlowSystemActor.PercentChoice(50)):
                 run Talk_InviteGame()
             else:
                 # RANDOM: Huh? Really?! Oh man, that's a real coo… // Whaaa?! I can live here?!<10:4> That'd … // Huh?! I can move here?! That'd be super…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:101', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:101', false)
                 System.EventFlags['cPlayerTemp:CampInviteRejected'] = true
  
 flow Flow_ReInvite():
     if System.EventFlags['cPlayer:Camp_InduceFailSellPlaceNothing']:
         # There's no more land for sale on your island, so I can't move here!Total downer. Well, if this is goodbye, then thanks for all the fun! I'll always r…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:424', false)
-        if MainNpc.IsInduceFailedReasonFixUpMainNpc.IsInduceFailedReasonFixUp():
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:424', false)
+        if MainNpc.IsInduceFailedReasonFixUp():
             System.EventFlags['cPlayer:Camp_InduceFailFlag'] = false
             System.EventFlags['cPlayer:Camp_InduceFailSellPlaceNothing'] = false
             # Or maybe I go and ask 'em again?  Maybe this time they'll say, "We were being weird and silly! Move on in!"
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:410', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                MainNpc.MessageSuspendMainNpc.MessageSuspend()
-                EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-                EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:410', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.MessageSuspend()
+                EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+                EventFlowSystemActor.WaitFrame(60)
+                EventFlowSystemActor.FadeIn(true)
                 run CheckOffice()
             else:
                 # You're right. I guess things don't change that quick, huh? Some other time then, <110:6>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:411', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:411', false)
  
 flow NPC_Select():
     run Event62()
  
 local flow Sub_Event11():
     # Huh? Really? Oh man! It'll be double the fun with you around! I'll go ask the Resident Services if I can move to this island right away, <110:6>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:002', true)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:002', true)
     run Sub_Event56()
  
 local flow Sub_Event56():
-    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
-    if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cSold') < 10:
+    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    EventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.FadeIn(true)
+    if EventFlowSystemActor.NpcHouseNum('cSold') < 10:
         run CheckOffice()
-    elif EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cAbandonedHouse') < 1:
+    elif EventFlowSystemActor.NpcHouseNum('cAbandonedHouse') < 1:
         run CheckOffice_Move()
     else:
         run CheckOffice_EmptyHouse()
  
 local flow Sub_Event65():
     # OK. I'd be nervous, but I got no idea who they even are, so they can't make me nervous! Off I go!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:306', true)
-    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
-    if EventFlowSystemActor.IsAbandonedHouseNpcEventFlowSystemActor.IsAbandonedHouseNpc('cUISelect'):
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:306', true)
+    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    EventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.FadeIn(true)
+    if EventFlowSystemActor.IsAbandonedHouseNpc('cUISelect'):
         # I used all of my courage and asked someone to change their whole life… For me, <110:10>, a guy they don't even know… Oh, by the way, my name's <110:1…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:309', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:309', false)
     else:
         # Guess what. <10:4>I went looking for <115:1:cd00>, but there was no one home! I think that means [he|she] already moved away. And that means that I c…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:309_01', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:309_01', false)
     if System.EventFlags['cLand:AmiiboCampSiteCall']:
-        EventFlowSystemActor.UISelectNpcMoveOutEventFlowSystemActor.UISelectNpcMoveOut('cUISelect')
+        EventFlowSystemActor.UISelectNpcMoveOut('cUISelect')
     else:
-        EventFlowSystemActor.UISelectNpcMoveOutEventFlowSystemActor.UISelectNpcMoveOut('cRandomSelect')
-    MainNpc.NpcFixedInducementMainNpc.NpcFixedInducement()
+        EventFlowSystemActor.UISelectNpcMoveOut('cRandomSelect')
+    MainNpc.NpcFixedInducement()
  
 local flow Sub_Event92():
     System.EventFlags['cPlayerTemp:CampInviteInProgress'] = true
@@ -142,55 +142,55 @@ local flow Sub_Event92():
  
 flow Talk_InviteGame():
     if System.EventFlags['cPlayerTemp:CampInviteRejected']:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # Oh, you're inviting me again? <50:3><110:5>, this is hard… I don't know what to do! Ooh! I've got it. We can play a game! If you win, I'll just move …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:207_01', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:207_01', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Sub_Event92()
                 else:
                     # That's OK—at least I don't have to make a decision now! A huh huh…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:208_01', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:208_01', false)
             case 1:
                 # Hmm…moving sounds like a lot of work, but then I'd get to hang out with you more… I can't decide! <10:4>Wait, I've got an idea! Let's just play a gam…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:207_02', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:207_02', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Sub_Event92()
                 else:
                     # No? Aww, I thought it was a good idea, <110:5>. Oh well!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:208_02', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:208_02', false)
             case 2:
                 # You must really want me to move here since you're inviting me again… But moving is hard! Hey, let's do something fun instead, like play a game. And i…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:207_03', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:207_03', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Sub_Event92()
                 else:
                     # Ah, that's OK. You know me—I'll just roll with it. A huh huh huh!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:208_03', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:208_03', false)
     else:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # Hmm… I dunno. It sounds cool… but it's real sudden. Oh, got an idea! How 'bout we play a game to decide? If you win, I'll move here. Sound fun? Good!…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:201_01', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:201_01', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Sub_Event92()
                 else:
                     # Aw, OK, <110:6>.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:202_01', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:202_01', false)
             case 1:
                 # Huh?! Really? That'd be super cool… But I dunno… Hmm. Oh! Here's an idea! Why think…when we can play a game instead?! If you win, I move here! Good i…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:201_02', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:201_02', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Sub_Event92()
                 else:
                     # Oh well, <110:6>!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:202_02', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:202_02', false)
             case 2:
                 # I'm so happy you invited me! But I dunno…I can't decide. What should I do?! Wait! I did an idea just now! Let's…play a game to decide! And if you win…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:201_03', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:201_03', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run Sub_Event92()
                 else:
                     # Aw, you don't wanna?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:202_03', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:202_03', false)
  

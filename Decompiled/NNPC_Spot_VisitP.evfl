@@ -1,16 +1,16 @@
 flow Begin():
-    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('SpeakTypeBed', 0)
-    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('SpeakTypeChair', 0)
+    MainNpc.NpcSetAIBlackBoard('SpeakTypeBed', 0)
+    MainNpc.NpcSetAIBlackBoard('SpeakTypeChair', 0)
     System.EventFlags['cLandTemp:VisitPGoHomeCheckCondition'] = false
     System.EventFlags['cLandTemp:VisitPStayExtendTime'] = 0
     MainNpc.EventFlags['cNpcTemp:ExtendStayTimeVisitP'] = false
     System.EventFlags['cLandTemp:CockroachMovingChk'] = false
     MainNpc.EventFlags['cNpcTemp:NotAddTalkCount'] = true
     if MainNpc.EventFlags['cNpcTemp:VisitQuestCallCount'] < 1:
-        EventFlowSystemActor.EmitDoorSoundEventFlowSystemActor.EmitDoorSound('cKnock')
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(9, true)
-        if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerEntranceRoom'):
-            MainNpc.NpcAISettingMainNpc.NpcAISetting(5, true)
+        EventFlowSystemActor.EmitDoorSound('cKnock')
+        MainNpc.NpcAISetting(9, true)
+        if EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerEntranceRoom'):
+            MainNpc.NpcAISetting(5, true)
         run VisitFirst()
         run VisitSecond()
     else:
@@ -18,141 +18,141 @@ flow Begin():
  
 flow End():
     if not MainNpc.EventFlags['cNpcTemp:VisitPNPCGoHomeMyself']:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # Do you have stuff to do? I'll go home, then! Bye, <110:3>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:403', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:403', true)
                 run Sub_Event81()
             case 1:
                 # Are you going somewhere? Yeah, I oughta go too. Those snacks ain't gonna eat themselves!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:404', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:404', true)
                 run Sub_Event81()
             case 2:
                 # Oh, you gotta be somewhere? Then I better head home too. Let's do this again, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:405', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:405', true)
                 run Sub_Event81()
     elif MainNpc.EventFlags['cNpcTemp:ExtendStayTimeVisitP']:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # Well, time to go home! Thanks for having me, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:400', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:400', true)
                 run Sub_Event81()
             case 1:
                 # Guurrggleglurg… Huh? Oh, that's my tummy clock saying it's time to go home and eat, <110:5>.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:401', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:401', true)
                 run Sub_Event81()
             case 2:
                 # I'm gonna head home! I'm so glad I know you, <110:3>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:402', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:402', true)
                 run Sub_Event81()
     else:
         # RANDOM: Whoa! I've been here a long old while! … // Let's play some more! // Later! // I guess I'll head out soon. I figure yo… // Let's play some more! // Later!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:500', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:500', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # RANDOM: Are ya sure? Yaaaay! OK, I'll stick aro… // I hoped you'd wanna play more! But I di…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:503', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:503', false)
             System.EventFlags['cLandTemp:VisitPStayExtendTime'] = 5
             MainNpc.EventFlags['cNpcTemp:ExtendStayTimeVisitP'] = true
-            MainNpc.SetVisitPGoHomeCheckConditionMainNpc.SetVisitPGoHomeCheckCondition()
+            MainNpc.SetVisitPGoHomeCheckCondition()
         else:
             # RANDOM: I had lotsa fun! Man, time flies, huh? … // Thanks for today! Everything was real f…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:504', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:504', true)
             run Sub_Event81()
  
 flow Free_VisitP():
-    if (EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (not MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame']) and (MainNpc.NpcNowPostureMainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame']) and (MainNpc.NpcNowPosture() == 0):
+    if (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (not MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame']) and (MainNpc.NpcNowPosture() == 0):
         run Game_VisitP()
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
         run NNPC_FreeC::FunitureP_Chkrun NNPC_FreeC::FunitureP_Chk()
     else:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious5EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
             case 0:
                 # Last night, you showed up in my dream and said, "I have something important to tell you." But I woke up before you told me. So I came over as soon as…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:206', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:206', false)
             case 1:
                 # Sorry for just showing up like this! I thought I smelled something yummy as I was passing by.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:207', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:207', false)
             case 2:
                 # I thought maybe you'd like to see me, so here I am, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:208', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:208', false)
             case 3:
                 # I'm always happy whenever we hang out together, <110:3>! That's why I'm here today.<10:4> Work your magic, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:209', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:209', false)
             case 4:
                 # There's something…I really want to… talk to you about… Can you guess what it is? I'm hoping you'll guess right and help me remember, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:210', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:210', false)
  
 flow Game_VisitP():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
         case 0:
             # Hey, <110:3>? Ya wanna play a game?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:211', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:211', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 entrypoint Event41:
                 run NNPC_Game_2ChoiceQuiz::Rootrun NNPC_Game_2ChoiceQuiz::Root()
-                MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+                MainNpc.NpcAddFriendship(1)
             else:
                 # No worries… We can play some other time, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:214', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:214', false)
         case 1:
             # <50:3><110:3>! Wanna play a game with me?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:212', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:212', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run Yes()
             else:
                 # No worries! Not everybody wants to play games all the time, even though games are great. We can just hang out instead!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:215', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:215', false)
         case 2:
             # Wanna play a game?<10:4> I know…at least one that we could try. What do you think, <110:3>?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:213', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:213', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run Yes()
             else:
                 # That's OK! I'll just wander around your house instead, <110:5>.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:216', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:216', false)
     MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame'] = true
  
 flow Present_VisitP():
-    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(20):
+    if EventFlowSystemActor.PercentChoice(20):
         run NNPC_Quest_AllReward::Goodrun NNPC_Quest_AllReward::Good()
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # Oh yeah! I brought you a thing! Check it out! I hope ya like it. It's [a|an]<125:4:0000>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:200', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:200', false)
             case 1:
                 # Oh! Oh yeah! Before I forget… I got you this thing! [A|An]<125:4:0000>! Heh heh, it's a souvenir. Just 'cause, <110:6>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:201', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:201', false)
             case 2:
                 # There's something I wanna give you, so I'm here to drop it off! Look! [A|An]<125:4:0000>! Hope ya like it, <110:5>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:202', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:202', false)
     else:
         run NNPC_Quest_AllReward::Giftrun NNPC_Quest_AllReward::Gift()
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # I'm here to bring you some snaaacks! [A|An]<125:4:0000>! I ate a pantsload of these one night! No. Seriously. I filled up a pair of blue jeans with t…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:203', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:203', false)
             case 1:
                 # I brought you snacks because snacks are how you show someone you care! Check it out. I got you [a|an]<125:4:0000>! What's cool is, even the bonus tas…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:204', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:204', false)
             case 2:
                 # Who wants fooooood? Because I brought food! Food for you, <110:3>! [A|An]<125:4:0000>! Doesn't it look delicious?<10:4> It looks delicious. I want to…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:205', false)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, '"Default"')
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:205', false)
+    MainNpc.NpcDelivery(1, '"Default"')
     MainNpc.EventFlags['cNpcTemp:SurpriseVisitPresentGave'] = true
-    MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+    MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
  
 local flow Sub_Event81():
-    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-    MainNpc.NpcVisitQuestGoHomeMainNpc.NpcVisitQuestGoHome()
-    EventFlowSystemActor.SetSharePlayChangeConditionEventFlowSystemActor.SetSharePlayChangeCondition(false)
+    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    MainNpc.NpcVisitQuestGoHome()
+    EventFlowSystemActor.SetSharePlayChangeCondition(false)
     System.EventFlags['cLandTemp:NpcVisitPlayerHouse'] = false
-    Player.PlayerWarpPlayer.PlayerWarp(8)
-    EventFlowSystemActor.CameraResetRoomAngleEventFlowSystemActor.CameraResetRoomAngle(0.0, true)
-    EventFlowSystemActor.StoreNormalCameraEventFlowSystemActor.StoreNormalCamera(true, '')
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
-    Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('AddWaveHands', false, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+    Player.PlayerWarp(8)
+    EventFlowSystemActor.CameraResetRoomAngle(0.0, true)
+    EventFlowSystemActor.StoreNormalCamera(true, '')
+    EventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.FadeIn(true)
+    Player.CharacterEmoticonAction('AddWaveHands', false, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
     MainNpc.EventFlags['cNpcTemp:VisitQuestCallCount'] = 0
     MainNpc.EventFlags['cNpcTemp:SurpriseVisitEntered'] = false
     MainNpc.EventFlags['cNpcTemp:AtHomeAI'] = false
@@ -161,98 +161,98 @@ local flow Sub_Event81():
 flow Talk():
     MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = true
     if MainNpc.EventFlags['cNpcTemp:IndoorTalkCount'] < 1:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # I just, ya know, suddenly really felt like seeing you, <110:3>…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:100', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:100', false)
             case 1:
                 # I happened to be close by and thought I'd come say hey, <110:3>.<10:4> HEY!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:101', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:101', false)
             case 2:
                 # Man, <110:3>! I was walking along and saw your place, and suddenly I HAD to see you!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:102', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:102', false)
     elif MainNpc.EventFlags['cNpcTemp:SurpriseVisitPresentGave']:
         run Free_VisitP()
     else:
-        if (EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0):
+        if (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (MainNpc.NpcNowPosture() == 0):
             run Present_VisitP()
         else:
             run Free_VisitP()
         MainNpc.EventFlags['cNpcTemp:AtHomeAI'] = true
  
 flow VisitFirst():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+    EventFlowSystemActor.WaitFrame(10)
+    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
         case 0:
             # Hey, it's me, <110:10>! I came to hang out!<10:7:00780000>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:001', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:001', true)
         case 1:
             # <50:3><110:10> is here! Leeeeet's play!<10:7:00780000>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:002', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:002', true)
         case 2:
             # Heya! I'm here to hang out and play. It's me, <110:10>!<10:7:00780000>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:003', true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:003', true)
+    EventFlowSystemActor.WaitFrame(10)
  
 flow VisitSecond():
-    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerEntranceRoom'):
-        Player.PlayerSetupForNpcQuestPVisitPlayer.PlayerSetupForNpcQuestPVisit()
-        MainNpc.SetNpcFeelMainNpc.SetNpcFeel('cNormal', 120, false)
-        MainNpc.ChangeNpcPlaceMainNpc.ChangeNpcPlace('cTalkPlayerHouse')
-        MainNpc.ChangeClothForVisitQuestMainNpc.ChangeClothForVisitQuest(false, false)
-        EventFlowSystemActor.EmitDoorSoundEventFlowSystemActor.EmitDoorSound('cDoorEnter')
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-        MainNpc.NpcEnterMainNpc.NpcEnter('Entrance', -2, 0.0)
+    if EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerEntranceRoom'):
+        Player.PlayerSetupForNpcQuestPVisit()
+        MainNpc.SetNpcFeel('cNormal', 120, false)
+        MainNpc.ChangeNpcPlace('cTalkPlayerHouse')
+        MainNpc.ChangeClothForVisitQuest(false, false)
+        EventFlowSystemActor.EmitDoorSound('cDoorEnter')
+        EventFlowSystemActor.WaitFrame(30)
+        MainNpc.NpcEnter('Entrance', -2, 0.0)
         if System.EventFlags['cLandTemp:CockroachMovingChk']:
             # Hi, cockroach!<10:4> Hey, if you already have friends over, maybe we oughta do this later. Have fun, <110:6>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:010', true)
-            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-            MainNpc.NpcSetSurpriseVisitDateMainNpc.NpcSetSurpriseVisitDate()
-            MainNpc.NpcVisitQuestGoHomeMainNpc.NpcVisitQuestGoHome()
-            EventFlowSystemActor.SetSharePlayChangeConditionEventFlowSystemActor.SetSharePlayChangeCondition(false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:010', true)
+            EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+            MainNpc.NpcSetSurpriseVisitDate()
+            MainNpc.NpcVisitQuestGoHome()
+            EventFlowSystemActor.SetSharePlayChangeCondition(false)
             System.EventFlags['cLandTemp:NpcVisitPlayerHouse'] = false
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-            EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+            EventFlowSystemActor.WaitFrame(30)
+            EventFlowSystemActor.FadeIn(true)
             MainNpc.EventFlags['cNpcTemp:VisitQuestCallCount'] = 0
             MainNpc.EventFlags['cNpcTemp:SurpriseVisitEntered'] = false
             MainNpc.EventFlags['cNpcTemp:AtHomeAI'] = false
             MainNpc.EventFlags['cNpcMemory:FinishVisitPToday'] = true
             MainNpc.EventFlags['cNpcMemory:PastCountFromLastVisitPlayerHouse'] = 1
         else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                 case 0:
                     # A huh huh huh, thanks for having me over, <110:5>!<10:7:00780000>
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:006', true)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:006', true)
                 case 1:
                     # Yay! Is it cool if I explore your house now, <110:5>?<10:7:00780000>
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:007', true)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:007', true)
                 case 2:
                     # I bet I caught ya by surprise, didn't I, <110:5>?<10:7:00780000>
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:008', true)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:008', true)
             MainNpc.EventFlags['cNpcTemp:SurpriseVisitEntered'] = true
-            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('SurpriseHide', 0)
-            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('SurpriseVisit', 1)
-            MainNpc.SystemSetInviteQuestEnterTimeMainNpc.SystemSetInviteQuestEnterTime()
+            MainNpc.NpcSetAIBlackBoard('SurpriseHide', 0)
+            MainNpc.NpcSetAIBlackBoard('SurpriseVisit', 1)
+            MainNpc.SystemSetInviteQuestEnterTime()
             MainNpc.EventFlags['cNpcMemory:VisitCount'] += 1
             MainNpc.EventFlags['cNpcMemory:PastCountFromLastVisitPlayerHouse'] = 1
-            MainNpc.NpcSetSurpriseVisitDateMainNpc.NpcSetSurpriseVisitDate()
-            EventFlowSystemActor.SetSharePlayChangeConditionEventFlowSystemActor.SetSharePlayChangeCondition(true)
+            MainNpc.NpcSetSurpriseVisitDate()
+            EventFlowSystemActor.SetSharePlayChangeCondition(true)
             System.EventFlags['cLandTemp:NpcVisitPlayerHouse'] = true
             run NNPC_FreeH_Progress::Conceal_MyHouseBuiltrun NNPC_FreeH_Progress::Conceal_MyHouseBuilt()
             if System.EventFlags['cPlayer:PlayerStungByBee']:
                 MainNpc.EventFlags['cNpcMemory:TalkBeefaceToday'] = true
     else:
-        EventFlowSystemActor.EmitDoorSoundEventFlowSystemActor.EmitDoorSound('cKnock')
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+        EventFlowSystemActor.EmitDoorSound('cKnock')
+        EventFlowSystemActor.WaitFrame(10)
         if MainNpc.EventFlags['cNpcTemp:VisitQuestCallCount'] < 1:
             # Heeeey! <50:3><110:3>! Are you home, <110:5>?<10:7:00780000>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:004', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:004', false)
             MainNpc.EventFlags['cNpcTemp:VisitQuestCallCount'] += 1
             System.EventFlags['cLandTemp:NpcVisitPlayerHouse'] = true
         else:
             # Hmm… Is it <110:3>'s nap time? Guess I'll go home.<10:7:00780000>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:005', true)
-            MainNpc.NpcVisitQuestGoHomeMainNpc.NpcVisitQuestGoHome()
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_VisitP:005', true)
+            MainNpc.NpcVisitQuestGoHome()
             MainNpc.EventFlags['cNpcTemp:VisitQuestCallCount'] = 0
             System.EventFlags['cLandTemp:NpcVisitPlayerHouse'] = false
  

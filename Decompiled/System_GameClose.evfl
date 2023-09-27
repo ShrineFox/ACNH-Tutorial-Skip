@@ -1,104 +1,104 @@
 flow DreamClose():
     # What would you like to do?
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
-            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageSuspend()
             run SNPC_tap_02_InDreaming::Jumpuprun SNPC_tap_02_InDreaming::Jumpup()
         case 1:
-            if EventFlowSystemActor.NetIsPublicDreamEventFlowSystemActor.NetIsPublicDream():
+            if EventFlowSystemActor.NetIsPublicDream():
                 # It doesn't seem like I can send a report on this dream...
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:027', true)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:027', true)
             else:
                 run ReportDream()
         default:
             return
  
 flow LocalClose():
-    if EventFlowSystemActor.NetIsInviteFriendEventFlowSystemActor.NetIsInviteFriend():
+    if EventFlowSystemActor.NetIsInviteFriend():
         # What would you like to do?
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:001', true)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
-            EventFlowSystemActor.UIShopMoneyDisappearEventFlowSystemActor.UIShopMoneyDisappear()
-            EventFlowSystemActor.UIMenuProfileOthersHandlingEventFlowSystemActor.UIMenuProfileOthersHandling()
-        elif EventFlowSystemActor.NetCanRequestLeaveEventFlowSystemActor.NetCanRequestLeave():
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:001', true)
+        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            EventFlowSystemActor.UIShopMoneyDisappear()
+            EventFlowSystemActor.UIMenuProfileOthersHandling()
+        elif EventFlowSystemActor.NetCanRequestLeave():
             run RetryLock()
         else:
             # I should wait until the performance is over.
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
     else:
         # What would you like to do?
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:004', true)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
-            EventFlowSystemActor.UIShopMoneyDisappearEventFlowSystemActor.UIShopMoneyDisappear()
-            EventFlowSystemActor.UIMenuProfileOthersHandlingEventFlowSystemActor.UIMenuProfileOthersHandling()
-        elif EventFlowSystemActor.NetCanRequestLeaveEventFlowSystemActor.NetCanRequestLeave():
-            EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:004', true)
+        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+            EventFlowSystemActor.UIShopMoneyDisappear()
+            EventFlowSystemActor.UIMenuProfileOthersHandling()
+        elif EventFlowSystemActor.NetCanRequestLeave():
+            EventFlowSystemActor.MessageLockNext(1)
             # Getting ready to return home...
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
-            EventFlowSystemActor.NetDemoLockEventFlowSystemActor.NetDemoLock(1)
-            EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-            if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
-                EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(2)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
+            EventFlowSystemActor.NetDemoLock(1)
+            EventFlowSystemActor.MessageUnlockNext()
+            if EventFlowSystemActor.CheckErrorType(2):
+                EventFlowSystemActor.MessageLockNext(2)
                 # Getting ready to return home... (Press  to cancel.)
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
-                EventFlowSystemActor.NetForceQuitSessionEventFlowSystemActor.NetForceQuitSession()
-                EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                if not EventFlowSystemActor.MessageUseBCancelEventFlowSystemActor.MessageUseBCancel():
-                    EventFlowSystemActor.NetLeaveSessionVillageEventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
+                EventFlowSystemActor.NetForceQuitSession()
+                EventFlowSystemActor.MessageUnlockNext()
+                EventFlowSystemActor.MessageSuspend()
+                if not EventFlowSystemActor.MessageUseBCancel():
+                    EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
             else:
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.NetLeaveSessionVillageEventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+                EventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
         else:
             # I should wait until the performance is over.
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
  
 flow NetClose():
-    if EventFlowSystemActor.NetModeEventFlowSystemActor.NetMode() in (0, 1):
+    if EventFlowSystemActor.NetMode() in (0, 1):
         run LocalClose()
     else:
         run System_InetClose::InetCloserun System_InetClose::InetClose()
  
 flow ReportDream():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.NetCaptureScreenshotEventFlowSystemActor.NetCaptureScreenshot()
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.NetCaptureScreenshot()
     # Do you want to report this dream?
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:025', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        EventFlowSystemActor.UIIllegalReportHandlingEventFlowSystemActor.UIIllegalReportHandling(8)
-        if EventFlowSystemActor.UIIllegalReportResultEventFlowSystemActor.UIIllegalReportResult():
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:025', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.UIIllegalReportHandling(8)
+        if EventFlowSystemActor.UIIllegalReportResult():
             # The dream you were experiencing has been reported. You will now be returned to your own bed.
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:026', true)
-            EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
-            EventFlowSystemActor.StopMeasurePlayTimeEventFlowSystemActor.StopMeasurePlayTime('cDreaming')
-            EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('', '', 'cBlack', 1.0, 1.0, true)
-            EventFlowSystemActor.NetExitDreamEventFlowSystemActor.NetExitDream(true)
-            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cDreamDemo', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:026', true)
+            EventFlowSystemActor.MiniGameSilentCancel()
+            EventFlowSystemActor.StopMeasurePlayTime('cDreaming')
+            EventFlowSystemActor.FadeOut('', '', 'cBlack', 1.0, 1.0, true)
+            EventFlowSystemActor.NetExitDream(true)
+            EventFlowSystemActor.SystemRequestChangeStage('cDreamDemo', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
  
 flow RetryLock():
-    EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    EventFlowSystemActor.MessageLockNext(1)
     # Ending the session...
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:006', false)
-    EventFlowSystemActor.NetDemoLockEventFlowSystemActor.NetDemoLock(2)
-    EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-    if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
-        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(2)
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:006', false)
+    EventFlowSystemActor.NetDemoLock(2)
+    EventFlowSystemActor.MessageUnlockNext()
+    if EventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.MessageLockNext(2)
         # Ending the session... (Press  to cancel.)
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:008', false)
-        EventFlowSystemActor.NetForceQuitSessionEventFlowSystemActor.NetForceQuitSession()
-        EventFlowSystemActor.MessageUnlockNextEventFlowSystemActor.MessageUnlockNext()
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        if not EventFlowSystemActor.MessageUseBCancelEventFlowSystemActor.MessageUseBCancel():
-            EventFlowSystemActor.NetBreakUpSessionVillageEventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:008', false)
+        EventFlowSystemActor.NetForceQuitSession()
+        EventFlowSystemActor.MessageUnlockNext()
+        EventFlowSystemActor.MessageSuspend()
+        if not EventFlowSystemActor.MessageUseBCancel():
+            EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
     else:
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.NetBreakUpSessionVillageEventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+        EventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
  
 flow Root():
-    if EventFlowSystemActor.NetIsConnectedEventFlowSystemActor.NetIsConnected():
-        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
-            if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+    if EventFlowSystemActor.NetIsConnected():
+        if EventFlowSystemActor.IsMyVillage():
+            if EventFlowSystemActor.NetHasVisitor():
                 run NetClose()
             else:
                 run Sub_grp_Event24()
@@ -110,26 +110,26 @@ flow Root():
 local flow Sub_grp_Event24():
     if not System.EventFlags['cPlayer:ValidatePlayerSaveFlag']:
         # You can't save right now.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
-    elif EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
+    elif EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
         run System_WherearenClose::WherearenCloserun System_WherearenClose::WherearenClose()
-    elif EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    elif EventFlowSystemActor.NetIsDreaming():
         run DreamClose()
-    elif (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol01')) or (System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']) or (EventFlowSystemActor.IsPlayerBirthdayRoomEventFlowSystemActor.IsPlayerBirthdayRoom()) or ((EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate'])):
+    elif (EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol01')) or (System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']) or (EventFlowSystemActor.IsPlayerBirthdayRoom()) or ((EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate'])):
         # You can't save right now.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)
-    elif EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(1):
+        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)
+    elif EventFlowSystemActor.IsSharePlay(1):
         run System_SharePlay_Entry::ExitSharePlayrun System_SharePlay_Entry::ExitSharePlay()
     else:
-        if (not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
+        if (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
             # Ready to wrap things up for now?
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:011', true)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:011', true)
         else:
             # Ready to wrap things up for now? (Next time you start the game, you will begin from your home.)
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            if EventFlowSystemActor.NetIsInviteFriendEventFlowSystemActor.NetIsInviteFriend():
-                EventFlowSystemActor.NetEndSessionVillageEventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', true)
-            EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
-            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:020', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            if EventFlowSystemActor.NetIsInviteFriend():
+                EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', true)
+            EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
+            EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
  

@@ -1,61 +1,61 @@
 flow Give():
-    MainNpc.SetItemNameMainNpc.SetItemName(11, 0, 0)
-    MainNpc.SetNpcNameMainNpc.SetNpcName(3, 1)
+    MainNpc.SetItemName(11, 0, 0)
+    MainNpc.SetNpcName(3, 1)
     # A delivery? For me?!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:001', false)
-    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cQuest', 65534, '', '', 'cItemSelect', false)
-    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
-    if MainNpc.IsSelectNpcRequestedItemMainNpc.IsSelectNpcRequestedItem():
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:001', false)
+    EventFlowSystemActor.UIItemSelectWindowHandling('cQuest', 65534, '', '', 'cItemSelect', false)
+    MainNpc.SetDeliveryItem(4, false)
+    if MainNpc.IsSelectNpcRequestedItem():
+        MainNpc.NpcDelivery(0, 'Keep')
         if MainNpc.QuestFlags['cDeliveryItemOpen']:
-            if EventFlowSystemActor.UISelectedItemIsWrappingEventFlowSystemActor.UISelectedItemIsWrapping('cItemSelect'):
+            if EventFlowSystemActor.UISelectedItemIsWrapping('cItemSelect'):
                 MainNpc.QuestFlags['cDeliveryWrappingAgain'] = true
                 run Sub_Event102()
             else:
-                MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(1)
+                MainNpc.NpcAddFriendship(1)
                 run NNPC_Quest_Delivery_End::OpenEndrun NNPC_Quest_Delivery_End::OpenEnd()
         else:
             run Sub_Event102()
     else:
         # A huh huh huh, or not!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:002', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:002', false)
  
 local flow Sub_Event102():
-    MainNpc.NpcAddFriendshipMainNpc.NpcAddFriendship(3)
-    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+    MainNpc.NpcAddFriendship(3)
+    switch MainNpc.DeliveryQuestType():
         case 0:
             # Oh! I wonder if this is what I let <115:1:cd01> borrow…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:003', false)
-            switch MainNpc.CheckClientNpcLookMainNpc.CheckClientNpcLook():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:003', false)
+            switch MainNpc.CheckClientNpcLook():
                 case 0:
                     # Oh man! It's wrapped up real pretty! Feels kinda like I'm getting a gift, a huh huh! Hang on… Is this really the thing that I lent her?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:101', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:101', false)
                 case 1:
                     # Wow, the wrapping is real cute!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:102', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:102', false)
                 case 2:
                     # Mmm… Sniff sniff sniff… It smells like flowers! A huh huh huh…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:103', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:103', false)
                 case 3:
                     # I never think she will, but she always returns my stuff!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:104', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:104', false)
                 case 4:
                     # Oh! He remembered! I thought he'd totally forgotten! Heck, I'D totally forgotten!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:105', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:105', false)
                 case 5:
                     # Huh. Knowing that dude, he was probably using it for <135:6:cd00> practice or something!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:106', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:106', false)
                 case 6:
                     # The dude kinda scares me a little bit, but he really keeps his word!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:107', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:107', false)
                 case 7:
                     # Wow! It's wrapped up so nice! Like it's from a fancy store, maybe!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:108', false)
-            switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:108', false)
+            switch MainNpc.CheckNpcFavorLevel():
                 case 0, 1:
                     run Sub_grp_Event125()
                 case 2, 3:
-                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(20):
+                    if EventFlowSystemActor.PercentChoice(20):
                         run Sub_grp_Event125()
                     else:
                         run TypeA()
@@ -63,15 +63,15 @@ local flow Sub_Event102():
                     run TypeA()
         case 1:
             # Huh? I left something behind? What is it?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:004', false)
-            switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:004', false)
+            switch MainNpc.CheckNpcFavorLevel():
                 case 0, 1:
-                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(70):
+                    if EventFlowSystemActor.PercentChoice(70):
                         run Sub_grp_Event128()
                     else:
                         run TypeB()
                 case 2, 3:
-                    switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(20, 10, 70):
+                    switch EventFlowSystemActor.PercentChoice3(20, 10, 70):
                         case 0:
                             run Sub_grp_Event128()
                         case 1:
@@ -82,15 +82,15 @@ local flow Sub_Event102():
                     run Sub_Event6()
         case 2:
             # You gotta be kidding! My package was delivered to <115:1:cd01>'s place?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:005', false)
-            switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:005', false)
+            switch MainNpc.CheckNpcFavorLevel():
                 case 0, 1:
-                    if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(30):
+                    if EventFlowSystemActor.PercentChoice(30):
                         run Sub_Event40()
                     else:
                         run Sub_Event124()
                 case 2, 3:
-                    switch EventFlowSystemActor.PercentChoice3EventFlowSystemActor.PercentChoice3(10, 20, 70):
+                    switch EventFlowSystemActor.PercentChoice3(10, 20, 70):
                         case 0:
                             run Sub_Event40()
                         case 1:
@@ -101,15 +101,15 @@ local flow Sub_Event102():
                     run Sub_Event37()
         case 3:
             # This is from <115:1:cd01>? And it's a present for me? Aww man, that's cool!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:006', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:006', false)
             run Sub_Event50()
         case 4:
             # Huh? It's a present from <115:1:cd01>? But why? Ohhh, 'cause of the other day?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:007', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:007', false)
             run Sub_Event50()
  
 local flow Sub_Event103():
-    MainNpc.SetItemToNpcStockListMainNpc.SetItemToNpcStockList(2, 2)
+    MainNpc.SetItemToNpcStockList(2, 2)
     MainNpc.QuestFlags['cDeliveryItemOpen'] = false
     MainNpc.QuestFlags['cDeliveryEnd'] = true
     MainNpc.EventFlags['cNpcMemory:StoodUpFlag'] = false
@@ -119,152 +119,152 @@ local flow Sub_Event124():
         run Sub_Event40()
     else:
         # Something I ordered? I don't remember ordering anything… Or maybe…I remember ordering something…but I DON'T remember what I ordered? Or MAYBE…I don't…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:303', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:303', false)
         run NNPC_Quest_Delivery_End::QuizEndrun NNPC_Quest_Delivery_End::QuizEnd()
  
 local flow Sub_Event37():
     # Huh? What is it?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:301', false)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(6, 'Default')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:301', false)
+    MainNpc.NpcDelivery(6, 'Default')
     MainNpc.QuestFlags['cDeliveryItemOpen'] = true
     # My <125:0:0000>! I ordered one when I saw it online the other day!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:302', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:302', false)
     run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
  
 local flow Sub_Event40():
     # Oh! This is that thing I ordered to give to you, <110:5>! It's kinda weird since you delivered it and all… But here ya go! I got this for you, <110:3…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:304', false)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, 'Keep')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:304', false)
+    MainNpc.NpcDelivery(10, 'Keep')
     MainNpc.QuestFlags['cDeliveryGetFree'] = true
     # Should I open it now?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:305', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(5, 'Default')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:305', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.NpcDelivery(5, 'Default')
         MainNpc.QuestFlags['cDeliveryItemOpen'] = true
-        if MainNpc.DeliveryQuestItemKindMainNpc.DeliveryQuestItemKind() == 0:
+        if MainNpc.DeliveryQuestItemKind() == 0:
             # Check it out. It's [a|an] <125:0:0000>! That's real cool, yeah?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:308', false)
-            MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
-            MainNpc.NpcDeliveryMainNpc.NpcDelivery(2, 'Default')
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:308', false)
+            MainNpc.SetDeliveryItemApplySave()
+            MainNpc.NpcDelivery(2, 'Default')
             if MainNpc.EventFlags['cNpcMemory:VisitCount'] < 1:
                 # Some stuff makes me think of my friends. So I buy that stuff and give it to my friends. Between the store and now, I've been thinking about you a LOT.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:313', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:313', false)
             else:
                 # I thought this would look good in your place, <110:5>. I hope ya dig it!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:309', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:309', false)
         else:
             # I thought you'd like this! It's [a|an] <125:0:0000>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:307', false)
-            MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
-            MainNpc.NpcDeliveryMainNpc.NpcDelivery(2, 'Default')
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:307', false)
+            MainNpc.SetDeliveryItemApplySave()
+            MainNpc.NpcDelivery(2, 'Default')
     else:
-        MainNpc.NpcDecideDeliveryQuestRewardMainNpc.NpcDecideDeliveryQuestReward(2, 4)
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(2, 'Default')
+        MainNpc.NpcDecideDeliveryQuestReward(2, 4)
+        MainNpc.NpcDelivery(2, 'Default')
         # Gonna save the fun for later? That's cool. Just lemme know what ya think!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:306', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:306', false)
         MainNpc.QuestFlags['cDeliveryItemOpen'] = true
-        MainNpc.NpcSetQuestRewardToPlayerBaggageMainNpc.NpcSetQuestRewardToPlayerBaggage('cSwap')
-    MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(1)
+        MainNpc.NpcSetQuestRewardToPlayerBaggage('cSwap')
+    MainNpc.RegistToReleaseItemList(1)
     MainNpc.QuestFlags['cDeliveryItemOpen'] = false
     MainNpc.QuestFlags['cDeliveryEnd'] = true
     MainNpc.EventFlags['cNpcMemory:StoodUpFlag'] = false
-    MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC_Delivery')
+    MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC_Delivery')
  
 local flow Sub_Event50():
     # I wonder what it is? Lemme see…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:400', false)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(6, 'Default')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:400', false)
+    MainNpc.NpcDelivery(6, 'Default')
     MainNpc.QuestFlags['cDeliveryItemOpen'] = true
-    if MainNpc.DeliveryQuestItemKindMainNpc.DeliveryQuestItemKind() == 0:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+    if MainNpc.DeliveryQuestItemKind() == 0:
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # [A|An]<125:0:0000>! This color makes me happy.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:401', false)
-                switch MainNpc.CheckClientNpcLookMainNpc.CheckClientNpcLook():
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:401', false)
+                switch MainNpc.CheckClientNpcLook():
                     case 0:
                         # <50:3><115:1:cd01>'s gifts are always fancy…they're usually real schmancy too!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:411', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:411', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 1:
                         # <115:1:cd01> knows what kinda stuff I dig! She's super "fab." That's what she says. "Fab." A huh huh huh. I love it.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:412', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:412', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 2:
                         # Man, I tell ya, <115:1:cd01> always picks out really stylish gifts!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:413', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:413', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 3:
                         # I never think <115:1:cd01> understands me… But she gets me. She gets me.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:414', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:414', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 4:
                         # <50:3><115:1:cd01> picked this out for me? No way! No! Way!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:415', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:415', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 5:
                         # <115:1:cd01> sent this? Neat! He must've took a break from doing scary exercises.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:416', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:416', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 6:
                         # I wish I coulda seen the look on <115:1:cd01>'s face when he was buying this!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:417', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:417', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 7:
                         # <50:3><115:1:cd01> gives the coolest gifts. <10:4>I mean…I think they're supposed to be cool?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:418', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:418', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
             case 1:
                 # No way! A huh huh! I can't believe it! [A|An]<125:0:0000>!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:402', false)
-                switch MainNpc.CheckClientNpcLookMainNpc.CheckClientNpcLook():
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:402', false)
+                switch MainNpc.CheckClientNpcLook():
                     case 0:
                         # <50:3><115:1:cd01>'s gifts are always fancy…they're usually real schmancy too!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:411', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:411', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 1:
                         # <115:1:cd01> knows what kinda stuff I dig! She's super "fab." That's what she says. "Fab." A huh huh huh. I love it.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:412', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:412', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 2:
                         # Man, I tell ya, <115:1:cd01> always picks out really stylish gifts!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:413', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:413', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 3:
                         # I never think <115:1:cd01> understands me… But she gets me. She gets me.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:414', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:414', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 4:
                         # <50:3><115:1:cd01> picked this out for me? No way! No! Way!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:415', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:415', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 5:
                         # <115:1:cd01> sent this? Neat! He must've took a break from doing scary exercises.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:416', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:416', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 6:
                         # I wish I coulda seen the look on <115:1:cd01>'s face when he was buying this!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:417', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:417', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                     case 7:
                         # <50:3><115:1:cd01> gives the coolest gifts. <10:4>I mean…I think they're supposed to be cool?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:418', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:418', false)
                         run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
             case 2:
                 # [A|An]<125:0:0000>! How cool is that? <10:4>PRETTY cool!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:403', false)
-                if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:403', false)
+                if EventFlowSystemActor.PercentChoice(50):
                     run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
                 else:
-                    MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
-                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
-                    switch MainNpc.DeliveryQuestTypeMainNpc.DeliveryQuestType():
+                    MainNpc.SetDeliveryItemApplySave()
+                    MainNpc.NpcDelivery(3, 'Default')
+                    switch MainNpc.DeliveryQuestType():
                         case 3:
                             # Thanks for bringing this over. I'll say thanks to <115:1:cd01> whenever I see 'em!
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:404', false)
+                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:404', false)
                             run Sub_Event103()
                         case 4:
                             # Thanks for doing this, <110:3>!  I'm gonna apologize to <115:1:cd01>!
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:405', false)
+                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:405', false)
                             run Sub_Event103()
                         default:
                             return
@@ -272,10 +272,10 @@ local flow Sub_Event50():
         run NNPC_Quest_Delivery_Cloth::Clothrun NNPC_Quest_Delivery_Cloth::Cloth()
  
 local flow Sub_Event6():
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(6, 'Default')
+    MainNpc.NpcDelivery(6, 'Default')
     MainNpc.QuestFlags['cDeliveryItemOpen'] = true
     # My <125:0:0000>! Dude. I've looked everywhere for this! I looked in my snack stash…on my roof…in my secret snack stash…out back where I accidentally …
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:201', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:201', false)
     run NNPC_Quest_Delivery_End::Thanks1run NNPC_Quest_Delivery_End::Thanks1()
  
 local flow Sub_grp_Event125():
@@ -289,33 +289,33 @@ local flow Sub_grp_Event128():
         run TypeB()
     else:
         # Hmm… You sure? I don't remember forgetting anything…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:202', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:202', false)
         run NNPC_Quest_Delivery_End::QuizEndrun NNPC_Quest_Delivery_End::QuizEnd()
  
 flow TypeA():
-    MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, 'Default')
+    MainNpc.SetDeliveryItemApplySave()
+    MainNpc.NpcDelivery(3, 'Default')
     # Thanks for delivering this! Tell <115:1:cd01> I said thanks too, <110:5>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:109', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:109', false)
     MainNpc.QuestFlags['cDeliveryEnd'] = true
     MainNpc.EventFlags['cNpcMemory:StoodUpFlag'] = false
  
 flow TypeB():
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(6, 'Default')
+    MainNpc.NpcDelivery(6, 'Default')
     MainNpc.QuestFlags['cDeliveryItemOpen'] = true
     # Oh, hey! This is my old <125:0:0000>! I already bought a new one 'cause I thought I lost this one… I guess I DID lose it, huh?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:203', false)
-    MainNpc.NpcDecideDeliveryQuestRewardMainNpc.NpcDecideDeliveryQuestReward(2, 1)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:203', false)
+    MainNpc.NpcDecideDeliveryQuestReward(2, 1)
     # Y'know what, <110:3>? I don't need two. Why don't you take it?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:204', false)
-    MainNpc.SetDeliveryItemApplySaveMainNpc.SetDeliveryItemApplySave()
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, 'Default')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:204', false)
+    MainNpc.SetDeliveryItemApplySave()
+    MainNpc.NpcDelivery(10, 'Default')
     MainNpc.QuestFlags['cDeliverySameBought'] = true
     # Thanks for the delivery. Oh, and tell <115:1:cd01> I said thanks too, <110:5>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:205', false)
-    MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(1)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Delivery_Give:205', false)
+    MainNpc.RegistToReleaseItemList(1)
     MainNpc.QuestFlags['cDeliveryEnd'] = true
     MainNpc.QuestFlags['cDeliveryItemOpen'] = false
     MainNpc.EventFlags['cNpcMemory:StoodUpFlag'] = false
-    MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC_Delivery')
+    MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC_Delivery')
  

@@ -9,162 +9,162 @@ flow Chy_ObjEntryCount():
  
 flow DailySell_Cancel():
     # What?! No, it's cool. It was enough to just…behold.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:020', false)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, 'Default')
-    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:020', false)
+    MainNpc.NpcDelivery(10, 'Default')
+    EventFlowSystemActor.UIMoneyDisappear()
     run Daily_SellCancel_Talk()
  
 flow Daily_ReqObj():
     if System.EventFlags['cPlayer:ChyDaily_ReqObj']:
-        MainNpc.NpcDecideOrderBeforeItemMainNpc.NpcDecideOrderBeforeItem('cChyInsect')
-        MainNpc.SetItemNameMainNpc.SetItemName(28, 0, 1)
-        if MainNpc.ChyIfSpecialInsectMainNpc.ChyIfSpecialInsect():
+        MainNpc.NpcDecideOrderBeforeItem('cChyInsect')
+        MainNpc.SetItemName(28, 0, 1)
+        if MainNpc.ChyIfSpecialInsect():
             # Of course. You're wondering about your <125:0:0001> piece. How could you not? Patience, bell cricket! I will forge for you a colossus that will bestr…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:111', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:111', false)
         else:
             # This is about your commission for a sculpture based on the exquisite <125:0:0001>, right? I have the image in my mind! Now my mortal digits must brin…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:100', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:100', false)
     elif System.EventFlags['cPlayer:ChyDaily_ExplainReqObj_First']:
         run Sub_grp_Event87()
     else:
         System.EventFlags['cPlayer:ChyDaily_ExplainReqObj_First'] = true
         # Oh! A-are you interested?! I consider it my mission to bring the bugs' beauty…however imperfectly… to places they haven't yet blessed. A bug's form i…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:101', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:101', false)
 entrypoint Event8:
         # If there's a bug you want me to sculpt, bring me <90:0:0003> of them.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:102', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:102', false)
+        switch EventFlowSystemActor.GeneralTalkChoice3():
             case 0:
                 run Sub_grp_Event87()
             case 1:
                 run Ex_Obj2()
             case 2:
                 # May you one day find your own path to infestation.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:110', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:110', false)
  
 flow Daily_SellCancel_Talk():
-    if EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
+    if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
         # I'm off to the next island tomorrow at <90:37:cd00> <110:21:cd00>… Maybe you'll have a bug for me by then?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:022', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:022', false)
     else:
         # I'm off to the next island at <90:37:cd00> <110:21:cd00>… Maybe you'll have a bug for me by then?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:023', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:023', false)
  
 flow Daily_SellInsect(SellTotal: int = 0):
-    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'Insect', ''):
+    if EventFlowSystemActor.HasKindItem('cKind', 'Insect', ''):
         # Really? WHAT KIND?!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:016', false)
-        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cInsectSell', 65534, 'Insect', '', 'cItemSelect', false)
-        if (EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide()) and (EventFlowSystemActor.UIResultItemWindowNumCheckEventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect')):
-            MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
-            MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
-            MainNpc.ShopSellCalcMainNpc.ShopSellCalc(SellTotal, 1.5, true, false)
-            EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 2, SellTotal, '""')
-            EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
-            if EventFlowSystemActor.UIResultItemWindowNumCheckEventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:016', false)
+        EventFlowSystemActor.UIItemSelectWindowHandling('cInsectSell', 65534, 'Insect', '', 'cItemSelect', false)
+        if (EventFlowSystemActor.UIResultMenuDecide()) and (EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect')):
+            MainNpc.SetDeliveryItem(4, false)
+            MainNpc.NpcDelivery(0, 'Keep')
+            MainNpc.ShopSellCalc(SellTotal, 1.5, true, false)
+            EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 2, SellTotal, '""')
+            EventFlowSystemActor.UIMoneyAppear()
+            if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
                 # A whole swarm?! This is the best day EVER! OK, tone it down, Flick… Ahem. Can I offer you, say, <90:20:0002> for the bunch of them?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:025', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:025', false)
             else:
-                EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+                EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
                 # [A|An]<125:0:0000>! Be shrill my squee-ing heart! It's… «so beautiful»! Keep it cool, Flick… Your <125:0:0000>… Would you, perchance, sell it to me f…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:024', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:024', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Really?! Th-thank you!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:027', false)
-                MainNpc.MessageSuspendMainNpc.MessageSuspend()
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(7, 'Default')
-                MainNpc.ShopSellDoneMainNpc.ShopSellDone(1.5, false)
-                EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
-                if (EventFlowSystemActor.ChyWeekEndEventEventFlowSystemActor.ChyWeekEndEvent() in (0, 1)) and (not System.EventFlags['cPlayer:ChyDaily_AnnounceEvent']):
+                MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:027', false)
+                MainNpc.MessageSuspend()
+                MainNpc.NpcDelivery(7, 'Default')
+                MainNpc.ShopSellDone(1.5, false)
+                EventFlowSystemActor.UIMoneyDisappear()
+                if (EventFlowSystemActor.ChyWeekEndEvent() in (0, 1)) and (not System.EventFlags['cPlayer:ChyDaily_AnnounceEvent']):
                     System.EventFlags['cPlayer:ChyDaily_AnnounceEvent'] = true
                     # Hey, um, thanks for hanging out with me. I don't talk with a lot of folks…except my partner. Have you ever competed in a Bug-Off? I was…gonna host on…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:033', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:033', false)
                 else:
                     # Let me know if you catch any more!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:028', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:028', false)
             else:
                 run DailySell_Cancel()
         else:
             # You're not gonna show me?! B-but… No, I get it. I cannot choose when I meet each bug. The mandible of destiny is afoot here.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:021', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:021', false)
             run Daily_SellCancel_Talk()
     else:
         # R-really?! That's great! What have you got for me?! Wait—you don't have the energy, the aura, the «MAJESTY »of someone with bugs in their pockets! So…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:011', false)
-        if EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:011', false)
+        if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
             # Just so you know, I have to leave tomorrow morning at 5 AM, so… please get back to me by then, OK?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:012', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:012', true)
         else:
             # Just so you know, I have to leave at 5 AM, so…please get back to me by then, OK?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:013', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:013', true)
  
 flow Ex_Obj2():
     # O-of course! I would explain my purpose a THOUSAND times, because my purpose is bugs! I sculpt icons of them, though my work can only be as shadows c…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:103', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:103', false)
     run Event8()
  
 flow Root(SellTotal: int = 0):
     run Tag_Num_daily()
     run Tag_SET_HOUR_daily()
-    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cNowCatchInsect', 'cDegit', 3, 0, '')
-    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    EventFlowSystemActor.SetTagFromSystem('cNowCatchInsect', 'cDegit', 3, 0, '')
+    if not EventFlowSystemActor.IsMyVillage():
         if System.EventFlags['cPlayerVisit:DC_ChyDaily_TalkFirst']:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                 case 0:
                     # I'm sure I'll make it to your island eventually. When that happens, will you introduce me to some of your local bugs and their ways?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:073', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:073', false)
                 case 1:
                     # I've been traveling from island to island looking for expressive bugs. It's been an emotional journey. I wonder what kind of segmented friends I'll m…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:072', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:072', false)
                 case 2:
                     # Wait! I just heard the scuttling aria of arthropod legs on a hard surface!<10:4> I must have misheard it…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:071', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:071', false)
         else:
             System.EventFlags['cPlayerVisit:DC_ChyDaily_TalkFirst'] = true
             # …I divide myself into the three sacred segments. I am the head, thorax, and abdomen of the universe… Huh? Did you hear that? Um, never mind. You're n…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:070', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:070', false)
     elif System.EventFlags['cPlayer:ChyDaily_TalkFirstDay']:
-        switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+        switch EventFlowSystemActor.RandomChoice3(3):
             case 0:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                     case 0:
                         # If you find yourself where there are no bugs…you have to visualize and manifest them yourself! Close your eyes. Reach with your mind. Feel the bugs. …
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:040', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:040', false)
                     case 1:
                         # My world was once gray and dull. Then they brought their riotous jointed rainbows of wonder!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:041', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:041', false)
                     case 2:
                         # It doesn't matter how much I treasure the bugs. They'll never notice what I do for them…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:042', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:042', false)
             case 1:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                     case 0:
                         # They reflect this sullied world, yet retain their own beauty… I am bewitched by those compound eyes.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:043', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:043', false)
                     case 1:
                         # It is sheer hubris to think that we could ever learn everything about bugs. Bugs are an experience. They are a conversation…one between the viewer an…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:044', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:044', false)
                     case 2:
                         # Larva, pupa, adulthood, final transcendence… They become more exalted with every metamorphosis!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:045', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:045', false)
             case 2:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious4EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
                     case 0:
                         # Am I truly listening to the needs of the <125:0:0003> with every ear I possess?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:046', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:046', false)
                     case 1:
                         # When the universe contemplates beauty, it imagines the silhouette of the <125:0:0003>.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:047', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:047', false)
                     case 2:
                         # Will this world meet its reckoning, beheld only by the lonely eyes of the <125:0:0003>?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:048', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:048', false)
                     case 3:
                         # If [a|an]<125:0:0003> were to manifest before me, how would I react? Laughter? Weeping?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:049', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:049', false)
         if System.EventFlags['cPlayer:ChyDaily_ReqObj']:
             # Huh? Oh, um, sorry. Just, y'know, thinking. So, have you found any bugs yet? I'll buy any kind—no questions asked.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:014', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:014', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     run Daily_SellInsect()
                 case 1:
@@ -173,36 +173,36 @@ flow Root(SellTotal: int = 0):
                     run TalkCancel()
         elif System.EventFlags['cPlayer:ChyDaily_ExplainReqObj_First']:
             # Oh! Um, sorry. Lost in my thoughts… Have you found any bugs yet? 'Cause I'll buy any kind. Any. Kind. Oh, and if you want to commission a piece of my…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:015', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:015', false)
             run Sub_grp_Event74(SellTotal=SellTotal)
         else:
             # Oh! Um, hi. Have you caught any bugs yet? I'm happy to buy any kind of bug you catch. And if you want to commission some of my art, just let me know.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:010', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:010', false)
             run Sub_grp_Event4(SellTotal=SellTotal)
     else:
         System.EventFlags['cPlayer:ChyDaily_TalkFirstDay'] = true
         if System.EventFlags['cPlayer:ChyDaily_TalkFirst']:
             # Oh, hey. Remember me…Flick? The guy who loves bugs in all their skittery, chittery, sometimes-glittery glory? I'm still looking for my soul bug, the …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:004', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:004', false)
             if System.EventFlags['cPlayer:ChyDaily_ExplainReqObj_First']:
                 # So if you find a bug, will you sell it to me? I can pay a little extra—no price is too high for my chitinous kindred! And that's ANY bug. Devotion wi…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:006', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:006', false)
                 run Sub_grp_Event74(SellTotal=SellTotal)
             else:
                 run Sub_Event82(SellTotal=SellTotal)
         else:
             System.EventFlags['cPlayer:ChyDaily_TalkFirst'] = true
             # Oh, uh, hi. Do you live here? I'm Flick. I'm…kind of a bug buff. An insect enthusiast. An arthropod artiste. «I love all bugs and their appendages!» …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:000', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:000', false)
             run Sub_Event82(SellTotal=SellTotal)
  
 local flow Sub_Event82(SellTotal: int):
     # So if you find a bug, will you sell it to me? I can pay a little extra—no price is too high for my chitinous kindred! And that's ANY bug. Devotion wi…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:005', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:005', false)
     run Sub_grp_Event4(SellTotal=SellTotal)
  
 local flow Sub_grp_Event4(SellTotal: int):
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Daily_SellInsect()
         case 1:
@@ -211,7 +211,7 @@ local flow Sub_grp_Event4(SellTotal: int):
             run TalkCancel()
  
 local flow Sub_grp_Event74(SellTotal: int):
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
             run Daily_SellInsect()
         case 1:
@@ -220,76 +220,76 @@ local flow Sub_grp_Event74(SellTotal: int):
             run TalkCancel()
  
 local flow Sub_grp_Event87():
-    if MainNpc.ChyHaveThreeOrMoreSameInsectMainNpc.ChyHaveThreeOrMoreSameInsect():
+    if MainNpc.ChyHaveThreeOrMoreSameInsect():
         # Oh, I see. The time has come for we two travelers to begin our journey together. What bug have you chosen to act as our guide?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:106', false)
-        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cInsectToyExchange', 65534, 'Insect', '', 'cItemSelect', false)
-        if EventFlowSystemActor.UIResultItemWindowNumCheckEventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
-            EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 2)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:106', false)
+        EventFlowSystemActor.UIItemSelectWindowHandling('cInsectToyExchange', 65534, 'Insect', '', 'cItemSelect', false)
+        if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
+            EventFlowSystemActor.SetTagFromUIResult('cItemName', 2)
             # Noble <125:0:0002>! Can you part with <90:0:0003> of them? They will be happy and safe with me.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:107', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                MainNpc.MessageSuspendMainNpc.MessageSuspend()
-                MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Default')
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:107', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.MessageSuspend()
+                MainNpc.SetDeliveryItem(4, false)
+                MainNpc.NpcDelivery(0, 'Default')
                 System.EventFlags['cPlayer:ChyDaily_ReqObj'] = true
                 run Chy_ObjEntryCount()
-                MainNpc.ChySetInsectToyMainNpc.ChySetInsectToy()
-                MainNpc.SetOrderBeforeItemMainNpc.SetOrderBeforeItem('cChyInsect')
-                EventFlowSystemActor.DeleteSelectUIItemEventFlowSystemActor.DeleteSelectUIItem(3)
-                EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 1)
-                if MainNpc.ChyIfSpecialInsectMainNpc.ChyIfSpecialInsect():
-                    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cChy', 'MAIL_SNpc_chy_daily', 2, 'cChyInsect', 'cFastTomorrow', 'cReward', false, false)
-                    switch MainNpc.ChyCheckSpecialInsectMainNpc.ChyCheckSpecialInsect():
+                MainNpc.ChySetInsectToy()
+                MainNpc.SetOrderBeforeItem('cChyInsect')
+                EventFlowSystemActor.DeleteSelectUIItem(3)
+                EventFlowSystemActor.SetTagFromUIResult('cItemName', 1)
+                if MainNpc.ChyIfSpecialInsect():
+                    EventFlowSystemActor.SystemMailSend('cChy', 'MAIL_SNpc_chy_daily', 2, 'cChyInsect', 'cFastTomorrow', 'cReward', false, false)
+                    switch MainNpc.ChyCheckSpecialInsect():
                         case 0:
                             # R-really? You want a sculpture of [a|an]<125:0:0001>? Fell juggernaut of the backyard? It is the exquisite intersection of mighty strength and gracef…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:150', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:150', false)
                         case 1:
                             # R-really? You want a sculpture of [a|an]<125:0:0001>? Reaping shears of the netherworld? Those twin razory scythes that slice into foes! Those crimso…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:151', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:151', false)
                         case 2:
                             # R-really? You want a sculpture of [a|an]<125:0:0001>? The angel that flaps among us? These glorious spirits are like lenses through which we can see …
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:152', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:152', false)
                         case 3:
                             # R-really? You want a sculpture of [a|an]<125:0:0001>? The ghost who flutters like a bug? Their brief lives are a tragedy that no one will ever hear, …
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:153', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:153', false)
                         case 4:
                             # R-really? You want a sculpture of [a|an]<125:0:0001>? The burning scourge of the skyways? Perched on its golden hoard with the heart of a mountain an…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:154', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:154', false)
                         case 5:
                             # R-really? You want a sculpture of [a|an]<125:0:0001>? The sublime spear of the heavens? Its mottled shell is a reflection of the negative sky of the …
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:155', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:155', false)
                     # When my labors are complete and you seek your sculpture, look to the postal service.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:156', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:156', false)
                 else:
-                    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cChy', 'MAIL_SNpc_chy_daily', 1, 'cChyInsect', 'cFastTomorrow', 'cReward', false, false)
+                    EventFlowSystemActor.SystemMailSend('cChy', 'MAIL_SNpc_chy_daily', 1, 'cChyInsect', 'cFastTomorrow', 'cReward', false, false)
                     # Scored a commission! I mean, um… AND SO OUR CONTRACT IS BOUND, HUMAN. Already I feel the all-consuming fires of the creative inferno warming my be-co…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:108', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:108', false)
             else:
                 # WHAT?! B-but…my creative spark just set fire to the drapes of my mind! No, it's OK. I'll be here if you change your mind or anything.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:109', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:109', false)
         else:
             # WHAT?! B-but…my creative spark just set fire to the drapes of my mind! No, it's OK. I'll be here if you change your mind or anything.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:109', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:109', false)
     else:
         # Yes! I'll be happy to—WAIT. You are not ready. You have not yet completed your rites of devotion. Dedicate yourself to catching <90:0:0003> of your c…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:105', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:105', false)
  
 flow Tag_Num_daily():
-    if EventFlowSystemActor.EnvSeasonEventFlowSystemActor.EnvSeason() in (`Spring`, `Summer`, `Autumn`):
-        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 6, 'cPlayerTemp:CatchInsectFesGetNum')
+    if EventFlowSystemActor.EnvSeason() in (`Spring`, `Summer`, `Autumn`):
+        EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 6, 'cPlayerTemp:CatchInsectFesGetNum')
     else:
-        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 4, 'cPlayerTemp:CatchInsectFesGetNum')
-    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 3, 3, 'cPlayerTemp:CatchInsectFesGetNum')
+        EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 4, 'cPlayerTemp:CatchInsectFesGetNum')
+    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 3, 3, 'cPlayerTemp:CatchInsectFesGetNum')
  
 flow Tag_SET_HOUR_daily():
-    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 0, 5, 'cPlayer:CatchInsectFesCount')
+    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 0, 5, 'cPlayer:CatchInsectFesCount')
  
 flow TalkCancel():
-    if EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
+    if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
         # Oh! Y-yeah, of course. But if you, you know, change your mind, I'll be here until <90:37:cd00> <110:21:cd00> tomorrow, so…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:002', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:002', false)
     else:
         # Oh! Y-yeah, of course. But if you, you know, change your mind, I'll be here until <90:37:cd00> <110:21:cd00>, so…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:003', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_daily:003', false)
  

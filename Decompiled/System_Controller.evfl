@@ -1,23 +1,23 @@
 flow SetupSoloController():
-    if EventFlowSystemActor.ControllerIsConnectedEventFlowSystemActor.ControllerIsConnected():
-        if EventFlowSystemActor.IsSoloPlayControllerEventFlowSystemActor.IsSoloPlayController():
-            EventFlowSystemActor.SetControllerStyleEventFlowSystemActor.SetControllerStyle(0)
-        elif EventFlowSystemActor.IncludeHorizontalControllerEventFlowSystemActor.IncludeHorizontalController():
+    if EventFlowSystemActor.ControllerIsConnected():
+        if EventFlowSystemActor.IsSoloPlayController():
+            EventFlowSystemActor.SetControllerStyle(0)
+        elif EventFlowSystemActor.IncludeHorizontalController():
             run Sub_Event4()
         else:
-            EventFlowSystemActor.SetControllerStyleEventFlowSystemActor.SetControllerStyle(0)
-            if not EventFlowSystemActor.IsSoloPlayControllerEventFlowSystemActor.IsSoloPlayController():
+            EventFlowSystemActor.SetControllerStyle(0)
+            if not EventFlowSystemActor.IsSoloPlayController():
                 run Sub_Event4()
     else:
         run Sub_Event7()
  
 local flow Sub_Event4():
     # When playing alone, a solo Joy-Con is not a valid controller method. Please connect a controller.<10:7:00b40000>
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:014', false)
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:014', false)
     run Sub_Event7()
  
 local flow Sub_Event7():
-    EventFlowSystemActor.SetControllerStyleEventFlowSystemActor.SetControllerStyle(0)
-    EventFlowSystemActor.RequetCtrlConnectSupportEventFlowSystemActor.RequetCtrlConnectSupport(1)
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.SetControllerStyle(0)
+    EventFlowSystemActor.RequetCtrlConnectSupport(1)
+    EventFlowSystemActor.MessageSuspend()
  

@@ -1,6 +1,6 @@
 flow Cutlery():
     run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
-    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cRestaurantCustomer2F', false, false, 0)
+    MainNpc.WherearenSetTagFacilityNpcName('cRestaurantCustomer2F', false, false, 0)
     switch SubflowResults@3[1]:
         case 0:
             run FacilityNameCutlery_Chk()
@@ -10,57 +10,57 @@ flow Cutlery():
             run Cutlery_ShareHouseMate_Chk()
             run NewBuildOrder_Cutlery()
         case 2:
-            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-            MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
-            MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+            MainNpc.TurnBody(10, 0.0)
+            MainNpc.TurnNeck(10, false)
+            MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+            EventFlowSystemActor.WaitFrame(10)
             run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
  
 flow Cutlery_ShareHouseMate_Chk():
-    if EventFlowSystemActor.IsSharehousePareWherearenRestaurant2FCustomersEventFlowSystemActor.IsSharehousePareWherearenRestaurant2FCustomers():
+    if EventFlowSystemActor.IsSharehousePareWherearenRestaurant2FCustomers():
         # RANDOM: <20:2:cd06>You ever stop and think abou… // Places like this are real nice. But any… // <20:2:cd06>Today, the two of us are gon…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:513', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:513', true)
     else:
         # RANDOM: <20:2:cd06>Excuse me, could I have a co… // I'm gonna eat till I can't move. Just g… // Secret food rooms at a food place are r…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:512', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:512', true)
  
 flow FacilityNameCutlery_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
+    if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
         # <20:2:cd06>This is definitely the fanciest room at <150:3:cd00>. Science has proved that everything tastes better when you're someplace fancy, <110:6…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:503', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:503', false)
         run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
         if SubflowResults@3[1] not in (0, 2):
             run NewBuildOrder_Cutlery()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow FacilityNameRoot_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
+    if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
         # <20:2:cd06>This is definitely the fanciest room at <150:3:cd00>. Science has proved that everything tastes better when you're someplace fancy, <110:6…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:503', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:503', false)
         run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
         if SubflowResults@3[1] not in (0, 2):
             run NewBuildOrder_Root()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow NewBuildOrder_Cutlery():
-    if EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
-        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+    if EventFlowSystemActor.IsWherearenWorkMode():
+        MainNpc.TurnBody(10, 0.0)
+        MainNpc.TurnNeck(10, false)
+        MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+        EventFlowSystemActor.WaitFrame(10)
         run NNPC_Spot_WherearenMainFieldVisitor::NewBuildInFacilityrun NNPC_Spot_WherearenMainFieldVisitor::NewBuildInFacility()
  
 flow NewBuildOrder_Root():
-    if EventFlowSystemActor.IsWherearenWorkModeEventFlowSystemActor.IsWherearenWorkMode():
-        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    if EventFlowSystemActor.IsWherearenWorkMode():
+        MainNpc.TurnBody(10, 0.0)
+        MainNpc.TurnNeck(10, false)
         run NNPC_Spot_WherearenMainFieldVisitor::NewBuildInFacilityrun NNPC_Spot_WherearenMainFieldVisitor::NewBuildInFacility()
  
 flow Root():
     run NNPC_RestaurantCustomer::TalkChkrun NNPC_RestaurantCustomer::TalkChk()
-    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cRestaurantCustomer2F', false, false, 0)
+    MainNpc.WherearenSetTagFacilityNpcName('cRestaurantCustomer2F', false, false, 0)
     switch SubflowResults@3[1]:
         case 0:
             run FacilityNameRoot_Chk()
@@ -70,17 +70,17 @@ flow Root():
             run Root_ShareHouseMate_Chk()
             run NewBuildOrder_Root()
         case 2:
-            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-            MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+            MainNpc.TurnBody(10, 0.0)
+            MainNpc.TurnNeck(10, false)
             run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
  
 flow Root_ShareHouseMate_Chk():
-    if EventFlowSystemActor.IsSharehousePareWherearenRestaurant2FCustomersEventFlowSystemActor.IsSharehousePareWherearenRestaurant2FCustomers():
+    if EventFlowSystemActor.IsSharehousePareWherearenRestaurant2FCustomers():
         # RANDOM: <20:2:cd06>Right now, this room is rese… // Reserving a room to have a meal for jus… // The only customers in this room are me …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:511', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:511', true)
     else:
         # RANDOM: <20:2:cd06>There aren't many customers … // <20:2:cd06>Didja know that only two cus… // <20:2:cd06>Apparently, this is a specia…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:510', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:510', true)
  
 flow StandSleep():
     run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()

@@ -2,29 +2,29 @@ flow Departure():
     return
  
 flow IntroduceFacility():
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(148)
-    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(false)
-    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('FacilityHospitalEditStartDemo', 'FacilityEditStartDemo_0', 'Player', false, false, false, 0)
+    EventFlowSystemActor.BGMPropertyControl(148)
+    EventFlowSystemActor.FadeIn(false)
+    EventFlowSystemActor.CameraSetDemoParam('FacilityHospitalEditStartDemo', 'FacilityEditStartDemo_0', 'Player', false, false, false, 0)
     fork:
         branch:
-            Player.PlayerMoveToTargetPlayer.PlayerMoveToTarget(false, 272.0, 350.0, 0.0, 0.0, false, '')
-            Player.TurnBodyPlayer.TurnBody(12, 180.0)
+            Player.PlayerMoveToTarget(false, 272.0, 350.0, 0.0, 0.0, false, '')
+            Player.TurnBody(12, 180.0)
         branch:
-            MainNpc.NpcMoveDirectionMainNpc.NpcMoveDirection(180.0, 25.0, 1, false, false)
-            MainNpc.TurnBodyMainNpc.TurnBody(12, 180.0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
+            MainNpc.NpcMoveDirection(180.0, 25.0, 1, false, false)
+            MainNpc.TurnBody(12, 180.0)
+    EventFlowSystemActor.WaitFrame(30)
     # Alright, we've arrived! This is the spot we've reserved for the hospital.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:021', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:021', false)
     fork:
         branch:
-            Player.TurnBodyPlayer.TurnBody(0, 0.0)
+            Player.TurnBody(0, 0.0)
         branch:
-            MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+            MainNpc.TurnBody(10, 0.0)
     # Let's start on the exterior first. Go ahead and work your magic, PLAYER!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:022', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:022', true)
     run Demo_Common_Wherearen::EditFacilityExteriorrun Demo_Common_Wherearen::EditFacilityExterior()
     System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
-    EventFlowSystemActor.ReserveSkipSceneStartDemoEventFlowSystemActor.ReserveSkipSceneStartDemo()
+    EventFlowSystemActor.ReserveSkipSceneStartDemo()
     System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
     run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cWherearenFacilityOrder', FadeOutSpeed=0.0, FadeInSpeed='cNormal', FadeOutKindString='cCircle', FadeInKindString='cCircle')
  
@@ -33,41 +33,41 @@ flow PostEdit():
     System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
  
 flow PreEdit():
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(147)
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-    Player.TurnBodyPlayer.TurnBody(0, 0.0)
+    EventFlowSystemActor.BGMPropertyControl(147)
+    MainNpc.TurnBody(10, 0.0)
+    EventFlowSystemActor.WaitFrame(5)
+    Player.TurnBody(0, 0.0)
     if System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone']:
         # Alright then, let's continue designing the hospital. The hospital needs a waiting area and examination room. Press  and look in Order to see what w…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:051', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:051', false)
     else:
         # Next up, the interior design! The hospital needs two areas: a waiting area and examination room. Press  and look in Order to see what's needed in e…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:041', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:041', false)
         System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone'] = true
  
 flow ReturnOffice():
     # Great job! Because of you, we were able to complete this impressive hospital, PLAYER! Now if a client or staff member falls ill, we can take good car…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:061', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:061', false)
     fork:
         branch:
             # True, true. But just be careful to watch what you eat, Lottie!
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:062', false)
+            SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:062', false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeckPlayer.TurnNeck(1, false)
+            EventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeck(1, false)
     fork:
         branch:
             # I really made you all worry that time, didn't I? Well, I'm all better now. There's no need to worry anymore.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:063', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:063', false)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeckPlayer.TurnNeck(0, false)
+            EventFlowSystemActor.WaitFrame(15)
+            Player.TurnNeck(0, false)
     run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
     # Moving on! As always, you worked really hard. Your pay should reflect that! So here's <90:44:0000>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:064', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:064', true)
     run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrame(20)
+    EventFlowSystemActor.MessageSuspend()
     System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone'] = false
     System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
     System.EventFlags['cPlayer:OtgTipsCompleteHospitalBuild'] = true
@@ -77,35 +77,35 @@ flow ReturnOffice():
     run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
  
 flow ReturnOffice_Init():
-    MainNpc.NpcAITalkCastSettingMainNpc.NpcAITalkCastSetting('WherearenPrologue')
+    MainNpc.NpcAITalkCastSetting('WherearenPrologue')
  
 flow Root():
     # We've gotten permission to work on another facility! This time, we're creating a hospital! Having a hospital here will give folks peace of mind since…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:001', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:001', false)
     # The other day, I experienced how dire things can get when you don't have a hospital nearby… I want us to work to design the best possible hospital fa…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:004', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_07_WherearenEvent_Hospital:004', true)
     System.EventFlags['cWherearenPlayer:SeqHospitalEditOngoing'] = true
     System.EventFlags['cWherearenPlayer:IsFacilityEditStartDemo'] = 1
     System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
     System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-    EventFlowSystemActor.ReserveSkipSceneStartDemoEventFlowSystemActor.ReserveSkipSceneStartDemo()
+    EventFlowSystemActor.ReserveSkipSceneStartDemo()
     run StartReaction()
  
 flow StartReaction():
-    EventFlowSystemActor.SystemBGMVolumeFadeOutEventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
+    EventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
     fork:
         branch:
-            Player.CharacterEmoticonActionPlayer.CharacterEmoticonAction('Assent', true, '', 0, false)
+            Player.CharacterEmoticonAction('Assent', true, '', 0, false)
         branch:
-            MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.WherearenTakeOnFacilityOrderEventFlowSystemActor.WherearenTakeOnFacilityOrder('cHospital', 'cNew')
-    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cStart')
-    EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cConfirm')
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(6)
-    EventFlowSystemActor.NextLPFadeTimeEventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
-    EventFlowSystemActor.SoundSceneChangeFadeOutDuckingEventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
-    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:HospitalEditStartDemo_0', 'Player', false)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilitySuspended', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+            MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.WherearenTakeOnFacilityOrder('cHospital', 'cNew')
+    EventFlowSystemActor.WherearenOrderCallback('cStart')
+    EventFlowSystemActor.WherearenOrderCallback('cConfirm')
+    EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+    EventFlowSystemActor.WaitFrame(6)
+    EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+    EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:HospitalEditStartDemo_0', 'Player', false)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilitySuspended', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
  

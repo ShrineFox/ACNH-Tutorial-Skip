@@ -1,67 +1,67 @@
 flow Cook():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Sub_Event122()
     else:
         run ShareHouseMate_Chk()
-        if (System.EventFlags['cPlayer:MainmenuRecipe_v2']) and (not System.EventFlags['cWherearenPlayer:GetCookingRecipeToday']) and (MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0):
+        if (System.EventFlags['cPlayer:MainmenuRecipe_v2']) and (not System.EventFlags['cWherearenPlayer:GetCookingRecipeToday']) and (MainNpc.NpcNowPosture() == 0):
             run StartCookingRecipeEvent()
         else:
             run Sub_Event122()
  
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
+    if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
         # <20:2:cd06>Go to <150:3:cd00> to eat the food I cook! I've never worked in advertising before, but I think I'm doing OK, don't you, <110:6>?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:303', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:303', false)
         run KKFes_Chk()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow GiveReceipe_Chk():
-    MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(65534, true)
-    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
-    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+    MainNpc.NpcSetRewardRecipe(65534, true)
+    MainNpc.SetDeliveryItem(1, true)
+    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         # Oh. Your pockets are full. Wanna come back for it later?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:113', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:113', false)
         System.EventFlags['cWherearenPlayer:TraineeGiveItemFailed'] = true
     else:
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
-        if MainNpc.IsNpcDIYRecipeCollectedMainNpc.IsNpcDIYRecipeCollected():
+        MainNpc.NpcDelivery(1, 'Default')
+        if MainNpc.IsNpcDIYRecipeCollected():
             # Wouldn't it be neat if that recipe made a buncha folks real happy? I think that'd be neat.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:114', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:114', false)
         else:
             # It should come out yummy no matter who makes it! Go ahead and give it a try, <110:6>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:107', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:107', false)
         System.EventFlags['cWherearenPlayer:GetCookingRecipeToday'] = true
         System.EventFlags['cWherearenPlayer:TraineeGiveItemFailed'] = false
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
+    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+        MainNpc.TurnNeck(10, true)
         # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessageMainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # Dancing will get folks hungry. And everything tastes better when you're hungry! The customers will love it!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:106', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:106', true)
             run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
         else:
             # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Root():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Sub_Event111()
     else:
         run ShareHouseMate_Chk()
-        if (System.EventFlags['cPlayer:MainmenuRecipe_v2']) and (not System.EventFlags['cWherearenPlayer:GetCookingRecipeToday']) and (MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0):
+        if (System.EventFlags['cPlayer:MainmenuRecipe_v2']) and (not System.EventFlags['cWherearenPlayer:GetCookingRecipeToday']) and (MainNpc.NpcNowPosture() == 0):
             run StartCookingRecipeEvent()
         else:
             run Sub_Event111()
  
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    if EventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeck(10, false)
         run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
@@ -69,66 +69,66 @@ flow StandSleep():
     run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
  
 flow StartCookingRecipeEvent():
-    MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(65534, true)
-    MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+    MainNpc.NpcSetRewardRecipe(65534, true)
+    MainNpc.SetItemName(1, 0, 0)
     if System.EventFlags['cWherearenPlayer:TraineeGiveItemFailed']:
-        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+        MainNpc.TurnBody(10, 0.0)
         # You're back for the recipe I couldn't give ya before? It's all written here. It's got some stains on it, but you can taste those to be sure you're do…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:115', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:115', false)
         run GiveReceipe_Chk()
     else:
-        MainNpc.TurnBodyMainNpc.TurnBody(11, 0.0)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        MainNpc.TurnBody(11, 0.0)
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # <20:2:cd06>Oh, hey! Hi, <150:6>! Did the yummy smell lure you back here?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:101', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:101', false)
             case 1:
                 # Uhh, I had a spoon a minute ago… <20:2:cd06>Huh? What are you doing back here?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:102', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:102', false)
             case 2:
                 # <20:2:cd06>Whoa, <150:6>?! I'm surprised to see you back here!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:103', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:103', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # I'm thinkin' about making [a|an] <125:0:0000>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:104', false)
-            if MainNpc.IsNpcDIYRecipeCollectedMainNpc.IsNpcDIYRecipeCollected():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:104', false)
+            if MainNpc.IsNpcDIYRecipeCollected():
                 # Wha?! You already know how to make <125:0:0000>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:110', false)
-                switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:110', false)
+                switch EventFlowSystemActor.GeneralTalkChoice2():
                     case 0, 1:
                         # Whaaaat?! I thought I came up with a brand-new recipe! You're so good at this kitchen stuff.
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:111', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:111', false)
                         # Take this recipe I wrote, and give it to somebody who wants a real happy kitchen!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:112', false)
+                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:112', false)
                         run GiveReceipe_Chk()
             else:
                 # You wanna learn the recipe? I can teach ya!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:105', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:105', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     # A huh huh huh, OK! I got some notes here. They'll tell you everything!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:106', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:106', false)
                     run GiveReceipe_Chk()
                 else:
                     # Huh? You sure? OK. I'm busy, so I'll talk at ya later, <110:6>!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:109', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:109', false)
                     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         else:
             # A huh huh huh, I guess so. A buncha folks have been coming to eat my food that I cook.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:108', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Restaurant:108', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 local flow Sub_Event111():
-    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cRestaurantTrainee', false, false, 0)
+    MainNpc.WherearenSetTagFacilityNpcName('cRestaurantTrainee', false, false, 0)
     run FacilityName_Chk()
     # RANDOM: <20:2:cd0e>Where's the ingredients for … // <20:2:cd06>I wonder if folks like my co… // <20:2:cd06>To make tasty food, just thi… // <20:2:cd06>As head chef, I get to decid… // <20:2:cd06>In a kitchen, ya gotta wash …
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:301', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:301', false)
     run KKFes_Chk()
  
 local flow Sub_Event122():
-    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cRestaurantTrainee', false, false, 0)
+    MainNpc.WherearenSetTagFacilityNpcName('cRestaurantTrainee', false, false, 0)
     run FacilityName_Chk()
     # RANDOM: <20:2:cd0e>This'll be finished real soo… // OK, time to get cookin'! I always make … // Alright, order up. <20:2:cd0e><115:1:cd… // <20:2:cd06>A huh huh huh, doesn't it lo… // Time for my secret ingredient…<10:4> <2…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:302', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:302', false)
     run KKFes_Chk()
  
 flow Walk():

@@ -1,12 +1,12 @@
 flow ChkCampsite():
     if System.EventFlags['cPlayer:PAnnounceCampsite']:
-        if EventFlowSystemActor.IsCampSiteOccupiedEventFlowSystemActor.IsCampSiteOccupied():
+        if EventFlowSystemActor.IsCampSiteOccupied():
             SubflowResults[9] = 3
             SubflowResults[4] = 1
             run CmnEvCount()
             System.EventFlags['cPlayer:PAnnounceCampsite'] = true
-    elif not EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cCampSite', 8):
-        if EventFlowSystemActor.IsCampSiteOccupiedEventFlowSystemActor.IsCampSiteOccupied():
+    elif not EventFlowSystemActor.FacilityOpenPastDays('cCampSite', 8):
+        if EventFlowSystemActor.IsCampSiteOccupied():
             SubflowResults[9] = 3
             SubflowResults[4] = 1
             run CmnEvCount()
@@ -26,7 +26,7 @@ flow ChkCampsite():
             System.EventFlags['cPlayer:PAnnounceCampsite'] = true
  
 flow ChkMarket():
-    switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+    switch EventFlowSystemActor.ShopLevel():
         case `NooksCrannyInitial`:
             if System.EventFlags['cLand:MarketConstruction2']:
                 SubflowResults[7] = 4
@@ -48,7 +48,7 @@ flow ChkMarket():
                     run CmnEvCount()
         case `NooksCrannyUpgraded`:
             run CmnPhoneCallImmQ()
-            if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cMarket2', 8):
+            if EventFlowSystemActor.FacilityOpenPastDays('cMarket2', 8):
                 if not System.EventFlags['cPlayer:TownNewsHeardShopOpen2Flag']:
                     if System.EventFlags['cLand:MarketOpen1stDay2']:
                         SubflowResults[7] = 5
@@ -74,7 +74,7 @@ flow ChkMuseum():
         SubflowResults[19] = 1
         run Sub_Event57()
     else:
-        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+        switch EventFlowSystemActor.MuseumLevel():
             case `BlathersTent`:
                 if (SubflowResults@2[0] == 0) and (not System.EventFlags['cPlayer:AnnouncementOwlMovedIn']):
                     if System.EventFlags['cLand:MuseumTentBuiltToday']:
@@ -85,7 +85,7 @@ flow ChkMuseum():
                     run CmnEvCount()
                     System.EventFlags['cPlayer:AnnouncementOwlMovedIn'] = true
             case `BlathersMuseumNoArt`:
-                if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cMuseum', 8):
+                if EventFlowSystemActor.FacilityOpenPastDays('cMuseum', 8):
                     if not System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag']:
                         if System.EventFlags['cLand:Museum2BuiltToday']:
                             SubflowResults[6] = 4
@@ -97,7 +97,7 @@ flow ChkMuseum():
                 else:
                     System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag'] = true
             case `BlathersMuseumArt`:
-                if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cMuseum2', 8):
+                if EventFlowSystemActor.FacilityOpenPastDays('cMuseum2', 8):
                     if not System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag']:
                         if System.EventFlags['cLand:Museum3BuiltToday']:
                             SubflowResults[6] = 7
@@ -109,7 +109,7 @@ flow ChkMuseum():
                 else:
                     System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag'] = true
             case `BlathersCafe`:
-                if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cMuseum3', 8):
+                if EventFlowSystemActor.FacilityOpenPastDays('cMuseum3', 8):
                     if not System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag']:
                         if System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']:
                             SubflowResults[19] = 2
@@ -138,7 +138,7 @@ flow ChkOfficeNews():
         run Sub_grp_Event63()
  
 flow ChkTailor():
-    if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cTailor', 8):
+    if EventFlowSystemActor.FacilityOpenPastDays('cTailor', 8):
         if (not System.EventFlags['cPlayer:PAnnounceTailorBuilt']) and (System.EventFlags['cLand:TailorBuilt']):
             if System.EventFlags['cLand:TailorBuiltToday']:
                 SubflowResults[8] = 1
@@ -179,13 +179,13 @@ flow CmnKppTourStartChk():
         run CmnEvCount()
  
 flow CmnMoveInChk():
-    if MainNpc.IsExistMoveNpcMainNpc.IsExistMoveNpc(false):
+    if MainNpc.IsExistMoveNpc(false):
         SubflowResults[5] = 1
         SubflowResults[4] = 1
         run CmnEvCount()
  
 flow CmnMoveOutChk():
-    if MainNpc.IsExistMoveNpcMainNpc.IsExistMoveNpc(true):
+    if MainNpc.IsExistMoveNpc(true):
         SubflowResults[10] = 1
         if SubflowResults@2[4] == 0:
             SubflowResults[4] = 2
@@ -200,24 +200,24 @@ flow CmnRegulationChk():
     if System.EventFlags['cLand:v200_Enabled_ChangeRegulation']:
         if not System.EventFlags['cPlayer:PAAboutUnlockIslandRegulation']:
             run RegulationUnlockNotice()
-        elif EventFlowSystemActor.TodayChangeRegulationEventFlowSystemActor.TodayChangeRegulation() in (1, 2, 3, 4, 5):
+        elif EventFlowSystemActor.TodayChangeRegulation() in (1, 2, 3, 4, 5):
             run RegulationUnlockNotice()
  
 flow EvNoticeChk_Carnival():
-    if not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'Carnival', false):
+    if not EventFlowSystemActor.CheckNearEvent(5, 1, 'Carnival', false):
         System.EventFlags['cPlayer:PublicAnnoucement_EvNotice_Carnival'] = false
     elif not System.EventFlags['cPlayer:PublicAnnoucement_EvNotice_Carnival']:
         SubflowResults[16] = 6
  
 flow EvNoticeChk_Fireworks():
-    if not EventFlowSystemActor.EnvCheckBetweenDateEventFlowSystemActor.EnvCheckBetweenDate(7, 28, 7, 31, 'cGrowUpTime'):
+    if not EventFlowSystemActor.EnvCheckBetweenDate(7, 28, 7, 31, 'cGrowUpTime'):
         System.EventFlags['cPlayer:PAnnounceFireWorksEvNotice'] = false
     elif not System.EventFlags['cPlayer:PAnnounceFireWorksEvNotice']:
         SubflowResults[16] = 2
  
 flow EvNoticeChk_Fishing():
-    if EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'FishingConvention', false):
-        switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+    if EventFlowSystemActor.CheckNearEvent(5, 1, 'FishingConvention', false):
+        switch EventFlowSystemActor.EnvMonth():
             case `January`:
                 if not System.EventFlags['cPlayer:PAnnounceFishingEvNotice_Jan']:
                     SubflowResults[16] = 3
@@ -239,13 +239,13 @@ flow EvNoticeChk_Fishing():
         System.EventFlags['cPlayer:PAnnounceFishingEvNotice_Oct'] = false
  
 flow EvNoticeChk_Insect():
-    if not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'InsectConvention', false):
+    if not EventFlowSystemActor.CheckNearEvent(5, 1, 'InsectConvention', false):
         System.EventFlags['cPlayer:PAnnounceInsectEvNotice_1'] = false
         System.EventFlags['cPlayer:PAnnounceInsectEvNotice_2'] = false
         System.EventFlags['cPlayer:PAnnounceInsectEvNotice_3'] = false
         System.EventFlags['cPlayer:PAnnounceInsectEvNotice_4'] = false
-    elif EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-        switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+    elif EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+        switch EventFlowSystemActor.EnvMonth():
             case `June`:
                 if not System.EventFlags['cPlayer:PAnnounceInsectEvNotice_1']:
                     SubflowResults[16] = 4
@@ -261,7 +261,7 @@ flow EvNoticeChk_Insect():
             default:
                 return
     else:
-        switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+        switch EventFlowSystemActor.EnvMonth():
             case `January`:
                 if not System.EventFlags['cPlayer:PAnnounceInsectEvNotice_3']:
                     SubflowResults[16] = 4
@@ -278,19 +278,19 @@ flow EvNoticeChk_Insect():
                 return
  
 flow EvNoticeChk_Museum():
-    if not EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('InternationalMuseum', false):
+    if not EventFlowSystemActor.TermEventNow('InternationalMuseum', false):
         System.EventFlags['cPlayer:PAnnounceStampRally'] = false
-    elif (not System.EventFlags['cPlayer:PAnnounceStampRally']) and (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() in (`BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`)) and (not System.EventFlags['cLand:Museum2BuiltToday']) and (not System.EventFlags['cLand:Museum3BuiltToday']) and (not System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']) and (not System.EventFlags['cLand:MuseumConstructionToday']) and (not System.EventFlags['cLand:Museum2ConstructionToday']) and (not System.EventFlags['cLand:MuseumCafeConstruction_2_ConstructionDay']):
+    elif (not System.EventFlags['cPlayer:PAnnounceStampRally']) and (EventFlowSystemActor.MuseumLevel() in (`BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`)) and (not System.EventFlags['cLand:Museum2BuiltToday']) and (not System.EventFlags['cLand:Museum3BuiltToday']) and (not System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']) and (not System.EventFlags['cLand:MuseumConstructionToday']) and (not System.EventFlags['cLand:Museum2ConstructionToday']) and (not System.EventFlags['cLand:MuseumCafeConstruction_2_ConstructionDay']):
         SubflowResults[16] = 1
  
 flow EvNoticeChk_NewyearEve():
-    if not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(4, 1, 'Countdown', false):
+    if not EventFlowSystemActor.CheckNearEvent(4, 1, 'Countdown', false):
         System.EventFlags['cPlayer:PAnnounceCountdownEvNotice'] = false
     elif not System.EventFlags['cPlayer:PAnnounceCountdownEvNotice']:
         SubflowResults[16] = 5
  
 flow EvNoticeChk_ThanksGiving():
-    if not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'HarvestFestival', false):
+    if not EventFlowSystemActor.CheckNearEvent(5, 1, 'HarvestFestival', false):
         System.EventFlags['cPlayer:AnnounceBeforeHarvest'] = false
     elif not System.EventFlags['cPlayer:AnnounceBeforeHarvest']:
         SubflowResults[16] = 7

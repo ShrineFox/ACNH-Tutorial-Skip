@@ -1,18 +1,18 @@
 flow ChineseZodiac():
-    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeZodiacNow']) and ((MainNpc.EventFlags['cNpcMemory:TalkFreeFNow']) or (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50))) and (MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeFEto')):
-        if EventFlowSystemActor.CurrentRegionLanguageEventFlowSystemActor.CurrentRegionLanguage('cCurrentMachine') == 0:
-            if (EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cNewYear', 'cGrowUpTime')) and (EventFlowSystemActor.CurrentRegionLanguageEventFlowSystemActor.CurrentRegionLanguage('cCurrentVillage') == 0):
+    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeZodiacNow']) and ((MainNpc.EventFlags['cNpcMemory:TalkFreeFNow']) or (EventFlowSystemActor.PercentChoice(50))) and (MainNpc.NpcHasFreeMessage('cFreeFEto')):
+        if EventFlowSystemActor.CurrentRegionLanguage('cCurrentMachine') == 0:
+            if (EventFlowSystemActor.EnvSameDate('cNewYear', 'cGrowUpTime')) and (EventFlowSystemActor.CurrentRegionLanguage('cCurrentVillage') == 0):
                 run Sub_Event29()
         else:
-            if (EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cLunarNewYear', 'cGrowUpTime')) and (EventFlowSystemActor.CurrentRegionLanguageEventFlowSystemActor.CurrentRegionLanguage('cCurrentVillage') in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)):
+            if (EventFlowSystemActor.EnvSameDate('cLunarNewYear', 'cGrowUpTime')) and (EventFlowSystemActor.CurrentRegionLanguage('cCurrentVillage') in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)):
                 run Sub_Event29()
  
 flow Event_Chk():
-    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeEventNow']) and (MainNpc.NpcHasFreeMessageMainNpc.EventFlags['cNpcMemory:TalkFreeEventNow']) and (MainNpc.NpcHasFreeMessage('cFreeEEvent')):
-        if (not System.EventFlags['cLand:AnyGlobalEventFinished']) and (not EventFlowSystemActor.EnvCheckBetweenDateEventFlowSystemActor.EnvCheckBetweenDate(10, 26, 10, 30, 'cLastGrowUpTime')) and (not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'HarvestFestival', false)) and (not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'XmasEve', false)) and (not EventFlowSystemActor.CheckNearEventEventFlowSystemActor.CheckNearEvent(5, 1, 'Carnival', false)):
-            MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeEEventFirst')
+    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeEventNow']) and (MainNpc.NpcHasFreeMessage('cFreeEEvent')):
+        if (not System.EventFlags['cLand:AnyGlobalEventFinished']) and (not EventFlowSystemActor.EnvCheckBetweenDate(10, 26, 10, 30, 'cLastGrowUpTime')) and (not EventFlowSystemActor.CheckNearEvent(5, 1, 'HarvestFestival', false)) and (not EventFlowSystemActor.CheckNearEvent(5, 1, 'XmasEve', false)) and (not EventFlowSystemActor.CheckNearEvent(5, 1, 'Carnival', false)):
+            MainNpc.NpcOpenFreeMessage('cFreeEEventFirst')
         else:
-            MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeEEvent')
+            MainNpc.NpcOpenFreeMessage('cFreeEEvent')
         MainNpc.EventFlags['cNpcMemory:TalkFreeEventNow'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
@@ -26,131 +26,131 @@ flow FreeF_Chk():
         run MultiDayEvent_Christmas()
  
 flow FreeF_Main():
-    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeFNow']) and (MainNpc.NpcHasFreeMessageMainNpc.EventFlags['cNpcMemory:TalkFreeFNow']) and (MainNpc.NpcHasFreeMessage('cFreeFEvent')) and (not EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('MayDay', false)):
-        MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeFEvent')
+    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeFNow']) and (MainNpc.NpcHasFreeMessage('cFreeFEvent')) and (not EventFlowSystemActor.TermEventNow('MayDay', false)):
+        MainNpc.NpcOpenFreeMessage('cFreeFEvent')
         MainNpc.EventFlags['cNpcMemory:TalkFreeFNow'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow HHA_Chk():
-    if (not System.EventFlags['cPlayer:TalkHHATodayAnyone']) and (not MainNpc.IsNnpcTentMainNpc.IsNnpcTent()) and (MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeEHHA')):
-        MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeEHHA')
+    if (not System.EventFlags['cPlayer:TalkHHATodayAnyone']) and (not MainNpc.IsNnpcTent()) and (MainNpc.NpcHasFreeMessage('cFreeEHHA')):
+        MainNpc.NpcOpenFreeMessage('cFreeEHHA')
         System.EventFlags['cPlayer:TalkHHATodayAnyone'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow MultiDayEvent_Christmas():
-    if EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('XmasReady2', false):
+    if EventFlowSystemActor.TermEventNow('XmasReady2', false):
         if System.EventFlags['cLand:BuiltTownOffice']:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                 case 0:
                     # You ready for Toy Day this month? 'Cause I am…not. I still gotta wrap my gifts for the exchange thingie. Don't make the mistake I can't stop making! …
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:001', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:001', false)
                 case 1:
                     # Once December hits, I am full-steam ahead on Toy Day, and as far as I know, I'm not even steam-powered! But exchanging gifts is all I can think about…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:002', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:002', false)
                 case 2:
                     # You see that there's a tree all dressed up for Toy Day? Man, that gets me sooo excited! I didn't even know trees could dress themselves. I learned so…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:003', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:003', false)
         else:
-            if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+            if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
                 # You ready for Toy Day this month? 'Cause I am…not. I still gotta wrap my gifts for the exchange thingie. Don't make the mistake I can't stop making! …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:001', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:001', false)
             else:
                 # Once December hits, I am full-steam ahead on Toy Day, and as far as I know, I'm not even steam-powered! But exchanging gifts is all I can think about…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:002', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Christmas:002', false)
         System.EventFlags['cPlayer:TalkFreeMultiDayEventTodayFlag'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow MultiDayEvent_EarthDay():
-    if EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('EarthDay', false):
+    if EventFlowSystemActor.TermEventNow('EarthDay', false):
         if System.EventFlags['cPlayer:ReijiTalkBeforeFlag']:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious5EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
                 case 0:
                     # Leif's got all kinds of saplings that bloom at different times of the year. I don't know how you get a plant to be excited for winter, but that's pre…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:001', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:001', false)
                 case 1:
                     # Hey, have you seen the flower seeds and shrubs Leif sells? He's got lots of stuff I've never seen before. Or smelled, for that matter!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:002', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:002', false)
                 case 2:
                     # Ever use Nook Miles? Well, the app's got a Nook Miles thing for Nature Day where we work with plants. Hey, if the earth wants us to be nice to it for…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:003', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:003', false)
                 case 3:
                     # I was walking by some flowers earlier and I saw a color I haven't seen before, <110:6>. Do you think new colors are how flowers celebrate Nature Day?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:004', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:004', false)
                 case 4:
                     # The air is so much yummier when there's lotsa plants around. It's like candy for your lungs, <110:6>!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:005', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:005', false)
             System.EventFlags['cPlayer:TalkFreeMultiDayEventTodayFlag'] = true
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
         else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                 case 0:
                     # Ever use Nook Miles? Well, the app's got a Nook Miles thing for Nature Day where we work with plants. Hey, if the earth wants us to be nice to it for…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:003', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:003', false)
                 case 1:
                     # I was walking by some flowers earlier and I saw a color I haven't seen before, <110:6>. Do you think new colors are how flowers celebrate Nature Day?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:004', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:004', false)
                 case 2:
                     # The air is so much yummier when there's lotsa plants around. It's like candy for your lungs, <110:6>!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:005', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_EarthDay:005', false)
             System.EventFlags['cPlayer:TalkFreeMultiDayEventTodayFlag'] = true
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow MultiDayEvent_Easter():
-    if EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Easter', 'cReadyOnly', false):
+    if EventFlowSystemActor.GlobalEventNow('Easter', 'cReadyOnly', false):
 entrypoint Event42:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious4EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
             case 0:
                 if System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
                     # Yay! Bunny Day is almost here! And that means eggs are gonna be in all kinds of weird places. Like in rocks! I was running and I bumped into a rock a…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:100', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:100', false)
                     run Sub_Event46()
                 else:
                     run Event42()
             case 1:
                 # Man, I'm sooooo excited for Bunny Day, <110:5>! Hey, ever wondered why you find more <item>wood eggs hitting coconut trees than any other kind of tre…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:101', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:101', false)
                 run Sub_Event46()
             case 2:
-                if EventFlowSystemActor.EnvHourOverGrowUpEventFlowSystemActor.EnvHourOverGrowUp():
+                if EventFlowSystemActor.EnvHourOverGrowUp():
                     run Event42()
                 else:
-                    EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cEasterMonthDay', 'cHour', 0, 0, '')
+                    EventFlowSystemActor.SetTagFromSystem('cEasterMonthDay', 'cHour', 0, 0, '')
                     # Bunny Day is all about candy eggs, which makes it the best.<10:4> Come on, <90:35:cd00> <90:36:cd00>! Get here faster!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:102', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:102', false)
                     run Sub_Event46()
             case 3:
                 # Guess what? Guess what? Guess whaaat? I caught a fish…except it wasn't a fish. It was a candy egg! It was so salty and tasty that I tried to catch mo…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:103', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Easter:103', false)
                 run Sub_Event46()
     else:
         return
  
 flow MultiDayEvent_Halloween():
-    if (EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Halloween', 'cReadyOnly', false)) and (not EventFlowSystemActor.HalloweenFtrNumEventFlowSystemActor.HalloweenFtrNum(3)):
-        if EventFlowSystemActor.HalloweenFtrNumEventFlowSystemActor.HalloweenFtrNum(8):
+    if (EventFlowSystemActor.GlobalEventNow('Halloween', 'cReadyOnly', false)) and (not EventFlowSystemActor.HalloweenFtrNum(3)):
+        if EventFlowSystemActor.HalloweenFtrNum(8):
             # Hey! Y'know what I just saw? Someone's been putting out Halloween decorations! That's gonna REALLY help me remember what month it is. It's harder tha…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:100', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:100', false)
         else:
-            if EventFlowSystemActor.HalloweenFtrNumEventFlowSystemActor.HalloweenFtrNum(15):
+            if EventFlowSystemActor.HalloweenFtrNum(15):
                 # Lotta Halloween decorations popping up around here lately. It's kinda cool! What do you think of the idea that ghosts put them out while we're not wa…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:101', false)
-            elif EventFlowSystemActor.HalloweenFtrNumEventFlowSystemActor.HalloweenFtrNum(30):
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:101', false)
+            elif EventFlowSystemActor.HalloweenFtrNum(30):
                 # Seein' the Halloween stuff all over ISLAND sure is gettin' me ready for the big night! I mean, as much as I ever can be. Just gotta remember it's not…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:102', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:102', false)
             else:
                 # Did I wake up this morning in a pumpkin patch, or are we still on ISLAND? It's never been more Halloween-y around here, that's for sure! Candy haul, …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:103', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeF_Halloween:103', false)
         System.EventFlags['cPlayer:TalkFreeMultiDayEventTodayFlag'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Snpc_Chk():
-    if (not System.EventFlags['cPlayer:TalkSnpcTodayAnyone']) and ((not System.EventFlags['cLand:IsNpcIncreased']) or (MainNpc.NpcLivingDaysMainNpc.NpcLivingDays(3))) and (MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeESnpc')) and (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField')):
-        MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeESnpc')
+    if (not System.EventFlags['cPlayer:TalkSnpcTodayAnyone']) and ((not System.EventFlags['cLand:IsNpcIncreased']) or (MainNpc.NpcLivingDays(3))) and (MainNpc.NpcHasFreeMessage('cFreeESnpc')) and (EventFlowSystemActor.SystemCheckNowStage('cField')):
+        MainNpc.NpcOpenFreeMessage('cFreeESnpc')
         System.EventFlags['cPlayer:TalkSnpcTodayAnyone'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 local flow Sub_Event29():
-    MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeFEto')
+    MainNpc.NpcOpenFreeMessage('cFreeFEto')
     MainNpc.EventFlags['cNpcMemory:TalkFreeZodiacNow'] = true
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  

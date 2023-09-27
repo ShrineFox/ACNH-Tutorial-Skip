@@ -1,94 +1,94 @@
 flow Explanation():
     System.EventFlags['cPlayer:HighAndLowPlayed'] = true
     # Sooo, I've got nine cards with the numbers 1 through 9 written on 'em…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:002', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:002', false)
     # So, I'm gonna just draw one random card first…<10:8:00780000>
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:017', false)
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.SystemDecideHighAndLowCardMainNpc.SystemDecideHighAndLowCard(true)
-    EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameStart')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:017', false)
+    MainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.SystemDecideHighAndLowCard(true)
+    EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameStart')
     # So…I drew the <90:0:0000>. Now you gotta guess if the next number I draw is gonna be higher or lower than <90:0:0000>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:003', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:003', false)
     # If you get it right, you're gonna win my <125:4:0000>. OK, I'm gonna draw the next card!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:014', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:014', false)
 entrypoint Event4:
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcShuffle', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cNextCardIn')
+    MainNpc.CharacterEmoticonAction('NpcShuffle', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.UIMiniGameHighAndLowHandling('cNextCardIn')
     # I've got the next card ready… So, is the number on this card higher or lower than <90:0:0000>? Think about it, but not TOO hard, a huh huh huh…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:100', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.SystemJudgeHighAndLowResultMainNpc.SystemJudgeHighAndLowResult('cLarger')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:100', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.SystemJudgeHighAndLowResult('cLarger')
     else:
-        MainNpc.SystemJudgeHighAndLowResultMainNpc.SystemJudgeHighAndLowResult('cSmaller')
+        MainNpc.SystemJudgeHighAndLowResult('cSmaller')
     # And the answer is…<10:4> Oh, wow. This is real tense, huh?<10:4> I usually try to be more chill. Anyway, the answer is…<10:7:003c0000>
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:101', false)
-    EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cNextCardOpen')
-    if MainNpc.SystemIsHighAndLowPlayerWinMainNpc.SystemIsHighAndLowPlayerWin():
-        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Success_Level1', -1)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:101', false)
+    EventFlowSystemActor.UIMiniGameHighAndLowHandling('cNextCardOpen')
+    if MainNpc.SystemIsHighAndLowPlayerWin():
+        EventFlowSystemActor.SoundTriggerEmit('Success_Level1', -1)
         # <10:12>It's <90:0:0001>! You got it! Alright, as promised, here's your <125:4:0000>!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:112', false)
-        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
-        MainNpc.SetItemNameMainNpc.SetItemName(1, 4, 0)
-        MainNpc.RegistToReleaseItemListMainNpc.RegistToReleaseItemList(4)
-        if EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
-            EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
-            MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:112', false)
+        MainNpc.SetDeliveryItem(1, true)
+        MainNpc.SetItemName(1, 4, 0)
+        MainNpc.RegistToReleaseItemList(4)
+        if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
+            EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+            MainNpc.NpcDelivery(1, 'Default')
             # That was fun, a huh huh huh! We should play again sometime. Right, <110:5>?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:120', true)
-            MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
-            MainNpc.AddMemoryEventPlayerForNpcMainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:120', true)
+            MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
+            MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
         else:
-            EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
-            MainNpc.NpcMailSendRandomMainNpc.NpcMailSendRandom('MAIL_XX_Game', 1, 3, 'cNone', 'cFastTomorrow', 'cReward', false)
+            EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+            MainNpc.NpcMailSendRandom('MAIL_XX_Game', 1, 3, 'cNone', 'cFastTomorrow', 'cReward', false)
             # Aww, but your pockets are too full, <110:5>. No worries. I'll send this over to you later!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:103', true)
-            MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:103', true)
+            MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
     else:
-        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Fail', -1)
+        EventFlowSystemActor.SoundTriggerEmit('Fail', -1)
         # <10:12>Ooh! <90:0:0001>! That's a shame. You didn't get it.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:104', false)
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
-        switch MainNpc.SystemCheckHighAndLow1stCardMainNpc.SystemCheckHighAndLow1stCard():
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:104', false)
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+        switch MainNpc.SystemCheckHighAndLow1stCard():
             case 0:
                 # Aww, you can't win every time. That wouldn't even be fun! Let's play again sometime and agree to be happy no matter who wins and loses, <110:5>.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:115', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:115', true)
             case 1:
                 # Oh, um…there isn't a number lower than <90:0:0000>. But that's cool!<10:4> We all space out…<10:4>sometimes.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:106', true)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:106', true)
             case 2:
                 # Uh, <110:4>? There's no number in this game that's higher than <90:0:0000>! It's cool. I did the SAME THING the first few times I played this game.<1…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:107', true)
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:107', true)
+        MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
  
 flow NoExplanation():
     # If you get it right, you're gonna win my <125:4:0000>. Let's get started!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:016', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:016', false)
     # So, I'm gonna just draw one random card first…<10:8:00780000>
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:018', false)
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.SystemDecideHighAndLowCardMainNpc.SystemDecideHighAndLowCard(true)
-    EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameStart')
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:018', false)
+    MainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.SystemDecideHighAndLowCard(true)
+    EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameStart')
     # Alright! It's the <90:0:0000>! Now I'll draw the next card.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:009', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:009', false)
     run Event4()
  
 flow Root():
-    MainNpc.NpcDecideGeneralQuestRewardMainNpc.NpcDecideGeneralQuestReward(0, 1)
-    MainNpc.SetItemNameMainNpc.SetItemName(1, 4, 0)
+    MainNpc.NpcDecideGeneralQuestReward(0, 1)
+    MainNpc.SetItemName(1, 4, 0)
     # Time for the funnest game I know! It's called High Card, Low Card!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:001', false)
-    MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:001', false)
+    MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
     if System.EventFlags['cPlayer:HighAndLowPlayed']:
         run NoExplanation()
     else:
         # Ya wanna hear the rules?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:005', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Game/BO_Game_HighLow:005', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run Explanation()
         else:
             run NoExplanation()

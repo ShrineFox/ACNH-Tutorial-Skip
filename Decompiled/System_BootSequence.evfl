@@ -1,44 +1,44 @@
 flow AfterMoving():
-    EventFlowSystemActor.SaveDisableBackupSettingOtherThanBackupAgentEventFlowSystemActor.SaveDisableBackupSettingOtherThanBackupAgent()
-    if not EventFlowSystemActor.SaveIsImmediatelyAfterLandMoveEventFlowSystemActor.SaveIsImmediatelyAfterLandMove():
-        EventFlowSystemActor.SaveUpdateDeviceIDEventFlowSystemActor.SaveUpdateDeviceID()
-        EventFlowSystemActor.SaveReserveLandMoveMarkEventFlowSystemActor.SaveReserveLandMoveMark()
-        if (EventFlowSystemActor.PlayAccountIsPlayerVillagerEventFlowSystemActor.PlayAccountIsPlayerVillager()) and (not EventFlowSystemActor.SaveCompareBackupAgentNSAIDEventFlowSystemActor.SaveCompareBackupAgentNSAID()):
-            EventFlowSystemActor.SaveEnableBackupSettingEventFlowSystemActor.SaveEnableBackupSetting()
+    EventFlowSystemActor.SaveDisableBackupSettingOtherThanBackupAgent()
+    if not EventFlowSystemActor.SaveIsImmediatelyAfterLandMove():
+        EventFlowSystemActor.SaveUpdateDeviceID()
+        EventFlowSystemActor.SaveReserveLandMoveMark()
+        if (EventFlowSystemActor.PlayAccountIsPlayerVillager()) and (not EventFlowSystemActor.SaveCompareBackupAgentNSAID()):
+            EventFlowSystemActor.SaveEnableBackupSetting()
  
 flow Broken(BGUIOn: bool):
     if not BGUIOn:
-        EventFlowSystemActor.UIBootBGChangeDialogEventFlowSystemActor.UIBootBGChangeDialog()
+        EventFlowSystemActor.UIBootBGChangeDialog()
     # The save data is damaged. Would you like to delete the damaged save data and start the game over?
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1310', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        EventFlowSystemActor.MessageLockNextEventFlowSystemActor.MessageLockNext(1)
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1310', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        EventFlowSystemActor.MessageLockNext(1)
         # Deleting save data. Do not touch the  POWER Button.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1300', false)
-        EventFlowSystemActor.SaveRemoveEventFlowSystemActor.SaveRemove('cAll')
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(90)
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1300', false)
+        EventFlowSystemActor.SaveRemove('cAll')
+        EventFlowSystemActor.WaitFrame(90)
+        EventFlowSystemActor.MessageSuspend()
         # The save data has been deleted. The game will now start.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1312', false)
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1312', false)
     else:
         run UnexpectedError(BGUIOn=true)
  
 flow Core():
     run PreProcess()
-    EventFlowSystemActor.SaveVersionCheckEventFlowSystemActor.SaveVersionCheck()
-    switch EventFlowSystemActor.SaveVersionCheckEventFlowSystemActor.SaveVersionCheck():
+    EventFlowSystemActor.SaveVersionCheck()
+    switch EventFlowSystemActor.SaveVersionCheck():
         case 0:
             run SaveDataLoad(BGUIOn=false)
         case 1:
-            EventFlowSystemActor.UIBootBGChangeDialogEventFlowSystemActor.UIBootBGChangeDialog()
+            EventFlowSystemActor.UIBootBGChangeDialog()
             # The save data will now be updated due to the new release version.
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1372', false)
+            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1372', false)
             # Updating save data… Do not touch .
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1373', false)
-            EventFlowSystemActor.SaveVersionConvertEventFlowSystemActor.SaveVersionConvert()
-            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1373', false)
+            EventFlowSystemActor.SaveVersionConvert()
+            EventFlowSystemActor.MessageSuspend()
             # The save data has been updated and the game will now start.
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1374', false)
+            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1374', false)
             run SaveDataLoad(BGUIOn=true)
         case 2:
             run SaveDataLoad(BGUIOn=false)
@@ -48,20 +48,20 @@ flow Core():
             run UnexpectedError(BGUIOn=false)
  
 flow PreProcess(BackupInputWait: int = 45):
-    if not EventFlowSystemActor.ControllerIsConnectedEventFlowSystemActor.ControllerIsConnected():
-        EventFlowSystemActor.RequetCtrlConnectSupportEventFlowSystemActor.RequetCtrlConnectSupport(1)
-    if not EventFlowSystemActor.IsGamePlayTimeEventFlowSystemActor.IsGamePlayTime():
-        EventFlowSystemActor.UIBootBGChangeDialogEventFlowSystemActor.UIBootBGChangeDialog()
+    if not EventFlowSystemActor.ControllerIsConnected():
+        EventFlowSystemActor.RequetCtrlConnectSupport(1)
+    if not EventFlowSystemActor.IsGamePlayTime():
+        EventFlowSystemActor.UIBootBGChangeDialog()
         run System_DateTimeNg::NoSaverun System_DateTimeNg::NoSave()
         return
-    elif EventFlowSystemActor.SaveIsExistEventFlowSystemActor.SaveIsExist():
+    elif EventFlowSystemActor.SaveIsExist():
 entrypoint Event64:
-        if EventFlowSystemActor.SaveRestoreSeqStartCheckEventFlowSystemActor.SaveRestoreSeqStartCheck():
+        if EventFlowSystemActor.SaveRestoreSeqStartCheck():
             BackupInputWait += -1
             if BackupInputWait <= 0:
                 return
             else:
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(0)
+                EventFlowSystemActor.WaitFrame(0)
                 run Event64()
         else:
             run System_SaveDataRestoring::StartRestoringrun System_SaveDataRestoring::StartRestoring()
@@ -71,52 +71,52 @@ entrypoint Event64:
  
 flow Root():
     run Core()
-    EventFlowSystemActor.EventFlagTempAllClearEventFlowSystemActor.EventFlagTempAllClear()
+    EventFlowSystemActor.EventFlagTempAllClear()
  
 flow SaveDataLoad(BGUIOn: bool):
-    EventFlowSystemActor.ConfirmMovedOneSaveDataExistenceEventFlowSystemActor.ConfirmMovedOneSaveDataExistence()
-    if EventFlowSystemActor.HasMovedOneSaveDataEventFlowSystemActor.HasMovedOneSaveData():
+    EventFlowSystemActor.ConfirmMovedOneSaveDataExistence()
+    if EventFlowSystemActor.HasMovedOneSaveData():
         run Sub_Event0(BGUIOn=BGUIOn)
     else:
-        EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cMovedOne')
-        if EventFlowSystemActor.SaveProcIsSuccessEventFlowSystemActor.SaveProcIsSuccess():
+        EventFlowSystemActor.SaveSimpleLoad('cMovedOne')
+        if EventFlowSystemActor.SaveProcIsSuccess():
             run Sub_grp_Event5(BGUIOn=BGUIOn)
         else:
             run Sub_Event0(BGUIOn=BGUIOn)
  
 local flow Sub_Event0(BGUIOn: bool):
-    EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cAll')
-    if EventFlowSystemActor.SaveProcIsSuccessEventFlowSystemActor.SaveProcIsSuccess():
-        if EventFlowSystemActor.SaveIsNotFoundEventFlowSystemActor.SaveIsNotFound():
-            if not EventFlowSystemActor.HasMovedOneSaveDataEventFlowSystemActor.HasMovedOneSaveData():
-                EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cMovedOne')
-                EventFlowSystemActor.BeginAsMovedOneEventFlowSystemActor.BeginAsMovedOne(false)
+    EventFlowSystemActor.SaveSimpleLoad('cAll')
+    if EventFlowSystemActor.SaveProcIsSuccess():
+        if EventFlowSystemActor.SaveIsNotFound():
+            if not EventFlowSystemActor.HasMovedOneSaveData():
+                EventFlowSystemActor.SaveSimpleLoad('cMovedOne')
+                EventFlowSystemActor.BeginAsMovedOne(false)
                 # Player data for an in-progress move from another island was detected. The moving process will now resume.
-                EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8021', false)
+                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8021', false)
         else:
             run Sub_grp_Event5(BGUIOn=BGUIOn)
     else:
-        if (not EventFlowSystemActor.PlayAccountIsPlayerVillagerEventFlowSystemActor.PlayAccountIsPlayerVillager()) and (not EventFlowSystemActor.HasMovedOneSaveDataEventFlowSystemActor.HasMovedOneSaveData()):
-            EventFlowSystemActor.SaveSimpleLoadEventFlowSystemActor.SaveSimpleLoad('cMovedOne')
-            EventFlowSystemActor.BeginAsMovedOneEventFlowSystemActor.BeginAsMovedOne(false)
-        EventFlowSystemActor.SaveUpdateBackupCustomDataEventFlowSystemActor.SaveUpdateBackupCustomData()
-        EventFlowSystemActor.SaveCopyToEnvEventFlowSystemActor.SaveCopyToEnv()
-        EventFlowSystemActor.CreateStaticFieldEventFlowSystemActor.CreateStaticField()
+        if (not EventFlowSystemActor.PlayAccountIsPlayerVillager()) and (not EventFlowSystemActor.HasMovedOneSaveData()):
+            EventFlowSystemActor.SaveSimpleLoad('cMovedOne')
+            EventFlowSystemActor.BeginAsMovedOne(false)
+        EventFlowSystemActor.SaveUpdateBackupCustomData()
+        EventFlowSystemActor.SaveCopyToEnv()
+        EventFlowSystemActor.CreateStaticField()
         run System_BootSequence_LangChk::Rootrun System_BootSequence_LangChk::Root()
         run System_BootSequence_PcSaveChk::Rootrun System_BootSequence_PcSaveChk::Root()
         run System_SaveDataRestoring::RestoringAgainrun System_SaveDataRestoring::RestoringAgain()
         run AfterMoving()
  
 local flow Sub_grp_Event5(BGUIOn: bool):
-    if EventFlowSystemActor.SaveIsBrokenEventFlowSystemActor.SaveIsBroken():
+    if EventFlowSystemActor.SaveIsBroken():
         run Broken(BGUIOn=BGUIOn)
     else:
         run UnexpectedError(BGUIOn=BGUIOn)
  
 flow UnexpectedError(BGUIOn: bool):
     if not BGUIOn:
-        EventFlowSystemActor.UIBootBGChangeDialogEventFlowSystemActor.UIBootBGChangeDialog()
+        EventFlowSystemActor.UIBootBGChangeDialog()
     # The game cannot be played with damaged save data. Please close the game from the HOME Menu.
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1311', false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(-1)
+    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1311', false)
+    EventFlowSystemActor.WaitFrame(-1)
  

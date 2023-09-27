@@ -1,12 +1,12 @@
 flow DocCmnCancel_MayDay():
     # Roger! Belayed and backing off. Whenever you need our services, just flag this dodo down.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:008', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:008', false)
  
 flow DocCmnReturn_MayDay():
     # Roger! Lifting off November Oscar Whisker.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:004', true)
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(76)
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
+    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:004', true)
+    EventFlowSystemActor.BGMPropertyControl(76)
+    EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
     System.EventFlags['cLandTemp:DocReturnFromIsland'] = true
     if not System.EventFlags['cPlayerTemp:XctTalkMayDayTourNow']:
         run NoReward()
@@ -19,105 +19,105 @@ flow DocCmnReturn_MayDay():
         run NoReward()
     elif not System.EventFlags['cPlayer:XctGetRewardEveryYear']:
         run GetPhoto()
-    elif EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cEvenYear', 'cLastGrowUpTime'):
+    elif EventFlowSystemActor.EnvSameDate('cEvenYear', 'cLastGrowUpTime'):
         run GetLuggage()
     else:
         run GetPhoto()
  
 flow DocHint_MayDay():
     # A hint, huh? Roger. Guidance incoming.<10:4> Acquiring knowledge…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:045', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:045', false)
     if System.EventFlags['cPlayerTemp:DocHintMayDayTour'] < 1:
         # OK. Say there's a tree in your way. You've got two options. Option one: Eat some fruit, then dig the whole thing up with a shovel. Option two: Chop i…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_3', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_3', false)
         System.EventFlags['cPlayerTemp:DocHintMayDayTour'] += 1
     elif System.EventFlags['cPlayerTemp:DocHintMayDayTour'] < 2:
         # I guess that's a big negatory on my "over and out." So let's talk hoppin' rivers. Hoppin' narrow rivers, copy? To hop a river, just press  in the di…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_1', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_1', false)
         System.EventFlags['cPlayerTemp:DocHintMayDayTour'] += 1
     elif System.EventFlags['cPlayerTemp:DocHintMayDayTour'] < 3:
         # Here's some intel: Did you know you can get a boost in your afterburners by eating fruit? Makes you strong! With that kinda fuel, you can uproot tree…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_0', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_0', false)
         System.EventFlags['cPlayerTemp:DocHintMayDayTour'] += 1
     elif System.EventFlags['cPlayerTemp:DocHintMayDayTour'] < 4:
         # Here's a little more intel for you: If you need tools, try crafting them. The DIY flight path is tried and true: Get materials, rendezvous with the n…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_4', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_4', false)
         System.EventFlags['cPlayerTemp:DocHintMayDayTour'] += 1
     else:
         # If you get stuck with no way out, deploy your phone and reach out to the Rescue Service. They'll reset the island so you can take another run at the…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_2', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:046_2', false)
         System.EventFlags['cPlayerTemp:DocHintMayDayTour'] += -4
  
 flow GetLuggage():
-    EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12472, 1, 'cVillageRemakePattern', 0)
-    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cXct', 'MAIL_SNpc_xct', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+    EventFlowSystemActor.SelectRewardItemDirect(12472, 1, 'cVillageRemakePattern', 0)
+    EventFlowSystemActor.SystemMailSend('cXct', 'MAIL_SNpc_xct', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
     run NoReward()
  
 flow GetPhoto():
-    EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14472, 1, 'cVillageRemakePattern', 0)
-    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cXct', 'MAIL_SNpc_xct', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+    EventFlowSystemActor.SelectRewardItemDirect(14472, 1, 'cVillageRemakePattern', 0)
+    EventFlowSystemActor.SystemMailSend('cXct', 'MAIL_SNpc_xct', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
     run NoReward()
  
 flow NoReward():
-    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 1):
-        if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 2):
-            if not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 3):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 2, 'cVillageRemakePattern', 0)
-            elif not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 4):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 3, 'cVillageRemakePattern', 0)
-            elif not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 5):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 4, 'cVillageRemakePattern', 0)
-            elif not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 6):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 5, 'cVillageRemakePattern', 0)
-            elif not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 7):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 6, 'cVillageRemakePattern', 0)
-            elif not EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 8):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 7, 'cVillageRemakePattern', 0)
-            elif EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 9):
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 9, 'cVillageRemakePattern', 0)
+    if EventFlowSystemActor.HasTargetItem(9964, 1):
+        if EventFlowSystemActor.HasTargetItem(9964, 2):
+            if not EventFlowSystemActor.HasTargetItem(9964, 3):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 2, 'cVillageRemakePattern', 0)
+            elif not EventFlowSystemActor.HasTargetItem(9964, 4):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 3, 'cVillageRemakePattern', 0)
+            elif not EventFlowSystemActor.HasTargetItem(9964, 5):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 4, 'cVillageRemakePattern', 0)
+            elif not EventFlowSystemActor.HasTargetItem(9964, 6):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 5, 'cVillageRemakePattern', 0)
+            elif not EventFlowSystemActor.HasTargetItem(9964, 7):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 6, 'cVillageRemakePattern', 0)
+            elif not EventFlowSystemActor.HasTargetItem(9964, 8):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 7, 'cVillageRemakePattern', 0)
+            elif EventFlowSystemActor.HasTargetItem(9964, 9):
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 9, 'cVillageRemakePattern', 0)
             else:
-                EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 8, 'cVillageRemakePattern', 0)
+                EventFlowSystemActor.SelectRewardItemDirect(9964, 8, 'cVillageRemakePattern', 0)
         else:
-            EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(9964, 1, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cAirline', 'MAIL_SP_Airline', 21, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-    EventFlowSystemActor.PlayerBaggageOperationForEventEventFlowSystemActor.PlayerBaggageOperationForEvent('cRestore')
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cFromOutlierToHomeland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+            EventFlowSystemActor.SelectRewardItemDirect(9964, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSend('cAirline', 'MAIL_SP_Airline', 21, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+    EventFlowSystemActor.PlayerBaggageOperationForEvent('cRestore')
+    EventFlowSystemActor.SystemRequestChangeStage('cFromOutlierToHomeland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow ReturnAfterCleared():
     # Now! What's on your flight plan?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:057', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:057', false)
     run Event21()
  
 flow Root():
     if System.EventFlags['cPlayer:UseNavigationMayDayTour']:
-        EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(58)
+        EventFlowSystemActor.BGMPropertyControl(58)
         # Looks like the Rescue Service folks took care of you, PLAYER! The island's been reset back to the way it was, so feel free to attempt the maze missi…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:050', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:050', false)
         System.EventFlags['cPlayer:UseNavigationMayDayTour'] = false
     elif not System.EventFlags['cPlayerTemp:DocMayDayTourFirstTalkDone']:
         System.EventFlags['cPlayerTemp:DocMayDayTourFirstTalkDone'] = true
         if System.EventFlags['cPlayer:XctGetRewardSec']:
             # And we have touchdown! You are at your May Day Tour destination! We've stowed your gear back at the airport counter. So you'll start this mission wit…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:060', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:060', false)
         else:
             # And we have touchdown! You are at your May Day Tour destination! Now, this tour's different than most.<10:4> Whole island's a giant maze! Nothing an …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:041', false)
-        EventFlowSystemActor.PlayerBaggageOperationForEventEventFlowSystemActor.PlayerBaggageOperationForEvent('cReserve')
-        EventFlowSystemActor.PlayerBaggageOperationForEventEventFlowSystemActor.PlayerBaggageOperationForEvent('cRemove')
+            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:041', false)
+        EventFlowSystemActor.PlayerBaggageOperationForEvent('cReserve')
+        EventFlowSystemActor.PlayerBaggageOperationForEvent('cRemove')
     elif System.EventFlags['cPlayer:ClearMayDayTour']:
         # Attention on deck! What's next on your flight plan?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:049', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:049', false)
 entrypoint Event21:
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
             run DocCmnCancel_MayDay()
         elif System.EventFlags['cPlayerTemp:XctTalkMayDayTourNow']:
-            if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 1):
+            if EventFlowSystemActor.HasTargetItem(9964, 1):
                 # We'll make sure all your things are back in your pockets once we've landed on ISLAND. However, any <item>Bell vouchers you might have acquired while …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:059', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:059', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     # There's no coming back to this May Day Tour. Ready to go?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:055', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:055', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run DocCmnReturn_MayDay()
                     else:
                         run DocCmnCancel_MayDay()
@@ -125,23 +125,23 @@ entrypoint Event21:
                     run DocCmnCancel_MayDay()
             else:
                 # We'll make sure all your things are back in your pockets once we've landed on ISLAND. Ready for takeoff?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:058', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:058', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     # There's no coming back to this May Day Tour. Ready to go?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:055', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:055', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run DocCmnReturn_MayDay()
                     else:
                         run DocCmnCancel_MayDay()
                 else:
                     run DocCmnCancel_MayDay()
-        elif EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 1):
+        elif EventFlowSystemActor.HasTargetItem(9964, 1):
             # We'll make sure all your things are back in your pockets once we've landed on ISLAND. However, any <item>Bell vouchers you might have acquired while …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:059', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:059', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Just so I know our signals aren't getting crossed: you can't revisit this May Day Tour island again. You sure about this?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:043', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:043', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run DocCmnReturn_MayDay()
                 else:
                     run DocCmnCancel_MayDay()
@@ -149,11 +149,11 @@ entrypoint Event21:
                 run DocCmnCancel_MayDay()
         else:
             # You ready to punt pontoons and fly Soaring <50:4><135:2:cd00> here back to <110:34>? You positive? Be VERY positive, 'cause I wouldn't want you leavi…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:003', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:003', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Just so I know our signals aren't getting crossed: you can't revisit this May Day Tour island again. You sure about this?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:043', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:043', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run DocCmnReturn_MayDay()
                 else:
                     run DocCmnCancel_MayDay()
@@ -161,32 +161,32 @@ entrypoint Event21:
                 run DocCmnCancel_MayDay()
     elif System.EventFlags['cPlayerTemp:XctTalkMayDayTourNow']:
         # For the love of Nook's ever-flyin' <135:5:cd00>! Did you soar through the entire maze, PLAYER?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:047', false)
-        switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:047', false)
+        switch EventFlowSystemActor.GeneralTalkChoice2():
             case 0, 1:
                 # Way to soar through! You'll have to let ol' Nook know. One dilly of a May Day Tour, huh?<10:4> Squawk the word, and we'll wing you back to your home …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:056', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:056', false)
                 System.EventFlags['cPlayer:ClearMayDayTour'] = true
                 run ReturnAfterCleared()
     else:
         # Lost in the fog? Need navigational assistance? Spill <135:1:cd00> on your flight plan? How can I help?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:042', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:042', false)
+        switch EventFlowSystemActor.GeneralTalkChoice4():
             case 0:
                 run DocHint_MayDay()
             case 1:
                 # Negatory. No joy. You're going into this mission Whisker Tango—that's "without tools" to you civvies. For this May Day Tour, you gotta navigate to th…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:044', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:044', false)
             case 2:
                 # Yearning for ISLAND?<10:4> If you want to do the maze again, please use the Rescue Service.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:051', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    if EventFlowSystemActor.HasTargetItemEventFlowSystemActor.HasTargetItem(9964, 1):
+                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:051', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    if EventFlowSystemActor.HasTargetItem(9964, 1):
                         # We'll make sure all your things are back in your pockets once we've landed on ISLAND. However, any <item>Bell vouchers you might have acquired while …
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:059', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:059', false)
                     # Just so I know our signals aren't getting crossed: you can't revisit this May Day Tour island again. You sure about this?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:043', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:043', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run DocCmnReturn_MayDay()
                     else:
                         run DocCmnCancel_MayDay()

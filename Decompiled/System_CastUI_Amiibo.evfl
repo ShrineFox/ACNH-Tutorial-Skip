@@ -1,19 +1,19 @@
 flow Root(NpadId: int = 0, ReadPadId: int = 0):
     SubflowResults[19] = 3
     run Obj_Common_AmiiboProcess::NFC_SettingChkrun Obj_Common_AmiiboProcess::NFC_SettingChk()
-    EventFlowSystemActor.CheckNfpControllerEventFlowSystemActor.CheckNfpController(NpadId)
+    EventFlowSystemActor.CheckNfpController(NpadId)
     ReadPadId = NpadId
-    EventFlowSystemActor.ReadAmiiboEventFlowSystemActor.ReadAmiibo(ReadPadId)
-    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-        if EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(1):
+    EventFlowSystemActor.ReadAmiibo(ReadPadId)
+    if EventFlowSystemActor.UIResultMenuDecide():
+        if EventFlowSystemActor.CheckErrorType(1):
             run Obj_Common_AmiiboProcess::NFC_ReadErrorrun Obj_Common_AmiiboProcess::NFC_ReadError()
-        elif not EventFlowSystemActor.IsAcceptableAmiiboEventFlowSystemActor.IsAcceptableAmiibo():
+        elif not EventFlowSystemActor.IsAcceptableAmiibo():
             # This amiibo is not supported. Please use an Animal Crossing character's amiibo.
-            Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkSys/SYS_Common_AmiiboError:101', false)
-        elif not EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cNNPC'):
+            Player.OpenMessageWindow('TalkSys/SYS_Common_AmiiboError:101', false)
+        elif not EventFlowSystemActor.CheckAmiiboNPC('cNNPC'):
             # You can't invite that client to a facility!
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
-        elif EventFlowSystemActor.CheckAmiiboNPCEventFlowSystemActor.CheckAmiiboNPC('cWherearenCustomer'):
+            EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
+        elif EventFlowSystemActor.CheckAmiiboNPC('cWherearenCustomer'):
             # You can't invite that client to a facility!
-            EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
+            EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
  

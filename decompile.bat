@@ -1,0 +1,1 @@
+for /r %%a in (*.bfevfl) do %%appdata%%\Programs\Python\Python37-32\python.exe main.py --functions functions.csv --out-dir out/ %%a

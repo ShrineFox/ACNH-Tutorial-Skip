@@ -2,14 +2,14 @@ flow FirstMeeting_FlagProcess():
     MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship'] = true
     MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage'] = true
     MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday'] = true
-    MainNpc.SetNpcFeelMainNpc.SetNpcFeel('cNormal', 120, false)
+    MainNpc.SetNpcFeel('cNormal', 120, false)
     run NNPC_Talk_Situation::Facility_Chkrun NNPC_Talk_Situation::Facility_Chk()
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Root():
     if not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage']:
-        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
-            if MainNpc.NpcIsMovingRoomMainNpc.NpcIsMovingRoom() == 0:
+        if EventFlowSystemActor.IsMyVillage():
+            if MainNpc.NpcIsMovingRoom() == 0:
                 MainNpc.EventFlags['cNpcMemory:FirstGreetingAtNpcHome'] = true
             if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
                 run NNPC_Reaction_First_Acquaintance::Rootrun NNPC_Reaction_First_Acquaintance::Root()

@@ -1,27 +1,27 @@
 flow Init():
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(17, false)
+    MainNpc.NpcAISetting(8, true)
+    MainNpc.NpcAISetting(17, false)
  
 flow Root():
-    if not MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
-        MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNormal', true)
+    if not MainNpc.NpcCheckStateSelectTiming('cInit'):
+        MainNpc.NpcChangeHeadCtrlMode('cNormal', true)
         run Sub_grp_Event13()
-    elif MainNpc.NpcCommuneShopOpenMainNpc.NpcCommuneShopOpen() == 0:
-        if EventFlowSystemActor.CommuneShopEventEventFlowSystemActor.CommuneShopEvent('cAlpShop'):
+    elif MainNpc.NpcCommuneShopOpen() == 0:
+        if EventFlowSystemActor.CommuneShopEvent('cAlpShop'):
             run Demo_Common_Commune::AlpOpen_AlpPosrun Demo_Common_Commune::AlpOpen_AlpPos()
-            MainNpc.NpcChangeHeadCtrlModeMainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-            MainNpc.NpcChangeConversationPretenseStateMainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Alp_Shop_alp', false, true, ArgInt0=0, ArgStr0='spn')
+            MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+            MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Alp_Shop_alp', false, true, ArgInt0=0, ArgStr0='spn')
         else:
             run Sub_grp_Event13()
     else:
-        MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
-        MainNpc.NpcChangeInvisibleStateMainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_alp_02_Commune', 'Root', true, true, ArgInt0=0)
+        MainNpc.NpcDisableServiceMotion()
+        MainNpc.NpcChangeInvisibleState('cInvisible', '', 'SNPC_alp_02_Commune', 'Root', true, true, ArgInt0=0)
  
 local flow Sub_grp_Event13():
     if System.EventFlags['cPlayer:AlpCommuneTalkBeforeFlag']:
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(19, true)
-    if MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cInit'):
-        MainNpc.NpcChangeSpNpcTurnStateMainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_alp_02_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+        MainNpc.NpcAISetting(19, true)
+    if MainNpc.NpcCheckStateSelectTiming('cInit'):
+        MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_alp_02_Commune', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
     else:
-        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cWherearenOfficerWait', '', 'SNPC_alp_02_Commune', 'Root', false, true)
+        MainNpc.NpcChangeAIState('cWherearenOfficerWait', '', 'SNPC_alp_02_Commune', 'Root', false, true)
  

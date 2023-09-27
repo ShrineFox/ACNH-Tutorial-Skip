@@ -5,32 +5,32 @@ flow Bpt_First():
 flow Bpt_NoThanks():
     if SubflowResults@3[0] == 0:
         # Take things as they come, no matter what… That is one way that things are sometimes done. Goodbye…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:011_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:011_01', false)
     else:
         # You can follow your own intuition… That is one way that things are sometimes done. Goodbye…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:011_02', false)
-    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:011_02', false)
+    EventFlowSystemActor.UIMoneyDisappear()
  
 flow OfficeHour():
-    if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(1, -1, true, true) in (1, 2):
+    if EventFlowSystemActor.EnvHourCompare(1, -1, true, true) in (1, 2):
         # The hours of my availability are passed for this day… Please return tomorrow…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:401', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:401', false)
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Root():
     run OfficeHour()
     run Bpt_First()
     run SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_FinishFortunesrun SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_FinishFortunes()
-    if MainNpc.BptTalkFrontMainNpc.BptTalkFront():
-        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    if MainNpc.BptTalkFront():
+        EventFlowSystemActor.UIMoneyAppear()
         # Keeee ha mo-ata… Keeee ha mo-atata…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:000', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:000', false)
         if System.EventFlags['cPlayer:Bpt_1stTalk']:
             switch SubflowResults@3[0]:
                 case 0:
                     # Only I, Katrina, can see it… I see your truth… I will reveal it to you for just 1,000 Bells.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:002', false)
-                    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                    MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:002', false)
+                    switch EventFlowSystemActor.GeneralTalkChoice3():
                         case 0:
                             run SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bellrun SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bell()
                             run SNPC_bpt_03_Commune_TodaysFortune::Rootrun SNPC_bpt_03_Commune_TodaysFortune::Root()
@@ -41,28 +41,28 @@ flow Root():
                             run Bpt_NoThanks()
                 case 1:
                     # Hm? What vexes you? If you want to know your luck for today as well, I will reveal it to you for just 1,000 Bells.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:004', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:004', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bellrun SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bell()
                         run SNPC_bpt_03_Commune_TodaysFortune::Rootrun SNPC_bpt_03_Commune_TodaysFortune::Root()
                     else:
                         run Bpt_NoThanks()
                 case 2:
                     # Hm? What vexes you? If you wish to know about your friendship with someone as well, I will reveal it to you for 1,000 Bells.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:005', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:005', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         run SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bellrun SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bell()
                         run SNPC_bpt_04_Commune_NpcFriendship::Rootrun SNPC_bpt_04_Commune_NpcFriendship::Root()
                     else:
                         run Bpt_NoThanks()
         else:
             # Hmm…something about you… I can see it… Yes, I can see it… Only I, Katrina, can see…your truth… I will reveal it to you for 1,000 Bells.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:001', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:001', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bellrun SNPC_bpt_02_Commune_1_ChkFlow::Bpt_Chk_Have1000Bell()
                 # I can tell you about your luck today. Or perhaps you wish to know about your friendship with another? What shall it be, then?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:003', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+                MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:003', false)
+                switch EventFlowSystemActor.GeneralTalkChoice3():
                     case 0:
                         run SNPC_bpt_03_Commune_TodaysFortune::Rootrun SNPC_bpt_03_Commune_TodaysFortune::Root()
                     case 1:
@@ -73,5 +73,5 @@ flow Root():
                 run Bpt_NoThanks()
     else:
         # Please come to the front if you are looking for your fortune…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:301', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:301', false)
  

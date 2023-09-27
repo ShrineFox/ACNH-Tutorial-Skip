@@ -5,7 +5,7 @@ flow Root():
     run Subflow3_BdayChk()
  
 local flow Sub_grp_Event1():
-    switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+    switch EventFlowSystemActor.EnvTimeZone():
         case `05:00-07:59`:
             SubflowResults[1] = 0
         case `08:00-11:59`:
@@ -20,19 +20,19 @@ local flow Sub_grp_Event1():
             SubflowResults[1] = 5
  
 flow Subflow1_GreetingChk():
-    if EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cNewYear', 'cNowTime'):
+    if EventFlowSystemActor.EnvSameDate('cNewYear', 'cNowTime'):
         SubflowResults[1] = 6
-    elif EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cLunarNewYear', 'cNowTime'):
+    elif EventFlowSystemActor.EnvSameDate('cLunarNewYear', 'cNowTime'):
         SubflowResults[1] = 7
-    elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('XmasEve', 'cMainOnly', false):
+    elif EventFlowSystemActor.GlobalEventNow('XmasEve', 'cMainOnly', false):
         SubflowResults[21] = 6
-        if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
+        if EventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
             SubflowResults[1] = 8
         else:
             SubflowResults[1] = 9
-    elif EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('XmasAfter', false):
+    elif EventFlowSystemActor.TermEventNow('XmasAfter', false):
         SubflowResults[22] = 2
-        if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
+        if EventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
             SubflowResults[1] = 9
         else:
             run Sub_grp_Event1()
@@ -40,37 +40,37 @@ flow Subflow1_GreetingChk():
         run Sub_grp_Event1()
  
 flow Subflow2B_22_PreEventGreeting():
-    if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('XmasReady1', false)) or (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('XmasReady2', false)):
+    if (EventFlowSystemActor.TermEventNow('XmasReady1', false)) or (EventFlowSystemActor.TermEventNow('XmasReady2', false)):
         if not System.EventFlags['cPlayer:AnnouncePreChristmas']:
             SubflowResults[22] = 1
-    elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Easter', 'cReadyOnly', false):
+    elif EventFlowSystemActor.GlobalEventNow('Easter', 'cReadyOnly', false):
         if not System.EventFlags['cPlayer:PAnnouncePreEaster']:
             SubflowResults[22] = 3
-    elif MainNpc.EnvPublicAnnouncementMainNpc.EnvPublicAnnouncement('cEnvAnnounceQueryType_FirstSnow'):
+    elif MainNpc.EnvPublicAnnouncement('cEnvAnnounceQueryType_FirstSnow'):
         SubflowResults[22] = 4
  
 flow Subflow2_EventDayChk():
-    if EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Carnival', 'cMainOnly', false):
+    if EventFlowSystemActor.GlobalEventNow('Carnival', 'cMainOnly', false):
         SubflowResults[21] = 1
         SubflowResults[23] = 1
-    elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Easter', 'cMainOnly', false):
+    elif EventFlowSystemActor.GlobalEventNow('Easter', 'cMainOnly', false):
         SubflowResults[21] = 2
         SubflowResults[23] = 1
-    elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Fireworks', 'cMainOnly', false):
+    elif EventFlowSystemActor.GlobalEventNow('Fireworks', 'cMainOnly', false):
         SubflowResults[21] = 3
         SubflowResults[23] = 1
-    elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('Halloween', 'cMainOnly', false):
+    elif EventFlowSystemActor.GlobalEventNow('Halloween', 'cMainOnly', false):
         SubflowResults[21] = 4
         SubflowResults[23] = 1
-    elif EventFlowSystemActor.GlobalEventNowEventFlowSystemActor.GlobalEventNow('HarvestFestival', 'cMainOnly', false):
+    elif EventFlowSystemActor.GlobalEventNow('HarvestFestival', 'cMainOnly', false):
         SubflowResults[21] = 5
         SubflowResults[23] = 1
-    elif (EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('Countdown') in (0, 1)) and (EventFlowSystemActor.EnvSameDateEventFlowSystemActor.EnvSameDate('cEndOfTheYear', 'cNowTime')):
+    elif (EventFlowSystemActor.EventCheck('Countdown') in (0, 1)) and (EventFlowSystemActor.EnvSameDate('cEndOfTheYear', 'cNowTime')):
         SubflowResults[21] = 7
         SubflowResults[23] = 1
-    elif EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('FishingConvention') in (0, 1):
-        if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-            switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+    elif EventFlowSystemActor.EventCheck('FishingConvention') in (0, 1):
+        if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+            switch EventFlowSystemActor.EnvMonth():
                 case `January`:
                     SubflowResults[2] = 4
                     SubflowResults[23] = 1
@@ -86,7 +86,7 @@ flow Subflow2_EventDayChk():
                 default:
                     return
         else:
-            switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+            switch EventFlowSystemActor.EnvMonth():
                 case `January`:
                     SubflowResults[2] = 2
                     SubflowResults[23] = 1
@@ -101,9 +101,9 @@ flow Subflow2_EventDayChk():
                     SubflowResults[23] = 1
                 default:
                     return
-    elif EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('InsectConvention') in (0, 1):
-        if EventFlowSystemActor.EnvWeatherAreaEventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-            switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+    elif EventFlowSystemActor.EventCheck('InsectConvention') in (0, 1):
+        if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+            switch EventFlowSystemActor.EnvMonth():
                 case `June`:
                     SubflowResults[2] = 5
                     SubflowResults[23] = 1
@@ -119,7 +119,7 @@ flow Subflow2_EventDayChk():
                 default:
                     return
         else:
-            switch EventFlowSystemActor.EnvMonthEventFlowSystemActor.EnvMonth():
+            switch EventFlowSystemActor.EnvMonth():
                 case `January`:
                     SubflowResults[2] = 7
                     SubflowResults[23] = 1
@@ -136,42 +136,42 @@ flow Subflow2_EventDayChk():
                     return
  
 flow Subflow3_BdayChk():
-    switch EventFlowSystemActor.CountBirthdayVillagerEventFlowSystemActor.CountBirthdayVillager():
+    switch EventFlowSystemActor.CountBirthdayVillager():
         case 1:
             SubflowResults[3] = 1
             SubflowResults[23] = 1
         case 2:
             SubflowResults[3] = 2
-            EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(0, 0)
+            EventFlowSystemActor.SetBirthdayVillagerName(0, 0)
             SubflowResults[23] = 1
         case 3:
             SubflowResults[3] = 3
-            EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(1, 0)
+            EventFlowSystemActor.SetBirthdayVillagerName(1, 0)
             SubflowResults[23] = 1
         case 4:
             SubflowResults[3] = 4
-            EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(0, 0)
+            EventFlowSystemActor.SetBirthdayVillagerName(0, 0)
             SubflowResults[23] = 1
         case 5:
             SubflowResults[3] = 5
-            EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(0, 0)
-            EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(1, 0)
+            EventFlowSystemActor.SetBirthdayVillagerName(0, 0)
+            EventFlowSystemActor.SetBirthdayVillagerName(1, 0)
             SubflowResults[23] = 1
         case 6, 7:
             SubflowResults[3] = 2
-            EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(0, 0)
+            EventFlowSystemActor.SetBirthdayVillagerName(0, 0)
             SubflowResults[23] = 1
         case 8:
             SubflowResults[3] = 3
-            MainNpc.SetNpcNameMainNpc.SetNpcName(11, 0)
+            MainNpc.SetNpcName(11, 0)
             SubflowResults[23] = 1
         case 9:
-            if EventFlowSystemActor.MainPlayerIsBirthdayEventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
+            if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
                 SubflowResults[3] = 6
                 SubflowResults[23] = 1
             else:
                 SubflowResults[3] = 7
-                EventFlowSystemActor.SetBirthdayVillagerNameEventFlowSystemActor.SetBirthdayVillagerName(0, 0)
+                EventFlowSystemActor.SetBirthdayVillagerName(0, 0)
                 SubflowResults[23] = 1
         default:
             return

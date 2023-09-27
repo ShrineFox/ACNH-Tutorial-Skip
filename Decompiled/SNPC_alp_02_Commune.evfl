@@ -1,86 +1,86 @@
 flow Root():
-    SubNpc.TurnBodySubNpc.TurnBody(10, 0.0)
-    if EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, true) != 0:
+    SubNpc.TurnBody(10, 0.0)
+    if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) != 0:
         # Sorry, squirt. I'm closin' up shop for the day. Come on back soon!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:005', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:005', false)
     elif System.EventFlags['cPlayer:AlpCommuneTalkBeforeFlag']:
-        EventFlowSystemActor.UIRemakeOrderCreateEventFlowSystemActor.UIRemakeOrderCreate()
+        EventFlowSystemActor.UIRemakeOrderCreate()
         # Howdy, squirt! You lookin' to get somethin' customized?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:001', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:001', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
             # What now? Well, if you need anything, just gimme a holler.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:004', false)
-        elif MainNpc.AlpCanRemakeMainNpc.AlpCanRemake():
+            MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:004', false)
+        elif MainNpc.AlpCanRemake():
             # Alright, leave it to me! So, what's your order?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:008', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:008', false)
 entrypoint Event7:
-            EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cAlpRemake', 65534, '', '', 'cItemSelectRemakeAlp', false)
-            if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-                MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('FaintSmile', false, '', 0, false)
-                EventFlowSystemActor.UIRemakeOrderHandlingEventFlowSystemActor.UIRemakeOrderHandling()
-                if not EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+            EventFlowSystemActor.UIItemSelectWindowHandling('cAlpRemake', 65534, '', '', 'cItemSelectRemakeAlp', false)
+            if EventFlowSystemActor.UIResultMenuDecide():
+                MainNpc.CharacterEmoticonAction('FaintSmile', false, '', 0, false)
+                EventFlowSystemActor.UIRemakeOrderHandling()
+                if not EventFlowSystemActor.UIResultMenuDecide():
                     run SelectOrder()
-                elif MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.0):
-                    MainNpc.AlpRemakePaymentMainNpc.AlpRemakePayment()
-                    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-                    EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cAlpRemake')
-                    MainNpc.NpcAISetPosMainNpc.NpcAISetPos(0.0, 0.0, 0.0, true, false)
-                    MainNpc.NpcStartASMainNpc.NpcStartAS('AlpMotorcycleKeep', false, true)
-                    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(65)
-                    EventFlowSystemActor.UIDisappearAlpRemakeWipeEventFlowSystemActor.UIDisappearAlpRemakeWipe()
-                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-                    MainNpc@Sub.NpcStartASMainNpc@Sub.NpcStartAS('AlpMotorcycle', false, true)
+                elif MainNpc.ShopHasBellCount(1.0):
+                    MainNpc.AlpRemakePayment()
+                    EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+                    EventFlowSystemActor.SaveSetFromUIResult('cAlpRemake')
+                    MainNpc.NpcAISetPos(0.0, 0.0, 0.0, true, false)
+                    MainNpc.NpcStartAS('AlpMotorcycleKeep', false, true)
+                    EventFlowSystemActor.SoundDuckingOff(65)
+                    EventFlowSystemActor.UIDisappearAlpRemakeWipe()
+                    EventFlowSystemActor.WaitFrame(30)
+                    MainNpc@Sub.NpcStartAS('AlpMotorcycle', false, true)
                     fork:
                         branch:
                             # Done and about to be delivered!
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:016', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:016', false)
                         branch:
-                            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
-                            if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                                SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Clapping', false, '', 0, false)
+                            EventFlowSystemActor.WaitFrame(40)
+                            if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+                                SubNpc.CharacterEmoticonAction('Clapping', false, '', 0, false)
                             else:
-                                SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Love', true, '', 0, true)
-                    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-                    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(176)
-                    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-                    MainNpc.NpcWaitTurnMainNpc.NpcWaitTurn()
-                    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(54, false)
-                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Keep')
+                                SubNpc.CharacterEmoticonAction('Love', true, '', 0, true)
+                    MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+                    EventFlowSystemActor.WaitFrame(10)
+                    EventFlowSystemActor.BGMPropertyControl(176)
+                    MainNpc.TurnBody(10, 0.0)
+                    MainNpc.NpcWaitTurn()
+                    MainNpc.SetDeliveryItem(54, false)
+                    MainNpc.NpcDelivery(1, 'Keep')
                     # Pretty great, right? If you find anythin' else that needs a bit of work, bring it here!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:017', true)
-                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(2, 'Default')
+                    MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:017', true)
+                    MainNpc.NpcDelivery(2, 'Default')
                 else:
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:014', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:014', false)
             else:
                 # You're quittin' on me?! Fine, fine. You can come back later if you change your mind.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:009', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:009', false)
         else:
             # …Hm? Doesn't look like you have anything I can customize right now!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:007', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:007', false)
     else:
         if System.EventFlags['cPlayer:TalkAlpCommuneOpenEvent']:
             # Heya! This place has a real great feel, doesn't it? Thanks again!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:012_1', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:012_1', false)
         else:
             if System.EventFlags['cPlayer:AlpJuneBrideTalkBeforeFlag']:
                 # Heya, squirt! Thanks again for helpin' out me and Reese with those wedding pictures.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:011', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:011', false)
             else:
                 # Heya! I don't believe we've met, have we?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:010', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:010', false)
             # I got a call from Harvey, one thing led to another, and now I got a place to show off what I can REALLY do! My sweetie pie, Reese, and I are gonna cu…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:012', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:012', false)
         # There are some things that only I can customize, so bring 'em here!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:013', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_02_Commune:013', false)
         System.EventFlags['cPlayer:AlpCommuneTalkBeforeFlag'] = true
         System.EventFlags['cPlayer:DoneCommuneAlpOpenEvent'] = true
         System.EventFlags['cPlayer:AlpJuneBrideTalkBeforeFlag'] = true
  
 flow Root_Init():
-    MainNpc.NpcAITalkSubCastEntryMainNpc.NpcAITalkSubCastEntry('alw', 1)
+    MainNpc.NpcAITalkSubCastEntry('alw', 1)
  
 flow SelectOrder():
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+    MainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
     run Event7()
  

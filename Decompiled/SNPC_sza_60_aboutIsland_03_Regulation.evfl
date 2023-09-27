@@ -1,119 +1,119 @@
 flow CurrentRegulationInfo():
     if System.EventFlags['cLand:RegulationType1']:
         # The Beautiful Island ordinance is in effect right now. It means we're asking folks to pitch in with weeding, watering flowers, and clearing trash fro…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_02', false)
     elif System.EventFlags['cLand:RegulationType2']:
         if System.EventFlags['cLand:TailorBuilt']:
             # We have the Early Bird ordinance in effect on ISLAND now. It means we're promoting an early- morning lifestyle by asking everyone to wake up just a l…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_03', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_03', false)
         else:
             # We have the Early Bird ordinance in effect on ISLAND now. It means we're promoting an early- morning lifestyle by asking everyone to wake up just a l…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_03_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_03_01', false)
     elif System.EventFlags['cLand:RegulationType3']:
         if System.EventFlags['cLand:TailorBuilt']:
             # Right now, the Night Owl ordinance is in effect on ISLAND. It means we're asking businesses to stay open later so they can serve those who are busy d…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_04', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_04', false)
         else:
             # Right now, the Night Owl ordinance is in effect on ISLAND. It means we've asked the shop to stay open later to serve those who are busy during the da…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_04_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_04_01', false)
     elif System.EventFlags['cLand:RegulationType4']:
         # Currently, the Bell Boom ordinance is in effect here on ISLAND. This means the cost of goods has gone up a bit, but so has the amount you'll get when…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_05', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_05', false)
     else:
         # At the moment, we have no ordinances in effect on ISLAND.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:002_01', false)
  
 flow Regulation_ChangFlagSet():
-    if EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation() in (1, 2, 3, 4):
+    if EventFlowSystemActor.ReserveRegulation() in (1, 2, 3, 4):
         System.EventFlags['cLand:EverChangedRegulation'] = true
  
 flow Regulation_Fee():
-    EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-    EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(20000, true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.MessageSuspend()
+    EventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.BellCountDown(20000, true)
+    EventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.UIMoneyDisappear()
+    EventFlowSystemActor.WaitFrame(5)
     run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
  
 flow Root():
     if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        switch EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation():
+        switch EventFlowSystemActor.ReserveRegulation():
             case 0, 1, 2, 3, 4:
-                EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
-                EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+                EventFlowSystemActor.MessageSuspend()
+                EventFlowSystemActor.WaitFrame(5)
+                EventFlowSystemActor.UIMoneyAppear()
+                EventFlowSystemActor.WaitFrame(5)
                 # You want to talk about ordinances for ISLAND? Sure!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:101', false)
-                if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(20000):
-                    switch EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation():
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:101', false)
+                if EventFlowSystemActor.HasBellCount(20000):
+                    switch EventFlowSystemActor.ReserveRegulation():
                         case 0:
                             # At the moment, we don't have any ordinances in effect on ISLAND.
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_01', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_01', false)
                             # Enacting an ordinance means lots of paperwork. We'll need 20,000 Bells as a collaboration and filing fee. Do you want to get started and enact an ord…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:103', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:103', false)
                             run Sub_grp_Event24()
                         case 1:
                             # The Beautiful Island ordinance is in effect on ISLAND now.
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_02', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_02', false)
                             run Sub_Event23()
                         case 2:
                             # We have the Early Bird ordinance in effect on ISLAND now.
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_03', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_03', false)
                             run Sub_Event23()
                         case 3:
                             # Right now, the Night Owl ordinance is in effect on ISLAND.
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_04', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_04', false)
                             run Sub_Event23()
                         case 4:
                             # Currently, the Bell Boom ordinance is in effect here on ISLAND.
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_05', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:102_05', false)
                             run Sub_Event23()
                         default:
                             return
                 else:
                     run CurrentRegulationInfo()
                     # To enact or change an ordinance, we'll need to collect a collaboration and filing fee of 20,000 Bells. Whenever you'd like to start the process, have…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:004', true)
-                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
-                    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+                    MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:004', true)
+                    EventFlowSystemActor.WaitFrame(5)
+                    EventFlowSystemActor.UIMoneyDisappear()
+                    EventFlowSystemActor.WaitFrame(5)
                     run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
             case 5:
                 # We'll have everything ready to enact our new ordinance tomorrow. It'll be so fun to have a change of pace!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:301', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:301', false)
                 run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
             case 6:
                 # We're on track to drop our ordinance tomorrow. I'll be sure to mention it in the island-wide broadcast too.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:302', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:302', false)
                 run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
     else:
         # You want to talk about ordinances for ISLAND? Sure!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:001', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:001', false)
         run CurrentRegulationInfo()
         # Enacting or changing ordinances can only be done by our Resident Representative, <110:39>. So if you have any concerns about our ordinances, you'll n…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:003', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:003', false)
         run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
  
 flow Sel_Regulation_Abolish():
     # If we drop the ordinance, we'll all go back to our original, free-and-breezy island lifestyle. Are you sure you don't want to have an ordinance in ef…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:205', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:205', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # OK! I'll begin the paperwork to drop the ordinance. Starting tomorrow, we'll be ordinance-free!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:215', true)
-        EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation('cRegulationStop')
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:215', true)
+        EventFlowSystemActor.ReserveRegulation('cRegulationStop')
         System.EventFlags['cLand:EverChangedRegulation'] = false
         run Regulation_Fee()
     else:
         run Sel_Regulation_Again()
  
 flow Sel_Regulation_Again():
-    switch EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation():
+    switch EventFlowSystemActor.ReserveRegulation():
         case 0:
             # OK! Which ordinance would you like to enact?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:111', false)
-            switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:111', false)
+            switch EventFlowSystemActor.GeneralTalkChoice5():
                 case 0:
                     run Sel_Regulation_Beautiful()
                 case 1:
@@ -126,8 +126,8 @@ flow Sel_Regulation_Again():
                     run Sza_ChangeRegulation_Cancel()
         case 1:
             # OK! What do you think our new direction should be?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:112', false)
-            switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:112', false)
+            switch EventFlowSystemActor.GeneralTalkChoice5():
                 case 0:
                     run Sel_Regulation_Morning()
                 case 1:
@@ -140,8 +140,8 @@ flow Sel_Regulation_Again():
                     run Sza_ChangeRegulation_Cancel()
         case 2:
             # OK! What do you think our new direction should be?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:113', false)
-            switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:113', false)
+            switch EventFlowSystemActor.GeneralTalkChoice5():
                 case 0:
                     run Sel_Regulation_Beautiful()
                 case 1:
@@ -154,8 +154,8 @@ flow Sel_Regulation_Again():
                     run Sza_ChangeRegulation_Cancel()
         case 3:
             # OK! What do you think our new direction should be?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:114', false)
-            switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:114', false)
+            switch EventFlowSystemActor.GeneralTalkChoice5():
                 case 0:
                     run Sel_Regulation_Beautiful()
                 case 1:
@@ -168,8 +168,8 @@ flow Sel_Regulation_Again():
                     run Sza_ChangeRegulation_Cancel()
         case 4:
             # OK! What do you think our new direction should be?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:115', false)
-            switch EventFlowSystemActor.GeneralTalkChoice5EventFlowSystemActor.GeneralTalkChoice5():
+            MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:115', false)
+            switch EventFlowSystemActor.GeneralTalkChoice5():
                 case 0:
                     run Sel_Regulation_Beautiful()
                 case 1:
@@ -185,24 +185,24 @@ flow Sel_Regulation_Again():
  
 flow Sel_Regulation_Beautiful():
     # For this one, we'd ask folks to pitch in with weeding, watering flowers, and clearing trash from our waters. Would you like to enact the Beautiful Is…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:201', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:201', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Understood! I'll get everything ready. The Beautiful Island ordinance will go into effect tomorrow!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:211', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:211', true)
         run Regulation_ChangFlagSet()
-        EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation('cRegulationClean')
+        EventFlowSystemActor.ReserveRegulation('cRegulationClean')
         run Regulation_Fee()
     else:
         run Sel_Regulation_Again()
  
 flow Sel_Regulation_Economy():
     # This would cause the cost of goods on the island to go up, but so would the amount folks get from selling! Would you like to enact the Bell Boom ordi…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:204', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:204', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # You got it! In that case, I'd better get to work. The Bell Boom ordinance will go into effect tomorrow!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:214', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:214', true)
         run Regulation_ChangFlagSet()
-        EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation('cRegulationMoney')
+        EventFlowSystemActor.ReserveRegulation('cRegulationMoney')
         run Regulation_Fee()
     else:
         run Sel_Regulation_Again()
@@ -210,15 +210,15 @@ flow Sel_Regulation_Economy():
 flow Sel_Regulation_Morning():
     if System.EventFlags['cLand:TailorBuilt']:
         # With this, we'd ask our residents to be more active in the morning and our businesses to open earlier. Would you like to enact the Early Bird ordinan…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:202', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:202', false)
     else:
         # With this, we'd ask our residents to be more active in the morning and the shop to open earlier as well. Would you like to enact the Early Bird ordin…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:202_01', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:202_01', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Absolutely! I'll take it from here. The Early Bird ordinance will go into effect tomorrow!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:212', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:212', true)
         run Regulation_ChangFlagSet()
-        EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation('cRegulationMorning')
+        EventFlowSystemActor.ReserveRegulation('cRegulationMorning')
         run Regulation_Fee()
     else:
         run Sel_Regulation_Again()
@@ -226,38 +226,38 @@ flow Sel_Regulation_Morning():
 flow Sel_Regulation_Night():
     if System.EventFlags['cLand:TailorBuilt']:
         # This would boost nightlife by asking folks to stay up later. We'd also have island businesses extend their hours. Would you like to enact the Night O…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:203', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:203', false)
     else:
         # This would boost nightlife by asking folks to stay up later. We'd also ask the shop to extend its hours. Would you like to enact the Night Owl ordina…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:203_01', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:203_01', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Alright! I'll get to work. The Night Owl ordinance will go into effect tomorrow!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:213', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:213', true)
         run Regulation_ChangFlagSet()
-        EventFlowSystemActor.ReserveRegulationEventFlowSystemActor.ReserveRegulation('cRegulationNight')
+        EventFlowSystemActor.ReserveRegulation('cRegulationNight')
         run Regulation_Fee()
     else:
         run Sel_Regulation_Again()
  
 local flow Sub_Event23():
     # To change an ordinance, we'll need the usual fee of 20,000 Bells. Are you sure you want to change it?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:104', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:104', false)
     run Sub_grp_Event24()
  
 local flow Sub_grp_Event24():
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run Sel_Regulation_Again()
     else:
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-        EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+        EventFlowSystemActor.WaitFrame(5)
+        EventFlowSystemActor.UIMoneyDisappear()
+        EventFlowSystemActor.WaitFrame(5)
         run SNPC_sza_00_Common::Sza_Cmn_Cancelrun SNPC_sza_00_Common::Sza_Cmn_Cancel()
  
 flow Sza_ChangeRegulation_Cancel():
     # Oh! Are you sure? Well, you know where to find me!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:110', true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_60_aboutisland_03_Regulation:110', true)
+    EventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.UIMoneyDisappear()
+    EventFlowSystemActor.WaitFrame(5)
     run SNPC_sza_00_Common::Sza_CmnSel_Againrun SNPC_sza_00_Common::Sza_CmnSel_Again()
  

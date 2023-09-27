@@ -1,34 +1,34 @@
 flow ApAlways():
-    if MainNpc.CheckNpcApproachTypeMainNpc.CheckNpcApproachType():
-        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+    if MainNpc.CheckNpcApproachType():
+        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
             # Oh, hey… You got a sec? I was gonna tell you… Ummm… What was I gonna tell you?<10:4> I guess I forgot!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:001', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:001', false)
         else:
             # Hey, so… Umm…I know I had something to say…buuuuuut… I forget what it was!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:002', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:002', false)
     else:
-        if EventFlowSystemActor.RandomChoiceExcludePrevious2EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
             # I had something on my mind, but… I guess it slipped off!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:003', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:003', false)
         else:
             # Oh! Hey there! I was so happy to see you, I forgot why I wanted to see you to begin with!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:004', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachA_Always:004', false)
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow ApGreeting():
-    if MainNpc.NpcCheckPastDaysMainNpc.NpcCheckPastDays('cGreeting', 14):
+    if MainNpc.NpcCheckPastDays('cGreeting', 14):
         run NNPC_ApproachB_Greeting::Rootrun NNPC_ApproachB_Greeting::Root()
     else:
         run Reselection()
  
 flow ApHabit():
-    if (not MainNpc.NpcIsFleaHolderMainNpc.NpcIsFleaHolder()) and (MainNpc.NpcCheckPastDaysMainNpc.NpcCheckPastDays('cPhrase', 10)):
+    if (not MainNpc.NpcIsFleaHolder()) and (MainNpc.NpcCheckPastDays('cPhrase', 10)):
         run NNPC_ApproachB_Habit::Rootrun NNPC_ApproachB_Habit::Root()
     else:
         run Reselection()
  
 flow ApNickname():
-    switch MainNpc.NpcCanStartApBNicknameMainNpc.NpcCanStartApBNickname():
+    switch MainNpc.NpcCanStartApBNickname():
         case 0:
             run NNPC_ApproachB_NickName::NewNamerun NNPC_ApproachB_NickName::NewName()
         case 1:
@@ -37,48 +37,48 @@ flow ApNickname():
             run Reselection()
  
 flow ApPresent():
-    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         run Reselection()
     else:
         run NNPC_ApproachC_Present::Rootrun NNPC_ApproachC_Present::Root()
  
 flow ApSell():
-    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         run Reselection()
     else:
         if System.EventFlags['cLand:RegulationType4']:
-            if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(9500):
+            if EventFlowSystemActor.HasBellCount(9500):
                 run NNPC_ApproachC_Sell::Rootrun NNPC_ApproachC_Sell::Root()
             else:
                 run Reselection()
         else:
-            if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(8000):
+            if EventFlowSystemActor.HasBellCount(8000):
                 run NNPC_ApproachC_Sell::Rootrun NNPC_ApproachC_Sell::Root()
             else:
                 run Reselection()
  
 flow ApTrade():
-    if MainNpc.HasNpcWantedItemMainNpc.HasNpcWantedItem():
+    if MainNpc.HasNpcWantedItem():
         run NNPC_ApproachC_Trade::Rootrun NNPC_ApproachC_Trade::Root()
     else:
         run Reselection()
  
 flow ApWant():
-    if MainNpc.HasNpcWantedItemMainNpc.HasNpcWantedItem():
+    if MainNpc.HasNpcWantedItem():
         run NNPC_ApproachC_Want::Rootrun NNPC_ApproachC_Want::Root()
     else:
         run Reselection()
  
 flow ApproachB_Chk():
-    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayer:InputApproachBanCount') in (1, 2):
+    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayer:InputApproachBanCount') in (1, 2):
         run Reselection()
  
 flow Reselection():
     if System.EventFlags['cPlayerTemp:NnpcApproachSelectCount'] < 3:
         System.EventFlags['cPlayerTemp:NnpcApproachSelectCount'] += 1
-        switch MainNpc.CheckNpcFavorLevelMainNpc.CheckNpcFavorLevel():
+        switch MainNpc.CheckNpcFavorLevel():
             case 0:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious9EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
                     case 0:
                         run ApproachB_Chk()
                         run ApGreeting()
@@ -98,7 +98,7 @@ flow Reselection():
                         run ApTrade()
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             case 1:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious9EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
                     case 0:
                         run ApproachB_Chk()
                         run ApGreeting()
@@ -118,7 +118,7 @@ flow Reselection():
                         run ApTrade()
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             case 2:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious6EventFlowSystemActor.RandomChoiceExcludePrevious6(6, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious6(6, true):
                     case 0:
                         run ApproachB_Chk()
                         run ApNickname()
@@ -131,7 +131,7 @@ flow Reselection():
                         run ApPresent()
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
             case 3:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
                     case 0:
                         run ApproachB_Chk()
                         run ApNickname()
@@ -147,8 +147,8 @@ flow Reselection():
         run ApAlways()
  
 flow Root():
-    if MainNpc.NpcCanStartQuestMainNpc.NpcCanStartQuest():
-        switch MainNpc.NpcHaveQuestTypeMainNpc.NpcHaveQuestType(''):
+    if MainNpc.NpcCanStartQuest():
+        switch MainNpc.NpcHaveQuestType(''):
             case 7, 0:
                 run Sub_Event67()
             case 1:

@@ -1,31 +1,31 @@
 flow ChkSituation_v200():
-    if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cPhotoStudio'):
+    if EventFlowSystemActor.SystemCheckNowStage('cPhotoStudio'):
         run EnableSwitch()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
+    elif (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
         run EnableSwitch()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 2):
+    elif (EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (EventFlowSystemActor.WherearenOrderStatus() == 2):
         run EnableSwitch()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow EnableSwitch():
-    if EventFlowSystemActor.SystemRadioPlayMusicEventFlowSystemActor.SystemRadioPlayMusic():
-        EventFlowSystemActor.SystemSetTagRadioPlayMusicEventFlowSystemActor.SystemSetTagRadioPlayMusic()
+    if EventFlowSystemActor.SystemRadioPlayMusic():
+        EventFlowSystemActor.SystemSetTagRadioPlayMusic()
         # "<125:0:0000>" is currently playing.
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Radio:002', false)
+        Player.OpenMessageWindow('TalkFtr/FTR_Radio:002', false)
     else:
         # The radio is on.
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Radio:004', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        Ftr.FtrChangeSwitchFtr.FtrChangeSwitch(false)
+        Player.OpenMessageWindow('TalkFtr/FTR_Radio:004', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        Ftr.FtrChangeSwitch(false)
  
 flow Root():
-    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
-        if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField'):
+    if EventFlowSystemActor.IsMyVillage():
+        if EventFlowSystemActor.SystemCheckNowStage('cField'):
             run EnableSwitch()
         else:
-            if EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse'):
+            if EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse'):
                 run EnableSwitch()
             else:
                 run Sub_Event22()
@@ -34,14 +34,14 @@ flow Root():
  
 local flow Sub_Event22():
     run ChkSituation_v200()
-    if not Ftr.IsOnStarterFtrSwitchFtr.IsOnStarterFtrSwitch():
+    if not Ftr.IsOnStarterFtrSwitch():
         # Nothing is playing.
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Radio:005', false)
-    elif EventFlowSystemActor.SystemRadioPlayMusicEventFlowSystemActor.SystemRadioPlayMusic():
-        EventFlowSystemActor.SystemSetTagRadioPlayMusicEventFlowSystemActor.SystemSetTagRadioPlayMusic()
+        Player.OpenMessageWindow('TalkFtr/FTR_Radio:005', false)
+    elif EventFlowSystemActor.SystemRadioPlayMusic():
+        EventFlowSystemActor.SystemSetTagRadioPlayMusic()
         # "<125:0:0000>" is currently playing.
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Radio:001', false)
+        Player.OpenMessageWindow('TalkFtr/FTR_Radio:001', false)
     else:
         # The radio is on.
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Radio:003', false)
+        Player.OpenMessageWindow('TalkFtr/FTR_Radio:003', false)
  

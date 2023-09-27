@@ -1,49 +1,49 @@
 flow Book():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+    if EventFlowSystemActor.IsInspectingWherearen():
+        MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
         run FacilityName_Chk()
         # RANDOM: <20:3:cd0e>OK, pay attention! I'm about… // <20:3:cd0e>OK…does anybody know the ans… // Umm…where'd we leave off anyway?<20:2:c… // Man, I had this dream once that I was n… // Here's a neat trick! Pick a number with…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:002', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:002', true)
         run KKFes_Chk()
     else:
         run ShareHouseMate_Chk()
-        if (not System.EventFlags['cWherearenPlayer:TeacherTalkedNow']) and (not System.EventFlags['cWherearenPlayer:GetPlumeriaToday']) and (MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0):
+        if (not System.EventFlags['cWherearenPlayer:TeacherTalkedNow']) and (not System.EventFlags['cWherearenPlayer:GetPlumeriaToday']) and (MainNpc.NpcNowPosture() == 0):
             run StartPlumeriaEvent()
         else:
-            MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+            MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
             run FacilityName_Chk()
             # RANDOM: <20:3:cd0e>OK, pay attention! I'm about… // <20:3:cd0e>OK…does anybody know the ans… // Umm…where'd we leave off anyway?<20:2:c… // Man, I had this dream once that I was n… // Here's a neat trick! Pick a number with…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:002', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:002', true)
             run KKFes_Chk()
  
 flow Demand_Chk():
-    if MainNpc.IsWherearenFacilityInteractionMainNpc.IsWherearenFacilityInteraction():
-        MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+    if MainNpc.IsWherearenFacilityInteraction():
+        MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
         # RANDOM: Hey, over there! No sleeping! If you sn… // Hey, <115:1:cd00>! Ah. So you CAN pay a… // Hey, <115:1:cd00>! Wake up, wake up!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:201', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:201', false)
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cSchool')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cSchool')
+    if (EventFlowSystemActor.WherearenExistFacilityName('cSchool')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cSchool')
         # <20:2:cd06>At <150:3:cd00>, all the kids are real smart. I learn stuff every day!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:004', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:004', false)
         run KKFes_Chk()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow GivePlumeria_Chk():
-    if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:WHEREAREN_TeacherFlag') in (0, 1):
-        MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(13348, true, 'cVillageRemakePattern', 0)
+    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:WHEREAREN_TeacherFlag') in (0, 1):
+        MainNpc.SetDeliveryItemAtRandom(13348, true, 'cVillageRemakePattern', 0)
     else:
-        MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(13262, true, 'cVillageRemakePattern', 0)
-    if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+        MainNpc.SetDeliveryItemAtRandom(13262, true, 'cVillageRemakePattern', 0)
+    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         # Huh? Your pockets are full. You can't carry any more stuff. Maybe come back later with less stuff.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:113', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:113', false)
         System.EventFlags['cWherearenPlayer:TeacherGiveItemFailed'] = true
     else:
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+        MainNpc.NpcDelivery(1, 'Default')
         # RANDOM: If ya give it lots of love and tell it … // Watch it grow every day, and write down… // You oughta plant it near your house! Th…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:107', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:107', false)
         System.EventFlags['cWherearenPlayer:GetPlumeriaToday'] = true
         System.EventFlags['cWherearenPlayer:TeacherGiveItemFailed'] = false
         System.EventFlags['cPlayerTemp:WHEREAREN_TeacherFlag'] = 0
@@ -51,21 +51,21 @@ flow GivePlumeria_Chk():
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, true)
+    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+        MainNpc.TurnNeck(10, true)
         # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessageMainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             # Let's take a field trip to the music festival! We'll all go together, <110:6>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:101', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:101', true)
             run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
         else:
             # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Root():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Event3()
     else:
         run ShareHouseMate_Chk()
@@ -73,14 +73,14 @@ flow Root():
             run Event3()
         elif System.EventFlags['cWherearenPlayer:GetPlumeriaToday']:
             run Event3()
-        elif MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0:
+        elif MainNpc.NpcNowPosture() == 0:
             run StartPlumeriaEvent()
         else:
             run Event3()
  
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    if EventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeck(10, false)
         run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
@@ -89,79 +89,79 @@ flow StandSleep():
  
 flow StartPlumeriaEvent():
     if System.EventFlags['cWherearenPlayer:TeacherGiveItemFailed']:
-        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-        if EventFlowSystemActor.FlagSystemIntValue3EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:WHEREAREN_TeacherFlag') in (0, 1):
+        MainNpc.TurnBody(10, 0.0)
+        if EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:WHEREAREN_TeacherFlag') in (0, 1):
             # Hey, ya came back! I knew ya would. Nobody can resist the call of free shrubs for too long. Here! It's a <item>white-plumeria start, just for you! Fr…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:115_01', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:115_01', false)
         else:
             # Hey, you came back to get the thing! Here! It's a <item>pink-plumeria start!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:115_02', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:115_02', false)
         run GivePlumeria_Chk()
     else:
-        MainNpc.TurnBodyMainNpc.TurnBody(11, 0.0)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+        MainNpc.TurnBody(11, 0.0)
+        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
             case 0:
                 # <20:2:cd06>Hey, <150:6>! Guess what!<10:4> FRANGIPANI! You're thinkin', "What's he yellin' about? Is he bein' rude?" Nope! I'm not allowed to be rude…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:101', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:101', false)
             case 1:
                 # <20:2:cd06>Hey there, <150:6>! You want a plumeria start? I got too many and I dunno why. It's really freaking me out. I don't even know where they'r…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:102', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:102', false)
             case 2:
                 # <20:2:cd06>Hi, <150:6>! You ever see that old movie about a plumeria start that got alien goo on it and turned into a monster? It's a real good movie…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:103', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            if EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50):
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:103', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            if EventFlowSystemActor.PercentChoice(50):
                 # I knew you'd say that! OK, today I'll give you…a <item>white-plumeria start!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:106_01', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:106_01', false)
                 System.EventFlags['cPlayerTemp:WHEREAREN_TeacherFlag'] = 1
             else:
                 # I knew you'd say that! OK, today I'll give you…a <item>pink-plumeria start!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:106_02', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:106_02', false)
                 System.EventFlags['cPlayerTemp:WHEREAREN_TeacherFlag'] = 2
             run GivePlumeria_Chk()
         else:
             # RANDOM: Oh, you don't NEED one? You might chang… // Oh, huh, wow… I never figured you for o… // A huh huh huh. I just tried to give ya …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:108', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_School:108', false)
             System.EventFlags['cWherearenPlayer:TeacherTalkedNow'] = true
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Walk():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if EventFlowSystemActor.IsInspectingWherearen():
         run Demand_Chk()
 entrypoint Event3:
-        MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+        MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
         run FacilityName_Chk()
         # RANDOM: <20:2:cd06>Being a teacher is hard. Sta… // <20:2:cd0e>If anybody's got questions, … // <20:3:cd0e>Hey, everyone! Your homework… // <20:2:cd0e>Everybody remember what all … // <20:2:cd0e>If I catch ya eating during …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:001', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:001', true)
         run KKFes_Chk()
     else:
         run ShareHouseMate_Chk()
-        if (not System.EventFlags['cWherearenPlayer:TeacherTalkedNow']) and (not System.EventFlags['cWherearenPlayer:GetPlumeriaToday']) and (MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0):
+        if (not System.EventFlags['cWherearenPlayer:TeacherTalkedNow']) and (not System.EventFlags['cWherearenPlayer:GetPlumeriaToday']) and (MainNpc.NpcNowPosture() == 0):
             run StartPlumeriaEvent()
             return
         else:
             run Demand_Chk()
 entrypoint Event3:
-            MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+            MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
             run FacilityName_Chk()
             # RANDOM: <20:2:cd06>Being a teacher is hard. Sta… // <20:2:cd0e>If anybody's got questions, … // <20:3:cd0e>Hey, everyone! Your homework… // <20:2:cd0e>Everybody remember what all … // <20:2:cd0e>If I catch ya eating during …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:001', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:001', true)
             run KKFes_Chk()
  
 flow WatchWindow():
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+    if EventFlowSystemActor.IsInspectingWherearen():
+        MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
         # RANDOM: I gotta tell ya a secret. I talk a bunc… // Looking out the window. Coffee cup in h… // I wanna eat the school lunch too. I've … // Huh? Did somebody write on the window? … // Is that <115:1:cd00> outside?! Oooh no.…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:003', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:003', true)
         run KKFes_Chk()
     else:
         run ShareHouseMate_Chk()
-        if (not System.EventFlags['cWherearenPlayer:TeacherTalkedNow']) and (not System.EventFlags['cWherearenPlayer:GetPlumeriaToday']) and (MainNpc.NpcNowPostureMainNpc.NpcNowPosture() == 0):
+        if (not System.EventFlags['cWherearenPlayer:TeacherTalkedNow']) and (not System.EventFlags['cWherearenPlayer:GetPlumeriaToday']) and (MainNpc.NpcNowPosture() == 0):
             run StartPlumeriaEvent()
             return
         else:
-            MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
+            MainNpc.WherearenSetTagFacilityNpcName('cSchoolStudent', false, false, 0)
             # RANDOM: I gotta tell ya a secret. I talk a bunc… // Looking out the window. Coffee cup in h… // I wanna eat the school lunch too. I've … // Huh? Did somebody write on the window? … // Is that <115:1:cd00> outside?! Oooh no.…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:003', true)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:003', true)
             run KKFes_Chk()
  

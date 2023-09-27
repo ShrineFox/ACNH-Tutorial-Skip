@@ -1,135 +1,135 @@
 flow CafeBuy_Again():
-    EventFlowSystemActor.UICafeMenuReselectionAppearHandlingEventFlowSystemActor.UICafeMenuReselectionAppearHandling()
+    EventFlowSystemActor.UICafeMenuReselectionAppearHandling()
     run Event8()
  
 flow CafeBuy_Chk():
-    if not MainNpc.ShopHasBellCountMainNpc.ShopHasBellCount(1.0):
+    if not MainNpc.ShopHasBellCount(1.0):
         # Thanks for your order!  Oh, wait a sec. Ya don't have enough to cover your bill right now. Come back again when you've got a buncha Poki on you, <110…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:026', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:026', false)
         run Sub_Event10()
-    elif EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+    elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
         # Thanks for your order! Hang on! Your pockets are all full up with stuff that's not this stuff! I can't give you your order because you need more pock…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:027', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:027', false)
         run Sub_Event10()
     else:
-        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(53, false)
-        MainNpc.ShopBuyDoneMainNpc.ShopBuyDone(false, false, false, false)
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(8, 'Default')
+        MainNpc.SetDeliveryItem(53, false)
+        MainNpc.ShopBuyDone(false, false, false, false)
+        MainNpc.NpcDelivery(8, 'Default')
         # RANDOM: Don't drop it, OK? That'd make me feel … // Thanks a lot, <110:6>! // Mmm…smells good, <110:6>…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:023', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:023', true)
  
 flow CafeUI_Close():
     fork:
         branch:
-            EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+            EventFlowSystemActor.MessageSuspend()
         branch:
-            EventFlowSystemActor@sub1.UIPokiDisappearEventFlowSystemActor@sub1.UIPokiDisappear()
+            EventFlowSystemActor@sub1.UIPokiDisappear()
         branch:
-            EventFlowSystemActor@sub2.UICafeMenuDisappearHandlingEventFlowSystemActor@sub2.UICafeMenuDisappearHandling()
+            EventFlowSystemActor@sub2.UICafeMenuDisappearHandling()
  
 flow Cancel():
     # RANDOM: OK! It's a big decision, <110:6>. // That's OK. I'm gonna go over there now,… // Neat! See ya, <110:6>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:022', true)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:022', true)
  
 flow CarryTray():
     run Root()
  
 flow EnterFacility():
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-    if EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cCafe'):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cCafe')
+    MainNpc.TurnBody(10, 0.0)
+    if EventFlowSystemActor.WherearenExistFacilityName('cCafe'):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cCafe')
         # If you like coffee and tea, then good news! We have coffee AND tea here at <150:3:cd00>!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:091', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:091', false)
     else:
         # Welcome to the most delicious job I've ever had!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:092', false)
-    if EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        EventFlowSystemActor.StartMeasurePlayTimeEventFlowSystemActor.StartMeasurePlayTime('cWherearenInspect')
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:092', false)
+    if EventFlowSystemActor.IsInspectingWherearen():
+        EventFlowSystemActor.StartMeasurePlayTime('cWherearenInspect')
  
 flow ExitFacility():
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    MainNpc.TurnBody(10, 0.0)
     # It was neat to see you here. And it'll be neat next time too, <110:6>!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:093', false)
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:093', false)
  
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityNameEventFlowSystemActor.WherearenExistFacilityName('cCafe')) and (not EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderThemeEventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cCafe')
-        if MainNpc.IsNthRoleMainNpc.IsNthRole(0):
+    if (EventFlowSystemActor.WherearenExistFacilityName('cCafe')) and (not EventFlowSystemActor.PercentChoice(80)):
+        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cCafe')
+        if MainNpc.IsNthRole(0):
             # <20:2:cd06>I taste test every single coffee bean <150:3:cd00> uses.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:002', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:002', false)
         else:
             # <20:2:cd06><50:3><150:3:cd00>'s tea is made of leaves. That's how ya know it's fancy!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:012', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:012', false)
         run KKFes_Chk()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KKFes_Chk():
-    if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+    if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
-        MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
-        if EventFlowSystemActor.WherearenKKFesStatusEventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3):
+    elif not EventFlowSystemActor.IsInspectingWherearen():
+        MainNpc.TurnBody(10, 0.0)
+        MainNpc.TurnNeck(10, false)
+        if EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3):
             # RANDOM: Do you want something? // Can I see the menu? // I'm good, thanks. // Wanna order stuff? // Can I see the menu? // I'm good, thanks. // Want something so your tummy won't get … // Can I see the menu? // I'm good, thanks.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:021', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:021', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 run LookMenu()
             else:
                 run Cancel()
         else:
             # RANDOM: Oh, do you need something? // Can I see the menu? // Let's go dancing! // I'm good, thanks. // Ah! Did you wanna order? // Can I see the menu? // Let's go dancing! // I'm good, thanks. // Ah, did you wanna get something for tak… // Can I see the menu? // Let's go dancing! // I'm good, thanks.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:031', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:031', false)
+            switch EventFlowSystemActor.GeneralTalkChoice3():
                 case 0:
                     run LookMenu()
                 case 1:
                     # Dancing? Oh yeah! That whole music festival thing's going on at the beach today, huh? Let's invite the customers and all go together, <110:6>!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:109', true)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:109', true)
                     run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
                 case 2:
                     run Cancel()
  
 flow LookMenu():
-    EventFlowSystemActor.UIPokiAppearEventFlowSystemActor.UIPokiAppear()
+    EventFlowSystemActor.UIPokiAppear()
     # Okey dokey! Here's what we've got!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:030', false)
-    EventFlowSystemActor.UICafeMenuAppearHandlingEventFlowSystemActor.UICafeMenuAppearHandling()
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:030', false)
+    EventFlowSystemActor.UICafeMenuAppearHandling()
 entrypoint Event8:
-    if EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cWherearenCafeMenuPrice', 0)
-        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cWherearenCafeMenuName', 0)
+    if EventFlowSystemActor.UIResultMenuDecide():
+        EventFlowSystemActor.SetTagFromUIResult('cWherearenCafeMenuPrice', 0)
+        EventFlowSystemActor.SetTagFromUIResult('cWherearenCafeMenuName', 0)
         # [A|An]<125:0:0000>? You got it! Your total is <90:44:0000>.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:025', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:025', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
             run CafeBuy_Chk()
             # Anything else you want?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:028', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:028', false)
         else:
             # Oh, changed your mind? Do ya want anything else instead?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:029', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:029', false)
         run CafeBuy_Again()
     else:
         run CafeUI_Close()
         # RANDOM: It's a real pretty menu, isn't it? I th… // You do that too? Whenever I look at a m… // You read fast, <110:6>!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:024', true)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:024', true)
  
 flow Root():
-    if not EventFlowSystemActor.IsInspectingWherearenEventFlowSystemActor.IsInspectingWherearen():
+    if not EventFlowSystemActor.IsInspectingWherearen():
         run ShareHouseMate_Chk()
-    MainNpc.WherearenSetTagFacilityNpcNameMainNpc.WherearenSetTagFacilityNpcName('cCafeWaiter', false, false, 0)
+    MainNpc.WherearenSetTagFacilityNpcName('cCafeWaiter', false, false, 0)
     run FacilityName_Chk()
-    if MainNpc.IsNthRoleMainNpc.IsNthRole(0):
+    if MainNpc.IsNthRole(0):
         # RANDOM: <20:2:cd06>What do I recommend? It depe… // <20:2:cd06>Let me know if you want me t… // <20:2:cd06>Meeting folks at this job is… // <20:2:cd06>I'm supposed to tell you to … // <20:2:cd06>Don't worry. I promise I'm o…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:001', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:001', false)
         run KKFes_Chk()
     else:
         # RANDOM: Hm? Did someone call me? <20:2:cd06>Or … // <20:2:cd06>Smell all the coffee you lik… // <20:2:cd06>If you love our coffee, you'… // <20:2:cd06>You want some water? It's fr… // <20:2:cd06><115:1:cd00>'s gonna go on a…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:011', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Cafe:011', false)
         run KKFes_Chk()
  
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeckMainNpc.TurnNeck(10, false)
+    if EventFlowSystemActor.WherearenOrderStatus() == 1:
+        MainNpc.TurnNeck(10, false)
         run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  

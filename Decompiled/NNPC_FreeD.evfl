@@ -1,82 +1,82 @@
 flow Action_CurrentPlayer_Chk():
-    if MainNpc.CanSelectRumorMessageMainNpc.CanSelectRumorMessage(2):
+    if MainNpc.CanSelectRumorMessage(2):
         run NNPC_FreeD_RumorAction::RumorP_Action_CurrentPlayerrun NNPC_FreeD_RumorAction::RumorP_Action_CurrentPlayer()
         System.EventFlags['cPlayer:TalkRumorPActionTodayAnyone'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Action_Villager_Chk():
-    if (EventFlowSystemActor.PlayerVillagerCountEventFlowSystemActor.PlayerVillagerCount(2)) and (not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(1)) and (MainNpc.HasPlayerActivitySinceMoveInMainNpc.HasPlayerActivitySinceMoveIn(0)):
+    if (EventFlowSystemActor.PlayerVillagerCount(2)) and (not EventFlowSystemActor.IsSharePlay(1)) and (MainNpc.HasPlayerActivitySinceMoveIn(0)):
         run NNPC_FreeD_RumorAction::RumorOP_Action_Villagerrun NNPC_FreeD_RumorAction::RumorOP_Action_Villager()
         System.EventFlags['cPlayer:TalkRumorOActionTodayAnyone'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Action_Visitor_Chk():
-    if (EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and (not EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor()) and (MainNpc.HasPlayerActivitySinceMoveInMainNpc.HasPlayerActivitySinceMoveIn(1)):
+    if (EventFlowSystemActor.IsMyVillage()) and (not EventFlowSystemActor.NetHasVisitor()) and (MainNpc.HasPlayerActivitySinceMoveIn(1)):
         run NNPC_FreeD_RumorAction::RumorOP_Action_Visitorrun NNPC_FreeD_RumorAction::RumorOP_Action_Visitor()
         MainNpc.EventFlags['cNpcMemory:TalkRumorVActionToday'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KeywordA():
     if System.EventFlags['cPlayer:HeardAboutFreeDKeywordA'] == 0:
-        MainNpc.DecideHandleNameMemoryMainNpc.DecideHandleNameMemory(0)
-        if (MainNpc.HasHandleNameMemoryMainNpc.HasHandleNameMemory()) and (MainNpc.HandleNameTalkDayIntervalMainNpc.HandleNameTalkDayInterval(1, 3)):
-            MainNpc.SetHandleNameTagMainNpc.SetHandleNameTag(0)
-            MainNpc.SetPlayerNameMainNpc.SetPlayerName(5)
+        MainNpc.DecideHandleNameMemory(0)
+        if (MainNpc.HasHandleNameMemory()) and (MainNpc.HandleNameTalkDayInterval(1, 3)):
+            MainNpc.SetHandleNameTag(0)
+            MainNpc.SetPlayerName(5)
             # I heard that <115:0:cd00> has a name that they want to be known as. Know what it is? <140:16:cd00>! Pretty cool, huh? I'd want mine to be "The ISLAND…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_Keyword:001', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_Keyword:001', false)
             System.EventFlags['cPlayer:HeardAboutFreeDKeywordA'] = 3
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KeywordB():
     if System.EventFlags['cPlayer:HeardAboutFreeDKeywordB'] == 0:
-        MainNpc.DecideHandleNameMemoryMainNpc.DecideHandleNameMemory(1)
-        if (MainNpc.HasHandleNameMemoryMainNpc.HasHandleNameMemory()) and (MainNpc.HandleNameTalkDayIntervalMainNpc.HandleNameTalkDayInterval(1, 3)):
-            MainNpc.SetHandleNameTagMainNpc.SetHandleNameTag(0)
-            MainNpc.SetPlayerNameMainNpc.SetPlayerName(5)
+        MainNpc.DecideHandleNameMemory(1)
+        if (MainNpc.HasHandleNameMemory()) and (MainNpc.HandleNameTalkDayInterval(1, 3)):
+            MainNpc.SetHandleNameTag(0)
+            MainNpc.SetPlayerName(5)
             # <50:3><115:0:cd00> was visiting the other day, and I guess they got another name back home… <140:16:cd00>! You hear somebody get called a thing like …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_Keyword:002', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_Keyword:002', false)
             System.EventFlags['cPlayer:HeardAboutFreeDKeywordB'] = 3
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow KeywordC():
-    if (System.EventFlags['cPlayer:HeardAboutFreeDKeywordC'] == 0) and (not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()):
-        MainNpc.DecideHandleNameMemoryMainNpc.DecideHandleNameMemory(2)
-        if MainNpc.HasHandleNameMemoryMainNpc.HasHandleNameMemory():
-            MainNpc.SetHandleNameTagMainNpc.SetHandleNameTag(0)
-            MainNpc.SetPlayerNameMainNpc.SetPlayerName(5)
+    if (System.EventFlags['cPlayer:HeardAboutFreeDKeywordC'] == 0) and (not EventFlowSystemActor.IsMyVillage()):
+        MainNpc.DecideHandleNameMemory(2)
+        if MainNpc.HasHandleNameMemory():
+            MainNpc.SetHandleNameTag(0)
+            MainNpc.SetPlayerName(5)
             # You know <115:0:cd00> from this island? They've got a title! That's real cool. Their title is… <140:16:cd00>! I bet <115:0:cd00> likes it when folks …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_Keyword:003', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_Keyword:003', false)
             System.EventFlags['cPlayer:HeardAboutFreeDKeywordC'] = 3
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Moving_Chk():
-    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeMovingNow']) and (MainNpc.NpcMoveOutStateMainNpc.EventFlags['cNpcMemory:TalkFreeMovingNow']) and (MainNpc.NpcMoveOutState() == 3) and (MainNpc.EventFlags['cNpcMemory:NextMoveOutTalk']):
-        MainNpc.NpcSelectFreeTalkMainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Free/BO_FreeD_Moving', '', '', '', true)
+    if (not MainNpc.EventFlags['cNpcMemory:TalkFreeMovingNow']) and (MainNpc.NpcMoveOutState() == 3) and (MainNpc.EventFlags['cNpcMemory:NextMoveOutTalk']):
+        MainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/Free/BO_FreeD_Moving', '', '', '', true)
         MainNpc.EventFlags['cNpcMemory:TalkFreeMovingNow'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RumorN1_Chk():
-    if (not MainNpc.EventFlags['cNpcMemory:TalkRumorNToday']) and (not ((MainNpc.NpcBirthTypeMainNpc.EventFlags['cNpcMemory:TalkRumorNToday']) and (not ((MainNpc.NpcBirthType('cFirst')) and ((MainNpc.EventFlags['cNpcTemp:AppWelcomeMigrantsTalk']) or (MainNpc.EventFlags['cNpcSave:AppE_WelcomeMigrantsToday'])))) and (MainNpc.NpcHasFreeMessageMainNpc.EventFlags['cNpcTemp:AppWelcomeMigrantsTalk']) or (MainNpc.EventFlags['cNpcSave:AppE_WelcomeMigrantsToday'])))) and (MainNpc.NpcHasFreeMessage('cFreeDRumorN1')):
-        MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeDRumorN1')
+    if (not MainNpc.EventFlags['cNpcMemory:TalkRumorNToday']) and (not ((MainNpc.NpcBirthType('cFirst')) and ((MainNpc.EventFlags['cNpcTemp:AppWelcomeMigrantsTalk']) or (MainNpc.EventFlags['cNpcSave:AppE_WelcomeMigrantsToday'])))) and (MainNpc.NpcHasFreeMessage('cFreeDRumorN1')):
+        MainNpc.NpcOpenFreeMessage('cFreeDRumorN1')
         MainNpc.EventFlags['cNpcMemory:TalkRumorNToday'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RumorN2_Chk():
-    if (not System.EventFlags['cPlayer:TalkRumorN2TodayAnyone']) and (MainNpc.NpcHasFreeMessageMainNpc.NpcHasFreeMessage('cFreeDRumorN2')):
-        MainNpc.NpcOpenFreeMessageMainNpc.NpcOpenFreeMessage('cFreeDRumorN2')
+    if (not System.EventFlags['cPlayer:TalkRumorN2TodayAnyone']) and (MainNpc.NpcHasFreeMessage('cFreeDRumorN2')):
+        MainNpc.NpcOpenFreeMessage('cFreeDRumorN2')
         System.EventFlags['cPlayer:TalkRumorN2TodayAnyone'] = true
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RumorN_Chk():
-    if MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4):
-        if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) != 0:
+    if MainNpc.NpcMoveOutState() in (0, 1, 2, 4):
+        if EventFlowSystemActor.RandomChoice2(2) != 0:
             run RumorN2_Chk()
         run RumorN1_Chk()
  
 flow RumorO_Favorite_Chk():
-    if (MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4)) and (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 5):
-        if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
-            if (not System.EventFlags['cPlayer:TalkRumorOVlgFavoriteToday']) and (EventFlowSystemActor.PlayerVillagerCountEventFlowSystemActor.PlayerVillagerCount(2)) and (not EventFlowSystemActor.IsSharePlayEventFlowSystemActor.IsSharePlay(1)):
+    if (MainNpc.NpcMoveOutState() in (0, 1, 2, 4)) and (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 5):
+        if EventFlowSystemActor.IsMyVillage():
+            if (not System.EventFlags['cPlayer:TalkRumorOVlgFavoriteToday']) and (EventFlowSystemActor.PlayerVillagerCount(2)) and (not EventFlowSystemActor.IsSharePlay(1)):
                 run NNPC_FreeD_RumorFavorite::RumorOP_Favorite_Villagerrun NNPC_FreeD_RumorFavorite::RumorOP_Favorite_Villager()
                 System.EventFlags['cPlayer:TalkRumorOVlgFavoriteToday'] = true
                 EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
@@ -86,7 +86,7 @@ flow RumorO_Favorite_Chk():
             EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow RumorP_Favorite_Chk():
-    if (not System.EventFlags['cPlayer:TalkRumorPFavoriteTodayAnyone']) and (System.EventFlags['cPlayer:RumorPFavoriteProgressDays'] >= 5) and (MainNpc.NpcMoveOutStateMainNpc.NpcMoveOutState() in (0, 1, 2, 4)) and (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 5):
+    if (not System.EventFlags['cPlayer:TalkRumorPFavoriteTodayAnyone']) and (System.EventFlags['cPlayer:RumorPFavoriteProgressDays'] >= 5) and (MainNpc.NpcMoveOutState() in (0, 1, 2, 4)) and (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 5):
         run NNPC_FreeD_RumorFavorite::RumorP_Favorite_CurrentPlayerrun NNPC_FreeD_RumorFavorite::RumorP_Favorite_CurrentPlayer()
  
 flow RumorP_Favorite_End():
@@ -95,7 +95,7 @@ flow RumorP_Favorite_End():
     EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Rumor_Action_Chk():
-    if (EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cConstructed') >= 5) and (MainNpc.NpcLivingDaysMainNpc.NpcLivingDays(3)):
+    if (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 5) and (MainNpc.NpcLivingDays(3)):
         if not System.EventFlags['cPlayer:TalkRumorOActionTodayAnyone']:
             run Action_Villager_Chk()
         if not MainNpc.EventFlags['cNpcMemory:TalkRumorVActionToday']:

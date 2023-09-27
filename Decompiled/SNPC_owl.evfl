@@ -1,33 +1,33 @@
 flow `1stTalkAtMuseum3`():
     # Hoo hoo! If it isn't PLAYER!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
     if System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']:
         # Today, at long, long last, the café is open for business here in ISLAND's museum.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:031', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:031', false)
     else:
         # Thanks to your efforts, our café is open for business at long, long last.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:031_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:031_01', false)
     if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
         # I cannot possibly thank you enough for bringing Brewster to us, but I shall at the very least try. Ahem… From the end of my beak to the furthest tips…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:032', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:032', false)
         run Sub_Event149()
     else:
         if System.EventFlags['cPlayer:Owl1stTalkMuseum1']:
             # And it would not have been possible in the least without the cooperation of everyone on ISLAND!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:032_01', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:032_01', false)
             run Sub_Event149()
         else:
             # Come to think of it, I don't believe we've spoken since the museum opened, PLAYER. Well, allow me to give you a quick overview of our fine institutio…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:041', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:041', false)
             # What's more, up the stairs and to the left is our café, recently established in partnership with the museum. The museum and the café both are open to…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:042', false)
-            if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:042', false)
+            if EventFlowSystemActor.MuseumComplete():
                 # Oh yes, that's right… Thanks to everyone's fine help, our collection is complete, so donations are closed. But if you wish to know about any fossils,…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
                 System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
             else:
                 # Oh yes, that's right… To streamline the donation process, we will begin accepting multiple donations at once. So if you wish to know about any fossil…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
             System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
             System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
             System.EventFlags['cPlayer:Owl1stTalkMuseum2'] = true
@@ -37,14 +37,14 @@ flow `1stTalkAtMuseum3`():
 flow Asleep():
     System.EventFlags['cPlayerTemp:OwlWokeHimUp'] = true
     # <10:12>Hooooo...<10:8:00500000> WHO?!<10:8:003c0000>
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:001', false)
-    MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('IsSleep', 0)
-    MainNpc.SetDefaultWaitAsMainNpc.SetDefaultWaitAs('cDefault')
-    MainNpc.TurnBodyMainNpc.TurnBody(10, 0.0)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:001', false)
+    MainNpc.NpcSetAIBlackBoard('IsSleep', 0)
+    MainNpc.SetDefaultWaitAs('cDefault')
+    MainNpc.TurnBody(10, 0.0)
     if System.EventFlags['cPlayer:FutaTalkedWhenAsleep']:
         # Oh dear. Pardon me…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:003', false)
-        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:003', false)
+        switch EventFlowSystemActor.MuseumLevel():
             case `BlathersTent`:
                 run SNPC_owl_10_Tent::Rootrun SNPC_owl_10_Tent::Root()
             case `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`:
@@ -54,7 +54,7 @@ flow Asleep():
                 return
     else:
         # Hoo! I beg your pardon! I'm a bit of a night owl, don't you know. Drowsy in the daytime. Ah! But more importantly…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:002', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:002', false)
         System.EventFlags['cPlayer:FutaTalkedWhenAsleep'] = true
         System.EventFlags['cPlayerTemp:OwlWokeHimUp'] = false
         run Owl_Talk_CommonTalk()
@@ -68,45 +68,45 @@ flow NoTopic():
     run SNPC_owl_25_Museum_Poster::Owl_GetPosterrun SNPC_owl_25_Museum_Poster::Owl_GetPoster()
     run SNPC_owl_25_Museum_Poster::Chk_PosterSelUnlockrun SNPC_owl_25_Museum_Poster::Chk_PosterSelUnlock()
     if System.EventFlags['cPlayer:MuseumPosterUnlockBuySel']:
-        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+        if EventFlowSystemActor.MuseumComplete():
             if System.EventFlags['cPlayerTemp:OwlWokeHimUp']:
                 # Do have a look around. No rush. Take your time.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
                 # Ah, but first…how may I assist you?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1008', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1008', false)
             else:
                 # Might there be something with which I can assist you?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1010', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1010', false)
             run SNPC_owl_00_Common::Comp_Direct_2run SNPC_owl_00_Common::Comp_Direct_2()
         else:
             if System.EventFlags['cPlayerTemp:OwlWokeHimUp']:
                 # Do have a look around. No rush. Take your time.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
                 # Ah, but first…how may I assist you?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1007', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1007', false)
             else:
                 # Might there be something with which I can assist you?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1009', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1009', false)
             run SNPC_owl_00_Common::Select4_Direct_2run SNPC_owl_00_Common::Select4_Direct_2()
-    elif EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+    elif EventFlowSystemActor.MuseumComplete():
         if System.EventFlags['cPlayerTemp:OwlWokeHimUp']:
             # Do have a look around. No rush. Take your time.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
             # Ah, but first…how may I assist you?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:018', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:018', false)
         else:
             # Might there be something with which I can assist you?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:012', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:012', false)
         run SNPC_owl_00_Common::Comp_Directrun SNPC_owl_00_Common::Comp_Direct()
     else:
         if System.EventFlags['cPlayerTemp:OwlWokeHimUp']:
             # Do have a look around. No rush. Take your time.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:016', false)
             # Ah, but first…how may I assist you?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:017', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:017', false)
         else:
             # Might there be something with which I can assist you?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:013', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:013', false)
         run SNPC_owl_00_Common::Select4_Directrun SNPC_owl_00_Common::Select4_Direct()
  
 flow OwlTalkAfterWakeup():
@@ -118,19 +118,19 @@ flow OwlTalkAfterWakeup():
             run SNPC_owl_24_Museum_StampRally::From2ndTimerun SNPC_owl_24_Museum_StampRally::From2ndTime()
             run SNPC_owl_22_Museum_RenualQuest::BeforeRenualQuestrun SNPC_owl_22_Museum_RenualQuest::BeforeRenualQuest()
             run SNPC_owl_00_Common::SkipMultiDonateNoticeAtComprun SNPC_owl_00_Common::SkipMultiDonateNoticeAtComp()
-            if not EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+            if not EventFlowSystemActor.MuseumComplete():
                 if not System.EventFlags['cLand:OwlFoundFossil']:
                     run SNPC_owl_10_Tent::Sel_NoFoundFossilrun SNPC_owl_10_Tent::Sel_NoFoundFossil()
                 elif not System.EventFlags['cPlayer:OwlShowFossilMyself']:
                     System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
                     System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
                     # Ah, PLAYER, I have news! A fossil has been found at last here on ISLAND! Hoot hoot hooray! I can begin taking fossil donations and conducting examina…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:052', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:052', false)
                 elif not System.EventFlags['cPlayer:OwlMultiDonateExplain']:
                     System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
                     # Hoo hoo! It's true! Our fossil hall is officially open, PLAYER. Progress is upon us! Indeed, I've put much thought into streamlining the museum exper…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:051', false)
-                elif EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:051', false)
+                elif EventFlowSystemActor.NetHasVisitor():
                     run NoTopic()
                 else:
                     run SNPC_owl_23_Museum_DiveFish::Rootrun SNPC_owl_23_Museum_DiveFish::Root()
@@ -142,7 +142,7 @@ flow OwlTalkAfterWakeup():
                 run SNPC_owl_25_Museum_Poster::Owl_Poster_CompJudgerun SNPC_owl_25_Museum_Poster::Owl_Poster_CompJudge()
                 if System.EventFlags['cPlayerTemp:OwlGetPosterCount'] < 1:
                     # Ah, PLAYER! I have news! Thanks to the philanthropy of our contributors, we have filled ALL of our permanent exhibits. As the spirit of giving has ma…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:014', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:014', false)
                     System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                     run SNPC_owl_00_Common::Comp_Directrun SNPC_owl_00_Common::Comp_Direct()
                 else:
@@ -154,11 +154,11 @@ flow OwlTalkAfterWakeup():
         run SNPC_owl_21_Museum_FirstTimeTalk::Rootrun SNPC_owl_21_Museum_FirstTimeTalk::Root()
  
 flow Owl_Talk_CommonTalk():
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`:
             run SNPC_owl_10_Tent::Rootrun SNPC_owl_10_Tent::Root()
         case `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`:
-            if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsSleep', 1):
+            if MainNpc.NpcBlackBoard('IsSleep', 1):
                 run Asleep()
             else:
                 run OwlTalkAfterWakeup()
@@ -167,70 +167,70 @@ flow Owl_Talk_CommonTalk():
  
 flow Owl_Talk_Today1stChk():
     System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersNotMovedIn`, `BlathersTent`, `BlathersMuseumNoArt`:
             if System.EventFlags['cPlayer:Owl1stTalkMuseum1']:
                 run SNPC_owl_00_Common::CmnTodayTalk1strun SNPC_owl_00_Common::CmnTodayTalk1st()
             else:
                 # Hoo hoo! If it isn't PLAYER!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
                 if System.EventFlags['cLand:Museum2BuiltToday']:
                     # At long last, the <10:13><50:4>ISLAND</10:13> Museum has opened. This very day, no less! An impressive feat of engineering, craftsmanship, and good o…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_01', false)
                 else:
                     # The <10:13><50:4>ISLAND</10:13> Museum has opened its doors, you see! It is a tremendous achievement. I confess, my feathers are puffed with pride.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_02', false)
                 if System.EventFlags['cPlayer:OwlDonationDone']:
                     # Of course, it was your very own donations that made it possible. So to you I say, THANK YOU!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_01', false)
                 else:
                     # Indeed, it was the donations from <110:33> residents themselves that made this possible!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_02', false)
                 # Now, allow me to give you a quick overview of our fine institution's floor plan… You'll find there are entrances to the left, to the right, and into …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:003', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:003', false)
                 if not System.EventFlags['cLand:OwlFoundFossil']:
                     # To be sure, we may have gotten ahead of ourselves with the fossil exhibit. Alas, no fossil has been found as of yet…though I remain ever confident! A…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_02', false)
                     System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
                 elif System.EventFlags['cPlayer:OwlShowFossilMyself']:
                     if System.EventFlags['cLand:OwlFoundDiveFish']:
-                        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                        if EventFlowSystemActor.MuseumComplete():
                             # Oh yes, that's right… Thanks to everyone's fine help, our collection is complete, so donations are closed. But if you wish to know about any fossils,…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
                             System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                         else:
                             # Oh yes, that's right… To streamline the donation process, we will begin accepting multiple donations at once. So if you wish to know about any fossil…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
                     else:
-                        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                        if EventFlowSystemActor.MuseumComplete():
                             # In fact, so great has been the spirit of giving that our collection is 100 percent complete! New donations are no longer needed, but if you wish to l…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
                             System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                         else:
                             # Ah! That's right! I have more good news to report. That is, the donation process has been streamlined. Henceforth we will accept multiple donations a…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
                     System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
                     System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
                 else:
                     # To the left here are the bugs, and to the right you'll find our fish. And in the basement… You'll find the fossils! Indeed, they have been discovered…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_03', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_03', false)
                     System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
                     if System.EventFlags['cLand:OwlFoundDiveFish']:
-                        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                        if EventFlowSystemActor.MuseumComplete():
                             # Oh yes, that's right… Thanks to everyone's fine help, our collection is complete, so donations are closed. But if you wish to know about any fossils,…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
                             System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                         else:
                             # Oh yes, that's right… To streamline the donation process, we will begin accepting multiple donations at once. So if you wish to know about any fossil…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
                     else:
-                        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                        if EventFlowSystemActor.MuseumComplete():
                             # In fact, so great has been the spirit of giving that our collection is 100 percent complete! New donations are no longer needed, but if you wish to l…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
                             System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                         else:
                             # Ah! That's right! I have more good news to report. That is, the donation process has been streamlined. Henceforth we will accept multiple donations a…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
                     System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
                     System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
         case `BlathersMuseumArt`:
@@ -238,55 +238,55 @@ flow Owl_Talk_Today1stChk():
                 run SNPC_owl_00_Common::CmnTodayTalk1strun SNPC_owl_00_Common::CmnTodayTalk1st()
             elif System.EventFlags['cLand:Museum2BuiltSkippedMuseum1']:
                 # Hoo hoo! If it isn't PLAYER!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001', false)
                 if System.EventFlags['cLand:Museum3BuiltToday']:
                     # At long last, the <10:13><50:4>ISLAND</10:13> Museum has opened. This very day, no less! An impressive feat of engineering, craftsmanship, and good o…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_01', false)
                 else:
                     # The <10:13><50:4>ISLAND</10:13> Museum has opened its doors, you see! It is a tremendous achievement. I confess, my feathers are puffed with pride.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:001_02', false)
                 if System.EventFlags['cPlayer:OwlDonationDone']:
                     # Of course, it was your very own donations that made it possible. So to you I say, THANK YOU!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_01', false)
                 else:
                     # Indeed, it was the donations from <110:33> residents themselves that made this possible!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:002_02', false)
                 # Now, allow me to give you a quick overview of our fine institution's floor plan… You'll find there are entrances to the left, to the right, and into …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:003', false)
-                if EventFlowSystemActor.MuseumRoomDonateNumEventFlowSystemActor.MuseumRoomDonateNum(1, 3):
-                    if EventFlowSystemActor.MuseumKindDonateRateEventFlowSystemActor.MuseumKindDonateRate(100, 'cKindArt'):
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:003', false)
+                if EventFlowSystemActor.MuseumRoomDonateNum(1, 3):
+                    if EventFlowSystemActor.MuseumKindDonateRate(100, 'cKindArt'):
                         # Also, beyond the entrance at the top of the stairs lies our art gallery! We have a myriad of magnificent masterpieces on display, just waiting to be …
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1003', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1003', false)
                     else:
                         # Additionally, beyond the entrance at the top of the stairs, you'll find our art gallery! We do happen to be accepting art donations, and I would pers…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1002', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1002', false)
                 else:
                     # In addition, the far room at the top of the stairs is a gallery to display magnificent works of art! Although, as of now, it is still entirely empty……
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1001', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1001', false)
                 run SkipMuseum1Process()
                 if System.EventFlags['cLand:OwlFoundFossil']:
                     System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
                     if System.EventFlags['cLand:OwlFoundDiveFish']:
-                        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                        if EventFlowSystemActor.MuseumComplete():
                             # Oh yes, that's right… Thanks to everyone's fine help, our collection is complete, so donations are closed. But if you wish to know about any fossils,…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1502', false)
                             System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                         else:
                             # Oh yes, that's right… To streamline the donation process, we will begin accepting multiple donations at once. So if you wish to know about any fossil…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1501', false)
                     else:
-                        if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
+                        if EventFlowSystemActor.MuseumComplete():
                             # In fact, so great has been the spirit of giving that our collection is 100 percent complete! New donations are no longer needed, but if you wish to l…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_04', false)
                             System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
                         else:
                             # Ah! That's right! I have more good news to report. That is, the donation process has been streamlined. Henceforth we will accept multiple donations a…
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:004_01', false)
                     System.EventFlags['cPlayer:OwlMultiDonateExplain'] = true
                     System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
                 else:
                     # And that's everything! So, please take your time and enjoy our wonderful collection!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1004', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_11_Museum1stTalk:1004', false)
                     System.EventFlags['cPlayer:Owl1stTalkMuseum1'] = true
             else:
                 run SNPC_owl_22_Museum_RenualQuest::AfterRenualQuestrun SNPC_owl_22_Museum_RenualQuest::AfterRenualQuest()
@@ -298,7 +298,7 @@ flow Owl_Talk_Today1stChk():
  
 flow Root():
     System.EventFlags['cPlayerTemp:OwlWokeHimUp'] = false
-    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    if EventFlowSystemActor.IsMyVillage():
         run Owl_Talk_CommonTalk()
     else:
         run SNPC_owl_90_OtherTown::Rootrun SNPC_owl_90_OtherTown::Root()
@@ -311,7 +311,7 @@ flow SkipMuseum1Process():
  
 local flow Sub_Event149():
     # Now, I imagine you'd like to know where the café is… Up the stairs and to the left. You can't miss it. Oh, and just like our museum, the café is open…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:033', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:033', false)
     # So whether it's for the exhibits or for a perfect cup of coffee, please enjoy your visit to our museum!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:034', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_30_CafeEvent:034', false)
  

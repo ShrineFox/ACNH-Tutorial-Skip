@@ -1,53 +1,53 @@
 flow Init():
     if (System.EventFlags['cLandTemp:IsFirstPrologue']) and (System.EventFlags['cLand:SetPrologueBonfire']):
-        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('PrologueStep', 2)
+        MainNpc.NpcRegistAIBlackBoard('PrologueStep', 2)
     else:
-        MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('PrologueStep', 0)
-    MainNpc.NpcAISettingMainNpc.NpcAISetting(1, true)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('HasTent', 0)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('IsMove', 0)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('PreCampfire', 0)
-    MainNpc.NpcRegistAIBlackBoardMainNpc.NpcRegistAIBlackBoard('Visible', 1)
-    MainNpc.NpcDisableServiceMotionMainNpc.NpcDisableServiceMotion()
-    MainNpc.ServiceMotionControlMainNpc.ServiceMotionControl(false)
+        MainNpc.NpcRegistAIBlackBoard('PrologueStep', 0)
+    MainNpc.NpcAISetting(1, true)
+    MainNpc.NpcRegistAIBlackBoard('HasTent', 0)
+    MainNpc.NpcRegistAIBlackBoard('IsMove', 0)
+    MainNpc.NpcRegistAIBlackBoard('PreCampfire', 0)
+    MainNpc.NpcRegistAIBlackBoard('Visible', 1)
+    MainNpc.NpcDisableServiceMotion()
+    MainNpc.ServiceMotionControl(false)
  
 flow Root():
-    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('Visible', 1):
+    if MainNpc.NpcBlackBoard('Visible', 1):
         run Root_Common(WaitFrame=90, OffsetZ=0, OffsetX=-2, TalkEventFlowName='Tutorials_Prologue4_Orientation2_RcmRct', PreCampfireAS='NpcSpArrange', PreCampfireAngle=270.0, Type=1)
     else:
-        MainNpc.NpcChangeAIStateMainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
+        MainNpc.NpcChangeAIState('cInvisible', '', '', '', false, true)
  
 flow Root_2ndStep(TalkEventFlowName: str, Type: int, PreCampfireAngle: float, WaitFrame: int, OffsetX: int, OffsetZ: int, PreCampfireAS: str):
-    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('PrologueStep', 2):
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(8, true)
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(6, false)
-        if not MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('PreCampfire', 1):
+    if MainNpc.NpcBlackBoard('PrologueStep', 2):
+        MainNpc.NpcAISetting(8, true)
+        MainNpc.NpcAISetting(6, false)
+        if not MainNpc.NpcBlackBoard('PreCampfire', 1):
             if not System.EventFlags['cLandTemp:PrologueStartedCampfire']:
-                MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, 0.0, '')
-            elif MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
-                MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, 0.0, '')
+                MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, true, true, 1, 0.0, '')
+            elif MainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
+                MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, 0.0, '')
             else:
-                MainNpc.NpcChangeAIStateCstmMainNpc.NpcChangeAIStateCstm(2, TalkEventFlowName, 'Root', 'Angle:0')
+                MainNpc.NpcChangeAIStateCstm(2, TalkEventFlowName, 'Root', 'Angle:0')
         elif Type != 0:
-            MainNpc.NpcAISettingMainNpc.NpcAISetting(8, false)
-            MainNpc.NpcChangeAIStateCstmMainNpc.NpcChangeAIStateCstm(4, TalkEventFlowName, 'Root', '')
-        elif MainNpc.NpcCheckStateSelectTimingMainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
-            MainNpc.NpcChangeTurnDefaultStateMainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, PreCampfireAngle, '')
+            MainNpc.NpcAISetting(8, false)
+            MainNpc.NpcChangeAIStateCstm(4, TalkEventFlowName, 'Root', '')
+        elif MainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
+            MainNpc.NpcChangeTurnDefaultState('cTurn', '', TalkEventFlowName, 'Root', false, false, false, 1, PreCampfireAngle, '')
         else:
-            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0=PreCampfireAS)
+            MainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', false, true, ArgFlag0=true, ArgInt0=0, ArgStr0=PreCampfireAS)
     else:
-        MainNpc.NpcAISettingMainNpc.NpcAISetting(6, true)
-        if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('IsMove', 1):
-            MainNpc.NpcAddBlackBoardMainNpc.NpcAddBlackBoard('PrologueStep', 1)
-            MainNpc.NpcChangeGoToDestinationStateMainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', TalkEventFlowName, 'Root', false, true, ArgInt0=1, ArgInt1=OffsetX, ArgInt2=OffsetZ)
+        MainNpc.NpcAISetting(6, true)
+        if MainNpc.NpcBlackBoard('IsMove', 1):
+            MainNpc.NpcAddBlackBoard('PrologueStep', 1)
+            MainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', TalkEventFlowName, 'Root', false, true, ArgInt0=1, ArgInt1=OffsetX, ArgInt2=OffsetZ)
         else:
-            MainNpc.NpcSetAIBlackBoardMainNpc.NpcSetAIBlackBoard('IsMove', 1)
-            MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=WaitFrame, ArgStr0='')
+            MainNpc.NpcSetAIBlackBoard('IsMove', 1)
+            MainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=WaitFrame, ArgStr0='')
  
 flow Root_Common(WaitFrame: int, OffsetZ: int, OffsetX: int, TalkEventFlowName: str, PreCampfireAS: str, PreCampfireAngle: float, Type: int):
-    if MainNpc.NpcBlackBoardMainNpc.NpcBlackBoard('PrologueStep', 1):
+    if MainNpc.NpcBlackBoard('PrologueStep', 1):
         run Root_2ndStep(TalkEventFlowName=TalkEventFlowName, WaitFrame=WaitFrame, OffsetX=OffsetX, OffsetZ=OffsetZ, Type=Type, PreCampfireAS=PreCampfireAS, PreCampfireAngle=PreCampfireAngle)
     else:
-        MainNpc.NpcAddBlackBoardMainNpc.NpcAddBlackBoard('PrologueStep', 1)
-        MainNpc.NpcChangeWaitStateMainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
+        MainNpc.NpcAddBlackBoard('PrologueStep', 1)
+        MainNpc.NpcChangeWaitState('cWait', '', TalkEventFlowName, 'Root', true, true, ArgFlag0=true, ArgInt0=0, ArgStr0='')
  

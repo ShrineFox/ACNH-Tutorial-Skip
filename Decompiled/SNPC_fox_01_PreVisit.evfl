@@ -1,12 +1,12 @@
 flow BeforeOpen():
-    if not EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    if not EventFlowSystemActor.IsMyVillage():
         if System.EventFlags['cPlayerVisit:FoxTalkFlag']:
             # RANDOM: So are you here sightseeing? The feel o… // Usually, this is when I would pitch an … // You been to the museum here yet? If not…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:161', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:161', false)
         else:
             System.EventFlags['cPlayerVisit:FoxTalkFlag'] = true
             # Correct me if I'm wrong, but you're not from around here, are you?<10:4> What a coincidence! Me neither! It's a shame I don't have anything to sell y…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:160', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:160', false)
     elif not System.EventFlags['cPlayer:FoxTalkTodayFlag']:
         System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
         System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = false
@@ -14,39 +14,39 @@ flow BeforeOpen():
             if System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag']:
                 System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag'] = false
                 # Hey, I know you! You visited me at one of my little side businesses. It's me, Redd! And your name is… <50:3>PLAYER! How ya been? I was just thinkin' …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:101_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:101_01', false)
             else:
                 if System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag']:
                     # I'd know that shining face anywhere. How ya been, PLAYER? You made the right choice buyin' that art from me earlier. I've had a lot of folks asking a…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:102_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:102_01', false)
                 else:
                     # Well, if it isn't PLAYER! How ya been?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:102_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:102_02', false)
                 # Ah…you know, I really gotta be honest. I think I'm fallin' for ISLAND. I mean, you've got quite a setup goin' here. And a LOT of art fans…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:103', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:103', false)
         else:
             System.EventFlags['cPlayer:TunekichiTalkBefore'] = true
             # Well, well! You from around here? Hi, the name's Redd. I work in sales. And you are…<10:4> <50:3>PLAYER! What a great name! Intelligent. Strong. I ca…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:101', false)
-        if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:101', false)
+        if EventFlowSystemActor.NetHasVisitor():
             # So I was… Oh, hang on. You've got company right now. It can wait. Come chat once we have a little more privacy, alright?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:106', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:106', false)
         else:
             run OpenShip()
-    elif EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+    elif EventFlowSystemActor.NetHasVisitor():
         # Hey, I wanna get you in on the ground floor of an idea of mine. Could be big! I don't want to steal you from your company though. We can chat once we…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:107', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:107', false)
     else:
         # <50:3>PLAYER! Just who I wanted to see. OK, I've been thinkin'…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:104', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:104', false)
         run OpenShip()
  
 flow BuyArtAgain(ArgPrice: int):
-    if EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ArgPrice):
+    if EventFlowSystemActor.HasBellCount(ArgPrice):
         run Event24()
     else:
         # Like I was saying—it's fate! Let's… Now wait a minute. You don't have enough Bells, cousin! Look, a deal like this may never come around again. Come …
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:008', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:008', false)
  
 flow BuyArtCmnChk():
     if (not System.EventFlags['cLand:Museum2ConstructionToday']) and (not System.EventFlags['cLand:MuseumGrowupEnable2']) and (System.EventFlags['cPlayer:OwlPaintingQuestExplain']) and (not System.EventFlags['cLand:FoxPreVisitAlreadyBuyToday']) and (not System.EventFlags['cPlayer:FoxPreVisitBuyArtMaxFlag']):
@@ -55,163 +55,163 @@ flow BuyArtCmnChk():
 flow BuyArtFirst(ArgPrice: int):
     System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = true
     # Hey, I hope you don't mind me bein' forward, but you look to me like someone who's got an eye for art. Don't be shocked. I've got a keen instinct for…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:003_01', false)
-    EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:003_01', false)
+    EventFlowSystemActor.UIMoneyAppear()
     # Yeah, I know! What a crazy coincidence! It's like fate! Well, I wanna sell to you, and ONLY you, 'cause you're family, and you're gonna get a giveawa…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:003_02', false)
-    switch EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2():
+    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:003_02', false)
+    switch EventFlowSystemActor.GeneralTalkChoice2():
         case 0, 1:
             # Come on, now! You're never gonna find a better price than… Ah, but that was fate talkin', right? Reminding me you're family…I mean, you're practicall…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:004', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
-                EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:004', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+                EventFlowSystemActor.UIMoneyDisappear()
                 # Crazy like a… Well, you know. Look, a deal like this may never come around again. Are you sure you wanna risk that? They're your Bells. I respect tha…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:007', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:007', false)
                 return
-            elif EventFlowSystemActor.HasBellCountEventFlowSystemActor.HasBellCount(ArgPrice):
+            elif EventFlowSystemActor.HasBellCount(ArgPrice):
 entrypoint Event24:
-                if EventFlowSystemActor.SystemHasBaggageSpaceEventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+                if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
                     # Like I was saying—it's fate! Let's… Now wait a minute. You don't have any room in your pockets, cousin! Look, a bargain like this may never come arou…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:009', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:009', false)
                 else:
                     # Ha! You are NOT gonna regret this. I'll just take those Bells from you…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:005', false)
-                    MainNpc.SetDeliveryItemAtRandomMainNpc.SetDeliveryItemAtRandom(2114, false, 'cVillageRemakePattern', 0)
-                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Default')
-                    EventFlowSystemActor.BellCountDownEventFlowSystemActor.BellCountDown(ArgPrice, true)
-                    MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(34, true)
-                    MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
-                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:005', false)
+                    MainNpc.SetDeliveryItemAtRandom(2114, false, 'cVillageRemakePattern', 0)
+                    MainNpc.NpcDelivery(0, 'Default')
+                    EventFlowSystemActor.BellCountDown(ArgPrice, true)
+                    MainNpc.SetDeliveryItem(34, true)
+                    MainNpc.NpcDelivery(1, 'Default')
+                    EventFlowSystemActor.UIMoneyDisappear()
                     if System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag']:
                         # Great decision! You saw a deal you knew you'd NEVER see again, and you jumped on it. Well done, cousin! You're really gonna enjoy your <125:0:0000>. …
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:021', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:021', false)
                         System.EventFlags['cPlayer:FoxPreVisitBuyArtMaxFlag'] = true
                     else:
                         # I knew you had an eye for art. It's like it was meant to be. I hope we can do this again, cousin!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:006', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:006', false)
                         System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag'] = true
                     System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = false
                     System.EventFlags['cLand:FoxPreVisitAlreadyBuyToday'] = true
                 return
             else:
                 # Like I was saying—it's fate! Let's… Now wait a minute. You don't have enough Bells, cousin! Look, a deal like this may never come around again. Come …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:008', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:008', false)
  
 flow OpenShip():
     # So ISLAND wants art, and I got art to sell. Might be something to this. But I couldn't sell to just anybody. I'd need someone I could trust. Complete…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # I knew I could count on you, cousin! That is absolutely the right choice.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105_01', false)
     else:
         # I'm hurt! There's nothing sketchy about this. I can prove it.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105_02', false)
     # I've got my boat anchored off the northern shore, and I'm almost done fixing all the leaks. Long story. Come have a look at what I'm sellin'. You won…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105_03', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:105_03', true)
     System.EventFlags['cPlayer:FoxInvitedShipFlag'] = true
     System.EventFlags['cLand:FoxMovedToMarket'] = true
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929, true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.NpcRequestActionMainNpc.NpcRequestAction(3)
-    EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
+    EventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929, true)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.NpcRequestAction(3)
+    EventFlowSystemActor.FadeIn(true)
  
 flow PreVisit(ArtPrice: int = 0):
-    if EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage():
+    if EventFlowSystemActor.IsMyVillage():
         run BuyArtCmnChk()
         if System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag']:
             ArtPrice = 49800
         else:
             ArtPrice = 4980
-        MainNpc.SetItemNameMainNpc.SetItemName(34, 0, 0)
-        EventFlowSystemActor.SetTagFromSystemEventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, ArtPrice, '')
+        MainNpc.SetItemName(34, 0, 0)
+        EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, ArtPrice, '')
         if not System.EventFlags['cPlayer:FoxTalkTodayFlag']:
             if System.EventFlags['cPlayer:TunekichiTalkBefore']:
                 System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
                 if System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag']:
                     System.EventFlags['cPlayer:FoxTalkOnlyStandShopFlag'] = false
                     # Hey, I know you! You visited me at one of my little side businesses. It's me, Redd! And your name is… <50:3>PLAYER! How ya been?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:001_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:001_01', false)
                     run Sub_grp_Event127(ArtPrice=ArtPrice)
                 elif (System.EventFlags['cPlayer:TalkFoxCommuneOpenEvent']) or (System.EventFlags['cPlayer:FoxCommuneTalkExplainFlag']):
                     # Hey, I know you! Welcome, welcome! It's great to see ya again!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:001_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:001_02', false)
                     run Sub_grp_Event127(ArtPrice=ArtPrice)
                 elif System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag']:
                     # Ah, it's a real pleasure seein' you again, PLAYER! I didn't realize how much I'd miss talkin' to someone who truly gets art, and can spot a good deal…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:016', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:016', false)
                 else:
                     # We meet again, PLAYER! It's nice to be someplace where art is loved and appreciated… It's too hard to find others who can enjoy all the beautiful art…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:015', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:015', false)
             else:
                 System.EventFlags['cPlayer:TunekichiTalkBefore'] = true
                 System.EventFlags['cPlayer:FoxTalkTodayFlag'] = true
                 # Well, well! You from around here? Hi, the name's Redd. I work in sales. And you are…<10:4> <50:3>PLAYER! What a great name! Intelligent. Strong. I ca…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:001', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:001', false)
                 run Sub_grp_Event127(ArtPrice=ArtPrice)
         elif System.EventFlags['cPlayer:FoxPreVisitWantSellFlag']:
             # Hey, PLAYER! I knew you couldn't stay away from a deal!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:011', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:011', false)
             if SubflowResults@2[0] == 0:
                 # But, uh…this is embarrassin'… Someone's already bought <50:1><125:0:0000>. Look, I'm so sorry! I tried to hold on to it for you, but they begged and …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:014', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:014', false)
                 System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = false
             else:
-                EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+                EventFlowSystemActor.UIMoneyAppear()
                 # So with the Cousin's Discount, it's… <90:22:0000> to claim your very own <125:0:0000>. Deal?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:012', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:012', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     run BuyArtAgain(ArgPrice=ArtPrice)
                 else:
-                    EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                    EventFlowSystemActor.UIMoneyDisappear()
                     # Whaaa?! You are missin' out! I stand by this deal, cousin. You're not gonna find a better price! But they're your Bells, and you've got your preferen…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:013', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:013', false)
         elif SubflowResults@2[0] == 0:
             # RANDOM: Y'know, there's just somethin' about th… // Hmm… I got a real good deal on an old f… // Young or old, it doesn't matter. Art sp…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:050', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:050', false)
         else:
             if System.EventFlags['cPlayer:FoxPreVisitBuyArtFlag']:
-                if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_5'):
+                if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_5'):
                     # RANDOM: Y'know, there's just somethin' about th… // Hmm… I got a real good deal on an old f… // Young or old, it doesn't matter. Art sp…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:050', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:050', false)
                 else:
                     # Well, if it isn't PLAYER! How can I help ya?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:017', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:017', false)
+                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                         System.EventFlags['cPlayer:FoxPreVisitWantSellFlag'] = true
                         # Ha ha ha! Straight to business. I like it. Lucky you. I happen to have [a|an]<125:0:0000> right here! Don't ask how I got it. Long story. But it's go…
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:019', false)
-                        EventFlowSystemActor.UIMoneyAppearEventFlowSystemActor.UIMoneyAppear()
+                        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:019', false)
+                        EventFlowSystemActor.UIMoneyAppear()
                         # I'm gonna go with the former and tell you it's a steal at <90:22:0000>. So whaddaya say? We got a deal?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:019_01', false)
-                        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:019_01', false)
+                        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                             run BuyArtAgain(ArgPrice=ArtPrice)
                         else:
-                            EventFlowSystemActor.UIMoneyDisappearEventFlowSystemActor.UIMoneyDisappear()
+                            EventFlowSystemActor.UIMoneyDisappear()
                             # Huh? Are you absolutely sure? Masterpieces like this don't come around often, especially at such a bargain price. But they're your Bells.
-                            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:020', false)
+                            MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:020', false)
                     else:
                         # Oh? Well, hello to you too, cousin! Nice weather for a stroll, isn't it? See you around!
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:018', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:018', false)
             else:
                 # Well, if it isn't PLAYER! Great to see you again!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:010', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:010', false)
                 run BuyArtFirst(ArgPrice=ArtPrice)
     elif System.EventFlags['cPlayerVisit:FoxTalkFlag']:
         # RANDOM: So are you here sightseeing? The feel o… // Usually, this is when I would pitch an … // You been to the museum here yet? If not…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:061', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:061', false)
     else:
         System.EventFlags['cPlayerVisit:FoxTalkFlag'] = true
         # Correct me if I'm wrong, but you're not from around here, are you?<10:4> What a coincidence! Me neither! It's a shame I don't have anything to sell y…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:060', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:060', false)
  
 local flow Sub_grp_Event127(ArtPrice: int):
     if SubflowResults@2[0] != 0:
         run BuyArtFirst(ArgPrice=ArtPrice)
     elif System.EventFlags['cPlayer:OwlPaintingQuestExplain']:
         # Ah, just feels like fate, don't it? Us meetin' here like this. Well, seein' as we're practically family, I'm not gonna let it be the last time we see…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:002_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:002_01', false)
     else:
         # So what's this I've been hearing about there being some grand museum around here? 'Cause I got a warehouse full of art I'm settin' up to liquidate, a…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:002_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/fox/SP_fox_01_PreVisit:002_02', false)
  

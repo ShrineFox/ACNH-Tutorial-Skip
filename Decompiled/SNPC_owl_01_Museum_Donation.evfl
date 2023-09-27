@@ -1,6 +1,6 @@
 flow Comp_Check(MultiComplete: bool = false, CompleteRoomType: int = 0):
-    MainNpc.OwlDonationDoneMainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    MainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`:
             run SNPC_owl_11_Tent_Entries::owl_Tent_AfterDonationrun SNPC_owl_11_Tent_Entries::owl_Tent_AfterDonation()
         case `BlathersMuseumNoArt`:
@@ -14,64 +14,64 @@ flow Comp_Check(MultiComplete: bool = false, CompleteRoomType: int = 0):
 flow Eplanation_ExpertOpinion():
     if System.EventFlags['cPlayerTemp:OwlKnownFossil']:
         # Yes, now then… The fossil you've brought has already been assessed, but…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:155_02', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:155_02', false)
     else:
         # Yes, now then… This also applies to the fossil you've brought this time, but…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:155_01', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:155_01', false)
     # Only a specialist such as myself can appraise a newly discovered fossil to determine its proper designation. From now on, do please bring me any foss…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:156', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:156', false)
     System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
     System.EventFlags['cLand:OwlFoundFossil'] = true
  
 flow Fossil_DonationTypeChk(MultiComplete: bool = false, CompleteRoomType: int = 0):
-    if MainNpc.OwlDonationFossilIsPartsMainNpc.OwlDonationFossilIsParts():
+    if MainNpc.OwlDonationFossilIsParts():
         # I never thought I'd lay eyes upon such a well-preserved <125:0:0000>. Dear me, might I give you a short presentation on the topic? I am quite knowled…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:130', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:130', false)
         run Sub_Event35(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
     else:
-        if MainNpc.OwlDonationFossilCompleteMainNpc.OwlDonationFossilComplete():
-            MainNpc.OwlDinosaurTagSetMainNpc.OwlDinosaurTagSet()
+        if MainNpc.OwlDonationFossilComplete():
+            MainNpc.OwlDinosaurTagSet()
             # Does this mean…<10:4> Yes! It is done! The <140:0:cd00> is complete! And a splendid specimen indeed. The <140:0:cd00> was a remarkable creature. Pray…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:126', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:126', false)
             run Sub_Event35(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
         else:
             # I never thought I'd lay eyes upon such a well-preserved <125:0:0000>. Dear me, might I give you a short presentation on the topic? I am quite knowled…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:130', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:130', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                 # Wonderful! 'Tis fascinating stuff, I assure you! Now, where to begin…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:127', false)
-                MainNpc.OwlOpenItemMessageMainNpc.OwlOpenItemMessage()
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:127', false)
+                MainNpc.OwlOpenItemMessage()
                 # And that is what I have to say about that. Anyhoot, I will gladly accept your generous donation. I only hope we can find what remains of this fossil …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:129_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:129_01', false)
             else:
                 # I see. Very well, I shall gladly accept your generous donation. Now, I only hope we can find the remaining parts and display the completed fossil. Be…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:128_01', false)
-    MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, '"Default"')
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:128_01', false)
+    MainNpc.NpcDelivery(3, '"Default"')
     if System.EventFlags['cLand:OwlFoundFossil']:
         run Comp_Check()
     else:
-        MainNpc.OwlDonationDoneMainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
+        MainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
         run Eplanation_ExpertOpinion()
  
 flow MuseumAfterDonationCommon():
-    MainNpc.OwlOpenItemMessageMainNpc.OwlOpenItemMessage()
+    MainNpc.OwlOpenItemMessage()
     # And there you have it. Fascinating stuff, no?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:133', false)
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:133', false)
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`:
             # Bravo and thank you! Once the museum is complete, it shall be displayed with the utmost dignity.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:112', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:112', true)
         case `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`:
             # Rest assured, all donations are displayed in a timely manner.<10:4> You have my gratitude!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:113', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:113', true)
         default:
             return
  
 flow NHBSF_BeforeShowDiveFish():
-    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation0'):
+    if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation0'):
         # Marvelous! What would you like to donate?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlTentDonation0', 'cItemSelect', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+        EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlTentDonation0', 'cItemSelect', false)
         run owl_Donation_AfterItemSel()
     else:
         run NotHaveBeforeShowFossil()
@@ -81,31 +81,31 @@ flow NotHaveAfterShowFossil():
  
 flow NotHaveBeforeShowFossil():
     # Hoo hoo! Thank you very much! …My feathers! Why, it seems you have nothing on your person we can accept at this time…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:141', false)
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:141', false)
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`, `BlathersMuseumNoArt`:
             if System.EventFlags['cPlayer:OwlDonateDiveFishAtMuseumTent']:
                 # We are currently accepting bugs, fish, sea creatures, and properly assessed fossils…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:149', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:149', false)
                 # If you acquire any of these items, please do consider donating them.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
             else:
                 # We are currently accepting bugs, fish, and properly assessed fossils…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:142', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:142', false)
                 # If you acquire any of these items, please do consider donating them.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
         case `BlathersMuseumArt`:
             # We accept donations of bugs, fish, sea creatures, properly assessed fossils, and works of art…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:151', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:151', false)
             # If you acquire any of these items, please do consider donating them.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
         default:
             return
  
 flow OwlNoDonationItems():
     # Hoo hoo! Thank you very much! …My feathers! Why, it seems you have nothing on your person we can accept at this time…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:141', false)
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:141', false)
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`:
             if System.EventFlags['cPlayer:OwlDonateDiveFishAtMuseumTent']:
                 run NotHaveAfterShowFossil()
@@ -115,7 +115,7 @@ flow OwlNoDonationItems():
             if System.EventFlags['cLand:OwlFoundDiveFish']:
 entrypoint Event163:
                 # We are currently accepting bugs, fish, sea creatures, and properly assessed fossils…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:149', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:149', false)
                 run Sub_grp_Event1()
             else:
                 run Sub_Event3()
@@ -124,7 +124,7 @@ entrypoint Event163:
                 run Sub_Event167()
             else:
                 # We accept donations of bugs, fish, and officially assessed fossils, as well as works of art…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:146', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:146', false)
                 run Sub_grp_Event1()
         case `BlathersCafe`:
             run Sub_Event167()
@@ -140,81 +140,81 @@ flow OwlPosterSend():
  
 flow OwlPosterSendArt():
     if System.EventFlags['cLandTemp:SendArtCompletePoster']:
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(14589, 1, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
+        EventFlowSystemActor.SelectRewardItemDirect(14589, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
         System.EventFlags['cLandTemp:SendArtCompletePoster'] = false
  
 flow OwlPosterSendDiveFish():
     if System.EventFlags['cLandTemp:SendDiveFishCompletePoster']:
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12985, 1, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
+        EventFlowSystemActor.SelectRewardItemDirect(12985, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
         System.EventFlags['cLandTemp:SendDiveFishCompletePoster'] = false
  
 flow OwlPosterSendFish():
     if System.EventFlags['cLandTemp:SendFishCompletePoster']:
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12040, 1, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
+        EventFlowSystemActor.SelectRewardItemDirect(12040, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
         System.EventFlags['cLandTemp:SendFishCompletePoster'] = false
  
 flow OwlPosterSendFossil():
     if System.EventFlags['cLandTemp:SendFossilCompletePoster']:
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12961, 1, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
+        EventFlowSystemActor.SelectRewardItemDirect(12961, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
         System.EventFlags['cLandTemp:SendFossilCompletePoster'] = false
  
 flow OwlPosterSendInsect():
     if System.EventFlags['cLandTemp:SendInsectCompletePoster']:
-        EventFlowSystemActor.SelectRewardItemDirectEventFlowSystemActor.SelectRewardItemDirect(12039, 1, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSendVillagerEventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
+        EventFlowSystemActor.SelectRewardItemDirect(12039, 1, 'cVillageRemakePattern', 0)
+        EventFlowSystemActor.SystemMailSendVillager('cOwl', 'MAIL_SNpc_owl', 2, 'cMuseumPoster', 'cFastTomorrow', 'cReward')
         System.EventFlags['cLandTemp:SendInsectCompletePoster'] = false
  
 flow OwlTentDonationAgain(MultiComplete: bool = false, CompleteRoomType: int = 0):
     if System.EventFlags['cLand:OwlFoundFossil']:
-        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+        switch EventFlowSystemActor.MuseumLevel():
             case `BlathersTent`:
-                if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation3'):
+                if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation3'):
                     # Marvelous! What would you like to donate?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-                    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlTentDonation3', 'cItemSelect', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+                    EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlTentDonation3', 'cItemSelect', false)
                     run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
                 else:
                     run OwlNoDonationItems()
             case `BlathersMuseumNoArt`:
                 if System.EventFlags['cPlayer:OwlShowDiveFishReport']:
-                    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_4'):
+                    if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_4'):
                         # Marvelous! What would you like to donate?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-                        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_4', 'cItemSelect', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+                        EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_4', 'cItemSelect', false)
                         run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
                     else:
                         run OwlNoDonationItems()
-                elif EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation'):
+                elif EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation'):
                     # Marvelous! What would you like to donate?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-                    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation', 'cItemSelect', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+                    EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation', 'cItemSelect', false)
                     run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
                 else:
                     run OwlNoDonationItems()
             case `BlathersMuseumArt`, `BlathersCafe`:
                 if System.EventFlags['cPlayer:OwlShowDiveFishReport']:
-                    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_3'):
+                    if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_3'):
                         # Marvelous! What would you like to donate?
-                        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-                        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_3', 'cItemSelect', false)
+                        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+                        EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_3', 'cItemSelect', false)
                         run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
                     else:
                         run OwlNoDonationItems()
-                elif EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_2'):
+                elif EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_2'):
                     # Marvelous! What would you like to donate?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-                    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_2', 'cItemSelect', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+                    EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_2', 'cItemSelect', false)
                     run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
                 else:
                     run OwlNoDonationItems()
             default:
                 return
     else:
-        switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+        switch EventFlowSystemActor.MuseumLevel():
             case `BlathersTent`:
                 run Sub_grp_Event178(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case `BlathersMuseumNoArt`:
@@ -223,10 +223,10 @@ flow OwlTentDonationAgain(MultiComplete: bool = false, CompleteRoomType: int = 0
                 else:
                     run NHBSF_BeforeShowDiveFish()
             case `BlathersMuseumArt`, `BlathersCafe`:
-                if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation2'):
+                if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation2'):
                     # Marvelous! What would you like to donate?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-                    EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation2', 'cItemSelect', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+                    EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation2', 'cItemSelect', false)
                     run owl_Donation_AfterItemSel()
                 else:
                     run NotHaveBeforeShowFossil()
@@ -234,26 +234,26 @@ flow OwlTentDonationAgain(MultiComplete: bool = false, CompleteRoomType: int = 0
                 return
  
 flow Owl_DonateComp():
-    if (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() not in (`BlathersNotMovedIn`, `BlathersTent`, `BlathersMuseumNoArt`)) and (System.EventFlags['cPlayer:OwlMultiDonateExplain']) and (System.EventFlags['cPlayer:OwlShowDiveFishReport']):
+    if (EventFlowSystemActor.MuseumLevel() not in (`BlathersNotMovedIn`, `BlathersTent`, `BlathersMuseumNoArt`)) and (System.EventFlags['cPlayer:OwlMultiDonateExplain']) and (System.EventFlags['cPlayer:OwlShowDiveFishReport']):
         if (not System.EventFlags['cPlayer:MuseumPosterUnlockBuySel']) and (not System.EventFlags['cPlayer:MuseumPosterTalkAboutMakePoster']):
             System.EventFlags['cPlayer:MuseumPosterTalkAboutMakePoster'] = true
             # This may be a good time to bring up an idea I've had for some time now… I decided to have a series of posters made to celebrate the completion of our…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:005', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:005', false)
         else:
             # I'll be mailing out the poster for our latest completed collection soon.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:006', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:006', false)
         run SNPC_owl_25_Museum_Poster::Owl_SendPosterrun SNPC_owl_25_Museum_Poster::Owl_SendPoster()
     else:
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Root(MultiComplete: bool = false, CompleteRoomType: int = 0):
-    switch EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel():
+    switch EventFlowSystemActor.MuseumLevel():
         case `BlathersTent`:
             run OwlTentDonationAgain(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
         case `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`:
-            if EventFlowSystemActor.NetHasVisitorEventFlowSystemActor.NetHasVisitor():
+            if EventFlowSystemActor.NetHasVisitor():
                 # Oh dear… My apologies!<10:4> <50:3>ISLAND has a visitor at this very moment… I am aflutter with excitement, and therefore cannot accept any donations…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:101', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:101', false)
             else:
                 run OwlTentDonationAgain(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
         default:
@@ -261,81 +261,81 @@ flow Root(MultiComplete: bool = false, CompleteRoomType: int = 0):
  
 local flow Sub_Event167():
     # We accept donations of bugs, fish, sea creatures, properly assessed fossils, and works of art…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:151', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:151', false)
     run Sub_grp_Event1()
  
 local flow Sub_Event219(MultiComplete: bool, CompleteRoomType: int):
     run Owl_DonateComp()
     # As each collection is completed, I'll have another poster printed, so keep your donations coming!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:007', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:007', false)
  
 local flow Sub_Event3():
     # We are currently accepting bugs, fish, and properly assessed fossils…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:142', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:142', false)
     run Sub_grp_Event1()
  
 local flow Sub_Event35(MultiComplete: bool, CompleteRoomType: int):
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Wonderful! 'Tis fascinating stuff, I assure you! Now, where to begin…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:127', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:127', false)
         run MuseumAfterDonationCommon()
     else:
         # I see. What a shame… Anyhoot, I shall gladly accept your generous donation.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:128', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:128', false)
  
 local flow Sub_Event62(MultiComplete: bool, CompleteRoomType: int):
     # Ah, no need to pull them all out! I'll handle the rest from here.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:110', false)
-    if MainNpc.OwlDonationSameItemMainNpc.OwlDonationSameItem():
+    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:110', false)
+    if MainNpc.OwlDonationSameItem():
         # Now, I see you're donating multiples of the same item, though we need only one. You may keep the extra.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:111', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:111', false)
     run Comp_Check()
  
 local flow Sub_grp_Event1():
-    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cKind', 'FossilUnknown', ''):
+    if EventFlowSystemActor.HasKindItem('cKind', 'FossilUnknown', ''):
         # That is, fossils must first be appraised by yours truly. So if you have a relic of unknown origin, please allow me to give it a look.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:144', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:144', true)
     else:
         # If you acquire any of these items, please do consider donating them.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)
  
 local flow Sub_grp_Event111(MultiComplete: bool, CompleteRoomType: int):
-    if EventFlowSystemActor.MuseumCompleteEventFlowSystemActor.MuseumComplete():
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+    if EventFlowSystemActor.MuseumComplete():
+        EventFlowSystemActor.MessageSuspend()
         # Hoot! Hooray! Huzzah! I say it again, HUZZAH! My goal… Our goal… We have finally done it! We've searched far and wide, high and low, and our collecti…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:401', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:401', false)
         System.EventFlags['cPlayer:FutaExplanationDonationComp'] = true
         run Owl_DonateComp()
         # To think we've completed every one of our collections. I never dared to dream of such a day! I hope you'll continue to visit us. You've been truly in…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:008', false)
-    elif MainNpc.OwlMuseumMultiCompleteMainNpc.OwlMuseumMultiComplete():
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_25_Museum_Poster:008', false)
+    elif MainNpc.OwlMuseumMultiComplete():
+        EventFlowSystemActor.MessageSuspend()
         # Wot wot? I say, what's this? I know a thing or two about fell swoops. But this… Yes! Indeed, YES! A number of our collections have been completed sim…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:402', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:402', false)
         run Sub_Event219(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
-    elif MainNpc.OwlMuseumCompleteRoomTypeMainNpc.OwlMuseumCompleteRoomType() in (0, 1, 2, 3, 6):
-        EventFlowSystemActor.MessageSuspendEventFlowSystemActor.MessageSuspend()
-        switch MainNpc.OwlMuseumCompleteRoomTypeMainNpc.OwlMuseumCompleteRoomType():
+    elif MainNpc.OwlMuseumCompleteRoomType() in (0, 1, 2, 3, 6):
+        EventFlowSystemActor.MessageSuspend()
+        switch MainNpc.OwlMuseumCompleteRoomType():
             case 0:
                 # Hoo! Ewww! And, eh, hats off to you. I daresay I am the very picture of an emotional roller coaster! To wit, whilst I am pleased to announce we have …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:403', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:403', false)
                 run Sub_Event219(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case 1:
                 # Hoo WHAT?! You found the missing piece to the museum's fish puzzle, PLAYER! Er…that is to say… We had a fish- shaped hole in our fish collection… and…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:404', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:404', false)
                 run Sub_Event219(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case 2:
                 # Hoo hoo! Is it true? The final fossil has been found? <10:4>It has! It has! Indeed, HUZZAH! Ah, PLAYER… Before you took up the task, ours was but a…b…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:405', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:405', false)
                 System.EventFlags['cLand:MuseumFossilComplete'] = true
                 run Sub_Event219(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case 3:
                 # Hoo hoo! Hoorah! Oh, happy day! This is the final piece we needed to make our art collection complete! The island's art gallery is filled to the brim…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:406', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:406', false)
                 run Sub_Event219(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case 6:
                 # Wot wot?! Is it truly true? With this donation, our sea-creature collection is now complete?! Hoot! Huzzah, I say! Hoooooray! And most importantly…TH…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:410', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:410', false)
                 run Sub_Event219(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             default:
                 return
@@ -343,118 +343,118 @@ local flow Sub_grp_Event111(MultiComplete: bool, CompleteRoomType: int):
         run SNPC_owl_00_Common::Againrun SNPC_owl_00_Common::Again()
  
 local flow Sub_grp_Event178(MultiComplete: bool, CompleteRoomType: int):
-    if EventFlowSystemActor.HasKindItemEventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation2'):
+    if EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlTentDonation2'):
         # Marvelous! What would you like to donate?
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
-        EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlTentDonation2', 'cItemSelect', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
+        EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlTentDonation2', 'cItemSelect', false)
         run owl_Donation_AfterItemSel()
     else:
         run NotHaveBeforeShowFossil()
  
 flow owl_Donation_AfterItemSel(MultiComplete: bool = false, CompleteRoomType: int = 0):
-    if not EventFlowSystemActor.UIResultMenuDecideEventFlowSystemActor.UIResultMenuDecide():
+    if not EventFlowSystemActor.UIResultMenuDecide():
         # Changed your mind, have you?<10:4> Another time then. Your assistance is always welcome.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:105', true)
-    elif EventFlowSystemActor.UIResultItemWindowNumCheckEventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:105', true)
+    elif EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
         # Woo hoo! Several things, I see! Let us take a look,« shall we?»<10:8:005a0000>
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:106', false)
-        switch MainNpc.OwlDonationFakeRateMainNpc.OwlDonationFakeRate():
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:106', false)
+        switch MainNpc.OwlDonationFakeRate():
             case 0:
                 # Splendid! We will gladly take these off your hands!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:109', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:109', false)
                 run Sub_Event62(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case 1:
                 # <10:12>HOO!!<10:8:00050000><10:9> I am afraid fraudulent work has wormed its way in amongst the donations you have presented me… I am terribly sorry,…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:108', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:108', false)
                 System.EventFlags['cLifeSupportAchievement:DonateFake'] += 1
                 run Sub_Event62(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case 2:
                 # <10:12>HOO-WHAT?!<10:9> Terribly sorry, but I'm afraid these are all the work of a nefarious forger. You must understand, we simply cannot display fa…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:107', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:107', false)
                 System.EventFlags['cLifeSupportAchievement:DonateFake'] += 1
                 run SNPC_owl_00_Common::Againrun SNPC_owl_00_Common::Again()
     else:
-        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(4, false)
-        EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(0, 'Keep')
-        switch MainNpc.OwlDonationItemTypeMainNpc.OwlDonationItemType():
+        MainNpc.SetDeliveryItem(4, false)
+        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+        MainNpc.NpcDelivery(0, 'Keep')
+        switch MainNpc.OwlDonationItemType():
             case `Insect`:
                 if System.EventFlags['cPlayer:OwlEverDonatedInsect']:
                     # Eeek! [A|An]<125:0:0000>! What a wretched thing…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:114_02', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:114_02', false)
                 else:
                     System.EventFlags['cPlayer:OwlEverDonatedInsect'] = true
                     # Eeek! [A|An]<125:0:0000>! The horror! The repugnance! Good heavens! I must maintain my composure!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:114_01', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:114_01', false)
                 if System.EventFlags['cPlayer:OwlHeardInsectExplanation']:
                     # Alas, I am obliged to ask… Would you like to learn more about this specimen?
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:116', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:116', false)
                 else:
                     # Ahem! I beg your pardon. Bugs…I do detest them. Still, there's much I can tell you about the insect you apprehended… If you insist, that is.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:115', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:115', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     System.EventFlags['cPlayer:OwlHeardInsectExplanation'] = true
                     # Ah, I see. In that case…ahem…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:117', false)
-                    MainNpc.OwlOpenItemMessageMainNpc.OwlOpenItemMessage()
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:117', false)
+                    MainNpc.OwlOpenItemMessage()
                     # Anyhoot… My sincerest thanks for your donation. And though bugs are the bane of my existence, rest assured the wretched thing will get the best of ca…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:119', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:119', false)
                 else:
                     # Yes, yes. Understood.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:118', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:118', false)
                     # Though bugs are the bane of my existence, rest assured the wretched thing will get the best of care here.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:119_01', false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, '"Default"')
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:119_01', false)
+                MainNpc.NpcDelivery(3, '"Default"')
                 run Comp_Check(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
             case `FossilUnknown`:
                 run SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Unknownrun SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Unknown()
             case `Fossil`:
                 if System.EventFlags['cLand:OwlFoundFossil']:
                     # Ooo hoo hoo! Could it be? It is…<10:4> [a|an]<125:0:0000>!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:125', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:125', false)
                     run Fossil_DonationTypeChk(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
                 else:
                     run SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Knownrun SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Known()
             case `FishOrDiveFish`:
                 # RANDOM: Hoo hoo! Why, this is… [a|an]<125:0:000… // Hootie hoo! This must be… [a|an]<125:0:… // Hoo! Woo hoo! This is undoubtedly… [a|a…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:120', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:120', false)
                 run v200_MuseumTent_NoticeSeaLife()
                 # Now, might I interest you in a few fascinating facts about your <125:0:0000>?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:131', false)
-                if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:131', false)
+                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
                     # Wonderful! I would love nothing more!
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:132', false)
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:132', false)
                     run MuseumAfterDonationCommon()
                 else:
                     # Ah, I see.<10:4> Another time, perhaps… Well then, let me assure you we shall take very good care of your donation.
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:134', false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, '"Default"')
+                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:134', false)
+                MainNpc.NpcDelivery(3, '"Default"')
                 run Comp_Check()
             case `PictureOrSculpture`:
                 # RANDOM: Hoo WHAT?! Is that…[a|an] <125:0:0000>?… // Hoo! Unless I am mistaken— and I am not… // Hoo! I say, hoot! THAT is most surely […
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:135', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:135', false)
                 # I shall treat this donation with the utmost care. Owl's honor! I shall also leave details about your donation for all to read once it is on display. …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:147', false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(3, '"Default"')
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:147', false)
+                MainNpc.NpcDelivery(3, '"Default"')
                 run Comp_Check()
             case `PictureFakeOrSculptureFake`:
                 # My feathers, is that [a|an] <125:0:0000>?!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:138', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:138', false)
                 # Hmm…it gives one pause to see [a|an]<125:0:0000> up close like this.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:148', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:148', false)
                 # <10:12><10:10> HOO-WHAT?!<10:9> Upon closer examination, I have grave news to share with you! This work of art…is a FAKE!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:139', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:139', false)
                 # I cannot accept forgeries, you see, so I must give it back. Hoo, sad but true!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:140', false)
-                MainNpc.NpcDeliveryMainNpc.NpcDelivery(10, '"Default"')
+                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:140', false)
+                MainNpc.NpcDelivery(10, '"Default"')
                 System.EventFlags['cLifeSupportAchievement:DonateFake'] += 1
                 run SNPC_owl_00_Common::Againrun SNPC_owl_00_Common::Again()
             default:
                 return
  
 flow v200_MuseumTent_NoticeSeaLife():
-    if (EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() == `BlathersTent`) and (EventFlowSystemActor.MultiKindItemSelectIncludeEventFlowSystemActor.MultiKindItemSelectInclude('DiveFish', '', '', '', '', '', '', '', 'cItemSelect')) and (not System.EventFlags['cPlayer:OwlDonateDiveFishAtMuseumTent']):
+    if (EventFlowSystemActor.MuseumLevel() == `BlathersTent`) and (EventFlowSystemActor.MultiKindItemSelectInclude('DiveFish', '', '', '', '', '', '', '', 'cItemSelect')) and (not System.EventFlags['cPlayer:OwlDonateDiveFishAtMuseumTent']):
         # Such sea creatures are a delight to behold! As with any fish or bugs you find, I will be happy to care for it.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1001', false)
+        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:1001', false)
         System.EventFlags['cPlayer:OwlDonateDiveFishAtMuseumTent'] = true
  

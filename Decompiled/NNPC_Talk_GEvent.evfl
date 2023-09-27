@@ -1,32 +1,32 @@
 flow Birthday_Judge():
-    if (EventFlowSystemActor.MainPlayerIsBirthdayEventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime')) and (EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
+    if (EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime')) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
         run NNPC_GEvent_BirthdayP::Rootrun NNPC_GEvent_BirthdayP::Root()
-    elif (EventFlowSystemActor.IsTheDayAfterTalkPlayerBithdayEventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompareEventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
+    elif (EventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
         run NNPC_GEvent_BirthdayP::Root_NextDayrun NNPC_GEvent_BirthdayP::Root_NextDay()
  
 flow Root():
-    if MainNpc.NpcIsSittingMainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-        switch EventFlowSystemActor.EventBranchEventFlowSystemActor.EventBranch(false, 0):
+    if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+        switch EventFlowSystemActor.EventBranch(false, 0):
             case `Easter`:
                 run NNPC_GEvent_Easter::Rootrun NNPC_GEvent_Easter::Root()
             case `Fireworks`:
                 run NNPC_GEvent_Fireworks::Rootrun NNPC_GEvent_Fireworks::Root()
             case `HarvestFestival`:
-                if EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('HarvestFestival') == 2:
+                if EventFlowSystemActor.EventCheck('HarvestFestival') == 2:
                     run NNPC_GEvent_Harvest::Rootrun NNPC_GEvent_Harvest::Root()
             case `XmasEve`:
-                if EventFlowSystemActor.EventCheckEventFlowSystemActor.EventCheck('XmasEve') == 1:
+                if EventFlowSystemActor.EventCheck('XmasEve') == 1:
                     if System.EventFlags['cPlayer:ReiStartQuest2']:
                         if ((not MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag']) or (MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag']) or (System.EventFlags['cPlayer:ReiGetReward3'])) and (not MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']):
                             run NNPC_Reaction_Sitting::StandingUp_Chkrun NNPC_Reaction_Sitting::StandingUp_Chk()
                     else:
-                        if (EventFlowSystemActor.CheckChristmasSantaPresentsProgressEventFlowSystemActor.CheckChristmasSantaPresentsProgress(true, 0)) and (not MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']):
+                        if (EventFlowSystemActor.CheckChristmasSantaPresentsProgress(true, 0)) and (not MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']):
                             run NNPC_Reaction_Sitting::StandingUp_Chkrun NNPC_Reaction_Sitting::StandingUp_Chk()
             default:
                 return
     else:
         run Birthday_Judge()
-        switch EventFlowSystemActor.EventBranchEventFlowSystemActor.EventBranch(false, 0):
+        switch EventFlowSystemActor.EventBranch(false, 0):
             case `FishingConvention`:
                 run NNPC_GEvent_CatchFishFes::Rootrun NNPC_GEvent_CatchFishFes::Root()
             case `InsectConvention`:

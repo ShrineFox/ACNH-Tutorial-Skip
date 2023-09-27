@@ -1,17 +1,17 @@
 flow `0_FlagSettings`():
     if System.EventFlags['cLand:ValidateVillageSave']:
         System.EventFlags['cLandTemp:CalendarEventStop'] = true
-        if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+        if EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
             System.EventFlags['cPlayer:ThisPCcreatedbeforeOfficeUpgrading'] = true
-        if EventFlowSystemActor.MuseumLevelEventFlowSystemActor.MuseumLevel() != `BlathersNotMovedIn`:
+        if EventFlowSystemActor.MuseumLevel() != `BlathersNotMovedIn`:
             System.EventFlags['cPlayer:2P_CreatedAfterOwlMoving'] = true
     else:
         System.EventFlags['cPlayer:ThisPCcreatedbeforeOfficeUpgrading'] = true
-    switch EventFlowSystemActor.ShopLevelEventFlowSystemActor.ShopLevel():
+    switch EventFlowSystemActor.ShopLevel():
         case `InResServiceTent`:
             System.EventFlags['cPlayer:KaburibaConditionFlag'] = false
         case `NooksCrannyInitial`:
-            if EventFlowSystemActor.FacilityOpenPastDaysEventFlowSystemActor.FacilityOpenPastDays('cMarket1', 8):
+            if EventFlowSystemActor.FacilityOpenPastDays('cMarket1', 8):
                 System.EventFlags['cPlayer:KaburibaConditionFlag'] = false
         default:
             return
@@ -33,25 +33,25 @@ flow `0_FlagSettings_ForMoving`():
  
 flow Apply():
     # The first step is checking your application. Is this your first time applying for one of our packages?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:1003_02', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:1003_02', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         run Normal_CharacterMaking()
     else:
         run Tutorials_Prologue1_Charactermaking_PlayerMoving::Rootrun Tutorials_Prologue1_Charactermaking_PlayerMoving::Root()
  
 flow BackCut0():
-    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut0End', 'cDefault', 'CameraTag:Root', false, false, false, 0)
-    MainNpc.LookAtPosMainNpc.LookAtPos(2, 0.0, 0.0, 0.0)
-    SubNpc.LookAtPosSubNpc.LookAtPos(2, 0.0, 0.0, 0.0)
+    EventFlowSystemActor.CameraSetDemoParam('Cut0End', 'cDefault', 'CameraTag:Root', false, false, false, 0)
+    MainNpc.LookAtPos(2, 0.0, 0.0, 0.0)
+    SubNpc.LookAtPos(2, 0.0, 0.0, 0.0)
  
 flow Charactermaking():
     System.EventFlags['cPlayer:CharacterCreationFlag'] = true
     # Our next step will be to take a picture of you, PLAYER. Oh, don't worry! Take as much time as you need to get yourself looking just the way you want.…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:005_01', true)
-    EventFlowSystemActor.UICharactermakingHandlingEventFlowSystemActor.UICharactermakingHandling('cFirstTime')
-    EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cCharaMakeResult')
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:005_01', true)
+    EventFlowSystemActor.UICharactermakingHandling('cFirstTime')
+    EventFlowSystemActor.SaveSetFromUIResult('cCharaMakeResult')
     # Great! You're all set.__ ...all set!__ I'll just go ahead and add that picture to your records.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:005_02', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:005_02', false)
  
 flow Continue_AfterMoving():
     run `0_FlagSettings`()
@@ -59,90 +59,90 @@ flow Continue_AfterMoving():
     run Event181()
  
 flow Cut0():
-    EventFlowSystemActor.UIPrologueBGAppearEventFlowSystemActor.UIPrologueBGAppear()
-    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut0Start', '', 'CameraTag:Root', false, false, false, 0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(120)
-    EventFlowSystemActor.UIPrologueBGDisappearEventFlowSystemActor.UIPrologueBGDisappear()
-    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(29)
-    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut0End', 'Cut0', 'CameraTag:Root', false, false, false, 0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.UIPrologueBGAppear()
+    EventFlowSystemActor.CameraSetDemoParam('Cut0Start', '', 'CameraTag:Root', false, false, false, 0)
+    EventFlowSystemActor.WaitFrame(120)
+    EventFlowSystemActor.UIPrologueBGDisappear()
+    EventFlowSystemActor.SoundDuckingOn(29)
+    EventFlowSystemActor.CameraSetDemoParam('Cut0End', 'Cut0', 'CameraTag:Root', false, false, false, 0)
+    EventFlowSystemActor.WaitFrame(60)
     fork:
         branch:
-            MainNpc.NpcRailMoveMainNpc.NpcRailMove(0, true, false, -1, -1, 1)
-            MainNpc.TurnBodyMainNpc.TurnBody(12, -5.0)
+            MainNpc.NpcRailMove(0, true, false, -1, -1, 1)
+            MainNpc.TurnBody(12, -5.0)
         branch:
-            EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-            SubNpc.NpcRailMoveSubNpc.NpcRailMove(1, true, false, -1, -1, 1)
-            SubNpc.TurnBodySubNpc.TurnBody(12, 5.0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+            EventFlowSystemActor.WaitFrame(30)
+            SubNpc.NpcRailMove(1, true, false, -1, -1, 1)
+            SubNpc.TurnBody(12, 5.0)
+    EventFlowSystemActor.WaitFrame(10)
  
 flow EndCharacterMaking():
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('AirportAnnounce', -1)
+    EventFlowSystemActor.SoundTriggerEmit('AirportAnnounce', -1)
     run ToCut1()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(2)
-    EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cAnnounce', true)
+    EventFlowSystemActor.WaitFrame(2)
+    EventFlowSystemActor.SwapSpeaker('cAnnounce', true)
     # <100:7>Your attention, please. This is a service announcement.</100:7><10:8:003c0000>
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:025', false)
-    MainNpc.LookAtPosMainNpc.LookAtPos(1, 0.0, 11.0, 10.0)
-    SubNpc.LookAtPosSubNpc.LookAtPos(1, 0.0, 11.0, 10.0)
+    EventFlowSystemActor.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:025', false)
+    MainNpc.LookAtPos(1, 0.0, 11.0, 10.0)
+    SubNpc.LookAtPos(1, 0.0, 11.0, 10.0)
     if System.EventFlags['cLand:ValidateVillageSave']:
         # <100:7>The chartered flight to ISLAND is ready for boarding. Any customers wanting to board should make their way to the gate at this time.</100:7>
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:025_02', false)
+        EventFlowSystemActor.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:025_02', false)
     else:
         # <100:7>The chartered flight for Nook Inc.'s Deserted Island Getaway Package is ready for boarding. Any customers waiting to board should make their w…
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:025_01', true)
-    EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cNone', true)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
+        EventFlowSystemActor.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:025_01', true)
+    EventFlowSystemActor.SwapSpeaker('cNone', true)
+    EventFlowSystemActor.WaitFrame(10)
     run BackCut0()
     # Ah, perfect timing! C'mon! Let's all board the plane together! __...together!__
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:026', true)
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-    SubNpc.CharacterEmoticonActionSubNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(54)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:026', true)
+    MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+    SubNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+    EventFlowSystemActor.BGMPropertyControl(54)
     System.EventFlags['cPlayer:DoneCharacterCreation'] = true
     System.EventFlags['cLandTemp:EntryGame'] = true
-    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(29)
-    EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+    EventFlowSystemActor.SoundDuckingOff(29)
+    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
     run PV()
  
 flow EnteringNameAndBday():
-    EventFlowSystemActor.SoundDuckingOnEventFlowSystemActor.SoundDuckingOn(41)
-    EventFlowSystemActor.UISoftwareKeyboardHandlingEventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
-    EventFlowSystemActor.SoundDuckingOffEventFlowSystemActor.SoundDuckingOff(41)
-    EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
-    EventFlowSystemActor.SetTagFromUIResultEventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
-    EventFlowSystemActor.UIDateHandlingEventFlowSystemActor.UIDateHandling('cOpeningBirthday')
-    EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-    MainNpc.TurnBodyMainNpc.TurnBody(12, 40.0)
-    MainNpc.LookAtPosMainNpc.LookAtPos(1, 0.0, 1.0, 0.0)
-    SubNpc.LookAtPosSubNpc.LookAtPos(1, 5.0, 4.0, 0.0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    MainNpc.RequestSimpleMainNpc.RequestSimple('NpcSpTyping', false)
+    EventFlowSystemActor.SoundDuckingOn(41)
+    EventFlowSystemActor.UISoftwareKeyboardHandling('cName', true)
+    EventFlowSystemActor.SoundDuckingOff(41)
+    EventFlowSystemActor.SaveSetFromUIResult('cPlayerName')
+    EventFlowSystemActor.SetTagFromUIResult('cPlayerNameNoGender', 0)
+    EventFlowSystemActor.UIDateHandling('cOpeningBirthday')
+    EventFlowSystemActor.SaveSetFromUIResult('cBirthDay')
+    EventFlowSystemActor.WaitFrame(10)
+    MainNpc.TurnBody(12, 40.0)
+    MainNpc.LookAtPos(1, 0.0, 1.0, 0.0)
+    SubNpc.LookAtPos(1, 5.0, 4.0, 0.0)
+    EventFlowSystemActor.WaitFrame(30)
+    MainNpc.RequestSimple('NpcSpTyping', false)
     # <50:3>PLAYER… <50:3>PLAYER… Let's see…<10:7:00640000>
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:003_03', false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    MainNpc.LookAtPosMainNpc.LookAtPos(2, 0.0, 0.0, 0.0)
-    MainNpc.TurnBodyMainNpc.TurnBody(12, -5.0)
-    SubNpc.LookAtPosSubNpc.LookAtPos(2, 0.0, 0.0, 0.0)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:003_03', false)
+    EventFlowSystemActor.WaitFrame(20)
+    MainNpc.LookAtPos(2, 0.0, 0.0, 0.0)
+    MainNpc.TurnBody(12, -5.0)
+    SubNpc.LookAtPos(2, 0.0, 0.0, 0.0)
     # Oh! Yes, here you are!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:003_05', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:003_05', false)
  
 flow From_RestartMoving():
-    EventFlowSystemActor.SaveSwitchMovedOneToVillagerEventFlowSystemActor.SaveSwitchMovedOneToVillager()
-    EventFlowSystemActor.NoticeGameStartForPlayReportEventFlowSystemActor.NoticeGameStartForPlayReport()
+    EventFlowSystemActor.SaveSwitchMovedOneToVillager()
+    EventFlowSystemActor.NoticeGameStartForPlayReport()
     run `0_FlagSettings`()
     run `0_FlagSettings_ForMoving`()
     # <50:3>PLAYER, we've been waiting for you!__ ...for you!__ You were in the process of moving here from another island, right?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2051', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2051', false)
     if System.EventFlags['cLand:ValidateVillageSave']:
         # We've already finished everything that needed to be done before we take off, so please wait for boarding! We'll give you an in-depth overview of isla…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2053', true)
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2053', true)
         run Tutorials_Prologue1_Charactermaking_PlayerMoving::CheckNALinkrun Tutorials_Prologue1_Charactermaking_PlayerMoving::CheckNALink()
         run From_RestartMoving_OtherP()
     else:
         # Let's resume the process now!__ ...now!__
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2052', false)
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:2052', false)
         run Tutorials_Prologue1_Charactermaking_PlayerMoving::CheckNALinkrun Tutorials_Prologue1_Charactermaking_PlayerMoving::CheckNALink()
         run From_RestartMoving_MainP()
  
@@ -154,106 +154,106 @@ flow From_RestartMoving_OtherP():
  
 flow Normal_CharacterMaking():
     # Understood!__ ...stood!__ Now then, we'll need to look up your application. Can we have your name and birthday?__ ...birthday?__
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:1003_02_01', false)
-    EventFlowSystemActor.EntryPlayerVillagerEventFlowSystemActor.EntryPlayerVillager()
-    EventFlowSystemActor.NoticeGameStartForPlayReportEventFlowSystemActor.NoticeGameStartForPlayReport()
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:1003_02_01', false)
+    EventFlowSystemActor.EntryPlayerVillager()
+    EventFlowSystemActor.NoticeGameStartForPlayReport()
     run EnteringNameAndBday()
     run Charactermaking()
 entrypoint Event181:
     if System.EventFlags['cLand:ValidateVillageSave']:
         # That concludes everything we need to do here! Don't worry! We'll give you an in-depth overview on island life once we're back on the ground!__ ...gro…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:103', true)
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:103', true)
 entrypoint Event180:
-        EventFlowSystemActor.ClearAllNpcOtherPlayerMoveInFlagEventFlowSystemActor.ClearAllNpcOtherPlayerMoveInFlag()
+        EventFlowSystemActor.ClearAllNpcOtherPlayerMoveInFlag()
     else:
 entrypoint Event172:
         # And now…let's start talking about your new home. So exciting!__ ...exciting!__
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:006', false)
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:006', false)
         run Tutorials_Prologue1_Areacheck::Rootrun Tutorials_Prologue1_Areacheck::Root()
         run TerrainSelect()
     run EndCharacterMaking()
  
 flow PV():
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Env_PlaneInside', 1)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-    switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+    EventFlowSystemActor.SoundTriggerEmit('Env_PlaneInside', 1)
+    EventFlowSystemActor.WaitFrame(60)
+    switch EventFlowSystemActor.EnvTimeZone():
         case `05:00-07:59`, `08:00-11:59`:
             # <100:6><100:3:cd01>Good morning, everyone.<100:3:cd02></100:6>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:027_01', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:027_01', false)
         case `12:00-15:59`, `16:00-18:59`:
             # <100:6><100:3:cd01>Hello, everyone.<100:3:cd02></100:6>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:027_02', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:027_02', false)
         case `19:00-23:59`, `00:00-04:59`:
             # <100:6><100:3:cd01>Good evening, everyone.<100:3:cd02></100:6>
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:027_03', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:027_03', false)
     if System.EventFlags['cLand:ValidateVillageSave']:
         # <100:6><100:3:cd01>Thank you for taking this chartered flight to ISLAND. Please sit back, relax, and enjoy a free video about Nook Inc.'s Deserted Is…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:028_01', false)
-        EventFlowSystemActor.ReserveNpcCommandEventFlowSystemActor.ReserveNpcCommand('PrologueTanukichiNewVillager')
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:028_01', false)
+        EventFlowSystemActor.ReserveNpcCommand('PrologueTanukichiNewVillager')
     else:
         # <100:6><100:3:cd01>Thank you for taking this chartered flight as part of Nook Inc.'s Deserted Island Getaway Package. Please sit back, relax, and enj…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:028', false)
-        EventFlowSystemActor.EnvSetDemoTimeEventFlowSystemActor.EnvSetDemoTime(14, 0, 0)
-        EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLockDemo')
+        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:028', false)
+        EventFlowSystemActor.EnvSetDemoTime(14, 0, 0)
+        EventFlowSystemActor.TimeLock('cLockDemo')
         System.EventFlags['cPlayer:MakeVillagePlayerFlag'] = true
         System.EventFlags['cLandTemp:IsFirstPrologue'] = true
         System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 1
-        EventFlowSystemActor.ReserveNpcCommandEventFlowSystemActor.ReserveNpcCommand('PrologueTanukichi')
-    EventFlowSystemActor.SoundFadeEventFlowSystemActor.SoundFade(1)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cOpeningMovie', 'cNormalFader', 'cCircle', 'cBlack', 1.0, 1.0)
+        EventFlowSystemActor.ReserveNpcCommand('PrologueTanukichi')
+    EventFlowSystemActor.SoundFade(1)
+    EventFlowSystemActor.WaitFrame(60)
+    EventFlowSystemActor.SystemRequestChangeStage('cOpeningMovie', 'cNormalFader', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow Root():
     run `0_FlagSettings`()
-    EventFlowSystemActor.BGMPropertyControlEventFlowSystemActor.BGMPropertyControl(55)
+    EventFlowSystemActor.BGMPropertyControl(55)
     run Cut0()
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(20)
-    if EventFlowSystemActor.HasMovedOneSaveDataEventFlowSystemActor.HasMovedOneSaveData():
-        switch EventFlowSystemActor.EnvTimeZoneEventFlowSystemActor.EnvTimeZone():
+    EventFlowSystemActor.WaitFrame(20)
+    if EventFlowSystemActor.HasMovedOneSaveData():
+        switch EventFlowSystemActor.EnvTimeZone():
             case `05:00-07:59`, `08:00-11:59`:
                 # Good morning! We're so excited to have you here!__ ...have you here!__
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:001_01', false)
+                MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:001_01', false)
             case `12:00-15:59`, `16:00-18:59`:
                 # Good afternoon! We're so excited to have you here!__ ...have you here!__
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:001_02', false)
+                MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:001_02', false)
             case `19:00-23:59`, `00:00-04:59`:
                 # Good evening! We're so excited to have you here!__ ...have you here!__
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:001_03', false)
+                MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:001_03', false)
         if System.EventFlags['cLand:ValidateVillageSave']:
             # Welcome…to the check-in counter for your big moving-day trip to ISLAND! There is so much to look forward to! But first, let us introduce ourselves. I…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:101', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:101', false)
             # And I'm Tommy!
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:002_02', false)
+            SubNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:002_02', false)
             # The two of us are already living on ISLAND. We're there to support everyone, including you! Think of us as your partners. We're in it for the long ha…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:102', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:102', false)
             # Now, let's walk through the steps to get you moved onto the island!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:102_02', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:102_02', false)
         else:
             # Let us be the first to congratulate you on your wise decision to sign up for this adventure. Welcome…to the check-in counter for your Deserted Island…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:002_01', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:002_01', false)
             # And I'm Tommy!
-            SubNpc.OpenMessageWindowSubNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:002_02', false)
+            SubNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:002_02', false)
             # We'll be flying to the island with you to help you get settled. Think of us as your partners. We're in it for the long haul! So, let's get started, s…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:003_01', false)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:003_01', false)
         run Apply()
     else:
         run From_RestartMoving()
  
 flow TerrainSelect():
     # Now then…all of our islands are approximately the same size, and they're all quite natural. So, don't worry about whether you'll have enough space or…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:021', true)
-    EventFlowSystemActor.UIMapSelectHandlingEventFlowSystemActor.UIMapSelectHandling()
-    EventFlowSystemActor.SaveSetFromUIResultEventFlowSystemActor.SaveSetFromUIResult('cVillage')
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:021', true)
+    EventFlowSystemActor.UIMapSelectHandling()
+    EventFlowSystemActor.SaveSetFromUIResult('cVillage')
     # Wonderful choice!__ ...choice!__<10:4> I can't wait to show it off to you.
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:022', false)
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:022', false)
     # Ah, but before we depart, I have just one final question for you… If you could only bring ONE thing with you to a deserted island, what would it be?_…
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:023', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:023', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0, 1, 2, 3:
             # How interesting… Oh! I'm sorry, that was just a hypothetical question. Nook Inc. will fully cover all of your basic needs! Yes, yes!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:024', true)
+            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue1_Airport:024', true)
  
 flow ToCut1():
-    EventFlowSystemActor.CameraSetDemoParamEventFlowSystemActor.CameraSetDemoParam('Cut1', 'cDefault', 'CameraTag:Root', false, false, false, 0)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(40)
+    EventFlowSystemActor.CameraSetDemoParam('Cut1', 'cDefault', 'CameraTag:Root', false, false, false, 0)
+    EventFlowSystemActor.WaitFrame(40)
  

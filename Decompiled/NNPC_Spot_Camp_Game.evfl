@@ -1,5 +1,5 @@
 flow CheckTool():
-    switch MainNpc.CheckCamperNpcHandheldItemMainNpc.CheckCamperNpcHandheldItem():
+    switch MainNpc.CheckCamperNpcHandheldItem():
         case 0:
             System.EventFlags['cPlayerTemp:CampSetTool'] = 1
         case 1:
@@ -14,180 +14,180 @@ flow CheckTool():
             System.EventFlags['cPlayerTemp:CampSetTool'] = 6
  
 flow Game01_Begin():
-    EventFlowSystemActor.SystemDecideFaceCardEventFlowSystemActor.SystemDecideFaceCard('cSelectType')
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardStart')
+    EventFlowSystemActor.SystemDecideFaceCard('cSelectType')
+    MainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardStart')
     # Alright! Which of these patterns— ♥heart, ♦diamond, ♠spade, or ♣club—is on this card?
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:101', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4EventFlowSystemActor.GeneralTalkChoice4():
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:101', false)
+    switch EventFlowSystemActor.GeneralTalkChoice4():
         case 0, 1, 2, 3:
             # Let's see what the answer is.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:005', false)
-            EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardOpen')
-            if EventFlowSystemActor.SystemIsCorrectFaceCardEventFlowSystemActor.SystemIsCorrectFaceCard():
-                EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Success_Level3', -1)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:005', false)
+            EventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardOpen')
+            if EventFlowSystemActor.SystemIsCorrectFaceCard():
+                EventFlowSystemActor.SoundTriggerEmit('Success_Level3', -1)
                 # The answer's…<140:14:cd00>! You got it!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:102_01', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:102_01', false)
                 run Game_SucessEnd()
             else:
-                EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Fail', -1)
+                EventFlowSystemActor.SoundTriggerEmit('Fail', -1)
                 # The answer's…<140:14:cd00>! Aw, no dice!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:102_02', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:102_02', false)
                 run Game_FailEnd()
  
 flow Game02_Begin():
-    EventFlowSystemActor.SystemDecideFaceCardEventFlowSystemActor.SystemDecideFaceCard('cSelectColor')
-    MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardStart')
+    EventFlowSystemActor.SystemDecideFaceCard('cSelectColor')
+    MainNpc.CharacterEmoticonAction('NpcHoldout', true, '', 0, false)
+    EventFlowSystemActor.WaitFrame(30)
+    EventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardStart')
     # So…is the pattern on this card I just drew "red" or "black"?!
-    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:201', false)
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
+    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:201', false)
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # Let's see what the answer is.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:005', false)
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardOpen')
-        if EventFlowSystemActor.SystemIsCorrectFaceCardEventFlowSystemActor.SystemIsCorrectFaceCard():
-            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Success_Level3', -1)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:005', false)
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardOpen')
+        if EventFlowSystemActor.SystemIsCorrectFaceCard():
+            EventFlowSystemActor.SoundTriggerEmit('Success_Level3', -1)
             # The answer's…<140:14:cd00>! That's red! You got it right!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_01', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_01', false)
             run Game_SucessEnd()
         else:
-            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Fail', -1)
+            EventFlowSystemActor.SoundTriggerEmit('Fail', -1)
             # The answer's…<140:14:cd00>! Aw, that's black! You got it wrong!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_02', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_02', false)
             run Game_FailEnd()
     else:
         # Let's see what the answer is.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:005', false)
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardOpen')
-        if EventFlowSystemActor.SystemIsCorrectFaceCardEventFlowSystemActor.SystemIsCorrectFaceCard():
-            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Success_Level3', -1)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:005', false)
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cFaceCardOpen')
+        if EventFlowSystemActor.SystemIsCorrectFaceCard():
+            EventFlowSystemActor.SoundTriggerEmit('Success_Level3', -1)
             # The answer's…<140:14:cd00>! It's black, so you got it right!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_03', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_03', false)
             run Game_SucessEnd()
         else:
-            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('Fail', -1)
+            EventFlowSystemActor.SoundTriggerEmit('Fail', -1)
             # The answer's…<140:14:cd00>! Aw, it's red. You got it wrong!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_04', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:202_04', false)
             run Game_FailEnd()
  
 flow Game_FailEnd():
     if System.EventFlags['cPlayerTemp:CampInviteInProgress']:
         # RANDOM: I win! Sorry, but I guess I'm not movin… // I win! Guess I'm not moving this time. // I won, so I won't be moving…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:204', false)
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:204', false)
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
         # RANDOM: What a fun way to spend however long th… // That was fun. Maybe I'll get folks to p… // That was exciting! Whew. I dunno if you…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:205', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:205', false)
         System.EventFlags['cPlayerTemp:CampInviteInProgress'] = false
         System.EventFlags['cPlayerTemp:CampInviteRejected'] = true
         run SetTool()
     else:
         System.EventFlags['cPlayer:CampGameClear'] += 1
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
         # I win! Sorry, but that means no prize for you… You could probably get a hug though. If ya want.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:006_03', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:006_03', false)
         # A huh huh. I was so excited I forgot to breathe! I get all nervous when I'm checking the results.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:007_03', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:007_03', false)
         run SetTool()
  
 flow Game_SucessEnd():
     if System.EventFlags['cPlayerTemp:CampInviteInProgress']:
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
         # RANDOM: That means…you win! That's real cool. O… // You win! Alright, now I gotta…oh yeah! … // That means you win! OK, OK, OK! Calm do…
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:206', true)
-        EventFlowSystemActor.FadeOutEventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(60)
-        EventFlowSystemActor.FadeInEventFlowSystemActor.FadeIn(true)
-        if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cSold') < 10:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:206', true)
+        EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+        EventFlowSystemActor.WaitFrame(60)
+        EventFlowSystemActor.FadeIn(true)
+        if EventFlowSystemActor.NpcHouseNum('cSold') < 10:
             run NNPC_Spot_Camp_Invite::CheckOfficerun NNPC_Spot_Camp_Invite::CheckOffice()
         else:
-            if EventFlowSystemActor.NpcHouseNumEventFlowSystemActor.NpcHouseNum('cAbandonedHouse') < 1:
+            if EventFlowSystemActor.NpcHouseNum('cAbandonedHouse') < 1:
                 run NNPC_Spot_Camp_Invite::CheckOffice_Moverun NNPC_Spot_Camp_Invite::CheckOffice_Move()
             else:
                 run NNPC_Spot_Camp_Invite::CheckOffice_EmptyHouserun NNPC_Spot_Camp_Invite::CheckOffice_EmptyHouse()
         System.EventFlags['cPlayerTemp:CampInviteInProgress'] = false
         run SetTool()
     else:
-        MainNpc.SetDeliveryItemMainNpc.SetDeliveryItem(1, true)
+        MainNpc.SetDeliveryItem(1, true)
         System.EventFlags['cPlayer:CampGameClear'] += 1
         if System.EventFlags['cPlayerTemp:CampGameHitRare']:
             System.EventFlags['cPlayer:CampGameGetRare'] = true
             # That means I lose! OK, here it is! My <125:0:0000>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:006_02', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:006_02', false)
         else:
             # Ah, wow! You win! Alrighty, like I promised, here's my <125:0:0000>!
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:006_01', false)
-        EventFlowSystemActor.UIMiniGameHighAndLowHandlingEventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
-        MainNpc.NpcDeliveryMainNpc.NpcDelivery(1, 'Default')
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:006_01', false)
+        EventFlowSystemActor.UIMiniGameHighAndLowHandling('cGameEnd')
+        MainNpc.NpcDelivery(1, 'Default')
         # That was great, a huh huh huh! I lost my thing, but I still had fun! Let's play again sometime, <110:6>!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:007_01', false)
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:007_01', false)
         run SetTool()
  
 flow Root():
     run CheckTool()
     if System.EventFlags['cPlayerTemp:CampInviteInProgress']:
         # Alright! Let's get started on the card-game showdown game…that you play with cards!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:203_01', true)
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-        MainNpc.CharacterEmoticonActionMainNpc.CharacterEmoticonAction('NpcShuffle', true, '', 0, false)
-        EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(30)
-        if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Invite:203_01', true)
+        MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+        MainNpc.CharacterEmoticonAction('NpcShuffle', true, '', 0, false)
+        EventFlowSystemActor.WaitFrame(30)
+        if EventFlowSystemActor.RandomChoice2(2) == 0:
             run Game01_Begin()
         else:
             run Game02_Begin()
     else:
         System.EventFlags['cPlayerTemp:CampGameHitRare'] = false
-        if (not System.EventFlags['cPlayer:CampGameGetRare']) and (EventFlowSystemActor.PercentChoiceEventFlowSystemActor.PercentChoice(50)):
+        if (not System.EventFlags['cPlayer:CampGameGetRare']) and (EventFlowSystemActor.PercentChoice(50)):
             System.EventFlags['cPlayerTemp:CampGameHitRare'] = true
-            EventFlowSystemActor.SelectRewardItemCampGameEventFlowSystemActor.SelectRewardItemCampGame('cVeryGood')
+            EventFlowSystemActor.SelectRewardItemCampGame('cVeryGood')
         else:
-            EventFlowSystemActor.SelectRewardItemCampGameEventFlowSystemActor.SelectRewardItemCampGame('cNormal')
-        MainNpc.SetItemNameMainNpc.SetItemName(1, 0, 0)
+            EventFlowSystemActor.SelectRewardItemCampGame('cNormal')
+        MainNpc.SetItemName(1, 0, 0)
         # Hey, do ya wanna play a little game with me? If you win, I'll give you my <125:0:0000> as a prize!
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:001', false)
-        if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() != 0:
+        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:001', false)
+        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
             # Aw, OK. But I still wanna play if you change your mind, <110:6>.
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:003', false)
-        elif EventFlowSystemActor.ShoppingCapacityEventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:003', false)
+        elif EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
             # Cool! OK, let's start then. Do ya need me to explain the rules, <110:6>?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:002', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:002', false)
             System.EventFlags['cPlayerTemp:CampGameStartFailed'] = false
-            MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-            if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                if EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+            MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+                if EventFlowSystemActor.RandomChoice2(2) == 0:
                     # OK! Here's the rule stuff! I've got cards with four different patterns: ♥heart, ♦diamond, ♠spade, ♣club. I'm going to draw one card and you gotta gue…
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:100', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:100', false)
                     run Game01_Begin()
                 else:
                     # OK! So all of these cards got one of these patterns: ♥heart, ♦diamond, ♠spade, or ♣club. I'm gonna draw one card, and you gotta guess what color the …
-                    MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:200', false)
+                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:200', false)
                     run Game02_Begin()
-            elif EventFlowSystemActor.RandomChoice2EventFlowSystemActor.RandomChoice2(2) == 0:
+            elif EventFlowSystemActor.RandomChoice2(2) == 0:
                 # OK! First, I'm gonna mix up all the cards real good! Shuffle, shuffle, shuffle…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:004', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:004', false)
                 run Game01_Begin()
             else:
                 # OK! First, I'm gonna mix up all the cards real good! Shuffle, shuffle, shuffle…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:004', false)
+                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:004', false)
                 run Game02_Begin()
         else:
             # Yay! Alright, let's start! Uh-oh. You've got some real full pockets. Maybe we should call it quits. It'd stink like feet if you won but couldn't take…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:008', false)
+            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Game:008', false)
             System.EventFlags['cPlayerTemp:CampGameStartFailed'] = true
  
 flow SetTool():
-    MainNpc.MessageSuspendMainNpc.MessageSuspend()
+    MainNpc.MessageSuspend()
     if System.EventFlags['cPlayerTemp:CampSetTool'] == 1:
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(7756, 'cNone', false)
+        MainNpc.NpcChangeHandTool(7756, 'cNone', false)
     elif System.EventFlags['cPlayerTemp:CampSetTool'] == 2:
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(7397, 'cNone', false)
+        MainNpc.NpcChangeHandTool(7397, 'cNone', false)
     elif System.EventFlags['cPlayerTemp:CampSetTool'] == 3:
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(7398, 'cNone', false)
+        MainNpc.NpcChangeHandTool(7398, 'cNone', false)
     elif System.EventFlags['cPlayerTemp:CampSetTool'] == 4:
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(7399, 'cNone', false)
+        MainNpc.NpcChangeHandTool(7399, 'cNone', false)
     elif System.EventFlags['cPlayerTemp:CampSetTool'] == 5:
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(7669, 'cNone', false)
+        MainNpc.NpcChangeHandTool(7669, 'cNone', false)
     elif System.EventFlags['cPlayerTemp:CampSetTool'] == 6:
-        MainNpc.NpcChangeHandToolMainNpc.NpcChangeHandTool(4388, 'cNone', false)
+        MainNpc.NpcChangeHandTool(4388, 'cNone', false)
  

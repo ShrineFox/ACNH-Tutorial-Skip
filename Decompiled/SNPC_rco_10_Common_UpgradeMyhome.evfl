@@ -1,17 +1,17 @@
 flow HHA_1st_BuildCelebration():
-    switch EventFlowSystemActor.RandomChoice3EventFlowSystemActor.RandomChoice3(3):
+    switch EventFlowSystemActor.RandomChoice3(3):
         case 0:
-            MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(7134, false)
+            MainNpc.NpcSetRewardRecipe(7134, false)
         case 1:
-            MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(7133, false)
+            MainNpc.NpcSetRewardRecipe(7133, false)
         case 2:
-            MainNpc.NpcSetRewardRecipeMainNpc.NpcSetRewardRecipe(3438, false)
-    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cHHA', 'MAIL_SP_HHA_BuildCelebration', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+            MainNpc.NpcSetRewardRecipe(3438, false)
+    EventFlowSystemActor.SystemMailSend('cHHA', 'MAIL_SP_HHA_BuildCelebration', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
  
 flow RcoCmnProcessUpgradeMyhome():
     System.EventFlags['cPlayer:RcoOrderedHouseBuilt'] = true
     System.EventFlags['cPlayer:RcoHeardRemodel1'] = false
-    switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+    switch EventFlowSystemActor.PlayerHouseLevel():
         case `PlacedTent`:
             System.EventFlags['cHouse:HouseOrder1'] = true
             System.EventFlags['cPlayer:NnpcFinishHintTalk'] = true
@@ -32,79 +32,79 @@ flow RcoCmnProcessUpgradeMyhome():
             return
  
 flow Rco_Cmn_UpgradeHouseSel():
-    if EventFlowSystemActor.GeneralTalkChoice2EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+        switch EventFlowSystemActor.PlayerHouseLevel():
             case `PlacedTent`:
                 # Thank you for your business! I'll get construction started right away. By the way, you get to choose from eight different colors for the roof.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:202', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:202', false)
                 run SNPC_rco_02_SelRoofColor::Rootrun SNPC_rco_02_SelRoofColor::Root()
                 # I'll get that order in for you. Yes, yes!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209', false)
                 # Oh! One more thing… Homeowners get an automatic Nook Mileage Program upgrade.
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_01', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_01', false)
                 # Just give me one moment, hm…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_02', true)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_02', true)
                 run Demo_Common_PhoneCall::SendingDataOneWayrun Demo_Common_PhoneCall::SendingDataOneWay()
                 # Yes, yes, there we go! I've updated your program membership details, PLAYER. Now when you use the Nook Miles app, you'll have access to all the Nook …
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_03', false)
-                MainNpc.SmartPhoneMainNpc.SmartPhone(1)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_03', false)
+                MainNpc.SmartPhone(1)
                 # That is all from me!<10:4> Your wonderful new home should be ready tomorrow. Quite exciting, yes?
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_04', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:209_04', false)
                 System.EventFlags['cPlayer:MainmenuRndDailyQuest'] = true
                 System.EventFlags['cPlayer:PlayerSonkatsuQuestEnable'] = true
                 System.EventFlags['cPlayer:Mobile1stBoot_MilageProgram'] = true
-                if (EventFlowSystemActor.TermEventNowEventFlowSystemActor.TermEventNow('EarthDay', false)) and (not System.EventFlags['cPlayer:MailSendFlag_EarthDayNotice']):
-                    EventFlowSystemActor.SystemMailSendEventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 6, 'cNone', 'cFastToday', 'cReward', false, false)
+                if (EventFlowSystemActor.TermEventNow('EarthDay', false)) and (not System.EventFlags['cPlayer:MailSendFlag_EarthDayNotice']):
+                    EventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 6, 'cNone', 'cFastToday', 'cReward', false, false)
                     System.EventFlags['cPlayer:MailSendFlag_EarthDayNotice'] = true
                 run RcoCmnProcessUpgradeMyhome()
             case `BaseHouse`, `BackRoom`:
                 # Wonderful! I'm so happy for you! I'm going to make sure construction begins right away. Oh! It occurs to me…<10:4>this might be a good time to consid…
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:251', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:251', false)
                 run SNPC_rco_02_SelRoofColor::Rootrun SNPC_rco_02_SelRoofColor::Root()
                 # Construction on your home should be finished up by tomorrow. I'll bet you're even more excited than I am!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:252', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:252', false)
                 run RcoCmnProcessUpgradeMyhome()
             case `HouseExpansion1`, `LeftRoom`, `RightRoom`, `SecondFloor`:
                 # Excellent! I'll get the construction started right away. Everything should be ready for you by tomorrow morning. So exciting! Exciting indeed!
-                MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:103', false)
+                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:103', false)
                 run RcoCmnProcessUpgradeMyhome()
             default:
                 return
     else:
         # Yes, yes, indeed! This is a major purchase that requires careful consideration. When you're ready, come see me.
-        MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:102', false)
-        if EventFlowSystemActor.OfficeLevelEventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:102', false)
+        if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
             run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
  
 flow Root():
-    switch EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel():
+    switch EventFlowSystemActor.PlayerHouseLevel():
         case `PlacedTent`:
             # Oh! <50:3>PLAYER! Have you made a decision about home ownership? Ready to move forward into comfort and luxury? As fun as living in a tent can be, a …
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:201', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:201', false)
             run Rco_Cmn_UpgradeHouseSel()
         case `BaseHouse`:
             # Well, hm… For your home, I think I'd recommend making the room larger. That would require taking out a loan for 198,000 Bells. Interested?
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:211', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:211', false)
             run Rco_Cmn_UpgradeHouseSel()
         case `HouseExpansion1`:
             # Well, hm… For your home, I think adding a new room would be nice. If we add it on the back, it won't change the look of the home, but you'll get so m…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:212', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:212', false)
             run Rco_Cmn_UpgradeHouseSel()
         case `BackRoom`:
             # Ready to expand your home, hm?<10:4> I believe we could add another room to give you a little more space. We'd be talking about a loan of 548,000 Bel…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:213', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:213', false)
             run Rco_Cmn_UpgradeHouseSel()
         case `LeftRoom`:
             # Ready to expand your home, hm?<10:4> I believe another room would give you the extra space you desire. We'd be talking about a loan of 758,000 Bells.…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:214', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:214', false)
             run Rco_Cmn_UpgradeHouseSel()
         case `RightRoom`:
             # Ready to expand your home, hm? Why, with a hammer and some elbow grease, we can put a large, one-room second story on your home! Of course…adding a w…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:215', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:215', false)
             run Rco_Cmn_UpgradeHouseSel()
         case `SecondFloor`:
             # Oho! Are you interested in having your very own basement? Now, you've weathered some serious sticker shock before, so I'm sure you can handle it, but…
-            MainNpc.OpenMessageWindowMainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:216', false)
+            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:216', false)
             run Rco_Cmn_UpgradeHouseSel()
         default:
             return

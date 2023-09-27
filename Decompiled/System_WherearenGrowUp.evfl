@@ -3,11 +3,11 @@ flow `1stKKFesDoneChk`():
         System.EventFlags['cWherearenPlayer:IsAfterFirstKKFesDay'] = true
  
 flow CheckDaysPassed():
-    if not EventFlowSystemActor.WherearenGrowUpIntervalEventFlowSystemActor.WherearenGrowUpInterval(7):
+    if not EventFlowSystemActor.WherearenGrowUpInterval(7):
         SubflowResults[2] = 0
-    elif not EventFlowSystemActor.WherearenGrowUpIntervalEventFlowSystemActor.WherearenGrowUpInterval(30):
+    elif not EventFlowSystemActor.WherearenGrowUpInterval(30):
         SubflowResults[2] = 1
-    elif EventFlowSystemActor.WherearenGrowUpIntervalEventFlowSystemActor.WherearenGrowUpInterval(365):
+    elif EventFlowSystemActor.WherearenGrowUpInterval(365):
         SubflowResults[2] = 3
     else:
         SubflowResults[2] = 2
@@ -15,23 +15,23 @@ flow CheckDaysPassed():
 flow ChocolateDemo():
     if System.EventFlags['cPlayerTemp:WHEREAREN_ChocolateDemoReserve']:
         System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-        EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('NNPC_Select_Chocolate', 'KeepFaderOff_Wherearen', false, false, false)
-        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cChocolateDemoWherearenIsland', 'cDAL', 'cCircle', 'cBlack', 1.0, 1.0)
+        EventFlowSystemActor.ReserveSystemFlowDemo('NNPC_Select_Chocolate', 'KeepFaderOff_Wherearen', false, false, false)
+        EventFlowSystemActor.SystemRequestChangeStage('cChocolateDemoWherearenIsland', 'cDAL', 'cCircle', 'cBlack', 1.0, 1.0)
         EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
  
 flow Continue():
     run System_GrowUp::DateCheckrun System_GrowUp::DateCheck()
-    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    EventFlowSystemActor.TimeLock('cLock')
     run GameEventChk()
     run CreateRoadChk()
     run CheckDaysPassed()
-    EventFlowSystemActor.SaveWherearenGrowUpEventFlowSystemActor.SaveWherearenGrowUp()
+    EventFlowSystemActor.SaveWherearenGrowUp()
     run PostGrowProcess()
-    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    EventFlowSystemActor.TimeLock('cUnlock')
     run System_GrowUp::Saverun System_GrowUp::Save()
     run ChocolateDemo()
     run Repair_EventFlag()
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIsland', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIsland', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow CreateRoadChk():
     if (not System.EventFlags['cWherearenPlayer:Unlock_CreateRoad']) and (System.EventFlags['cPlayer:MainmenuConstructLicense']):
@@ -39,18 +39,18 @@ flow CreateRoadChk():
  
 flow FirstTime():
     run System_GrowUp::DateCheckrun System_GrowUp::DateCheck()
-    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    EventFlowSystemActor.TimeLock('cLock')
     run CreateRoadChk()
-    EventFlowSystemActor.SaveWherearenGrowUpEventFlowSystemActor.SaveWherearenGrowUp()
-    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    EventFlowSystemActor.SaveWherearenGrowUp()
+    EventFlowSystemActor.TimeLock('cUnlock')
     System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
     System.EventFlags['cPlayerTemp:WHEREAREN_MainIslandLandingDemo'] = true
-    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('Demo_Wherearen_Op', 'FirstLanding', false, true, false)
-    EventFlowSystemActor.CameraReserveFirstStateCommandEventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Landing0Start', 'CameraTag:KKFesBeach', false)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandDemoLanding', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.ReserveSystemFlowDemo('Demo_Wherearen_Op', 'FirstLanding', false, true, false)
+    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Landing0Start', 'CameraTag:KKFesBeach', false)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandDemoLanding', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow GameEventChk():
-    if EventFlowSystemActor.WherearenGrowUpIntervalEventFlowSystemActor.WherearenGrowUpInterval(1):
+    if EventFlowSystemActor.WherearenGrowUpInterval(1):
         SubflowResults[0] = 1
         run GameEventChk_ManCatalogShop()
         run GameEventChk_MncBox()
@@ -58,7 +58,7 @@ flow GameEventChk():
         SubflowResults[0] = 0
  
 flow GameEventChk_EntryOffice():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 0:
+    if EventFlowSystemActor.WherearenOrderStatus() == 0:
         System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
         if not System.EventFlags['cWherearenPlayer:SeqMncEventLesson01']:
             run GameEventChk_ExchangeMachine()
@@ -69,7 +69,7 @@ flow GameEventChk_EnvSound():
     if System.EventFlags['cWherearenPlayer:SeqEnvSoundOngoing']:
         if not System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']:
             run SNPC_otg_30_WherearenEvent_EnvSound::FromGrowUprun SNPC_otg_30_WherearenEvent_EnvSound::FromGrowUp()
-        elif EventFlowSystemActor.KKFesEventFlowSystemActor.KKFes() in (0, 1):
+        elif EventFlowSystemActor.KKFes() in (0, 1):
             run SNPC_otg_30_WherearenEvent_EnvSound::FromGrowUp_Reset03run SNPC_otg_30_WherearenEvent_EnvSound::FromGrowUp_Reset03()
  
 flow GameEventChk_ExchangeMachine():
@@ -81,16 +81,16 @@ entrypoint Event23:
         System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = true
  
 flow GameEventChk_ManCatalogShop():
-    if (not System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']) and (EventFlowSystemActor.WherearenShopFtrBuyTotalEventFlowSystemActor.WherearenShopFtrBuyTotal(150000)):
+    if (not System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']) and (EventFlowSystemActor.WherearenShopFtrBuyTotal(150000)):
         System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop'] = true
-        EventFlowSystemActor.UnlockManCatalogSpTabItemEventFlowSystemActor.UnlockManCatalogSpTabItem()
+        EventFlowSystemActor.UnlockManCatalogSpTabItem()
  
 flow GameEventChk_MncBox():
     if (not System.EventFlags['cWherearenPlayer:Unlock_MncBox']) and (System.EventFlags['cWherearenPlayer:MncLessonDone']):
         System.EventFlags['cWherearenPlayer:SeqMncBoxEventReady'] = true
  
 flow GameEventChk_MncLesson():
-    if (System.EventFlags['cWherearenPlayer:MncLessonDone']) and (((not System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_02']) and (EventFlowSystemActor.PlayerHasCraftRecipeEventFlowSystemActor.PlayerHasCraftRecipe('WherearenMncBox', 65534))) or (EventFlowSystemActor.IsMncBoxLessonEventFlowSystemActor.IsMncBoxLesson())):
+    if (System.EventFlags['cWherearenPlayer:MncLessonDone']) and (((not System.EventFlags['cWherearenPlayer:Unlock_PillarCatalog_02']) and (EventFlowSystemActor.PlayerHasCraftRecipe('WherearenMncBox', 65534))) or (EventFlowSystemActor.IsMncBoxLesson())):
         System.EventFlags['cWherearenPlayer:SeqMncEventLesson02'] = true
  
 flow GameEventChk_ResortStudy():
@@ -99,7 +99,7 @@ flow GameEventChk_ResortStudy():
         run Event23()
  
 flow GameEventChk_SnpcFacility():
-    if (EventFlowSystemActor.EnvDayOfWeekEventFlowSystemActor.EnvDayOfWeek() == `Monday`) and (System.EventFlags['cPlayer:KaburibaTalkBeforeFlag']):
+    if (EventFlowSystemActor.EnvDayOfWeek() == `Monday`) and (System.EventFlags['cPlayer:KaburibaTalkBeforeFlag']):
         System.EventFlags['cWherearenPlayer:BoaHospitalEvent'] = true
  
 flow GameEventChk_SnpcVisit():
@@ -114,22 +114,22 @@ flow GameEventChk_SnpcVisit():
  
 flow InGame():
     # It's a brand-new day. I'm gonna make it another great one!
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Player:1308', true)
+    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Player:1308', true)
     run System_GrowUp::DateCheckrun System_GrowUp::DateCheck()
-    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cLock')
+    EventFlowSystemActor.TimeLock('cLock')
     run GameEventChk()
     run CreateRoadChk()
-    EventFlowSystemActor.SaveWherearenGrowUpEventFlowSystemActor.SaveWherearenGrowUp()
+    EventFlowSystemActor.SaveWherearenGrowUp()
     run PostGrowProcess()
-    EventFlowSystemActor.TimeLockEventFlowSystemActor.TimeLock('cUnlock')
+    EventFlowSystemActor.TimeLock('cUnlock')
     run System_GrowUp::Saverun System_GrowUp::Save()
     run Repair_EventFlag()
     System.EventFlags['cPlayerTemp:WHEREAREN_DocMainEreaFirstTalkDone'] = true
     System.EventFlags['cWherearenPlayer:VisitToday'] = true
     System.EventFlags['cWherearenPlayer:VisitTotal'] += 1
     System.EventFlags['cWherearenPlayer:BridgeFromGrowUp'] = true
-    EventFlowSystemActor.ReserveSystemFlowDemoEventFlowSystemActor.ReserveSystemFlowDemo('SNPC_mnc_01_Wherearen', 'FromGrowUp', false, true, false)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandAfterGrowUp', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.ReserveSystemFlowDemo('SNPC_mnc_01_Wherearen', 'FromGrowUp', false, true, false)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandAfterGrowUp', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
  
 flow PostGrowProcess():
     if SubflowResults@2[0] != 0:
@@ -171,17 +171,17 @@ flow VisitCheck_Mnc():
         SubflowResults[1] = 1
  
 flow VisitCheck_Slo():
-    if (not System.EventFlags['cWherearenPlayer:Unlock_FlowerCatalog']) and (System.EventFlags['cWherearenPlayer:CompleteAppearanceSchool']) and (EventFlowSystemActor.IsSNpcVisitingEventFlowSystemActor.IsSNpcVisiting('cSlo') in (1, 2)):
+    if (not System.EventFlags['cWherearenPlayer:Unlock_FlowerCatalog']) and (System.EventFlags['cWherearenPlayer:CompleteAppearanceSchool']) and (EventFlowSystemActor.IsSNpcVisiting('cSlo') in (1, 2)):
         System.EventFlags['cWherearenPlayer:SNPCAppearCtrl'] = 3
         SubflowResults[1] = 1
  
 flow VisitCheck_Tkk():
-    if (System.EventFlags['cWherearenPlayer:SeqKKRave1stDone']) and (EventFlowSystemActor.KKFesEventFlowSystemActor.KKFes() in (0, 1)):
+    if (System.EventFlags['cWherearenPlayer:SeqKKRave1stDone']) and (EventFlowSystemActor.KKFes() in (0, 1)):
         System.EventFlags['cWherearenPlayer:SNPCAppearCtrl'] = 4
         SubflowResults[1] = 1
  
 flow WherearenProcess():
-    if (EventFlowSystemActor.IsWherearenAocAvailableEventFlowSystemActor.IsWherearenAocAvailable()) and (not System.EventFlags['cPlayer:UnlockWherearen']) and (System.EventFlags['cLand:BuiltTownOffice']) and (not System.EventFlags['cLand:BuiltTownOfficeToday']) and (System.EventFlags['cPlayer:MainmenuRecipe']) and (EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`)):
+    if (EventFlowSystemActor.IsWherearenAocAvailable()) and (not System.EventFlags['cPlayer:UnlockWherearen']) and (System.EventFlags['cLand:BuiltTownOffice']) and (not System.EventFlags['cLand:BuiltTownOfficeToday']) and (System.EventFlags['cPlayer:MainmenuRecipe']) and (EventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`)):
         System.EventFlags['cPlayer:StandByPhoneCallOtgVisit'] = true
         System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
  

@@ -1,36 +1,36 @@
 flow Root():
-    if EventFlowSystemActor.NetIsDreamingEventFlowSystemActor.NetIsDreaming():
+    if EventFlowSystemActor.NetIsDreaming():
         run Storeroom_RndText()
-    elif not ((EventFlowSystemActor.IsMyVillageEventFlowSystemActor.IsMyVillage()) and ((EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cField')) or (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse')))):
+    elif not ((EventFlowSystemActor.IsMyVillage()) and ((EventFlowSystemActor.SystemCheckNowStage('cField')) or (EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse')))):
         run Storeroom_RndText()
-    elif EventFlowSystemActor.PlayerHouseLevelEventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
+    elif EventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
         # Once I own a house, I bet I'll be able to store things in this...
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Storeroom:002', false)
+        Player.OpenMessageWindow('TalkFtr/FTR_Storeroom:002', false)
     else:
         run StoreRoom_UseAtMyField()
  
 flow StoreRoom_UseAtMyField():
     run Storeroom_ChkFirstWhereren()
     # Alright, what should I do?
-    Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Storeroom:011', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3EventFlowSystemActor.GeneralTalkChoice3():
+    Player.OpenMessageWindow('TalkFtr/FTR_Storeroom:011', false)
+    switch EventFlowSystemActor.GeneralTalkChoice3():
         case 0:
-            EventFlowSystemActor.UIItemSelectWindowHandlingEventFlowSystemActor.UIItemSelectWindowHandling('cMoveToChest', 65534, '', '', 'cPutInStorage', false)
-            EventFlowSystemActor.UISelectedItemMoveChestEventFlowSystemActor.UISelectedItemMoveChest()
+            EventFlowSystemActor.UIItemSelectWindowHandling('cMoveToChest', 65534, '', '', 'cPutInStorage', false)
+            EventFlowSystemActor.UISelectedItemMoveChest()
         case 1:
-            EventFlowSystemActor.UIStorageHandlingEventFlowSystemActor.UIStorageHandling()
+            EventFlowSystemActor.UIStorageHandling()
         default:
             return
  
 flow Storeroom_ChkFirstWhereren():
-    if (EventFlowSystemActor.SystemCheckNowStageEventFlowSystemActor.SystemCheckNowStage('cWherearenOffice1')) and (not System.EventFlags['cWherearenPlayer:FirstOfficeStoreroomFlag']):
+    if (EventFlowSystemActor.SystemCheckNowStage('cWherearenOffice1')) and (not System.EventFlags['cWherearenPlayer:FirstOfficeStoreroomFlag']):
         # It looks like I can store things in this cabinet.
-        Player.OpenMessageWindowPlayer.OpenMessageWindow('TalkFtr/FTR_Storeroom:003', true)
+        Player.OpenMessageWindow('TalkFtr/FTR_Storeroom:003', true)
         # You can use this cabinet to access your home storage.
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0126', true)
+        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:0126', true)
         System.EventFlags['cWherearenPlayer:FirstOfficeStoreroomFlag'] = true
  
 flow Storeroom_RndText():
     # RANDOM: Hmm...fascinating... // That's some...interesting storage. // Maybe it's about time I reorganized my … // Cool storage idea... // I guess everyone's gotta organize someh…
-    EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_Storeroom:001', false)
+    EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_Storeroom:001', false)
  

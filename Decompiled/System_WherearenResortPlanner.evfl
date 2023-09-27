@@ -1,8 +1,8 @@
 flow ConstructionPortfolioApp():
-    EventFlowSystemActor.UIConstructionPortfolioAppearEventFlowSystemActor.UIConstructionPortfolioAppear()
-    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
-    EventFlowSystemActor.UIConstructionPortfolioWaitManipulateEventFlowSystemActor.UIConstructionPortfolioWaitManipulate()
-    switch EventFlowSystemActor.UIClientListResultEventFlowSystemActor.UIClientListResult():
+    EventFlowSystemActor.UIConstructionPortfolioAppear()
+    EventFlowSystemActor.SystemFaderRelease()
+    EventFlowSystemActor.UIConstructionPortfolioWaitManipulate()
+    switch EventFlowSystemActor.UIClientListResult():
         case 0, 3:
             run SequenceEndApp()
         case 1:
@@ -14,10 +14,10 @@ flow ConstructionPortfolioApp():
  
 flow ConstructionPortfolioMnc():
     if System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortPlannerAppRevisit']:
-        EventFlowSystemActor.UIConstructionPortfolioAppearEventFlowSystemActor.UIConstructionPortfolioAppear()
-        EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
-        EventFlowSystemActor.UIConstructionPortfolioWaitManipulateEventFlowSystemActor.UIConstructionPortfolioWaitManipulate()
-        switch EventFlowSystemActor.UIClientListResultEventFlowSystemActor.UIClientListResult():
+        EventFlowSystemActor.UIConstructionPortfolioAppear()
+        EventFlowSystemActor.SystemFaderRelease()
+        EventFlowSystemActor.UIConstructionPortfolioWaitManipulate()
+        switch EventFlowSystemActor.UIClientListResult():
             case 0:
                 run SequenceEndMnc()
             case 1:
@@ -30,40 +30,40 @@ flow ConstructionPortfolioMnc():
         run ReVisitTutorial()
  
 flow ReSelectConstructionPortfolio():
-    EventFlowSystemActor.UIConstructionPortfolioReSelectionEventFlowSystemActor.UIConstructionPortfolioReSelection()
-    EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cNone', false)
+    EventFlowSystemActor.UIConstructionPortfolioReSelection()
+    EventFlowSystemActor.SwapSpeaker('cNone', false)
     run Event133()
  
 flow ReVisitTutorial():
-    EventFlowSystemActor.UIConstructionPortfolioAppearEventFlowSystemActor.UIConstructionPortfolioAppear()
-    EventFlowSystemActor.SystemFaderReleaseEventFlowSystemActor.SystemFaderRelease()
-    EventFlowSystemActor.UIConstructionPortfolioWaitManipulateEventFlowSystemActor.UIConstructionPortfolioWaitManipulate()
+    EventFlowSystemActor.UIConstructionPortfolioAppear()
+    EventFlowSystemActor.SystemFaderRelease()
+    EventFlowSystemActor.UIConstructionPortfolioWaitManipulate()
 entrypoint Event133:
-    if EventFlowSystemActor.UIIsShowConvDialogOnConstructionPortfolioEventFlowSystemActor.UIIsShowConvDialogOnConstructionPortfolio():
-        EventFlowSystemActor.SwapSpeakerEventFlowSystemActor.SwapSpeaker('cMnc', true)
+    if EventFlowSystemActor.UIIsShowConvDialogOnConstructionPortfolio():
+        EventFlowSystemActor.SwapSpeaker('cMnc', true)
         # Whoa, whoa, whoa, hang on! That's not the right destination, is it?
-        EventFlowSystemActor.OpenMessageWindowEventFlowSystemActor.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:059', true)
+        EventFlowSystemActor.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:059', true)
         run ReSelectConstructionPortfolio()
-    elif EventFlowSystemActor.UIClientListResultEventFlowSystemActor.UIClientListResult() in (0, 2, 3, 4):
+    elif EventFlowSystemActor.UIClientListResult() in (0, 2, 3, 4):
         run SequenceEndMnc()
     else:
         System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Garden'] = true
-        EventFlowSystemActor.WherearenSetNpcGardenVisitByEventFlowSystemActor.WherearenSetNpcGardenVisitBy('cTalkMnc')
-        EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenVisit', 0)
+        EventFlowSystemActor.WherearenSetNpcGardenVisitBy('cTalkMnc')
+        EventFlowSystemActor.PlayReport('cWherearenVisit', 0)
         run Demo_Common_Wherearen::SetCamera_GardenVisitrun Demo_Common_Wherearen::SetCamera_GardenVisit()
-        EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-        EventFlowSystemActor.ReserveEnterGardenPatternEventFlowSystemActor.ReserveEnterGardenPattern(1)
-        EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+        EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+        EventFlowSystemActor.ReserveEnterGardenPattern(1)
+        EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
  
 flow ReturnSave():
-    EventFlowSystemActor.UISaveIconAppearEventFlowSystemActor.UISaveIconAppear()
+    EventFlowSystemActor.UISaveIconAppear()
     if System.EventFlags['cPlayerTemp:WHEREAREN_NeedsInspectReply']:
-        EventFlowSystemActor.NetWherearenReplyEventFlowSystemActor.NetWherearenReply('cVisit')
-        switch EventFlowSystemActor.CheckErrorTypeEventFlowSystemActor.CheckErrorType(2):
+        EventFlowSystemActor.NetWherearenReply('cVisit')
+        switch EventFlowSystemActor.CheckErrorType(2):
             default:
                 return
-    EventFlowSystemActor.SaveSimpleSaveEventFlowSystemActor.SaveSimpleSave('cAll')
-    EventFlowSystemActor.UISaveIconDisappearEventFlowSystemActor.UISaveIconDisappear()
+    EventFlowSystemActor.SaveSimpleSave('cAll')
+    EventFlowSystemActor.UISaveIconDisappear()
  
 flow Root():
     if System.EventFlags['cWherearenPlayer:ResortPlannerFromInspect']:
@@ -71,7 +71,7 @@ flow Root():
         System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn'] = true
         if System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromMyPage']:
             run System_WherearenResortPlannerMyPage::FromMyPagerun System_WherearenResortPlannerMyPage::FromMyPage()
-        elif EventFlowSystemActor.UIWherearenInspectBeforeListEventFlowSystemActor.UIWherearenInspectBeforeList() in (0, 1, 2, 3, 5):
+        elif EventFlowSystemActor.UIWherearenInspectBeforeList() in (0, 1, 2, 3, 5):
             run System_WherearenResortPlannerInspect::WherearenInspectListrun System_WherearenResortPlannerInspect::WherearenInspectList()
         else:
             run System_WherearenResortPlannerInspect::WherearenInspectUserPagerun System_WherearenResortPlannerInspect::WherearenInspectUserPage()
@@ -86,14 +86,14 @@ flow Root():
             run ConstructionPortfolioMnc()
  
 flow SequenceEndApp():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerAppReturn', 'cWherearenPlannerBack', 'cWherearenPlannerBack', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.WaitFrame(15)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerAppReturn', 'cWherearenPlannerBack', 'cWherearenPlannerBack', 'cBlack', 1.0, 1.0)
  
 flow SequenceEndMnc():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(15)
+    EventFlowSystemActor.WaitFrame(15)
     System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Bridge'] = true
     System.EventFlags['cWherearenPlayer:ResortPlannerCancel'] = true
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerAppReturn', 'cWherearenPlannerBackFromMnc', 'cWherearenPlannerBackFromMnc', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerAppReturn', 'cWherearenPlannerBackFromMnc', 'cWherearenPlannerBackFromMnc', 'cBlack', 1.0, 1.0)
  
 flow Setting_OpenNpc():
     System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromSmartphone'] = false
@@ -111,20 +111,20 @@ flow Setting_ReturnInspect():
     System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_InspectHouse'] = false
  
 local flow Sub_Event50():
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat_NoDelay_Switch', -1)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerAppGoFacility', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat_NoDelay_Switch', -1)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerAppGoFacility', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
  
 flow VisitFacility():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
-    EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
-    EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenVisit', 0)
+    EventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.MiniGameSilentCancel()
+    EventFlowSystemActor.PlayReport('cWherearenVisit', 0)
     System.EventFlags['cWherearenPlayer:OtgWithoutMakeup'] = false
     System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromSmartphone'] = false
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-    if EventFlowSystemActor.WherearenVisitFacilityTypeEventFlowSystemActor.WherearenVisitFacilityType() in (0, 1, 2, 3, 4):
+    EventFlowSystemActor.WaitFrame(10)
+    if EventFlowSystemActor.WherearenVisitFacilityType() in (0, 1, 2, 3, 4):
         run Sub_Event50()
     else:
-        EventFlowSystemActor.WherearenOrderCallbackEventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+        EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
         System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
         System.EventFlags['cWherearenPlayer:VisitHouseReturn'] = true
         run Demo_Common_Wherearen::CheckReturnWithTakumirun Demo_Common_Wherearen::CheckReturnWithTakumi()
@@ -132,33 +132,33 @@ flow VisitFacility():
             run Sub_Event50()
         else:
             System.EventFlags['cWherearenPlayer:ReturnWithOtg'] = true
-            EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat_NoDelay_Switch', -1)
-            EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+            EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat_NoDelay_Switch', -1)
+            EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
  
 flow VisitFacilitySequence():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() == 0:
+    if EventFlowSystemActor.WherearenOrderStatus() == 0:
         run VisitFacility()
     else:
         run ConstructionPortfolioApp()
  
 flow VisitNpcGarden():
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(5)
+    EventFlowSystemActor.WaitFrame(5)
     System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Garden'] = true
-    EventFlowSystemActor.MiniGameSilentCancelEventFlowSystemActor.MiniGameSilentCancel()
-    EventFlowSystemActor.WherearenSetNpcGardenVisitByEventFlowSystemActor.WherearenSetNpcGardenVisitBy('cClientList')
-    EventFlowSystemActor.PlayReportEventFlowSystemActor.PlayReport('cWherearenVisit', 0)
+    EventFlowSystemActor.MiniGameSilentCancel()
+    EventFlowSystemActor.WherearenSetNpcGardenVisitBy('cClientList')
+    EventFlowSystemActor.PlayReport('cWherearenVisit', 0)
     run Demo_Common_Wherearen::SetCamera_GardenVisitrun Demo_Common_Wherearen::SetCamera_GardenVisit()
     System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromSmartphone'] = false
-    EventFlowSystemActor.WaitFrameEventFlowSystemActor.WaitFrame(10)
-    EventFlowSystemActor.SoundTriggerEmitEventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat_NoDelay', -1)
-    if EventFlowSystemActor.WherearenNpcFreeQuery2EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cCustomer'):
-        EventFlowSystemActor.ReserveEnterGardenPatternEventFlowSystemActor.ReserveEnterGardenPattern(2)
+    EventFlowSystemActor.WaitFrame(10)
+    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat_NoDelay', -1)
+    if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cCustomer'):
+        EventFlowSystemActor.ReserveEnterGardenPattern(2)
     else:
-        EventFlowSystemActor.ReserveEnterGardenPatternEventFlowSystemActor.ReserveEnterGardenPattern(1)
-    EventFlowSystemActor.SystemRequestChangeStageEventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+        EventFlowSystemActor.ReserveEnterGardenPattern(1)
+    EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
  
 flow VisitNpcSequence():
-    if EventFlowSystemActor.WherearenOrderStatusEventFlowSystemActor.WherearenOrderStatus() != 0:
+    if EventFlowSystemActor.WherearenOrderStatus() != 0:
         run ConstructionPortfolioApp()
     elif System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
         run ConstructionPortfolioApp()
