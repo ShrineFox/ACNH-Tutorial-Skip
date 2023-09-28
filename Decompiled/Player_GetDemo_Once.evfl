@@ -33,35 +33,44 @@ flow Get_FinishLoan():
             run Sub_Event33()
  
 flow Get_MainGame():
-    if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+# DEV NOTE: Removes celebration text after Tom Nook gives you loan details outside your tent
+
+#    if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
         # My move is complete... Deserted-island life begins anew!
-        Player.OpenMessageWindow('TalkSys/SYS_Player:200_01', true)
-    else:
+#        Player.OpenMessageWindow('TalkSys/SYS_Player:200_01', true)
+#    else:
         # My new life is underway... I can do whatever I want! WOO-HOO!
-        Player.OpenMessageWindow('TalkSys/SYS_Player:200', true)
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue', 'cNextDemoEnd_Simple', false)
-    else:
-        run Demo_PublicAnnouncement_Process::Rootrun Demo_PublicAnnouncement_Process::Root()
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue2P', 'cNextDemoEnd_Simple', false)
+#        Player.OpenMessageWindow('TalkSys/SYS_Player:200', true)
+#    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+#        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue', 'cNextDemoEnd_Simple', false)
+#    else:
+#        run Demo_PublicAnnouncement_Process::Rootrun Demo_PublicAnnouncement_Process::Root()
+#        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue2P', 'cNextDemoEnd_Simple', false)
+    EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue', 'cNextDemoEnd_Simple', false)
  
 flow Get_MainGame_Continue():
     EventFlowSystemActor.WaitFrame(30)
-    # From now on, island time will match the flow of time in the real world.
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_01', false)
+# DEV NOTE: Removes auto-save and 24 hour clock system messages. Also try to force 24-hour BGM on
+
+	# From now on, island time will match the flow of time in the real world.
+#    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_01', false)
     # Do not touch the  POWER Button when you see the auto-save indicator  in the top-right screen corner. You can also save and quit your game after pre…
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
+#    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
     System.EventFlags['cLand:ValidateVillageSave'] = true
-    System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 7
+	System.EventFlags['cLand:SzaTaled1stTimeAnyPlayer'] = true
+	System.EventFlags['cLand:BuiltTownOffice'] = true
+    System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 99
     run SetLocalFruitFlag()
     run StartMainGameBitSet()
  
 flow Get_MainGame_Continue2P():
     EventFlowSystemActor.WaitFrame(30)
+# DEV NOTE: Removes auto-save and 24 hour clock system messages
+
     # From now on, your life here will be automatically recorded via auto-save.
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_02', false)
+#    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_02', false)
     # Do not touch the  POWER Button when you see the auto-save indicator  in the top-right screen corner. You can also save and quit your game after pre…
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
+#    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
     System.EventFlags['cPlayer:PlayerEnableEating'] = true
     System.EventFlags['cPlayer:PlayerPocketUIEnable'] = true
     System.EventFlags['cPlayer:PlayerPickupEnable'] = true
@@ -161,7 +170,7 @@ flow SetBitAboutKpp():
             System.EventFlags['cLand:KppTourStartToday'] = true
  
 flow SetBitAboutMuseumPoster():
-    run SNPC_owl_25_Museum_Poster::ChkNoticeUnlockPosterrun SNPC_owl_25_Museum_Poster::ChkNoticeUnlockPoster()
+    run SNPC_owl_25_Museum_Poster::ChkNoticeUnlockPoster()
     if SubflowResults@7[3] in (1, 2, 3, 4, 5, 6):
         System.EventFlags['cPlayer:MuseumPosterUnlockBuySel'] = true
  

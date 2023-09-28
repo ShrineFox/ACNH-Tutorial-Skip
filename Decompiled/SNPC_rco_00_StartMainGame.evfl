@@ -16,46 +16,47 @@ flow RcoTentCall():
     EventFlowSystemActor.ReserveNpcCommand('PrologueNextDayFrontOfTent')
  
 flow Rco_GetSmartPhone():
-    MainNpc.SetDeliveryItemAtRandom(3076, false, 'cVillageRemakePattern', 0)
-    MainNpc.NpcDelivery(1, 'Keep')
+# DEV NOTE: Skip getting smartphone
+#    MainNpc.SetDeliveryItemAtRandom(3076, false, 'cVillageRemakePattern', 0)
+#    MainNpc.NpcDelivery(1, 'Keep')
     # It's your very own NookPhone! I had these made especially for island residents.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_02', true)
-    MainNpc.NpcDelivery(2, 'Default')
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_02', true)
+#    MainNpc.NpcDelivery(2, 'Default')
     # Ah, I want to make sure it's working right, so could you try turning it on for me, hm?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_03', true)
-    Player.SmartPhone(0)
-    EventFlowSystemActor.WaitFrame(5)
-    Player.SmartPhone(4)
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_03', true)
+#    Player.SmartPhone(0)
+#    EventFlowSystemActor.WaitFrame(5)
+#    Player.SmartPhone(4)
     System.EventFlags['cPlayer:MainmenuAchievement'] = true
     System.EventFlags['cPlayer:MainmenuMydesign'] = true
     System.EventFlags['cPlayer:PlayerMainUImenuEnable'] = true
     EventFlowSystemActor.PlayReport('cSeqEndTutorial', 0)
     System.EventFlags['cPlayer:MainUiClockEnable'] = true
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.UIMenuDeviceAppear('cBoot', 'cNone')
-    EventFlowSystemActor.WaitFrame(45)
-    Player.SmartPhone(5)
-    EventFlowSystemActor.WaitFrame(5)
+#    EventFlowSystemActor.WaitFrame(30)
+#    EventFlowSystemActor.UIMenuDeviceAppear('cBoot', 'cNone')
+#    EventFlowSystemActor.WaitFrame(45)
+#    Player.SmartPhone(5)
+#    EventFlowSystemActor.WaitFrame(5)
     # Good, good. Looks like you're getting good reception as well. OK, feel free to put it away now.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_04', true)
-    Player.SmartPhone(1)
-    EventFlowSystemActor.WaitFrame(5)
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_04', true)
+#    Player.SmartPhone(1)
+#    EventFlowSystemActor.WaitFrame(5)
     # Say, PLAYER, have you ever used a smartphone before?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:005', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:005', false)
+#    switch EventFlowSystemActor.GeneralTalkChoice3():
+#        case 0:
             # Very good! Then this should be a breeze for you. In fact, these NookPhones are rather easier to operate than ordinary phones. Oh, yes. We simply remo…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_01', false)
-        case 1:
+#            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_01', false)
+#        case 1:
             # Very good! Then this should be a breeze for you. In fact, I think you'll find it much more useful than the phone you already have.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_02', false)
-        case 2:
-            if EventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
+#            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_02', false)
+#        case 2:
+#            if EventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
                 # Is that so? How wonderful of you! I daresay, you seem especially well suited for life on this rustic island. Nevertheless, I believe you'll find this…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_04', false)
-            else:
+#                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_04', false)
+#            else:
                 # Is that so? How wonderful of you! I daresay, you seem especially well suited for life on this rustic island. Nevertheless, I believe you'll find this…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_03', false)
+#                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:006_03', false)
  
 flow Rco_OrientationEnd():
     EventFlowSystemActor.WaitFrame(10)
@@ -71,84 +72,92 @@ flow Rco_OrientationEnd():
     EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame', 'cNowDemoEnd', false)
  
 flow Rco_TutorialGetBill():
+# DEV NOTE: Skip Nook Phone stuff, only show itemized bill amount
     MainNpc.SetDeliveryItemAtRandom(3077, false, 'cVillageRemakePattern', 0)
     MainNpc.NpcDelivery(1, 'Keep')
     # It's your itemized bill!
     MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:007_01', false)
     EventFlowSystemActor.UIMoneyAppear()
     # So, this includes everything—airfare, accommodations, labor, tax…and of course your NookPhone, hm? Bringing your grand total to the modest sum of…49,…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:008', false)
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        if EventFlowSystemActor.GeneralTalkChoice3() == 0:
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:008', false)
+#    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+#        if EventFlowSystemActor.GeneralTalkChoice3() == 0:
             # Yes, yes! Well, then… WAIT! You don't have any Bells! I can't believe I didn't think of this… Ah! Of course…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:008_01', false)
-        else:
+#            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:008_01', false)
+#        else:
             # Oh ho ho! Good one, PLAYER. Wait—you're being serious!<10:4>  Yes, of course… I can't believe I didn't think of this… Well, Bells are a currency that…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:008_02', false)
-    else:
-        if EventFlowSystemActor.GeneralTalkChoice3() == 0:
+#            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:008_02', false)
+#    else:
+#        if EventFlowSystemActor.GeneralTalkChoice3() == 0:
             # Yes, yes, you've… Huh?<10:7:005a0000> Hey, PLAYER! You don't have any money at all!
-            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue3_Orientation1:110_01', false)
-        else:
+#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue3_Orientation1:110_01', false)
+#        else:
             # What…<10:7:00780000>
-            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue3_Orientation1:110_02', false)
+#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue3_Orientation1:110_02', false)
         # Oh no! No Bells, PLAYER? It's crazy, honestly. So many of my customers arrive here without two Bells to rub together…
-        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue3_Orientation1:111', false)
+#        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue3_Orientation1:111', false)
     MainNpc.NpcDelivery(2, 'Default')
     EventFlowSystemActor.UIMoneyDisappear()
     # Well, no need to worry!<10:4> I was prepared for exactly this type of tricky situation. For the getaway package, you can pay your fees with miles ins…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:009', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0, 1, 2:
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:009', false)
+#    switch EventFlowSystemActor.GeneralTalkChoice3():
+#        case 0, 1, 2:
             # Well, it's quite extraordinary, if I do say so myself. With the Nook Mileage Program, you can earn miles by simply living your life here on ISLAND! I…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:010', false)
+#            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:010', false)
             EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 5000, '')
             # So, the bottom line is…you'd need 49,800 Bells to pay your move-in fees, but with this new service… Would you believe it? It only comes to…<90:3:0000…
             MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:011', false)
             # Yes, yes, but there are more details available within your NookPhone. Just open the Nook Miles app! And you'll see that you've earned some miles just…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:012', false)
+#            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:012', false)
  
 flow Root():
+# DEV NOTE: Skip most of Tom Nook's monologue about bills and Nook Phone usage
+
     # Ah, there you are. I hope you had a pleasant nap. Or, well…I suppose it was a bit more than a nap, wasn't it? It's a brand-new day!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:002', false)
-    switch EventFlowSystemActor.GeneralTalkChoice2():
-        case 0, 1:
-            if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-                run SNPC_rco_00_StartMainGame_PlayerMoving::Root_MainPrun SNPC_rco_00_StartMainGame_PlayerMoving::Root_MainP()
-            else:
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:002', false)
+#    switch EventFlowSystemActor.GeneralTalkChoice2():
+#        case 0, 1:
+#            if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+#                run SNPC_rco_00_StartMainGame_PlayerMoving::Root_MainP()
+#            else:
                 # Oh ho ho! Yes, it's quite normal to be worn out from such a long trip—and a major life event! Speaking of which… I have a few more things that you mi…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:003', false)
+#                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:003', false)
                 # First, you'll need one of these, yes?
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_01', true)
-                run Rco_GetSmartPhone()
-                run v200_SendTipsApp()
+#                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:004_01', true)
+#                run Rco_GetSmartPhone()
+#                run v200_SendTipsApp()
                 # Alright, that's enough about the app for now. I do have one more thing for you, however…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:007', true)
-                run Rco_TutorialGetBill()
+#                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:007', true)
+#                run Rco_TutorialGetBill()
                 # Now, if you'll excuse me, I must get back to a few other matters. But let me heartily congratulate you once again on your arrival. I'm so happy to ha…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:013', true)
-                run Rco_OrientationEnd()
+#                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:013', true)
+#                run Rco_OrientationEnd()
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:011', false)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:012', true)
+    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:013', true)
+    run Rco_OrientationEnd()
  
 flow v200_SendTipsApp():
+# DEV NOTE: Skip Tips App Acquisition
     # Ah, yes, yes!<10:4> There's also a very useful app that contains advice for living here. Normally this would not be free of charge, but as you're jus…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2001', false)
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2001', false)
     # It's called Island Life 101, and it is a message delivery service of sorts… Feel like giving it a try, hm?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2002', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+#    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2002', false)
+#    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
         # OK! I'll need you to pull out your NookPhone again so I can send you the app.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2003', true)
+#        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2003', true)
         System.EventFlags['cPlayer:MainmenuTips'] = true
-        run Demo_Common_PhoneCall::SendingPhoneApp_PhoneInPHand1run Demo_Common_PhoneCall::SendingPhoneApp_PhoneInPHand1()
-        EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cLoadTips')
-        run Demo_Common_PhoneCall::SendingPhoneApp_PhoneInPHand2run Demo_Common_PhoneCall::SendingPhoneApp_PhoneInPHand2()
+#        run Demo_Common_PhoneCall::SendingPhoneApp_PhoneInPHand1()
+#        EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cLoadTips')
+#        run Demo_Common_PhoneCall::SendingPhoneApp_PhoneInPHand2()
         # Perfect, perfect! You've now got the Island Life 101 app as well. You'll start getting messages once you're out and about doing things. Read them as …
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2004', true)
-        EventFlowSystemActor.WaitFrame(5)
-        MainNpc.SmartPhone(1)
-        Player.SmartPhone(1)
-        EventFlowSystemActor.WaitFrame(5)
-    else:
+#        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2004', true)
+#        EventFlowSystemActor.WaitFrame(5)
+#        MainNpc.SmartPhone(1)
+#        Player.SmartPhone(1)
+#        EventFlowSystemActor.WaitFrame(5)
+#    else:
         # Oh my, oh my. You're quite certain? Well, I suppose figuring out your own way around new surroundings can be a fun adventure too, hm? Yes, yes, if yo…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2006', false)
-    EventFlowSystemActor.WaitFrame(5)
+#        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_01_StartingMaingame:2006', false)
+#    EventFlowSystemActor.WaitFrame(5)
  
