@@ -1,25 +1,3 @@
-flow Prologue_NnpcTentChk():
-	if System.EventFlags['cLand:Prologue4BuiltNpcAN']:
-		# Don't tell me you already helped <115:1:cd00> out too? You're like…like…a true champion! I just got here, so I don't have anything ready, but I'm gon…
-		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:008_02', true)
-# DEV NOTE: Skip campfire material gathering sequence
-		System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
-		System.EventFlags['cLand:ConfirmedFruit'] = true
-		System.EventFlags['cPlayer:PrologueForCampfire1'] = true
-		System.EventFlags['cPlayer:PrologueForCampfire2'] = true
-		System.EventFlags['cPlayer:PrologueAfterBuiltTentTalk'] = true
-		System.EventFlags['cLand:Prologue4BuiltPlayer'] = true
-		System.EventFlags['cPlayer:PrologueStartedCampfire'] = true
-		Player.TurnNeck(11, false)
-		EventFlowSystemActor.WaitFrame(10)
-		EventFlowSystemActor.SetNpcAIBlackBoardByLabel('rco', 'isSpeak', 1, 1)
-	elif System.EventFlags['cPlayer:Prologue4AnGetTent']:
-		# I hope <115:1:cd00> ends up with a spot at least half as mighty as mine!
-		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:025_02', false)
-	else:
-		# I wonder how that <115:1:cd00> is doing? She might be having as much trouble as I was, so maybe you should go see if she needs help.
-		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:008_03', false)
-
 flow Root():
 	MainNpc.SetNpcName(14, 0)
 	if not System.EventFlags['cPlayer:PrologueDone1stTalkAtPlaza']:
@@ -125,3 +103,26 @@ flow Root():
 			# So…find a good place for a tent? I'm lookin' to pitch mine somewhere close to nature so I can train my body AND my soul, <110:5>!
 			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:003', false)
 
+flow Prologue_NnpcTentChk():
+	if System.EventFlags['cLand:Prologue4BuiltNpcAN']:
+		# Don't tell me you already helped <115:1:cd00> out too? You're like…like…a true champion! I just got here, so I don't have anything ready, but I'm gon…
+		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:008_02', true)
+	elif System.EventFlags['cPlayer:Prologue4AnGetTent']:
+		# I hope <115:1:cd00> ends up with a spot at least half as mighty as mine!
+		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:025_02', false)
+	else:
+		# I wonder how that <115:1:cd00> is doing? She might be having as much trouble as I was, so maybe you should go see if she needs help.
+		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_HA:008_03', false)
+	# DEV NOTE: Skip campfire material gathering sequence
+	if System.EventFlags['cLand:Prologue4BuiltNpcAN'] and System.EventFlags['cLand:Prologue4BuiltNpcHA']:
+		System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
+		System.EventFlags['cLand:ConfirmedFruit'] = true
+		System.EventFlags['cPlayer:PrologueForCampfire1'] = true
+		System.EventFlags['cPlayer:PrologueForCampfire2'] = true
+		System.EventFlags['cPlayer:PrologueAfterBuiltTentTalk'] = true
+		System.EventFlags['cLand:Prologue4BuiltPlayer'] = true
+		System.EventFlags['cPlayer:PrologueStartedCampfire'] = true
+		Player.TurnNeck(11, false)
+		EventFlowSystemActor.WaitFrame(10)
+		EventFlowSystemActor.SetNpcAIBlackBoardByLabel('rco', 'isSpeak', 1, 1)
+		run Tutorials_Prologue5_Campfire::Root()
