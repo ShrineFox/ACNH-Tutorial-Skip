@@ -1,232 +1,232 @@
 flow ChkNpcTentStatus():
-    if System.EventFlags['cLand:Prologue4BuiltNpcAN']:
-        if System.EventFlags['cPlayer:Prologue4HaGetTent']:
-            SubflowResults[0] = 7
-        else:
-            SubflowResults[0] = 6
-    elif System.EventFlags['cLand:Prologue4BuiltNpcHA']:
-        if System.EventFlags['cPlayer:Prologue4AnGetTent']:
-            SubflowResults[0] = 5
-        else:
-            SubflowResults[0] = 4
-    elif System.EventFlags['cPlayer:Prologue4AnGetTent']:
-        if System.EventFlags['cPlayer:Prologue4HaGetTent']:
-            SubflowResults[0] = 3
-        else:
-            SubflowResults[0] = 2
-    elif System.EventFlags['cPlayer:Prologue4HaGetTent']:
-        SubflowResults[0] = 1
-    else:
-        SubflowResults[0] = 0
- 
+	if System.EventFlags['cLand:Prologue4BuiltNpcAN']:
+		if System.EventFlags['cPlayer:Prologue4HaGetTent']:
+			SubflowResults[0] = 7
+		else:
+			SubflowResults[0] = 6
+	elif System.EventFlags['cLand:Prologue4BuiltNpcHA']:
+		if System.EventFlags['cPlayer:Prologue4AnGetTent']:
+			SubflowResults[0] = 5
+		else:
+			SubflowResults[0] = 4
+	elif System.EventFlags['cPlayer:Prologue4AnGetTent']:
+		if System.EventFlags['cPlayer:Prologue4HaGetTent']:
+			SubflowResults[0] = 3
+		else:
+			SubflowResults[0] = 2
+	elif System.EventFlags['cPlayer:Prologue4HaGetTent']:
+		SubflowResults[0] = 1
+	else:
+		SubflowResults[0] = 0
+
 flow NormalTalk_BeforeTentGet():
-    # Tommy or Timmy would be happy to provide you with your <item>tent, hm?
-    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:001', false)
- 
+	# Tommy or Timmy would be happy to provide you with your <item>tent, hm?
+	MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:001', false)
+
 flow NormalTalk_BeforeTentSet():
-    # RANDOM: We're all just getting started here, so… // Are you worried about finding just the … // I'm afraid I'm just as new to this isla…
-    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:002', false)
- 
+	# RANDOM: We're all just getting started here, so… // Are you worried about finding just the … // I'm afraid I'm just as new to this isla…
+	MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:002', false)
+
 flow Prologue4_AfterBuiltTent():
-    MainNpc.SetNpcName(14, 0)
-    MainNpc.SetNpcName(13, 1)
-    run Event9()
- 
+	MainNpc.SetNpcName(14, 0)
+	MainNpc.SetNpcName(13, 1)
+	run Event9()
+
 flow Root():
-    MainNpc.SetNpcName(14, 0)
-    MainNpc.SetNpcName(13, 1)
-    if not System.EventFlags['cPlayer:PrologueAfterBuiltTentTalk']:
-        if not System.EventFlags['cPlayer:PlayerPocketUIEnable']:
-            if not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-                run NormalTalk_BeforeTentGet()
-            elif System.EventFlags['cPlayer:RcoTalkAboutMovingBelongings']:
-                run NormalTalk_BeforeTentGet()
-            else:
-                run Talk_AboutMovingBelongings()
-        elif System.EventFlags['cLand:Prologue4BuiltPlayer']:
+	MainNpc.SetNpcName(14, 0)
+	MainNpc.SetNpcName(13, 1)
+	if not System.EventFlags['cPlayer:PrologueAfterBuiltTentTalk']:
+		if not System.EventFlags['cPlayer:PlayerPocketUIEnable']:
+			if not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+				run NormalTalk_BeforeTentGet()
+			elif System.EventFlags['cPlayer:RcoTalkAboutMovingBelongings']:
+				run NormalTalk_BeforeTentGet()
+			else:
+				run Talk_AboutMovingBelongings()
+		elif System.EventFlags['cLand:Prologue4BuiltPlayer']:
 entrypoint Event9:
-            run ChkNpcTentStatus()
-            if System.EventFlags['cPlayer:Prologue4AfterBuiltPcTent']:
-                switch SubflowResults@8[0]:
-                    case 0:
-                        # You're the first one back, so I suppose the others must still be searching for just the right location. You know…since you've already done some scout…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:012', false)
-                    case 1, 2:
-                        # Would you be so kind as to lend a helping hand to others as they set up their tents, PLAYER? And, after that's all taken care of, come on back here a…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:019', false)
-                    case 3:
-                        # I hear that you've been nominated to be our lead tent-location scout. Oho! By all means, continue helping the others, and then meet me back here when…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:016', false)
-                    case 4:
-                        # Hmm…<115:1:cd00> hasn't returned yet, so she's probably still out looking for a spot. Would you mind lending her a helping hand? I'm very excited to …
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:013', false)
-                    case 5:
-                        # I hear you've volunteered to help <115:1:cd00> set up her tent. By all means, carry on, and then meet me back here when you're done, hm?
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:018', false)
-                    case 6:
-                        # Hmm…<115:1:cd01> hasn't returned yet, so he's probably still out looking for a spot. Would you mind lending him a helping hand? I'm very excited to m…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:014', false)
-                    case 7:
-                        # I hear you've volunteered to help <115:1:cd01> set up his tent. By all means, carry on, and then meet me back here when you're done, hm?
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:017', false)
-            else:
-                System.EventFlags['cPlayer:Prologue4AfterBuiltPcTent'] = true
-                # Ah, PLAYER. You must have found a suitable spot for your <item>tent, hm?
-                MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:011', false)
-                switch SubflowResults@8[0]:
-                    case 0:
-                        # You're the first one back, so I suppose the others must still be searching for just the right location. You know…since you've already done some scout…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:012', false)
-                    case 1, 2, 3:
-                        # I hear that you've been nominated to be our lead tent-location scout. Oho! By all means, continue helping the others, and then meet me back here when…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:015', false)
-                    case 4:
-                        # Hmm…<115:1:cd00> hasn't returned yet, so she's probably still out looking for a spot. Would you mind lending her a helping hand? I'm very excited to …
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:013', false)
-                    case 5, 7:
-                        # I hear that you've been nominated to be our lead tent-location scout. Oho! By all means, continue helping the others, and then meet me back here when…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:015', false)
-                    case 6:
-                        # Hmm…<115:1:cd01> hasn't returned yet, so he's probably still out looking for a spot. Would you mind lending him a helping hand? I'm very excited to m…
-                        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:014', false)
-        elif not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-            run NormalTalk_BeforeTentSet()
-        elif System.EventFlags['cPlayer:RcoTalkAboutMovingBelongings']:
-            run NormalTalk_BeforeTentSet()
-        else:
-            run Talk_AboutMovingBelongings()
-    elif not System.EventFlags['cPlayer:PrologueForCampfire1']:
-        # Ah, PLAYER. I just wanted to go over what we'll need for the campfire. I think roughly 10 <item>tree branches should do the trick. You can find them …
-#        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:011', false)
-        EventFlowSystemActor.BGMPropertyControl(79)
-        System.EventFlags['cPlayer:PrologueForCampfire1'] = true
-        System.EventFlags['cPlayer:PlayerPickupEnable'] = true
-#        System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 4
-#    elif not System.EventFlags['cPlayer:PrologueForCampfire2']:
-#        if EventFlowSystemActor.HasTargetItem(2500, 11):
-            # Oh—good, good, PLAYER! It looks like you've managed to collect up the <item>tree branches… Hm? You found even more than I asked!<10:4> I only need th…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:013_01', false)
-#            run Sub_Event24()
-#        elif EventFlowSystemActor.HasTargetItem(2500, 10):
-            # Ah, welcome back. I trust you had some success foraging for <item>tree branches? Very well! Allow me to lighten your load.
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:013', false)
-#            run Sub_Event24()
-			System.EventFlags['cPlayer:PrologueForCampfire2'] = true
-			System.EventFlags['cLand:ConfirmedFruit'] = true
-			run TownFruitTypeChk()
+			run ChkNpcTentStatus()
+			if System.EventFlags['cPlayer:Prologue4AfterBuiltPcTent']:
+				switch SubflowResults@8[0]:
+					case 0:
+						# You're the first one back, so I suppose the others must still be searching for just the right location. You know…since you've already done some scout…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:012', false)
+					case 1, 2:
+						# Would you be so kind as to lend a helping hand to others as they set up their tents, PLAYER? And, after that's all taken care of, come on back here a…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:019', false)
+					case 3:
+						# I hear that you've been nominated to be our lead tent-location scout. Oho! By all means, continue helping the others, and then meet me back here when…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:016', false)
+					case 4:
+						# Hmm…<115:1:cd00> hasn't returned yet, so she's probably still out looking for a spot. Would you mind lending her a helping hand? I'm very excited to …
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:013', false)
+					case 5:
+						# I hear you've volunteered to help <115:1:cd00> set up her tent. By all means, carry on, and then meet me back here when you're done, hm?
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:018', false)
+					case 6:
+						# Hmm…<115:1:cd01> hasn't returned yet, so he's probably still out looking for a spot. Would you mind lending him a helping hand? I'm very excited to m…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:014', false)
+					case 7:
+						# I hear you've volunteered to help <115:1:cd01> set up his tent. By all means, carry on, and then meet me back here when you're done, hm?
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:017', false)
+			else:
+				System.EventFlags['cPlayer:Prologue4AfterBuiltPcTent'] = true
+				# Ah, PLAYER. You must have found a suitable spot for your <item>tent, hm?
+				MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:011', false)
+				switch SubflowResults@8[0]:
+					case 0:
+						# You're the first one back, so I suppose the others must still be searching for just the right location. You know…since you've already done some scout…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:012', false)
+					case 1, 2, 3:
+						# I hear that you've been nominated to be our lead tent-location scout. Oho! By all means, continue helping the others, and then meet me back here when…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:015', false)
+					case 4:
+						# Hmm…<115:1:cd00> hasn't returned yet, so she's probably still out looking for a spot. Would you mind lending her a helping hand? I'm very excited to …
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:013', false)
+					case 5, 7:
+						# I hear that you've been nominated to be our lead tent-location scout. Oho! By all means, continue helping the others, and then meet me back here when…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:015', false)
+					case 6:
+						# Hmm…<115:1:cd01> hasn't returned yet, so he's probably still out looking for a spot. Would you mind lending him a helping hand? I'm very excited to m…
+						MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:014', false)
+		elif not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+			run NormalTalk_BeforeTentSet()
+		elif System.EventFlags['cPlayer:RcoTalkAboutMovingBelongings']:
+			run NormalTalk_BeforeTentSet()
+		else:
+			run Talk_AboutMovingBelongings()
+	elif not System.EventFlags['cPlayer:PrologueForCampfire1']:
+		# Ah, PLAYER. I just wanted to go over what we'll need for the campfire. I think roughly 10 <item>tree branches should do the trick. You can find them …
+#		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:011', false)
+		EventFlowSystemActor.BGMPropertyControl(79)
+		System.EventFlags['cPlayer:PrologueForCampfire1'] = true
+		System.EventFlags['cPlayer:PlayerPickupEnable'] = true
+#		System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 4
+#	elif not System.EventFlags['cPlayer:PrologueForCampfire2']:
+#		if EventFlowSystemActor.HasTargetItem(2500, 11):
+			# Oh—good, good, PLAYER! It looks like you've managed to collect up the <item>tree branches… Hm? You found even more than I asked!<10:4> I only need th…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:013_01', false)
+#			run Sub_Event24()
+#		elif EventFlowSystemActor.HasTargetItem(2500, 10):
+			# Ah, welcome back. I trust you had some success foraging for <item>tree branches? Very well! Allow me to lighten your load.
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:013', false)
+#			run Sub_Event24()
+		System.EventFlags['cPlayer:PrologueForCampfire2'] = true
+		System.EventFlags['cLand:ConfirmedFruit'] = true
+		run TownFruitTypeChk()
 # 			if System.EventFlags['cPlayer:HaveTownFruit4CampFire']:
-#            run Sub_Event109()
-#        else:
-            # RANDOM: Not sure what a <item>tree branch looks… // Need a refresher? Just press  to pick … // We're going to need 10 of the fallen <i… // If you lose track of how many branches …
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:012', false)
-#    elif not System.EventFlags['cPlayer:PrologueStartedCampfire']:
-#        run TownFruitTypeChk()
-#        if System.EventFlags['cPlayer:HaveTownFruit4CampFire']:
-            # Well, well! I knew you were the right one for the job. Thank you once again! I'll go ahead and take those <110:7:cd01> off your hands and get started…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:031', true)
-#            run Sub_Event55()
-#        else:
-            # RANDOM: These local <110:7:cd01> are a real del… // Good work so far, but do please harvest… // Need a hint? Well, I'm no <110:7:cd00> …
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:021', false)
-#    elif System.EventFlags['cPlayer:AllowPcTentEntering']:
-        # RANDOM: I hope you find the camping supplies in… // To use your new supplies or a piece of … // When everything is set up and you're re…
-#        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:061', false)
-#    elif EventFlowSystemActor.ShoppingCapacity('cItemName', 4081):
-#        if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`):
-            # Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like turning in, by all means, go ahead. We'll keep the fire burni…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:051_01', false)
-#        else:
-            # Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like taking a short nap in your tent, by all means, go ahead! We'l…
-            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:051', false)
-#        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Sounds good to me! But first, you'll probably want this…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:052', false)
-            MainNpc.SetDeliveryItemAtRandom(4081, true, 'cVillageRemakePattern', 0)
-            MainNpc.NpcDelivery(1, 'Default')
-            # It's your very own camping cot! You'll want to set it up in your tent before you lie down. Oh, and there are a few packages waiting in your tent as w…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:053', false)
-            # We've got another big day ahead of us tomorrow, so rest up as much as you can tonight. Yes, yes, that's all from me for now. Sweet dreams, PLAYER!
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:054', false)
-            System.EventFlags['cPlayer:AllowPcTentEntering'] = true
-#        else:
-            # RANDOM: Yes, yes. I should have known you would… // Of course. You work hard and you play h…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:057', false)
-            # Just stop by and see me for a quick chat before you turn in. I have something to give you!
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:058', false)
-#    else:
-#        if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`):
-            # Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like turning in, by all means, go ahead. We'll keep the fire burni…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:055_02', false)
-#        else:
-            # Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like taking a short nap in your tent, by all means, go ahead! We'l…
-#            MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:055_01', false)
-        # Oh, but, I have something to give you before you go back to your tent. Before you go rest, please make sure you have room to carry something and then…
-#        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:056', false)
- 
+#			run Sub_Event109()
+#		else:
+			# RANDOM: Not sure what a <item>tree branch looks… // Need a refresher? Just press  to pick … // We're going to need 10 of the fallen <i… // If you lose track of how many branches …
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:012', false)
+#	elif not System.EventFlags['cPlayer:PrologueStartedCampfire']:
+#		run TownFruitTypeChk()
+#		if System.EventFlags['cPlayer:HaveTownFruit4CampFire']:
+			# Well, well! I knew you were the right one for the job. Thank you once again! I'll go ahead and take those <110:7:cd01> off your hands and get started…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:031', true)
+#			run Sub_Event55()
+#		else:
+			# RANDOM: These local <110:7:cd01> are a real del… // Good work so far, but do please harvest… // Need a hint? Well, I'm no <110:7:cd00> …
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:021', false)
+#	elif System.EventFlags['cPlayer:AllowPcTentEntering']:
+		# RANDOM: I hope you find the camping supplies in… // To use your new supplies or a piece of … // When everything is set up and you're re…
+#		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:061', false)
+#	elif EventFlowSystemActor.ShoppingCapacity('cItemName', 4081):
+#		if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`):
+			# Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like turning in, by all means, go ahead. We'll keep the fire burni…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:051_01', false)
+#		else:
+			# Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like taking a short nap in your tent, by all means, go ahead! We'l…
+		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:051', false)
+#		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Sounds good to me! But first, you'll probably want this…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:052', false)
+		MainNpc.SetDeliveryItemAtRandom(4081, true, 'cVillageRemakePattern', 0)
+		MainNpc.NpcDelivery(1, 'Default')
+			# It's your very own camping cot! You'll want to set it up in your tent before you lie down. Oh, and there are a few packages waiting in your tent as w…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:053', false)
+			# We've got another big day ahead of us tomorrow, so rest up as much as you can tonight. Yes, yes, that's all from me for now. Sweet dreams, PLAYER!
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:054', false)
+		System.EventFlags['cPlayer:AllowPcTentEntering'] = true
+#		else:
+			# RANDOM: Yes, yes. I should have known you would… // Of course. You work hard and you play h…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:057', false)
+			# Just stop by and see me for a quick chat before you turn in. I have something to give you!
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:058', false)
+#	else:
+#		if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`):
+			# Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like turning in, by all means, go ahead. We'll keep the fire burni…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:055_02', false)
+#		else:
+			# Ah, PLAYER. Having a good time, yes? I know this is all a bit much, so if you feel like taking a short nap in your tent, by all means, go ahead! We'l…
+#			MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:055_01', false)
+		# Oh, but, I have something to give you before you go back to your tent. Before you go rest, please make sure you have room to carry something and then…
+#		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:056', false)
+
 local flow Sub_Event24():
-#    MainNpc.SetDeliveryItemAtRandom(2500, false, 'cVillageRemakePattern', 0)
-#    MainNpc.NpcDelivery(0, 'Keep')
-    # Yes, yes, that should be plenty for our campfire. You made quick work of that! I'm quite glad that I'll be sharing this desolate island with such a h…
-#    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:014', false)
-#    EventFlowSystemActor.DeleteTargetItem(2500, 10, false)
-#    MainNpc.NpcDelivery(3, 'Default')
-    # And speaking of surviving on a desolate island, our next task is to round up something to snack on. While you were collecting branches, I was evaluat…
-#    MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:015', false)
-    System.EventFlags['cPlayer:PrologueForCampfire2'] = true
-    System.EventFlags['cLand:ConfirmedFruit'] = true
-#    run TownFruitTypeChk()
-#    if System.EventFlags['cPlayer:HaveTownFruit4CampFire']:
-        # …Oh, what's this? You've already collected enough <110:7:cd01> for everyone, haven't you? Well, well! I knew you were the right one for the job. Than…
-#        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:017', true)
-#        run Sub_Event55()
-#    else:
-        # Now, I'm sure that you don't need much guidance here, but just in case… If you see a tree growing <110:7:cd01>, you can press  to shake it. Then jus…
-#        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:016', false)
- 
+#	MainNpc.SetDeliveryItemAtRandom(2500, false, 'cVillageRemakePattern', 0)
+#	MainNpc.NpcDelivery(0, 'Keep')
+	# Yes, yes, that should be plenty for our campfire. You made quick work of that! I'm quite glad that I'll be sharing this desolate island with such a h…
+#	MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:014', false)
+#	EventFlowSystemActor.DeleteTargetItem(2500, 10, false)
+#	MainNpc.NpcDelivery(3, 'Default')
+	# And speaking of surviving on a desolate island, our next task is to round up something to snack on. While you were collecting branches, I was evaluat…
+#	MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:015', false)
+	System.EventFlags['cPlayer:PrologueForCampfire2'] = true
+	System.EventFlags['cLand:ConfirmedFruit'] = true
+#	run TownFruitTypeChk()
+#	if System.EventFlags['cPlayer:HaveTownFruit4CampFire']:
+		# …Oh, what's this? You've already collected enough <110:7:cd01> for everyone, haven't you? Well, well! I knew you were the right one for the job. Than…
+#		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:017', true)
+#		run Sub_Event55()
+#	else:
+		# Now, I'm sure that you don't need much guidance here, but just in case… If you see a tree growing <110:7:cd01>, you can press  to shake it. Then jus…
+#		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation3:016', false)
+
 local flow Sub_Event55():
-    MainNpc.NpcDelivery(0, 'Keep')
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 0.699999988079071, 0.699999988079071, true)
-    EventFlowSystemActor.BGMPropertyControl(78)
-    EventFlowSystemActor.EnvSetDemoTime(20, 0, 0)
-    System.EventFlags['cLand:SetPrologueBonfire'] = true
-    System.EventFlags['cPlayer:PrologueStartedCampfire'] = true
-    EventFlowSystemActor.SystemReenterStage(3, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	MainNpc.NpcDelivery(0, 'Keep')
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 0.699999988079071, 0.699999988079071, true)
+	EventFlowSystemActor.BGMPropertyControl(78)
+	EventFlowSystemActor.EnvSetDemoTime(20, 0, 0)
+	System.EventFlags['cLand:SetPrologueBonfire'] = true
+	System.EventFlags['cPlayer:PrologueStartedCampfire'] = true
+	EventFlowSystemActor.SystemReenterStage(3, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
 flow Talk_AboutMovingBelongings():
-    if System.EventFlags['cPlayer:RcmRctTalkAboutMovingBelongings']:
-        # Ah, PLAYER! You likely already heard about your belongings and house from Timmy or Tommy, hm? Unfortunately, the flight carrying them was delayed sli…
-        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:1002', false)
-    else:
-        # Ah, yes! There you are. There's something I really need to talk to you about, PLAYER. You moved here after taking part in a Deserted Island Getaway P…
-        MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:1001', false)
-    System.EventFlags['cPlayer:RcoTalkAboutMovingBelongings'] = true
- 
+	if System.EventFlags['cPlayer:RcmRctTalkAboutMovingBelongings']:
+		# Ah, PLAYER! You likely already heard about your belongings and house from Timmy or Tommy, hm? Unfortunately, the flight carrying them was delayed sli…
+		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:1002', false)
+	else:
+		# Ah, yes! There you are. There's something I really need to talk to you about, PLAYER. You moved here after taking part in a Deserted Island Getaway P…
+		MainNpc.OpenMessageWindow('Tutorials/Tutorials_Prologue4_Orientation2_Rco:1001', false)
+	System.EventFlags['cPlayer:RcoTalkAboutMovingBelongings'] = true
+
 flow TownFruitTypeChk():
-    switch EventFlowSystemActor.LandFruit():
-        case 0:
-            if EventFlowSystemActor.HasTargetItem(2287, 6):
-                EventFlowSystemActor.DeleteTargetItem(2287, 6, false)
-                MainNpc.SetDeliveryItemAtRandom(2287, false, 'cVillageRemakePattern', 0)
-                System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
-        case 1:
-            if EventFlowSystemActor.HasTargetItem(2214, 6):
-                EventFlowSystemActor.DeleteTargetItem(2214, 6, false)
-                MainNpc.SetDeliveryItemAtRandom(2214, false, 'cVillageRemakePattern', 0)
-                System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
-        case 2:
-            if EventFlowSystemActor.HasTargetItem(2285, 6):
-                EventFlowSystemActor.DeleteTargetItem(2285, 6, false)
-                MainNpc.SetDeliveryItemAtRandom(2285, false, 'cVillageRemakePattern', 0)
-                System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
-        case 3:
-            if EventFlowSystemActor.HasTargetItem(2286, 6):
-                EventFlowSystemActor.DeleteTargetItem(2286, 6, false)
-                MainNpc.SetDeliveryItemAtRandom(2286, false, 'cVillageRemakePattern', 0)
-                System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
-        case 4:
-            if EventFlowSystemActor.HasTargetItem(2213, 6):
-                EventFlowSystemActor.DeleteTargetItem(2213, 6, false)
-                MainNpc.SetDeliveryItemAtRandom(2213, false, 'cVillageRemakePattern', 0)
-                System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
- 
+	switch EventFlowSystemActor.LandFruit():
+		case 0:
+			if EventFlowSystemActor.HasTargetItem(2287, 6):
+				EventFlowSystemActor.DeleteTargetItem(2287, 6, false)
+				MainNpc.SetDeliveryItemAtRandom(2287, false, 'cVillageRemakePattern', 0)
+				System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
+		case 1:
+			if EventFlowSystemActor.HasTargetItem(2214, 6):
+				EventFlowSystemActor.DeleteTargetItem(2214, 6, false)
+				MainNpc.SetDeliveryItemAtRandom(2214, false, 'cVillageRemakePattern', 0)
+				System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
+		case 2:
+			if EventFlowSystemActor.HasTargetItem(2285, 6):
+				EventFlowSystemActor.DeleteTargetItem(2285, 6, false)
+				MainNpc.SetDeliveryItemAtRandom(2285, false, 'cVillageRemakePattern', 0)
+				System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
+		case 3:
+			if EventFlowSystemActor.HasTargetItem(2286, 6):
+				EventFlowSystemActor.DeleteTargetItem(2286, 6, false)
+				MainNpc.SetDeliveryItemAtRandom(2286, false, 'cVillageRemakePattern', 0)
+				System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
+		case 4:
+			if EventFlowSystemActor.HasTargetItem(2213, 6):
+				EventFlowSystemActor.DeleteTargetItem(2213, 6, false)
+				MainNpc.SetDeliveryItemAtRandom(2213, false, 'cVillageRemakePattern', 0)
+				System.EventFlags['cPlayer:HaveTownFruit4CampFire'] = true
+
