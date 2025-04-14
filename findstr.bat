@@ -1,0 +1,1 @@
+findstr /n /0 /C:"You'd like to pay your" *.evfl

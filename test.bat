@@ -1,0 +1,1 @@
+C:\Python39\python.exe C:\Users\Ryan\Documents\GitHub\acnh-eventflow-compiler\compiler\main.py -functions C:\Users\Ryan\Documents\GitHub\ACNH-Tutorial-Skip\functions.csv -d C:\Users\Ryan\Documents\GitHub\ACNH-Tutorial-Skip\EventFlow_Decompiled\Tutorials_Prologue1_Charactermaking.evfl
