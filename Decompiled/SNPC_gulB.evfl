@@ -1,442 +1,441 @@
 flow GulBAfterQuest():
-    if System.EventFlags['cLandTemp:GulBTalkShareplay']:
-        # Avast! It's me matey from earlier! I seem to be cursed, stuck deep in a whole barrel of pickles! Leavin' this isle is way harder than it seems…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:120', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        run GulBAfterQuestChat()
- 
+	if System.EventFlags['cLandTemp:GulBTalkShareplay']:
+		# Avast! It's me matey from earlier! I seem to be cursed, stuck deep in a whole barrel of pickles! Leavin' this isle is way harder than it seems…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:120', false)
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		run GulBAfterQuestChat()
+
 flow GulBAfterQuestChat():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # The world's me oyster now that me <item>communicator is back in me hands.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:040_01', true)
-        case 1:
-            # Me ol' crew must be sighin' in relief now that I've sent me message.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:040_02', true)
-        case 2:
-            # Arrr, that message o' mine has surely reached me buccaneer buddies by now.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:040_03', true)
-    MainNpc.SmartPhone(0)
-    MainNpc.SmartPhone(4)
-    # Let's check the SMS Bounty… No replies yet…
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:041', true)
-    MainNpc.SmartPhone(1)
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # It says me message was read…so… where are those scallywags?! They'll be swabbin' the deck for this delay!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:042', false)
-        case 1:
-            # It says they read me message, so I'm sure they're preparin' a grand pirate homecomin' for their captain! At least…they'd BETTER be. ARRR!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:043', false)
-        case 2:
-            # Y'think me ship is on its way here? It says the crew got me message… I love me mateys, but they sure be slow to reply! HAR!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:044', false)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# The world's me oyster now that me <item>communicator is back in me hands.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:040_01', true)
+		case 1:
+			# Me ol' crew must be sighin' in relief now that I've sent me message.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:040_02', true)
+		case 2:
+			# Arrr, that message o' mine has surely reached me buccaneer buddies by now.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:040_03', true)
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+	# Let's check the SMS Bounty… No replies yet…
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:041', true)
+	MainNpc.SmartPhone(1)
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# It says me message was read…so… where are those scallywags?! They'll be swabbin' the deck for this delay!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:042', false)
+		case 1:
+			# It says they read me message, so I'm sure they're preparin' a grand pirate homecomin' for their captain! At least…they'd BETTER be. ARRR!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:043', false)
+		case 2:
+			# Y'think me ship is on its way here? It says the crew got me message… I love me mateys, but they sure be slow to reply! HAR!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:044', false)
+	EventFlowSystemActor.ExitFlowchart()
+
 flow GulBClear():
-    if not System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-        System.EventFlags['cLifeSupportAchievement:HelpGul'] += 1
-        System.EventFlags['cPlayer:GulBHelpCount'] += 1
-        System.EventFlags['cPlayer:GulBQuestFinishFlag'] = true
-        System.EventFlags['cLand:JohnnyQuestFinishFlagIsland'] = true
-        EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_GulB_Help')
-    System.EventFlags['cPlayer:GulBQuestStartFlag'] = false
-    MainNpc.GulFreeAction('cGulActionType_SetAnotherPlayerClearFlag')
-    System.EventFlags['cLandTemp:GulBTalkShareplay'] = false
- 
+	if not System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+		System.EventFlags['cLifeSupportAchievement:HelpGul'] += 1
+		System.EventFlags['cPlayer:GulBHelpCount'] += 1
+		System.EventFlags['cPlayer:GulBQuestFinishFlag'] = true
+		System.EventFlags['cLand:JohnnyQuestFinishFlagIsland'] = true
+		EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_GulB_Help')
+	System.EventFlags['cPlayer:GulBQuestStartFlag'] = false
+	MainNpc.GulFreeAction('cGulActionType_SetAnotherPlayerClearFlag')
+	System.EventFlags['cLandTemp:GulBTalkShareplay'] = false
+
 flow GulBGivePartsForced():
-    MainNpc.SetDeliveryItemAtRandom(13105, false, 'cVillageRemakePattern', 0)
-    MainNpc.NpcDelivery(0, 'Keep')
-    MainNpc.GulFreeAction('cGulActionType_PresentPiratesParts')
-    MainNpc.NpcDelivery(3, '"Default"')
- 
+	MainNpc.SetDeliveryItemAtRandom(13105, false, 'cVillageRemakePattern', 0)
+	MainNpc.NpcDelivery(0, 'Keep')
+	MainNpc.GulFreeAction('cGulActionType_PresentPiratesParts')
+	MainNpc.NpcDelivery(3, '"Default"')
+
 flow GulBKeepSleep():
-    if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
-        MainNpc.NpcChangeNameStatus(3)
-    # Hrmmmmph… Nay… I'm too comfy to be gettin' up, matey. Zzz…
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:060', false)
-    MainNpc.NpcChangeNameStatus(0)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
+		MainNpc.NpcChangeNameStatus(3)
+	# Hrmmmmph… Nay… I'm too comfy to be gettin' up, matey. Zzz…
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:060', false)
+	MainNpc.NpcChangeNameStatus(0)
+	EventFlowSystemActor.ExitFlowchart()
+
 flow GulBQuestClear():
-    EventFlowSystemActor.WaitFrame(4)
-    MainNpc.CharacterEmoticonAction('Dance', false, '', 0, false)
-    EventFlowSystemActor.WaitFrame(60)
-    # I thank ye with all me heart, matey! With extra cherries on top, even! Now I can contact me faithful crew!
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:033', true)
-    MainNpc.SmartPhone(0)
-    MainNpc.SmartPhone(4)
-    # Avast, ye lily-livered sea dogs! 'Tis I, your beloved captain who makes things happ-tain! I had ANOTHER bad spill, so ye best change course and come …
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:036', true)
-    MainNpc.SmartPhone(1)
-    MainNpc.DecideEventReward('cGulBReward')
-    MainNpc.SetDeliveryItem(1, true)
-    # Ye saved me life! That's a debt that needs repayin', so I'll ship ye a fine reward soon—expedited! Arrr!
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:034', false)
-    # Ahhh, that takes a load off! Nothin' left to do but wander this here beach and look mean. Here I go! ARRR!
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:035', true)
-    run GulBClear()
-    switch EventFlowSystemActor.RandomChoice5(5):
-        case 0:
-            EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-        case 1:
-            EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-        case 2:
-            EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 3, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-        case 3:
-            EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 4, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-        case 4:
-            EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 5, 'cNone', 'cFastTomorrow', 'cReward', false, false)
- 
+	EventFlowSystemActor.WaitFrame(4)
+	MainNpc.CharacterEmoticonAction('Dance', false, '', 0, false)
+	EventFlowSystemActor.WaitFrame(60)
+	# I thank ye with all me heart, matey! With extra cherries on top, even! Now I can contact me faithful crew!
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:033', true)
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+	# Avast, ye lily-livered sea dogs! 'Tis I, your beloved captain who makes things happ-tain! I had ANOTHER bad spill, so ye best change course and come …
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:036', true)
+	MainNpc.SmartPhone(1)
+	MainNpc.DecideEventReward('cGulBReward')
+	MainNpc.SetDeliveryItem(1, true)
+	# Ye saved me life! That's a debt that needs repayin', so I'll ship ye a fine reward soon—expedited! Arrr!
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:034', false)
+	# Ahhh, that takes a load off! Nothin' left to do but wander this here beach and look mean. Here I go! ARRR!
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:035', true)
+	run GulBClear()
+	switch EventFlowSystemActor.RandomChoice5(5):
+		case 0:
+			EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+		case 1:
+			EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+		case 2:
+			EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 3, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+		case 3:
+			EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 4, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+		case 4:
+			EventFlowSystemActor.SystemMailSend('cGulB', 'MAIL_SNpc_gulB', 5, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+
 flow GulBQuestNow():
-    if EventFlowSystemActor.HasTargetItem(13105, 1):
-        # Arrr! Have ye found it yet?
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:030', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            MainNpc.SetDeliveryItemAtRandom(13105, false, 'cVillageRemakePattern', 0)
-            MainNpc.NpcDelivery(0, 'Keep')
-            MainNpc.GulFreeAction('cGulActionType_PresentPiratesParts')
-            # ARRR! That's it! That's me precious <item>communicator!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:032', true)
-            MainNpc.NpcDelivery(3, '"Default"')
-            run GulBQuestClear()
-        else:
-            run Sub_grp_Event192()
-    else:
-        run Sub_grp_Event192()
- 
+	if EventFlowSystemActor.HasTargetItem(13105, 1):
+		# Arrr! Have ye found it yet?
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:030', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			MainNpc.SetDeliveryItemAtRandom(13105, false, 'cVillageRemakePattern', 0)
+			MainNpc.NpcDelivery(0, 'Keep')
+			MainNpc.GulFreeAction('cGulActionType_PresentPiratesParts')
+			# ARRR! That's it! That's me precious <item>communicator!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:032', true)
+			MainNpc.NpcDelivery(3, '"Default"')
+			run GulBQuestClear()
+		else:
+			run Sub_grp_Event192()
+	else:
+		run Sub_grp_Event192()
+
 flow GulBQuestNow_OtherClear():
-    run Event163()
- 
+	run Event163()
+
 flow GulBSitUp():
-    if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
-        MainNpc.NpcChangeNameStatus(3)
-    # Arrr…
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:065', true)
-    MainNpc.NpcChangeNameStatus(0)
-    MainNpc.SetDefaultWaitAs('cDefault')
-    MainNpc.RequestSimple('GulGetUp', true)
-    MainNpc.TurnBody(10, 0.0)
-    System.EventFlags['cLand:JohnnySitUpFlag'] = true
- 
+	if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
+		MainNpc.NpcChangeNameStatus(3)
+	# Arrr…
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:065', true)
+	MainNpc.NpcChangeNameStatus(0)
+	MainNpc.SetDefaultWaitAs('cDefault')
+	MainNpc.RequestSimple('GulGetUp', true)
+	MainNpc.TurnBody(10, 0.0)
+	System.EventFlags['cLand:JohnnySitUpFlag'] = true
+
 flow GulBStart():
-    if System.EventFlags['cPlayer:GulBQuestStartFlag']:
-        # If yer wonderin' where me ol' <item>communicator may be, it's surely sunken offshore of this very island! Sunk like me piratin' career if I don't get…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:023', false)
-    else:
-        # Me gut says me <item>communicator is in a nearby ocean! Me crew is surely searchin' for me, so I should keep lookout. Gots to be on land for that, ye…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:022', false)
-    System.EventFlags['cPlayer:GulBQuestStartFlag'] = true
-    System.EventFlags['cLandTemp:GulBTalkShareplay'] = true
-    System.EventFlags['cPlayer:GulBAnotherPlayerClearFlag'] = false
- 
+	if System.EventFlags['cPlayer:GulBQuestStartFlag']:
+		# If yer wonderin' where me ol' <item>communicator may be, it's surely sunken offshore of this very island! Sunk like me piratin' career if I don't get…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:023', false)
+	else:
+		# Me gut says me <item>communicator is in a nearby ocean! Me crew is surely searchin' for me, so I should keep lookout. Gots to be on land for that, ye…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:022', false)
+	System.EventFlags['cPlayer:GulBQuestStartFlag'] = true
+	System.EventFlags['cLandTemp:GulBTalkShareplay'] = true
+	System.EventFlags['cPlayer:GulBAnotherPlayerClearFlag'] = false
+
 flow GulBStartWithStanding():
-    # Who can silence a bawlin' babe with a single bug-eyed glance? 'Tis I, a rough, tough pirate captain! Arrr!
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:121', false)
-    # One minute I'm on me pirate ship. The next, I'm tumblin' overboard and at the mercy of the cruel ocean… As if that weren't bad enough, me <item>commu…
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:122', false)
-    # Without it, I'll have to wait for me crew to find me on their own…and they be useless without me! I'm beggin' ye, matey! Will ye help me find me <ite…
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:123', false)
-    run GulBStart()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	# Who can silence a bawlin' babe with a single bug-eyed glance? 'Tis I, a rough, tough pirate captain! Arrr!
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:121', false)
+	# One minute I'm on me pirate ship. The next, I'm tumblin' overboard and at the mercy of the cruel ocean… As if that weren't bad enough, me <item>commu…
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:122', false)
+	# Without it, I'll have to wait for me crew to find me on their own…and they be useless without me! I'm beggin' ye, matey! Will ye help me find me <ite…
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:123', false)
+	run GulBStart()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow GulBTalkChk():
-    if EventFlowSystemActor.IsMyVillage():
-        System.EventFlags['cPlayer:GulBTalkBeforeFlag'] = true
- 
+	if EventFlowSystemActor.IsMyVillage():
+		System.EventFlags['cPlayer:GulBTalkBeforeFlag'] = true
+
 flow GulBTalkSleep():
-    if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
-        MainNpc.NpcChangeNameStatus(3)
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious10(10, true):
-        case 0:
-            # Zzz…nyam, nyam, nyam…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_01', false)
-        case 1:
-            # Mrrph…arrr! Don't wanna get up, Ma. Lemme sail the seven Zs… Zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_02', false)
-        case 2:
-            # Arrr! I don't care if it's me turn to man the helm. Me nap time is me nap time… Zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_03', false)
-        case 3:
-            # ARRR! Storm's a-comin'! Brace yerselves, mateys! Zzz… Hatten down the batches! Or is it… batten down the hatches? Zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_04', false)
-        case 4:
-            # Zzz… Ye call that a sea bass? I give it a C- at best…arrr! Nyam, nyam…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_05', false)
-        case 5:
-            # S-such a storm… This is it, mateys! We're headed for Davy Jones's shoe cubby! Zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_06', false)
-        case 6:
-            # Arrr… Buccaneer? That's a bit out of me price range. Could I talk ye into a discount for both ears? Zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_07', false)
-        case 7:
-            # Yo-ho, yo-ho… Pirate sounds, et cetera…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_08', false)
-        case 8:
-            # Zzz… Raise the main sail! Ready the yard sale! Anyone seen the mizzen mast? Arrr, zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_09', false)
-        case 9:
-            # SNRRK, snrrk… Arr! If I find even a single raisin in these cookies… I'll keelhaul the lot of ye! Zzz…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_10', false)
-    MainNpc.NpcChangeNameStatus(0)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
+		MainNpc.NpcChangeNameStatus(3)
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious10(10, true):
+		case 0:
+			# Zzz…nyam, nyam, nyam…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_01', false)
+		case 1:
+			# Mrrph…arrr! Don't wanna get up, Ma. Lemme sail the seven Zs… Zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_02', false)
+		case 2:
+			# Arrr! I don't care if it's me turn to man the helm. Me nap time is me nap time… Zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_03', false)
+		case 3:
+			# ARRR! Storm's a-comin'! Brace yerselves, mateys! Zzz… Hatten down the batches! Or is it… batten down the hatches? Zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_04', false)
+		case 4:
+			# Zzz… Ye call that a sea bass? I give it a C- at best…arrr! Nyam, nyam…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_05', false)
+		case 5:
+			# S-such a storm… This is it, mateys! We're headed for Davy Jones's shoe cubby! Zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_06', false)
+		case 6:
+			# Arrr… Buccaneer? That's a bit out of me price range. Could I talk ye into a discount for both ears? Zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_07', false)
+		case 7:
+			# Yo-ho, yo-ho… Pirate sounds, et cetera…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_08', false)
+		case 8:
+			# Zzz… Raise the main sail! Ready the yard sale! Anyone seen the mizzen mast? Arrr, zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_09', false)
+		case 9:
+			# SNRRK, snrrk… Arr! If I find even a single raisin in these cookies… I'll keelhaul the lot of ye! Zzz…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:001_10', false)
+	MainNpc.NpcChangeNameStatus(0)
+	EventFlowSystemActor.ExitFlowchart()
+
 flow GulB_DC():
-    if System.EventFlags['cLand:JohnnySitUpFlag']:
-        run GulBTalkChk()
-        if System.EventFlags['cLandTemp:GulBTalkShareplay']:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # Arrr, I wonder where me pirate ship be right about now… Is it even a pirate ship? Memory's a bit fuzzy.
-                    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:062_01', false)
-                case 1:
-                    # See my unpatched pirate eye spyin' that horizon! 'Tis sea, sea, and MORE sea as far as ye can see…y'see?
-                    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:062_02', false)
-                case 2:
-                    # Ahoy! Are ye stranded on this isle too? I'm usin' this minivacation to work on me pirate snarl. ARRR! Good stuff, eh?
-                    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:062_03', false)
-        else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # Arrr! I be a fearsome pirate captain who's sailed the seven seas! I'm sure we'll meet again someday, matey. The ocean's big, but it's not THAT big, y…
-                    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:061_01', false)
-                case 1:
-                    # I be a rough, gruff pirate captain! I can silence a bawlin' babe with but a single bug-eyed glance! We're two ships passin' in the night for now, but…
-                    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:061_02', false)
-                case 2:
-                    # This be a quaint little island for a pirate such as I! Tell me, do ye have an isle of your own out there? Any treasure there, perhaps? Preferably ung…
-                    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:061_03', false)
-    else:
-        run GulBKeepSleep()
- 
+	if System.EventFlags['cLand:JohnnySitUpFlag']:
+		run GulBTalkChk()
+		if System.EventFlags['cLandTemp:GulBTalkShareplay']:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# Arrr, I wonder where me pirate ship be right about now… Is it even a pirate ship? Memory's a bit fuzzy.
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:062_01', false)
+				case 1:
+					# See my unpatched pirate eye spyin' that horizon! 'Tis sea, sea, and MORE sea as far as ye can see…y'see?
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:062_02', false)
+				case 2:
+					# Ahoy! Are ye stranded on this isle too? I'm usin' this minivacation to work on me pirate snarl. ARRR! Good stuff, eh?
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:062_03', false)
+		else:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# Arrr! I be a fearsome pirate captain who's sailed the seven seas! I'm sure we'll meet again someday, matey. The ocean's big, but it's not THAT big, y…
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:061_01', false)
+				case 1:
+					# I be a rough, gruff pirate captain! I can silence a bawlin' babe with but a single bug-eyed glance! We're two ships passin' in the night for now, but…
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:061_02', false)
+				case 2:
+					# This be a quaint little island for a pirate such as I! Tell me, do ye have an isle of your own out there? Any treasure there, perhaps? Preferably ung…
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:061_03', false)
+	else:
+		run GulBKeepSleep()
+
 flow GulB_GetUp_NotStart():
-    run GulBSitUp()
-    if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerQuestNow'):
-        if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
-            MainNpc.NpcChangeNameStatus(3)
-        # Arrr! Thanks for wakin' me up!
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:100', false)
-        # I be the famed pirate-captain extraordinaire, Gullivarrr!
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:101', true)
-        run GulBTalkChk()
-        MainNpc.NpcChangeNameStatus(0)
-        # A shockin' series of terrible mishaps ruffled me feathers AND me brain. Left me right tuckered out!
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:102', false)
-        # May I spin ye a yarn? I was thrown from me ship into the sea, then washed up here… I awoke to find me <item>communicator— me most essential piratin' …
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:103', false)
-    else:
-        if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerClear'):
-            if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
-                MainNpc.NpcChangeNameStatus(3)
-            # Arrr! Thanks for wakin' me up!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:100', false)
-            # I be the famed pirate-captain extraordinaire, Gullivarrr!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:101', true)
-            run GulBTalkChk()
-            MainNpc.NpcChangeNameStatus(0)
-            # I've had quite a bit going on. Looks as if I passed out right where I stood! Har. That's so me.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:105', false)
-            # May I spin ye a yarn? I was thrown from me ship and into the sea, then washed up here… I awoke to find me <item>communicator— me most essential pirat…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:106', false)
-            # So a happy ending after all. Why, me crew may have reached out while I told the tale! I'll just check me…uh.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:106_01', false)
-            MainNpc.NpcStartAS('GulBLostPhone', true, false)
-            # <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator is gone! AGAIN! ARRR! I must've dropped it when I passed out. The waves surely swept it ou…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:107', false)
-            # Without it, I won't be able to get missives from me crew! It's got to be sunk out in the sea. Ye look like a kind skipper. Will ye find me <item>comm…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:108', false)
-        else:
-            if System.EventFlags['cPlayer:GulBSitUpBeforeFlag']:
-                switch EventFlowSystemActor.RandomChoice4(4):
-                    case 0:
-                        # ARRR! Put your backs into it, me hearties! Haul as much as ye can carry! We ship out in— Oh. Oops! This be no grocery run! This is the isle of me bes…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:005', false)
-                        # As for me, well, I took another tumble over the bow into the sea, washed up here… Ye know how it be. Arrr! Guess ye could say I'm…all washed up! A wa…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:006', false)
-                    case 1:
-                        # Arrr! Have at ye, Cortez! Three swords AND a hook? Let's make this a fair duel… I'll tie one wing behind me back! HAR! I— Huh? Blimey! What a dream. …
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:008', false)
-                        # Sorry I came out swingin'! Didn't mean to give ye a scare. Matter o' fact, it was a few practice swings of me fearful fisticuffery that sent me tumbl…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:009', false)
-                    case 2:
-                        # GAH! Wh-what happened?! Where am I? Who are you? Why am I dressed like this?! Wait! It's all coming back to me… Ye be PLAYER! Of course! Arrr! I thin…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:011', false)
-                        # Kiddin' aside, I, uh, fell overboard again. Ye probably guessed as much. I'll contact me crew straightaway…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:012', false)
-                    case 3:
-                        # <10:12>Ah— Ahhh— <10:10>ACHOOOOO!<10:9> Blimey! I be freezin' me webbed tootsies off. How long was I soakin' up seawater this time? Arrr! Just look a…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:014', false)
-                        # Shiver me timbers! If it ain't me matey PLAYER! Again! Say, what is it about this island? Folks be fearin' me buccaneerin' from Crocodile Isle to Kee…
-                        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:015', false)
-            else:
-                if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
-                    MainNpc.NpcChangeNameStatus(3)
-                # Arrr! This buffet may be the end of me, lads, but I think I can tamp a bit more peach cobbler down me gullet… AVAST! Where'd the buffet go? What tric…
-                MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:002', true)
-                System.EventFlags['cPlayer:GulBSitUpBeforeFlag'] = true
-                run GulBTalkChk()
-                MainNpc.NpcChangeNameStatus(0)
-                # Now, where's the cruel matey who burst me buffet bubble? Was it YE? Arrr, ye don't LOOK very cruel… I s'ppose ye did me a favor. I might have gobbled…
-                MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:003', false)
-                # I was partakin' of a bit o' the GOOD soda with me crew, but I tumbled o'er the prow and into the sea! 'Tis naught but a mild inconvenience, though, f…
-                MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:004', false)
-            # So long as I've got me trusty ol' <item>communicator, I'll be just…uh.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:018', false)
-            MainNpc.NpcStartAS('GulBLostPhone', true, false)
-            # <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator has gone and vanished! ARRR! Those waves bopped me around like an inflatable beach ball… T…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:018_01', false)
-            # That means…I'm lost at sea! I'll have to wait for me buccaneer buddies to find me on their own! That could take quite a bit o' time… I'm still worksh…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:018_02', false)
-            # RANDOM: AHOY! You, with the whale-sized noggin!… // Sure, I'll look for it. // No way! // I'm begging ye, matey! Will ye help fin… // Sure, I'll look for it. // No way!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:019', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # RANDOM: Arrr! Ye means it?! Now there's a shant… // Really?! Why, you're even sweeter than …
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:020', false)
-    else:
-        # RANDOM: Arrr… Yer heart must be colder than a s… // ARRR! I haven't felt this betrayed sinc…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:021', false)
-    run GulBStart()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run GulBSitUp()
+	if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerQuestNow'):
+		if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
+			MainNpc.NpcChangeNameStatus(3)
+		# Arrr! Thanks for wakin' me up!
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:100', false)
+		# I be the famed pirate-captain extraordinaire, Gullivarrr!
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:101', true)
+		run GulBTalkChk()
+		MainNpc.NpcChangeNameStatus(0)
+		# A shockin' series of terrible mishaps ruffled me feathers AND me brain. Left me right tuckered out!
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:102', false)
+		# May I spin ye a yarn? I was thrown from me ship into the sea, then washed up here… I awoke to find me <item>communicator— me most essential piratin' …
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:103', false)
+	else:
+		if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerClear'):
+			if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
+				MainNpc.NpcChangeNameStatus(3)
+			# Arrr! Thanks for wakin' me up!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:100', false)
+			# I be the famed pirate-captain extraordinaire, Gullivarrr!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:101', true)
+			run GulBTalkChk()
+			MainNpc.NpcChangeNameStatus(0)
+			# I've had quite a bit going on. Looks as if I passed out right where I stood! Har. That's so me.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:105', false)
+			# May I spin ye a yarn? I was thrown from me ship and into the sea, then washed up here… I awoke to find me <item>communicator— me most essential pirat…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:106', false)
+			# So a happy ending after all. Why, me crew may have reached out while I told the tale! I'll just check me…uh.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:106_01', false)
+			MainNpc.NpcStartAS('GulBLostPhone', true, false)
+			# <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator is gone! AGAIN! ARRR! I must've dropped it when I passed out. The waves surely swept it ou…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:107', false)
+			# Without it, I won't be able to get missives from me crew! It's got to be sunk out in the sea. Ye look like a kind skipper. Will ye find me <item>comm…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:108', false)
+		else:
+			if System.EventFlags['cPlayer:GulBSitUpBeforeFlag']:
+				switch EventFlowSystemActor.RandomChoice4(4):
+					case 0:
+						# ARRR! Put your backs into it, me hearties! Haul as much as ye can carry! We ship out in— Oh. Oops! This be no grocery run! This is the isle of me bes…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:005', false)
+						# As for me, well, I took another tumble over the bow into the sea, washed up here… Ye know how it be. Arrr! Guess ye could say I'm…all washed up! A wa…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:006', false)
+					case 1:
+						# Arrr! Have at ye, Cortez! Three swords AND a hook? Let's make this a fair duel… I'll tie one wing behind me back! HAR! I— Huh? Blimey! What a dream. …
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:008', false)
+						# Sorry I came out swingin'! Didn't mean to give ye a scare. Matter o' fact, it was a few practice swings of me fearful fisticuffery that sent me tumbl…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:009', false)
+					case 2:
+						# GAH! Wh-what happened?! Where am I? Who are you? Why am I dressed like this?! Wait! It's all coming back to me… Ye be PLAYER! Of course! Arrr! I thin…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:011', false)
+						# Kiddin' aside, I, uh, fell overboard again. Ye probably guessed as much. I'll contact me crew straightaway…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:012', false)
+					case 3:
+						# <10:12>Ah— Ahhh— <10:10>ACHOOOOO!<10:9> Blimey! I be freezin' me webbed tootsies off. How long was I soakin' up seawater this time? Arrr! Just look a…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:014', false)
+						# Shiver me timbers! If it ain't me matey PLAYER! Again! Say, what is it about this island? Folks be fearin' me buccaneerin' from Crocodile Isle to Kee…
+						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:015', false)
+			else:
+				if not System.EventFlags['cPlayer:GulBTalkBeforeFlag']:
+					MainNpc.NpcChangeNameStatus(3)
+				# Arrr! This buffet may be the end of me, lads, but I think I can tamp a bit more peach cobbler down me gullet… AVAST! Where'd the buffet go? What tric…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:002', true)
+				System.EventFlags['cPlayer:GulBSitUpBeforeFlag'] = true
+				run GulBTalkChk()
+				MainNpc.NpcChangeNameStatus(0)
+				# Now, where's the cruel matey who burst me buffet bubble? Was it YE? Arrr, ye don't LOOK very cruel… I s'ppose ye did me a favor. I might have gobbled…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:003', false)
+				# I was partakin' of a bit o' the GOOD soda with me crew, but I tumbled o'er the prow and into the sea! 'Tis naught but a mild inconvenience, though, f…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:004', false)
+			# So long as I've got me trusty ol' <item>communicator, I'll be just…uh.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:018', false)
+			MainNpc.NpcStartAS('GulBLostPhone', true, false)
+			# <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator has gone and vanished! ARRR! Those waves bopped me around like an inflatable beach ball… T…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:018_01', false)
+			# That means…I'm lost at sea! I'll have to wait for me buccaneer buddies to find me on their own! That could take quite a bit o' time… I'm still worksh…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:018_02', false)
+			# RANDOM: AHOY! You, with the whale-sized noggin!… // Sure, I'll look for it. // No way! // I'm begging ye, matey! Will ye help fin… // Sure, I'll look for it. // No way!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:019', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# RANDOM: Arrr! Ye means it?! Now there's a shant… // Really?! Why, you're even sweeter than …
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:020', false)
+	else:
+		# RANDOM: Arrr… Yer heart must be colder than a s… // ARRR! I haven't felt this betrayed sinc…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:021', false)
+	run GulBStart()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow GulB_GetUp_Start():
-    run GulBSitUp()
-    # Ah, it's me matey from before! Thanks for the wake-up prod!
-    MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:080', false)
-    if System.EventFlags['cPlayer:GulBAnotherPlayerClearFlag']:
-        # A kind ol' soul pulled me <item>communicator out of the sea!
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:112', false)
-        # Knowin' it'd be smooth sailin' from there on, fatigue took the helm. Basically, I passed right out!
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:113', false)
-        # Arrr, I s'ppose I should reach out to me crew…uh.
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:113_01', false)
-        MainNpc.NpcStartAS('GulBLostPhone', true, false)
-        # <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator is gone! AGAIN! ARRR! I must've dropped it when I passed out. The waves surely swept it ou…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:107', false)
-        # Without it, I won't be able to get missives from me crew! It's got to be sunk out in the sea. Ye look like a kind skipper. Will ye find me <item>comm…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:114', false)
-        run GulBStart()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        # I got hit by a dire need for some emergency shut-eye… I'm counting on ye! Keep searchin' for me lost <item>communicator!
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:110', false)
-        run GulBStart()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run GulBSitUp()
+	# Ah, it's me matey from before! Thanks for the wake-up prod!
+	MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:080', false)
+	if System.EventFlags['cPlayer:GulBAnotherPlayerClearFlag']:
+		# A kind ol' soul pulled me <item>communicator out of the sea!
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:112', false)
+		# Knowin' it'd be smooth sailin' from there on, fatigue took the helm. Basically, I passed right out!
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:113', false)
+		# Arrr, I s'ppose I should reach out to me crew…uh.
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:113_01', false)
+		MainNpc.NpcStartAS('GulBLostPhone', true, false)
+		# <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator is gone! AGAIN! ARRR! I must've dropped it when I passed out. The waves surely swept it ou…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:107', false)
+		# Without it, I won't be able to get missives from me crew! It's got to be sunk out in the sea. Ye look like a kind skipper. Will ye find me <item>comm…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:114', false)
+		run GulBStart()
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		# I got hit by a dire need for some emergency shut-eye… I'm counting on ye! Keep searchin' for me lost <item>communicator!
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:110', false)
+		run GulBStart()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow GulB_NetHost():
-    if System.EventFlags['cLand:JohnnySitUpFlag']:
-        run GulBTalkChk()
-        if System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-            run GulBAfterQuestChat()
-        elif not System.EventFlags['cPlayer:GulBQuestStartFlag']:
-            # Eh? What's that yer askin'? "Is that a wand outfit?" Yer suggestin' this pirate getup be a mere…costume? 'Fraid I don't catch your drift, bucko. Ye b…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:067', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        elif EventFlowSystemActor.HasTargetItem(13105, 1):
-            # Oh! If it isn't me local matey! I know I was supposed to be keepin' an eye out for me ship, but…the sound of the waves was so relaxin'… HUH?! Ye actu…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:066', false)
-            run GulBGivePartsForced()
-            run GulBQuestClear()
-        else:
-            # Oh! New mateys! Don't go spreadin' rumors about me weak water wings in regards to swimmin', ye savvy? Besides that, ye should be showin' your crew a …
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:068', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-        run GulBKeepSleep()
-    elif not System.EventFlags['cPlayer:GulBQuestStartFlag']:
-        run GulBKeepSleep()
-    elif EventFlowSystemActor.HasTargetItem(13105, 1):
-        run GulBSitUp()
-        # Oh! If it isn't me local matey! I know I was supposed to be keepin' an eye out for me ship, but…the sound of the waves was so relaxin'… HUH?! Ye actu…
-        MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:066', false)
-        run GulBGivePartsForced()
-        run GulBQuestClear()
-    else:
-        run GulBKeepSleep()
- 
+	if System.EventFlags['cLand:JohnnySitUpFlag']:
+		run GulBTalkChk()
+		if System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+			run GulBAfterQuestChat()
+		elif not System.EventFlags['cPlayer:GulBQuestStartFlag']:
+			# Eh? What's that yer askin'? "Is that a wand outfit?" Yer suggestin' this pirate getup be a mere…costume? 'Fraid I don't catch your drift, bucko. Ye b…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:067', false)
+			EventFlowSystemActor.ExitFlowchart()
+		elif EventFlowSystemActor.HasTargetItem(13105, 1):
+			# Oh! If it isn't me local matey! I know I was supposed to be keepin' an eye out for me ship, but…the sound of the waves was so relaxin'… HUH?! Ye actu…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:066', false)
+			run GulBGivePartsForced()
+			run GulBQuestClear()
+		else:
+			# Oh! New mateys! Don't go spreadin' rumors about me weak water wings in regards to swimmin', ye savvy? Besides that, ye should be showin' your crew a …
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:068', false)
+			EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+		run GulBKeepSleep()
+	elif not System.EventFlags['cPlayer:GulBQuestStartFlag']:
+		run GulBKeepSleep()
+	elif EventFlowSystemActor.HasTargetItem(13105, 1):
+		run GulBSitUp()
+		# Oh! If it isn't me local matey! I know I was supposed to be keepin' an eye out for me ship, but…the sound of the waves was so relaxin'… HUH?! Ye actu…
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:066', false)
+		run GulBGivePartsForced()
+		run GulBQuestClear()
+	else:
+		run GulBKeepSleep()
+
 flow GulB_Share():
-    if System.EventFlags['cLand:JohnnySitUpFlag']:
-        run GulBTalkChk()
-        if System.EventFlags['cLandTemp:GulBTalkShareplay']:
-            if System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-                run GulBAfterQuest()
-            elif not System.EventFlags['cPlayer:GulBQuestStartFlag']:
-                run GulBStartWithStanding()
-            elif System.EventFlags['cPlayer:GulBAnotherPlayerClearFlag']:
-                run GulBQuestNow_OtherClear()
-            else:
-                run GulBQuestNow()
-        elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-            run GulBAfterQuestChat()
-        else:
-            if System.EventFlags['cPlayer:GulBQuestStartFlag']:
+	if System.EventFlags['cLand:JohnnySitUpFlag']:
+		run GulBTalkChk()
+		if System.EventFlags['cLandTemp:GulBTalkShareplay']:
+			if System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+				run GulBAfterQuest()
+			elif not System.EventFlags['cPlayer:GulBQuestStartFlag']:
+				run GulBStartWithStanding()
+			elif System.EventFlags['cPlayer:GulBAnotherPlayerClearFlag']:
+				run GulBQuestNow_OtherClear()
+			else:
+				run GulBQuestNow()
+		elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+			run GulBAfterQuestChat()
+		else:
+			if System.EventFlags['cPlayer:GulBQuestStartFlag']:
 entrypoint Event163:
-                # Avast! If it isn't me favorite matey!
-                MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:126', false)
-            else:
-                # Who can silence a bawlin' babe with a single bug-eyed glance? 'Tis I, a rough, tough pirate captain! Arrr!
-                MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:121', false)
-                # I got tossed from me pirate ship into the sea, then washed up here… Me trusty <item>communicator had gone missin'. All hope of rescue was lost! I was…
-                MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:125', false)
-            # A kind ol' soul pulled me <item>communicator out of the sea!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:112', false)
-            # OK, I should be gettin' a message from me crew any minute now.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:127', false)
-            # As long as I have me trusty ol' <item>communicator, then…uh.
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:127_01', false)
-            MainNpc.NpcStartAS('GulBLostPhone', true, false)
-            # <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator is gone…AGAIN!
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:128', false)
-            # That slippery <item>communicator must've slid back into the sea… I'll never get back to me ship without it! I'm beggin' ye! Ye have to find me <item>…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:128_01', false)
-            run GulBStart()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-        run GulBKeepSleep()
-    elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
-        run GulB_GetUp_Start()
-    else:
-        run GulB_GetUp_NotStart()
- 
+				# Avast! If it isn't me favorite matey!
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:126', false)
+			else:
+				# Who can silence a bawlin' babe with a single bug-eyed glance? 'Tis I, a rough, tough pirate captain! Arrr!
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:121', false)
+				# I got tossed from me pirate ship into the sea, then washed up here… Me trusty <item>communicator had gone missin'. All hope of rescue was lost! I was…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:125', false)
+			# A kind ol' soul pulled me <item>communicator out of the sea!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:112', false)
+			# OK, I should be gettin' a message from me crew any minute now.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:127', false)
+			# As long as I have me trusty ol' <item>communicator, then…uh.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:127_01', false)
+			MainNpc.NpcStartAS('GulBLostPhone', true, false)
+			# <10:12><10:10>OHMEGOSH! <10:9>Me trusty <item>communicator is gone…AGAIN!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:128', false)
+			# That slippery <item>communicator must've slid back into the sea… I'll never get back to me ship without it! I'm beggin' ye! Ye have to find me <item>…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:128_01', false)
+			run GulBStart()
+			EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+		run GulBKeepSleep()
+	elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
+		run GulB_GetUp_Start()
+	else:
+		run GulB_GetUp_NotStart()
+
 flow Root():
-    if EventFlowSystemActor.IsSharePlay(0):
-        run GulB_Share()
-    elif not EventFlowSystemActor.IsMyVillage():
-        run GulB_DC()
-    elif EventFlowSystemActor.NetHasVisitor():
-        run GulB_NetHost()
-    elif System.EventFlags['cLand:JohnnySitUpFlag']:
-        run GulBTalkChk()
-        if System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-            run GulBAfterQuest()
-        elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
-            run GulBQuestNow()
-        else:
-            run GulBStartWithStanding()
-    elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
-        run GulBKeepSleep()
-    elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
-        run GulB_GetUp_Start()
-    else:
-        System.EventFlags['cPlayer:JonnyTalkCount'] += 1
-        if System.EventFlags['cPlayer:JonnyTalkCount'] == 1:
-            run GulBTalkSleep()
-        elif EventFlowSystemActor.PercentChoice(10):
-            run GulB_GetUp_NotStart()
-        elif System.EventFlags['cPlayer:JonnyTalkCount'] < 6:
-            run GulBTalkSleep()
-        else:
-            run GulB_GetUp_NotStart()
- 
+	if EventFlowSystemActor.IsSharePlay(0):
+		run GulB_Share()
+	elif not EventFlowSystemActor.IsMyVillage():
+		run GulB_DC()
+	elif EventFlowSystemActor.NetHasVisitor():
+		run GulB_NetHost()
+	elif System.EventFlags['cLand:JohnnySitUpFlag']:
+		run GulBTalkChk()
+		if System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+			run GulBAfterQuest()
+		elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
+			run GulBQuestNow()
+		else:
+			run GulBStartWithStanding()
+	elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+		run GulBKeepSleep()
+	elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
+		run GulB_GetUp_Start()
+	else:
+		System.EventFlags['cPlayer:JonnyTalkCount'] += 1
+		if System.EventFlags['cPlayer:JonnyTalkCount'] == 1:
+			run GulBTalkSleep()
+		elif EventFlowSystemActor.PercentChoice(10):
+			run GulB_GetUp_NotStart()
+		elif System.EventFlags['cPlayer:JonnyTalkCount'] < 6:
+			run GulBTalkSleep()
+		else:
+			run GulB_GetUp_NotStart()
+
 local flow Sub_grp_Event192():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # Me <item>communicator surely sank to the bottom of a nearby sea… If that be the case, I'd best not flail me feathers out there. I'm known for many th…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:031_01', false)
-        case 1:
-            # I'd bet me own sea biscuits that ol' <item>communicator o' mine is sunk off this island's shores! This'll cast a shadow on me piratin' career for sur…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:031_02', false)
-        case 2:
-            # Oh, me poor ol' <item>communicator… Come back to me! Free yourself from Neptune's clammy grip! Arrr, me mournful wails earn no reply. It must be some…
-            MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:031_03', false)
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Me <item>communicator surely sank to the bottom of a nearby sea… If that be the case, I'd best not flail me feathers out there. I'm known for many th…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:031_01', false)
+		case 1:
+			# I'd bet me own sea biscuits that ol' <item>communicator o' mine is sunk off this island's shores! This'll cast a shadow on me piratin' career for sur…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:031_02', false)
+		case 2:
+			# Oh, me poor ol' <item>communicator… Come back to me! Free yourself from Neptune's clammy grip! Arrr, me mournful wails earn no reply. It must be some…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gulB:031_03', false)

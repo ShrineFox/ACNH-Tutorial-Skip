@@ -1,146 +1,145 @@
 flow Root02_InTheDark():
-    Player.PlayerForceOffSharePlaySubIcon('cOff')
-    EventFlowSystemActor.SoundDuckingOn(45)
-    EventFlowSystemActor.SoundDuckingOn(46)
-    EventFlowSystemActor.SoundDuckingOn(47)
-    if SubflowResults@Sub@3[5] not in (0, 1):
-        MainNpc.NpcAISetPos(0.0, 0.0, 270.0, true, false)
-        Player.PlayerWarp(5)
-    System@Sub.EventFlags['cLandTemp:TukBehaviorControlFlag'] = true
-    fork:
-        branch:
-            Player.TurnBody(12, -90.0)
-        branch:
-            MainNpc.TurnBody(12, -90.0)
-            MainNpc.NpcWaitTurn()
-        branch:
-            EventFlowSystemActor.WaitFrame(55)
-    EventFlowSystemActor.TukSetDishes()
-    EventFlowSystemActor.WaitFrame(50)
-    run Root03_FadeIn()
- 
+	Player.PlayerForceOffSharePlaySubIcon('cOff')
+	EventFlowSystemActor.SoundDuckingOn(45)
+	EventFlowSystemActor.SoundDuckingOn(46)
+	EventFlowSystemActor.SoundDuckingOn(47)
+	if SubflowResults@Sub@3[5] not in (0, 1):
+		MainNpc.NpcAISetPos(0.0, 0.0, 270.0, true, false)
+		Player.PlayerWarp(5)
+	System@Sub.EventFlags['cLandTemp:TukBehaviorControlFlag'] = true
+	fork:
+		branch:
+			Player.TurnBody(12, -90.0)
+		branch:
+			MainNpc.TurnBody(12, -90.0)
+			MainNpc.NpcWaitTurn()
+		branch:
+			EventFlowSystemActor.WaitFrame(55)
+	EventFlowSystemActor.TukSetDishes()
+	EventFlowSystemActor.WaitFrame(50)
+	run Root03_FadeIn()
+
 flow Root03_FadeIn():
-    EventFlowSystemActor.CameraSetDemoParam('CookingFocus', '', 'Event:HarvestCooking', false, false, true, 0)
-    fork:
-        branch:
-            EventFlowSystemActor@Sub.SoundTriggerEmit('Bell', -1)
-            EventFlowSystemActor@Sub.FadeIn(true)
-        branch:
-            EventFlowSystemActor.WaitFrame(39)
-            EventFlowSystemActor.SoundTriggerEmit('Expect', -1)
-            EventFlowSystemActor.SoundDuckingOff(46)
-            EventFlowSystemActor.CameraSetDemoParam('CookingBirdview', 'CookingBirdview', 'Place:EventPlaza', false, false, true, 0)
-            EventFlowSystemActor.WaitFrame(130)
-            EventFlowSystemActor.WaitFrame(35)
-        branch:
-            EventFlowSystemActor@Sub2.WaitFrame(39)
-            EventFlowSystemActor@Sub2.WaitFrame(30)
-            System@Sub2.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 2
-            EventFlowSystemActor@Sub2.WaitFrame(100)
-            EventFlowSystemActor@Sub2.WaitFrame(35)
-    EventFlowSystemActor.SoundDuckingOff(45)
-    fork:
-        branch:
-            System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 3
-        branch:
-            Player.CharacterEmoticonAction('Smiling', true, '', 0, false)
-        branch:
-            MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(90)
-    MainNpc.TalkCamera(true, 'cTalk', 1)
-    EventFlowSystemActor.SoundDuckingOff(47)
-    Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(0)
-    fork:
-        branch:
-            Player.TurnBody(0, 0.0)
-        branch:
-            MainNpc.TurnBody(10, 0.0)
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.BGMPropertyControl(118)
-    EventFlowSystemActor.DecideHarvestNpcHandTool()
- 
+	EventFlowSystemActor.CameraSetDemoParam('CookingFocus', '', 'Event:HarvestCooking', false, false, true, 0)
+	fork:
+		branch:
+			EventFlowSystemActor@Sub.SoundTriggerEmit('Bell', -1)
+			EventFlowSystemActor@Sub.FadeIn(true)
+		branch:
+			EventFlowSystemActor.WaitFrame(39)
+			EventFlowSystemActor.SoundTriggerEmit('Expect', -1)
+			EventFlowSystemActor.SoundDuckingOff(46)
+			EventFlowSystemActor.CameraSetDemoParam('CookingBirdview', 'CookingBirdview', 'Place:EventPlaza', false, false, true, 0)
+			EventFlowSystemActor.WaitFrame(130)
+			EventFlowSystemActor.WaitFrame(35)
+		branch:
+			EventFlowSystemActor@Sub2.WaitFrame(39)
+			EventFlowSystemActor@Sub2.WaitFrame(30)
+			System@Sub2.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 2
+			EventFlowSystemActor@Sub2.WaitFrame(100)
+			EventFlowSystemActor@Sub2.WaitFrame(35)
+	EventFlowSystemActor.SoundDuckingOff(45)
+	fork:
+		branch:
+			System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 3
+		branch:
+			Player.CharacterEmoticonAction('Smiling', true, '', 0, false)
+		branch:
+			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(90)
+	MainNpc.TalkCamera(true, 'cTalk', 1)
+	EventFlowSystemActor.SoundDuckingOff(47)
+	Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(0)
+	fork:
+		branch:
+			Player.TurnBody(0, 0.0)
+		branch:
+			MainNpc.TurnBody(10, 0.0)
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.BGMPropertyControl(118)
+	EventFlowSystemActor.DecideHarvestNpcHandTool()
+
 flow Root_Normal():
-    run Set_DemoParam_DishNum_Normal()
-    run Set_DemoParam_Pattern_Normal()
-    # Now then. I've got everything I need, so…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:061', true)
+	run Set_DemoParam_DishNum_Normal()
+	run Set_DemoParam_Pattern_Normal()
+	# Now then. I've got everything I need, so…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:061', true)
 entrypoint Event89:
-    EventFlowSystemActor.BGMPropertyControl(117)
-    fork:
-        branch:
-            if SubflowResults@Sub@3[5] == 0:
-                Player.TurnBody(12, 0.0)
-        branch:
-            MainNpc.TurnNeck(11, false)
-            MainNpc.TurnBody(12, 0.0)
-            MainNpc.NpcWaitTurn()
-        branch:
-            EventFlowSystemActor.CameraSetDemoParam('CookingFinish', 'cDefault', 'Npc:tuk', false, false, true, 0)
-    EventFlowSystemActor.WaitFrame(10)
-    EventFlowSystemActor.SoundTriggerEmit('CookingStartWipe', -1)
-    if SubflowResults@3[5] == 0:
-        # <10:12>«Let's get cooking!»<10:8:00500000>
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:062', true)
-    else:
-        # <10:12>«Let's get cooking!»<10:8:00500000>
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:062_01', true)
-    EventFlowSystemActor.WaitFrame(0)
-    EventFlowSystemActor.MessageCancelShortIn()
-    fork:
-        branch:
-            EventFlowSystemActor.FadeOut('cCircle', 'cNormalFader', 'cBlack', 1.0, 1.0, true)
-        branch:
-            EventFlowSystemActor@Sub.WaitFrame(30)
-            System@Sub.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 1
-    run Root02_InTheDark()
- 
+	EventFlowSystemActor.BGMPropertyControl(117)
+	fork:
+		branch:
+			if SubflowResults@Sub@3[5] == 0:
+				Player.TurnBody(12, 0.0)
+		branch:
+			MainNpc.TurnNeck(11, false)
+			MainNpc.TurnBody(12, 0.0)
+			MainNpc.NpcWaitTurn()
+		branch:
+			EventFlowSystemActor.CameraSetDemoParam('CookingFinish', 'cDefault', 'Npc:tuk', false, false, true, 0)
+	EventFlowSystemActor.WaitFrame(10)
+	EventFlowSystemActor.SoundTriggerEmit('CookingStartWipe', -1)
+	if SubflowResults@3[5] == 0:
+		# <10:12>«Let's get cooking!»<10:8:00500000>
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:062', true)
+	else:
+		# <10:12>«Let's get cooking!»<10:8:00500000>
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:062_01', true)
+	EventFlowSystemActor.WaitFrame(0)
+	EventFlowSystemActor.MessageCancelShortIn()
+	fork:
+		branch:
+			EventFlowSystemActor.FadeOut('cCircle', 'cNormalFader', 'cBlack', 1.0, 1.0, true)
+		branch:
+			EventFlowSystemActor@Sub.WaitFrame(30)
+			System@Sub.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 1
+	run Root02_InTheDark()
+
 flow Root_Secret():
-    run Set_DemoParam_DishNum_Secret()
-    run Set_DemoParam_Pattern_Secret()
-    # Now then. You've given me everything I need, so…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:063', true)
-    run Event89()
- 
+	run Set_DemoParam_DishNum_Secret()
+	run Set_DemoParam_Pattern_Secret()
+	# Now then. You've given me everything I need, so…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:063', true)
+	run Event89()
+
 flow Set_DemoParam_DishNum_Normal():
-    switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-        case 1:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 1
-        case 2:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 2
-        case 3:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 3
-        case 4:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 4
-        default:
-            return
- 
+	switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+		case 1:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 1
+		case 2:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 2
+		case 3:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 3
+		case 4:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 4
+		default:
+			return
+
 flow Set_DemoParam_DishNum_Secret():
-    switch SubflowResults@5[2]:
-        case 1:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 1
-        case 2:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 2
-        case 3:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 3
-        case 4:
-            System.EventFlags['cLandTemp:HarvestDemoCooking'] = 4
-        default:
-            return
- 
+	switch SubflowResults@5[2]:
+		case 1:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 1
+		case 2:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 2
+		case 3:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 3
+		case 4:
+			System.EventFlags['cLandTemp:HarvestDemoCooking'] = 4
+		default:
+			return
+
 flow Set_DemoParam_Pattern_Normal():
-    switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-        case 1:
-            System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 1
-        case 2:
-            System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 2
-        case 3:
-            System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 3
-        case 4:
-            System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 4
-        default:
-            return
- 
+	switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+		case 1:
+			System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 1
+		case 2:
+			System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 2
+		case 3:
+			System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 3
+		case 4:
+			System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 4
+		default:
+			return
+
 flow Set_DemoParam_Pattern_Secret():
-    System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 4
- 
+	System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 4

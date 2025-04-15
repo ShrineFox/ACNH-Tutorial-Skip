@@ -1,87 +1,86 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        MainNpc.NpcCopyPhrase()
-        # Sometimes I feel bad pulling weeds. Would it be so wrong to let a few of them grow and bloom, <110:5>?
-        MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:201', false)
-        # No way! <20:2:cd04>It comes down to them or us, <110:31:cd00>… THEM. OR. US!
-        SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:202', false)
-        # I guess<20:2:cd03> it's kind of hard to find something we can both agree on, <110:31:cd01>, <110:5>.
-        MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:203', false)
-        Player.TurnNeck(1, false)
-        # Hmmm… I guess we can both agree that "<110:5>" is kinda fun to say at least, right?
-        SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:204', false)
-        Player.TurnNeck(0, false)
-        # THERE's our common ground! Feel free to keep using it if you really feel like it motivates you, <110:5>.
-        MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:205', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        fork:
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Did you hear it, <110:3>? I feel like a teacher, because he just called me "Miss <110:31:cd00>!" <20:3:cd05>Maybe I should be calling you "Mr. <110:3…
-        MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:001', false)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
-            case 0:
-                Player.TurnNeck(1, false)
-                # Nah. Just call me Maestro, 'cause I'm the Maestro of Muscles!
-                SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:002', false)
-                Player.TurnNeck(0, false)
-                # OK… Whatever name makes you happy… Maestro.
-                MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:003', false)
-                Player.TurnNeck(1, false)
-                # You know what? Never mind… Now that I hear you use it, that actually sounds kinda goofy, <110:5>.
-                SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:004', false)
-            case 1:
-                Player.TurnNeck(1, false)
-                # How about calling me Coach? It'd be good practice for you, since I'll probably be coaching someday…
-                SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:005', false)
-                Player.TurnNeck(0, false)
-                # Hmm… Anything to say after your team's shocking loss in today's game, Coach <110:31:cd01>?
-                MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:006', false)
-                Player.TurnNeck(1, false)
-                # Whuh? We lost? No way! Um, what I meant to say is… We need to play much better to win, <110:5>!
-                SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:007', false)
-            case 2:
-                Player.TurnNeck(1, false)
-                # It would be nice to be called "Boss," just so I could see what it feels like to be in charge of something…
-                SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:008', false)
-                Player.TurnNeck(0, false)
-                # OK, let's see… Boss, we need a decision right now on the carpet color for our office: gray or blue?
-                MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:009', false)
-                Player.TurnNeck(1, false)
-                # Really, right now? OK… I wanna say blue? No, wait! Gray's good. Isn't it? <50:3><110:5>, I sprained my brain!
-                SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:010', false)
-    else:
-        fork:
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Oh, hey <110:3>! <50:3><110:31:cd01> tells me I need strength training. I think I agree, but… Do you think I should start off by working on my arms, …
-        MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:101', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            SubNpc.TurnNeck(0, false)
-            # Aw, yeah! <20:3:cd05><20:2:cd04>That's what I told her! Just a few short weeks of curls and deadlifts, and you'll see her carrying around great, big …
-            SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:102', false)
-            Player.TurnNeck(0, false)
-            # That would help me declutter my shelves and donate some books…
-            MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:103', false)
-            # And you like baking, right? <20:2:cd04>Think of the heavy kitchen stuff you could use with your buff arms, <110:5>!
-            SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:104', false)
-            Player.TurnNeck(0, false)
-            # You're right, <110:5>! I could whip up a ton of dough with one of those big, industrial-sized mixers, <110:5>…
-            MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:105', false)
-        else:
-            SubNpc.TurnNeck(0, false)
-            # See? <20:3:cd05><20:2:cd04>We're on the same page! A few weeks of lunges and squats, and you'll be running around the island a lot faster.
-            SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:106', false)
-            Player.TurnNeck(0, false)
-            # You're right! I could get my errands done faster and race home to get in some extra reading!
-            MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:107', false)
-            # Reading? <20:2:cd04>Errands? I was thinking more along the lines of you taking up <135:6:cd00>, <110:5>…
-            SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:108', false)
-            Player.TurnNeck(0, false)
-            # That's not usually my thing, but… Maybe it'd help my strength training if I was a little more flexible.
-            MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:109', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		MainNpc.NpcCopyPhrase()
+		# Sometimes I feel bad pulling weeds. Would it be so wrong to let a few of them grow and bloom, <110:5>?
+		MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:201', false)
+		# No way! <20:2:cd04>It comes down to them or us, <110:31:cd00>… THEM. OR. US!
+		SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:202', false)
+		# I guess<20:2:cd03> it's kind of hard to find something we can both agree on, <110:31:cd01>, <110:5>.
+		MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:203', false)
+		Player.TurnNeck(1, false)
+		# Hmmm… I guess we can both agree that "<110:5>" is kinda fun to say at least, right?
+		SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:204', false)
+		Player.TurnNeck(0, false)
+		# THERE's our common ground! Feel free to keep using it if you really feel like it motivates you, <110:5>.
+		MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:205', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		fork:
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Did you hear it, <110:3>? I feel like a teacher, because he just called me "Miss <110:31:cd00>!" <20:3:cd05>Maybe I should be calling you "Mr. <110:3…
+		MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:001', false)
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, false):
+			case 0:
+				Player.TurnNeck(1, false)
+				# Nah. Just call me Maestro, 'cause I'm the Maestro of Muscles!
+				SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:002', false)
+				Player.TurnNeck(0, false)
+				# OK… Whatever name makes you happy… Maestro.
+				MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:003', false)
+				Player.TurnNeck(1, false)
+				# You know what? Never mind… Now that I hear you use it, that actually sounds kinda goofy, <110:5>.
+				SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:004', false)
+			case 1:
+				Player.TurnNeck(1, false)
+				# How about calling me Coach? It'd be good practice for you, since I'll probably be coaching someday…
+				SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:005', false)
+				Player.TurnNeck(0, false)
+				# Hmm… Anything to say after your team's shocking loss in today's game, Coach <110:31:cd01>?
+				MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:006', false)
+				Player.TurnNeck(1, false)
+				# Whuh? We lost? No way! Um, what I meant to say is… We need to play much better to win, <110:5>!
+				SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:007', false)
+			case 2:
+				Player.TurnNeck(1, false)
+				# It would be nice to be called "Boss," just so I could see what it feels like to be in charge of something…
+				SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:008', false)
+				Player.TurnNeck(0, false)
+				# OK, let's see… Boss, we need a decision right now on the carpet color for our office: gray or blue?
+				MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:009', false)
+				Player.TurnNeck(1, false)
+				# Really, right now? OK… I wanna say blue? No, wait! Gray's good. Isn't it? <50:3><110:5>, I sprained my brain!
+				SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:010', false)
+	else:
+		fork:
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Oh, hey <110:3>! <50:3><110:31:cd01> tells me I need strength training. I think I agree, but… Do you think I should start off by working on my arms, …
+		MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:101', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			SubNpc.TurnNeck(0, false)
+			# Aw, yeah! <20:3:cd05><20:2:cd04>That's what I told her! Just a few short weeks of curls and deadlifts, and you'll see her carrying around great, big …
+			SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:102', false)
+			Player.TurnNeck(0, false)
+			# That would help me declutter my shelves and donate some books…
+			MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:103', false)
+			# And you like baking, right? <20:2:cd04>Think of the heavy kitchen stuff you could use with your buff arms, <110:5>!
+			SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:104', false)
+			Player.TurnNeck(0, false)
+			# You're right, <110:5>! I could whip up a ton of dough with one of those big, industrial-sized mixers, <110:5>…
+			MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:105', false)
+		else:
+			SubNpc.TurnNeck(0, false)
+			# See? <20:3:cd05><20:2:cd04>We're on the same page! A few weeks of lunges and squats, and you'll be running around the island a lot faster.
+			SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:106', false)
+			Player.TurnNeck(0, false)
+			# You're right! I could get my errands done faster and race home to get in some extra reading!
+			MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:107', false)
+			# Reading? <20:2:cd04>Errands? I was thinking more along the lines of you taking up <135:6:cd00>, <110:5>…
+			SubNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:108', false)
+			Player.TurnNeck(0, false)
+			# That's not usually my thing, but… Maybe it'd help my strength training if I was a little more flexible.
+			MainNpc.OpenMessageWindow('TalkNNpc/G1_Fu/Conv/FU_Conv_HA:109', false)

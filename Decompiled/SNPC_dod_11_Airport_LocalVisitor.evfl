@@ -1,198 +1,197 @@
 flow Cmn_Hint_Going():
-    # See, we can't take off for an island if someone there is in the middle of talking or workin' on something. If you try a few times and it keeps not co…
-    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:117_01', false)
-    # So did you want me to try again right now?
-    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:117_02', false)
- 
+	# See, we can't take off for an island if someone there is in the middle of talking or workin' on something. If you try a few times and it keeps not co…
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:117_01', false)
+	# So did you want me to try again right now?
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:117_02', false)
+
 flow EntryPoint_LocalVisitor():
-    if EventFlowSystemActor.NetMode() in (0, 1):
-        # Alright, gimme a sec to set up local play.
-        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:111', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.MessageSuspend()
-            run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-            EventFlowSystemActor.MessageLockNext(1)
-            EventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
-            # Saving. Do not touch .
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-            EventFlowSystemActor.SaveSimpleSave('cAll')
-            EventFlowSystemActor.NetInitLocal('cInitLocal', false)
-            EventFlowSystemActor.MessageSuspend()
-            run Sub_Event21()
-        else:
-            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
-    else:
-        # You got it! I'll turn off the internet connection and set things up for local play.
-        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:112', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.MessageSuspend()
-            run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-            EventFlowSystemActor.MessageLockNext(1)
-            EventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
-            # Saving. Do not touch .
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-            EventFlowSystemActor.SaveSimpleSave('cAll')
-            EventFlowSystemActor.MessageSuspend()
-            # Disconnecting from the internet and preparing local wireless connection...
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:002', false)
-            EventFlowSystemActor.NetShutdown('cNetShutdown', false)
-            EventFlowSystemActor.NetInitLocal('cInitLocal', false)
-            EventFlowSystemActor.MessageSuspend()
-            run Sub_Event21()
-        else:
-            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
- 
+	if EventFlowSystemActor.NetMode() in (0, 1):
+		# Alright, gimme a sec to set up local play.
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:111', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.MessageSuspend()
+			run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
+			EventFlowSystemActor.MessageLockNext(1)
+			EventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
+			# Saving. Do not touch .
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+			EventFlowSystemActor.SaveSimpleSave('cAll')
+			EventFlowSystemActor.NetInitLocal('cInitLocal', false)
+			EventFlowSystemActor.MessageSuspend()
+			run Sub_Event21()
+		else:
+			run SNPC_dod_AirPort::EntryPoint_Cancel()
+	else:
+		# You got it! I'll turn off the internet connection and set things up for local play.
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:112', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.MessageSuspend()
+			run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
+			EventFlowSystemActor.MessageLockNext(1)
+			EventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
+			# Saving. Do not touch .
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+			EventFlowSystemActor.SaveSimpleSave('cAll')
+			EventFlowSystemActor.MessageSuspend()
+			# Disconnecting from the internet and preparing local wireless connection...
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:002', false)
+			EventFlowSystemActor.NetShutdown('cNetShutdown', false)
+			EventFlowSystemActor.NetInitLocal('cInitLocal', false)
+			EventFlowSystemActor.MessageSuspend()
+			run Sub_Event21()
+		else:
+			run SNPC_dod_AirPort::EntryPoint_Cancel()
+
 flow EntryPoint_PasswordRetryLocal():
-    EventFlowSystemActor.UISoftwareKeyboardHandling('cPasswordLocal', false)
-    run Event71()
- 
+	EventFlowSystemActor.UISoftwareKeyboardHandling('cPasswordLocal', false)
+	run Event71()
+
 flow EntryPoint_ResearchLocal():
-    EventFlowSystemActor.MessageSuspend()
-    run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
-    EventFlowSystemActor.MessageLockNext(1)
-    # Looking for islands you can visit...
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:003', false)
-    EventFlowSystemActor.NetFindSessionVillage('cLocal')
-    EventFlowSystemActor.MessageSuspend()
-    run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.MessageUnlockNext()
-    run Event23()
- 
+	EventFlowSystemActor.MessageSuspend()
+	run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
+	EventFlowSystemActor.MessageLockNext(1)
+	# Looking for islands you can visit...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:003', false)
+	EventFlowSystemActor.NetFindSessionVillage('cLocal')
+	EventFlowSystemActor.MessageSuspend()
+	run SNPC_dod_AirPort::EntryPoint_PostProcedure()
+	EventFlowSystemActor.MessageUnlockNext()
+	run Event23()
+
 flow EntryPoint_RockRetryLocal():
-    run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
-    EventFlowSystemActor.MessageLockNext(1)
-    # Getting ready to depart...
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:004', false)
-    run Event46()
- 
+	run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
+	EventFlowSystemActor.MessageLockNext(1)
+	# Getting ready to depart...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:004', false)
+	run Event46()
+
 local flow Sub_Event21():
-    # Looking for islands you can visit...
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:003', false)
-    EventFlowSystemActor.NetFindSessionVillage('cLocal')
-    EventFlowSystemActor.MessageSuspend()
-    run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.MessageUnlockNext()
+	# Looking for islands you can visit...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:003', false)
+	EventFlowSystemActor.NetFindSessionVillage('cLocal')
+	EventFlowSystemActor.MessageSuspend()
+	run SNPC_dod_AirPort::EntryPoint_PostProcedure()
+	EventFlowSystemActor.MessageUnlockNext()
 entrypoint Event23:
-    switch EventFlowSystemActor.NetFoundVillageNum():
-        case 0:
-            # Oh, drumsticks… Looks like there aren't any islands we can take you to right now… Sorry about that.
-            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:102', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run EntryPoint_ResearchLocal()
-            else:
-                EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-                run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
-        case 1:
-            if EventFlowSystemActor.NetAllSessionIsFull():
-                # OK, I found a place called <115:2:cd00>…but it's at full capacity and not taking visitors.
-                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:105', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run EntryPoint_ResearchLocal()
-                else:
-                    EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-                    run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
-            else:
-                # Looks like we got a flight for <115:2:cd00> right now… That where you wanted to go?
-                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:104', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        run Sub_grp_Event68()
-                    case 1:
-                        run EntryPoint_ResearchLocal()
-                    case 2:
-                        EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-                        run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
-        case 2:
-            EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
-            System.EventFlags['cPlayerTemp:AirportTripListError'] = false
-            # Oh, hang on—which island you wanna go to?
-            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:103', true)
-            EventFlowSystemActor.OpenVillageList()
-            EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
-            if System.EventFlags['cPlayerTemp:AirportTripListError']:
-                EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                switch EventFlowSystemActor.NetIsDecidedVillage():
-                    case 0:
-                        run Sub_grp_Event68()
-                    case 1:
-                        run EntryPoint_ResearchLocal()
-                    case 2:
-                        EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-                        run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
- 
+	switch EventFlowSystemActor.NetFoundVillageNum():
+		case 0:
+			# Oh, drumsticks… Looks like there aren't any islands we can take you to right now… Sorry about that.
+			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:102', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run EntryPoint_ResearchLocal()
+			else:
+				EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+				run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+		case 1:
+			if EventFlowSystemActor.NetAllSessionIsFull():
+				# OK, I found a place called <115:2:cd00>…but it's at full capacity and not taking visitors.
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:105', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run EntryPoint_ResearchLocal()
+				else:
+					EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+					run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+			else:
+				# Looks like we got a flight for <115:2:cd00> right now… That where you wanted to go?
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:104', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+ run Sub_grp_Event68()
+					case 1:
+run EntryPoint_ResearchLocal()
+					case 2:
+						EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+		case 2:
+			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+			System.EventFlags['cPlayerTemp:AirportTripListError'] = false
+			# Oh, hang on—which island you wanna go to?
+			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:103', true)
+			EventFlowSystemActor.OpenVillageList()
+			EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+			if System.EventFlags['cPlayerTemp:AirportTripListError']:
+				EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+				EventFlowSystemActor.ExitFlowchart()
+			else:
+				switch EventFlowSystemActor.NetIsDecidedVillage():
+					case 0:
+ run Sub_grp_Event68()
+					case 1:
+run EntryPoint_ResearchLocal()
+					case 2:
+						EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+
 local flow Sub_Event56():
-    EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-    run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
- 
+	EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+	run SNPC_dod_AirPort::EntryPoint_Cancel()
+
 local flow Sub_Event77():
-    run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
-    EventFlowSystemActor.MessageLockNext(1)
-    # Getting ready to depart...
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:004', false)
-    EventFlowSystemActor.NetJoinSessionVillage()
-    if EventFlowSystemActor.CheckErrorType(2):
-        EventFlowSystemActor.MessageSuspend()
-        run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-        EventFlowSystemActor.MessageUnlockNext()
-        # Oooh! Looks like that's not the Dodo Code™. You wanna try entering it again?
-        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:107', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run EntryPoint_PasswordRetryLocal()
-        else:
-            EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
-    else:
+	run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
+	EventFlowSystemActor.MessageLockNext(1)
+	# Getting ready to depart...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:004', false)
+	EventFlowSystemActor.NetJoinSessionVillage()
+	if EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.MessageSuspend()
+		run SNPC_dod_AirPort::EntryPoint_PostProcedure()
+		EventFlowSystemActor.MessageUnlockNext()
+		# Oooh! Looks like that's not the Dodo Code™. You wanna try entering it again?
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:107', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run EntryPoint_PasswordRetryLocal()
+		else:
+			EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+			run SNPC_dod_AirPort::EntryPoint_Cancel()
+	else:
 entrypoint Event46:
-        EventFlowSystemActor.NetDemoLock(0)
-        EventFlowSystemActor.MessageSuspend()
-        run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-        EventFlowSystemActor.MessageUnlockNext()
-        if not EventFlowSystemActor.CheckErrorType(2):
-            EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
-            if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-                run SNPC_dod_AirPort::LandMakingRemove_Visitorrun SNPC_dod_AirPort::LandMakingRemove_Visitor()
-            else:
-                # Alrighty then—you're all set! And when you need to travel, just think, "What would dodos do?"<10:7:003c0000>
-                MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:109', true)
-            run SNPC_dod_30_Airport_DepartVisitor::EntryPoint_Departrun SNPC_dod_30_Airport_DepartVisitor::EntryPoint_Depart()
-        elif EventFlowSystemActor.NetLockFailReason() == 0:
-            # Wuh-oh! Looks like we're getting interference… Hang on… Someone not put their NookPhone into airplane mode again?
-            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:108', true)
-            switch EventFlowSystemActor.GeneralTalkChoice3():
-                case 0:
-                    run EntryPoint_RockRetryLocal()
-                case 1:
-                    run Cmn_Hint_Going()
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        run EntryPoint_RockRetryLocal()
-                    else:
-                        run Sub_Event56()
-                case 2:
-                    run Sub_Event56()
-        else:
-            # Well, dang. Someone went and closed the gate over there.
-            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:140', false)
-            # You wanna try going someplace else? I can search again.
-            MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:150', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run EntryPoint_ResearchLocal()
-            else:
-                EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-                run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
- 
+		EventFlowSystemActor.NetDemoLock(0)
+		EventFlowSystemActor.MessageSuspend()
+		run SNPC_dod_AirPort::EntryPoint_PostProcedure()
+		EventFlowSystemActor.MessageUnlockNext()
+		if not EventFlowSystemActor.CheckErrorType(2):
+			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+			if System.EventFlags['cPlayer:EquipLicenseHelmet']:
+				run SNPC_dod_AirPort::LandMakingRemove_Visitor()
+			else:
+				# Alrighty then—you're all set! And when you need to travel, just think, "What would dodos do?"<10:7:003c0000>
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:109', true)
+			run SNPC_dod_30_Airport_DepartVisitor::EntryPoint_Depart()
+		elif EventFlowSystemActor.NetLockFailReason() == 0:
+			# Wuh-oh! Looks like we're getting interference… Hang on… Someone not put their NookPhone into airplane mode again?
+			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:108', true)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					run EntryPoint_RockRetryLocal()
+				case 1:
+					run Cmn_Hint_Going()
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+run EntryPoint_RockRetryLocal()
+					else:
+	run Sub_Event56()
+				case 2:
+					run Sub_Event56()
+		else:
+			# Well, dang. Someone went and closed the gate over there.
+			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:140', false)
+			# You wanna try going someplace else? I can search again.
+			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:150', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run EntryPoint_ResearchLocal()
+			else:
+				EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+				run SNPC_dod_AirPort::EntryPoint_Cancel()
+
 local flow Sub_grp_Event68():
-    if EventFlowSystemActor.NetIsNeedPassword('cNeedPassword'):
-        # Hang on! You need a special Dodo Code™ to visit this island.<10:4> Couldja gimme those four digits?
-        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:106', true)
-        EventFlowSystemActor.UISoftwareKeyboardHandling('cPasswordLocal', true)
+	if EventFlowSystemActor.NetIsNeedPassword('cNeedPassword'):
+		# Hang on! You need a special Dodo Code™ to visit this island.<10:4> Couldja gimme those four digits?
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:106', true)
+		EventFlowSystemActor.UISoftwareKeyboardHandling('cPasswordLocal', true)
 entrypoint Event71:
-        if EventFlowSystemActor.UIResultMenuDecide():
-            run Sub_Event77()
-        else:
-            EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-            run SNPC_dod_AirPort::EntryPoint_Cancel_Negarun SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
-    else:
-        run Sub_Event77()
- 
+		if EventFlowSystemActor.UIResultMenuDecide():
+			run Sub_Event77()
+		else:
+			EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+			run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+	else:
+		run Sub_Event77()

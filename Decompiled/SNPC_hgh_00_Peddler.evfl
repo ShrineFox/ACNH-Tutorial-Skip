@@ -1,276 +1,275 @@
 flow CheckHghSel():
-    if System.EventFlags['cPlayer:HghEndRequestHousingKit']:
-        SubflowResults[0] = 1
-    elif System.EventFlags['cPlayer:HghHeardRequestHousingKit']:
-        SubflowResults[0] = 0
-    else:
-        SubflowResults[0] = 1
- 
+	if System.EventFlags['cPlayer:HghEndRequestHousingKit']:
+		SubflowResults[0] = 1
+	elif System.EventFlags['cPlayer:HghHeardRequestHousingKit']:
+		SubflowResults[0] = 0
+	else:
+		SubflowResults[0] = 1
+
 flow HghPeddlerClosed():
-    if System.EventFlags['cPlayer:KinuyoTalkTodayFlag']:
-        # Sorry, I've closed up shop for the day.<10:4> But come see me again another time, OK?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:902', false)
-    else:
-        System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
-        # Oh, thanks for stopping by again, PLAYER! Sorry, but I'm closed up for the day and heading home soon. But I hope you'll come see me again next time!
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:901', false)
- 
+	if System.EventFlags['cPlayer:KinuyoTalkTodayFlag']:
+		# Sorry, I've closed up shop for the day.<10:4> But come see me again another time, OK?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:902', false)
+	else:
+		System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
+		# Oh, thanks for stopping by again, PLAYER! Sorry, but I'm closed up for the day and heading home soon. But I hope you'll come see me again next time!
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:901', false)
+
 flow HghPeddler_NormalSeq():
-    run CheckHghSel()
-    if EventFlowSystemActor.EnvHourCompare(22, -1, true, true) != 0:
-        run HghPeddlerClosed()
-    elif not System.EventFlags['cPlayer:KinuyoTalkTodayFlag']:
-        System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
-        switch EventFlowSystemActor.EnvTimeZone():
-            case `05:00-07:59`, `08:00-11:59`:
-                # Gooooooood morning, PLAYER! Thanks for stopping by!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:101_01', false)
-            case `12:00-15:59`, `16:00-18:59`:
-                # Gooooooood afternoon, PLAYER! Thanks for stopping by!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:101_02', false)
-            case `19:00-23:59`, `00:00-04:59`:
-                # Gooooooood evening, PLAYER! Thanks for stopping by!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:101_03', false)
+	run CheckHghSel()
+	if EventFlowSystemActor.EnvHourCompare(22, -1, true, true) != 0:
+		run HghPeddlerClosed()
+	elif not System.EventFlags['cPlayer:KinuyoTalkTodayFlag']:
+		System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
+		switch EventFlowSystemActor.EnvTimeZone():
+			case `05:00-07:59`, `08:00-11:59`:
+				# Gooooooood morning, PLAYER! Thanks for stopping by!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:101_01', false)
+			case `12:00-15:59`, `16:00-18:59`:
+				# Gooooooood afternoon, PLAYER! Thanks for stopping by!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:101_02', false)
+			case `19:00-23:59`, `00:00-04:59`:
+				# Gooooooood evening, PLAYER! Thanks for stopping by!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:101_03', false)
 entrypoint Event145:
-        if SubflowResults@2[0] == 0:
-            # How can I help today?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:106', false)
-            run hgh_Peddler_Sel_3B_Housing()
-        else:
-            # How can I help today?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:102', false)
-            run Sub_grp_Event93()
-    elif System.EventFlags['cPlayer:HghPeddlerPurchaceToday']:
-        if SubflowResults@2[0] == 0:
-            # Oh, hey again, PLAYER! Forget something on your list?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:107', false)
-            run hgh_Peddler_Sel_3B_Housing()
-        else:
-            # Oh, hey again, PLAYER! Forget something on your list?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:105_01', false)
-            run Sub_grp_Event93()
-    elif SubflowResults@2[0] == 0:
-        # Oh, hey, PLAYER. What's up?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:108', false)
-        run hgh_Peddler_Sel_3B_Housing()
-    else:
-        # Oh, hey, PLAYER. What's up?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:105_02', false)
-        run Sub_grp_Event93()
- 
+		if SubflowResults@2[0] == 0:
+			# How can I help today?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:106', false)
+			run hgh_Peddler_Sel_3B_Housing()
+		else:
+			# How can I help today?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:102', false)
+			run Sub_grp_Event93()
+	elif System.EventFlags['cPlayer:HghPeddlerPurchaceToday']:
+		if SubflowResults@2[0] == 0:
+			# Oh, hey again, PLAYER! Forget something on your list?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:107', false)
+			run hgh_Peddler_Sel_3B_Housing()
+		else:
+			# Oh, hey again, PLAYER! Forget something on your list?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:105_01', false)
+			run Sub_grp_Event93()
+	elif SubflowResults@2[0] == 0:
+		# Oh, hey, PLAYER. What's up?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:108', false)
+		run hgh_Peddler_Sel_3B_Housing()
+	else:
+		# Oh, hey, PLAYER. What's up?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:105_02', false)
+		run Sub_grp_Event93()
+
 flow HghShoppingCancelUI_1st():
-    # Whaddaya think?<10:4> I'm going to bring different stuff each time I visit, so be sure to stop by!
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:007', false)
-    run Event49()
- 
+	# Whaddaya think?<10:4> I'm going to bring different stuff each time I visit, so be sure to stop by!
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:007', false)
+	run Event49()
+
 flow Hgh_AfterCancel():
-    # No worries! Anything else catchin'  your eye?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:112', false)
+	# No worries! Anything else catchin'  your eye?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:112', false)
 entrypoint Event58:
-    EventFlowSystemActor.UIShopBuyReselectionAppear()
-    run Event51()
- 
+	EventFlowSystemActor.UIShopBuyReselectionAppear()
+	run Event51()
+
 flow Hgh_AfterNoMoney():
-    # Do you want to look around for something else instead?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:113_02', false)
-    run Event58()
- 
+	# Do you want to look around for something else instead?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:113_02', false)
+	run Event58()
+
 flow Hgh_AfterPurchase():
-    # Do you wanna look at anything else?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:115', false)
-    run Event58()
- 
+	# Do you wanna look at anything else?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:115', false)
+	run Event58()
+
 flow Hgh_PeddlerShopping_Visitor():
-    run Event50()
- 
+	run Event50()
+
 flow Hgh_TailorBuildEvent():
-    if System.EventFlags['cLand:TailorGetHousingkit']:
-        # Thanks so much for offering to scout a location for our shop! We're not planning a huge place or anything, so we don't need a ton of space. If you fi…
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:221', false)
-    elif System.EventFlags['cPlayer:HghHeardRequestHousingKit']:
-        run Retry_Request()
-    else:
-        System.EventFlags['cPlayer:HghHeardRequestHousingKit'] = true
-        System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
-        # Oh, hey, PLAYER! You came at just the right time! There's something I'd like to ask you today… Could I bend your ear for a bit?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:201', false)
-        switch EventFlowSystemActor.GeneralTalkChoice2():
-            case 0, 1:
-                # Oh, thank you! You see, I wanted to ask you about a location…for the store that we're thinking of opening.
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:202', false)
-                # Thanks to you, we've gained a lot of customers on this island who can't wait for me to come here peddlin'. So…I've been talking with my sister about …
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:203', false)
-                # So today I came to chat with Tom Nook, and we had a great conversation!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:204', false)
-                # He was all like, "We have some materials left over from building Nook's Cranny, hm?" "All that must be done then is to select an appropriate location…
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:205', false)
-                # So I figured I'd just keep doing the traveling-peddler thing until I ran into you again. And that's now!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:206', false)
-                # Oh, geez, I've just been rambling on and on, haven't I? Sorry—I'm pretty excited about all this! Anyway, my sister and I would feel better opening th…
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:207', false)
+	if System.EventFlags['cLand:TailorGetHousingkit']:
+		# Thanks so much for offering to scout a location for our shop! We're not planning a huge place or anything, so we don't need a ton of space. If you fi…
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:221', false)
+	elif System.EventFlags['cPlayer:HghHeardRequestHousingKit']:
+		run Retry_Request()
+	else:
+		System.EventFlags['cPlayer:HghHeardRequestHousingKit'] = true
+		System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
+		# Oh, hey, PLAYER! You came at just the right time! There's something I'd like to ask you today… Could I bend your ear for a bit?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:201', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0, 1:
+				# Oh, thank you! You see, I wanted to ask you about a location…for the store that we're thinking of opening.
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:202', false)
+				# Thanks to you, we've gained a lot of customers on this island who can't wait for me to come here peddlin'. So…I've been talking with my sister about …
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:203', false)
+				# So today I came to chat with Tom Nook, and we had a great conversation!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:204', false)
+				# He was all like, "We have some materials left over from building Nook's Cranny, hm?" "All that must be done then is to select an appropriate location…
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:205', false)
+				# So I figured I'd just keep doing the traveling-peddler thing until I ran into you again. And that's now!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:206', false)
+				# Oh, geez, I've just been rambling on and on, haven't I? Sorry—I'm pretty excited about all this! Anyway, my sister and I would feel better opening th…
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:207', false)
 entrypoint Event26:
-                if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-                    # Oh, of course! Life sure can be "life-y" sometimes, right? Don't stress on my account. But I'll be around for a while longer, so if you get some free…
-                    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:210', false)
-                    run Request_Failed()
-                elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                    # Really? That's great! Oh, but your pockets are full. Call it tailor's intuition! If you'll make some space, I'll give you the <item>tailors construct…
-                    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:212', false)
-                    run Request_Failed()
-                else:
-                    # Seriously?! Oh, you're a total lifesaver! Alright then, let me give you this <item>tailors construction kit!
-                    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:208', false)
-                    MainNpc.SetDeliveryItemAtRandom(4411, true, 'cVillageRemakePattern', 0)
-                    MainNpc.NpcDelivery(1, 'Default')
-                    # Just set it up in whatever spot makes sense to you, and that's where we'll have our shop built!
-                    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:209', false)
-                    System.EventFlags['cLand:TailorGetHousingkit'] = true
-                    System.EventFlags['cPlayer:HghGetTailorHousingKit'] = true
- 
+				if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+					# Oh, of course! Life sure can be "life-y" sometimes, right? Don't stress on my account. But I'll be around for a while longer, so if you get some free…
+					MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:210', false)
+					run Request_Failed()
+				elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+					# Really? That's great! Oh, but your pockets are full. Call it tailor's intuition! If you'll make some space, I'll give you the <item>tailors construct…
+					MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:212', false)
+					run Request_Failed()
+				else:
+					# Seriously?! Oh, you're a total lifesaver! Alright then, let me give you this <item>tailors construction kit!
+					MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:208', false)
+					MainNpc.SetDeliveryItemAtRandom(4411, true, 'cVillageRemakePattern', 0)
+					MainNpc.NpcDelivery(1, 'Default')
+					# Just set it up in whatever spot makes sense to you, and that's where we'll have our shop built!
+					MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:209', false)
+					System.EventFlags['cLand:TailorGetHousingkit'] = true
+					System.EventFlags['cPlayer:HghGetTailorHousingKit'] = true
+
 flow Hgh_Visit_OpenUI():
-    EventFlowSystemActor.UIMoneyAppear()
-    EventFlowSystemActor.UIShopBuyAppear('cKinuyo')
+	EventFlowSystemActor.UIMoneyAppear()
+	EventFlowSystemActor.UIShopBuyAppear('cKinuyo')
 entrypoint Event51:
-    if EventFlowSystemActor.UIResultMenuDecide():
-        run SNPC_hgh::Hgh_Common_TagSetrun SNPC_hgh::Hgh_Common_TagSet()
-        # It's <90:26:0000> for [a|an]<125:0:0000>. You interested?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:111', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-            run Hgh_AfterCancel()
-        elif not EventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
-            run SNPC_hgh::Hgh_Common_ItemFullrun SNPC_hgh::Hgh_Common_ItemFull()
-            fork:
-                branch:
-                    EventFlowSystemActor.UIMoneyDisappear()
-                branch:
-                    EventFlowSystemActor@Sub.MessageSuspend()
-                branch:
-                    EventFlowSystemActor@Sub1.UIShopBuyDisappear()
-        elif MainNpc.ShopHasBellCount(1.0):
-            # You got it!
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:114_01', false)
-            run Demo_Common::Demo_Cmn_Shoppingrun Demo_Common::Demo_Cmn_Shopping()
-            # Thanks!
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:114_02', false)
-            System.EventFlags['cPlayer:HghPeddlerPurchaceToday'] = true
-            if EventFlowSystemActor.IsMyVillage():
-                if not System.EventFlags['cLand:HghPeddlerPurchaceToday']:
-                    System.EventFlags['cLand:CountTailorBuild'] += 1
-                    System.EventFlags['cLand:HghPeddlerPurchaceToday'] = true
-                run Hgh_AfterPurchase()
-            else:
-                run Hgh_AfterPurchase()
-        else:
-            # Ooooooh no! What a pickle… I'm afraid you, uh, haven't got enough money for that…
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:113_01', false)
-            run Hgh_AfterNoMoney()
-    else:
-        fork:
-            branch:
-                EventFlowSystemActor.UIMoneyDisappear()
-            branch:
-                EventFlowSystemActor@Sub.UIShopBuyDisappear()
-        if not EventFlowSystemActor.IsMyVillage():
-            run NormalEnd()
-        elif System.EventFlags['cPlayer:KinuyoTalkBoforeFlag']:
-            run NormalEnd()
-        else:
-            run HghShoppingCancelUI_1st()
- 
+	if EventFlowSystemActor.UIResultMenuDecide():
+		run SNPC_hgh::Hgh_Common_TagSet()
+		# It's <90:26:0000> for [a|an]<125:0:0000>. You interested?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:111', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+			run Hgh_AfterCancel()
+		elif not EventFlowSystemActor.ShoppingCapacity('cShopping', 65534):
+			run SNPC_hgh::Hgh_Common_ItemFull()
+			fork:
+				branch:
+					EventFlowSystemActor.UIMoneyDisappear()
+				branch:
+					EventFlowSystemActor@Sub.MessageSuspend()
+				branch:
+					EventFlowSystemActor@Sub1.UIShopBuyDisappear()
+		elif MainNpc.ShopHasBellCount(1.0):
+			# You got it!
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:114_01', false)
+			run Demo_Common::Demo_Cmn_Shopping()
+			# Thanks!
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:114_02', false)
+			System.EventFlags['cPlayer:HghPeddlerPurchaceToday'] = true
+			if EventFlowSystemActor.IsMyVillage():
+				if not System.EventFlags['cLand:HghPeddlerPurchaceToday']:
+					System.EventFlags['cLand:CountTailorBuild'] += 1
+					System.EventFlags['cLand:HghPeddlerPurchaceToday'] = true
+				run Hgh_AfterPurchase()
+			else:
+				run Hgh_AfterPurchase()
+		else:
+			# Ooooooh no! What a pickle… I'm afraid you, uh, haven't got enough money for that…
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:113_01', false)
+			run Hgh_AfterNoMoney()
+	else:
+		fork:
+			branch:
+				EventFlowSystemActor.UIMoneyDisappear()
+			branch:
+				EventFlowSystemActor@Sub.UIShopBuyDisappear()
+		if not EventFlowSystemActor.IsMyVillage():
+			run NormalEnd()
+		elif System.EventFlags['cPlayer:KinuyoTalkBoforeFlag']:
+			run NormalEnd()
+		else:
+			run HghShoppingCancelUI_1st()
+
 flow NormalEnd():
-    if System.EventFlags['cPlayer:HghPeddlerPurchaceToday']:
-        # Thanks! See you next time!
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:116_01', false)
-    else:
-        # Nothing that tickled your fancy? Well, I'll have different stuff with me next time, so be sure to stop by!
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:116_02', false)
- 
+	if System.EventFlags['cPlayer:HghPeddlerPurchaceToday']:
+		# Thanks! See you next time!
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:116_01', false)
+	else:
+		# Nothing that tickled your fancy? Well, I'll have different stuff with me next time, so be sure to stop by!
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:116_02', false)
+
 flow Request_Failed():
-    run Event145()
- 
+	run Event145()
+
 flow Retry_Request():
-    # Could it be…are you here to find me a spot for my store?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:211', false)
-    run Event26()
- 
+	# Could it be…are you here to find me a spot for my store?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:211', false)
+	run Event26()
+
 flow Root():
-    if not EventFlowSystemActor.IsMyVillage():
-        if EventFlowSystemActor.EnvHourCompare(22, -1, true, true) == 0:
-            if System.EventFlags['cPlayerVisit:HghPeddlerVisitorTalk1st']:
-                # Hey, thanks for stopping by again! Didja wanna browse some more?
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:153', false)
-            else:
-                System.EventFlags['cPlayerVisit:HghPeddlerVisitorTalk1st'] = true
-                # Howdy, stranger! If you're looking for a souvenir, I've got all the clothes and accessories you could need!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:151', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Hgh_PeddlerShopping_Visitor()
-            else:
-                # You got it! Come by and see me anytime!
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:152', false)
-        else:
-            # Sorry, I've closed up shop for the day.<10:4> But come see me again another time, OK?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:902', false)
-    elif not System.EventFlags['cPlayer:KinuyoTalkBoforeFlag']:
-        # Hey, hi there!
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:001', false)
-        if System.EventFlags['cPlayer:KinuyoMetShopFlag']:
-            # …Oh, right! Didn't I see you at the store a while back? I knew you looked familiar! No worries if you forgot, but my name's Mabel!
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:002_01', false)
-        else:
-            # Hey, sorry to bug you, but do you live on this island? I'm trying to get a toe in the ware- peddling business around here. The name's Mabel—nice to m…
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:002_02', false)
-        # I'm an old friend of Timmy, Tommy, and Tom Nook. We go waaaaaaaaaay back. Anyway, that's how I heard about <110:33>, and came out here to sell clothe…
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:003', false)
-        # Oh, hey! Since you're, like, right here, you wanna see the stuff I'm selling today?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:004', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+	if not EventFlowSystemActor.IsMyVillage():
+		if EventFlowSystemActor.EnvHourCompare(22, -1, true, true) == 0:
+			if System.EventFlags['cPlayerVisit:HghPeddlerVisitorTalk1st']:
+				# Hey, thanks for stopping by again! Didja wanna browse some more?
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:153', false)
+			else:
+				System.EventFlags['cPlayerVisit:HghPeddlerVisitorTalk1st'] = true
+				# Howdy, stranger! If you're looking for a souvenir, I've got all the clothes and accessories you could need!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:151', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Hgh_PeddlerShopping_Visitor()
+			else:
+				# You got it! Come by and see me anytime!
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:152', false)
+		else:
+			# Sorry, I've closed up shop for the day.<10:4> But come see me again another time, OK?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:902', false)
+	elif not System.EventFlags['cPlayer:KinuyoTalkBoforeFlag']:
+		# Hey, hi there!
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:001', false)
+		if System.EventFlags['cPlayer:KinuyoMetShopFlag']:
+			# …Oh, right! Didn't I see you at the store a while back? I knew you looked familiar! No worries if you forgot, but my name's Mabel!
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:002_01', false)
+		else:
+			# Hey, sorry to bug you, but do you live on this island? I'm trying to get a toe in the ware- peddling business around here. The name's Mabel—nice to m…
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:002_02', false)
+		# I'm an old friend of Timmy, Tommy, and Tom Nook. We go waaaaaaaaaay back. Anyway, that's how I heard about <110:33>, and came out here to sell clothe…
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:003', false)
+		# Oh, hey! Since you're, like, right here, you wanna see the stuff I'm selling today?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:004', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 entrypoint Event50:
-            # Great! Lemme just open up today's catalog for you!
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:006', false)
-            run Hgh_Visit_OpenUI()
-        else:
-            # Oh no! I'm sorry! Listen to me babbling when you've got other things to do!
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:005_01', false)
+			# Great! Lemme just open up today's catalog for you!
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:006', false)
+			run Hgh_Visit_OpenUI()
+		else:
+			# Oh no! I'm sorry! Listen to me babbling when you've got other things to do!
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:005_01', false)
 entrypoint Event49:
-            # On the days I'm here, I'll be selling first thing in the morning until about 10 at night, if you wanna shop.
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:005_02', false)
-        System.EventFlags['cPlayer:KinuyoTalkBoforeFlag'] = true
-        System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
-    elif not System.EventFlags['cLand:EnableTailorBuild']:
-        run HghPeddler_NormalSeq()
-    elif not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        run HghPeddler_NormalSeq()
-    elif not System.EventFlags['cPlayer:HghHeardRequestHousingKit']:
-        run Hgh_TailorBuildEvent()
-    elif not System.EventFlags['cLand:TailorReserved']:
-        run HghPeddler_NormalSeq()
-    elif System.EventFlags['cPlayer:HghEndRequestHousingKit']:
-        run HghPeddler_NormalSeq()
-    else:
-        # Hey, you found a spot for the shop! Thanks so much, PLAYER! Once we're all set up and everything, I hope you'll swing by and support my sister and me!
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:222', false)
-        System.EventFlags['cPlayer:HghEndRequestHousingKit'] = true
-        System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
- 
+			# On the days I'm here, I'll be selling first thing in the morning until about 10 at night, if you wanna shop.
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:005_02', false)
+		System.EventFlags['cPlayer:KinuyoTalkBoforeFlag'] = true
+		System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
+	elif not System.EventFlags['cLand:EnableTailorBuild']:
+		run HghPeddler_NormalSeq()
+	elif not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		run HghPeddler_NormalSeq()
+	elif not System.EventFlags['cPlayer:HghHeardRequestHousingKit']:
+		run Hgh_TailorBuildEvent()
+	elif not System.EventFlags['cLand:TailorReserved']:
+		run HghPeddler_NormalSeq()
+	elif System.EventFlags['cPlayer:HghEndRequestHousingKit']:
+		run HghPeddler_NormalSeq()
+	else:
+		# Hey, you found a spot for the shop! Thanks so much, PLAYER! Once we're all set up and everything, I hope you'll swing by and support my sister and me!
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:222', false)
+		System.EventFlags['cPlayer:HghEndRequestHousingKit'] = true
+		System.EventFlags['cPlayer:KinuyoTalkTodayFlag'] = true
+
 local flow Sub_grp_Event93():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # You got it! Here's what I'm selling today…
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:104', false)
-        run Hgh_Visit_OpenUI()
-    else:
-        # That's so sweet! Thanks for coming to say hi, and if there's ever anything you need, just give me a shout, OK?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:103', false)
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# You got it! Here's what I'm selling today…
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:104', false)
+		run Hgh_Visit_OpenUI()
+	else:
+		# That's so sweet! Thanks for coming to say hi, and if there's ever anything you need, just give me a shout, OK?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:103', false)
+
 flow hgh_Peddler_Sel_3B_Housing():
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            # You got it! Here's what I'm selling today…
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:104', false)
-            run Hgh_Visit_OpenUI()
-        case 1:
-            run Hgh_TailorBuildEvent()
-        case 2:
-            # That's so sweet! Thanks for coming to say hi, and if there's ever anything you need, just give me a shout, OK?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:103', false)
- 
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			# You got it! Here's what I'm selling today…
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:104', false)
+			run Hgh_Visit_OpenUI()
+		case 1:
+			run Hgh_TailorBuildEvent()
+		case 2:
+			# That's so sweet! Thanks for coming to say hi, and if there's ever anything you need, just give me a shout, OK?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_00_Peddler:103', false)

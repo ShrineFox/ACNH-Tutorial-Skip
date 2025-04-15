@@ -1,115 +1,114 @@
 flow AskStart():
-    if EventFlowSystemActor.SaveIsEnabledBackupSetting():
-        # So, how can I help you?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002', false)
-        run Event2()
-    else:
-        # So, how can I help you?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_01', false)
-        run Event2()
- 
+	if EventFlowSystemActor.SaveIsEnabledBackupSetting():
+		# So, how can I help you?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002', false)
+		run Event2()
+	else:
+		# So, how can I help you?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_01', false)
+		run Event2()
+
 flow Enable_Backup():
-    # Understood! I'll enable the island backup service right away.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:003_01', false)
-    EventFlowSystemActor.MessageLockNext(1)
-    # Enabling island backup… Do not touch .
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:011', false)
-    EventFlowSystemActor.SaveVerifyBackupLicense()
-    if EventFlowSystemActor.SaveBackupLicenseEnabled():
-        EventFlowSystemActor.MessageUnlockNext()
-        EventFlowSystemActor.MessageSuspend()
-        # Hmm…that's strange. For some reason, I wasn't able to enable the island backup service just now. Remember, your Nintendo Switch system must be connec…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:008', false)
-        run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-    else:
-        run SaveRecoveringSetting()
-        # And there we go. Island backup has been enabled! From now on, your data will be uploaded when no one is playing the game. That is, provided your Nint…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:003_02', false)
-        run Seq_Close_AfterEnable()
- 
+	# Understood! I'll enable the island backup service right away.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:003_01', false)
+	EventFlowSystemActor.MessageLockNext(1)
+	# Enabling island backup… Do not touch .
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:011', false)
+	EventFlowSystemActor.SaveVerifyBackupLicense()
+	if EventFlowSystemActor.SaveBackupLicenseEnabled():
+		EventFlowSystemActor.MessageUnlockNext()
+		EventFlowSystemActor.MessageSuspend()
+		# Hmm…that's strange. For some reason, I wasn't able to enable the island backup service just now. Remember, your Nintendo Switch system must be connec…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:008', false)
+		run SNPC_rco_92_OtherSettings::Seq_Close()
+	else:
+		run SaveRecoveringSetting()
+		# And there we go. Island backup has been enabled! From now on, your data will be uploaded when no one is playing the game. That is, provided your Nint…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:003_02', false)
+		run Seq_Close_AfterEnable()
+
 flow Return_RestoringExplain():
-    # Can I help you with anything else?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_09', false)
-    run Event3()
- 
+	# Can I help you with anything else?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_09', false)
+	run Event3()
+
 flow Root():
-    if EventFlowSystemActor.SaveIsEnabledBackupSetting():
-        # Ah, yes. You'd like to talk about our island backup service, hm? Well, first…the service is only for use when your Nintendo Switch system has been lo…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:001', false)
-    else:
-        # Ah, yes. You'd like to talk about your island backup settings, hm? Well, island backup is currently enabled, so your island is protected even when yo…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:001_01', false)
+	if EventFlowSystemActor.SaveIsEnabledBackupSetting():
+		# Ah, yes. You'd like to talk about our island backup service, hm? Well, first…the service is only for use when your Nintendo Switch system has been lo…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:001', false)
+	else:
+		# Ah, yes. You'd like to talk about your island backup settings, hm? Well, island backup is currently enabled, so your island is protected even when yo…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:001_01', false)
 entrypoint Event2:
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            if (not EventFlowSystemActor.BackupAgentExist()) or (EventFlowSystemActor.SaveIsEnabledBackupSetting()):
-                # Of course, of course, you'd like to enable island backup? I'd be happy to help! Let me just talk you through a few items first, hm? To enable island …
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:003', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run Enable_Backup()
-                else:
-                    run SNPC_rco_92_OtherSettings::Delete_Cancelrun SNPC_rco_92_OtherSettings::Delete_Cancel()
-            elif EventFlowSystemActor.BackupAgentIsMainPlayer():
-                # I can help you with that, but let me confirm that you understand first… If you disable island backup, you won't be able to restore your data if your …
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:004', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    EventFlowSystemActor.SaveDisableBackupSetting()
-                    # OK, I've disabled island backup for you! If you change your mind and want to re-enable island backup, you can come talk to me anytime.
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:005_01', false)
-                    run Seq_Close_AfterEnable()
-                else:
-                    # Yes, yes…I won't change a thing.
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:006', false)
-                    run AskStart()
-            else:
-                # Ah! It seems another user was the one who originally enabled island backup on this system. I'm afraid that other user will need to be the one to disa…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:007', false)
-                run AskStart()
-        case 1:
-            run SavedataRestoringExplain()
-        case 2:
-            run SNPC_rco_92_OtherSettings::Sel_EndMenurun SNPC_rco_92_OtherSettings::Sel_EndMenu()
- 
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			if (not EventFlowSystemActor.BackupAgentExist()) or (EventFlowSystemActor.SaveIsEnabledBackupSetting()):
+				# Of course, of course, you'd like to enable island backup? I'd be happy to help! Let me just talk you through a few items first, hm? To enable island …
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:003', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run Enable_Backup()
+				else:
+					run SNPC_rco_92_OtherSettings::Delete_Cancel()
+			elif EventFlowSystemActor.BackupAgentIsMainPlayer():
+				# I can help you with that, but let me confirm that you understand first… If you disable island backup, you won't be able to restore your data if your …
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:004', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					EventFlowSystemActor.SaveDisableBackupSetting()
+					# OK, I've disabled island backup for you! If you change your mind and want to re-enable island backup, you can come talk to me anytime.
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:005_01', false)
+					run Seq_Close_AfterEnable()
+				else:
+					# Yes, yes…I won't change a thing.
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:006', false)
+					run AskStart()
+			else:
+				# Ah! It seems another user was the one who originally enabled island backup on this system. I'm afraid that other user will need to be the one to disa…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:007', false)
+				run AskStart()
+		case 1:
+			run SavedataRestoringExplain()
+		case 2:
+			run SNPC_rco_92_OtherSettings::Sel_EndMenu()
+
 flow SaveRecoveringSetting():
-    EventFlowSystemActor.MessageLockNext(1)
-    # Saving. Do not touch .
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-    fork:
-        branch:
-            EventFlowSystemActor.SaveRegisterBackupAgent()
-            EventFlowSystemActor.SaveSimpleSave('cAll')
-            EventFlowSystemActor.SaveEnableBackupSetting()
-        branch:
-            EventFlowSystemActor@Sub.WaitFrame(60)
-    EventFlowSystemActor.MessageUnlockNext()
-    EventFlowSystemActor.MessageSuspend()
- 
+	EventFlowSystemActor.MessageLockNext(1)
+	# Saving. Do not touch .
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+	fork:
+		branch:
+			EventFlowSystemActor.SaveRegisterBackupAgent()
+			EventFlowSystemActor.SaveSimpleSave('cAll')
+			EventFlowSystemActor.SaveEnableBackupSetting()
+		branch:
+			EventFlowSystemActor@Sub.WaitFrame(60)
+	EventFlowSystemActor.MessageUnlockNext()
+	EventFlowSystemActor.MessageSuspend()
+
 flow SavedataRestoringExplain():
-    # I'd be happy to explain our island backup and restoration service. What would you like to learn about?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_04', false)
+	# I'd be happy to explain our island backup and restoration service. What would you like to learn about?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_04', false)
 entrypoint Event3:
-    switch EventFlowSystemActor.GeneralTalkChoice5():
-        case 0:
-            # Great question! Island backup is a way to upload your Animal Crossing: New Horizons data for safekeeping. First, the service is only for use when you…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_05', false)
-            run Return_RestoringExplain()
-        case 1:
-            # Ah, a question about the technical details. I'll do my best to answer! Well, if you have enabled island backup, you can rest assured that your data w…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_06', false)
-            run Return_RestoringExplain()
-        case 2:
-            # Yes, yes…quite a relevant query! Well, I believe I can explain what you'll need to utilize island backup… To enable island backup or restore data, yo…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_07', false)
-            run Return_RestoringExplain()
-        case 3:
-            # Oh, yes. That's quite important! Island backup can protect your data if your Nintendo Switch system is lost or damaged. But before data can be restor…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_08', false)
-            run Return_RestoringExplain()
-        case 4:
-            run AskStart()
- 
+	switch EventFlowSystemActor.GeneralTalkChoice5():
+		case 0:
+			# Great question! Island backup is a way to upload your Animal Crossing: New Horizons data for safekeeping. First, the service is only for use when you…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_05', false)
+			run Return_RestoringExplain()
+		case 1:
+			# Ah, a question about the technical details. I'll do my best to answer! Well, if you have enabled island backup, you can rest assured that your data w…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_06', false)
+			run Return_RestoringExplain()
+		case 2:
+			# Yes, yes…quite a relevant query! Well, I believe I can explain what you'll need to utilize island backup… To enable island backup or restore data, yo…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_07', false)
+			run Return_RestoringExplain()
+		case 3:
+			# Oh, yes. That's quite important! Island backup can protect your data if your Nintendo Switch system is lost or damaged. But before data can be restor…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_94_SavedataRestoring:002_08', false)
+			run Return_RestoringExplain()
+		case 4:
+			run AskStart()
+
 flow Seq_Close_AfterEnable():
-    # Now, let's return to the title screen.<10:4> See you on ISLAND!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_92_OtherSettings:054', false)
-    run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
- 
+	# Now, let's return to the title screen.<10:4> See you on ISLAND!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_92_OtherSettings:054', false)
+	run SNPC_rco_92_OtherSettings::Seq_Close()

@@ -1,49 +1,48 @@
 flow Buy_After():
-    if EventFlowSystemActor.IsMyVillage():
-        System.EventFlags['cPlayer:RcmBoughtCandyTodayFlag'] = true
-    else:
-        System.EventFlags['cPlayerVisit:DC_RcmBoughtCandyTodayFlag'] = true
- 
+	if EventFlowSystemActor.IsMyVillage():
+		System.EventFlags['cPlayer:RcmBoughtCandyTodayFlag'] = true
+	else:
+		System.EventFlags['cPlayerVisit:DC_RcmBoughtCandyTodayFlag'] = true
+
 flow Root():
-    if not System.EventFlags['cPlayer:RcmExplainCandyFlag']:
-        System.EventFlags['cPlayer:RcmExplainCandyFlag'] = true
-        # Ah, you're interested in [a|an]<125:0:0200>? I should let you know that those are a limited-time item…available only during October!__ ...October!__
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_01', false)
-        # Because we expect high demand for this seasonal item, sales are limited to just one per customer per day.
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_02', false)
-        # Would you like to buy one?
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_03', false)
-        run Sub_grp_Event14()
-    elif EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayer:RcmBoughtCandyTodayFlag']:
-            run Sub_Event19()
-        else:
-            run Sub_Event16()
-    else:
-        if System.EventFlags['cPlayerVisit:DC_RcmBoughtCandyTodayFlag']:
-            run Sub_Event19()
-        else:
-            run Sub_Event16()
- 
+	if not System.EventFlags['cPlayer:RcmExplainCandyFlag']:
+		System.EventFlags['cPlayer:RcmExplainCandyFlag'] = true
+		# Ah, you're interested in [a|an]<125:0:0200>? I should let you know that those are a limited-time item…available only during October!__ ...October!__
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_01', false)
+		# Because we expect high demand for this seasonal item, sales are limited to just one per customer per day.
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_02', false)
+		# Would you like to buy one?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_03', false)
+		run Sub_grp_Event14()
+	elif EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayer:RcmBoughtCandyTodayFlag']:
+			run Sub_Event19()
+		else:
+			run Sub_Event16()
+	else:
+		if System.EventFlags['cPlayerVisit:DC_RcmBoughtCandyTodayFlag']:
+			run Sub_Event19()
+		else:
+			run Sub_Event16()
+
 local flow Sub_Event16():
-    # [A|An]<125:0:0000> would be <90:26:0000>.
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:094', false)
-    run Sub_grp_Event14()
- 
+	# [A|An]<125:0:0000> would be <90:26:0000>.
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:094', false)
+	run Sub_grp_Event14()
+
 local flow Sub_Event19():
-    # Oh, I'm so sorry, but we can only sell each customer one piece of candy per day.
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_04', false)
-    if EventFlowSystemActor.GlobalEventNow('Halloween', 'cReadyOnly', false):
-        # Since you've already purchased one piece today, I do hope you'll come back tomorrow for another.
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_05', false)
-    else:
-        # You've already purchased one piece today, and I'm afraid that this is the last day it will be available this year. I do hope you'll come back for mor…
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_06', false)
-    run SNPC_rcm_00_Common::BuyCancelNoAskrun SNPC_rcm_00_Common::BuyCancelNoAsk()
- 
+	# Oh, I'm so sorry, but we can only sell each customer one piece of candy per day.
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_04', false)
+	if EventFlowSystemActor.GlobalEventNow('Halloween', 'cReadyOnly', false):
+		# Since you've already purchased one piece today, I do hope you'll come back tomorrow for another.
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_05', false)
+	else:
+		# You've already purchased one piece today, and I'm afraid that this is the last day it will be available this year. I do hope you'll come back for mor…
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:144_06', false)
+	run SNPC_rcm_00_Common::BuyCancelNoAsk()
+
 local flow Sub_grp_Event14():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Processrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
-    else:
-        run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancelrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+	else:
+		run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()

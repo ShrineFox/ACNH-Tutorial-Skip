@@ -1,230 +1,229 @@
 flow FinishDonationBuildBridgeSlope():
-    # Alright! We reached our donation goal!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:215', false)
- 
+	# Alright! We reached our donation goal!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:215', false)
+
 flow FinishDonationCommune():
-    # Alright! We reached our donation goal!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:1313', false)
- 
+	# Alright! We reached our donation goal!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:1313', false)
+
 flow Finish_1stKkLive():
-    # Wow! Well, now that K.K. has performed, it's time to focus on making island life better and better. That means living each day to the fullest, doing …
-    Player.OpenMessageWindow('TalkSys/SYS_Player:212', true)
-    if EventFlowSystemActor.MainPlayerIsBirthday(true, 'cGrowUpTime'):
-        EventFlowSystemActor.SystemRequestChangeStage('cMainFieldPlayerHouse', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-    elif EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
-        EventFlowSystemActor.SystemReenterStage(0, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	# Wow! Well, now that K.K. has performed, it's time to focus on making island life better and better. That means living each day to the fullest, doing …
+	Player.OpenMessageWindow('TalkSys/SYS_Player:212', true)
+	if EventFlowSystemActor.MainPlayerIsBirthday(true, 'cGrowUpTime'):
+		EventFlowSystemActor.SystemRequestChangeStage('cMainFieldPlayerHouse', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+	elif EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+		EventFlowSystemActor.SystemReenterStage(0, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
 flow GetHairStyleFromPoo():
-    # Harriet taught me a new hairstyle! I can choose it whenever I want at a vanity or mirror.
-    Player.OpenMessageWindow('TalkSys/SYS_Player:217', false)
- 
+	# Harriet taught me a new hairstyle! I can choose it whenever I want at a vanity or mirror.
+	Player.OpenMessageWindow('TalkSys/SYS_Player:217', false)
+
 flow Get_FinishLoan():
-    System.EventFlags['cPlayer:PlayerLoanRepaying'] = false
-    System.EventFlags['cPlayer:PlayerLoanFinish1st'] = true
-    switch EventFlowSystemActor.PlayerHouseLevel():
-        case `Homeless`:
-            if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']):
-                run Sub_Event31()
-        case `PlacedTent`, `BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`:
-            run Sub_Event31()
-        case `Basement`:
-            # Sweet! I finally finished paying off my very last home loan!
-            MainNpc.OpenMessageWindow('TalkSys/SYS_Player:204_03', false)
-            run Sub_Event33()
- 
+	System.EventFlags['cPlayer:PlayerLoanRepaying'] = false
+	System.EventFlags['cPlayer:PlayerLoanFinish1st'] = true
+	switch EventFlowSystemActor.PlayerHouseLevel():
+		case `Homeless`:
+			if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']):
+				run Sub_Event31()
+		case `PlacedTent`, `BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`:
+			run Sub_Event31()
+		case `Basement`:
+			# Sweet! I finally finished paying off my very last home loan!
+			MainNpc.OpenMessageWindow('TalkSys/SYS_Player:204_03', false)
+			run Sub_Event33()
+
 flow Get_MainGame():
-    if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-        # My move is complete... Deserted-island life begins anew!
-        Player.OpenMessageWindow('TalkSys/SYS_Player:200_01', true)
-    else:
-        # My new life is underway... I can do whatever I want! WOO-HOO!
-        Player.OpenMessageWindow('TalkSys/SYS_Player:200', true)
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue', 'cNextDemoEnd_Simple', false)
-    else:
-        run Demo_PublicAnnouncement_Process::Rootrun Demo_PublicAnnouncement_Process::Root()
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue2P', 'cNextDemoEnd_Simple', false)
- 
+	if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+		# My move is complete... Deserted-island life begins anew!
+		Player.OpenMessageWindow('TalkSys/SYS_Player:200_01', true)
+	else:
+		# My new life is underway... I can do whatever I want! WOO-HOO!
+		Player.OpenMessageWindow('TalkSys/SYS_Player:200', true)
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue', 'cNextDemoEnd_Simple', false)
+	else:
+		run Demo_PublicAnnouncement_Process::Root()
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue2P', 'cNextDemoEnd_Simple', false)
+
 flow Get_MainGame_Continue():
-    EventFlowSystemActor.WaitFrame(30)
-    # From now on, island time will match the flow of time in the real world.
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_01', false)
-    # Do not touch the  POWER Button when you see the auto-save indicator  in the top-right screen corner. You can also save and quit your game after pre…
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
-    System.EventFlags['cLand:ValidateVillageSave'] = true
-    System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 7
-    run SetLocalFruitFlag()
-    run StartMainGameBitSet()
- 
+	EventFlowSystemActor.WaitFrame(30)
+	# From now on, island time will match the flow of time in the real world.
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_01', false)
+	# Do not touch the  POWER Button when you see the auto-save indicator  in the top-right screen corner. You can also save and quit your game after pre…
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
+	System.EventFlags['cLand:ValidateVillageSave'] = true
+	System.EventFlags['cLand:OpeningSeqBGMChangeCounter'] = 7
+	run SetLocalFruitFlag()
+	run StartMainGameBitSet()
+
 flow Get_MainGame_Continue2P():
-    EventFlowSystemActor.WaitFrame(30)
-    # From now on, your life here will be automatically recorded via auto-save.
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_02', false)
-    # Do not touch the  POWER Button when you see the auto-save indicator  in the top-right screen corner. You can also save and quit your game after pre…
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
-    System.EventFlags['cPlayer:PlayerEnableEating'] = true
-    System.EventFlags['cPlayer:PlayerPocketUIEnable'] = true
-    System.EventFlags['cPlayer:PlayerPickupEnable'] = true
-    System.EventFlags['cPlayer:NnpcFinishHintTalk'] = true
-    System.EventFlags['cLandTemp:CalendarEventStop'] = false
-    System.EventFlags['cPlayer:AllowPcTentEntering'] = true
-    if not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        EventFlowSystemActor.NpcSetRewardRecipe(7142, false)
-        EventFlowSystemActor.SystemMailSendDirect('cNintendo', 'MAIL_SP_Nintendo', 2, 'cReward')
-        EventFlowSystemActor.StartupMailSend(true, true, true)
-    switch EventFlowSystemActor.ShopLevel():
-        case `InResServiceTent`:
-            pass
-        case `NooksCrannyInitial`:
-            System.EventFlags['cPlayer:RcmHeardAboutNewOpen1'] = true
-        case `NooksCrannyUpgraded`:
-            System.EventFlags['cPlayer:RcmHeardAboutNewOpen2'] = true
-    if EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`):
-        System.EventFlags['cPlayer:RcoFirstTalkNewOffice'] = true
-    if System.EventFlags['cLand:TailorBuilt']:
-        System.EventFlags['cPlayer:PAnnounceTailorBuilt'] = true
-    if System.EventFlags['cLand:CampSiteBuilt']:
-        System.EventFlags['cPlayer:PAnnounceCampsite'] = true
-    switch EventFlowSystemActor.MuseumLevel():
-        case `BlathersTent`:
-            System.EventFlags['cPlayer:AnnouncementOwlMovedIn'] = true
-        case `BlathersMuseumNoArt`:
-            System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag'] = true
-        case `BlathersMuseumArt`:
-            System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag'] = true
-        case `BlathersNotMovedIn`:
-            pass
-        case `BlathersCafe`:
-            System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag'] = true
-    run SetBitAboutRegulation()
-    run SetBitAboutMuseumPoster()
-    run SetBitAboutKpp()
-    run SkipNoticePriceDownBuildMoving()
-    run StartMainGameBitSet()
-    EventFlowSystemActor.CalendarEventStartFor2P()
-    EventFlowSystemActor.ResetNpcScheduleForStart()
-    EventFlowSystemActor.NpcInitializeActivity(-1)
-    EventFlowSystemActor.SystemReenterStage(2, 'cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929)
- 
+	EventFlowSystemActor.WaitFrame(30)
+	# From now on, your life here will be automatically recorded via auto-save.
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:001_02', false)
+	# Do not touch the  POWER Button when you see the auto-save indicator  in the top-right screen corner. You can also save and quit your game after pre…
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Guide:002', true)
+	System.EventFlags['cPlayer:PlayerEnableEating'] = true
+	System.EventFlags['cPlayer:PlayerPocketUIEnable'] = true
+	System.EventFlags['cPlayer:PlayerPickupEnable'] = true
+	System.EventFlags['cPlayer:NnpcFinishHintTalk'] = true
+	System.EventFlags['cLandTemp:CalendarEventStop'] = false
+	System.EventFlags['cPlayer:AllowPcTentEntering'] = true
+	if not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		EventFlowSystemActor.NpcSetRewardRecipe(7142, false)
+		EventFlowSystemActor.SystemMailSendDirect('cNintendo', 'MAIL_SP_Nintendo', 2, 'cReward')
+		EventFlowSystemActor.StartupMailSend(true, true, true)
+	switch EventFlowSystemActor.ShopLevel():
+		case `InResServiceTent`:
+			pass
+		case `NooksCrannyInitial`:
+			System.EventFlags['cPlayer:RcmHeardAboutNewOpen1'] = true
+		case `NooksCrannyUpgraded`:
+			System.EventFlags['cPlayer:RcmHeardAboutNewOpen2'] = true
+	if EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`):
+		System.EventFlags['cPlayer:RcoFirstTalkNewOffice'] = true
+	if System.EventFlags['cLand:TailorBuilt']:
+		System.EventFlags['cPlayer:PAnnounceTailorBuilt'] = true
+	if System.EventFlags['cLand:CampSiteBuilt']:
+		System.EventFlags['cPlayer:PAnnounceCampsite'] = true
+	switch EventFlowSystemActor.MuseumLevel():
+		case `BlathersTent`:
+			System.EventFlags['cPlayer:AnnouncementOwlMovedIn'] = true
+		case `BlathersMuseumNoArt`:
+			System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag'] = true
+		case `BlathersMuseumArt`:
+			System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag'] = true
+		case `BlathersNotMovedIn`:
+			pass
+		case `BlathersCafe`:
+			System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag'] = true
+	run SetBitAboutRegulation()
+	run SetBitAboutMuseumPoster()
+	run SetBitAboutKpp()
+	run SkipNoticePriceDownBuildMoving()
+	run StartMainGameBitSet()
+	EventFlowSystemActor.CalendarEventStartFor2P()
+	EventFlowSystemActor.ResetNpcScheduleForStart()
+	EventFlowSystemActor.NpcInitializeActivity(-1)
+	EventFlowSystemActor.SystemReenterStage(2, 'cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929)
+
 flow Get_ShoppingAppli():
-    # Now I've got the Nook Shopping app on my NookPhone! I can shop whenever I want, wherever I want!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:216', false)
- 
+	# Now I've got the Nook Shopping app on my NookPhone! I can shop whenever I want, wherever I want!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:216', false)
+
 flow ImmQComplete_Notice():
-    # All the home and furnishing prep work is done!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:214_01', false)
-    System.EventFlags['cPlayer:ImmQCompleteDemo'] = true
- 
+	# All the home and furnishing prep work is done!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:214_01', false)
+	System.EventFlags['cPlayer:ImmQCompleteDemo'] = true
+
 flow ImmQComplete_PutIn():
-    # Whew! All the home and furnishing prep work is done!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:213', false)
-    System.EventFlags['cPlayer:ImmQCompleteDemo'] = true
- 
+	# Whew! All the home and furnishing prep work is done!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:213', false)
+	System.EventFlags['cPlayer:ImmQCompleteDemo'] = true
+
 flow MovingPBitSet_AboutHousing():
-    if System.EventFlags['cPlayer:RcoOrderedHouseBuilt']:
-        System.EventFlags['cPlayer:PlayerMovingOrderHouseBuilt'] = true
-    if System.EventFlags['cPlayer:RcoChangeHouseDesignReserved']:
-        System.EventFlags['cPlayer:PlayerMovingOrderChangeHouseDesign'] = true
-    if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
-        System.EventFlags['cPlayer:PlayerMovingOrderHouseMoveInIsland'] = true
-        if System.EventFlags['cPlayer:RcoBuildMovingPurchase_v200']:
-            EventFlowSystemActor.SavingCountDown(8000, false)
-            System.EventFlags['cPlayer:ReturnMyHomeMoving8000PMoving'] = true
-        else:
-            EventFlowSystemActor.SavingCountDown(30000, false)
-    if System.EventFlags['cPlayer:RcoStorageExpansionReserved']:
-        System.EventFlags['cPlayer:PlayerMovingReservedStorageExpand'] = true
-    if System.EventFlags['cPlayer:RcoAfterHouseRemodel']:
-        System.EventFlags['cPlayer:PlayerMovingAfterHouseRemodel'] = true
-    if System.EventFlags['cPlayer:PlayerLoanFinish1st']:
-        System.EventFlags['cPlayer:PlayerMovingAfterLoanFinish'] = true
-    if System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion']:
-        System.EventFlags['cPlayer:PlayerMovingAfterStorageExpansion'] = true
-    if System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
-        if EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
-            System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild'] = true
-    else:
-        if System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']:
-            System.EventFlags['cPlayer:RcoPMovingUnlockNpcEditWithPhoneCall'] = true
-    System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        System.EventFlags['cPlayer:BuiltMyHome'] = true
-        System.EventFlags['cPlayer:PlayerMovingEnable'] = true
-        if EventFlowSystemActor.PlayerHouseLevel() == `Basement`:
-            System.EventFlags['cPlayer:PlayerMovingDefaultHouseHasBasement'] = true
- 
+	if System.EventFlags['cPlayer:RcoOrderedHouseBuilt']:
+		System.EventFlags['cPlayer:PlayerMovingOrderHouseBuilt'] = true
+	if System.EventFlags['cPlayer:RcoChangeHouseDesignReserved']:
+		System.EventFlags['cPlayer:PlayerMovingOrderChangeHouseDesign'] = true
+	if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
+		System.EventFlags['cPlayer:PlayerMovingOrderHouseMoveInIsland'] = true
+		if System.EventFlags['cPlayer:RcoBuildMovingPurchase_v200']:
+			EventFlowSystemActor.SavingCountDown(8000, false)
+			System.EventFlags['cPlayer:ReturnMyHomeMoving8000PMoving'] = true
+		else:
+			EventFlowSystemActor.SavingCountDown(30000, false)
+	if System.EventFlags['cPlayer:RcoStorageExpansionReserved']:
+		System.EventFlags['cPlayer:PlayerMovingReservedStorageExpand'] = true
+	if System.EventFlags['cPlayer:RcoAfterHouseRemodel']:
+		System.EventFlags['cPlayer:PlayerMovingAfterHouseRemodel'] = true
+	if System.EventFlags['cPlayer:PlayerLoanFinish1st']:
+		System.EventFlags['cPlayer:PlayerMovingAfterLoanFinish'] = true
+	if System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion']:
+		System.EventFlags['cPlayer:PlayerMovingAfterStorageExpansion'] = true
+	if System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+		if EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+			System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild'] = true
+	else:
+		if System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']:
+			System.EventFlags['cPlayer:RcoPMovingUnlockNpcEditWithPhoneCall'] = true
+	System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		System.EventFlags['cPlayer:BuiltMyHome'] = true
+		System.EventFlags['cPlayer:PlayerMovingEnable'] = true
+		if EventFlowSystemActor.PlayerHouseLevel() == `Basement`:
+			System.EventFlags['cPlayer:PlayerMovingDefaultHouseHasBasement'] = true
+
 flow SetBitAboutKpp():
-    if System.EventFlags['cLand:TkkFirstLive']:
-        System.EventFlags['cPlayer:MakePlayerAfterStartingKppTour'] = true
-        if System.EventFlags['cLand:KppTourStart']:
-            System.EventFlags['cPlayer:PAnnounceAboutKppTourCompleted'] = true
-            System.EventFlags['cLand:KppTourStartToday'] = true
- 
+	if System.EventFlags['cLand:TkkFirstLive']:
+		System.EventFlags['cPlayer:MakePlayerAfterStartingKppTour'] = true
+		if System.EventFlags['cLand:KppTourStart']:
+			System.EventFlags['cPlayer:PAnnounceAboutKppTourCompleted'] = true
+			System.EventFlags['cLand:KppTourStartToday'] = true
+
 flow SetBitAboutMuseumPoster():
-    run SNPC_owl_25_Museum_Poster::ChkNoticeUnlockPosterrun SNPC_owl_25_Museum_Poster::ChkNoticeUnlockPoster()
-    if SubflowResults@7[3] in (1, 2, 3, 4, 5, 6):
-        System.EventFlags['cPlayer:MuseumPosterUnlockBuySel'] = true
- 
+	run SNPC_owl_25_Museum_Poster::ChkNoticeUnlockPoster()
+	if SubflowResults@7[3] in (1, 2, 3, 4, 5, 6):
+		System.EventFlags['cPlayer:MuseumPosterUnlockBuySel'] = true
+
 flow SetBitAboutRegulation():
-    if System.EventFlags['cLand:v200_Enabled_ChangeRegulation']:
-        System.EventFlags['cPlayer:ExplainIslandRegulation'] = true
-        System.EventFlags['cPlayer:PAAboutUnlockIslandRegulation'] = true
- 
+	if System.EventFlags['cLand:v200_Enabled_ChangeRegulation']:
+		System.EventFlags['cPlayer:ExplainIslandRegulation'] = true
+		System.EventFlags['cPlayer:PAAboutUnlockIslandRegulation'] = true
+
 flow SetLocalFruitFlag():
-    switch EventFlowSystemActor.LandFruit():
-        case 0:
-            System.EventFlags['cLand:IslandLocalFruitCherry'] = true
-        case 1:
-            System.EventFlags['cLand:IslandLocalFruitOrange'] = true
-        case 2:
-            System.EventFlags['cLand:IslandLocalFruitPear'] = true
-        case 3:
-            System.EventFlags['cLand:IslandLocalFruitPeach'] = true
-        case 4:
-            System.EventFlags['cLand:IslandLocalFruitApple'] = true
- 
+	switch EventFlowSystemActor.LandFruit():
+		case 0:
+			System.EventFlags['cLand:IslandLocalFruitCherry'] = true
+		case 1:
+			System.EventFlags['cLand:IslandLocalFruitOrange'] = true
+		case 2:
+			System.EventFlags['cLand:IslandLocalFruitPear'] = true
+		case 3:
+			System.EventFlags['cLand:IslandLocalFruitPeach'] = true
+		case 4:
+			System.EventFlags['cLand:IslandLocalFruitApple'] = true
+
 flow SkipNoticePriceDownBuildMoving():
-    System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true
- 
+	System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true
+
 flow StartMainGameBitSet():
-    System.EventFlags['cLifeSupportAchievement:ImmigratetoIsland'] += 1
-    System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
-    if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-        run MovingPBitSet_AboutHousing()
-        System.EventFlags['cPlayer:NnpcFinishHintTalk'] = true
-        EventFlowSystemActor.FinishMoveIn()
-    else:
-        EventFlowSystemActor.FinishNewVillagerCreation()
-    if System.EventFlags['cPlayer:PlayerMovingWithEmoticonUI']:
-        System.EventFlags['cPlayer:EnableEmoticonUI'] = true
-        System.EventFlags['cPlayer:PlayerMovingWithEmoticonUI'] = false
-    if System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']:
-        System.EventFlags['cPlayer:PlayerMovingWithPFlag555'] = true
-        System.EventFlags['cPlayer:SpnPhotoStudioGuideDone'] = false
-    if System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
-        System.EventFlags['cLand:UnlockSzaResetHouse'] = true
-    switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayer:PMovingTmpDustCloth'):
-        case 0:
-            pass
-        case 1:
-            run Sub_Event155()
-        case 2:
-            System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02'] = true
-            run Sub_Event155()
-    System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
-    System.EventFlags['cPlayer:PcMaingameStart'] = true
-    EventFlowSystemActor.SaveUpdateBackupCustomData()
- 
+	System.EventFlags['cLifeSupportAchievement:ImmigratetoIsland'] += 1
+	System.EventFlags['cPlayer:EnablePcTownDecoration'] = true
+	if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+		run MovingPBitSet_AboutHousing()
+		System.EventFlags['cPlayer:NnpcFinishHintTalk'] = true
+		EventFlowSystemActor.FinishMoveIn()
+	else:
+		EventFlowSystemActor.FinishNewVillagerCreation()
+	if System.EventFlags['cPlayer:PlayerMovingWithEmoticonUI']:
+		System.EventFlags['cPlayer:EnableEmoticonUI'] = true
+		System.EventFlags['cPlayer:PlayerMovingWithEmoticonUI'] = false
+	if System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']:
+		System.EventFlags['cPlayer:PlayerMovingWithPFlag555'] = true
+		System.EventFlags['cPlayer:SpnPhotoStudioGuideDone'] = false
+	if System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']:
+		System.EventFlags['cLand:UnlockSzaResetHouse'] = true
+	switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayer:PMovingTmpDustCloth'):
+		case 0:
+			pass
+		case 1:
+			run Sub_Event155()
+		case 2:
+			System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_02'] = true
+			run Sub_Event155()
+	System.EventFlags['cPlayer:ValidatePlayerSaveFlag'] = true
+	System.EventFlags['cPlayer:PcMaingameStart'] = true
+	EventFlowSystemActor.SaveUpdateBackupCustomData()
+
 local flow Sub_Event155():
-    System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_01'] = true
-    System.EventFlags['cPlayer:PMovingTmpDustCloth'] = 0
- 
+	System.EventFlags['cPlayer:WHEREAREN_Unlock_DustCloth_01'] = true
+	System.EventFlags['cPlayer:PMovingTmpDustCloth'] = 0
+
 local flow Sub_Event31():
-    # Yes! I finished paying off my home loan!
-    MainNpc.OpenMessageWindow('TalkSys/SYS_Player:204_02', false)
-    run Sub_Event33()
- 
+	# Yes! I finished paying off my home loan!
+	MainNpc.OpenMessageWindow('TalkSys/SYS_Player:204_02', false)
+	run Sub_Event33()
+
 local flow Sub_Event33():
-    System.EventFlags['cLifeSupportAchievement:RepayLoan'] += 1
-    EventFlowSystemActor.NpcPlayerActivity('cActivityType_ReturnLoan')
- 
+	System.EventFlags['cLifeSupportAchievement:RepayLoan'] += 1
+	EventFlowSystemActor.NpcPlayerActivity('cActivityType_ReturnLoan')

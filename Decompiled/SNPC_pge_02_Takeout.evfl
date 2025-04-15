@@ -1,160 +1,159 @@
 flow Pge_Anime_TakeOut():
-    EventFlowSystemActor.MessageSuspend()
-    MainNpc.TurnBody(12, 270.0)
-    MainNpc.NpcWaitTurn()
-    MainNpc.PgeCafeReaction('cTakeOut', true)
-    MainNpc.PgeCafeReaction('cPourCoffee', true)
-    MainNpc.PgeCafeReaction('cPutOnLid', true)
-    MainNpc.TurnBody(12, 0.0)
-    MainNpc.NpcWaitTurn()
-    MainNpc.PgeCafeReaction('cPutOnTable', true)
-    EventFlowSystemActor.WaitFrame(10)
-    Player.PlayerMuseumCafe(0, true)
-    EventFlowSystemActor.WaitFrame(20)
-    MainNpc.SetDefaultWaitAs('cDefault')
- 
+	EventFlowSystemActor.MessageSuspend()
+	MainNpc.TurnBody(12, 270.0)
+	MainNpc.NpcWaitTurn()
+	MainNpc.PgeCafeReaction('cTakeOut', true)
+	MainNpc.PgeCafeReaction('cPourCoffee', true)
+	MainNpc.PgeCafeReaction('cPutOnLid', true)
+	MainNpc.TurnBody(12, 0.0)
+	MainNpc.NpcWaitTurn()
+	MainNpc.PgeCafeReaction('cPutOnTable', true)
+	EventFlowSystemActor.WaitFrame(10)
+	Player.PlayerMuseumCafe(0, true)
+	EventFlowSystemActor.WaitFrame(20)
+	MainNpc.SetDefaultWaitAs('cDefault')
+
 flow Pge_Buy_TakeOut():
-    run Event41()
- 
+	run Event41()
+
 flow Root():
-    MainNpc.TurnNeck(10, false)
-    MainNpc.TurnBody(10, 0.0)
-    run SNPC_pge::Pge_Dreamrun SNPC_pge::Pge_Dream()
-    SubflowResults[1] = 1
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 300, '')
-    if EventFlowSystemActor.IsCafeWaitSitAll():
-        # Please take a seat at a table…
-        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:030', false)
-    elif EventFlowSystemActor.IsMyVillage():
-        run SNPC_pge::Pge_Firstrun SNPC_pge::Pge_First()
-        run SNPC_pge::Pge_FirstCaferun SNPC_pge::Pge_FirstCafe()
-        if not System.EventFlags['cPlayer:PgeTalkTodayFlag']:
-            System.EventFlags['cPlayer:PgeTalkTodayFlag'] = true
-            if System.EventFlags['cPlayer:PgeRegularCount'] < 9:
-                switch EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:PgeRegularCount'):
-                    case 0:
-                        # ……
-                        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:001', false)
-                    case 1, 2:
-                        # …Welcome to the Roost.
-                        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:002', false)
-                    case 3, 4:
-                        # …Welcome back.
-                        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:003', false)
-                    case 5, 6:
-                        # …Hello again.
-                        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:004', false)
-                    case 7, 8:
-                        # Hello, and welcome…
-                        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:005', false)
-            elif System.EventFlags['cPlayer:PgeRegularCount'] < 11:
-                # Ah… Hello again…
-                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:006', false)
-            elif System.EventFlags['cPlayer:PgeRegularCount'] < 13:
-                # Hello, PLAYER. A pleasure, as always…
-                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:007', false)
-            elif System.EventFlags['cPlayer:PgeRegularCount'] < 15:
-                # Good to see you, PLAYER.
-                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:008', false)
-            else:
-                # Hello, PLAYER.
-                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:009', false)
-        elif System.EventFlags['cPlayer:PgeRegularCount'] < 3:
-            switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayer:PgeRegularCount'):
-                case 0:
-                    # If you're here on your own, take a seat at the counter…
-                    MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:010', false)
-                case 1:
-                    # I can take your order…if you'll grab a seat at the counter.
-                    MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:011', false)
-                case 2:
-                    # Coo… Have a seat at the counter.
-                    MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:012', false)
-        else:
-            # …What can I do for you?
-            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:013', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                if EventFlowSystemActor.ShoppingCapacity('cItemName', 14541):
+	MainNpc.TurnNeck(10, false)
+	MainNpc.TurnBody(10, 0.0)
+	run SNPC_pge::Pge_Dream()
+	SubflowResults[1] = 1
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 300, '')
+	if EventFlowSystemActor.IsCafeWaitSitAll():
+		# Please take a seat at a table…
+		MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:030', false)
+	elif EventFlowSystemActor.IsMyVillage():
+		run SNPC_pge::Pge_First()
+		run SNPC_pge::Pge_FirstCafe()
+		if not System.EventFlags['cPlayer:PgeTalkTodayFlag']:
+			System.EventFlags['cPlayer:PgeTalkTodayFlag'] = true
+			if System.EventFlags['cPlayer:PgeRegularCount'] < 9:
+				switch EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:PgeRegularCount'):
+					case 0:
+						# ……
+						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:001', false)
+					case 1, 2:
+						# …Welcome to the Roost.
+						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:002', false)
+					case 3, 4:
+						# …Welcome back.
+						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:003', false)
+					case 5, 6:
+						# …Hello again.
+						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:004', false)
+					case 7, 8:
+						# Hello, and welcome…
+						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:005', false)
+			elif System.EventFlags['cPlayer:PgeRegularCount'] < 11:
+				# Ah… Hello again…
+				MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:006', false)
+			elif System.EventFlags['cPlayer:PgeRegularCount'] < 13:
+				# Hello, PLAYER. A pleasure, as always…
+				MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:007', false)
+			elif System.EventFlags['cPlayer:PgeRegularCount'] < 15:
+				# Good to see you, PLAYER.
+				MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:008', false)
+			else:
+				# Hello, PLAYER.
+				MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:009', false)
+		elif System.EventFlags['cPlayer:PgeRegularCount'] < 3:
+			switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayer:PgeRegularCount'):
+				case 0:
+					# If you're here on your own, take a seat at the counter…
+					MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:010', false)
+				case 1:
+					# I can take your order…if you'll grab a seat at the counter.
+					MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:011', false)
+				case 2:
+					# Coo… Have a seat at the counter.
+					MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:012', false)
+		else:
+			# …What can I do for you?
+			MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:013', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				if EventFlowSystemActor.ShoppingCapacity('cItemName', 14541):
 entrypoint Event41:
-                    EventFlowSystemActor.UIMoneyAppear()
-                    if EventFlowSystemActor.IsMyVillage():
-                        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                            case 0:
-                                # One coffee to go, right? That's <90:21:0000>…
-                                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:014', false)
-                            case 1:
-                                # One coffee to go. That's <90:21:0000>…
-                                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:015', false)
-                            case 2:
-                                # If you're after a coffee to go, I'll fix you one up for <90:21:0000>…
-                                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:016', false)
-                    else:
-                        # …Coffee to go, right? One cup, <90:21:0000>…
-                        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:026', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        if not EventFlowSystemActor.ShoppingCapacity('cItemName', 14541):
-                            # Looks like…your pockets are full…
-                            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:022', false)
-                            run SNPC_pge::Pge_DeleteUIrun SNPC_pge::Pge_DeleteUI()
-                        elif EventFlowSystemActor.HasBellCount(300):
-                            MainNpc.SetDeliveryItemAtRandom(14541, false, 'cVillageRemakePattern', 0)
-                            EventFlowSystemActor.BellCountDown(300, true)
-                            if EventFlowSystemActor.IsMyVillage():
-                                # Sure.
-                                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:023', false)
-                            else:
-                                # Coming right up… No matter where you're from, I'll give you a cup of coffee you're sure to appreciate.
-                                MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:027', false)
-                            run SNPC_pge::Pge_DeleteUIrun SNPC_pge::Pge_DeleteUI()
-                            run Pge_Anime_TakeOut()
-                            EventFlowSystemActor.SetMemoryValuePlayer('cBlancoValuePlayer:PV_Cafe_TakeoutCoffee', 1)
-                            EventFlowSystemActor.SetItemToPocket(14541, 1)
-                            # Coo… Thank you very much.
-                            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:024', false)
-                            if EventFlowSystemActor.IsMyVillage():
-                                System.EventFlags['cPlayer:PgeCoffeeTodayFlag'] = true
-                                if not System.EventFlags['cLand:CoffeTakeout']:
-                                    System.EventFlags['cLand:CoffeTakeout'] = true
-                                if not System.EventFlags['cPlayer:DrinkCoffeeToday']:
-                                    System.EventFlags['cLifeSupportAchievement:DrinkCoffee'] += 1
-                                    System.EventFlags['cPlayer:DrinkCoffeeToday'] = true
-                            else:
-                                System.EventFlags['cPlayerVisit:PgeVisitorCoffeeFlag'] = true
-                        else:
-                            # Coo!<10:4> You're a little short on cash… Sorry, but…I don't run tabs…
-                            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:021', false)
-                            run SNPC_pge::Pge_DeleteUIrun SNPC_pge::Pge_DeleteUI()
-                    else:
-                        run Sub_grp_Event14()
-                else:
-                    # Looks like…your pockets are full…
-                    MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:022', false)
-            else:
-                run Sub_grp_Event14()
-    elif System.EventFlags['cPlayerVisit:PgeVisitorTalkFlag']:
-        run Pge_Buy_TakeOut()
-    else:
-        System.EventFlags['cPlayerVisit:PgeVisitorTalkFlag'] = true
-        # Welcome to the Roost…
-        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:025', false)
- 
+					EventFlowSystemActor.UIMoneyAppear()
+					if EventFlowSystemActor.IsMyVillage():
+						switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+							case 0:
+								# One coffee to go, right? That's <90:21:0000>…
+								MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:014', false)
+							case 1:
+								# One coffee to go. That's <90:21:0000>…
+								MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:015', false)
+							case 2:
+								# If you're after a coffee to go, I'll fix you one up for <90:21:0000>…
+								MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:016', false)
+					else:
+						# …Coffee to go, right? One cup, <90:21:0000>…
+						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:026', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						if not EventFlowSystemActor.ShoppingCapacity('cItemName', 14541):
+							# Looks like…your pockets are full…
+							MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:022', false)
+run SNPC_pge::Pge_DeleteUI()
+						elif EventFlowSystemActor.HasBellCount(300):
+							MainNpc.SetDeliveryItemAtRandom(14541, false, 'cVillageRemakePattern', 0)
+							EventFlowSystemActor.BellCountDown(300, true)
+							if EventFlowSystemActor.IsMyVillage():
+								# Sure.
+								MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:023', false)
+							else:
+								# Coming right up… No matter where you're from, I'll give you a cup of coffee you're sure to appreciate.
+								MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:027', false)
+run SNPC_pge::Pge_DeleteUI()
+  run Pge_Anime_TakeOut()
+							EventFlowSystemActor.SetMemoryValuePlayer('cBlancoValuePlayer:PV_Cafe_TakeoutCoffee', 1)
+							EventFlowSystemActor.SetItemToPocket(14541, 1)
+							# Coo… Thank you very much.
+							MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:024', false)
+							if EventFlowSystemActor.IsMyVillage():
+System.EventFlags['cPlayer:PgeCoffeeTodayFlag'] = true
+								if not System.EventFlags['cLand:CoffeTakeout']:
+System.EventFlags['cLand:CoffeTakeout'] = true
+								if not System.EventFlags['cPlayer:DrinkCoffeeToday']:
+System.EventFlags['cLifeSupportAchievement:DrinkCoffee'] += 1
+System.EventFlags['cPlayer:DrinkCoffeeToday'] = true
+							else:
+System.EventFlags['cPlayerVisit:PgeVisitorCoffeeFlag'] = true
+						else:
+							# Coo!<10:4> You're a little short on cash… Sorry, but…I don't run tabs…
+							MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:021', false)
+run SNPC_pge::Pge_DeleteUI()
+					else:
+ run Sub_grp_Event14()
+				else:
+					# Looks like…your pockets are full…
+					MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:022', false)
+			else:
+				run Sub_grp_Event14()
+	elif System.EventFlags['cPlayerVisit:PgeVisitorTalkFlag']:
+		run Pge_Buy_TakeOut()
+	else:
+		System.EventFlags['cPlayerVisit:PgeVisitorTalkFlag'] = true
+		# Welcome to the Roost…
+		MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:025', false)
+
 flow Root_Init():
-    MainNpc.SetDefaultWaitAs('cPgeBaseWait')
-    run SNPC_pge::SetupSharePlayCamerarun SNPC_pge::SetupSharePlayCamera()
- 
+	MainNpc.SetDefaultWaitAs('cPgeBaseWait')
+	run SNPC_pge::SetupSharePlayCamera()
+
 local flow Sub_grp_Event14():
-    if (EventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cPlayer:PgeRegularCount'] >= 7):
-        if System.EventFlags['cPlayer:PgeRegularCount'] < 11:
-            # Coo… Got it.
-            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:018', false)
-        elif System.EventFlags['cPlayer:PgeRegularCount'] < 15:
-            # …Some other time, then.
-            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:019', false)
-        else:
-            # Coo… When you want coffee, you know who to ask.
-            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:020', false)
-    else:
-        # …Well then.
-        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:017', false)
-    run SNPC_pge::Pge_DeleteUIrun SNPC_pge::Pge_DeleteUI()
- 
+	if (EventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cPlayer:PgeRegularCount'] >= 7):
+		if System.EventFlags['cPlayer:PgeRegularCount'] < 11:
+			# Coo… Got it.
+			MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:018', false)
+		elif System.EventFlags['cPlayer:PgeRegularCount'] < 15:
+			# …Some other time, then.
+			MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:019', false)
+		else:
+			# Coo… When you want coffee, you know who to ask.
+			MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:020', false)
+	else:
+		# …Well then.
+		MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:017', false)
+	run SNPC_pge::Pge_DeleteUI()

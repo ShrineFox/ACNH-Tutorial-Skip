@@ -1,158 +1,157 @@
 local flow Sub_Event10(IgnoreError: bool, Terminate: bool):
-    EventFlowSystemActor.UploadProfile(IgnoreError, false)
-    if EventFlowSystemActor.CheckErrorType(2):
-        SubflowResults[0] = 1
-        if EventFlowSystemActor.NetIsAppError('cUploadProfile'):
-            EventFlowSystemActor.MessageSuspend()
-            # Your profile could not be sent. If this process fails repeatedly, please retake your profile photo and try again.
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0820', true)
-        if Terminate:
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	EventFlowSystemActor.UploadProfile(IgnoreError, false)
+	if EventFlowSystemActor.CheckErrorType(2):
+		SubflowResults[0] = 1
+		if EventFlowSystemActor.NetIsAppError('cUploadProfile'):
+			EventFlowSystemActor.MessageSuspend()
+			# Your profile could not be sent. If this process fails repeatedly, please retake your profile photo and try again.
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0820', true)
+		if Terminate:
+			EventFlowSystemActor.ExitFlowchart()
+
 flow UploadProfileCore(IgnoreError: bool, Terminate: bool):
-    EventFlowSystemActor.NetCheckProfileBan(IgnoreError)
-    if EventFlowSystemActor.CheckErrorType(2):
-        SubflowResults[0] = 1
-        if Terminate:
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:UploadPlayerProfileIllegal']:
-        if System.EventFlags['cPlayer:ImprovePlayerProfile']:
-            System.EventFlags['cPlayer:UploadPlayerProfileIllegal'] = false
-            System.EventFlags['cPlayer:ImprovePlayerProfile'] = false
-            run Sub_Event10(IgnoreError=IgnoreError, Terminate=Terminate)
-    else:
-        run Sub_Event10(IgnoreError=IgnoreError, Terminate=Terminate)
- 
+	EventFlowSystemActor.NetCheckProfileBan(IgnoreError)
+	if EventFlowSystemActor.CheckErrorType(2):
+		SubflowResults[0] = 1
+		if Terminate:
+			EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:UploadPlayerProfileIllegal']:
+		if System.EventFlags['cPlayer:ImprovePlayerProfile']:
+			System.EventFlags['cPlayer:UploadPlayerProfileIllegal'] = false
+			System.EventFlags['cPlayer:ImprovePlayerProfile'] = false
+			run Sub_Event10(IgnoreError=IgnoreError, Terminate=Terminate)
+	else:
+		run Sub_Event10(IgnoreError=IgnoreError, Terminate=Terminate)
+
 flow UploadResortProfile(IgnoreError: bool, Terminate: bool):
-    if EventFlowSystemActor.NetHasWherearenAuthorID():
-        EventFlowSystemActor.NetUploadPlayerIcon(IgnoreError)
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[0] = 1
-            if Terminate:
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            EventFlowSystemActor.NetWherearenUploadProfile(IgnoreError, false)
-            if EventFlowSystemActor.CheckErrorType(2):
-                SubflowResults[0] = 1
-                if Terminate:
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.NetHasWherearenAuthorID():
+		EventFlowSystemActor.NetUploadPlayerIcon(IgnoreError)
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+			if Terminate:
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			EventFlowSystemActor.NetWherearenUploadProfile(IgnoreError, false)
+			if EventFlowSystemActor.CheckErrorType(2):
+				SubflowResults[0] = 1
+				if Terminate:
+					EventFlowSystemActor.ExitFlowchart()
+
 flow UserRegist(HasError: bool = false, WithLogin: bool, WithSave: bool, Terminate: bool):
-    SubflowResults[0] = 0
-    EventFlowSystemActor.MessageLockNext(1)
-    # Connecting to the internet...
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
-    run UserResistCore(Terminate=Terminate)
-    if WithLogin:
-        EventFlowSystemActor.NetLoginNEX('cLoginNEX', false)
-    EventFlowSystemActor.MessageSuspend()
-    if (not EventFlowSystemActor.NetIsDreaming()) and (WithSave):
-        EventFlowSystemActor.MessageLockNext(1)
-        # Saving. Do not touch .
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-        EventFlowSystemActor.SaveSimpleSave('cAll')
-        EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.MessageUnlockNext()
- 
+	SubflowResults[0] = 0
+	EventFlowSystemActor.MessageLockNext(1)
+	# Connecting to the internet...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+	run UserResistCore(Terminate=Terminate)
+	if WithLogin:
+		EventFlowSystemActor.NetLoginNEX('cLoginNEX', false)
+	EventFlowSystemActor.MessageSuspend()
+	if (not EventFlowSystemActor.NetIsDreaming()) and (WithSave):
+		EventFlowSystemActor.MessageLockNext(1)
+		# Saving. Do not touch .
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+		EventFlowSystemActor.SaveSimpleSave('cAll')
+		EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.MessageUnlockNext()
+
 flow UserResistCore(Terminate: bool):
-    if EventFlowSystemActor.NetMode() not in (0, 2):
-        EventFlowSystemActor.NetShutdown('cNetShutdown', false)
-    EventFlowSystemActor.NetConnectInit('cConnectInet', true)
-    if EventFlowSystemActor.CheckErrorType(2):
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.MessageUnlockNext()
-        # Do you want to try to connect to the internet again?
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0810', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            SubflowResults[0] = 1
-            if Terminate:
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            EventFlowSystemActor.MessageLockNext(1)
-            # Connecting to the internet...
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
-            run UserResistCore(Terminate=Terminate)
-    elif Terminate:
-        EventFlowSystemActor.NetCheckNSA('cCheckNSA', false)
-        EventFlowSystemActor.NetGetPOPID(false)
-        EventFlowSystemActor.NetUpdateFriendList('cBestFriend')
-        EventFlowSystemActor.NetUpdateFriendLandWithInterval(1)
-        run UploadProfileCore(IgnoreError=false, Terminate=Terminate)
-        EventFlowSystemActor.NetUploadEmoticon(false, -1, true)
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[0] = 1
-            if Terminate:
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            EventFlowSystemActor.NetUploadCatalog(false, false)
-            if EventFlowSystemActor.CheckErrorType(2):
-                SubflowResults[0] = 1
-                if Terminate:
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                EventFlowSystemActor.NetUploadRewardUnlock(false, true)
-                if EventFlowSystemActor.CheckErrorType(2):
-                    SubflowResults[0] = 1
-                    if Terminate:
-                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                else:
-                    EventFlowSystemActor.NetUploadResortUnlock(false, false)
-                    if EventFlowSystemActor.CheckErrorType(2):
-                        SubflowResults[0] = 1
-                        if Terminate:
-                            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                    else:
-                        EventFlowSystemActor.NetUploadLifeTips(false, false)
-                        if EventFlowSystemActor.CheckErrorType(2):
-                            SubflowResults[0] = 1
-                            if Terminate:
-                                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                        else:
-                            EventFlowSystemActor.NetUploadPlayerMemories(false, false)
-                            if EventFlowSystemActor.CheckErrorType(2):
-                                SubflowResults[0] = 1
-                                if Terminate:
-                                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                            else:
-                                run UploadResortProfile(IgnoreError=false, Terminate=Terminate)
-    else:
-        EventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[0] = 1
-        else:
-            EventFlowSystemActor.NetGetPOPID(true)
-            if EventFlowSystemActor.CheckErrorType(2):
-                SubflowResults[0] = 1
-            else:
-                EventFlowSystemActor.NetUpdateFriendList('cBestFriend')
-                if EventFlowSystemActor.CheckErrorType(2):
-                    SubflowResults[0] = 1
-                else:
-                    EventFlowSystemActor.NetUpdateFriendLandWithInterval(1)
-                    run UploadProfileCore(IgnoreError=false, Terminate=Terminate)
-                    EventFlowSystemActor.NetUploadEmoticon(false, -1, true)
-                    if EventFlowSystemActor.CheckErrorType(2):
-                        SubflowResults[0] = 1
-                    else:
-                        EventFlowSystemActor.NetUploadCatalog(true, false)
-                        if EventFlowSystemActor.CheckErrorType(2):
-                            SubflowResults[0] = 1
-                        else:
-                            EventFlowSystemActor.NetUploadRewardUnlock(false, true)
-                            if EventFlowSystemActor.CheckErrorType(2):
-                                SubflowResults[0] = 1
-                            else:
-                                EventFlowSystemActor.NetUploadResortUnlock(false, false)
-                                if EventFlowSystemActor.CheckErrorType(2):
-                                    SubflowResults[0] = 1
-                                else:
-                                    EventFlowSystemActor.NetUploadLifeTips(false, false)
-                                    if EventFlowSystemActor.CheckErrorType(2):
-                                        SubflowResults[0] = 1
-                                    else:
-                                        EventFlowSystemActor.NetUploadPlayerMemories(false, false)
-                                        if EventFlowSystemActor.CheckErrorType(2):
-                                            SubflowResults[0] = 1
-                                        else:
-                                            run UploadResortProfile(IgnoreError=false, Terminate=Terminate)
- 
+	if EventFlowSystemActor.NetMode() not in (0, 2):
+		EventFlowSystemActor.NetShutdown('cNetShutdown', false)
+	EventFlowSystemActor.NetConnectInit('cConnectInet', true)
+	if EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.MessageUnlockNext()
+		# Do you want to try to connect to the internet again?
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0810', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			SubflowResults[0] = 1
+			if Terminate:
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			EventFlowSystemActor.MessageLockNext(1)
+			# Connecting to the internet...
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+			run UserResistCore(Terminate=Terminate)
+	elif Terminate:
+		EventFlowSystemActor.NetCheckNSA('cCheckNSA', false)
+		EventFlowSystemActor.NetGetPOPID(false)
+		EventFlowSystemActor.NetUpdateFriendList('cBestFriend')
+		EventFlowSystemActor.NetUpdateFriendLandWithInterval(1)
+		run UploadProfileCore(IgnoreError=false, Terminate=Terminate)
+		EventFlowSystemActor.NetUploadEmoticon(false, -1, true)
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+			if Terminate:
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			EventFlowSystemActor.NetUploadCatalog(false, false)
+			if EventFlowSystemActor.CheckErrorType(2):
+				SubflowResults[0] = 1
+				if Terminate:
+					EventFlowSystemActor.ExitFlowchart()
+			else:
+				EventFlowSystemActor.NetUploadRewardUnlock(false, true)
+				if EventFlowSystemActor.CheckErrorType(2):
+					SubflowResults[0] = 1
+					if Terminate:
+EventFlowSystemActor.ExitFlowchart()
+				else:
+					EventFlowSystemActor.NetUploadResortUnlock(false, false)
+					if EventFlowSystemActor.CheckErrorType(2):
+ SubflowResults[0] = 1
+						if Terminate:
+EventFlowSystemActor.ExitFlowchart()
+					else:
+						EventFlowSystemActor.NetUploadLifeTips(false, false)
+						if EventFlowSystemActor.CheckErrorType(2):
+	SubflowResults[0] = 1
+							if Terminate:
+EventFlowSystemActor.ExitFlowchart()
+						else:
+							EventFlowSystemActor.NetUploadPlayerMemories(false, false)
+							if EventFlowSystemActor.CheckErrorType(2):
+	  SubflowResults[0] = 1
+								if Terminate:
+EventFlowSystemActor.ExitFlowchart()
+							else:
+								run UploadResortProfile(IgnoreError=false, Terminate=Terminate)
+	else:
+		EventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+		else:
+			EventFlowSystemActor.NetGetPOPID(true)
+			if EventFlowSystemActor.CheckErrorType(2):
+				SubflowResults[0] = 1
+			else:
+				EventFlowSystemActor.NetUpdateFriendList('cBestFriend')
+				if EventFlowSystemActor.CheckErrorType(2):
+					SubflowResults[0] = 1
+				else:
+					EventFlowSystemActor.NetUpdateFriendLandWithInterval(1)
+					run UploadProfileCore(IgnoreError=false, Terminate=Terminate)
+					EventFlowSystemActor.NetUploadEmoticon(false, -1, true)
+					if EventFlowSystemActor.CheckErrorType(2):
+ SubflowResults[0] = 1
+					else:
+						EventFlowSystemActor.NetUploadCatalog(true, false)
+						if EventFlowSystemActor.CheckErrorType(2):
+	SubflowResults[0] = 1
+						else:
+							EventFlowSystemActor.NetUploadRewardUnlock(false, true)
+							if EventFlowSystemActor.CheckErrorType(2):
+	  SubflowResults[0] = 1
+							else:
+								EventFlowSystemActor.NetUploadResortUnlock(false, false)
+								if EventFlowSystemActor.CheckErrorType(2):
+		SubflowResults[0] = 1
+								else:
+									EventFlowSystemActor.NetUploadLifeTips(false, false)
+									if EventFlowSystemActor.CheckErrorType(2):
+		  SubflowResults[0] = 1
+									else:
+										EventFlowSystemActor.NetUploadPlayerMemories(false, false)
+										if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+										else:
+											run UploadResortProfile(IgnoreError=false, Terminate=Terminate)

@@ -1,77 +1,76 @@
 flow EntryPoint_AuthorID():
-    if System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID']:
-        # Currently, your Happy Home Network ID is visible in your Passport to other players you've played with. Do you want to change this setting so that you…
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:402', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID'] = false
-            # Your Happy Home Network ID is now hidden from others who view your Passport.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:405', true)
-        else:
-            run EntryPoint_Setting_Continue()
-    else:
-        # Currently, your Happy Home Network ID is hidden in your Passport. Do you want to make your HHN ID visible on your Passport to other players you've pl…
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:403', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID'] = true
-            # Your Happy Home Network ID can now be seen by others who view your Passport.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:406', true)
-        else:
-            run EntryPoint_Setting_Continue()
-    run EntryPoint_Repetition()
- 
+	if System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID']:
+		# Currently, your Happy Home Network ID is visible in your Passport to other players you've played with. Do you want to change this setting so that you…
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:402', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID'] = false
+			# Your Happy Home Network ID is now hidden from others who view your Passport.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:405', true)
+		else:
+			run EntryPoint_Setting_Continue()
+	else:
+		# Currently, your Happy Home Network ID is hidden in your Passport. Do you want to make your HHN ID visible on your Passport to other players you've pl…
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:403', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID'] = true
+			# Your Happy Home Network ID can now be seen by others who view your Passport.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:406', true)
+		else:
+			run EntryPoint_Setting_Continue()
+	run EntryPoint_Repetition()
+
 flow EntryPoint_Cancel():
-    EventFlowSystemActor.MessageLockNext(1)
-    # Saving settings...
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:418', false)
-    EventFlowSystemActor.NetWherearenUploadProfile(true, false)
-    EventFlowSystemActor.UploadProfile(true, false)
-    EventFlowSystemActor.MessageUnlockNext()
-    EventFlowSystemActor.MessageSuspend()
- 
+	EventFlowSystemActor.MessageLockNext(1)
+	# Saving settings...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:418', false)
+	EventFlowSystemActor.NetWherearenUploadProfile(true, false)
+	EventFlowSystemActor.UploadProfile(true, false)
+	EventFlowSystemActor.MessageUnlockNext()
+	EventFlowSystemActor.MessageSuspend()
+
 flow EntryPoint_PickupSet():
-    if System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose']:
-        # Currently, properties you've posted on your profile page are displayed in the Showroom property list. You can change this so that your properties are…
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:407', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose'] = false
-            # Your properties will not be displayed in the Vacation Homes and Facilities lists.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:409', true)
-        else:
-            run EntryPoint_Setting_Continue()
-    else:
-        # Currently, properties on your profile page are not shown in the Vacation Homes and Facilities lists. Do you want to change this setting to display yo…
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:408', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose'] = true
-            # Your properties will be displayed in the Vacation Homes and Facilities lists.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:410', true)
-        else:
-            run EntryPoint_Setting_Continue()
-    run EntryPoint_Repetition()
- 
+	if System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose']:
+		# Currently, properties you've posted on your profile page are displayed in the Showroom property list. You can change this so that your properties are…
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:407', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose'] = false
+			# Your properties will not be displayed in the Vacation Homes and Facilities lists.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:409', true)
+		else:
+			run EntryPoint_Setting_Continue()
+	else:
+		# Currently, properties on your profile page are not shown in the Vacation Homes and Facilities lists. Do you want to change this setting to display yo…
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:408', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose'] = true
+			# Your properties will be displayed in the Vacation Homes and Facilities lists.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:410', true)
+		else:
+			run EntryPoint_Setting_Continue()
+	run EntryPoint_Repetition()
+
 flow EntryPoint_Repetition():
-    # What would you like to adjust?
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:411', true)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run EntryPoint_AuthorID()
-        case 1:
-            run EntryPoint_PickupSet()
-        case 2:
-            run EntryPoint_Cancel()
- 
+	# What would you like to adjust?
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:411', true)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run EntryPoint_AuthorID()
+		case 1:
+			run EntryPoint_PickupSet()
+		case 2:
+			run EntryPoint_Cancel()
+
 flow EntryPoint_Setting_Continue():
-    # Your setting will be left as is.
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:404', true)
- 
+	# Your setting will be left as is.
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:404', true)
+
 flow Root():
-    # Here, you can adjust the settings for the Happy Home Network. What would you like to adjust?
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:401', true)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run EntryPoint_AuthorID()
-        case 1:
-            run EntryPoint_PickupSet()
-        case 2:
-            run EntryPoint_Cancel()
- 
+	# Here, you can adjust the settings for the Happy Home Network. What would you like to adjust?
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:401', true)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run EntryPoint_AuthorID()
+		case 1:
+			run EntryPoint_PickupSet()
+		case 2:
+			run EntryPoint_Cancel()

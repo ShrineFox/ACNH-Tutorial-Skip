@@ -1,109 +1,108 @@
 flow EndTalk():
-    if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
-        # Welcome back, PLAYER! Did you chat with Niko?
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:111', false)
-        switch EventFlowSystemActor.GeneralTalkChoice2():
-            case 0, 1:
-                EventFlowSystemActor.WaitFrame(30)
-                # Oooh, you had a chat about DIY! I knew Niko likes building things, but I didn't know you do too!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:111_01', true)
-                MainNpc.CharacterEmoticonAction('IdeaBulb', true, '', 0, false)
-                EventFlowSystemActor.WaitFrame(30)
-                MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-                MainNpc.TurnNeck(1, false)
-                run Demo_Common_Wherearen::Demo_OfficeOverlookRightCamerarun Demo_Common_Wherearen::Demo_OfficeOverlookRightCamera()
-                EventFlowSystemActor.WaitFrame(20)
-                # Say, Wardell! Remember when we ordered that workbench?<20:2:cd07> When is it supposed to arrive?
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:112', true)
-                Player.TurnNeck(1, false)
-                # <150:5>Soon.
-                SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:113', true)
-                Player.TurnNeck(0, false)
-                # Great! Thank you!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:114', false)
-                MainNpc.TurnNeck(10, false)
-                # I thought it might be handy to have a workbench around here, so I asked Wardell to order one. We'll place it upstairs once it arrives. Please feel fr…
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:115', true)
-                System.EventFlags['cWherearenPlayer:SeqMncRecipeDone'] = true
-                System.EventFlags['cWherearenPlayer:Unlock_MessageBottle'] = true
-                System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing'] = false
-                System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog'] = false
-                System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
-    else:
-        # RANDOM: You ought to be able to find Niko at th… // I imagine when you and Niko were workin…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:105', true)
- 
+	if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
+		# Welcome back, PLAYER! Did you chat with Niko?
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:111', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0, 1:
+				EventFlowSystemActor.WaitFrame(30)
+				# Oooh, you had a chat about DIY! I knew Niko likes building things, but I didn't know you do too!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:111_01', true)
+				MainNpc.CharacterEmoticonAction('IdeaBulb', true, '', 0, false)
+				EventFlowSystemActor.WaitFrame(30)
+				MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+				MainNpc.TurnNeck(1, false)
+				run Demo_Common_Wherearen::Demo_OfficeOverlookRightCamera()
+				EventFlowSystemActor.WaitFrame(20)
+				# Say, Wardell! Remember when we ordered that workbench?<20:2:cd07> When is it supposed to arrive?
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:112', true)
+				Player.TurnNeck(1, false)
+				# <150:5>Soon.
+				SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:113', true)
+				Player.TurnNeck(0, false)
+				# Great! Thank you!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:114', false)
+				MainNpc.TurnNeck(10, false)
+				# I thought it might be handy to have a workbench around here, so I asked Wardell to order one. We'll place it upstairs once it arrives. Please feel fr…
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:115', true)
+				System.EventFlags['cWherearenPlayer:SeqMncRecipeDone'] = true
+				System.EventFlags['cWherearenPlayer:Unlock_MessageBottle'] = true
+				System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing'] = false
+				System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog'] = false
+				System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
+	else:
+		# RANDOM: You ought to be able to find Niko at th… // I imagine when you and Niko were workin…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:105', true)
+
 flow EndTalk_Catalog():
-    if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
+	if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
 entrypoint Event30:
-        # <50:3>PLAYER, sorry to keep you waiting! I finally managed to get this place squared away, so I'll be accepting new vacation-home requests again! Let…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:151', false)
-        switch EventFlowSystemActor.GeneralTalkChoice2():
-            case 0, 1:
-                EventFlowSystemActor.WaitFrame(30)
-                # Using DIY-crafted items when you're designing vacation homes? Now, there's an idea! Handmade items have character, and vacation homes need character!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:152', false)
-                # However, I'd appreciate it if you limit yourself to items you have crafted at least once before. I don't want to take any risks trying to craft somet…
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:153', true)
-                System.EventFlags['cWherearenPlayer:Unlock_MargeCatalog_DIY'] = true
-                System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing'] = false
-                System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog'] = false
-                System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
-                System.EventFlags['cPlayer:OtgTipsUnlockDIYFtrCatalog'] = true
-                run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeColor='cBlack', SoundDucking='cWorldDucking', FadeType='cCircle', FadeSpeed='cNormal')
-                run Demo_Common_Wherearen::Demo_OfficeOverlookCamerarun Demo_Common_Wherearen::Demo_OfficeOverlookCamera()
-                EventFlowSystemActor.SetupActorPosition(17)
-                Player.TurnBody(12, 0.0)
-                EventFlowSystemActor.WaitFrame(20)
-                run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
-                EventFlowSystemActor.ReservePlayerMutterDemo('SNPC_otg_17_WherearenEvent_DIYCatalog', 'MutterDemo', 'cNowDemoEnd', false)
-    else:
-        # RANDOM: Niko should be upstairs. Why not go see… // Sorry—I'm still cleaning. These dust bu…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:145', true)
- 
+		# <50:3>PLAYER, sorry to keep you waiting! I finally managed to get this place squared away, so I'll be accepting new vacation-home requests again! Let…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:151', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0, 1:
+				EventFlowSystemActor.WaitFrame(30)
+				# Using DIY-crafted items when you're designing vacation homes? Now, there's an idea! Handmade items have character, and vacation homes need character!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:152', false)
+				# However, I'd appreciate it if you limit yourself to items you have crafted at least once before. I don't want to take any risks trying to craft somet…
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:153', true)
+				System.EventFlags['cWherearenPlayer:Unlock_MargeCatalog_DIY'] = true
+				System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing'] = false
+				System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog'] = false
+				System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
+				System.EventFlags['cPlayer:OtgTipsUnlockDIYFtrCatalog'] = true
+				run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeColor='cBlack', SoundDucking='cWorldDucking', FadeType='cCircle', FadeSpeed='cNormal')
+				run Demo_Common_Wherearen::Demo_OfficeOverlookCamera()
+				EventFlowSystemActor.SetupActorPosition(17)
+				Player.TurnBody(12, 0.0)
+				EventFlowSystemActor.WaitFrame(20)
+				run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+				EventFlowSystemActor.ReservePlayerMutterDemo('SNPC_otg_17_WherearenEvent_DIYCatalog', 'MutterDemo', 'cNowDemoEnd', false)
+	else:
+		# RANDOM: Niko should be upstairs. Why not go see… // Sorry—I'm still cleaning. These dust bu…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:145', true)
+
 flow FromAmiiboReader():
-    if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
-        run Event30()
-    else:
-        # I appreciate that you're an enthusiastic worker, but I'm not accepting new requests. If you have time to spare, go upstairs and chat with Niko. He'd …
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:146', true)
- 
+	if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
+		run Event30()
+	else:
+		# I appreciate that you're an enthusiastic worker, but I'm not accepting new requests. If you have time to spare, go upstairs and chat with Niko. He'd …
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:146', true)
+
 flow MutterDemo():
-    # Now I can use DIY-crafted items too! The "handmade" touch is really going to make a lot of clients happy!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:1305_01', true)
- 
+	# Now I can use DIY-crafted items too! The "handmade" touch is really going to make a lot of clients happy!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:1305_01', true)
+
 flow Root():
-    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
-    # Welcome back! You just keep doing great work, don't you?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:101', false)
-    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
-    # Before I forget, here's your payment of <90:44:0000>. Thanks for another job well done!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:102', true)
-    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
-    # Oh, and Niko let me know he'd like to talk with you. Now's as good a time as any for a break. Why not go chat with him?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:103', true)
-    System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing'] = true
-    System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = true
-    SubflowResults[3] = 0
-    run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
-    run SNPC_otg_01_WherearenOffice::Otg_ReturnHomePosrun SNPC_otg_01_WherearenOffice::Otg_ReturnHomePos()
- 
+	run SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+	# Welcome back! You just keep doing great work, don't you?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:101', false)
+	run SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+	# Before I forget, here's your payment of <90:44:0000>. Thanks for another job well done!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:102', true)
+	run SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+	# Oh, and Niko let me know he'd like to talk with you. Now's as good a time as any for a break. Why not go chat with him?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:103', true)
+	System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing'] = true
+	System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = true
+	SubflowResults[3] = 0
+	run SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+	run SNPC_otg_01_WherearenOffice::Otg_ReturnHomePos()
+
 flow Root_DIYCatalogMerge():
-    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
-    # Welcome back, PLAYER! Another job well done?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:141', false)
-    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
-    # With the job finished, here's your payment—<90:44:0000>.
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:142', true)
-    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
-    # With that settled, I think I'm going to clean up the office for a little bit. Clutter and dust are sneaky things, and they like to pile up while you'…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:143', true)
-    SubflowResults[3] = 0
-    run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
-    Player.TurnBody(0, 0.0)
-    # Oh! You should go say hi to Niko! Niko got back a moment before you and went straight upstairs. I'm sure he'd enjoy a visit!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:144', true)
-    System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing'] = true
-    System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = true
-    run SNPC_otg_01_WherearenOffice::Otg_ReturnHomePosrun SNPC_otg_01_WherearenOffice::Otg_ReturnHomePos()
- 
+	run SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+	# Welcome back, PLAYER! Another job well done?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:141', false)
+	run SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+	# With the job finished, here's your payment—<90:44:0000>.
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:142', true)
+	run SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+	# With that settled, I think I'm going to clean up the office for a little bit. Clutter and dust are sneaky things, and they like to pile up while you'…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:143', true)
+	SubflowResults[3] = 0
+	run SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+	Player.TurnBody(0, 0.0)
+	# Oh! You should go say hi to Niko! Niko got back a moment before you and went straight upstairs. I'm sure he'd enjoy a visit!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:144', true)
+	System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing'] = true
+	System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = true
+	run SNPC_otg_01_WherearenOffice::Otg_ReturnHomePos()

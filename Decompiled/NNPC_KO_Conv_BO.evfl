@@ -1,111 +1,110 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        fork:
-            branch:
-                Player.TurnBody(0, 0.0)
-            branch:
-                MainNpc.TurnBody(1, 0.0)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        MainNpc.NpcCopyPhrase()
-        # Urrrrrr… <50:3><110:5>, I just can't seem to wake up and get goin' today.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:201', false)
-        Player.TurnNeck(1, false)
-        # Uuuuuh… Aw, now you've got me yawning too, <110:31:cd00>. <50:3><110:5>…
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:202', false)
-        Player.TurnNeck(0, false)
-        # That's not all you picked up from me. Sounds like you're usin' my catchphrase too, <110:5>.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:203', false)
-        Player.TurnNeck(1, false)
-        # Hey, yeah! I like it, <110:5>! So, would it be OK if I tried saying "<110:5>" sometimes, maybe?
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:204', false)
-        Player.TurnNeck(0, false)
-        # Too late now if it wasn't, so knock yourself out, <110:5>…
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:205', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        fork:
-            branch:
-                Player.TurnBody(0, 0.0)
-            branch:
-                MainNpc.TurnBody(1, 0.0)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        # When're you gonna stop messin' around and start plannin' for your future, <110:31:cd01>?
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:001', false)
-        # Huh? My future? Like, with rockets and robots on the moon, maybe?
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:002', false)
-        # No, consarn it, your future as an adult! What're you gonna do with yourself when you grow up? You gotta have dreams, right?
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:003', false)
-        Player.TurnNeck(1, false)
-        # Oh! Yeah, I got dreams alright…
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:004', false)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
-            case 0:
-                # I wanna have a swimming pool that's filled to the top with <135:1:cd00>…<20:2:cd03> I'll dive in and try to hold my breath as long as I can…or drink …
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:005', false)
-                # What kinda cockamamie dream is that? Talkin' to you wears me out…
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:006', false)
-            case 1:
-                # I wanna build a great big house made out of <135:7:cd00>! And everything inside will be made out of <135:7:cd00> too! It might get all sticky and cov…
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:007', false)
-                # What kinda cockamamie dream is that? Talkin' to you wears me out…
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:006', false)
-            case 2:
-                # I wanna find a big basket and tie lots and lots of balloons to it… Then I could crawl inside and take a nice nap. When I woke up, maybe I'd be on a w…
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:008', true)
-                run Sub_Event55()
-            case 3:
-                # I wanna invent a new kind of  <135:3:cd00> that will never run out, ever! Just imagine… I'd always have enough to share with you, <110:31:cd00>, or y…
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:010', false)
-                run Sub_Event55()
-            case 4:
-                # I wanna start a shaved-ice stand! And be the assistant manager so I could get a great big discount! I'd probably get bad brain freeze all the time fr…
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:011', false)
-                SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-                # Good luck raisin' capital with that business plan, kiddo. I give up…
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:013', false)
-    else:
-        fork:
-            branch:
-                Player.TurnBody(0, 0.0)
-            branch:
-                MainNpc.TurnBody(1, 0.0)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        # It might toughen you up if you was to use more…colorful language.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:101', false)
-        Player.TurnNeck(1, false)
-        # Ooh, you're gonna teach me how to talk in colors? Teach me, teach me!
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:102', false)
-        Player.TurnNeck(0, false)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # How about this? If someone says somethin' you didn't follow, you might ask 'em, "What the hey?"
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:103', false)
-                Player.TurnNeck(1, false)
-                # Hey, what the hey, now? Like that?
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:104', false)
-            case 1:
-                # Say someone does somethin' that makes you angry. Well, in that case, you just call 'em a dadgum doofus!
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:107', false)
-                Player.TurnNeck(1, false)
-                # Um, lemme see… You gumdad goofus! Like that?
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:108', false)
-            case 2:
-                # If someone was to jump out at you, you might yell, "Jeepers creepers, you done scared me silly!"
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:109', false)
-                Player.TurnNeck(1, false)
-                # OK, um… Jeepers, creeper, you scared me done, silly! Like that?
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:110', false)
-        Player.TurnNeck(0, false)
-        # Well, that's…somethin', I reckon. Almost makes you sound grown up.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:105', false)
-        Player.TurnNeck(1, false)
-        # Aw, yeah! Now I'm gonna sound cool like you, <110:31:cd00>! Whiskers and bean music, concern it!
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:106', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		fork:
+			branch:
+				Player.TurnBody(0, 0.0)
+			branch:
+				MainNpc.TurnBody(1, 0.0)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		MainNpc.NpcCopyPhrase()
+		# Urrrrrr… <50:3><110:5>, I just can't seem to wake up and get goin' today.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:201', false)
+		Player.TurnNeck(1, false)
+		# Uuuuuh… Aw, now you've got me yawning too, <110:31:cd00>. <50:3><110:5>…
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:202', false)
+		Player.TurnNeck(0, false)
+		# That's not all you picked up from me. Sounds like you're usin' my catchphrase too, <110:5>.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:203', false)
+		Player.TurnNeck(1, false)
+		# Hey, yeah! I like it, <110:5>! So, would it be OK if I tried saying "<110:5>" sometimes, maybe?
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:204', false)
+		Player.TurnNeck(0, false)
+		# Too late now if it wasn't, so knock yourself out, <110:5>…
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:205', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		fork:
+			branch:
+				Player.TurnBody(0, 0.0)
+			branch:
+				MainNpc.TurnBody(1, 0.0)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		# When're you gonna stop messin' around and start plannin' for your future, <110:31:cd01>?
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:001', false)
+		# Huh? My future? Like, with rockets and robots on the moon, maybe?
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:002', false)
+		# No, consarn it, your future as an adult! What're you gonna do with yourself when you grow up? You gotta have dreams, right?
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:003', false)
+		Player.TurnNeck(1, false)
+		# Oh! Yeah, I got dreams alright…
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:004', false)
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+			case 0:
+				# I wanna have a swimming pool that's filled to the top with <135:1:cd00>…<20:2:cd03> I'll dive in and try to hold my breath as long as I can…or drink …
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:005', false)
+				# What kinda cockamamie dream is that? Talkin' to you wears me out…
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:006', false)
+			case 1:
+				# I wanna build a great big house made out of <135:7:cd00>! And everything inside will be made out of <135:7:cd00> too! It might get all sticky and cov…
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:007', false)
+				# What kinda cockamamie dream is that? Talkin' to you wears me out…
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:006', false)
+			case 2:
+				# I wanna find a big basket and tie lots and lots of balloons to it… Then I could crawl inside and take a nice nap. When I woke up, maybe I'd be on a w…
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:008', true)
+				run Sub_Event55()
+			case 3:
+				# I wanna invent a new kind of  <135:3:cd00> that will never run out, ever! Just imagine… I'd always have enough to share with you, <110:31:cd00>, or y…
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:010', false)
+				run Sub_Event55()
+			case 4:
+				# I wanna start a shaved-ice stand! And be the assistant manager so I could get a great big discount! I'd probably get bad brain freeze all the time fr…
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:011', false)
+				SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+				# Good luck raisin' capital with that business plan, kiddo. I give up…
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:013', false)
+	else:
+		fork:
+			branch:
+				Player.TurnBody(0, 0.0)
+			branch:
+				MainNpc.TurnBody(1, 0.0)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		# It might toughen you up if you was to use more…colorful language.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:101', false)
+		Player.TurnNeck(1, false)
+		# Ooh, you're gonna teach me how to talk in colors? Teach me, teach me!
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:102', false)
+		Player.TurnNeck(0, false)
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# How about this? If someone says somethin' you didn't follow, you might ask 'em, "What the hey?"
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:103', false)
+				Player.TurnNeck(1, false)
+				# Hey, what the hey, now? Like that?
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:104', false)
+			case 1:
+				# Say someone does somethin' that makes you angry. Well, in that case, you just call 'em a dadgum doofus!
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:107', false)
+				Player.TurnNeck(1, false)
+				# Um, lemme see… You gumdad goofus! Like that?
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:108', false)
+			case 2:
+				# If someone was to jump out at you, you might yell, "Jeepers creepers, you done scared me silly!"
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:109', false)
+				Player.TurnNeck(1, false)
+				# OK, um… Jeepers, creeper, you scared me done, silly! Like that?
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:110', false)
+		Player.TurnNeck(0, false)
+		# Well, that's…somethin', I reckon. Almost makes you sound grown up.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:105', false)
+		Player.TurnNeck(1, false)
+		# Aw, yeah! Now I'm gonna sound cool like you, <110:31:cd00>! Whiskers and bean music, concern it!
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:106', false)
+
 local flow Sub_Event55():
-    SubNpc.CharacterEmoticonAction('Worried', true, '', 0, false)
-    # Some plan. See, it's stuff like this that makes me worry about you!
-    MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:009', false)
- 
+	SubNpc.CharacterEmoticonAction('Worried', true, '', 0, false)
+	# Some plan. See, it's stuff like this that makes me worry about you!
+	MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_BO:009', false)

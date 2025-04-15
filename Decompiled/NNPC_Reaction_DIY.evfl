@@ -1,173 +1,172 @@
 flow DIY_AfterItemGet():
-    MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial'] = true
-    System.EventFlags['cPlayerTemp:GotRecipeorMaterial'] = true
-    MainNpc.EventFlags['cNpcMemory:TalkDIY'] = true
-    MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial'] = true
+	System.EventFlags['cPlayerTemp:GotRecipeorMaterial'] = true
+	MainNpc.EventFlags['cNpcMemory:TalkDIY'] = true
+	MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow DIY_GetItem():
-    if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 1:
-        EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
-        run Sub_Event42()
-    elif MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 2:
-        EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
-        run Sub_Event42()
- 
+	if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 1:
+		EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
+		run Sub_Event42()
+	elif MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 2:
+		EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
+		run Sub_Event42()
+
 flow DIY_GetItem_Ornament():
-    if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 3:
-        EventFlowSystemActor.SelectRewardItemDirect(5732, 3, 'cVillageRemakePattern', 0)
-        run Sub_Event22()
-    elif MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 4:
-        EventFlowSystemActor.SelectRewardItemDirect(5731, 3, 'cVillageRemakePattern', 0)
-        run Sub_Event22()
-    elif MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 5:
-        EventFlowSystemActor.SelectRewardItemDirect(5730, 3, 'cVillageRemakePattern', 0)
-        run Sub_Event22()
- 
+	if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 3:
+		EventFlowSystemActor.SelectRewardItemDirect(5732, 3, 'cVillageRemakePattern', 0)
+		run Sub_Event22()
+	elif MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 4:
+		EventFlowSystemActor.SelectRewardItemDirect(5731, 3, 'cVillageRemakePattern', 0)
+		run Sub_Event22()
+	elif MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] == 5:
+		EventFlowSystemActor.SelectRewardItemDirect(5730, 3, 'cVillageRemakePattern', 0)
+		run Sub_Event22()
+
 flow DIY_Item_Full():
-    # Oh man! Your pockets are too fulla stuff! Come back later, and I'll set ya up!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:010', false)
-    MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull'] = true
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	# Oh man! Your pockets are too fulla stuff! Come back later, and I'll set ya up!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:010', false)
+	MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull'] = true
+	EventFlowSystemActor.ExitFlowchart()
+
 flow DIY_Ornament():
-    # …No foolin'? You already know how to make those?
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:040', false)
-    # That's cool! I'll just give you some of my extra crafting stuff, then.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:041', false)
-    if EventFlowSystemActor.PercentChoice(25):
-        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 3
-        EventFlowSystemActor.SelectRewardItemDirect(5732, 3, 'cVillageRemakePattern', 0)
-    else:
-        if EventFlowSystemActor.RandomChoice2(2) == 0:
-            MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 4
-            EventFlowSystemActor.SelectRewardItemDirect(5731, 3, 'cVillageRemakePattern', 0)
-        else:
-            MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 5
-            EventFlowSystemActor.SelectRewardItemDirect(5730, 3, 'cVillageRemakePattern', 0)
+	# …No foolin'? You already know how to make those?
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:040', false)
+	# That's cool! I'll just give you some of my extra crafting stuff, then.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:041', false)
+	if EventFlowSystemActor.PercentChoice(25):
+		MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 3
+		EventFlowSystemActor.SelectRewardItemDirect(5732, 3, 'cVillageRemakePattern', 0)
+	else:
+		if EventFlowSystemActor.RandomChoice2(2) == 0:
+			MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 4
+			EventFlowSystemActor.SelectRewardItemDirect(5731, 3, 'cVillageRemakePattern', 0)
+		else:
+			MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 5
+			EventFlowSystemActor.SelectRewardItemDirect(5730, 3, 'cVillageRemakePattern', 0)
 entrypoint Event85:
-    MainNpc.SetDeliveryItem(1, true)
-    if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
-        MainNpc.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        MainNpc.SetItemName(1, 0, 1)
-        # Take 3 <125:0:0201>. They're all yours! Now go make something pretty. The prettier, the better, <110:6>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:042', false)
-        run DIY_AfterItemGet()
-    else:
-        run DIY_Item_Full()
- 
+	MainNpc.SetDeliveryItem(1, true)
+	if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
+		MainNpc.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		MainNpc.SetItemName(1, 0, 1)
+		# Take 3 <125:0:0201>. They're all yours! Now go make something pretty. The prettier, the better, <110:6>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:042', false)
+		run DIY_AfterItemGet()
+	else:
+		run DIY_Item_Full()
+
 flow DIY_PumpkinFtr():
-    # …No foolin'? You already know how to make that one?
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:033', false)
-    if EventFlowSystemActor.PercentChoice(70):
-        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 1
-        EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
-        # Dang! Is there anything you DON'T know? Well, what if I gave you some pumpkins to make it with instead?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:034', false)
-    else:
-        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 2
-        EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
-        # Aw. I was all excited to give you the recipe too. Hmm… What can I give you that's just as good? Oh, duh! How about <item>candy? Halloween is coming u…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:036', false)
+	# …No foolin'? You already know how to make that one?
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:033', false)
+	if EventFlowSystemActor.PercentChoice(70):
+		MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 1
+		EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
+		# Dang! Is there anything you DON'T know? Well, what if I gave you some pumpkins to make it with instead?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:034', false)
+	else:
+		MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 2
+		EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
+		# Aw. I was all excited to give you the recipe too. Hmm… What can I give you that's just as good? Oh, duh! How about <item>candy? Halloween is coming u…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:036', false)
 entrypoint Event23:
-    MainNpc.SetDeliveryItem(1, true)
-    if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 1:
-            # Wouldn't wanna get caught on Halloween without <item>candy, right? I always keep my pockets stuffed!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:037', false)
-        else:
-            # Make something cool with those pumpkins! It's the right season for [a|an]<125:0:0000>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:035', false)
-        run DIY_AfterItemGet()
-    else:
-        run DIY_Item_Full()
- 
+	MainNpc.SetDeliveryItem(1, true)
+	if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 1:
+			# Wouldn't wanna get caught on Halloween without <item>candy, right? I always keep my pockets stuffed!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:037', false)
+		else:
+			# Make something cool with those pumpkins! It's the right season for [a|an]<125:0:0000>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:035', false)
+		run DIY_AfterItemGet()
+	else:
+		run DIY_Item_Full()
+
 flow Root():
-    if MainNpc.IsInTheActOfDIY():
-        run NNPC_FreeH_Progress::Conceal_NpcHouseBuiltrun NNPC_FreeH_Progress::Conceal_NpcHouseBuilt()
-        MainNpc.SetItemName(16, 0, 0)
-        if not MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial']:
-            if MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull']:
-                run DIY_GetItem()
-                run DIY_GetItem_Ornament()
-                # Oh! You're back for my top secret recipe, huh? Heeere you go! A DIY recipe for [a|an]<125:0:0000>. Don't lose it!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:021', false)
-                run Sub_Event51()
-            else:
-                # RANDOM: Hey! Sorry about the mess, but I ain't … // What are you doing? // You look busy. // Check me out! I'm doin' STUFF! // What are you doing? // You look busy. // <50:3><110:3>! Um. Watch your step, OK? // What are you doing? // You look busy.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:001', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    # I'm making me [a|an] <125:0:0000>! One of the bugs in the floor whispered the DIY instructions in my ear while I was sleeping last night. So I gotta …
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:002', false)
-                    if MainNpc.IsNpcDIYRecipeCollected():
-                        if MainNpc.IsDIYHalloweenItem():
-                            run DIY_PumpkinFtr()
-                        else:
-                            if MainNpc.IsDIYOrnamentItem():
-                                run DIY_Ornament()
-                        # What?! You already know how to make [a|an]<125:0:0000>?!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:008', false)
-                        switch EventFlowSystemActor.GeneralTalkChoice2():
-                            case 0, 1:
-                                # That's real cool. You're always on top of things, and I'm usually stuck under them!
-                                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:009', false)
-                                # I wanna tell everybody about the <125:0:0000>, so I scribbled down the recipe! If ya know anyone that wants to know how to make it, can you hand them…
-                                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:019', false)
-                                run Sub_Event51()
-                    else:
-                        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 0
-                        # Check it out! Plans for [a|an] <125:0:0000>! I can teach ya if ya want!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:003', false)
-                        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                            # Leave it to me! I got it all scribbled down right here…so just read this!
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:017', false)
-                            run Sub_Event51()
-                        else:
-                            run Sub_Event65()
-                else:
-                    run Sub_Event65()
- 
+	if MainNpc.IsInTheActOfDIY():
+		run NNPC_FreeH_Progress::Conceal_NpcHouseBuilt()
+		MainNpc.SetItemName(16, 0, 0)
+		if not MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial']:
+			if MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull']:
+				run DIY_GetItem()
+				run DIY_GetItem_Ornament()
+				# Oh! You're back for my top secret recipe, huh? Heeere you go! A DIY recipe for [a|an]<125:0:0000>. Don't lose it!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:021', false)
+				run Sub_Event51()
+			else:
+				# RANDOM: Hey! Sorry about the mess, but I ain't … // What are you doing? // You look busy. // Check me out! I'm doin' STUFF! // What are you doing? // You look busy. // <50:3><110:3>! Um. Watch your step, OK? // What are you doing? // You look busy.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:001', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# I'm making me [a|an] <125:0:0000>! One of the bugs in the floor whispered the DIY instructions in my ear while I was sleeping last night. So I gotta …
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:002', false)
+					if MainNpc.IsNpcDIYRecipeCollected():
+						if MainNpc.IsDIYHalloweenItem():
+	run DIY_PumpkinFtr()
+						else:
+							if MainNpc.IsDIYOrnamentItem():
+	   run DIY_Ornament()
+						# What?! You already know how to make [a|an]<125:0:0000>?!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:008', false)
+						switch EventFlowSystemActor.GeneralTalkChoice2():
+							case 0, 1:
+								# That's real cool. You're always on top of things, and I'm usually stuck under them!
+								MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:009', false)
+								# I wanna tell everybody about the <125:0:0000>, so I scribbled down the recipe! If ya know anyone that wants to know how to make it, can you hand them…
+								MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:019', false)
+		run Sub_Event51()
+					else:
+MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 0
+						# Check it out! Plans for [a|an] <125:0:0000>! I can teach ya if ya want!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:003', false)
+						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+							# Leave it to me! I got it all scribbled down right here…so just read this!
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:017', false)
+	  run Sub_Event51()
+						else:
+	  run Sub_Event65()
+				else:
+					run Sub_Event65()
+
 local flow Sub_Event22():
-    # You're back! Here ya go, just like I promised, <110:6>.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:043', false)
-    run Event85()
- 
+	# You're back! Here ya go, just like I promised, <110:6>.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:043', false)
+	run Event85()
+
 local flow Sub_Event42():
-    # You're back! Here ya go, just like I promised, <110:6>.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:032', false)
-    run Event23()
- 
+	# You're back! Here ya go, just like I promised, <110:6>.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:032', false)
+	run Event23()
+
 local flow Sub_Event51():
-    MainNpc.NpcSetRewardRecipe(65534, true)
-    MainNpc.SetDeliveryItem(1, true)
-    if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        if MainNpc.IsDIYHalloweenItem():
-            if (EventFlowSystemActor.RandomChoice2(2) != 0) and (not MainNpc.IsDIYItemFenceHalloween()) and (System.EventFlags['cPlayer:EnableDiyRemake']):
-                # If you wanna customize that, the normal kits won't work. You gotta use a colored pumpkin instead. If you don't have any different- colored pumpkins, …
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:031', false)
-                run DIY_AfterItemGet()
-            else:
-                # Um, you're gonna need pumpkins for that. But they're real easy to grow! Give it a try, <110:6>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:030', false)
-                run DIY_AfterItemGet()
-        elif MainNpc.IsNpcDIYRecipeCollected():
-            # It'd be great if a buncha folks made [a|an]<125:0:0000>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:020', false)
-            run DIY_AfterItemGet()
-        else:
-            # If I can make it, then I bet you could do it in no time, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:018', false)
-            run DIY_AfterItemGet()
-    else:
-        run DIY_Item_Full()
- 
+	MainNpc.NpcSetRewardRecipe(65534, true)
+	MainNpc.SetDeliveryItem(1, true)
+	if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		if MainNpc.IsDIYHalloweenItem():
+			if (EventFlowSystemActor.RandomChoice2(2) != 0) and (not MainNpc.IsDIYItemFenceHalloween()) and (System.EventFlags['cPlayer:EnableDiyRemake']):
+				# If you wanna customize that, the normal kits won't work. You gotta use a colored pumpkin instead. If you don't have any different- colored pumpkins, …
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:031', false)
+				run DIY_AfterItemGet()
+			else:
+				# Um, you're gonna need pumpkins for that. But they're real easy to grow! Give it a try, <110:6>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:030', false)
+				run DIY_AfterItemGet()
+		elif MainNpc.IsNpcDIYRecipeCollected():
+			# It'd be great if a buncha folks made [a|an]<125:0:0000>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:020', false)
+			run DIY_AfterItemGet()
+		else:
+			# If I can make it, then I bet you could do it in no time, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:018', false)
+			run DIY_AfterItemGet()
+	else:
+		run DIY_Item_Full()
+
 local flow Sub_Event65():
-    # Yeah, I got a lot goin' on. I dunno how much of this is even legal. Safetywise, I mean.  Let's play later!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:007', false)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	# Yeah, I got a lot goin' on. I dunno how much of this is even legal. Safetywise, I mean.  Let's play later!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_DIY:007', false)
+	EventFlowSystemActor.ExitFlowchart()

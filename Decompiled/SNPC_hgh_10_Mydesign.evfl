@@ -1,216 +1,215 @@
 flow Hgh_MyDesign_JustLooking():
-    # Of course! Take your time.
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:005', false)
- 
+	# Of course! Take your time.
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:005', false)
+
 flow Hgh_Mydesign_Get():
-    # You'll need to delete one of the custom designs you have now to make space. Is that OK?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:006', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # You got it! Please choose a spot to put this design.
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:009', false)
-        if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
-            EventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
-        else:
-            EventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
-        if EventFlowSystemActor.UIResultMenuDecide():
-            EventFlowSystemActor.SoundTriggerEmit('Copy_Design', -1)
-            # Aaaand that's done! I'm glad you found a design you liked.
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:010', false)
-            MainNpc.HghFreeAction('cHghActionType_UpdateHoldMyDesignReplace')
-            if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
-                run hgh_PRO()
-            else:
-                run Hgh_Mydesign_RefreshChk()
-        else:
-            run hgh_Cancel()
-    else:
-        run hgh_Cancel()
- 
+	# You'll need to delete one of the custom designs you have now to make space. Is that OK?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:006', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# You got it! Please choose a spot to put this design.
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:009', false)
+		if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
+			EventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
+		else:
+			EventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
+		if EventFlowSystemActor.UIResultMenuDecide():
+			EventFlowSystemActor.SoundTriggerEmit('Copy_Design', -1)
+			# Aaaand that's done! I'm glad you found a design you liked.
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:010', false)
+			MainNpc.HghFreeAction('cHghActionType_UpdateHoldMyDesignReplace')
+			if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
+				run hgh_PRO()
+			else:
+				run Hgh_Mydesign_RefreshChk()
+		else:
+			run hgh_Cancel()
+	else:
+		run hgh_Cancel()
+
 flow Hgh_Mydesign_Not_Report_Select():
-    switch MainNpc.HghMydesignOwner():
-        case 0:
-            # <50:3><115:3:cd00>? You made this one, didn't you?<10:4> …So, what did you want to do?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:002', false)
-        case 1:
-            # That's <115:3:cd00>, designed by <115:0:cd00>. …So, what did you want to do?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:003', false)
-        case 2:
-            # That's <115:3:cd00>. <50:3><115:0:cd00> from <115:5:cd00> designed it. …So, what did you want to do?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:004', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run Hgh_Mydesign_Get()
-            return
-        case 1:
+	switch MainNpc.HghMydesignOwner():
+		case 0:
+			# <50:3><115:3:cd00>? You made this one, didn't you?<10:4> …So, what did you want to do?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:002', false)
+		case 1:
+			# That's <115:3:cd00>, designed by <115:0:cd00>. …So, what did you want to do?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:003', false)
+		case 2:
+			# That's <115:3:cd00>. <50:3><115:0:cd00> from <115:5:cd00> designed it. …So, what did you want to do?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:004', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run Hgh_Mydesign_Get()
+			return
+		case 1:
 entrypoint Event62:
-            if MainNpc.HghFreeQuery2('cHghQueryType_HasDisplayMyDesign'):
-                # Sure thing! Could you show me the design you want to display?
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:021', false)
-                EventFlowSystemActor.UIMyDesignSelectHandling(0, 0, 4, 1, 1)
-                if EventFlowSystemActor.UIResultMenuDecide():
-                    EventFlowSystemActor.SetTagFromUIResult('cMyDesignTitle', 1)
-                    # So you want to display <115:3:cd01>? You got it! By the way, what should we do with the design that was on display in this spot before?
-                    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:022', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        if MainNpc.HghFreeQuery2('cHghQueryType_UISelectMyDesignIsPro'):
-                            if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
-                                run hgh_Change()
-                                run hgh_PRO()
-                            else:
-                                run hgh_Overwrite()
-                                run Hgh_Mydesign_RefreshChk()
-                        elif MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
-                            run hgh_Overwrite()
-                            run hgh_PRO()
-                        else:
-                            run hgh_Change()
-                            run Hgh_Mydesign_RefreshChk()
-                        return
-                    else:
-                        # You don't need it?<10:4> No problem! We'll get rid of it.
-                        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:024', false)
-                        MainNpc.HghFreeAction('cHghActionType_UpdateShopMyDesign')
-                        # I think this new design will be SUPER popular!
-                        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:026', false)
-                else:
-                    run hgh_Cancel()
-                    return
-            else:
-                # Huh? You want to display a custom design? But…I'm not sure how to put this… You don't have any designs of your own right now, PLAYER. You're absolute…
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:020', false)
-                return
-        case 2:
-            run Hgh_MyDesign_JustLooking()
-            return
- 
+			if MainNpc.HghFreeQuery2('cHghQueryType_HasDisplayMyDesign'):
+				# Sure thing! Could you show me the design you want to display?
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:021', false)
+				EventFlowSystemActor.UIMyDesignSelectHandling(0, 0, 4, 1, 1)
+				if EventFlowSystemActor.UIResultMenuDecide():
+					EventFlowSystemActor.SetTagFromUIResult('cMyDesignTitle', 1)
+					# So you want to display <115:3:cd01>? You got it! By the way, what should we do with the design that was on display in this spot before?
+					MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:022', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						if MainNpc.HghFreeQuery2('cHghQueryType_UISelectMyDesignIsPro'):
+							if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
+		run hgh_Change()
+		  run hgh_PRO()
+							else:
+	   run hgh_Overwrite()
+ run Hgh_Mydesign_RefreshChk()
+						elif MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
+	 run hgh_Overwrite()
+		run hgh_PRO()
+						else:
+	  run hgh_Change()
+run Hgh_Mydesign_RefreshChk()
+						return
+					else:
+						# You don't need it?<10:4> No problem! We'll get rid of it.
+						MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:024', false)
+MainNpc.HghFreeAction('cHghActionType_UpdateShopMyDesign')
+						# I think this new design will be SUPER popular!
+						MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:026', false)
+				else:
+					run hgh_Cancel()
+					return
+			else:
+				# Huh? You want to display a custom design? But…I'm not sure how to put this… You don't have any designs of your own right now, PLAYER. You're absolute…
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:020', false)
+				return
+		case 2:
+			run Hgh_MyDesign_JustLooking()
+			return
+
 flow Hgh_Mydesign_RefreshChk():
-    if EventFlowSystemActor.OverwriteEquipedMyDesign():
-        # Oh! It looks like you saved over the design you're using now. Don't worry. The design you have now will stay right where it is until you want to chan…
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:051', false)
- 
+	if EventFlowSystemActor.OverwriteEquipedMyDesign():
+		# Oh! It looks like you saved over the design you're using now. Don't worry. The design you have now will stay right where it is until you want to chan…
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:051', false)
+
 flow Hgh_Mydesign_Report_Select():
-    switch MainNpc.HghMydesignOwner():
-        case 1:
-            # That's <115:3:cd00>, designed by <115:0:cd00>. …So, what did you want to do?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:003_01', false)
-            run Sub_grp_Event1()
-        case 2:
-            # That's <115:3:cd00>. <50:3><115:0:cd00> from <115:5:cd00> designed it. …So, what did you want to do?
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:004_01', false)
-            run Sub_grp_Event1()
-        default:
-            return
- 
+	switch MainNpc.HghMydesignOwner():
+		case 1:
+			# That's <115:3:cd00>, designed by <115:0:cd00>. …So, what did you want to do?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:003_01', false)
+			run Sub_grp_Event1()
+		case 2:
+			# That's <115:3:cd00>. <50:3><115:0:cd00> from <115:5:cd00> designed it. …So, what did you want to do?
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:004_01', false)
+			run Sub_grp_Event1()
+		default:
+			return
+
 flow Hgh_Mydesign_Show():
-    run Event62()
- 
+	run Event62()
+
 flow Hgh_Talk():
-    # Which row did you want a closer look at—the top one or the bottom one?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:001', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4():
-        case 0:
-            MainNpc.NpcAddBlackBoard('CheckMyDesign', 4)
-            run Sub_Event31()
-        case 1:
-            run Sub_Event31()
-        case 2:
-            # Those designs on display over there, those are all original custom designs! If there's a design you like, you can copy it into your NookPhone, where …
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:000', false)
-        case 3:
-            # Of course! Take your time.
-            MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:005', false)
- 
+	# Which row did you want a closer look at—the top one or the bottom one?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:001', false)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			MainNpc.NpcAddBlackBoard('CheckMyDesign', 4)
+			run Sub_Event31()
+		case 1:
+			run Sub_Event31()
+		case 2:
+			# Those designs on display over there, those are all original custom designs! If there's a design you like, you can copy it into your NookPhone, where …
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:000', false)
+		case 3:
+			# Of course! Take your time.
+			MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:005', false)
+
 flow Root():
-    EventFlowSystemActor.UIShopMoneyDisappear()
-    run Hgh_Talk()
-    EventFlowSystemActor.UIMoneyAppear()
- 
+	EventFlowSystemActor.UIShopMoneyDisappear()
+	run Hgh_Talk()
+	EventFlowSystemActor.UIMoneyAppear()
+
 local flow Sub_Event31():
-    MainNpc.ShopCheckItemSet('CheckMyDesign', 'cTailor')
-    MainNpc.CameraForWallHangingMyDesign()
-    EventFlowSystemActor.SetTagFromSystem('cTailorMyDesignDesignName', 'cDegit', 0, 0, '')
-    switch MainNpc.HghMydesignOwner():
-        case 0:
-            run Hgh_Mydesign_Not_Report_Select()
-        case 1:
-            run Sub_Event50()
-        case 2:
-            EventFlowSystemActor.SetTagFromSystem('cTailorMyDesignLandName', 'cDegit', 0, 0, '')
-            run Sub_Event50()
- 
+	MainNpc.ShopCheckItemSet('CheckMyDesign', 'cTailor')
+	MainNpc.CameraForWallHangingMyDesign()
+	EventFlowSystemActor.SetTagFromSystem('cTailorMyDesignDesignName', 'cDegit', 0, 0, '')
+	switch MainNpc.HghMydesignOwner():
+		case 0:
+			run Hgh_Mydesign_Not_Report_Select()
+		case 1:
+			run Sub_Event50()
+		case 2:
+			EventFlowSystemActor.SetTagFromSystem('cTailorMyDesignLandName', 'cDegit', 0, 0, '')
+			run Sub_Event50()
+
 local flow Sub_Event50():
-    EventFlowSystemActor.SetTagFromSystem('cTailorMyDesignPlayerName', 'cDegit', 0, 0, '')
-    if not EventFlowSystemActor.NetHasPOPID(false):
-        run Hgh_Mydesign_Not_Report_Select()
-    elif MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsTailorDefault'):
-        run Hgh_Mydesign_Not_Report_Select()
-    else:
-        run Hgh_Mydesign_Report_Select()
- 
+	EventFlowSystemActor.SetTagFromSystem('cTailorMyDesignPlayerName', 'cDegit', 0, 0, '')
+	if not EventFlowSystemActor.NetHasPOPID(false):
+		run Hgh_Mydesign_Not_Report_Select()
+	elif MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsTailorDefault'):
+		run Hgh_Mydesign_Not_Report_Select()
+	else:
+		run Hgh_Mydesign_Report_Select()
+
 local flow Sub_grp_Event1():
-    switch EventFlowSystemActor.GeneralTalkChoice4():
-        case 0:
-            run Hgh_Mydesign_Get()
-        case 1:
-            run Hgh_Mydesign_Show()
-        case 2:
-            EventFlowSystemActor.NetCaptureScreenshot()
-            EventFlowSystemActor.UIIllegalReportHandling(1)
-            if EventFlowSystemActor.UIIllegalReportResult():
-                MainNpc.HghRevertToTailorDefault()
-                # Okeydoke, I'll go ahead and remove this custom design.
-                MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:040', false)
-            else:
-                run hgh_Cancel()
-        case 3:
-            run Hgh_MyDesign_JustLooking()
- 
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			run Hgh_Mydesign_Get()
+		case 1:
+			run Hgh_Mydesign_Show()
+		case 2:
+			EventFlowSystemActor.NetCaptureScreenshot()
+			EventFlowSystemActor.UIIllegalReportHandling(1)
+			if EventFlowSystemActor.UIIllegalReportResult():
+				MainNpc.HghRevertToTailorDefault()
+				# Okeydoke, I'll go ahead and remove this custom design.
+				MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:040', false)
+			else:
+				run hgh_Cancel()
+		case 3:
+			run Hgh_MyDesign_JustLooking()
+
 flow hgh_Cancel():
-    # Oh, OK! Never mind, then.
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:008', false)
-    EventFlowSystemActor.UIMoneyAppear()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	# Oh, OK! Never mind, then.
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:008', false)
+	EventFlowSystemActor.UIMoneyAppear()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow hgh_Change():
-    # Sounds good! I'll swap it with your design.
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:025', false)
-    MainNpc.HghFreeAction('cHghActionType_ExchangeMyDesign')
-    # I think this new design will be SUPER popular!
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:026', false)
- 
+	# Sounds good! I'll swap it with your design.
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:025', false)
+	MainNpc.HghFreeAction('cHghActionType_ExchangeMyDesign')
+	# I think this new design will be SUPER popular!
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:026', false)
+
 flow hgh_Overwrite():
-    # Where would you like to save it?
-    MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:027', false)
-    if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
-        EventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
-    else:
-        EventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
-    if EventFlowSystemActor.UIResultMenuDecide():
-        # Sounds good! I'll swap it with your design.
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:025', false)
-        MainNpc.HghFreeAction('cHghActionType_UpdateHoldMyDesignReplace')
-        MainNpc.HghFreeAction('cHghActionType_UpdateShopMyDesign')
-        # I think this new design will be SUPER popular!
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:026', false)
-    else:
-        # Oh, did you want to quit and do this another time?
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:028', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run hgh_Cancel()
-        else:
-            run hgh_Overwrite()
- 
+	# Where would you like to save it?
+	MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:027', false)
+	if MainNpc.HghFreeQuery2('cHghQueryType_CheckMyDesignIsPro'):
+		EventFlowSystemActor.UIMyDesignSelectHandling(1, 2, 0, 0, 0)
+	else:
+		EventFlowSystemActor.UIMyDesignSelectHandling(1, 1, 0, 0, 0)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		# Sounds good! I'll swap it with your design.
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:025', false)
+		MainNpc.HghFreeAction('cHghActionType_UpdateHoldMyDesignReplace')
+		MainNpc.HghFreeAction('cHghActionType_UpdateShopMyDesign')
+		# I think this new design will be SUPER popular!
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:026', false)
+	else:
+		# Oh, did you want to quit and do this another time?
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:028', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run hgh_Cancel()
+		else:
+			run hgh_Overwrite()
+
 flow hgh_PRO():
-    if (not System.EventFlags['cPlayer:MainmenuUnlockMydesingPro']) and (not System.EventFlags['cPlayer:KinuyoPROdesginFlag']):
-        System.EventFlags['cPlayer:KinuyoPROdesginFlag'] = true
-        MainNpc.TalkCamera(true, 'cTalk', 0)
-        Player.TurnBody(0, 0.0)
-        Player.PlayerWaitTurn()
-        Player.TurnNeck(0, false)
-        # Hey, didja know that the design you're taking with you is what we call a Pro custom design? On a normal custom design, it's one picture on the front …
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:030', false)
-        # It looks like you haven't upgraded your Custom Designs app yet. That's not a problem for using the Pro design you just took—wear it all you like! But…
-        MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:031', false)
-    else:
-        run Hgh_Mydesign_RefreshChk()
- 
+	if (not System.EventFlags['cPlayer:MainmenuUnlockMydesingPro']) and (not System.EventFlags['cPlayer:KinuyoPROdesginFlag']):
+		System.EventFlags['cPlayer:KinuyoPROdesginFlag'] = true
+		MainNpc.TalkCamera(true, 'cTalk', 0)
+		Player.TurnBody(0, 0.0)
+		Player.PlayerWaitTurn()
+		Player.TurnNeck(0, false)
+		# Hey, didja know that the design you're taking with you is what we call a Pro custom design? On a normal custom design, it's one picture on the front …
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:030', false)
+		# It looks like you haven't upgraded your Custom Designs app yet. That's not a problem for using the Pro design you just took—wear it all you like! But…
+		MainNpc.OpenMessageWindow('TalkSNpc/hgh/SP_hgh_10_Mydesign:031', false)
+	else:
+		run Hgh_Mydesign_RefreshChk()

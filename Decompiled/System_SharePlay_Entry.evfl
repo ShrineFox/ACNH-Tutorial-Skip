@@ -1,130 +1,129 @@
 flow ChkNpcHouseCoordinate():
-    if (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
-        # You can't call anyone right now.
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:017', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
+		# You can't call anyone right now.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:017', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Choice(Offset: int = 0, VListIndex: int = 0):
-    EventFlowSystemActor.UIMsgCardAdrCreate('cSharePlay')
-    if EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(1):
-        # Please select the island residents you want to play with. You can't play with residents whose user data has been deleted from the system.
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:019', false)
-    else:
-        # Please select the island residents you want to play with.
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:003', false)
-    EventFlowSystemActor.UIMsgCardAdrHandling('cSharePlay')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.SystemRequestChangeStage('cGrowUpPlayerSwitch', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-    else:
-        EventFlowSystemActor.CancelSharePlayEntry()
- 
+	EventFlowSystemActor.UIMsgCardAdrCreate('cSharePlay')
+	if EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(1):
+		# Please select the island residents you want to play with. You can't play with residents whose user data has been deleted from the system.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:019', false)
+	else:
+		# Please select the island residents you want to play with.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:003', false)
+	EventFlowSystemActor.UIMsgCardAdrHandling('cSharePlay')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.SystemRequestChangeStage('cGrowUpPlayerSwitch', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+	else:
+		EventFlowSystemActor.CancelSharePlayEntry()
+
 flow ExitSharePlay():
-    if (not EventFlowSystemActor.CountSharePlayerNum(3)) and (not EventFlowSystemActor.CountWaitingPlayerNum(1)):
-        # You're playing with another resident right now. What would you like to do?
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:006_01', true)
-        switch EventFlowSystemActor.GeneralTalkChoice6():
-            case 0:
-                run SharePlay_ChangeLeader()
-            case 1:
-                run System_SharePlay_Exit::Rootrun System_SharePlay_Exit::Root()
-            case 2:
-                run SharePlay_SaveAndGameEnd()
-            case 3:
-                EventFlowSystemActor.UIShopMoneyDisappear()
-                EventFlowSystemActor.UIMenuProfileOthersHandling()
-            case 4:
-                EventFlowSystemActor.UIShopMoneyDisappear()
-                run SharePlay_HowToPlay()
-            case 5:
-                EventFlowSystemActor.CancelSharePlayEntry()
-    else:
-        # You're playing with other folks at the moment. What would you like to do?
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:006', true)
-        switch EventFlowSystemActor.GeneralTalkChoice7():
-            case 0:
-                run SharePlay_ChangeLeader()
-            case 1:
-                run System_SharePlay_Exit::Rootrun System_SharePlay_Exit::Root()
-            case 2:
-                EventFlowSystemActor.UIShopMoneyDisappear()
-                EventFlowSystemActor.PrepareSharePlayEntry()
-                run Choice()
-            case 3:
-                run SharePlay_SaveAndGameEnd()
-            case 4:
-                EventFlowSystemActor.UIShopMoneyDisappear()
-                EventFlowSystemActor.UIMenuProfileOthersHandling()
-            case 5:
-                EventFlowSystemActor.UIShopMoneyDisappear()
-                run SharePlay_HowToPlay()
-            case 6:
-                EventFlowSystemActor.CancelSharePlayEntry()
- 
+	if (not EventFlowSystemActor.CountSharePlayerNum(3)) and (not EventFlowSystemActor.CountWaitingPlayerNum(1)):
+		# You're playing with another resident right now. What would you like to do?
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:006_01', true)
+		switch EventFlowSystemActor.GeneralTalkChoice6():
+			case 0:
+				run SharePlay_ChangeLeader()
+			case 1:
+				run System_SharePlay_Exit::Root()
+			case 2:
+				run SharePlay_SaveAndGameEnd()
+			case 3:
+				EventFlowSystemActor.UIShopMoneyDisappear()
+				EventFlowSystemActor.UIMenuProfileOthersHandling()
+			case 4:
+				EventFlowSystemActor.UIShopMoneyDisappear()
+				run SharePlay_HowToPlay()
+			case 5:
+				EventFlowSystemActor.CancelSharePlayEntry()
+	else:
+		# You're playing with other folks at the moment. What would you like to do?
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:006', true)
+		switch EventFlowSystemActor.GeneralTalkChoice7():
+			case 0:
+				run SharePlay_ChangeLeader()
+			case 1:
+				run System_SharePlay_Exit::Root()
+			case 2:
+				EventFlowSystemActor.UIShopMoneyDisappear()
+				EventFlowSystemActor.PrepareSharePlayEntry()
+				run Choice()
+			case 3:
+				run SharePlay_SaveAndGameEnd()
+			case 4:
+				EventFlowSystemActor.UIShopMoneyDisappear()
+				EventFlowSystemActor.UIMenuProfileOthersHandling()
+			case 5:
+				EventFlowSystemActor.UIShopMoneyDisappear()
+				run SharePlay_HowToPlay()
+			case 6:
+				EventFlowSystemActor.CancelSharePlayEntry()
+
 flow Root():
-    if not System.EventFlags['cPlayer:Mobile1stBoot_SharePlay']:
-        # Call Resident Use this app to invite up to three other residents (players) living on the island to play together in Party Play! Before you begin, you…
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5041', false)
-        System.EventFlags['cPlayer:Mobile1stBoot_SharePlay'] = true
-    if EventFlowSystemActor.NetIsDreaming():
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:013_01', false)
-        EventFlowSystemActor.CancelSharePlayEntry()
-    elif EventFlowSystemActor.NetIsConnected():
-        # You cannot call other residents when networked play is active.
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:013', false)
-        EventFlowSystemActor.CancelSharePlayEntry()
-    elif (not EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
-        run ChkNpcHouseCoordinate()
-        if EventFlowSystemActor.IsPlayerBirthdayRoom():
-            # You can't call anyone right now.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:017', false)
-        elif EventFlowSystemActor.IsSharePlay(1):
-            run ExitSharePlay()
-        else:
-            run SharePlay_AppOpen_Solo()
-    else:
-        # Huh? "Outside Service Area"? Guess I can only use this on my own island.
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:018', false)
- 
+	if not System.EventFlags['cPlayer:Mobile1stBoot_SharePlay']:
+		# Call Resident Use this app to invite up to three other residents (players) living on the island to play together in Party Play! Before you begin, you…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5041', false)
+		System.EventFlags['cPlayer:Mobile1stBoot_SharePlay'] = true
+	if EventFlowSystemActor.NetIsDreaming():
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:013_01', false)
+		EventFlowSystemActor.CancelSharePlayEntry()
+	elif EventFlowSystemActor.NetIsConnected():
+		# You cannot call other residents when networked play is active.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:013', false)
+		EventFlowSystemActor.CancelSharePlayEntry()
+	elif (not EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
+		run ChkNpcHouseCoordinate()
+		if EventFlowSystemActor.IsPlayerBirthdayRoom():
+			# You can't call anyone right now.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:017', false)
+		elif EventFlowSystemActor.IsSharePlay(1):
+			run ExitSharePlay()
+		else:
+			run SharePlay_AppOpen_Solo()
+	else:
+		# Huh? "Outside Service Area"? Guess I can only use this on my own island.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:018', false)
+
 flow SharePlay_AppOpen_Solo():
-    EventFlowSystemActor.PrepareSharePlayEntry()
-    if EventFlowSystemActor.CountWaitingPlayerNum(1):
-        Player.SmartPhone(2)
-        run Choice()
-    else:
-        if EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(1):
-            # You cannot call anyone at this time. You can't play with residents whose user data has been deleted from the system.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:020', false)
-        else:
-            # It seems there aren't any other island residents to play with right now.
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:002', true)
-        EventFlowSystemActor.CancelSharePlayEntry()
- 
+	EventFlowSystemActor.PrepareSharePlayEntry()
+	if EventFlowSystemActor.CountWaitingPlayerNum(1):
+		Player.SmartPhone(2)
+		run Choice()
+	else:
+		if EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(1):
+			# You cannot call anyone at this time. You can't play with residents whose user data has been deleted from the system.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:020', false)
+		else:
+			# It seems there aren't any other island residents to play with right now.
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:002', true)
+		EventFlowSystemActor.CancelSharePlayEntry()
+
 flow SharePlay_ChangeLeader():
-    if Player.PlayerIsForbidMainChange():
-        # You can't change the Leader right now.
-        EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:016', false)
-    else:
-        Player.PlayerChangeDemoState('cSharePlayMainChangeReciveWait')
- 
+	if Player.PlayerIsForbidMainChange():
+		# You can't change the Leader right now.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:016', false)
+	else:
+		Player.PlayerChangeDemoState('cSharePlayMainChangeReciveWait')
+
 flow SharePlay_HowToPlay():
-    EventFlowSystemActor.WaitFrame(30)
-    if EventFlowSystemActor.IncludeHorizontalController():
-        if System.EventFlags['cPlayer:EnableEmoticonUI']:
-            # Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_02', false)
-        else:
-            # Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_01', false)
-    elif System.EventFlags['cPlayer:EnableEmoticonUI']:
-        # Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_04', false)
-    else:
-        # Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_03', false)
- 
+	EventFlowSystemActor.WaitFrame(30)
+	if EventFlowSystemActor.IncludeHorizontalController():
+		if System.EventFlags['cPlayer:EnableEmoticonUI']:
+			# Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_02', false)
+		else:
+			# Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_01', false)
+	elif System.EventFlags['cPlayer:EnableEmoticonUI']:
+		# Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_04', false)
+	else:
+		# Party Play Island residents can play together in Party Play, where one player is the Leader and the others are Followers. The Leader and Followers ca…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5201_03', false)
+
 flow SharePlay_SaveAndGameEnd():
-    EventFlowSystemActor.QuitSharePlay()
-    EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'AfterSharePlay', false, false, false)
-    EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.QuitSharePlay()
+	EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'AfterSharePlay', false, false, false)
+	EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)

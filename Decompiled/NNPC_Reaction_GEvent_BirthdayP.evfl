@@ -1,24 +1,23 @@
 flow Root():
-    if EventFlowSystemActor.IsSharePlay(0):
-        if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
-            if EventFlowSystemActor.CanScheduleNowPlayerBirthdayParty():
-                if (not EventFlowSystemActor.IsHoldPlayerBirthdayThisYear()) and (not System.EventFlags['cPlayer:BirthdayPToldlPartySharePlay']):
-                    # Oh, hey, <110:3>! There's somebody who wants to talk to ya about something. Something real cool! But they don't wanna bother you while you're with a …
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_BirthdayP:001', false)
-                    System.EventFlags['cPlayer:BirthdayPToldlPartySharePlay'] = true
-                    run NNPC_Talk_Situation::Facility_Chkrun NNPC_Talk_Situation::Facility_Chk()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                else:
-                    run Sub_grp_Event12()
-        else:
-            run Sub_grp_Event12()
- 
+	if EventFlowSystemActor.IsSharePlay(0):
+		if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
+			if EventFlowSystemActor.CanScheduleNowPlayerBirthdayParty():
+				if (not EventFlowSystemActor.IsHoldPlayerBirthdayThisYear()) and (not System.EventFlags['cPlayer:BirthdayPToldlPartySharePlay']):
+					# Oh, hey, <110:3>! There's somebody who wants to talk to ya about something. Something real cool! But they don't wanna bother you while you're with a …
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_BirthdayP:001', false)
+					System.EventFlags['cPlayer:BirthdayPToldlPartySharePlay'] = true
+					run NNPC_Talk_Situation::Facility_Chk()
+					EventFlowSystemActor.ExitFlowchart()
+				else:
+					run Sub_grp_Event12()
+		else:
+			run Sub_grp_Event12()
+
 local flow Sub_grp_Event12():
-    if EventFlowSystemActor.IsExistBirthdayPlayerInSub():
-        MainNpc.SetPlayerName(4)
-        # <50:3><110:3>! You're hanging out with <115:0:cd00>, yeah? There's somebody who wants to talk with <115:0:cd00>, but… It's something real important a…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_BirthdayP:002', false)
-        EventFlowSystemActor.SetBirthdayPToldlPartySharePlayFlag()
-        run NNPC_Talk_Situation::Facility_Chkrun NNPC_Talk_Situation::Facility_Chk()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.IsExistBirthdayPlayerInSub():
+		MainNpc.SetPlayerName(4)
+		# <50:3><110:3>! You're hanging out with <115:0:cd00>, yeah? There's somebody who wants to talk with <115:0:cd00>, but… It's something real important a…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_GEvent_BirthdayP:002', false)
+		EventFlowSystemActor.SetBirthdayPToldlPartySharePlayFlag()
+		run NNPC_Talk_Situation::Facility_Chk()
+		EventFlowSystemActor.ExitFlowchart()

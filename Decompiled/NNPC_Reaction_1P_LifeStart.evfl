@@ -1,87 +1,86 @@
 flow `1P_Lifestart_Conv`():
-    switch MainNpc.CheckNpcLook():
-        case 3:
-            if System.EventFlags['cPlayer:Prologue4AnGetTent']:
-                if EventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
-                    # Letting you pick out my tent plot was totally the right call. Thanks a million, <110:3>. You rock! Really feels like things are startin' off on the r…
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:001_01', false)
-                else:
-                    # Yo, <110:3>! I'm gettin' a real good vibe from the tent plot you picked for me. Thanks for the hand! We've gotta look out for each other here. If you…
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:001_02', false)
-            else:
-                # <50:3><110:3>! Thanks a ton for earlier. I got my tent all up and running thanks to that pep talk. The brochure said we'd be living on an uninhabited…
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:002', false)
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # Oh yeah! I wanted to thank you for the help, <110:5>! So, I've got something for you now, but it looks like your pockets are full. It's all good. I'l…
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:004', true)
-                MainNpc.NpcSetRewardRecipe(6840, false)
-                MainNpc.NpcMailSend('MAIL_XX_LifeStart', 1, 'cNone', 'cFastToday', 'cReward', false)
-            else:
-                MainNpc.NpcSetRewardRecipe(6840, false)
-                MainNpc.SetItemName(1, 0, 0)
-                MainNpc.SetDeliveryItem(1, true)
-                # Oh yeah! I was thinking about how to thank you, and I came up with a recipe for [a|an]<125:0:0000>!
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_01', true)
-                MainNpc.NpcDelivery(1, 'Default')
-                # Alright, so the first thing I thought when I got here was, "Now THAT'S a lot of weeds." That's kinda where I got the idea. It's a DIY project that us…
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_02', false)
-                if System.EventFlags['cPlayer:MainmenuRecipe']:
-                    # Think about it. Weeds are the most abundant natural resource we have. May as well use 'em, <110:5>!
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_04', false)
-                else:
-                    # If you've never done a DIY project before, you should ask Tom Nook to help you out. He's doing free DIY demos over at Resident Services.
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_03', false)
-        case 5:
-            if System.EventFlags['cPlayer:Prologue4HaGetTent']:
-                if EventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
-                    # Yo, <110:3>! I'm really digging this spot you found for me. Thanks! I hope we can keep looking out for each other like this. It's good to have buddie…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:001_01', false)
-                else:
-                    # Yo, <110:3>! That spot you found for me is just incredible. Thanks! I hope we can keep looking out for each other like this. It's good to have buddie…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:001_02', false)
-            else:
-                # Yo! I'm pumped about that spot you helped me pick out for my tent. Thanks for the push! I hope we can keep looking out for each other like this. It's…
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:002', false)
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # That's right! I got a little thank-you gift for when you spotted me the other day, <110:5>. Oh. Except it looks like your pockets are full. No prob! …
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:004', true)
-                run RewardSetHA()
-                MainNpc.NpcMailSend('MAIL_XX_LifeStart', 1, 'cNone', 'cFastToday', 'cDeliveryItem', false)
-            else:
-                run RewardSetHA()
-                # Oh, right! I've got something here for you, <110:5>. Thanks again for finding a place for my…place!
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:003_01', true)
-                MainNpc.NpcDelivery(1, 'Keep')
-                # That <125:6:cd00> is perfect for ISLAND! You can try it on by pressing  to open up your pockets. Then press  to select the item you want. Choose "W…
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:003_02', false)
-                MainNpc.NpcDelivery(2, 'Default')
-        default:
-            return
- 
+	switch MainNpc.CheckNpcLook():
+		case 3:
+			if System.EventFlags['cPlayer:Prologue4AnGetTent']:
+				if EventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+					# Letting you pick out my tent plot was totally the right call. Thanks a million, <110:3>. You rock! Really feels like things are startin' off on the r…
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:001_01', false)
+				else:
+					# Yo, <110:3>! I'm gettin' a real good vibe from the tent plot you picked for me. Thanks for the hand! We've gotta look out for each other here. If you…
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:001_02', false)
+			else:
+				# <50:3><110:3>! Thanks a ton for earlier. I got my tent all up and running thanks to that pep talk. The brochure said we'd be living on an uninhabited…
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:002', false)
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Oh yeah! I wanted to thank you for the help, <110:5>! So, I've got something for you now, but it looks like your pockets are full. It's all good. I'l…
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:004', true)
+				MainNpc.NpcSetRewardRecipe(6840, false)
+				MainNpc.NpcMailSend('MAIL_XX_LifeStart', 1, 'cNone', 'cFastToday', 'cReward', false)
+			else:
+				MainNpc.NpcSetRewardRecipe(6840, false)
+				MainNpc.SetItemName(1, 0, 0)
+				MainNpc.SetDeliveryItem(1, true)
+				# Oh yeah! I was thinking about how to thank you, and I came up with a recipe for [a|an]<125:0:0000>!
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_01', true)
+				MainNpc.NpcDelivery(1, 'Default')
+				# Alright, so the first thing I thought when I got here was, "Now THAT'S a lot of weeds." That's kinda where I got the idea. It's a DIY project that us…
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_02', false)
+				if System.EventFlags['cPlayer:MainmenuRecipe']:
+					# Think about it. Weeds are the most abundant natural resource we have. May as well use 'em, <110:5>!
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_04', false)
+				else:
+					# If you've never done a DIY project before, you should ask Tom Nook to help you out. He's doing free DIY demos over at Resident Services.
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/React/AN_React_1P_LifeStart:003_03', false)
+		case 5:
+			if System.EventFlags['cPlayer:Prologue4HaGetTent']:
+				if EventFlowSystemActor.SystemCheckNowStage('cTalkingNpcHouse'):
+					# Yo, <110:3>! I'm really digging this spot you found for me. Thanks! I hope we can keep looking out for each other like this. It's good to have buddie…
+					MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:001_01', false)
+				else:
+					# Yo, <110:3>! That spot you found for me is just incredible. Thanks! I hope we can keep looking out for each other like this. It's good to have buddie…
+					MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:001_02', false)
+			else:
+				# Yo! I'm pumped about that spot you helped me pick out for my tent. Thanks for the push! I hope we can keep looking out for each other like this. It's…
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:002', false)
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# That's right! I got a little thank-you gift for when you spotted me the other day, <110:5>. Oh. Except it looks like your pockets are full. No prob! …
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:004', true)
+				run RewardSetHA()
+				MainNpc.NpcMailSend('MAIL_XX_LifeStart', 1, 'cNone', 'cFastToday', 'cDeliveryItem', false)
+			else:
+				run RewardSetHA()
+				# Oh, right! I've got something here for you, <110:5>. Thanks again for finding a place for my…place!
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:003_01', true)
+				MainNpc.NpcDelivery(1, 'Keep')
+				# That <125:6:cd00> is perfect for ISLAND! You can try it on by pressing  to open up your pockets. Then press  to select the item you want. Choose "W…
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/React/HA_React_1P_LifeStart:003_02', false)
+				MainNpc.NpcDelivery(2, 'Default')
+		default:
+			return
+
 flow RewardSetHA():
-    switch EventFlowSystemActor.RandomChoice6(6):
-        case 0:
-            MainNpc.SetDeliveryItemAtRandom(5136, true, 'cVillageRemakePattern', 0)
-        case 1:
-            MainNpc.SetDeliveryItemAtRandom(5128, true, 'cVillageRemakePattern', 0)
-            System.EventFlags['cPlayer:1stPresentHatType'] = 1
-        case 2:
-            MainNpc.SetDeliveryItemAtRandom(5148, true, 'cVillageRemakePattern', 0)
-            System.EventFlags['cPlayer:1stPresentHatType'] = 2
-        case 3:
-            MainNpc.SetDeliveryItemAtRandom(11521, true, 'cVillageRemakePattern', 0)
-            System.EventFlags['cPlayer:1stPresentHatType'] = 3
-        case 4:
-            MainNpc.SetDeliveryItemAtRandom(5258, true, 'cVillageRemakePattern', 0)
-            System.EventFlags['cPlayer:1stPresentHatType'] = 4
-        case 5:
-            MainNpc.SetDeliveryItemAtRandom(5293, true, 'cVillageRemakePattern', 0)
-            System.EventFlags['cPlayer:1stPresentHatType'] = 5
-    MainNpc.SetItemName(14, 6, 0)
- 
+	switch EventFlowSystemActor.RandomChoice6(6):
+		case 0:
+			MainNpc.SetDeliveryItemAtRandom(5136, true, 'cVillageRemakePattern', 0)
+		case 1:
+			MainNpc.SetDeliveryItemAtRandom(5128, true, 'cVillageRemakePattern', 0)
+			System.EventFlags['cPlayer:1stPresentHatType'] = 1
+		case 2:
+			MainNpc.SetDeliveryItemAtRandom(5148, true, 'cVillageRemakePattern', 0)
+			System.EventFlags['cPlayer:1stPresentHatType'] = 2
+		case 3:
+			MainNpc.SetDeliveryItemAtRandom(11521, true, 'cVillageRemakePattern', 0)
+			System.EventFlags['cPlayer:1stPresentHatType'] = 3
+		case 4:
+			MainNpc.SetDeliveryItemAtRandom(5258, true, 'cVillageRemakePattern', 0)
+			System.EventFlags['cPlayer:1stPresentHatType'] = 4
+		case 5:
+			MainNpc.SetDeliveryItemAtRandom(5293, true, 'cVillageRemakePattern', 0)
+			System.EventFlags['cPlayer:1stPresentHatType'] = 5
+	MainNpc.SetItemName(14, 6, 0)
+
 flow Root():
-    if (EventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (MainNpc.NpcBirthType('cFirst')) and (MainNpc.IsNnpcTent()) and (not MainNpc.EventFlags['cNpcSave:TalkLifeStart1P1st']) and (MainNpc.NpcIsSitting() == 4):
-        run `1P_Lifestart_Conv`()
-        MainNpc.EventFlags['cNpcSave:TalkLifeStart1P1st'] = true
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.IsMyVillage()) and (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (MainNpc.NpcBirthType('cFirst')) and (MainNpc.IsNnpcTent()) and (not MainNpc.EventFlags['cNpcSave:TalkLifeStart1P1st']) and (MainNpc.NpcIsSitting() == 4):
+		run `1P_Lifestart_Conv`()
+		MainNpc.EventFlags['cNpcSave:TalkLifeStart1P1st'] = true
+		EventFlowSystemActor.ExitFlowchart()

@@ -1,89 +1,88 @@
 flow Get_RAID():
-    if EventFlowSystemActor.NetHasWherearenAuthorID():
-        SubflowResults[1] = 0
-    else:
-        # Read Before Posting Properties Properties you post can be toured by other players around the world via the Showroom. Property info from the time of  …
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1108', true)
-        EventFlowSystemActor.UINetConnectWaitAppear()
-        EventFlowSystemActor.NetWherearenGetAuthorID()
-        EventFlowSystemActor.UINetConnectWaitDisappear()
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[1] = 1
-        else:
-            EventFlowSystemActor.MessageLockNext(1)
-            # Saving. Do not touch .
-            EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-            System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose'] = true
-            System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID'] = true
-            EventFlowSystemActor.SaveSimpleSave('cAll')
-            EventFlowSystemActor.MessageSuspend()
-            EventFlowSystemActor.MessageUnlockNext()
-            EventFlowSystemActor.SetTagFromSystem('cMyWherearenAuthorIDD', 'cDegit', 0, 0, '')
-            # Your Happy Home Network ID is <140:17:cd00>. Other players can view your profile page through an ID Search when you share your HHN ID with them. You …
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1109', true)
-            SubflowResults[1] = 0
- 
+	if EventFlowSystemActor.NetHasWherearenAuthorID():
+		SubflowResults[1] = 0
+	else:
+		# Read Before Posting Properties Properties you post can be toured by other players around the world via the Showroom. Property info from the time of  …
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1108', true)
+		EventFlowSystemActor.UINetConnectWaitAppear()
+		EventFlowSystemActor.NetWherearenGetAuthorID()
+		EventFlowSystemActor.UINetConnectWaitDisappear()
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[1] = 1
+		else:
+			EventFlowSystemActor.MessageLockNext(1)
+			# Saving. Do not touch .
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+			System.EventFlags['cPlayer:WHEREAREN_Pickup_Disclose'] = true
+			System.EventFlags['cPlayer:WHEREAREN_DisclosePlannerID'] = true
+			EventFlowSystemActor.SaveSimpleSave('cAll')
+			EventFlowSystemActor.MessageSuspend()
+			EventFlowSystemActor.MessageUnlockNext()
+			EventFlowSystemActor.SetTagFromSystem('cMyWherearenAuthorIDD', 'cDegit', 0, 0, '')
+			# Your Happy Home Network ID is <140:17:cd00>. Other players can view your profile page through an ID Search when you share your HHN ID with them. You …
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1109', true)
+			SubflowResults[1] = 0
+
 flow Return_Failure():
-    SubflowResults[0] = 1
- 
+	SubflowResults[0] = 1
+
 flow Return_Success():
-    SubflowResults[0] = 0
- 
+	SubflowResults[0] = 0
+
 flow SignIn_ResortPlannerCore():
-    if System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn']:
-        SubflowResults[1] = 0
-    else:
-        EventFlowSystemActor.CheckFreeCommunication(true)
-        if EventFlowSystemActor.IsApprovedFreeCommunication():
-            if not EventFlowSystemActor.NetHasPOPID(false):
-                System.EventFlags['cPlayerTemp:WHEREAREN_NeedSaveAfterUserRegist'] = true
-            run System_ServerRegistration::UserRegistrun System_ServerRegistration::UserRegist(WithLogin=false, Terminate=false, WithSave=false)
-            if SubflowResults@2[0] == 0:
-                System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn'] = true
-                SubflowResults[1] = 0
-            else:
-                SubflowResults[1] = 1
-        else:
-            # You can't use the Showroom when "Communicating with Others" is restricted in Parental Controls.
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1110', true)
-            SubflowResults[1] = 1
- 
+	if System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn']:
+		SubflowResults[1] = 0
+	else:
+		EventFlowSystemActor.CheckFreeCommunication(true)
+		if EventFlowSystemActor.IsApprovedFreeCommunication():
+			if not EventFlowSystemActor.NetHasPOPID(false):
+				System.EventFlags['cPlayerTemp:WHEREAREN_NeedSaveAfterUserRegist'] = true
+			run System_ServerRegistration::UserRegistrun System_ServerRegistration::UserRegist(WithLogin=false, Terminate=false, WithSave=false)
+			if SubflowResults@2[0] == 0:
+				System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn'] = true
+				SubflowResults[1] = 0
+			else:
+				SubflowResults[1] = 1
+		else:
+			# You can't use the Showroom when "Communicating with Others" is restricted in Parental Controls.
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1110', true)
+			SubflowResults[1] = 1
+
 flow SignIn_ResortPlannerRoot(GetRAID: bool):
-    run SignIn_ResortPlannerCore()
-    if SubflowResults@2[1] != 0:
-        run Return_Failure()
-    elif GetRAID:
-        run Get_RAID()
-        if SubflowResults@2[1] == 0:
-            run Sub_Event101()
-        else:
-            run Return_Failure()
-    else:
-        run Sub_Event101()
- 
+	run SignIn_ResortPlannerCore()
+	if SubflowResults@2[1] != 0:
+		run Return_Failure()
+	elif GetRAID:
+		run Get_RAID()
+		if SubflowResults@2[1] == 0:
+			run Sub_Event101()
+		else:
+			run Return_Failure()
+	else:
+		run Sub_Event101()
+
 local flow Sub_Event101():
-    run Upload_PlannerProfile()
-    if SubflowResults@2[1] == 0:
-        System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn'] = true
-        run Return_Success()
-    else:
-        run Return_Failure()
- 
+	run Upload_PlannerProfile()
+	if SubflowResults@2[1] == 0:
+		System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_IsSignIn'] = true
+		run Return_Success()
+	else:
+		run Return_Failure()
+
 flow Upload_PlannerProfile():
-    if EventFlowSystemActor.NetHasWherearenAuthorID():
-        EventFlowSystemActor.NetUploadPlayerIcon(false)
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[1] = 1
-        else:
-            EventFlowSystemActor.NetWherearenUploadProfile(false, false)
-            if EventFlowSystemActor.CheckErrorType(2):
-                SubflowResults[1] = 1
-            else:
-                EventFlowSystemActor.UploadProfile(false, false)
-                if EventFlowSystemActor.CheckErrorType(2):
-                    SubflowResults[1] = 1
-                else:
-                    SubflowResults[1] = 0
-    else:
-        SubflowResults[1] = 0
- 
+	if EventFlowSystemActor.NetHasWherearenAuthorID():
+		EventFlowSystemActor.NetUploadPlayerIcon(false)
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[1] = 1
+		else:
+			EventFlowSystemActor.NetWherearenUploadProfile(false, false)
+			if EventFlowSystemActor.CheckErrorType(2):
+				SubflowResults[1] = 1
+			else:
+				EventFlowSystemActor.UploadProfile(false, false)
+				if EventFlowSystemActor.CheckErrorType(2):
+					SubflowResults[1] = 1
+				else:
+					SubflowResults[1] = 0
+	else:
+		SubflowResults[1] = 0

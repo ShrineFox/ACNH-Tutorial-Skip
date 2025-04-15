@@ -1,29 +1,28 @@
 flow Root():
-    MainNpc.ShopCheckItemSet('CheckItemIndex', 'cWherearenTailor')
-    EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-    EventFlowSystemActor.SetTagFromUIResult('cWherearenItemPrice', 0)
-    MainNpc.TurnNeck(13, false)
-    Player.TurnNeck(13, false)
-    if EventFlowSystemActor.IsInspectingWherearen():
-        # Looks like I can't shop while I'm touring the place...
-        Player.OpenMessageWindow('TalkSys/SYS_Player:1307', true)
-    else:
-        EventFlowSystemActor.UIPokiAppear()
-        # <50:3><50:1><125:0:0000>? The price is gonna come to <90:44:0000>, <110:6>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:011', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            if not MainNpc.ShopHasBellCount(1.0):
-                # Great, thanks… Wait, huh? I'm sorry, but it looks like you don't have enough money, <110:6>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:014', true)
-            elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # Great, thanks… Uh, it looks like you can't hold anything else. I hope you'll free up some space and come back another time.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:015', true)
-            else:
-                MainNpc.ShopBuyDone(false, false, false, false)
-                # Thanks for the money! Lemme know if ya need anything else!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:012', true)
-        else:
-            # OK! We gotta buncha stuff, so take your time and look around.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:013', true)
-        EventFlowSystemActor.UIPokiDisappear()
- 
+	MainNpc.ShopCheckItemSet('CheckItemIndex', 'cWherearenTailor')
+	EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+	EventFlowSystemActor.SetTagFromUIResult('cWherearenItemPrice', 0)
+	MainNpc.TurnNeck(13, false)
+	Player.TurnNeck(13, false)
+	if EventFlowSystemActor.IsInspectingWherearen():
+		# Looks like I can't shop while I'm touring the place...
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1307', true)
+	else:
+		EventFlowSystemActor.UIPokiAppear()
+		# <50:3><50:1><125:0:0000>? The price is gonna come to <90:44:0000>, <110:6>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:011', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			if not MainNpc.ShopHasBellCount(1.0):
+				# Great, thanks… Wait, huh? I'm sorry, but it looks like you don't have enough money, <110:6>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:014', true)
+			elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Great, thanks… Uh, it looks like you can't hold anything else. I hope you'll free up some space and come back another time.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:015', true)
+			else:
+				MainNpc.ShopBuyDone(false, false, false, false)
+				# Thanks for the money! Lemme know if ya need anything else!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:012', true)
+		else:
+			# OK! We gotta buncha stuff, so take your time and look around.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Tailor:013', true)
+		EventFlowSystemActor.UIPokiDisappear()

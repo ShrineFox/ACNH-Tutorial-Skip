@@ -1,103 +1,102 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        MainNpc.NpcCopyPhrase()
-        # You're real neat, <110:31:cd01>! What's your secret, <110:5>?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:201', false)
-        Player.TurnNeck(1, false)
-        # I've no secrets, <110:31:cd00>! None at all! What you just said, though… "<50:3><110:5>," was it? That sounds like code. Is it you who's keeping secr…
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:202', false)
-        Player.TurnNeck(0, false)
-        # Nope! "<110:5>" is my catchphrase! Ya oughta try saying it!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:203', false)
-        Player.TurnNeck(1, false)
-        # Well, I'm not one for stealing others' styles, but if you insist… Fret not! It is I, <110:31:cd01>. And I will never leave your side… Ahem…<110:6>. W…
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:204', false)
-        Player.TurnNeck(0, false)
-        # Awesome, <110:31:cd01>! It was so cool hearing someone as cool as you say my catchphrase!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:205', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        fork:
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Heya, <110:4>! We were just talking about food! <50:3><110:31:cd01> knows all about foods I've never even heard of!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:001', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                MainNpc.TurnNeck(1, false)
-        # Don't go saying that all over the place. <20:3:cd07><20:3:cd05>I haven't had a chance to tell everyone yet…
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:002', false)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # But last night, I dined upon a dish of freshly ground peanuts…spread thickly upon a <20:2:cd08>slice of bread. The culinary delight was garnished wit…
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:003', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        SubNpc.TurnNeck(0, false)
-                # Oh, wow! That sounds amazing!<10:4> All I had last night was a peanut butter and jelly sandwich!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:004', false)
-                run Sub_Event40()
-            case 1:
-                # But for lunch yesterday, I layered a freshly decanted tomato sauce, and extra-fine <20:2:cd08>mozzarella over flat bread.
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:005', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        SubNpc.TurnNeck(0, false)
-                # Ooh, lucky! That sounds great!<10:4> All I had for lunch yesterday was a whole cheese pizza!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:006', false)
-                run Sub_Event40()
-            case 2:
-                # But for breakfast yesterday, I had two slices of bread, lightly toasted in a special <20:2:cd08>oven. I then spread fine fruit preserves carefully ac…
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:007', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        SubNpc.TurnNeck(0, false)
-                # What! You eat all kindsa fancy foods! All I had for breakfast was a couple toasts and a buncha jam.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:008', false)
-                run Sub_Event40()
-    else:
-        # Hey, <110:31:cd01>. Guess what I'm thinking of… right now!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:101', false)
-        Player.TurnNeck(1, false)
-        # What you're thinking of? Hmm, let's see…
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:102', false)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # Well, you love naps, so perhaps you're thinking of a dream you had?
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:103', false)
-                Player.TurnNeck(0, false)
-                # That's crazy! Howdja know?! I had a dream I was in a big 'ol bucket of <135:7:cd00>! I ate and I ate, but there was always more!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:104', false)
-            case 1:
-                # Well, you're quite the gourmand. I imagine you're considering what to have for dinner tonight!
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:105', false)
-                Player.TurnNeck(0, false)
-                # Yeah! I keep thinking, "Do I want <135:3:cd00> or do I want <135:3:cd01>?" Maybe I want <135:3:cd02>? Or do I want <135:3:cd04>? But I'd like <135:3:…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:106', false)
-            case 2:
-                # Since your taste buds inform your every life choice, I expect you are excited for a new flavor of chip!
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:107', false)
-                Player.TurnNeck(0, false)
-                # Wow! Yeah! There's a new fish-and- ketchup chip I wanna try real bad!<10:4> How'd you know that?!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:108', false)
-        Player.TurnNeck(1, false)
-        # It's too easy with you! Your thoughts are written all over your face!
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:109', false)
-        Player.TurnNeck(0, false)
-        # No! I might have snacks ON my face? But my THOUGHTS are INSIDE my face, not on it!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:110', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		MainNpc.NpcCopyPhrase()
+		# You're real neat, <110:31:cd01>! What's your secret, <110:5>?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:201', false)
+		Player.TurnNeck(1, false)
+		# I've no secrets, <110:31:cd00>! None at all! What you just said, though… "<50:3><110:5>," was it? That sounds like code. Is it you who's keeping secr…
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:202', false)
+		Player.TurnNeck(0, false)
+		# Nope! "<110:5>" is my catchphrase! Ya oughta try saying it!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:203', false)
+		Player.TurnNeck(1, false)
+		# Well, I'm not one for stealing others' styles, but if you insist… Fret not! It is I, <110:31:cd01>. And I will never leave your side… Ahem…<110:6>. W…
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:204', false)
+		Player.TurnNeck(0, false)
+		# Awesome, <110:31:cd01>! It was so cool hearing someone as cool as you say my catchphrase!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:205', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		fork:
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Heya, <110:4>! We were just talking about food! <50:3><110:31:cd01> knows all about foods I've never even heard of!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:001', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				MainNpc.TurnNeck(1, false)
+		# Don't go saying that all over the place. <20:3:cd07><20:3:cd05>I haven't had a chance to tell everyone yet…
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:002', false)
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# But last night, I dined upon a dish of freshly ground peanuts…spread thickly upon a <20:2:cd08>slice of bread. The culinary delight was garnished wit…
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:003', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						SubNpc.TurnNeck(0, false)
+				# Oh, wow! That sounds amazing!<10:4> All I had last night was a peanut butter and jelly sandwich!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:004', false)
+				run Sub_Event40()
+			case 1:
+				# But for lunch yesterday, I layered a freshly decanted tomato sauce, and extra-fine <20:2:cd08>mozzarella over flat bread.
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:005', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						SubNpc.TurnNeck(0, false)
+				# Ooh, lucky! That sounds great!<10:4> All I had for lunch yesterday was a whole cheese pizza!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:006', false)
+				run Sub_Event40()
+			case 2:
+				# But for breakfast yesterday, I had two slices of bread, lightly toasted in a special <20:2:cd08>oven. I then spread fine fruit preserves carefully ac…
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:007', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						SubNpc.TurnNeck(0, false)
+				# What! You eat all kindsa fancy foods! All I had for breakfast was a couple toasts and a buncha jam.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:008', false)
+				run Sub_Event40()
+	else:
+		# Hey, <110:31:cd01>. Guess what I'm thinking of… right now!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:101', false)
+		Player.TurnNeck(1, false)
+		# What you're thinking of? Hmm, let's see…
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:102', false)
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Well, you love naps, so perhaps you're thinking of a dream you had?
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:103', false)
+				Player.TurnNeck(0, false)
+				# That's crazy! Howdja know?! I had a dream I was in a big 'ol bucket of <135:7:cd00>! I ate and I ate, but there was always more!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:104', false)
+			case 1:
+				# Well, you're quite the gourmand. I imagine you're considering what to have for dinner tonight!
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:105', false)
+				Player.TurnNeck(0, false)
+				# Yeah! I keep thinking, "Do I want <135:3:cd00> or do I want <135:3:cd01>?" Maybe I want <135:3:cd02>? Or do I want <135:3:cd04>? But I'd like <135:3:…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:106', false)
+			case 2:
+				# Since your taste buds inform your every life choice, I expect you are excited for a new flavor of chip!
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:107', false)
+				Player.TurnNeck(0, false)
+				# Wow! Yeah! There's a new fish-and- ketchup chip I wanna try real bad!<10:4> How'd you know that?!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:108', false)
+		Player.TurnNeck(1, false)
+		# It's too easy with you! Your thoughts are written all over your face!
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:109', false)
+		Player.TurnNeck(0, false)
+		# No! I might have snacks ON my face? But my THOUGHTS are INSIDE my face, not on it!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:110', false)
+
 local flow Sub_Event40():
-    Player.TurnNeck(1, false)
-    # What's that? Your food sounds totally vintage. Maybe I should try it sometime, <110:6>.
-    SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:009', false)
- 
+	Player.TurnNeck(1, false)
+	# What's that? Your food sounds totally vintage. Maybe I should try it sometime, <110:6>.
+	SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_ZK:009', false)

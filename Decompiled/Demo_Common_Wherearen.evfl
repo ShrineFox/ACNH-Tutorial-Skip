@@ -1,373 +1,372 @@
 flow CheckReturnWithTakumi():
-    if (not EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cCustomer')):
-        SubflowResults[0] = 0
-    else:
-        SubflowResults[0] = 1
- 
+	if (not EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cCustomer')):
+		SubflowResults[0] = 0
+	else:
+		SubflowResults[0] = 1
+
 flow Demo_Mnc_ExitOffice():
-    SubNpc.TurnNeck(11, false)
-    SubNpc.NpcRailMove(2, false, false, 1, 2, 1)
-    SubNpc.NpcSetVisibleAction(false)
-    EventFlowSystemActor.EmitDoorSound('cDoorExit')
-    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
- 
+	SubNpc.TurnNeck(11, false)
+	SubNpc.NpcRailMove(2, false, false, 1, 2, 1)
+	SubNpc.NpcSetVisibleAction(false)
+	EventFlowSystemActor.EmitDoorSound('cDoorExit')
+	System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
+
 flow Demo_OfficeOverlookCamera():
-    MainNpc.NpcAISetting(4, false)
-    EventFlowSystemActor.CameraSetDemoParam('Overlook', 'cDefault', 'CameraTag:RoomCenter', false, false, false, 0)
- 
+	MainNpc.NpcAISetting(4, false)
+	EventFlowSystemActor.CameraSetDemoParam('Overlook', 'cDefault', 'CameraTag:RoomCenter', false, false, false, 0)
+
 flow Demo_OfficeOverlookRightCamera():
-    MainNpc.NpcAISetting(4, false)
-    EventFlowSystemActor.CameraSetDemoParam('OverlookRight', 'cDefault', 'CameraTag:RoomCenter', false, false, false, 0)
- 
+	MainNpc.NpcAISetting(4, false)
+	EventFlowSystemActor.CameraSetDemoParam('OverlookRight', 'cDefault', 'CameraTag:RoomCenter', false, false, false, 0)
+
 flow Demo_OfficeSetCounterPosition():
-    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-    EventFlowSystemActor.SetupActorPosition(18)
-    EventFlowSystemActor.CameraSetDemoParam('Customer', 'cDefault', 'CameraTag:RoomCenter', false, false, false, 0)
-    Player.TurnBody(11, 0.0)
-    EventFlowSystemActor.WaitFrame(20)
-    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
- 
+	run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	EventFlowSystemActor.SetupActorPosition(18)
+	EventFlowSystemActor.CameraSetDemoParam('Customer', 'cDefault', 'CameraTag:RoomCenter', false, false, false, 0)
+	Player.TurnBody(11, 0.0)
+	EventFlowSystemActor.WaitFrame(20)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+
 flow Demo_SetNormalPositionInOffice():
-    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
-    run Demo_SetNormalPositionInOffice_NoFlagChange()
- 
+	System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
+	run Demo_SetNormalPositionInOffice_NoFlagChange()
+
 flow Demo_SetNormalPositionInOffice_NoFlagChange():
-    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-    Npc_2.NpcChangeHandTool(65534, 'cPutAway', true)
-    SubNpc.NpcSetVisibleAction(false)
-    EventFlowSystemActor.SetupActorPosition(14)
-    EventFlowSystemActor.WarpMncInOfficeGeneratePosAngleY()
-    Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    Npc_2.EndManDustClothEffect()
-    Npc_2.TurnNeck(11, false)
-    MainNpc.TurnBody(10, 0.0)
-    Player.TurnBody(0, 0.0)
-    EventFlowSystemActor.WaitFrame(20)
-    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
- 
+	run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	Npc_2.NpcChangeHandTool(65534, 'cPutAway', true)
+	SubNpc.NpcSetVisibleAction(false)
+	EventFlowSystemActor.SetupActorPosition(14)
+	EventFlowSystemActor.WarpMncInOfficeGeneratePosAngleY()
+	Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	Npc_2.EndManDustClothEffect()
+	Npc_2.TurnNeck(11, false)
+	MainNpc.TurnBody(10, 0.0)
+	Player.TurnBody(0, 0.0)
+	EventFlowSystemActor.WaitFrame(20)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+
 flow EditFacilityExterior():
-    EventFlowSystemActor.SetWherearenFacilityDefaultParts()
+	EventFlowSystemActor.SetWherearenFacilityDefaultParts()
 entrypoint Event78:
-    EventFlowSystemActor.UICustomFacilityHandling('cFirstTime')
-    # Is this OK for the exterior?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:091', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # Great! It looks wonderful. With that taken care of, let's head inside.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:092', true)
-        return
-    else:
-        # Oh, something not right? Then what should the exterior look like?
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:093', true)
-        run Event78()
- 
+	EventFlowSystemActor.UICustomFacilityHandling('cFirstTime')
+	# Is this OK for the exterior?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:091', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# Great! It looks wonderful. With that taken care of, let's head inside.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:092', true)
+		return
+	else:
+		# Oh, something not right? Then what should the exterior look like?
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:093', true)
+		run Event78()
+
 flow EveFragChk_WorkDoneReturnOffice():
-    run GenerateNpcForStoryEvent()
-    run GenerateNpcForGradeUp()
-    if (not System.EventFlags['cWherearenPlayer:Unlock_WorkingTable']) and (System.EventFlags['cWherearenPlayer:SeqMncRecipeDone']):
-        System.EventFlags['cWherearenPlayer:Unlock_WorkingTable'] = true
-        System.EventFlags['cPlayer:OtgTipsUnlockWorkingTable'] = true
-    if (not System.EventFlags['cWherearenPlayer:PutAmiiboDeviceInOffice']) and (System.EventFlags['cWherearenPlayer:NewBuildCount'] == 6) and (EventFlowSystemActor.WherearenNpcOrderType() == 0):
-        System.EventFlags['cWherearenPlayer:PutAmiiboDeviceInOffice'] = true
- 
+	run GenerateNpcForStoryEvent()
+	run GenerateNpcForGradeUp()
+	if (not System.EventFlags['cWherearenPlayer:Unlock_WorkingTable']) and (System.EventFlags['cWherearenPlayer:SeqMncRecipeDone']):
+		System.EventFlags['cWherearenPlayer:Unlock_WorkingTable'] = true
+		System.EventFlags['cPlayer:OtgTipsUnlockWorkingTable'] = true
+	if (not System.EventFlags['cWherearenPlayer:PutAmiiboDeviceInOffice']) and (System.EventFlags['cWherearenPlayer:NewBuildCount'] == 6) and (EventFlowSystemActor.WherearenNpcOrderType() == 0):
+		System.EventFlags['cWherearenPlayer:PutAmiiboDeviceInOffice'] = true
+
 flow GenerateNpcForGradeUp():
-    if (SubflowResults@10[11] == 0) and (SubflowResults@9[12] == 0) and (SubflowResults@4[13] == 0) and (EventFlowSystemActor.WherearenCanNextGradeUp('cGradeD')):
-        System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
- 
+	if (SubflowResults@10[11] == 0) and (SubflowResults@9[12] == 0) and (SubflowResults@4[13] == 0) and (EventFlowSystemActor.WherearenCanNextGradeUp('cGradeD')):
+		System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+
 flow GenerateNpcForStoryEvent():
-    switch EventFlowSystemActor.WherearenNpcOrderType():
-        case 0:
-            run StoryEventChk_AfterNewBuild()
-            switch SubflowResults@10[11]:
-                case 0, 4, 5, 7, 8, 9:
-                    switch SubflowResults@10[12]:
-                        case 0, 2, 3, 4, 8:
-                            if SubflowResults@3[13] not in (0, 1):
-                                System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp'] = true
-                            elif System.EventFlags['cWherearenPlayer:NewBuildCount'] != 15:
-                                if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 20:
-                                    run Sub_Event199()
-                            else:
-                                System.EventFlags['cWherearenPlayer:GenerateSecondCustomer'] = true
-                                run Sub_Event199()
-                        case 1, 5:
-                            System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp'] = true
-                        case 6, 9:
-                            System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
-                        case 7:
-                            System.EventFlags['cWherearenPlayer:RcoGenerateInOfficeTemp'] = true
-                case 1, 2, 6:
-                    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
-                case 3:
-                    System.EventFlags['cWherearenPlayer:NpcGeneratePreDustClothTemp'] = true
-                    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
-        case 1:
-            run StoryEventChk_AfterShareHouse()
-            if SubflowResults@2[15] == 1:
-                System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
-        default:
-            return
- 
+	switch EventFlowSystemActor.WherearenNpcOrderType():
+		case 0:
+			run StoryEventChk_AfterNewBuild()
+			switch SubflowResults@10[11]:
+				case 0, 4, 5, 7, 8, 9:
+					switch SubflowResults@10[12]:
+						case 0, 2, 3, 4, 8:
+							if SubflowResults@3[13] not in (0, 1):
+System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp'] = true
+							elif System.EventFlags['cWherearenPlayer:NewBuildCount'] != 15:
+								if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 20:
+		 run Sub_Event199()
+							else:
+System.EventFlags['cWherearenPlayer:GenerateSecondCustomer'] = true
+	   run Sub_Event199()
+						case 1, 5:
+System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp'] = true
+						case 6, 9:
+System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+						case 7:
+System.EventFlags['cWherearenPlayer:RcoGenerateInOfficeTemp'] = true
+				case 1, 2, 6:
+					System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+				case 3:
+					System.EventFlags['cWherearenPlayer:NpcGeneratePreDustClothTemp'] = true
+					System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+		case 1:
+			run StoryEventChk_AfterShareHouse()
+			if SubflowResults@2[15] == 1:
+				System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+		default:
+			return
+
 flow KKFes1stLiveZoom():
-    EventFlowSystemActor.WaitFrame(180)
-    EventFlowSystemActor.SoundDuckingOn(55)
-    EventFlowSystemActor.SetLookAtTargetObject('cObjectKKFesShip')
-    EventFlowSystemActor.WherearenKKFesSetting(3)
-    EventFlowSystemActor.WaitFrame(60)
-    EventFlowSystemActor.WaitFrame(215)
-    EventFlowSystemActor.WaitFrame(210)
-    EventFlowSystemActor.WaitFrame(60)
-    EventFlowSystemActor.WherearenKKFesSetting(5)
- 
+	EventFlowSystemActor.WaitFrame(180)
+	EventFlowSystemActor.SoundDuckingOn(55)
+	EventFlowSystemActor.SetLookAtTargetObject('cObjectKKFesShip')
+	EventFlowSystemActor.WherearenKKFesSetting(3)
+	EventFlowSystemActor.WaitFrame(60)
+	EventFlowSystemActor.WaitFrame(215)
+	EventFlowSystemActor.WaitFrame(210)
+	EventFlowSystemActor.WaitFrame(60)
+	EventFlowSystemActor.WherearenKKFesSetting(5)
+
 flow KKFesCheck():
-    switch EventFlowSystemActor.WherearenKKFesStatus(false):
-        case 1:
-            fork:
-                branch:
-                    if MainNpc.WherearenIsBuiltNpc():
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
-                branch:
-                    # I can't wait for today's festival! Ahhh! I'm so excited, my body's dancing on its own! A huh huh huh help! I'm seein' flowers!
-                    MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:401')
-        case 2:
-            fork:
-                branch:
-                    if MainNpc.WherearenIsBuiltNpc():
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
-                branch:
-                    # Watch this. Watch this. No, really, I need you to watch this. You ready? Ready? Watch this. Watch! Whazaka!<10:4> Pretty cool, huh? I learned that to…
-                    MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:403')
-            MainNpc.TurnBody(10, 0.0)
-        case 3:
-            fork:
-                branch:
-                    if MainNpc.WherearenIsBuiltNpc():
-                        EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
-                branch:
-                    # That was so fun… The festival might be over, but MY festival's never gonna stop! I'm dancing forever! At least not until I get wore out and curl up u…
-                    MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:402')
-        default:
-            return
- 
+	switch EventFlowSystemActor.WherearenKKFesStatus(false):
+		case 1:
+			fork:
+				branch:
+					if MainNpc.WherearenIsBuiltNpc():
+						EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+				branch:
+					# I can't wait for today's festival! Ahhh! I'm so excited, my body's dancing on its own! A huh huh huh help! I'm seein' flowers!
+					MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:401')
+		case 2:
+			fork:
+				branch:
+					if MainNpc.WherearenIsBuiltNpc():
+						EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+				branch:
+					# Watch this. Watch this. No, really, I need you to watch this. You ready? Ready? Watch this. Watch! Whazaka!<10:4> Pretty cool, huh? I learned that to…
+					MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:403')
+			MainNpc.TurnBody(10, 0.0)
+		case 3:
+			fork:
+				branch:
+					if MainNpc.WherearenIsBuiltNpc():
+						EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegMainNpcActor', 0, false, 0.0, 0.0, '')
+				branch:
+					# That was so fun… The festival might be over, but MY festival's never gonna stop! I'm dancing forever! At least not until I get wore out and curl up u…
+					MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenMainField:402')
+		default:
+			return
+
 flow KKFesDemoLiveSceneChange():
-    EventFlowSystemActor.CameraSetDemoParam('KKFesNotice', 'KKFesNotice', 'CameraTag:KKFesBeach', false, false, false, 0)
-    if System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes']:
-        EventFlowSystemActor.WherearenKKFesSetting(1)
-        run KKFes1stLiveZoom()
-    else:
-        EventFlowSystemActor.SoundDuckingOn(55)
-        EventFlowSystemActor.WherearenKKFesSetting(0)
-    EventFlowSystemActor.KKFesDemoLive()
-    EventFlowSystemActor.WherearenKKFesSetting(2)
-    if System.EventFlags['cWherearenPlayer:SeqKKRave1stDone']:
-        EventFlowSystemActor.SystemReenterStage(0, 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
-        EventFlowSystemActor.SoundDuckingOff(55)
-    else:
-        EventFlowSystemActor.ReserveNpcCommand('WherearenFirstKKFes')
-        EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:PostKKFesTalk', 'Npc:otg', false)
-        EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandFirstKKFes', 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
-        EventFlowSystemActor.SoundDuckingOff(55)
- 
+	EventFlowSystemActor.CameraSetDemoParam('KKFesNotice', 'KKFesNotice', 'CameraTag:KKFesBeach', false, false, false, 0)
+	if System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes']:
+		EventFlowSystemActor.WherearenKKFesSetting(1)
+		run KKFes1stLiveZoom()
+	else:
+		EventFlowSystemActor.SoundDuckingOn(55)
+		EventFlowSystemActor.WherearenKKFesSetting(0)
+	EventFlowSystemActor.KKFesDemoLive()
+	EventFlowSystemActor.WherearenKKFesSetting(2)
+	if System.EventFlags['cWherearenPlayer:SeqKKRave1stDone']:
+		EventFlowSystemActor.SystemReenterStage(0, 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
+		EventFlowSystemActor.SoundDuckingOff(55)
+	else:
+		EventFlowSystemActor.ReserveNpcCommand('WherearenFirstKKFes')
+		EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:PostKKFesTalk', 'Npc:otg', false)
+		EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandFirstKKFes', 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
+		EventFlowSystemActor.SoundDuckingOff(55)
+
 flow KKFesNotice():
-    run PrepareKKFesNotice()
-    EventFlowSystemActor.WaitFrame(120)
-    # **Hey, everyone! ♪ DJ KK is on the turntables! Time to bust moves until you run out of moves! ♪**<10:7:00b40000>
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Player:1501', true)
-    run PostKKFesNotice()
- 
+	run PrepareKKFesNotice()
+	EventFlowSystemActor.WaitFrame(120)
+	# **Hey, everyone! ♪ DJ KK is on the turntables! Time to bust moves until you run out of moves! ♪**<10:7:00b40000>
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Player:1501', true)
+	run PostKKFesNotice()
+
 flow OtgFesFirstFesSpeak():
-    if System.EventFlags['cWherearenPlayer:FirstKKFesStep'] == 1:
-        EventFlowSystemActor.SetNpcAIBlackBoardByLabel('otg', 'Speak', 1, 1)
- 
+	if System.EventFlags['cWherearenPlayer:FirstKKFesStep'] == 1:
+		EventFlowSystemActor.SetNpcAIBlackBoardByLabel('otg', 'Speak', 1, 1)
+
 flow PostKKFesNotice():
-    EventFlowSystemActor.FadeOut('cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0, true)
-    EventFlowSystemActor.StoreNormalCamera(true, '')
-    EventFlowSystemActor.RequestRecreateFtr()
-    EventFlowSystemActor.WaitFrame(30)
-    run OtgFesFirstFesSpeak()
-    System.EventFlags['cWherearenPlayer:KKFesIsAnnounce'] = true
-    EventFlowSystemActor.FadeIn(true)
-    EventFlowSystemActor.WaitFrame(5)
- 
+	EventFlowSystemActor.FadeOut('cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0, true)
+	EventFlowSystemActor.StoreNormalCamera(true, '')
+	EventFlowSystemActor.RequestRecreateFtr()
+	EventFlowSystemActor.WaitFrame(30)
+	run OtgFesFirstFesSpeak()
+	System.EventFlags['cWherearenPlayer:KKFesIsAnnounce'] = true
+	EventFlowSystemActor.FadeIn(true)
+	EventFlowSystemActor.WaitFrame(5)
+
 flow PrepareKKFesNotice():
-    EventFlowSystemActor.SwapSpeaker('cOtg', true)
-    EventFlowSystemActor.CameraSetDemoParam('KKFesNoticeStart', '', 'CameraTag:KKFesBeach', false, false, false, 0)
-    EventFlowSystemActor.FadeIn(true)
-    EventFlowSystemActor.CameraSetDemoParam('KKFesNotice', 'KKFesNotice', 'CameraTag:KKFesBeach', false, false, false, 0)
-    EventFlowSystemActor.WaitFrame(45)
- 
+	EventFlowSystemActor.SwapSpeaker('cOtg', true)
+	EventFlowSystemActor.CameraSetDemoParam('KKFesNoticeStart', '', 'CameraTag:KKFesBeach', false, false, false, 0)
+	EventFlowSystemActor.FadeIn(true)
+	EventFlowSystemActor.CameraSetDemoParam('KKFesNotice', 'KKFesNotice', 'CameraTag:KKFesBeach', false, false, false, 0)
+	EventFlowSystemActor.WaitFrame(45)
+
 flow ReserveCheckWorkContinue():
-    EventFlowSystemActor.SetNpcAIBlackBoardByLabel('otg', 'CheckWorkContinue', 1, 1)
- 
+	EventFlowSystemActor.SetNpcAIBlackBoardByLabel('otg', 'CheckWorkContinue', 1, 1)
+
 flow SetCamera_GardenVisit():
-    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Visit', 'Place:SafeAreaSP_X', false)
- 
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Visit', 'Place:SafeAreaSP_X', false)
+
 flow SetSalaryAsDeliveryItem():
-    MainNpc.SetDeliveryItemAtRandom(14774, false, 'cVillageRemakePattern', 0)
- 
+	MainNpc.SetDeliveryItemAtRandom(14774, false, 'cVillageRemakePattern', 0)
+
 flow StoryEventChk_AfterNewBuild():
-    if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 0:
-        if not System.EventFlags['cWherearenPlayer:OtgGetStartingSalary']:
-            SubflowResults[11] = 1
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 1:
-        if not System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortPlannerApp']:
-            SubflowResults[11] = 2
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 2:
-        if not System.EventFlags['cWherearenPlayer:SeqIntimateDustCloth']:
-            SubflowResults[11] = 3
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 3:
-        if not System.EventFlags['cWherearenPlayer:SeqOtgTalkAboutSoloWork']:
-            SubflowResults[11] = 4
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 4:
-        if not System.EventFlags['cWherearenPlayer:SeqMncRecipeDone']:
-            SubflowResults[11] = 5
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
-        if not System.EventFlags['cWherearenPlayer:SeqGetRecipeKabetasu']:
-            SubflowResults[11] = 6
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 9:
-        if not System.EventFlags['cWherearenPlayer:SeqParty1Done']:
-            SubflowResults[11] = 7
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 12:
-        if not System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortPlannerAppNetwork']:
-            SubflowResults[11] = 8
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 13:
-        if not System.EventFlags['cWherearenPlayer:SeqOtgTalkAboutChocolate']:
-            SubflowResults[13] = 3
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 14:
-        if not System.EventFlags['cWherearenPlayer:Unlock_MargeCatalog_DIY']:
-            SubflowResults[11] = 9
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 16:
-        if not System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_01']:
-            SubflowResults[12] = 1
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 17:
-        if not System.EventFlags['cWherearenPlayer:Unlock_Extension']:
-            SubflowResults[12] = 2
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 19:
-        if not System.EventFlags['cWherearenPlayer:SeqParty2Done']:
-            SubflowResults[12] = 3
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 21:
-        if not System.EventFlags['cWherearenPlayer:SeqOtgSickFinish']:
-            SubflowResults[12] = 4
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 24:
-        if not System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_02']:
-            SubflowResults[12] = 5
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 25:
-        if not System.EventFlags['cWherearenPlayer:SeqKKFesStartBuildStageDone']:
-            SubflowResults[12] = 6
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 26:
-        if not System.EventFlags['cWherearenPlayer:Unlock_MargeCatalog_General']:
-            SubflowResults[12] = 7
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 29:
-        if not System.EventFlags['cWherearenPlayer:SeqParty3Done']:
-            SubflowResults[12] = 8
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 28:
-        if not System.EventFlags['cWherearenPlayer:SeqKKRaveStageDone']:
-            SubflowResults[12] = 9
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] <= 100:
-        if EventFlowSystemActor.IsRegularParty('cTen'):
-            SubflowResults[13] = 1
-        else:
-            run Sub_grp_Event147()
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] > 200:
-        if EventFlowSystemActor.IsRegularParty('cFifty'):
-            SubflowResults[13] = 1
-        else:
-            run Sub_grp_Event147()
-    else:
-        if EventFlowSystemActor.IsRegularParty('cTwenty'):
-            SubflowResults[13] = 1
-        else:
-            run Sub_grp_Event147()
- 
+	if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 0:
+		if not System.EventFlags['cWherearenPlayer:OtgGetStartingSalary']:
+			SubflowResults[11] = 1
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 1:
+		if not System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortPlannerApp']:
+			SubflowResults[11] = 2
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 2:
+		if not System.EventFlags['cWherearenPlayer:SeqIntimateDustCloth']:
+			SubflowResults[11] = 3
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 3:
+		if not System.EventFlags['cWherearenPlayer:SeqOtgTalkAboutSoloWork']:
+			SubflowResults[11] = 4
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 4:
+		if not System.EventFlags['cWherearenPlayer:SeqMncRecipeDone']:
+			SubflowResults[11] = 5
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
+		if not System.EventFlags['cWherearenPlayer:SeqGetRecipeKabetasu']:
+			SubflowResults[11] = 6
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 9:
+		if not System.EventFlags['cWherearenPlayer:SeqParty1Done']:
+			SubflowResults[11] = 7
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 12:
+		if not System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortPlannerAppNetwork']:
+			SubflowResults[11] = 8
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 13:
+		if not System.EventFlags['cWherearenPlayer:SeqOtgTalkAboutChocolate']:
+			SubflowResults[13] = 3
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 14:
+		if not System.EventFlags['cWherearenPlayer:Unlock_MargeCatalog_DIY']:
+			SubflowResults[11] = 9
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 16:
+		if not System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_01']:
+			SubflowResults[12] = 1
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 17:
+		if not System.EventFlags['cWherearenPlayer:Unlock_Extension']:
+			SubflowResults[12] = 2
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 19:
+		if not System.EventFlags['cWherearenPlayer:SeqParty2Done']:
+			SubflowResults[12] = 3
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 21:
+		if not System.EventFlags['cWherearenPlayer:SeqOtgSickFinish']:
+			SubflowResults[12] = 4
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 24:
+		if not System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_02']:
+			SubflowResults[12] = 5
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 25:
+		if not System.EventFlags['cWherearenPlayer:SeqKKFesStartBuildStageDone']:
+			SubflowResults[12] = 6
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 26:
+		if not System.EventFlags['cWherearenPlayer:Unlock_MargeCatalog_General']:
+			SubflowResults[12] = 7
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 29:
+		if not System.EventFlags['cWherearenPlayer:SeqParty3Done']:
+			SubflowResults[12] = 8
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 28:
+		if not System.EventFlags['cWherearenPlayer:SeqKKRaveStageDone']:
+			SubflowResults[12] = 9
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] <= 100:
+		if EventFlowSystemActor.IsRegularParty('cTen'):
+			SubflowResults[13] = 1
+		else:
+			run Sub_grp_Event147()
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] > 200:
+		if EventFlowSystemActor.IsRegularParty('cFifty'):
+			SubflowResults[13] = 1
+		else:
+			run Sub_grp_Event147()
+	else:
+		if EventFlowSystemActor.IsRegularParty('cTwenty'):
+			SubflowResults[13] = 1
+		else:
+			run Sub_grp_Event147()
+
 flow StoryEventChk_AfterShareHouse():
-    if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
-        SubflowResults[15] = 1
- 
+	if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
+		SubflowResults[15] = 1
+
 flow StoryEventChk_StartingWork():
-    if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
-        if not System.EventFlags['cWherearenPlayer:SeqAvailableAmiiboDone']:
-            SubflowResults[16] = 1
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 12:
-        if not System.EventFlags['cWherearenPlayer:Unlock_Faclility_Restaurant']:
-            SubflowResults[16] = 2
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 16:
-        if not System.EventFlags['cWherearenPlayer:Unlock_ShareHouse']:
-            SubflowResults[16] = 3
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 21:
-        if not System.EventFlags['cWherearenPlayer:SeqOtgSickDone']:
-            SubflowResults[16] = 4
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 24:
-        if not System.EventFlags['cWherearenPlayer:Unlock_Faclility_Hospital']:
-            SubflowResults[16] = 5
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 28:
-        if not ((System.EventFlags['cWherearenPlayer:CompleteAppearanceRestaurant']) and (System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe'])):
-            SubflowResults[16] = 6
-    elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 30:
-        if not System.EventFlags['cWherearenPlayer:Unlock_Faclility_Tailor']:
-            SubflowResults[16] = 7
-    elif (System.EventFlags['cWherearenPlayer:NewBuildCount'] >= 7) and (not System.EventFlags['cWherearenPlayer:Unlock_Faclility_School']):
-        SubflowResults[16] = 8
- 
+	if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
+		if not System.EventFlags['cWherearenPlayer:SeqAvailableAmiiboDone']:
+			SubflowResults[16] = 1
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 12:
+		if not System.EventFlags['cWherearenPlayer:Unlock_Faclility_Restaurant']:
+			SubflowResults[16] = 2
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 16:
+		if not System.EventFlags['cWherearenPlayer:Unlock_ShareHouse']:
+			SubflowResults[16] = 3
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 21:
+		if not System.EventFlags['cWherearenPlayer:SeqOtgSickDone']:
+			SubflowResults[16] = 4
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 24:
+		if not System.EventFlags['cWherearenPlayer:Unlock_Faclility_Hospital']:
+			SubflowResults[16] = 5
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 28:
+		if not ((System.EventFlags['cWherearenPlayer:CompleteAppearanceRestaurant']) and (System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe'])):
+			SubflowResults[16] = 6
+	elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 30:
+		if not System.EventFlags['cWherearenPlayer:Unlock_Faclility_Tailor']:
+			SubflowResults[16] = 7
+	elif (System.EventFlags['cWherearenPlayer:NewBuildCount'] >= 7) and (not System.EventFlags['cWherearenPlayer:Unlock_Faclility_School']):
+		SubflowResults[16] = 8
+
 local flow Sub_Event199():
-    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
-    System.EventFlags['cWherearenPlayer:MncEntryOfficeReserve'] = true
- 
+	System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+	System.EventFlags['cWherearenPlayer:MncEntryOfficeReserve'] = true
+
 local flow Sub_grp_Event147():
-    if (not System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_03']) and (System.EventFlags['cWherearenPlayer:AfterFirstKKFesCount'] >= 2) and (not System.EventFlags['cWherearenPlayer:IsFirstKKFesDay']) and (EventFlowSystemActor.KKFes() == 2):
-        SubflowResults[13] = 2
- 
+	if (not System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_03']) and (System.EventFlags['cWherearenPlayer:AfterFirstKKFesCount'] >= 2) and (not System.EventFlags['cWherearenPlayer:IsFirstKKFesDay']) and (EventFlowSystemActor.KKFes() == 2):
+		SubflowResults[13] = 2
+
 flow ToKKFesDemoLive():
-    EventFlowSystemActor.ReserveSystemFlowDemo('Demo_Common_Wherearen', 'KKFesDemoLiveSceneChange', false, true, true)
-    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:KKFesNotice', 'CameraTag::KKFesBeach', false)
-    EventFlowSystemActor.ReserveSkipSceneStartDemo()
-    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:KKFesNotice', 'CameraTag:KKFesBeach', false)
-    if System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes']:
-        EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandKKFesLiveDemo', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-    else:
-        EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandKKFesLiveDemo', 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.ReserveSystemFlowDemo('Demo_Common_Wherearen', 'KKFesDemoLiveSceneChange', false, true, true)
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:KKFesNotice', 'CameraTag::KKFesBeach', false)
+	EventFlowSystemActor.ReserveSkipSceneStartDemo()
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:KKFesNotice', 'CameraTag:KKFesBeach', false)
+	if System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes']:
+		EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandKKFesLiveDemo', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+	else:
+		EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandKKFesLiveDemo', 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
+
 flow ToKKFesNotice():
-    EventFlowSystemActor.ReserveSystemFlowDemo('Demo_Common_Wherearen', 'KKFesNotice', false, true, false)
-    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-    EventFlowSystemActor.SystemReenterStage(5, 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.ReserveSystemFlowDemo('Demo_Common_Wherearen', 'KKFesNotice', false, true, false)
+	System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+	EventFlowSystemActor.SystemReenterStage(5, 'cKKFes', 'cKKFes', 'cBlack', 1.0, 1.0)
+
 flow UnlockPrepareEventNpc():
-    if (EventFlowSystemActor.WherearenOrderInfoType() == 0) and (EventFlowSystemActor.WherearenNpcOrderType() == 0) and (EventFlowSystemActor.WherearenOrderStatus() in (3, 6)):
-        if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 2:
-            System.EventFlags['cWherearenPlayer:Unlock_NPC_08'] = true
-        elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 6:
-            System.EventFlags['cWherearenPlayer:Unlock_NPC_10'] = true
-        elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
-            System.EventFlags['cWherearenPlayer:Unlock_NPC_02'] = true
- 
+	if (EventFlowSystemActor.WherearenOrderInfoType() == 0) and (EventFlowSystemActor.WherearenNpcOrderType() == 0) and (EventFlowSystemActor.WherearenOrderStatus() in (3, 6)):
+		if System.EventFlags['cWherearenPlayer:NewBuildCount'] == 2:
+			System.EventFlags['cWherearenPlayer:Unlock_NPC_08'] = true
+		elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 6:
+			System.EventFlags['cWherearenPlayer:Unlock_NPC_10'] = true
+		elif System.EventFlags['cWherearenPlayer:NewBuildCount'] == 7:
+			System.EventFlags['cWherearenPlayer:Unlock_NPC_02'] = true
+
 flow WorkDoneReturnOffice():
-    EventFlowSystemActor.MessageSuspend()
-    run UnlockPrepareEventNpc()
-    EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
-    EventFlowSystemActor.HousingDeliveryPhotographyBGMEnd()
-    run EveFragChk_WorkDoneReturnOffice()
-    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-    System.EventFlags['cWherearenPlayer:IsMncChangeStageForPhotoMode'] = false
-    run CheckReturnWithTakumi()
-    if SubflowResults@2[0] == 0:
-        run WorkDoneReturnOffice_ToEntrance()
-    elif EventFlowSystemActor.WherearenNpcOrderType() == 0:
-        run StoryEventChk_AfterNewBuild()
-        if (SubflowResults@10[11] == 0) and (SubflowResults@10[12] == 0) and (SubflowResults@4[13] == 0):
-            run WorkDoneReturnOffice_ByOtg()
-        else:
-            run WorkDoneReturnOffice_ToEntrance()
-    else:
-        run WorkDoneReturnOffice_ByOtg()
- 
+	EventFlowSystemActor.MessageSuspend()
+	run UnlockPrepareEventNpc()
+	EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+	EventFlowSystemActor.HousingDeliveryPhotographyBGMEnd()
+	run EveFragChk_WorkDoneReturnOffice()
+	System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+	System.EventFlags['cWherearenPlayer:IsMncChangeStageForPhotoMode'] = false
+	run CheckReturnWithTakumi()
+	if SubflowResults@2[0] == 0:
+		run WorkDoneReturnOffice_ToEntrance()
+	elif EventFlowSystemActor.WherearenNpcOrderType() == 0:
+		run StoryEventChk_AfterNewBuild()
+		if (SubflowResults@10[11] == 0) and (SubflowResults@10[12] == 0) and (SubflowResults@4[13] == 0):
+			run WorkDoneReturnOffice_ByOtg()
+		else:
+			run WorkDoneReturnOffice_ToEntrance()
+	else:
+		run WorkDoneReturnOffice_ByOtg()
+
 flow WorkDoneReturnOffice_ByOtg():
-    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-    EventFlowSystemActor.BGMPropertyControl(180)
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+	EventFlowSystemActor.BGMPropertyControl(180)
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+
 flow WorkDoneReturnOffice_ToEntrance():
-    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-    EventFlowSystemActor.BGMPropertyControl(180)
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+	EventFlowSystemActor.BGMPropertyControl(180)
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)

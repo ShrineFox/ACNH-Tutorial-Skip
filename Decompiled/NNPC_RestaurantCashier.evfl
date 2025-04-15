@@ -1,47 +1,46 @@
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
-        # <20:2:cd06>Our head chef's the best. I know because I lick every dish!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:003', false)
-        run KKFes_Chk()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
+		EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
+		# <20:2:cd06>Our head chef's the best. I know because I lick every dish!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:003', false)
+		run KKFes_Chk()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeck(10, true)
-        # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Ooh, good idea! Let's go! I'll invite some customers too, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:104', true)
-            run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
-        else:
-            # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+		MainNpc.TurnNeck(10, true)
+		# RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
+		MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Ooh, good idea! Let's go! I'll invite some customers too, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:104', true)
+			run Demo_Common_Wherearen::ToKKFesDemoLive()
+		else:
+			# RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+			EventFlowSystemActor.ExitFlowchart()
+
 flow Register():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    run FacilityName_Chk()
-    # RANDOM: <20:2:cd0e>Here's your bill! Aaaand don… // The secret to counting out the change r… // 1,000 Poki…2,000 Poki… A huh huh huh, c… // Do ya got a point card? I forget if we … // Working the register is fun. So many bu…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:002', false)
-    run KKFes_Chk()
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	run FacilityName_Chk()
+	# RANDOM: <20:2:cd0e>Here's your bill! Aaaand don… // The secret to counting out the change r… // 1,000 Poki…2,000 Poki… A huh huh huh, c… // Do ya got a point card? I forget if we … // Working the register is fun. So many bu…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:002', false)
+	run KKFes_Chk()
+
 flow Root():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    run FacilityName_Chk()
-    # RANDOM: <20:2:cd0e>Eat lots of yummy stuff—it's… // <20:2:cd06>A huh huh huh, my tummy keep… // <20:3:cd0e>I like being smiley when eve… // <20:2:cd0e>I'll bring you a menu, so go… // <20:2:cd06>A napkin? Just a second… Huh…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:001', false)
-    run KKFes_Chk()
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	run FacilityName_Chk()
+	# RANDOM: <20:2:cd0e>Eat lots of yummy stuff—it's… // <20:2:cd06>A huh huh huh, my tummy keep… // <20:3:cd0e>I like being smiley when eve… // <20:2:cd0e>I'll bring you a menu, so go… // <20:2:cd06>A napkin? Just a second… Huh…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:001', false)
+	run KKFes_Chk()
+
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeck(10, false)
-        run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.WherearenOrderStatus() == 1:
+		MainNpc.TurnNeck(10, false)
+		run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow StandSleep():
-    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
- 
+	run NNPC_RestaurantCustomer::`StandSleep_2.1`()

@@ -1,142 +1,141 @@
 flow MncBoxChk():
-    if (not System.EventFlags['cWherearenPlayer:Unlock_MncBox']) and (System.EventFlags['cWherearenPlayer:SeqMncBoxEventReady']) and (not System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']):
-        # Hi, PLAYER! We've been waiting for you. <20:2:cd05>Wardell<20:2:cd07> has a favor to ask.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:331', true)
-        Player.TurnNeck(1, false)
-        EventFlowSystemActor.WaitFrame(30)
-        SubNpc.TurnNeck(10, false)
-        # <50:3>PLAYER<150:5>hello. Do you have any extra DIY materials? Niko could make use of your spares<150:5>
-        SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:332', true)
-        # Oh, right. Niko's been talking about how he needs more materials for his DIY projects. I suppose I didn't pay attention to how serious he was.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:333', true)
-        # When Niko crafts<150:5>his happiness appears to grow. It is nice. With more materials, he may smile even bigger<150:5>
-        SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:334', true)
-        # Yeah, it'd make his day!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:335', false)
-        MainNpc.TurnNeck(10, false)
-        fork:
-            branch:
-                # So, if you have any extra materials that he could use, would you mind sharing them with Niko? You'll find his materials box upstairs, right next to t…
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:336', true)
-            branch:
-                EventFlowSystemActor.WaitFrame(15)
-                Player.TurnNeck(0, false)
-        # I would<150:5>appreciate it, my friend.
-        SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:337', true)
-        System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
-        System.EventFlags['cWherearenPlayer:Unlock_MncBox'] = true
-        EventFlowSystemActor.SetMncBoxMateriel()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (not System.EventFlags['cWherearenPlayer:Unlock_MncBox']) and (System.EventFlags['cWherearenPlayer:SeqMncBoxEventReady']) and (not System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']):
+		# Hi, PLAYER! We've been waiting for you. <20:2:cd05>Wardell<20:2:cd07> has a favor to ask.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:331', true)
+		Player.TurnNeck(1, false)
+		EventFlowSystemActor.WaitFrame(30)
+		SubNpc.TurnNeck(10, false)
+		# <50:3>PLAYER<150:5>hello. Do you have any extra DIY materials? Niko could make use of your spares<150:5>
+		SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:332', true)
+		# Oh, right. Niko's been talking about how he needs more materials for his DIY projects. I suppose I didn't pay attention to how serious he was.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:333', true)
+		# When Niko crafts<150:5>his happiness appears to grow. It is nice. With more materials, he may smile even bigger<150:5>
+		SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:334', true)
+		# Yeah, it'd make his day!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:335', false)
+		MainNpc.TurnNeck(10, false)
+		fork:
+			branch:
+				# So, if you have any extra materials that he could use, would you mind sharing them with Niko? You'll find his materials box upstairs, right next to t…
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:336', true)
+			branch:
+				EventFlowSystemActor.WaitFrame(15)
+				Player.TurnNeck(0, false)
+		# I would<150:5>appreciate it, my friend.
+		SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:337', true)
+		System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
+		System.EventFlags['cWherearenPlayer:Unlock_MncBox'] = true
+		EventFlowSystemActor.SetMncBoxMateriel()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow RestaurantCafeChk():
-    if (not System.EventFlags['cWherearenPlayer:OtgTalkEntranceRestaurant']) and (System.EventFlags['cWherearenPlayer:Unlock_Faclility_Restaurant']):
-        run Demo_Common_Wherearen::StoryEventChk_StartingWorkrun Demo_Common_Wherearen::StoryEventChk_StartingWork()
-        if SubflowResults@9[16] in (0, 1, 2, 3, 4):
-            System.EventFlags['cWherearenPlayer:OtgTalkEntranceRestaurant'] = true
-            if System.EventFlags['cWherearenPlayer:ChoiceRestaurant']:
-                if System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']:
-                    # Hi! Guess what? The restaurant and café have really taken off! They're attracting visitors from far away! We could use this opportunity to ask those …
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112_02', true)
-                else:
-                    # Hi! Guess what? The restaurant has really taken off! We have visitors coming from far away to try it out! We could use this opportunity to ask restau…
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112', true)
-            else:
-                if System.EventFlags['cWherearenPlayer:CompleteAppearanceRestaurant']:
-                    # Hi! Guess what? The restaurant and café have really taken off! They're attracting visitors from far away! We could use this opportunity to ask those …
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112_02', true)
-                else:
-                    # Hi! Guess what? The café has really taken off! We have visitors coming from far away to try it out! We could use this opportunity to ask café visitor…
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112_01', true)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (not System.EventFlags['cWherearenPlayer:OtgTalkEntranceRestaurant']) and (System.EventFlags['cWherearenPlayer:Unlock_Faclility_Restaurant']):
+		run Demo_Common_Wherearen::StoryEventChk_StartingWork()
+		if SubflowResults@9[16] in (0, 1, 2, 3, 4):
+			System.EventFlags['cWherearenPlayer:OtgTalkEntranceRestaurant'] = true
+			if System.EventFlags['cWherearenPlayer:ChoiceRestaurant']:
+				if System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']:
+					# Hi! Guess what? The restaurant and café have really taken off! They're attracting visitors from far away! We could use this opportunity to ask those …
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112_02', true)
+				else:
+					# Hi! Guess what? The restaurant has really taken off! We have visitors coming from far away to try it out! We could use this opportunity to ask restau…
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112', true)
+			else:
+				if System.EventFlags['cWherearenPlayer:CompleteAppearanceRestaurant']:
+					# Hi! Guess what? The restaurant and café have really taken off! They're attracting visitors from far away! We could use this opportunity to ask those …
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112_02', true)
+				else:
+					# Hi! Guess what? The café has really taken off! We have visitors coming from far away to try it out! We could use this opportunity to ask café visitor…
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:112_01', true)
+			EventFlowSystemActor.ExitFlowchart()
+
 flow Root():
-    run MncBoxChk()
-    run StoryEventChk()
-    run RestaurantCafeChk()
-    switch EventFlowSystemActor.WherearenKKFesStatus(false):
-        case 0, 3:
-            run Sub_grp_Event43()
-        case 1:
-            if EventFlowSystemActor.IsDayBeforeKKFes():
-                run Sub_grp_Event43()
-            else:
-                # Can you believe DJ KK himself will be performing here? The show starts at 6 PM, so don't let me catch you working right up until the last minute. Hav…
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:111_01', true)
-        case 2:
-            # DJ KK is here today! I hear things are pretty exciting on the north beach. You should go join in the fun between jobs!
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:111', true)
- 
+	run MncBoxChk()
+	run StoryEventChk()
+	run RestaurantCafeChk()
+	switch EventFlowSystemActor.WherearenKKFesStatus(false):
+		case 0, 3:
+			run Sub_grp_Event43()
+		case 1:
+			if EventFlowSystemActor.IsDayBeforeKKFes():
+				run Sub_grp_Event43()
+			else:
+				# Can you believe DJ KK himself will be performing here? The show starts at 6 PM, so don't let me catch you working right up until the last minute. Hav…
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:111_01', true)
+		case 2:
+			# DJ KK is here today! I hear things are pretty exciting on the north beach. You should go join in the fun between jobs!
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:111', true)
+
 flow Root_Init():
-    if System.EventFlags['cWherearenPlayer:SeqMncBoxEventReady']:
-        MainNpc.NpcAITalkSubCastEntry('man', 1)
- 
+	if System.EventFlags['cWherearenPlayer:SeqMncBoxEventReady']:
+		MainNpc.NpcAITalkSubCastEntry('man', 1)
+
 flow Root_OfficeMachine():
-    System.EventFlags['cWherearenPlayer:SeqExchangeMachineEventReady'] = false
-    System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice'] = false
-    System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
-    System.EventFlags['cPlayer:OtgTipsUnlockATM'] = true
-    # Hey, can I show you something neat, PLAYER?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_01', false)
-    EventFlowSystemActor.SetLookAtTargetObject('cWherearenATM')
-    MainNpc.TurnNeck(13, false)
-    MainNpc.TurnBody(13, 0.0)
-    # Do you…notice anything new over there?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_02', false)
-    # It's an…ABD! Of course, that stands for "Automatic Bell Dispenser." But it can also dispense our local currency, Poki. I guess it's actually an "AB&P…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_03', false)
-    MainNpc.TurnNeck(10, false)
-    # The relative that sent over the <item>amiibo scanner also sent this!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_04', false)
-    # It lets you deposit Poki or withdraw Poki, and also exchange Poki into Bells or vice versa! The exchange rate changes every day, and there's a limit …
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_05', false)
-    if EventFlowSystemActor.SavingPokiCount(1):
-        # After all, you worked hard for those Poki, and I imagine you might want to exchange them for Bells for home. A little planning ahead might go a long …
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_06', false)
-        # Oh! By the way… I sent your recent earnings to that ABD. So be sure to check it when you can.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:042', true)
-    else:
-        # After all, you worked hard for those Poki, and I imagine you might want to exchange them for Bells for home. A little planning ahead might go a long …
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_06', true)
- 
+	System.EventFlags['cWherearenPlayer:SeqExchangeMachineEventReady'] = false
+	System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice'] = false
+	System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
+	System.EventFlags['cPlayer:OtgTipsUnlockATM'] = true
+	# Hey, can I show you something neat, PLAYER?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_01', false)
+	EventFlowSystemActor.SetLookAtTargetObject('cWherearenATM')
+	MainNpc.TurnNeck(13, false)
+	MainNpc.TurnBody(13, 0.0)
+	# Do you…notice anything new over there?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_02', false)
+	# It's an…ABD! Of course, that stands for "Automatic Bell Dispenser." But it can also dispense our local currency, Poki. I guess it's actually an "AB&P…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_03', false)
+	MainNpc.TurnNeck(10, false)
+	# The relative that sent over the <item>amiibo scanner also sent this!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_04', false)
+	# It lets you deposit Poki or withdraw Poki, and also exchange Poki into Bells or vice versa! The exchange rate changes every day, and there's a limit …
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_05', false)
+	if EventFlowSystemActor.SavingPokiCount(1):
+		# After all, you worked hard for those Poki, and I imagine you might want to exchange them for Bells for home. A little planning ahead might go a long …
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_06', false)
+		# Oh! By the way… I sent your recent earnings to that ABD. So be sure to check it when you can.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:042', true)
+	else:
+		# After all, you worked hard for those Poki, and I imagine you might want to exchange them for Bells for home. A little planning ahead might go a long …
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:041_06', true)
+
 flow Root_ResortStudy():
-    System.EventFlags['cWherearenPlayer:SeqResortStudyEventReady'] = false
-    System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice'] = false
-    System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
-    # Ah, PLAYER! I've been waiting for you! Can you pull out your phone so I can send an app to you?
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:030', true)
-    run Demo_Common_PhoneCall::SendingDataWithP_Otgrun Demo_Common_PhoneCall::SendingDataWithP_Otg()
-    EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cWherearenStudy')
-    run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
-    # Perfect! The app is called Room Sketch, and it's used for creating room designs! You can use it anytime. I find myself playing around with it all the…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:031', false)
-    System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortStudyApp'] = true
-    EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Wherearen', 'ResortStudy', 'cNowDemoEnd', false)
- 
+	System.EventFlags['cWherearenPlayer:SeqResortStudyEventReady'] = false
+	System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice'] = false
+	System.EventFlags['cWherearenPlayer:Prohibit_NewOrder'] = false
+	# Ah, PLAYER! I've been waiting for you! Can you pull out your phone so I can send an app to you?
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:030', true)
+	run Demo_Common_PhoneCall::SendingDataWithP_Otg()
+	EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cWherearenStudy')
+	run Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+	# Perfect! The app is called Room Sketch, and it's used for creating room designs! You can use it anytime. I find myself playing around with it all the…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_09_WherearenEvent_Sub:031', false)
+	System.EventFlags['cPlayer:WHEREAREN_Unlock_ResortStudyApp'] = true
+	EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Wherearen', 'ResortStudy', 'cNowDemoEnd', false)
+
 flow StoryEventChk():
-    if System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
-        if System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']:
-            # Oh, PLAYER! I saw Wardell head out a moment ago. You're on break until he gets back, so enjoy yourself!
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:238', true)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        elif not System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
-            if System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing']:
-                # Oh, PLAYER! Have you had a chat with Niko yet? If you haven't, you should go visit him at the pier.
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:106', true)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
-                # I'm focusing on cleaning the office at the moment, so I've put a hold on any new work tasks. Niko is upstairs taking a break. Why don't you join him …
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:147', true)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
+		if System.EventFlags['cWherearenPlayer:ManGenerateInFieldTemp']:
+			# Oh, PLAYER! I saw Wardell head out a moment ago. You're on break until he gets back, so enjoy yourself!
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:238', true)
+			EventFlowSystemActor.ExitFlowchart()
+		elif not System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
+			if System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing']:
+				# Oh, PLAYER! Have you had a chat with Niko yet? If you haven't, you should go visit him at the pier.
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:106', true)
+				EventFlowSystemActor.ExitFlowchart()
+			elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
+				# I'm focusing on cleaning the office at the moment, so I've put a hold on any new work tasks. Niko is upstairs taking a break. Why don't you join him …
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:147', true)
+				EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_grp_Event43():
-    switch EventFlowSystemActor.EnvTimeZone():
-        case `05:00-07:59`, `08:00-11:59`:
-            # Good morning, PLAYER!
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:101', true)
-        case `12:00-15:59`, `16:00-18:59`:
-            # Hi, PLAYER. It's good to see you!
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:102', true)
-        case `19:00-23:59`, `00:00-04:59`:
-            # Good evening, PLAYER!
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:103', true)
- 
+	switch EventFlowSystemActor.EnvTimeZone():
+		case `05:00-07:59`, `08:00-11:59`:
+			# Good morning, PLAYER!
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:101', true)
+		case `12:00-15:59`, `16:00-18:59`:
+			# Hi, PLAYER. It's good to see you!
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:102', true)
+		case `19:00-23:59`, `00:00-04:59`:
+			# Good evening, PLAYER!
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_01_WherearenOffice:103', true)

@@ -1,612 +1,611 @@
 flow AfterFirstTalk_Normal():
-    # The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2003', false)
- 
+	# The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2003', false)
+
 flow Delively_Cmn():
-    run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Namerun SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
-    switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-        case 1:
-            # Our next dish will be a <item>pumpkin pie absolutely stuffed with pumpkin!
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:051', false)
-            run Sub_Event161()
-        case 2:
-            # Our next dish will be a <item>gratin. We'll be working from my own recipe, featuring hearty ingredients!
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:051_01', false)
-            run Sub_Event161()
-        case 3:
-            # Last up is a dazzling presentation of fresh fish: the one, the only, <item>meunière!
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:051_02', false)
-            run Sub_Event161()
-        default:
-            return
- 
+	run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
+	switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+		case 1:
+			# Our next dish will be a <item>pumpkin pie absolutely stuffed with pumpkin!
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:051', false)
+			run Sub_Event161()
+		case 2:
+			# Our next dish will be a <item>gratin. We'll be working from my own recipe, featuring hearty ingredients!
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:051_01', false)
+			run Sub_Event161()
+		case 3:
+			# Last up is a dazzling presentation of fresh fish: the one, the only, <item>meunière!
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:051_02', false)
+			run Sub_Event161()
+		default:
+			return
+
 flow Delively_First(ItemPrice: int = 0):
-    run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Namerun SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
-    # Everyone must be salivating to get a taste of my cooking. I'd love to start on some <item>clam chowder…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:011', false)
-    # And I would, if only I had a digger to fetch me 3 fresh <item>manila clams.
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:012', false)
-    # I'd do it myself, but these are chef's hands. Without an assistant digger, I despair of getting my ingredients.
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:013', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # What?! Did you bring me my ingredients?!
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:014', false)
-        EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'HarvestFoodStuff3', '', false)
-        if EventFlowSystemActor.UIResultMenuDecide():
-            MainNpc.SetDeliveryItem(4, false)
-            MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
-            EventFlowSystemActor.MessageSuspend()
-            MainNpc.NpcDelivery(0, 'Keep')
-            run SNPC_tuk_02_SystemProcess::Chk_ResultShowFoodrun SNPC_tuk_02_SystemProcess::Chk_ResultShowFood()
-            switch SubflowResults@3[3]:
-                case 1:
-                    # Well, what do you know! Fresh <item>manila clams from this very island! These are some beauties. I'll make the finest <item>clam chowder you've ever …
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:015', false)
-                    EventFlowSystemActor.MessageSuspend()
-                    MainNpc.NpcDelivery(3, 'Default')
-                    EventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
-                    run SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Moverun SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Move()
-                    System.EventFlags['cPlayer:HarvestProgress'] += 1
-                    if EventFlowSystemActor.EventFlagSystemComqare('cPlayer:HarvestProgress', 'cLand:HarvestProgress') == 0:
-                        System.EventFlags['cLand:HarvestProgress'] += 1
-                        run DemoTest()
-                    else:
-                        run DemoTest()
-                case 2:
-                    # Ermm…I appreciate the gesture, but this isn't what I was looking for.
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:043', false)
-                    EventFlowSystemActor.MessageSuspend()
-                    MainNpc.NpcDelivery(10, 'Default')
-                    # I need 3 <item>manila clams to make world-class <item>clam chowder. <10:4>Shouldn't take too long, so off you go!
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:043_01', false)
-                    System.EventFlags['cPlayer:TukCancel1stRequest'] = true
-                default:
-                    return
-        else:
-            # If you don't have the ingredients yet, that's fine. Just deliver them to me here before I'm off the clock.
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:042', false)
-    else:
-        # Yikes! I forgot an important rule of fine dining: never rope the customer into cooking. My a-gobb-logies! That does leave the question of where I'll …
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:041', false)
-        # Let's table that rule for a second. Is there any chance at all I could sweet talk you into getting those <item>manila clams I need? Maybe go stew on …
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:041_01', false)
-        System.EventFlags['cPlayer:TukCancel1stRequest'] = true
- 
+	run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
+	# Everyone must be salivating to get a taste of my cooking. I'd love to start on some <item>clam chowder…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:011', false)
+	# And I would, if only I had a digger to fetch me 3 fresh <item>manila clams.
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:012', false)
+	# I'd do it myself, but these are chef's hands. Without an assistant digger, I despair of getting my ingredients.
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:013', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# What?! Did you bring me my ingredients?!
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:014', false)
+		EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'HarvestFoodStuff3', '', false)
+		if EventFlowSystemActor.UIResultMenuDecide():
+			MainNpc.SetDeliveryItem(4, false)
+			MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+			EventFlowSystemActor.MessageSuspend()
+			MainNpc.NpcDelivery(0, 'Keep')
+			run SNPC_tuk_02_SystemProcess::Chk_ResultShowFood()
+			switch SubflowResults@3[3]:
+				case 1:
+					# Well, what do you know! Fresh <item>manila clams from this very island! These are some beauties. I'll make the finest <item>clam chowder you've ever …
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:015', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.NpcDelivery(3, 'Default')
+					EventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
+					run SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Move()
+					System.EventFlags['cPlayer:HarvestProgress'] += 1
+					if EventFlowSystemActor.EventFlagSystemComqare('cPlayer:HarvestProgress', 'cLand:HarvestProgress') == 0:
+System.EventFlags['cLand:HarvestProgress'] += 1
+						run DemoTest()
+					else:
+						run DemoTest()
+				case 2:
+					# Ermm…I appreciate the gesture, but this isn't what I was looking for.
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:043', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.NpcDelivery(10, 'Default')
+					# I need 3 <item>manila clams to make world-class <item>clam chowder. <10:4>Shouldn't take too long, so off you go!
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:043_01', false)
+					System.EventFlags['cPlayer:TukCancel1stRequest'] = true
+				default:
+					return
+		else:
+			# If you don't have the ingredients yet, that's fine. Just deliver them to me here before I'm off the clock.
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:042', false)
+	else:
+		# Yikes! I forgot an important rule of fine dining: never rope the customer into cooking. My a-gobb-logies! That does leave the question of where I'll …
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:041', false)
+		# Let's table that rule for a second. Is there any chance at all I could sweet talk you into getting those <item>manila clams I need? Maybe go stew on …
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:041_01', false)
+		System.EventFlags['cPlayer:TukCancel1stRequest'] = true
+
 flow Delivery_Secret(ItemPrice: int = 0):
-    run SNPC_tuk_02_SystemProcess::Set_SecretFood_Dish_Namerun SNPC_tuk_02_SystemProcess::Set_SecretFood_Dish_Name()
-    if SubflowResults@3[4] in (0, 2):
-        switch SubflowResults@5[2]:
-            case 1, 3, 4:
-                # Ooooh! Your <140:26:0004> is a very interesting ingredient.
-                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:101', false)
-                switch SubflowResults@3[4]:
-                    case 0:
-                        # Hang on… Your <140:26:0004> could be just what I need to spice up my <140:25:cd02> recipe.
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:102', false)
-                        # Every professional chef worth their salt knows when greatness is at hand! I can taste it in the air!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:103', false)
-                        run Sub_Event94(ItemPrice=ItemPrice)
-                    case 2:
-                        # I could use your <140:26:0004> to bring my <140:25:cd02> recipe from five stars to six!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:114', false)
-                        run Sub_Event94(ItemPrice=ItemPrice)
-                    default:
-                        return
-            case 2:
-                # Oh! That <140:26:0004> and the <140:26:0005> have a scent to them that screams "YUM"!
-                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:111', false)
-                switch SubflowResults@3[4]:
-                    case 0:
-                        # Wait! I'd bet those 2 shades of pumpkin could be used to make my <140:25:cd02> recipe even better.
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:112', false)
-                        # Every professional chef worth their salt knows when greatness is at hand! I can taste it in the air!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:103', false)
-                        run Sub_Event170(ItemPrice=ItemPrice)
-                    case 2:
-                        # I could use your 2 shades of pumpkin to bring my <140:25:cd02> recipe from five stars to six!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:114_01', false)
-                        run Sub_Event170(ItemPrice=ItemPrice)
-                    default:
-                        return
-            default:
-                return
-    else:
-        switch SubflowResults@5[2]:
-            case 1, 3, 4:
-                # I'd do anything to get my hands on a high-quality ingredient like your <140:26:0004>. I know you said no, but I must ask again: may I make <140:25:cd…
-                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:115', false)
-                run Sub_grp_Event121(ItemPrice=ItemPrice)
-            case 2:
-                # I'd just love to cook with high-quality ingredients like <140:26:0004> and <140:26:0005>. I know you said no, but I must ask again: may I make <140:2…
-                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:115_01', false)
-                run Sub_grp_Event121(ItemPrice=ItemPrice)
-            default:
-                return
- 
+	run SNPC_tuk_02_SystemProcess::Set_SecretFood_Dish_Name()
+	if SubflowResults@3[4] in (0, 2):
+		switch SubflowResults@5[2]:
+			case 1, 3, 4:
+				# Ooooh! Your <140:26:0004> is a very interesting ingredient.
+				MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:101', false)
+				switch SubflowResults@3[4]:
+					case 0:
+						# Hang on… Your <140:26:0004> could be just what I need to spice up my <140:25:cd02> recipe.
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:102', false)
+						# Every professional chef worth their salt knows when greatness is at hand! I can taste it in the air!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:103', false)
+run Sub_Event94(ItemPrice=ItemPrice)
+					case 2:
+						# I could use your <140:26:0004> to bring my <140:25:cd02> recipe from five stars to six!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:114', false)
+run Sub_Event94(ItemPrice=ItemPrice)
+					default:
+						return
+			case 2:
+				# Oh! That <140:26:0004> and the <140:26:0005> have a scent to them that screams "YUM"!
+				MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:111', false)
+				switch SubflowResults@3[4]:
+					case 0:
+						# Wait! I'd bet those 2 shades of pumpkin could be used to make my <140:25:cd02> recipe even better.
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:112', false)
+						# Every professional chef worth their salt knows when greatness is at hand! I can taste it in the air!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:103', false)
+run Sub_Event170(ItemPrice=ItemPrice)
+					case 2:
+						# I could use your 2 shades of pumpkin to bring my <140:25:cd02> recipe from five stars to six!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:114_01', false)
+run Sub_Event170(ItemPrice=ItemPrice)
+					default:
+						return
+			default:
+				return
+	else:
+		switch SubflowResults@5[2]:
+			case 1, 3, 4:
+				# I'd do anything to get my hands on a high-quality ingredient like your <140:26:0004>. I know you said no, but I must ask again: may I make <140:25:cd…
+				MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:115', false)
+				run Sub_grp_Event121(ItemPrice=ItemPrice)
+			case 2:
+				# I'd just love to cook with high-quality ingredients like <140:26:0004> and <140:26:0005>. I know you said no, but I must ask again: may I make <140:2…
+				MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:115_01', false)
+				run Sub_grp_Event121(ItemPrice=ItemPrice)
+			default:
+				return
+
 flow DemoTest():
-    run SNPC_tuk_01_DemoCooking::Root_Normalrun SNPC_tuk_01_DemoCooking::Root_Normal()
-    run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Namerun SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
-    System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
-    # Thanks to me, and also you to some extent, we've got delicious <item>clam chowder ready to serve! Folks tend to underrate soup, but they should think…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:021', false)
-    run GetReward_First()
- 
+	run SNPC_tuk_01_DemoCooking::Root_Normal()
+	run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
+	System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
+	# Thanks to me, and also you to some extent, we've got delicious <item>clam chowder ready to serve! Folks tend to underrate soup, but they should think…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:021', false)
+	run GetReward_First()
+
 flow GetRewardAfterEvent():
-    # That's that for this year's Turkey Day gala. Your help this year was a lifesaver! I'll keep honing my skills as a chef so I can get hired back next y…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:088', false)
-    System.EventFlags['cPlayer:TukTalkAfterEvent'] = true
- 
+	# That's that for this year's Turkey Day gala. Your help this year was a lifesaver! I'll keep honing my skills as a chef so I can get hired back next y…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:088', false)
+	System.EventFlags['cPlayer:TukTalkAfterEvent'] = true
+
 flow GetReward_Cmn():
-    run SNPC_tuk_02_SystemProcess::Set_NormalRewardrun SNPC_tuk_02_SystemProcess::Set_NormalReward()
-    switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-        case 2, 3:
-            # This is for your help with another great dish. Compliments of the chef, [a|an]<125:0:0003>!
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_01', false)
-            run Event201()
-        case 4:
-            # Gobble gob! We got through the entire four-course menu I planned for today! I owe much of that to you. In all honesty, I'm deeply thankful for your h…
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_02', false)
-            run PassReward_Cmn()
-            run GetReward_Cooking_Recipe()
-            run Event47()
-        default:
-            return
- 
+	run SNPC_tuk_02_SystemProcess::Set_NormalReward()
+	switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+		case 2, 3:
+			# This is for your help with another great dish. Compliments of the chef, [a|an]<125:0:0003>!
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_01', false)
+			run Event201()
+		case 4:
+			# Gobble gob! We got through the entire four-course menu I planned for today! I owe much of that to you. In all honesty, I'm deeply thankful for your h…
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_02', false)
+			run PassReward_Cmn()
+			run GetReward_Cooking_Recipe()
+			run Event47()
+		default:
+			return
+
 flow GetReward_Cooking_Recipe():
-    if (not EventFlowSystemActor.PlayerHasCookingRecipe('DishHarvestRecipeBook', 65534)) and (System.EventFlags['cPlayer:MainmenuRecipe_v2']):
-        # And I…have another little present, just for you!
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_03', true)
-        MainNpc.NpcSetRewardRecipe(12823, false)
-        MainNpc.SetDeliveryItem(1, false)
-        MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Keep')
-        # It's recipes! With these, you can learn how to make everything I prepared today. This book will be on sale at the shop tomorrow, but you deserve an a…
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_04', false)
-        MainNpc.NpcDelivery(2, 'Default')
-        EventFlowSystemActor.PlayerSetCookingRecipe('DishHarvestRecipeBook', 65534)
-        # The recipes should be in your NookPhone app. Be sure to check them out later!
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_05', false)
- 
+	if (not EventFlowSystemActor.PlayerHasCookingRecipe('DishHarvestRecipeBook', 65534)) and (System.EventFlags['cPlayer:MainmenuRecipe_v2']):
+		# And I…have another little present, just for you!
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_03', true)
+		MainNpc.NpcSetRewardRecipe(12823, false)
+		MainNpc.SetDeliveryItem(1, false)
+		MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Keep')
+		# It's recipes! With these, you can learn how to make everything I prepared today. This book will be on sale at the shop tomorrow, but you deserve an a…
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_04', false)
+		MainNpc.NpcDelivery(2, 'Default')
+		EventFlowSystemActor.PlayerSetCookingRecipe('DishHarvestRecipeBook', 65534)
+		# The recipes should be in your NookPhone app. Be sure to check them out later!
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:081_05', false)
+
 flow GetReward_First():
-    run SNPC_tuk_02_SystemProcess::Set_NormalRewardrun SNPC_tuk_02_SystemProcess::Set_NormalReward()
-    # I'd like to show my appreciation for your help. I present to you [a|an] <125:0:0003>!
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:022', false)
-    run Event201()
- 
+	run SNPC_tuk_02_SystemProcess::Set_NormalReward()
+	# I'd like to show my appreciation for your help. I present to you [a|an] <125:0:0003>!
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:022', false)
+	run Event201()
+
 flow GetReward_Retry():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # I still want to give you that reward I mentioned! <10:4>After you make some pocket space, come remind me!
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:087', false)
-    else:
-        run SNPC_tuk_02_SystemProcess::Set_RetryRewardrun SNPC_tuk_02_SystemProcess::Set_RetryReward()
-        # Stowed some of your stuff, did you? In that case, I present to you your <125:0:0003>!
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:086', false)
-        switch EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward'):
-            case 1, 2, 3, 4:
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# I still want to give you that reward I mentioned! <10:4>After you make some pocket space, come remind me!
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:087', false)
+	else:
+		run SNPC_tuk_02_SystemProcess::Set_RetryReward()
+		# Stowed some of your stuff, did you? In that case, I present to you your <125:0:0003>!
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:086', false)
+		switch EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward'):
+			case 1, 2, 3, 4:
 entrypoint Event201:
-                run PassReward_Cmn()
+				run PassReward_Cmn()
 entrypoint Event47:
-                run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Namerun SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
-                switch EventFlowSystemActor.EventCheck('HarvestFestival'):
-                    case 1:
-                        switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-                            case 1:
-                                # I'll say this: for an amateur, you've got a real eye for ingredients! Next on my menu, I plan to cook up a <item>pumpkin pie. I was going to hire a g…
-                                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:026', false)
-                                switch EventFlowSystemActor.GeneralTalkChoice2():
-                                    case 0, 1:
-                                        # Gobble gob! I really appreciate this. Even a brilliant chef is nothing without an eager assistant. Let's make this a red-letter Turkey Day!
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:027', false)
-                                        # Let's talk turkey about what we'll need to bake that <item>pumpkin pie. I'll need [a|an]<140:26:0000>, plus [a|an]<140:26:0001>. Once it's all stirre…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:028', false)
-                                        # If you don't have what we need, someone else might. There's no shame in asking around for help. It's how I recruited you, after all.
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:029', false)
-                                        System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] += 1
-                            case 2:
-                                # Now then…for our next dish, we'll use lots of ingredients to make a hearty <item>gratin. For this, we need to procure [a|an] <140:26:0000> as well as…
-                                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:092', false)
-                                System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] += 1
-                            case 3:
-                                # Let's see… Yes, it's time to tackle the final dish. Only the best for our main course! The final dish I have planned is none other than…a grand meuni…
-                                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:093', false)
-                                # I understand it's Turkey Day, but you wouldn't believe the way they choose to celebrate it in some places. But the less said there, the better. We'll…
-                                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:093_01', false)
-                                System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] += 1
-                            case 4:
-                                # Ahh… Few things are as rewarding as a job well done, don't you think? But the job IS done now, so you have my blessing to go and enjoy this Turkey Da…
-                                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:082', false)
-                                switch SubflowResults@3[1]:
-                                    case 0:
-                                        # Gobble gob! With some help from you, I made four wonderful courses for our festival today. But as a professional chef, I should always be striving to…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:083_01', false)
-                                        # It's your call, but if you'd like to go above and beyond, bring me any ingredients you think might work. If they improve my recipes…well, I won't cre…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:084', false)
-                                    case 1:
-                                        # So we didn't follow my tried-and-true recipes to the letter. Your choice of ingredients was too ingenious not to! It's got me thinking… I suspect all…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:083', false)
-                                        # It's your call, but if you'd like to go above and beyond, bring me any ingredients you think might work. If they improve my recipes…well, I won't cre…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:084', false)
-                                    default:
-                                        return
-                            default:
-                                return
-                    case 2:
-                        run GetRewardAfterEvent()
-                    default:
-                        return
-            case 5, 6, 7, 8:
+				run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
+				switch EventFlowSystemActor.EventCheck('HarvestFestival'):
+					case 1:
+						switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+							case 1:
+								# I'll say this: for an amateur, you've got a real eye for ingredients! Next on my menu, I plan to cook up a <item>pumpkin pie. I was going to hire a g…
+								MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:026', false)
+								switch EventFlowSystemActor.GeneralTalkChoice2():
+									case 0, 1:
+										# Gobble gob! I really appreciate this. Even a brilliant chef is nothing without an eager assistant. Let's make this a red-letter Turkey Day!
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:027', false)
+										# Let's talk turkey about what we'll need to bake that <item>pumpkin pie. I'll need [a|an]<140:26:0000>, plus [a|an]<140:26:0001>. Once it's all stirre…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:028', false)
+										# If you don't have what we need, someone else might. There's no shame in asking around for help. It's how I recruited you, after all.
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:029', false)
+System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] += 1
+							case 2:
+								# Now then…for our next dish, we'll use lots of ingredients to make a hearty <item>gratin. For this, we need to procure [a|an] <140:26:0000> as well as…
+								MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:092', false)
+System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] += 1
+							case 3:
+								# Let's see… Yes, it's time to tackle the final dish. Only the best for our main course! The final dish I have planned is none other than…a grand meuni…
+								MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:093', false)
+								# I understand it's Turkey Day, but you wouldn't believe the way they choose to celebrate it in some places. But the less said there, the better. We'll…
+								MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:093_01', false)
+System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] += 1
+							case 4:
+								# Ahh… Few things are as rewarding as a job well done, don't you think? But the job IS done now, so you have my blessing to go and enjoy this Turkey Da…
+								MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:082', false)
+								switch SubflowResults@3[1]:
+									case 0:
+										# Gobble gob! With some help from you, I made four wonderful courses for our festival today. But as a professional chef, I should always be striving to…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:083_01', false)
+										# It's your call, but if you'd like to go above and beyond, bring me any ingredients you think might work. If they improve my recipes…well, I won't cre…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:084', false)
+									case 1:
+										# So we didn't follow my tried-and-true recipes to the letter. Your choice of ingredients was too ingenious not to! It's got me thinking… I suspect all…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:083', false)
+										# It's your call, but if you'd like to go above and beyond, bring me any ingredients you think might work. If they improve my recipes…well, I won't cre…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:084', false)
+									default:
+				 return
+							default:
+								return
+					case 2:
+run GetRewardAfterEvent()
+					default:
+						return
+			case 5, 6, 7, 8:
 entrypoint Event298:
-                run PassReward_Cmn()
-                run SNPC_tuk_02_SystemProcess::Chk_SecretFood_Processrun SNPC_tuk_02_SystemProcess::Chk_SecretFood_Process()
-                switch EventFlowSystemActor.EventCheck('HarvestFestival'):
-                    case 1:
-                        switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-                            case 1, 2, 3:
-                                # I hope you'll keep helping me out with ingredients for the next course! You find the ingredients, and I'll cook 'em. That's division of labor for you!
-                                MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:122', false)
-                            case 4:
-                                switch SubflowResults@3[1]:
-                                    case 1:
-                                        # Something tells me we could try even harder to find unique ingredients to give my recipes a special kick. If you find anything delicious that fits th…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:123', false)
-                                    case 2:
+				run PassReward_Cmn()
+				run SNPC_tuk_02_SystemProcess::Chk_SecretFood_Process()
+				switch EventFlowSystemActor.EventCheck('HarvestFestival'):
+					case 1:
+						switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+							case 1, 2, 3:
+								# I hope you'll keep helping me out with ingredients for the next course! You find the ingredients, and I'll cook 'em. That's division of labor for you!
+								MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:122', false)
+							case 4:
+								switch SubflowResults@3[1]:
+									case 1:
+										# Something tells me we could try even harder to find unique ingredients to give my recipes a special kick. If you find anything delicious that fits th…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:123', false)
+									case 2:
 entrypoint Event311:
-                                        # You know, at first I only thought of you as an amateur ingredient gofer. But the ingredients you brought me led to all sorts of flavor breakthroughs.…
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:128', false)
-                                        # But no, you've earned a break. Go take some time to really, truly enjoy the rest of Turkey Day!
-                                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:129', false)
-                                    default:
-                                        return
-                            default:
-                                return
-                    case 2:
-                        run GetRewardAfterEvent()
-                    default:
-                        return
-            default:
-                return
- 
+										# You know, at first I only thought of you as an amateur ingredient gofer. But the ingredients you brought me led to all sorts of flavor breakthroughs.…
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:128', false)
+										# But no, you've earned a break. Go take some time to really, truly enjoy the rest of Turkey Day!
+										MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:129', false)
+									default:
+				 return
+							default:
+								return
+					case 2:
+run GetRewardAfterEvent()
+					default:
+						return
+			default:
+				return
+
 flow GetReward_Secret_Cmn():
-    run SNPC_tuk_02_SystemProcess::Set_SecretRewardrun SNPC_tuk_02_SystemProcess::Set_SecretReward()
-    if EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward') in (0, 1, 2, 3, 4, 5, 6, 7):
-        run UnlockedAllRecipe()
-    else:
-        EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_ThanksGiving_CookingComplete')
-        if System.EventFlags['cPlayer:MainmenuRecipe']:
-            if EventFlowSystemActor.PlayerHasCraftRecipe('HarvestFtr', 65534):
-                run UnlockedAllRecipe()
-            else:
-                run GetReward_Secret_Recipe()
-        else:
-            run UnlockedAllRecipe()
- 
+	run SNPC_tuk_02_SystemProcess::Set_SecretReward()
+	if EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward') in (0, 1, 2, 3, 4, 5, 6, 7):
+		run UnlockedAllRecipe()
+	else:
+		EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_ThanksGiving_CookingComplete')
+		if System.EventFlags['cPlayer:MainmenuRecipe']:
+			if EventFlowSystemActor.PlayerHasCraftRecipe('HarvestFtr', 65534):
+				run UnlockedAllRecipe()
+			else:
+				run GetReward_Secret_Recipe()
+		else:
+			run UnlockedAllRecipe()
+
 flow GetReward_Secret_Recipe():
-    System.EventFlags['cPlayer:HarvestKeepReward'] = 0
-    # Good gobble! All four of the courses we prepared today have surpassed my original recipes!
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:124', false)
-    # You've done so much for me. I need to think hard about the best way to thank you… Oh, I've got it! DIY is popular on this island, right? You create a…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:125', false)
-    MainNpc.SetDeliveryItemAtRandom(5794, false, 'cVillageRemakePattern', 0)
-    MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
-    EventFlowSystemActor.MessageSuspend()
-    MainNpc.NpcDelivery(1, 'Keep')
-    # It's a recipe collection that teaches you how to make Turkey Day–themed furniture, and other things besides! The shop should carry it starting tomorr…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:126', false)
-    # I may be a genius at the stove, but furniture is beyond me. I think these plans belong with you instead. All the recipes will be added to your NookPh…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:127', false)
-    EventFlowSystemActor.MessageSuspend()
-    MainNpc.NpcDelivery(2, 'Default')
-    EventFlowSystemActor.PlayerSetCraftRecipe('HarvestFtr', 65534)
-    run Event311()
- 
+	System.EventFlags['cPlayer:HarvestKeepReward'] = 0
+	# Good gobble! All four of the courses we prepared today have surpassed my original recipes!
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:124', false)
+	# You've done so much for me. I need to think hard about the best way to thank you… Oh, I've got it! DIY is popular on this island, right? You create a…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:125', false)
+	MainNpc.SetDeliveryItemAtRandom(5794, false, 'cVillageRemakePattern', 0)
+	MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+	EventFlowSystemActor.MessageSuspend()
+	MainNpc.NpcDelivery(1, 'Keep')
+	# It's a recipe collection that teaches you how to make Turkey Day–themed furniture, and other things besides! The shop should carry it starting tomorr…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:126', false)
+	# I may be a genius at the stove, but furniture is beyond me. I think these plans belong with you instead. All the recipes will be added to your NookPh…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:127', false)
+	EventFlowSystemActor.MessageSuspend()
+	MainNpc.NpcDelivery(2, 'Default')
+	EventFlowSystemActor.PlayerSetCraftRecipe('HarvestFtr', 65534)
+	run Event311()
+
 flow Host_Root():
-    if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress') == 0:
-        if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestTalkAboutNextDishProgress') == 0:
-            run Request_First()
-        else:
-            run Delively_First()
-    elif EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward') == 0:
-        run SNPC_tuk_02_SystemProcess::Chk_HaveSecretFoodrun SNPC_tuk_02_SystemProcess::Chk_HaveSecretFood()
-        if SubflowResults@5[2] == 0:
-            switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-                case 1, 2, 3:
-                    run Delively_Cmn()
-                case 4:
-                    if SubflowResults@3[1] not in (0, 1):
-                        # The feast was a smashing success, and more of it was your work than I expected! I'm extremely thankful. Now go on, then! Enjoy the Turkey Day festiva…
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:151', false)
-                    elif EventFlowSystemActor.RandomChoice2(2) == 0:
-                        # I bet there are still dishes that could be improved even more with ingredients I hadn't considered. If this island has secret ingredients up its slee…
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:150', false)
-                    else:
-                        # Hmm… No. Nothing you're carrying is firing my imagination. But if you come across something you think we could put to use, I'd appreciate you bringin…
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:150_01', false)
-                default:
-                    return
-        else:
-            run Delivery_Secret()
-    else:
-        run GetReward_Retry()
- 
+	if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress') == 0:
+		if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestTalkAboutNextDishProgress') == 0:
+			run Request_First()
+		else:
+			run Delively_First()
+	elif EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward') == 0:
+		run SNPC_tuk_02_SystemProcess::Chk_HaveSecretFood()
+		if SubflowResults@5[2] == 0:
+			switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+				case 1, 2, 3:
+					run Delively_Cmn()
+				case 4:
+					if SubflowResults@3[1] not in (0, 1):
+						# The feast was a smashing success, and more of it was your work than I expected! I'm extremely thankful. Now go on, then! Enjoy the Turkey Day festiva…
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:151', false)
+					elif EventFlowSystemActor.RandomChoice2(2) == 0:
+						# I bet there are still dishes that could be improved even more with ingredients I hadn't considered. If this island has secret ingredients up its slee…
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:150', false)
+					else:
+						# Hmm… No. Nothing you're carrying is firing my imagination. But if you come across something you think we could put to use, I'd appreciate you bringin…
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:150_01', false)
+				default:
+					return
+		else:
+			run Delivery_Secret()
+	else:
+		run GetReward_Retry()
+
 flow PassReward_Cmn():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # Wait. You wouldn't have enough room in your pockets if I gave this to you right now. I don't want you to go home empty- handed, so make some pocket s…
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:089', false)
-        MainNpc.MessageSuspend()
-        MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
-        Player.PlayerForceOffSharePlaySubIcon('cOn')
-        System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
-        System.EventFlags['cLandTemp:HarvestDemoCooking'] = 0
-        System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 0
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        System.EventFlags['cPlayer:HarvestKeepReward'] = 0
-        System.EventFlags['cPlayer:TukSecretRewardType'] = 0
- 
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Wait. You wouldn't have enough room in your pockets if I gave this to you right now. I don't want you to go home empty- handed, so make some pocket s…
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:089', false)
+		MainNpc.MessageSuspend()
+		MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
+		Player.PlayerForceOffSharePlaySubIcon('cOn')
+		System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
+		System.EventFlags['cLandTemp:HarvestDemoCooking'] = 0
+		System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 0
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		System.EventFlags['cPlayer:HarvestKeepReward'] = 0
+		System.EventFlags['cPlayer:TukSecretRewardType'] = 0
+
 flow Request_First():
-    if System.EventFlags['cPlayer:TukTalkBeforeEvent']:
-        # Hey! It's you again! You're just in time for a Turkey Day feast.
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:001_01', false)
-    else:
-        # Are you one of the locals here? I'm Franklin, professional chef extraordinaire. <10:4>Nook Inc. hired me to come and cook for everyone.
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:001', false)
-        if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-            # See, Turkey Day's about celebrating the harvest by preparing a feast with all those fresh ingredients. And no one knows feasting like turkeys, which …
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:002', false)
-        else:
-            # See, Turkey Day's about celebrating the bounty of spring by cooking it. And no one knows how to cook a feast like turkeys, which is why they called i…
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:002_01', false)
-    if EventFlowSystemActor.FlagSystemIntValue5(5, 'cLand:HarvestProgress') == 0:
-        # Well…I say that, but right now it's what those of us in my line of work would call a…conceptual feast.
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:003', false)
-    else:
-        # I've gotten a bit of a start already, as you can see here, but I'm not as far along as I'd like.
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:003_01', false)
-    # Make no mistake: I brought with me everything I need to whip up a positively gobblicious <item>clam chowder. But today is about nature's bounty, not …
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:004', false)
-    # Just 3 <item>manila clams would be all I'd need to adapt my award-winning <item>clam chowder recipe. But I typically have people to do my clam diggin…
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:005', false)
-    System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] = 1
- 
+	if System.EventFlags['cPlayer:TukTalkBeforeEvent']:
+		# Hey! It's you again! You're just in time for a Turkey Day feast.
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:001_01', false)
+	else:
+		# Are you one of the locals here? I'm Franklin, professional chef extraordinaire. <10:4>Nook Inc. hired me to come and cook for everyone.
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:001', false)
+		if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+			# See, Turkey Day's about celebrating the harvest by preparing a feast with all those fresh ingredients. And no one knows feasting like turkeys, which …
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:002', false)
+		else:
+			# See, Turkey Day's about celebrating the bounty of spring by cooking it. And no one knows how to cook a feast like turkeys, which is why they called i…
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:002_01', false)
+	if EventFlowSystemActor.FlagSystemIntValue5(5, 'cLand:HarvestProgress') == 0:
+		# Well…I say that, but right now it's what those of us in my line of work would call a…conceptual feast.
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:003', false)
+	else:
+		# I've gotten a bit of a start already, as you can see here, but I'm not as far along as I'd like.
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:003_01', false)
+	# Make no mistake: I brought with me everything I need to whip up a positively gobblicious <item>clam chowder. But today is about nature's bounty, not …
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:004', false)
+	# Just 3 <item>manila clams would be all I'd need to adapt my award-winning <item>clam chowder recipe. But I typically have people to do my clam diggin…
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:005', false)
+	System.EventFlags['cPlayer:HarvestTalkAboutNextDishProgress'] = 1
+
 flow Root():
-    System.EventFlags['cPlayer:TukTalkFirst'] = true
-    if EventFlowSystemActor.IsMyVillage():
-        run SNPC_tuk_02_SystemProcess::Chk_SecretFood_Processrun SNPC_tuk_02_SystemProcess::Chk_SecretFood_Process()
-        switch EventFlowSystemActor.EventCheck('HarvestFestival'):
-            case 0:
-                if System.EventFlags['cPlayer:TukTalkBeforeEvent']:
-                    # Our Turkey Day feast isn't ready to be served quite yet. But come back once everything gets underway!
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1021', false)
-                else:
-                    # Are you one of the locals here? I'm Franklin, professional chef extraordinaire. <10:4>Nook Inc. hired me to come and cook for everyone.
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1001', false)
-                    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-                        # See, Turkey Day's about celebrating the harvest by preparing a feast with all those fresh ingredients. And no one knows feasting like turkeys, which …
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1002', false)
-                    else:
-                        # See, Turkey Day's about celebrating the bounty of spring by cooking it. And no one knows how to cook a feast like turkeys, which is why they called i…
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1002_01', false)
-                    # However, there's still some time before the festivities kick off. I'm sure your taste buds are raring to go, but I still have prep to do. Come by onc…
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1003', false)
-                    System.EventFlags['cPlayer:TukTalkBeforeEvent'] = true
-            case 1:
-                run Host_Root()
-                MainNpc.MessageSuspend()
-                MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
-                Player.PlayerForceOffSharePlaySubIcon('cOn')
-                System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
-                System.EventFlags['cLandTemp:HarvestDemoCooking'] = 0
-                System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 0
-            case 2:
-                if EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward') != 0:
-                    run GetReward_Retry()
-                    MainNpc.MessageSuspend()
-                    MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
-                elif not System.EventFlags['cPlayer:TukTalkAfterEvent']:
-                    System.EventFlags['cPlayer:TukTalkAfterEvent'] = true
-                    if System.EventFlags['cPlayer:TukTalkBeforeEvent']:
-                        run AfterFirstTalk_Normal()
-                    elif EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestTalkAboutNextDishProgress') == 0:
-                        # Are you one of the locals here?
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2001', false)
-                        # I'm Franklin. <10:4>They brought me on special to cook for Turkey Day… But the feast is over, alas. Mark your calendar now for next year's festival, …
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2002', false)
-                    else:
-                        run AfterFirstTalk_Normal()
-                elif EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress') in (0, 1, 2, 3):
-                    # The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2011', false)
-                else:
-                    # Gobble gob gob! Today's Turkey Day feast was everything I hoped for! And it might not have been without your help. I hope I get an assistant as capab…
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2012', false)
-            default:
-                return
-    else:
-        switch EventFlowSystemActor.EventCheck('HarvestFestival'):
-            case 0:
-                if System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent']:
-                    # Our Turkey Day feast isn't ready to be served quite yet. But come back once everything gets underway!
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1021', false)
-                else:
-                    # Hm? Who might you be? Oh, a visitor from another island. I see. Here for a good meal, are you? You're in luck, because on Turkey Day we celebrate nat…
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1011', false)
-                    System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent'] = true
-            case 1:
-                if System.EventFlags['cPlayerVisit:DC_TukTalkRunningEvent']:
-                    # You've come a long way! I hope you enjoy Turkey Day the way they do it on ISLAND. I certainly do!
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:511', false)
-                else:
-                    if System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent']:
-                        # Well, well! Look who's back! Our Turkey Day festivities are underway now. Bon appétit!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:502', false)
-                    else:
-                        # Hm? Who might you be? Oh, a visitor from another island. I see. Here for a good meal, are you? You're in luck, because on Turkey Day we celebrate nat…
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:501', false)
-                    System.EventFlags['cPlayerVisit:DC_TukTalkRunningEvent'] = true
-            case 2:
-                if System.EventFlags['cPlayerVisit:DC_TukTalkAfterEvent']:
-                    if EventFlowSystemActor.FlagSystemIntValue5(5, 'cLand:HarvestProgress') in (0, 1, 2, 3):
-                        # The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2111', false)
-                    else:
-                        # Gobble gob gob! Today's Turkey Day feast was everything I hoped for!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2112', false)
-                else:
-                    if (not System.EventFlags['cPlayerVisit:DC_TukTalkRunningEvent']) and (not System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent']):
-                        # Hm? Who might you be? Oh, a visitor from another island. Here to see what all the fuss is about, hm?
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2101', false)
-                        # I'm Franklin. <10:4>They brought me on special to cook for Turkey Day… But the feast is over, alas. Mark your calendar now for next year's festival, …
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2102', false)
-                    else:
-                        # The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
-                        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2103', false)
-                    System.EventFlags['cPlayerVisit:DC_TukTalkAfterEvent'] = true
-            default:
-                return
- 
+	System.EventFlags['cPlayer:TukTalkFirst'] = true
+	if EventFlowSystemActor.IsMyVillage():
+		run SNPC_tuk_02_SystemProcess::Chk_SecretFood_Process()
+		switch EventFlowSystemActor.EventCheck('HarvestFestival'):
+			case 0:
+				if System.EventFlags['cPlayer:TukTalkBeforeEvent']:
+					# Our Turkey Day feast isn't ready to be served quite yet. But come back once everything gets underway!
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1021', false)
+				else:
+					# Are you one of the locals here? I'm Franklin, professional chef extraordinaire. <10:4>Nook Inc. hired me to come and cook for everyone.
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1001', false)
+					if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+						# See, Turkey Day's about celebrating the harvest by preparing a feast with all those fresh ingredients. And no one knows feasting like turkeys, which …
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1002', false)
+					else:
+						# See, Turkey Day's about celebrating the bounty of spring by cooking it. And no one knows how to cook a feast like turkeys, which is why they called i…
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1002_01', false)
+					# However, there's still some time before the festivities kick off. I'm sure your taste buds are raring to go, but I still have prep to do. Come by onc…
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1003', false)
+					System.EventFlags['cPlayer:TukTalkBeforeEvent'] = true
+			case 1:
+				run Host_Root()
+				MainNpc.MessageSuspend()
+				MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
+				Player.PlayerForceOffSharePlaySubIcon('cOn')
+				System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
+				System.EventFlags['cLandTemp:HarvestDemoCooking'] = 0
+				System.EventFlags['cLandTemp:HarvestDemoPlayerProgress'] = 0
+			case 2:
+				if EventFlowSystemActor.FlagSystemIntValue9(9, 'cPlayer:HarvestKeepReward') != 0:
+					run GetReward_Retry()
+					MainNpc.MessageSuspend()
+					MainNpc.NpcChangeHandTool(65534, 'cSetTmpTool', false)
+				elif not System.EventFlags['cPlayer:TukTalkAfterEvent']:
+					System.EventFlags['cPlayer:TukTalkAfterEvent'] = true
+					if System.EventFlags['cPlayer:TukTalkBeforeEvent']:
+run AfterFirstTalk_Normal()
+					elif EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestTalkAboutNextDishProgress') == 0:
+						# Are you one of the locals here?
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2001', false)
+						# I'm Franklin. <10:4>They brought me on special to cook for Turkey Day… But the feast is over, alas. Mark your calendar now for next year's festival, …
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2002', false)
+					else:
+run AfterFirstTalk_Normal()
+				elif EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress') in (0, 1, 2, 3):
+					# The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2011', false)
+				else:
+					# Gobble gob gob! Today's Turkey Day feast was everything I hoped for! And it might not have been without your help. I hope I get an assistant as capab…
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2012', false)
+			default:
+				return
+	else:
+		switch EventFlowSystemActor.EventCheck('HarvestFestival'):
+			case 0:
+				if System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent']:
+					# Our Turkey Day feast isn't ready to be served quite yet. But come back once everything gets underway!
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1021', false)
+				else:
+					# Hm? Who might you be? Oh, a visitor from another island. I see. Here for a good meal, are you? You're in luck, because on Turkey Day we celebrate nat…
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:1011', false)
+					System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent'] = true
+			case 1:
+				if System.EventFlags['cPlayerVisit:DC_TukTalkRunningEvent']:
+					# You've come a long way! I hope you enjoy Turkey Day the way they do it on ISLAND. I certainly do!
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:511', false)
+				else:
+					if System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent']:
+						# Well, well! Look who's back! Our Turkey Day festivities are underway now. Bon appétit!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:502', false)
+					else:
+						# Hm? Who might you be? Oh, a visitor from another island. I see. Here for a good meal, are you? You're in luck, because on Turkey Day we celebrate nat…
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:501', false)
+					System.EventFlags['cPlayerVisit:DC_TukTalkRunningEvent'] = true
+			case 2:
+				if System.EventFlags['cPlayerVisit:DC_TukTalkAfterEvent']:
+					if EventFlowSystemActor.FlagSystemIntValue5(5, 'cLand:HarvestProgress') in (0, 1, 2, 3):
+						# The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2111', false)
+					else:
+						# Gobble gob gob! Today's Turkey Day feast was everything I hoped for!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2112', false)
+				else:
+					if (not System.EventFlags['cPlayerVisit:DC_TukTalkRunningEvent']) and (not System.EventFlags['cPlayerVisit:DC_TukTalkBeforeEvent']):
+						# Hm? Who might you be? Oh, a visitor from another island. Here to see what all the fuss is about, hm?
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2101', false)
+						# I'm Franklin. <10:4>They brought me on special to cook for Turkey Day… But the feast is over, alas. Mark your calendar now for next year's festival, …
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2102', false)
+					else:
+						# The Turkey Day festivities have come to a close this year. I hope to see you at next year's smorgasbord!
+						MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:2103', false)
+					System.EventFlags['cPlayerVisit:DC_TukTalkAfterEvent'] = true
+			default:
+				return
+
 local flow Sub_Event125(ItemPrice: int):
-    run SNPC_tuk_01_DemoCooking::Root_Secretrun SNPC_tuk_01_DemoCooking::Root_Secret()
-    System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
-    switch SubflowResults@5[2]:
-        case 1:
-            # Gobble gob! Your ingredients have pushed my <item>clam chowder recipe to previously undreamt-of heights! With the addition of a hearty scallop to the…
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:072', false)
-            run GetReward_Secret_Cmn()
-        case 2:
-            # Wow! Your bounty of multicolored pumpkins has revamped the palate, if not the palette, of my <item>pumpkin pie! I don't think it would have occurred …
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:073', false)
-            run GetReward_Secret_Cmn()
-        case 3:
-            # I'm gobsmacked! Those thick crab legs really lent some depth to my standard <item>gratin recipe. Looking at the finished <item>gratin gives me gooseb…
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:074', false)
-            run GetReward_Secret_Cmn()
-        case 4:
-            # My original request would have made a fine meunière, but your barred knifejaw was an inspired choice. Our main dish is now even more luxurious. There…
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:075', false)
-            run GetReward_Secret_Cmn()
-        default:
-            return
- 
+	run SNPC_tuk_01_DemoCooking::Root_Secret()
+	System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
+	switch SubflowResults@5[2]:
+		case 1:
+			# Gobble gob! Your ingredients have pushed my <item>clam chowder recipe to previously undreamt-of heights! With the addition of a hearty scallop to the…
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:072', false)
+			run GetReward_Secret_Cmn()
+		case 2:
+			# Wow! Your bounty of multicolored pumpkins has revamped the palate, if not the palette, of my <item>pumpkin pie! I don't think it would have occurred …
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:073', false)
+			run GetReward_Secret_Cmn()
+		case 3:
+			# I'm gobsmacked! Those thick crab legs really lent some depth to my standard <item>gratin recipe. Looking at the finished <item>gratin gives me gooseb…
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:074', false)
+			run GetReward_Secret_Cmn()
+		case 4:
+			# My original request would have made a fine meunière, but your barred knifejaw was an inspired choice. Our main dish is now even more luxurious. There…
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:075', false)
+			run GetReward_Secret_Cmn()
+		default:
+			return
+
 local flow Sub_Event161():
-    # The main ingredients are simple: [a|an]<140:26:0000> and [a|an] <140:26:0001>.
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:052', false)
-    # I'll get started prepping it here. Once you get your hands on the ingredients, bring them back to me!
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:053', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # So soon?! That's great, gobble gob! Let's see what you found.
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:054', false)
-        EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'HarvestFoodStuff2', '', false)
-        if EventFlowSystemActor.UIResultMenuDecide():
-            MainNpc.SetDeliveryItem(4, false)
-            MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
-            EventFlowSystemActor.MessageSuspend()
-            MainNpc.NpcDelivery(0, 'Keep')
-            run SNPC_tuk_02_SystemProcess::Chk_ResultShowFoodrun SNPC_tuk_02_SystemProcess::Chk_ResultShowFood()
-            switch SubflowResults@3[3]:
-                case 1:
-                    # Nice! Reliable assistants and high- quality ingredients make a master chef's work that much smoother.
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:055', false)
-                    EventFlowSystemActor.MessageSuspend()
-                    MainNpc.NpcDelivery(3, 'Default')
-                    EventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
-                    run SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Moverun SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Move()
-                    System.EventFlags['cPlayer:HarvestProgress'] += 1
-                    if EventFlowSystemActor.EventFlagSystemComqare('cPlayer:HarvestProgress', 'cLand:HarvestProgress') == 0:
-                        System.EventFlags['cLand:HarvestProgress'] += 1
-                    run SNPC_tuk_01_DemoCooking::Root_Normalrun SNPC_tuk_01_DemoCooking::Root_Normal()
-                    run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Namerun SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
-                    System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
-                    switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
-                        case 2:
-                            # Mm-mm-MMM! That creamy roasted pumpkin, pureed with spices, makes for a quintessential <item>pumpkin pie! Few chefs could have brought out the flavor…
-                            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:071_01', false)
-                            run GetReward_Cmn()
-                        case 3:
-                            # Masterful! My <item>gratin is filled with the heartiest of hearty ingredients. It'll be the talk of the town! You know, you're developing quite a sav…
-                            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:071_02', false)
-                            run GetReward_Cmn()
-                        case 4:
-                            # We've done it! We've used two splendid fish to create a meunière worthy of a main course! I couldn't have worked my magic without the ingredients you…
-                            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:071_03', false)
-                            run GetReward_Cmn()
-                        default:
-                            return
-                case 2:
-                    # Ermm…I appreciate the gesture, but this isn't what I was looking for.
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:058', false)
-                    EventFlowSystemActor.MessageSuspend()
-                    MainNpc.NpcDelivery(10, 'Default')
-                    # We need [a|an]<140:26:0000> and [a|an]<140:26:0001>.<10:4> Go get 'em, double time!
-                    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:058_01', false)
-                default:
-                    return
-        else:
-            # If you don't have the ingredients yet, that's fine. Just deliver them to me here before I'm off the clock.
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:057', false)
-    else:
-        # It's a real load off my mind to have such a hardworking assistant today. Frees me up to do the real work! If you have trouble finding what we need, d…
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:056', false)
- 
+	# The main ingredients are simple: [a|an]<140:26:0000> and [a|an] <140:26:0001>.
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:052', false)
+	# I'll get started prepping it here. Once you get your hands on the ingredients, bring them back to me!
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:053', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# So soon?! That's great, gobble gob! Let's see what you found.
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:054', false)
+		EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'HarvestFoodStuff2', '', false)
+		if EventFlowSystemActor.UIResultMenuDecide():
+			MainNpc.SetDeliveryItem(4, false)
+			MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+			EventFlowSystemActor.MessageSuspend()
+			MainNpc.NpcDelivery(0, 'Keep')
+			run SNPC_tuk_02_SystemProcess::Chk_ResultShowFood()
+			switch SubflowResults@3[3]:
+				case 1:
+					# Nice! Reliable assistants and high- quality ingredients make a master chef's work that much smoother.
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:055', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.NpcDelivery(3, 'Default')
+					EventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
+					run SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Move()
+					System.EventFlags['cPlayer:HarvestProgress'] += 1
+					if EventFlowSystemActor.EventFlagSystemComqare('cPlayer:HarvestProgress', 'cLand:HarvestProgress') == 0:
+System.EventFlags['cLand:HarvestProgress'] += 1
+					run SNPC_tuk_01_DemoCooking::Root_Normal()
+					run SNPC_tuk_02_SystemProcess::Set_RequestFood_CookingDish_Name()
+					System.EventFlags['cLandTemp:HarvestDemoNpcStep'] = 0
+					switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress'):
+						case 2:
+							# Mm-mm-MMM! That creamy roasted pumpkin, pureed with spices, makes for a quintessential <item>pumpkin pie! Few chefs could have brought out the flavor…
+							MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:071_01', false)
+	 run GetReward_Cmn()
+						case 3:
+							# Masterful! My <item>gratin is filled with the heartiest of hearty ingredients. It'll be the talk of the town! You know, you're developing quite a sav…
+							MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:071_02', false)
+	 run GetReward_Cmn()
+						case 4:
+							# We've done it! We've used two splendid fish to create a meunière worthy of a main course! I couldn't have worked my magic without the ingredients you…
+							MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:071_03', false)
+	 run GetReward_Cmn()
+						default:
+							return
+				case 2:
+					# Ermm…I appreciate the gesture, but this isn't what I was looking for.
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:058', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.NpcDelivery(10, 'Default')
+					# We need [a|an]<140:26:0000> and [a|an]<140:26:0001>.<10:4> Go get 'em, double time!
+					MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:058_01', false)
+				default:
+					return
+		else:
+			# If you don't have the ingredients yet, that's fine. Just deliver them to me here before I'm off the clock.
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:057', false)
+	else:
+		# It's a real load off my mind to have such a hardworking assistant today. Frees me up to do the real work! If you have trouble finding what we need, d…
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:056', false)
+
 local flow Sub_Event169(ItemPrice: int):
-    # You're holding the key to a positively delectable <140:25:cd02>! Help me unlock its flavor potential!
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:105', false)
-    run Sub_grp_Event121(ItemPrice=ItemPrice)
- 
+	# You're holding the key to a positively delectable <140:25:cd02>! Help me unlock its flavor potential!
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:105', false)
+	run Sub_grp_Event121(ItemPrice=ItemPrice)
+
 local flow Sub_Event170(ItemPrice: int):
-    # I need your <140:26:0004> and your <140:26:0005>. Trust me, it's all for the greater food.
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:113', false)
-    run Sub_Event169(ItemPrice=ItemPrice)
- 
+	# I need your <140:26:0004> and your <140:26:0005>. Trust me, it's all for the greater food.
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:113', false)
+	run Sub_Event169(ItemPrice=ItemPrice)
+
 local flow Sub_Event94(ItemPrice: int):
-    # I'm sorry, but I need you to give me your <140:26:0004>. Trust me, it's all for the greater food.
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:104', false)
-    run Sub_Event169(ItemPrice=ItemPrice)
- 
+	# I'm sorry, but I need you to give me your <140:26:0004>. Trust me, it's all for the greater food.
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:104', false)
+	run Sub_Event169(ItemPrice=ItemPrice)
+
 local flow Sub_grp_Event121(ItemPrice: int):
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(0, 'Keep')
-        # You won't regret this! I'm going to cook the most amazing <140:25:cd02> you've ever had. Just you wait!
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:106', false)
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(3, 'Default')
-        run SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Moverun SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Move()
-        run SNPC_tuk_02_SystemProcess::Delete_SecretFood_InPocketrun SNPC_tuk_02_SystemProcess::Delete_SecretFood_InPocket()
-        switch SubflowResults@5[2]:
-            case 1:
-                System.EventFlags['cPlayer:HarvestHQDish1P'] = true
-                System.EventFlags['cLand:HarvestHQDish1Island'] = true
-                run Sub_Event125(ItemPrice=ItemPrice)
-            case 2:
-                System.EventFlags['cPlayer:HarvestHQDish2P'] = true
-                System.EventFlags['cLand:HarvestHQDish2Island'] = true
-                run Sub_Event125(ItemPrice=ItemPrice)
-            case 3:
-                System.EventFlags['cPlayer:HarvestHQDish3P'] = true
-                System.EventFlags['cLand:HarvestHQDish3Island'] = true
-                run Sub_Event125(ItemPrice=ItemPrice)
-            case 4:
-                System.EventFlags['cPlayer:HarvestHQDish4P'] = true
-                System.EventFlags['cLand:HarvestHQDish4Island'] = true
-                run Sub_Event125(ItemPrice=ItemPrice)
-            default:
-                return
-    else:
-        # So it's like that, huh? Disappointing, but you're free to do as you will. That said, I have a sense for these things. If you get any more you're will…
-        MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:107', false)
-        run SNPC_tuk_02_SystemProcess::Set_RefuseGiveSecretFoodFlagrun SNPC_tuk_02_SystemProcess::Set_RefuseGiveSecretFoodFlag()
-        if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress') in (1, 2, 3):
-            # Anyway, back to the matter at hand…
-            MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:108', false)
-            run Delively_Cmn()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		MainNpc.NpcChangeHandTool(65534, 'cStoreTmpTool', false)
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(0, 'Keep')
+		# You won't regret this! I'm going to cook the most amazing <140:25:cd02> you've ever had. Just you wait!
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:106', false)
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(3, 'Default')
+		run SNPC_tuk_02_SystemProcess::Chk_PlayerTuk_Move()
+		run SNPC_tuk_02_SystemProcess::Delete_SecretFood_InPocket()
+		switch SubflowResults@5[2]:
+			case 1:
+				System.EventFlags['cPlayer:HarvestHQDish1P'] = true
+				System.EventFlags['cLand:HarvestHQDish1Island'] = true
+				run Sub_Event125(ItemPrice=ItemPrice)
+			case 2:
+				System.EventFlags['cPlayer:HarvestHQDish2P'] = true
+				System.EventFlags['cLand:HarvestHQDish2Island'] = true
+				run Sub_Event125(ItemPrice=ItemPrice)
+			case 3:
+				System.EventFlags['cPlayer:HarvestHQDish3P'] = true
+				System.EventFlags['cLand:HarvestHQDish3Island'] = true
+				run Sub_Event125(ItemPrice=ItemPrice)
+			case 4:
+				System.EventFlags['cPlayer:HarvestHQDish4P'] = true
+				System.EventFlags['cLand:HarvestHQDish4Island'] = true
+				run Sub_Event125(ItemPrice=ItemPrice)
+			default:
+				return
+	else:
+		# So it's like that, huh? Disappointing, but you're free to do as you will. That said, I have a sense for these things. If you get any more you're will…
+		MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:107', false)
+		run SNPC_tuk_02_SystemProcess::Set_RefuseGiveSecretFoodFlag()
+		if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayer:HarvestProgress') in (1, 2, 3):
+			# Anyway, back to the matter at hand…
+			MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:108', false)
+			run Delively_Cmn()
+
 flow UnlockedAllRecipe():
-    # This is for your help with another great dish. Compliments of the chef, [a|an]<125:0:0003>!
-    MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:121', false)
-    run Event298()
- 
+	# This is for your help with another great dish. Compliments of the chef, [a|an]<125:0:0003>!
+	MainNpc.OpenMessageWindow('TalkSNpc/tuk/SP_tuk:121', false)
+	run Event298()

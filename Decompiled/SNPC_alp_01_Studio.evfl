@@ -1,172 +1,171 @@
 flow Alp_Chk_Exchange():
-    if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-        run SNPC_alw_01_Studio::Alw_DayChkrun SNPC_alw_01_Studio::Alw_DayChk()
-        switch SubflowResults@8[0]:
-            case 0:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    # We're countin' on ya, squirt!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:101', false)
-                else:
-                    # I made a whole mess of special furniture just for this shoot. Don't be shy about usin' it!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:102', false)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 5:
-                if System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag']:
-                    if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                        # What's a wedding without a big ol' reception to cap it off? I can't wait to see all the photos.
-                        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:103', false)
-                    else:
-                        # Reese sure is a sight, eh? All eyes are gonna be on her at this reception shoot. Everyone had better be respectful. She's married to ME!
-                        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:104', false)
-                    System.EventFlags['cPlayer:AlpJuneBrideExchangeFlag'] = true
-            default:
-                return
- 
+	if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+		run SNPC_alw_01_Studio::Alw_DayChk()
+		switch SubflowResults@8[0]:
+			case 0:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					# We're countin' on ya, squirt!
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:101', false)
+				else:
+					# I made a whole mess of special furniture just for this shoot. Don't be shy about usin' it!
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:102', false)
+				EventFlowSystemActor.ExitFlowchart()
+			case 5:
+				if System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag']:
+					if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+						# What's a wedding without a big ol' reception to cap it off? I can't wait to see all the photos.
+						MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:103', false)
+					else:
+						# Reese sure is a sight, eh? All eyes are gonna be on her at this reception shoot. Everyone had better be respectful. She's married to ME!
+						MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:104', false)
+					System.EventFlags['cPlayer:AlpJuneBrideExchangeFlag'] = true
+			default:
+				return
+
 flow Alp_Chk_GetStick():
-    switch SubflowResults@8[0]:
-        case 6:
-            if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-                run Sub_grp_Event50()
-        case 7:
-            run Sub_grp_Event50()
-        default:
-            return
- 
+	switch SubflowResults@8[0]:
+		case 6:
+			if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+				run Sub_grp_Event50()
+		case 7:
+			run Sub_grp_Event50()
+		default:
+			return
+
 flow Alp_Exchange():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # Alright! What's grabbin' ya?
-        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:003', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# Alright! What's grabbin' ya?
+		MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:003', false)
 entrypoint Event39:
-        EventFlowSystemActor.UICatalogGiftHandling()
-        if EventFlowSystemActor.UIResultMenuDecide():
-            MainNpc.SetItemName(35, 0, 0)
-            EventFlowSystemActor.SetTagFromUIResult('cExchangeRequireNum', 0)
-            # OK, how about…<90:2:0000> <item>heart crystals for my <125:0:0000>?
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:010', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-                    # Great! I'll take those <item>heart crystals…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:013_02', true)
-                else:
-                    # Great! I'll take those <item>heart crystals…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:013', true)
-                    MainNpc.SetDeliveryItemAtRandom(12546, false, 'cVillageRemakePattern', 0)
-                    MainNpc.NpcDelivery(0, 'Default')
-                    # Hate seein' this stuff go, but a deal's a deal. I'll get everything on its way, so keep an eye out. Oh! And thanks.
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:014', false)
-                EventFlowSystemActor.DeleteRequireExchangeItem()
-                EventFlowSystemActor.CommuneMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 3, 'cCatalogGift', 'cFastTomorrow', 'cFromUICatalogGift')
-                System.EventFlags['cPlayer:AlpJuneBrideExchangeFlag'] = true
-                if EventFlowSystemActor.HasTargetItem(12546, 3):
-                    if EventFlowSystemActor.HasFreeInCommuneMail():
-                        # Y'know, if you wanna get rid of a few more <item>heart crystals, there's still furniture in it for ya.
-                        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:015', false)
-                        run Alp_Exchange()
-                    else:
-                        # Y'know, you're doing an awful lot of tradin' today.
-                        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:016', false)
-                        # I oughta get caught up on that other stuff you wanted.<10:4> How 'bout we hold off on more trades till later?
-                        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:017', false)
-                return
-            else:
-                # It's no fleece off my hide, squirt. You're doin' me a favor, so take all the time ya need.
-                MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:011', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run Event39()
-                else:
-                    # Suit yourself. But think on it.
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:004', false)
-                    return
-        else:
-            # Huh? I thought we had a deal. You'd better be comin' back.
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:005', false)
-            return
-    else:
-        # Suit yourself. But think on it.
-        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:004', false)
-        return
- 
+		EventFlowSystemActor.UICatalogGiftHandling()
+		if EventFlowSystemActor.UIResultMenuDecide():
+			MainNpc.SetItemName(35, 0, 0)
+			EventFlowSystemActor.SetTagFromUIResult('cExchangeRequireNum', 0)
+			# OK, how about…<90:2:0000> <item>heart crystals for my <125:0:0000>?
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:010', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+					# Great! I'll take those <item>heart crystals…
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:013_02', true)
+				else:
+					# Great! I'll take those <item>heart crystals…
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:013', true)
+					MainNpc.SetDeliveryItemAtRandom(12546, false, 'cVillageRemakePattern', 0)
+					MainNpc.NpcDelivery(0, 'Default')
+					# Hate seein' this stuff go, but a deal's a deal. I'll get everything on its way, so keep an eye out. Oh! And thanks.
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:014', false)
+				EventFlowSystemActor.DeleteRequireExchangeItem()
+				EventFlowSystemActor.CommuneMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 3, 'cCatalogGift', 'cFastTomorrow', 'cFromUICatalogGift')
+				System.EventFlags['cPlayer:AlpJuneBrideExchangeFlag'] = true
+				if EventFlowSystemActor.HasTargetItem(12546, 3):
+					if EventFlowSystemActor.HasFreeInCommuneMail():
+						# Y'know, if you wanna get rid of a few more <item>heart crystals, there's still furniture in it for ya.
+						MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:015', false)
+  run Alp_Exchange()
+					else:
+						# Y'know, you're doing an awful lot of tradin' today.
+						MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:016', false)
+						# I oughta get caught up on that other stuff you wanted.<10:4> How 'bout we hold off on more trades till later?
+						MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:017', false)
+				return
+			else:
+				# It's no fleece off my hide, squirt. You're doin' me a favor, so take all the time ya need.
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:011', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run Event39()
+				else:
+					# Suit yourself. But think on it.
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:004', false)
+					return
+		else:
+			# Huh? I thought we had a deal. You'd better be comin' back.
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:005', false)
+			return
+	else:
+		# Suit yourself. But think on it.
+		MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:004', false)
+		return
+
 flow Root():
-    run SNPC_alw_01_Studio::Alw_DayChkrun SNPC_alw_01_Studio::Alw_DayChk()
-    run Alp_Chk_GetStick()
-    run Alp_Chk_Exchange()
-    if not EventFlowSystemActor.HasFreeInCommuneMail():
-        # I oughta get caught up on that other stuff you wanted.<10:4> How 'bout we hold off on more trades till later?
-        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:017', false)
-    elif System.EventFlags['cPlayer:AlpJuneBrideExchangeFlag']:
-        # Heya, squirt. I'll trade some more furniture for your <item>heart crystals. Whaddaya say?
-        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:002', false)
-        run Alp_Exchange()
-    else:
-        # Howdy, squirt. Any interest in tradin' those <item>heart crystals for some of my furniture? Reese thinks they're pretty.
-        MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:001', false)
-        run Alp_Exchange()
- 
+	run SNPC_alw_01_Studio::Alw_DayChk()
+	run Alp_Chk_GetStick()
+	run Alp_Chk_Exchange()
+	if not EventFlowSystemActor.HasFreeInCommuneMail():
+		# I oughta get caught up on that other stuff you wanted.<10:4> How 'bout we hold off on more trades till later?
+		MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:017', false)
+	elif System.EventFlags['cPlayer:AlpJuneBrideExchangeFlag']:
+		# Heya, squirt. I'll trade some more furniture for your <item>heart crystals. Whaddaya say?
+		MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:002', false)
+		run Alp_Exchange()
+	else:
+		# Howdy, squirt. Any interest in tradin' those <item>heart crystals for some of my furniture? Reese thinks they're pretty.
+		MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:001', false)
+		run Alp_Exchange()
+
 flow Root_Init():
-    if (EventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']):
-        MainNpc.NpcAITalkSubCastEntry('alw', 1)
- 
+	if (EventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']):
+		MainNpc.NpcAITalkSubCastEntry('alw', 1)
+
 local flow Sub_Event57():
-    System.EventFlags['cPlayer:AlpJuneBrideGetStickFrag'] = true
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	System.EventFlags['cPlayer:AlpJuneBrideGetStickFrag'] = true
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event64():
-    if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-        MainNpc.SetEventRewardToPlayerBaggage('cFree')
-        if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
-            # Actually, if you check your pockets, you'll see I already snuck 'em in there. Anyhoo, enjoy!
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:023_01', false)
-            run Sub_Event57()
-        else:
-            # I went ahead and stuck it in your pockets. Hope you don't mind. Be sure to think of us when you're makin' it, ya hear?
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:023', false)
-            run Sub_Event57()
-    else:
-        MainNpc.SetDeliveryItem(1, true)
-        EventFlowSystemActor.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
-            # By the by, I'd be happy to take those back from you if any of this wedding stuff catches your eye, squirt. Come on back if you feel like tradin'! Or …
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:021_01', false)
-            run Sub_Event57()
-        else:
-            # Be sure to think of us when you're makin' it, ya hear?
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:021', false)
-            run Sub_Event57()
- 
+	if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+		MainNpc.SetEventRewardToPlayerBaggage('cFree')
+		if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
+			# Actually, if you check your pockets, you'll see I already snuck 'em in there. Anyhoo, enjoy!
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:023_01', false)
+			run Sub_Event57()
+		else:
+			# I went ahead and stuck it in your pockets. Hope you don't mind. Be sure to think of us when you're makin' it, ya hear?
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:023', false)
+			run Sub_Event57()
+	else:
+		MainNpc.SetDeliveryItem(1, true)
+		EventFlowSystemActor.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
+			# By the by, I'd be happy to take those back from you if any of this wedding stuff catches your eye, squirt. Come on back if you feel like tradin'! Or …
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:021_01', false)
+			run Sub_Event57()
+		else:
+			# Be sure to think of us when you're makin' it, ya hear?
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:021', false)
+			run Sub_Event57()
+
 local flow Sub_grp_Event50():
-    if not System.EventFlags['cPlayer:AlpJuneBrideGetStickFrag']:
-        if System.EventFlags['cPlayer:AlpJuneBrideNotGetLoveCrystalFrag']:
-            EventFlowSystemActor.SelectRewardItemDirect(12546, 10, 'cVillageRemakePattern', 0)
-            if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-                # I see you made some room in those pockets. Here's 10 <item>heart crystals, as promised!
-                MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:022_02', false)
-                run Sub_Event64()
-        else:
-            if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
-                # You've done a lot for us, squirt. We really appreciate it. I know it ain't much, but we both feel you've earned something for helpin' us out. So here…
-                MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:020_01', false)
-                EventFlowSystemActor.SelectRewardItemDirect(12546, 10, 'cVillageRemakePattern', 0)
-            else:
-                # You've done a lot for us, squirt. We really appreciate it. Here, this is somethin' the two of us worked on. It's a DIY recipe for a <item>wedding wan…
-                MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:020', false)
-                EventFlowSystemActor.NpcSetRewardRecipe(12695, false)
-                if not System.EventFlags['cPlayer:MainmenuRecipe']:
-                    # Just a sec. You do know your way around DIY, don'tcha? So, basically, DIY is makin' tools and furniture and such, and it's pretty fun once you get a …
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:024', false)
-            if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-                run Sub_Event64()
-            else:
-                if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
-                    # Hm! Well, I can't give 'em to you on account of your pockets bein' full.<10:4> Go clear some space and come back!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:022_01', false)
-                    System.EventFlags['cPlayer:AlpJuneBrideNotGetLoveCrystalFrag'] = true
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                else:
-                    # Hm! I don't think I can give it to you on account of your pockets bein' full.<10:4> Not to worry. I'll just mail it to ya!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:022', false)
-                    # Be sure to think of us when you're makin' it, ya hear?
-                    MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:021', false)
-                    EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 4, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-                    run Sub_Event57()
- 
+	if not System.EventFlags['cPlayer:AlpJuneBrideGetStickFrag']:
+		if System.EventFlags['cPlayer:AlpJuneBrideNotGetLoveCrystalFrag']:
+			EventFlowSystemActor.SelectRewardItemDirect(12546, 10, 'cVillageRemakePattern', 0)
+			if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+				# I see you made some room in those pockets. Here's 10 <item>heart crystals, as promised!
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:022_02', false)
+				run Sub_Event64()
+		else:
+			if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
+				# You've done a lot for us, squirt. We really appreciate it. I know it ain't much, but we both feel you've earned something for helpin' us out. So here…
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:020_01', false)
+				EventFlowSystemActor.SelectRewardItemDirect(12546, 10, 'cVillageRemakePattern', 0)
+			else:
+				# You've done a lot for us, squirt. We really appreciate it. Here, this is somethin' the two of us worked on. It's a DIY recipe for a <item>wedding wan…
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:020', false)
+				EventFlowSystemActor.NpcSetRewardRecipe(12695, false)
+				if not System.EventFlags['cPlayer:MainmenuRecipe']:
+					# Just a sec. You do know your way around DIY, don'tcha? So, basically, DIY is makin' tools and furniture and such, and it's pretty fun once you get a …
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:024', false)
+			if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+				run Sub_Event64()
+			else:
+				if EventFlowSystemActor.PlayerHasCraftRecipe('', 12695):
+					# Hm! Well, I can't give 'em to you on account of your pockets bein' full.<10:4> Go clear some space and come back!
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:022_01', false)
+					System.EventFlags['cPlayer:AlpJuneBrideNotGetLoveCrystalFrag'] = true
+					EventFlowSystemActor.ExitFlowchart()
+				else:
+					# Hm! I don't think I can give it to you on account of your pockets bein' full.<10:4> Not to worry. I'll just mail it to ya!
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:022', false)
+					# Be sure to think of us when you're makin' it, ya hear?
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:021', false)
+					EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 4, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+					run Sub_Event57()

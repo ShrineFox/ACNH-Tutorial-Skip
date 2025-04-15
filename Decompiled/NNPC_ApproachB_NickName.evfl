@@ -1,101 +1,100 @@
 flow Cancell():
-    # Huh?! C'mon, don't tease! Tell me!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:110', true)
-    run Event21()
- 
+	# Huh?! C'mon, don't tease! Tell me!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:110', true)
+	run Event21()
+
 flow CopyName():
-    MainNpc.NpcSetNicknameToTag('cOtherNpc')
-    if MainNpc.CheckNpcApproachType():
-        # Hey, PLAYER… I heard some folks have been calling ya <115:0:cd00>… I really dig the way that sounds. Would it be cool if I called ya <115:0:cd00> too?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:003', false)
-    else:
-        # Oh, hey, <110:3>! Hey, haven't I heard folks calling you…<115:0:cd00> lately? That nickname is real awesome! Is it cool if I call you that too?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:006', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.NpcSaveNickname('cOtherNpc')
-        # That's real cool! I was hoping ya'd say that. Now I feel like we're the cool kids, <110:3>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:200', false)
-        MainNpc.EventFlags['cNpcMemory:InputNickname'] = true
-        System.EventFlags['cPlayer:InputApproachBanCount'] = 1
-    else:
-        # Oh! I guess it must be just between you and your closest pals? No worries. No worries.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:201', true)
-        System.EventFlags['cPlayer:InputApproachBanCount'] = 2
- 
+	MainNpc.NpcSetNicknameToTag('cOtherNpc')
+	if MainNpc.CheckNpcApproachType():
+		# Hey, PLAYER… I heard some folks have been calling ya <115:0:cd00>… I really dig the way that sounds. Would it be cool if I called ya <115:0:cd00> too?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:003', false)
+	else:
+		# Oh, hey, <110:3>! Hey, haven't I heard folks calling you…<115:0:cd00> lately? That nickname is real awesome! Is it cool if I call you that too?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:006', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		MainNpc.NpcSaveNickname('cOtherNpc')
+		# That's real cool! I was hoping ya'd say that. Now I feel like we're the cool kids, <110:3>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:200', false)
+		MainNpc.EventFlags['cNpcMemory:InputNickname'] = true
+		System.EventFlags['cPlayer:InputApproachBanCount'] = 1
+	else:
+		# Oh! I guess it must be just between you and your closest pals? No worries. No worries.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:201', true)
+		System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+
 flow NewName():
-    fork:
-        branch:
-            EventFlowSystemActor.CandNicknamePattern()
-        branch:
-            if MainNpc.CheckNpcApproachType():
-                if MainNpc.EventFlags['cNpcMemory:InputNickname']:
-                    # Hey! I thought of a new nickname for ya, PLAYER! But I'm, uh, not sure you'll like it. Wanna hear it, though?
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:002', false)
-                else:
-                    # Guess what, <110:3>?<10:4> I made up a nickname for ya! Wanna hear it? 'Cause…I wanna tell ya.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:001', false)
-            elif MainNpc.EventFlags['cNpcMemory:InputNickname']:
-                # I was just thinking about you! I put my noggin to work coming up with a new nickname for ya… Don't get me wrong! Ya got a real cool nickname and all,…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:005', false)
-            else:
-                # Ah! Where'd you come from, PLAYER? I was spaced out, thinking up a cool nickname for you so everyone'll know we're buddies, <110:6>.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:004', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.NpcSetNicknameToTag('cPattern')
-        # What about…<110:3>? Whaddaya think? Real cool, huh?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:100', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # You got it, PLAYER! Er…I guess I should say… You got it, <110:3>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:102', false)
-            MainNpc.NpcSaveNickname('cPattern')
-            MainNpc.EventFlags['cNpcMemory:InputNickname'] = true
-            System.EventFlags['cPlayer:InputApproachBanCount'] = 1
-        elif EventFlowSystemActor.PercentChoice(50):
-            # Hmm… Well, uh… What nickname WOULD you like?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:103', true)
+	fork:
+		branch:
+			EventFlowSystemActor.CandNicknamePattern()
+		branch:
+			if MainNpc.CheckNpcApproachType():
+				if MainNpc.EventFlags['cNpcMemory:InputNickname']:
+					# Hey! I thought of a new nickname for ya, PLAYER! But I'm, uh, not sure you'll like it. Wanna hear it, though?
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:002', false)
+				else:
+					# Guess what, <110:3>?<10:4> I made up a nickname for ya! Wanna hear it? 'Cause…I wanna tell ya.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:001', false)
+			elif MainNpc.EventFlags['cNpcMemory:InputNickname']:
+				# I was just thinking about you! I put my noggin to work coming up with a new nickname for ya… Don't get me wrong! Ya got a real cool nickname and all,…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:005', false)
+			else:
+				# Ah! Where'd you come from, PLAYER? I was spaced out, thinking up a cool nickname for you so everyone'll know we're buddies, <110:6>.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:004', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		MainNpc.NpcSetNicknameToTag('cPattern')
+		# What about…<110:3>? Whaddaya think? Real cool, huh?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:100', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# You got it, PLAYER! Er…I guess I should say… You got it, <110:3>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:102', false)
+			MainNpc.NpcSaveNickname('cPattern')
+			MainNpc.EventFlags['cNpcMemory:InputNickname'] = true
+			System.EventFlags['cPlayer:InputApproachBanCount'] = 1
+		elif EventFlowSystemActor.PercentChoice(50):
+			# Hmm… Well, uh… What nickname WOULD you like?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:103', true)
 entrypoint Event21:
-            EventFlowSystemActor.UISoftwareKeyboardHandling('cNicname', true)
-            if EventFlowSystemActor.UIResultMenuDecide():
-                EventFlowSystemActor.SetTagFromUIResult('cNickname', 0)
-                if MainNpc.NpcCheckSameWordFromSwkbd('cNickname'):
-                    # "<50:3><110:3>"? Isn't that what I've BEEN calling you? I guess ya just wanna keep the nickname you already have?
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:105', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        # OK, you got it! I'll just keep calling ya <110:3>, then!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:108', false)
-                        System.EventFlags['cPlayer:InputApproachBanCount'] = 1
-                    else:
-                        run Retype()
-                else:
-                    # <50:3><110:3>, huh? Works for me!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:106', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        if MainNpc.IsEqualPlayerNameAndSwkbdInput():
-                            # "PLAYER"?! So, um, you want your new nickname to be just your name? OK, then that's what I'll call you! Let me take a practice run at it… Hi, PLAYER!…
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:111', false)
-                            EventFlowSystemActor.SaveSetFromUIResult('cNickname')
-                            MainNpc.EventFlags['cNpcMemory:InputNickname'] = false
-                        else:
-                            # Yeah, OK! Then from now on, I'll call ya <110:3>!
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:109', false)
-                            EventFlowSystemActor.SaveSetFromUIResult('cNickname')
-                            MainNpc.EventFlags['cNpcMemory:InputNickname'] = true
-                        System.EventFlags['cPlayer:InputApproachBanCount'] = 1
-                    else:
-                        run Retype()
-            else:
-                run Cancell()
-        else:
-            # Huh? Really? Oh. I'll try extra harder to come up with one you'll like!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:104', false)
-            System.EventFlags['cPlayer:InputApproachBanCount'] = 2
-    else:
-        # Oh. OK. Well, you're the boss of your own name, I guess.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:101', false)
-        System.EventFlags['cPlayer:InputApproachBanCount'] = 2
- 
+			EventFlowSystemActor.UISoftwareKeyboardHandling('cNicname', true)
+			if EventFlowSystemActor.UIResultMenuDecide():
+				EventFlowSystemActor.SetTagFromUIResult('cNickname', 0)
+				if MainNpc.NpcCheckSameWordFromSwkbd('cNickname'):
+					# "<50:3><110:3>"? Isn't that what I've BEEN calling you? I guess ya just wanna keep the nickname you already have?
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:105', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						# OK, you got it! I'll just keep calling ya <110:3>, then!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:108', false)
+System.EventFlags['cPlayer:InputApproachBanCount'] = 1
+					else:
+						run Retype()
+				else:
+					# <50:3><110:3>, huh? Works for me!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:106', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						if MainNpc.IsEqualPlayerNameAndSwkbdInput():
+							# "PLAYER"?! So, um, you want your new nickname to be just your name? OK, then that's what I'll call you! Let me take a practice run at it… Hi, PLAYER!…
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:111', false)
+EventFlowSystemActor.SaveSetFromUIResult('cNickname')
+MainNpc.EventFlags['cNpcMemory:InputNickname'] = false
+						else:
+							# Yeah, OK! Then from now on, I'll call ya <110:3>!
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:109', false)
+EventFlowSystemActor.SaveSetFromUIResult('cNickname')
+MainNpc.EventFlags['cNpcMemory:InputNickname'] = true
+System.EventFlags['cPlayer:InputApproachBanCount'] = 1
+					else:
+						run Retype()
+			else:
+				run Cancell()
+		else:
+			# Huh? Really? Oh. I'll try extra harder to come up with one you'll like!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:104', false)
+			System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+	else:
+		# Oh. OK. Well, you're the boss of your own name, I guess.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:101', false)
+		System.EventFlags['cPlayer:InputApproachBanCount'] = 2
+
 flow Retype():
-    # Oh? Have ya thought of one ya like more?
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:107', true)
-    run Event21()
- 
+	# Oh? Have ya thought of one ya like more?
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachB_NickName:107', true)
+	run Event21()

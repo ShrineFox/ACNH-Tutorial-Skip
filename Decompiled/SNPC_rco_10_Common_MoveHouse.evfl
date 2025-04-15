@@ -1,67 +1,66 @@
 flow MoveMyHouseOngoing(ItemPrice: int = 0):
-    EventFlowSystemActor.NpcEventItemSet(5358, 'cTalk', 0, ItemPrice)
-    if System.EventFlags['cLand:RcoMoveReservedAnyone'] != 2:
-        EventFlowSystemActor.UIMoneyAppear()
-        # Yes, yes! I've already accepted your request to move your home. Is there something on your mind?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:020', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Oh? Couldn't find a good location? Then we'll cancel the plan, and I'll return your money.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:021', false)
-            EventFlowSystemActor.DeleteTargetItem(5358, 1, false)
-            if System.EventFlags['cPlayer:RcoBuildMovingPurchase_v200']:
-                EventFlowSystemActor.BellCountDown(8000, false)
-            else:
-                EventFlowSystemActor.BellCountDown(30000, false)
-            System.EventFlags['cPlayer:RcoMoveHouseReserved'] = false
-            System.EventFlags['cLand:RcoMoveReservedAnyone'] = 0
-            System.EventFlags['cLand:RcoMoveReservedKind'] = 0
-            System.EventFlags['cPlayer:RcoMoveSomeBuiding'] = false
-            EventFlowSystemActor.StructureMoveSaveIndex(2)
-            EventFlowSystemActor.UIMoneyDisappear()
-        else:
-            EventFlowSystemActor.UIMoneyDisappear()
-            # Moving requires some setup, hm? You'll need to rope off some land for your new location. So find a spot and rope it off with your <125:0:0000>!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:022', false)
-    else:
-        # You roped off some space using your <125:0:0000>? Then you should be all squared away by tomorrow!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:023', false)
- 
+	EventFlowSystemActor.NpcEventItemSet(5358, 'cTalk', 0, ItemPrice)
+	if System.EventFlags['cLand:RcoMoveReservedAnyone'] != 2:
+		EventFlowSystemActor.UIMoneyAppear()
+		# Yes, yes! I've already accepted your request to move your home. Is there something on your mind?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:020', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Oh? Couldn't find a good location? Then we'll cancel the plan, and I'll return your money.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:021', false)
+			EventFlowSystemActor.DeleteTargetItem(5358, 1, false)
+			if System.EventFlags['cPlayer:RcoBuildMovingPurchase_v200']:
+				EventFlowSystemActor.BellCountDown(8000, false)
+			else:
+				EventFlowSystemActor.BellCountDown(30000, false)
+			System.EventFlags['cPlayer:RcoMoveHouseReserved'] = false
+			System.EventFlags['cLand:RcoMoveReservedAnyone'] = 0
+			System.EventFlags['cLand:RcoMoveReservedKind'] = 0
+			System.EventFlags['cPlayer:RcoMoveSomeBuiding'] = false
+			EventFlowSystemActor.StructureMoveSaveIndex(2)
+			EventFlowSystemActor.UIMoneyDisappear()
+		else:
+			EventFlowSystemActor.UIMoneyDisappear()
+			# Moving requires some setup, hm? You'll need to rope off some land for your new location. So find a spot and rope it off with your <125:0:0000>!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:022', false)
+	else:
+		# You roped off some space using your <125:0:0000>? Then you should be all squared away by tomorrow!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:023', false)
+
 flow Root(ItemPrice: int = 0):
-    run SNPC_rco_10_Common_Move::MoveBuildStateChkrun SNPC_rco_10_Common_Move::MoveBuildStateChk()
-    run SNPC_rco_10_Common_Move::MoveBuildKindChkrun SNPC_rco_10_Common_Move::MoveBuildKindChk()
-    if SubflowResults@3[0] == 0:
-        EventFlowSystemActor.UIMoneyAppear()
-        # Ah, you want to move your home? Once you pick out a new place, I'll have it moved by the following morning. The cost for all that is 8,000 Bells. Are…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:013', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-            # Really?<10:4> Well, if you change your mind, I'm here to help.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:014', false)
-            EventFlowSystemActor.UIMoneyDisappear()
-            if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
-                run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
-        elif not EventFlowSystemActor.HasBellCount(8000):
-            # Wonderful! Er…PLAYER, I'm afraid I need to collect your moving fees up front. You don't seem to have enough to cover it right now. But let's chat whe…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:015', false)
-            EventFlowSystemActor.UIMoneyDisappear()
-        elif EventFlowSystemActor.ShoppingCapacity('cItemName', 5358):
-            EventFlowSystemActor.BellCountDown(-8000, false)
-            System.EventFlags['cPlayer:RcoBuildMovingPurchase_v200'] = true
-            # Yes, yes! Excellent!<10:4> Now the next step is for you to head out and find your new plot.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:017', false)
-            EventFlowSystemActor.SetItemToPocket(5358, 1)
-            EventFlowSystemActor.StructureMoveSaveIndex(0)
-            EventFlowSystemActor.NpcEventItemSet(5358, 'cTalk', 0, ItemPrice)
-            # You see, you'll need to rope off some land at the location you'd like to move to. You'll find the <item>moving kit you need in your pockets. Please s…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:018', false)
-            System.EventFlags['cPlayer:RcoMoveHouseReserved'] = true
-            System.EventFlags['cLand:RcoMoveReservedAnyone'] = 1
-            System.EventFlags['cLand:RcoMoveReservedKind'] = 1
-            System.EventFlags['cPlayer:RcoMoveSomeBuiding'] = true
-            EventFlowSystemActor.UIMoneyDisappear()
-        else:
-            # You'll need to rope off some space with a <item>moving kit when you find a good location to move to. But your pockets are much too full for the kit. …
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:016', false)
-            EventFlowSystemActor.UIMoneyDisappear()
-    else:
-        run SNPC_rco_10_Common_Move::MoveBuildErrorrun SNPC_rco_10_Common_Move::MoveBuildError()
- 
+	run SNPC_rco_10_Common_Move::MoveBuildStateChk()
+	run SNPC_rco_10_Common_Move::MoveBuildKindChk()
+	if SubflowResults@3[0] == 0:
+		EventFlowSystemActor.UIMoneyAppear()
+		# Ah, you want to move your home? Once you pick out a new place, I'll have it moved by the following morning. The cost for all that is 8,000 Bells. Are…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:013', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+			# Really?<10:4> Well, if you change your mind, I'm here to help.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:014', false)
+			EventFlowSystemActor.UIMoneyDisappear()
+			if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+				run SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+		elif not EventFlowSystemActor.HasBellCount(8000):
+			# Wonderful! Er…PLAYER, I'm afraid I need to collect your moving fees up front. You don't seem to have enough to cover it right now. But let's chat whe…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:015', false)
+			EventFlowSystemActor.UIMoneyDisappear()
+		elif EventFlowSystemActor.ShoppingCapacity('cItemName', 5358):
+			EventFlowSystemActor.BellCountDown(-8000, false)
+			System.EventFlags['cPlayer:RcoBuildMovingPurchase_v200'] = true
+			# Yes, yes! Excellent!<10:4> Now the next step is for you to head out and find your new plot.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:017', false)
+			EventFlowSystemActor.SetItemToPocket(5358, 1)
+			EventFlowSystemActor.StructureMoveSaveIndex(0)
+			EventFlowSystemActor.NpcEventItemSet(5358, 'cTalk', 0, ItemPrice)
+			# You see, you'll need to rope off some land at the location you'd like to move to. You'll find the <item>moving kit you need in your pockets. Please s…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:018', false)
+			System.EventFlags['cPlayer:RcoMoveHouseReserved'] = true
+			System.EventFlags['cLand:RcoMoveReservedAnyone'] = 1
+			System.EventFlags['cLand:RcoMoveReservedKind'] = 1
+			System.EventFlags['cPlayer:RcoMoveSomeBuiding'] = true
+			EventFlowSystemActor.UIMoneyDisappear()
+		else:
+			# You'll need to rope off some space with a <item>moving kit when you find a good location to move to. But your pockets are much too full for the kit. …
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:016', false)
+			EventFlowSystemActor.UIMoneyDisappear()
+	else:
+		run SNPC_rco_10_Common_Move::MoveBuildError()

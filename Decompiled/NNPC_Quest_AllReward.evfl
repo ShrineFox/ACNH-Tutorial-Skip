@@ -1,98 +1,97 @@
 flow Gift():
-    MainNpc.NpcDecideVisitPresent(3, 0)
-    MainNpc.NpcAddFriendship(1)
-    MainNpc.SetDeliveryItem(9, true)
-    MainNpc.SetItemName(9, 4, 0)
- 
+	MainNpc.NpcDecideVisitPresent(3, 0)
+	MainNpc.NpcAddFriendship(1)
+	MainNpc.SetDeliveryItem(9, true)
+	MainNpc.SetItemName(9, 4, 0)
+
 flow Good():
-    switch MainNpc.CheckNpcFavorLevel():
-        case 0, 1:
-            run Lvel3()
-        case 2, 3:
-            if EventFlowSystemActor.PercentChoice(50):
-                run Lvel3()
-            else:
-                run Lvel2()
-        case 4, 5:
-            run Lvel2()
- 
+	switch MainNpc.CheckNpcFavorLevel():
+		case 0, 1:
+			run Lvel3()
+		case 2, 3:
+			if EventFlowSystemActor.PercentChoice(50):
+				run Lvel3()
+			else:
+				run Lvel2()
+		case 4, 5:
+			run Lvel2()
+
 flow Level1():
-    MainNpc.NpcDecideGeneralQuestReward(0, 2)
-    MainNpc.NpcAddFriendship(1)
-    run Event38()
- 
+	MainNpc.NpcDecideGeneralQuestReward(0, 2)
+	MainNpc.NpcAddFriendship(1)
+	run Event38()
+
 flow Lvel2():
-    MainNpc.NpcDecideGeneralQuestReward(0, 1)
-    MainNpc.NpcAddFriendship(2)
-    run Event38()
- 
+	MainNpc.NpcDecideGeneralQuestReward(0, 1)
+	MainNpc.NpcAddFriendship(2)
+	run Event38()
+
 flow Lvel3():
-    MainNpc.NpcDecideGeneralQuestReward(0, 0)
-    MainNpc.NpcAddFriendship(3)
+	MainNpc.NpcDecideGeneralQuestReward(0, 0)
+	MainNpc.NpcAddFriendship(3)
 entrypoint Event38:
-    MainNpc.SetDeliveryItem(1, true)
-    MainNpc.SetItemName(1, 4, 0)
-    MainNpc.RegistToReleaseItemList(4)
- 
+	MainNpc.SetDeliveryItem(1, true)
+	MainNpc.SetItemName(1, 4, 0)
+	MainNpc.RegistToReleaseItemList(4)
+
 flow Music():
-    MainNpc.NpcDecideVisitPresent(3, 1)
-    MainNpc.NpcAddFriendship(3)
-    MainNpc.SetDeliveryItem(9, true)
-    MainNpc.SetItemName(9, 0, 0)
- 
+	MainNpc.NpcDecideVisitPresent(3, 1)
+	MainNpc.NpcAddFriendship(3)
+	MainNpc.SetDeliveryItem(9, true)
+	MainNpc.SetItemName(9, 0, 0)
+
 flow Normal():
-    switch MainNpc.CheckNpcFavorLevel():
-        case 0, 1:
-            run Lvel2()
-        case 2, 3:
-            if EventFlowSystemActor.PercentChoice(50):
-                run Lvel2()
-            else:
-                run Level1()
-        case 4, 5:
-            run Level1()
- 
+	switch MainNpc.CheckNpcFavorLevel():
+		case 0, 1:
+			run Lvel2()
+		case 2, 3:
+			if EventFlowSystemActor.PercentChoice(50):
+				run Lvel2()
+			else:
+				run Level1()
+		case 4, 5:
+			run Level1()
+
 flow Root():
-    if MainNpc.EventFlags['cNpcMemory:ApproachQuestOrdered']:
-        run Good()
-    else:
-        switch MainNpc.NpcHaveQuestType(''):
-            case 1:
-                if (MainNpc.NpcCheckCatchQuestType() in (0, 2)) and (EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 8000):
-                    run Normal()
-                else:
-                    run Good()
-            case 2:
-                if MainNpc.QuestFlags['cLostUseHint']:
-                    run Normal()
-                else:
-                    run Good()
-            case 4:
-                if MainNpc.NpcTreasureQuestDifficulty() == 0:
-                    run Normal()
-                else:
-                    run Good()
-            case 5:
-                if MainNpc.SystemVisitQuestKind('cNpc'):
-                    run Lvel3()
-                else:
-                    run VisitNow()
-            case 6:
-                if MainNpc.SystemVisitQuestKind('cPlayer'):
-                    run Lvel3()
-                else:
-                    run VisitNow()
-            case 7:
-                if System.EventFlags['cPlayerTemp:SickQuestGossip']:
-                    run Good()
-                else:
-                    run Normal()
-            default:
-                return
- 
+	if MainNpc.EventFlags['cNpcMemory:ApproachQuestOrdered']:
+		run Good()
+	else:
+		switch MainNpc.NpcHaveQuestType(''):
+			case 1:
+				if (MainNpc.NpcCheckCatchQuestType() in (0, 2)) and (EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 8000):
+					run Normal()
+				else:
+					run Good()
+			case 2:
+				if MainNpc.QuestFlags['cLostUseHint']:
+					run Normal()
+				else:
+					run Good()
+			case 4:
+				if MainNpc.NpcTreasureQuestDifficulty() == 0:
+					run Normal()
+				else:
+					run Good()
+			case 5:
+				if MainNpc.SystemVisitQuestKind('cNpc'):
+					run Lvel3()
+				else:
+					run VisitNow()
+			case 6:
+				if MainNpc.SystemVisitQuestKind('cPlayer'):
+					run Lvel3()
+				else:
+					run VisitNow()
+			case 7:
+				if System.EventFlags['cPlayerTemp:SickQuestGossip']:
+					run Good()
+				else:
+					run Normal()
+			default:
+				return
+
 flow VisitNow():
-    if EventFlowSystemActor.RandomChoice2(2) == 0:
-        run Level1()
-    else:
-        run Gift()
- 
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		run Level1()
+	else:
+		run Gift()

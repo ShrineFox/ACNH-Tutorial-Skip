@@ -1,254 +1,253 @@
 flow DeferredPayment():
-    EventFlowSystemActor.UIPokiAppear()
-    # Oh. You're paying<150:5>
-    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:171', true)
-    EventFlowSystemActor.UITenKeyHandling('cNatteeLoan')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.WherearenShopLoanPay()
-        # <150:5>Thanks.
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:172', false)
-        if not EventFlowSystemActor.WherearenShopLoan():
-            # Oh<150:5> You paid the full amount. If you don't have enough in the future<150:5>you can always use this service again.
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:173', true)
-        EventFlowSystemActor.UIPokiDisappear()
-    else:
-        # <150:5>Well then. See you<150:5>later.
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:174', true)
-        EventFlowSystemActor.UIPokiDisappear()
- 
+	EventFlowSystemActor.UIPokiAppear()
+	# Oh. You're paying<150:5>
+	MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:171', true)
+	EventFlowSystemActor.UITenKeyHandling('cNatteeLoan')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.WherearenShopLoanPay()
+		# <150:5>Thanks.
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:172', false)
+		if not EventFlowSystemActor.WherearenShopLoan():
+			# Oh<150:5> You paid the full amount. If you don't have enough in the future<150:5>you can always use this service again.
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:173', true)
+		EventFlowSystemActor.UIPokiDisappear()
+	else:
+		# <150:5>Well then. See you<150:5>later.
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:174', true)
+		EventFlowSystemActor.UIPokiDisappear()
+
 flow DeferredPaymentChk():
-    if (not System.EventFlags['cWherearenPlayer:Unlock_ManDeferredPayment']) and (System.EventFlags['cWherearenPlayer:CoordinatorGrade'] >= 2):
-        SubflowResults[1] = 1
- 
+	if (not System.EventFlags['cWherearenPlayer:Unlock_ManDeferredPayment']) and (System.EventFlags['cWherearenPlayer:CoordinatorGrade'] >= 2):
+		SubflowResults[1] = 1
+
 flow DeliverVillager():
-    EventFlowSystemActor.UIMsgCardAdrHandling('cPlayerResident')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.UIMsgCardSelectHandling()
-        if EventFlowSystemActor.UIResultMenuDecide():
-            EventFlowSystemActor.UIMsgCardEditTextHandling('cMessageCard')
-            if EventFlowSystemActor.UIResultMenuDecide():
-                EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
-                EventFlowSystemActor.NatteeCatalogMailSend()
-                EventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
-                EventFlowSystemActor.UINatteeCatalogRestartHandling(true)
-                run RestartCatalog()
-            else:
-                run Sub_Event53()
-        else:
-            run DeliverVillager()
-    else:
-        run Sub_Event53()
- 
+	EventFlowSystemActor.UIMsgCardAdrHandling('cPlayerResident')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.UIMsgCardSelectHandling()
+		if EventFlowSystemActor.UIResultMenuDecide():
+			EventFlowSystemActor.UIMsgCardEditTextHandling('cMessageCard')
+			if EventFlowSystemActor.UIResultMenuDecide():
+				EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
+				EventFlowSystemActor.NatteeCatalogMailSend()
+				EventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
+				EventFlowSystemActor.UINatteeCatalogRestartHandling(true)
+				run RestartCatalog()
+			else:
+				run Sub_Event53()
+		else:
+			run DeliverVillager()
+	else:
+		run Sub_Event53()
+
 flow FirstTalkToday():
-    if System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_01']:
-        switch EventFlowSystemActor.EnvTimeZone():
-            case `05:00-07:59`, `08:00-11:59`:
-                # <150:5>Morning<150:5>PLAYER.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:104', false)
-            case `12:00-15:59`, `16:00-18:59`:
-                # <150:5>Hi<150:5>PLAYER.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:105', false)
-            case `19:00-23:59`, `00:00-04:59`:
-                # <150:5>Evening<150:5>PLAYER.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:106', false)
-    else:
-        switch EventFlowSystemActor.EnvTimeZone():
-            case `05:00-07:59`, `08:00-11:59`:
-                # <150:5>Morning.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:101', false)
-            case `12:00-15:59`, `16:00-18:59`:
-                # <150:5>Hello.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:102', false)
-            case `19:00-23:59`, `00:00-04:59`:
-                # <150:5>Evening.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:103', false)
- 
+	if System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_01']:
+		switch EventFlowSystemActor.EnvTimeZone():
+			case `05:00-07:59`, `08:00-11:59`:
+				# <150:5>Morning<150:5>PLAYER.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:104', false)
+			case `12:00-15:59`, `16:00-18:59`:
+				# <150:5>Hi<150:5>PLAYER.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:105', false)
+			case `19:00-23:59`, `00:00-04:59`:
+				# <150:5>Evening<150:5>PLAYER.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:106', false)
+	else:
+		switch EventFlowSystemActor.EnvTimeZone():
+			case `05:00-07:59`, `08:00-11:59`:
+				# <150:5>Morning.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:101', false)
+			case `12:00-15:59`, `16:00-18:59`:
+				# <150:5>Hello.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:102', false)
+			case `19:00-23:59`, `00:00-04:59`:
+				# <150:5>Evening.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:103', false)
+
 flow FreeTalk():
-    if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-        # <150:5><150:5>
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:120', false)
-    elif System.EventFlags['cWherearenPlayer:TodayCompleteCount'] >= 3:
-        # RANDOM: You're<150:5>looking prepared today. // Don't overwork<150:5>yourself, OK?
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:121', false)
-    elif System.EventFlags['cWherearenPlayer:CoordinatorGrade'] < 2:
-        # RANDOM: Are you<150:5>getting used to the job? // The shop items change<150:5>every day.
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:122', false)
-    else:
-        # RANDOM: Let's work hard today<150:5>too. // I recommend<150:5>all of the items.
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:123', false)
- 
+	if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		# <150:5><150:5>
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:120', false)
+	elif System.EventFlags['cWherearenPlayer:TodayCompleteCount'] >= 3:
+		# RANDOM: You're<150:5>looking prepared today. // Don't overwork<150:5>yourself, OK?
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:121', false)
+	elif System.EventFlags['cWherearenPlayer:CoordinatorGrade'] < 2:
+		# RANDOM: Are you<150:5>getting used to the job? // The shop items change<150:5>every day.
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:122', false)
+	else:
+		# RANDOM: Let's work hard today<150:5>too. // I recommend<150:5>all of the items.
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:123', false)
+
 flow ManCatalog():
-    MainNpc.MessageSuspend()
-    EventFlowSystemActor.UIShopBuyHandling('cWherearenOffice')
-    run RestartCatalog()
- 
+	MainNpc.MessageSuspend()
+	EventFlowSystemActor.UIShopBuyHandling('cWherearenOffice')
+	run RestartCatalog()
+
 flow ManCatalogChk():
-    if (not System.EventFlags['cWherearenPlayer:SeqManTalkAboutCatalogShop']) and (System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']):
-        SubflowResults[0] = 1
- 
+	if (not System.EventFlags['cWherearenPlayer:SeqManTalkAboutCatalogShop']) and (System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']):
+		SubflowResults[0] = 1
+
 flow RestartCatalog():
-    switch EventFlowSystemActor.IsDeliveryToOthers('cNatteeCatalog'):
-        case 0:
-            run DeliverVillager()
-        case 1:
-            # Thank you<150:5>
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:162', true)
-        default:
-            return
- 
+	switch EventFlowSystemActor.IsDeliveryToOthers('cNatteeCatalog'):
+		case 0:
+			run DeliverVillager()
+		case 1:
+			# Thank you<150:5>
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:162', true)
+		default:
+			return
+
 flow Root():
-    run StoryEventChk()
-    run DeferredPaymentChk()
-    if SubflowResults@2[1] == 0:
-        run ManCatalogChk()
-        if SubflowResults@2[0] == 0:
-            run Talk()
-            System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
-            if EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3):
-                if not System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']:
-                    if EventFlowSystemActor.WherearenShopLoan():
-                        # What's up<150:5>my friend?
-                        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:152', false)
-                        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                            run DeferredPayment()
-                        else:
-                            # <150:5>
-                            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-                elif EventFlowSystemActor.WherearenShopLoan():
-                    # What's up<150:5>my friend?
-                    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:153', false)
-                    switch EventFlowSystemActor.GeneralTalkChoice3():
-                        case 0:
-                            run ManCatalog()
-                        case 1:
-                            run DeferredPayment()
-                        case 2:
-                            # <150:5>
-                            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-                else:
-                    # What's up<150:5>my friend?
-                    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:151', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        run ManCatalog()
-                    else:
-                        # <150:5>
-                        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-            elif not System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']:
-                if EventFlowSystemActor.WherearenShopLoan():
-                    # What's up<150:5>my friend?
-                    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:193', false)
-                    switch EventFlowSystemActor.GeneralTalkChoice3():
-                        case 0:
-                            run DeferredPayment()
-                        case 1:
-                            run Sub_Event112()
-                        case 2:
-                            # <150:5>
-                            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-                else:
-                    # What's up<150:5>my friend?
-                    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:191', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        run Sub_Event112()
-                    else:
-                        # <150:5>
-                        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-            elif EventFlowSystemActor.WherearenShopLoan():
-                # What's up<150:5>my friend?
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:194', false)
-                switch EventFlowSystemActor.GeneralTalkChoice4():
-                    case 0:
-                        run ManCatalog()
-                    case 1:
-                        run DeferredPayment()
-                    case 2:
-                        run Sub_Event83()
-                    case 3:
-                        # <150:5>
-                        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-            else:
-                # What's up<150:5>my friend?
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:192', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        run ManCatalog()
-                    case 1:
-                        run Sub_Event83()
-                    case 2:
-                        # <150:5>
-                        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
-        else:
-            System.EventFlags['cPlayer:OtgTipsExplainManCatalog'] = true
-            System.EventFlags['cWherearenPlayer:SeqManTalkAboutCatalogShop'] = true
-            System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
-            # Hello<150:5>PLAYER. I really appreciate your business<150:5> You're one of our best customers. Just let me know<150:5>if you ever want to place a spe…
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:008', true)
-    else:
-        System.EventFlags['cWherearenPlayer:Unlock_ManDeferredPayment'] = true
-        System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
-        # <50:3>PLAYER<150:5>I have news. We've started<150:5>a new service. Employees of Paradise Planning<150:5> can pay for their purchases later<150:5> if …
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:009', true)
- 
+	run StoryEventChk()
+	run DeferredPaymentChk()
+	if SubflowResults@2[1] == 0:
+		run ManCatalogChk()
+		if SubflowResults@2[0] == 0:
+			run Talk()
+			System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
+			if EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3):
+				if not System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']:
+					if EventFlowSystemActor.WherearenShopLoan():
+						# What's up<150:5>my friend?
+						MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:152', false)
+						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+	run DeferredPayment()
+						else:
+							# <150:5>
+							MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+				elif EventFlowSystemActor.WherearenShopLoan():
+					# What's up<150:5>my friend?
+					MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:153', false)
+					switch EventFlowSystemActor.GeneralTalkChoice3():
+						case 0:
+	  run ManCatalog()
+						case 1:
+	run DeferredPayment()
+						case 2:
+							# <150:5>
+							MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+				else:
+					# What's up<150:5>my friend?
+					MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:151', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+	run ManCatalog()
+					else:
+						# <150:5>
+						MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+			elif not System.EventFlags['cWherearenPlayer:Unlock_ManCatalogShop']:
+				if EventFlowSystemActor.WherearenShopLoan():
+					# What's up<150:5>my friend?
+					MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:193', false)
+					switch EventFlowSystemActor.GeneralTalkChoice3():
+						case 0:
+	run DeferredPayment()
+						case 1:
+	 run Sub_Event112()
+						case 2:
+							# <150:5>
+							MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+				else:
+					# What's up<150:5>my friend?
+					MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:191', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+  run Sub_Event112()
+					else:
+						# <150:5>
+						MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+			elif EventFlowSystemActor.WherearenShopLoan():
+				# What's up<150:5>my friend?
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:194', false)
+				switch EventFlowSystemActor.GeneralTalkChoice4():
+					case 0:
+	run ManCatalog()
+					case 1:
+ run DeferredPayment()
+					case 2:
+	run Sub_Event83()
+					case 3:
+						# <150:5>
+						MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+			else:
+				# What's up<150:5>my friend?
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:192', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+	run ManCatalog()
+					case 1:
+	run Sub_Event83()
+					case 2:
+						# <150:5>
+						MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:154', true)
+		else:
+			System.EventFlags['cPlayer:OtgTipsExplainManCatalog'] = true
+			System.EventFlags['cWherearenPlayer:SeqManTalkAboutCatalogShop'] = true
+			System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
+			# Hello<150:5>PLAYER. I really appreciate your business<150:5> You're one of our best customers. Just let me know<150:5>if you ever want to place a spe…
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:008', true)
+	else:
+		System.EventFlags['cWherearenPlayer:Unlock_ManDeferredPayment'] = true
+		System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
+		# <50:3>PLAYER<150:5>I have news. We've started<150:5>a new service. Employees of Paradise Planning<150:5> can pay for their purchases later<150:5> if …
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:009', true)
+
 flow StoryEventChk():
-    if System.EventFlags['cWherearenPlayer:SeqUniformTutorialOngoing']:
-        if EventFlowSystemActor.IsWherearenWorkMode():
-            # <150:5>
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:302', true)
-        else:
-            # <150:5>
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:301', true)
-        System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cWherearenPlayer:ManSetAfterTalkEnvSound']:
-        System.EventFlags['cWherearenPlayer:ManSetAfterTalkEnvSound'] = false
-        if System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_03']:
-            # I hope you find it peaceful<150:5>when you listen to the sounds of the world.
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:310', true)
-        else:
-            if System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_02']:
-                # We should listen to sounds together again sometime<150:5> I enjoy that time with you.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:309', true)
-            else:
-                # Thank you<150:5>for earlier.
-                MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:308', true)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if System.EventFlags['cWherearenPlayer:SeqUniformTutorialOngoing']:
+		if EventFlowSystemActor.IsWherearenWorkMode():
+			# <150:5>
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:302', true)
+		else:
+			# <150:5>
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:301', true)
+		System.EventFlags['cWherearenPlayer:ManTalkToday'] = true
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cWherearenPlayer:ManSetAfterTalkEnvSound']:
+		System.EventFlags['cWherearenPlayer:ManSetAfterTalkEnvSound'] = false
+		if System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_03']:
+			# I hope you find it peaceful<150:5>when you listen to the sounds of the world.
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:310', true)
+		else:
+			if System.EventFlags['cPlayer:WHEREAREN_Unlock_EnvSound_02']:
+				# We should listen to sounds together again sometime<150:5> I enjoy that time with you.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:309', true)
+			else:
+				# Thank you<150:5>for earlier.
+				MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:308', true)
+		EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event112():
-    # Wurf!<10:4> OK<150:5>let's all go together.
-    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:199', true)
-    run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
- 
+	# Wurf!<10:4> OK<150:5>let's all go together.
+	MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:199', true)
+	run Demo_Common_Wherearen::ToKKFesDemoLive()
+
 local flow Sub_Event53():
-    EventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
-    EventFlowSystemActor.UINatteeCatalogRestartHandling(false)
-    run RestartCatalog()
- 
+	EventFlowSystemActor.ClearCatalogShoppingMsgCardSetting()
+	EventFlowSystemActor.UINatteeCatalogRestartHandling(false)
+	run RestartCatalog()
+
 local flow Sub_Event83():
-    # Wurf!<10:4> OK<150:5>let's all go together.
-    MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:199', true)
-    run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
- 
+	# Wurf!<10:4> OK<150:5>let's all go together.
+	MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:199', true)
+	run Demo_Common_Wherearen::ToKKFesDemoLive()
+
 flow Talk():
-    if System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing']:
-        if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
-            # <150:5>
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:304', false)
-        else:
-            # RANDOM: <150:5> // I believe you<150:5>will do well. // Say hello to Niko<150:5>for me.
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:303', false)
-    elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
-        if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
-            # RANDOM: <150:5> // Nice<150:5> I'm pleased.
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:306', false)
-        else:
-            # RANDOM: <150:5> // Will you please<150:5>help Niko for me? // Say hello to Niko<150:5>for me.
-            MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:305', false)
-    elif EventFlowSystemActor.WherearenLookForHousemateState() == 0:
-        # RANDOM: <150:5> // <150:5>Are you working right now? // <150:5>Good luck.
-        MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:141', true)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cWherearenPlayer:ManTalkToday']:
-        run FreeTalk()
-    else:
-        run FirstTalkToday()
- 
+	if System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing']:
+		if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
+			# <150:5>
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:304', false)
+		else:
+			# RANDOM: <150:5> // I believe you<150:5>will do well. // Say hello to Niko<150:5>for me.
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:303', false)
+	elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
+		if System.EventFlags['cWherearenPlayer:SeqMncTalkDIYCatalog']:
+			# RANDOM: <150:5> // Nice<150:5> I'm pleased.
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:306', false)
+		else:
+			# RANDOM: <150:5> // Will you please<150:5>help Niko for me? // Say hello to Niko<150:5>for me.
+			MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:305', false)
+	elif EventFlowSystemActor.WherearenLookForHousemateState() == 0:
+		# RANDOM: <150:5> // <150:5>Are you working right now? // <150:5>Good luck.
+		MainNpc.OpenMessageWindow('TalkSNpc/man/SP_man_WherearenOffice:141', true)
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cWherearenPlayer:ManTalkToday']:
+		run FreeTalk()
+	else:
+		run FirstTalkToday()

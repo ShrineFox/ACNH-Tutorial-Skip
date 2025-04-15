@@ -1,62 +1,61 @@
 flow Again():
-    # I don't have any pointers on your form, unfortunately. Just the basics about getting into the water. So, first things first, you'll want to put on a …
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:141_02', false)
-    # Well, I think that covers everything you'll need to know!__ ...know!__ So, back to the item at hand. It can be yours for <90:26:0000>. Would you like…
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:142', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Processrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
-        case 1:
-            # Of course! Here's everything you need to keep in mind for swimming in the ocean.__ ...ocean.__
-            MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:143', false)
-            run Again()
-        case 2:
-            run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancelrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
- 
+	# I don't have any pointers on your form, unfortunately. Just the basics about getting into the water. So, first things first, you'll want to put on a …
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:141_02', false)
+	# Well, I think that covers everything you'll need to know!__ ...know!__ So, back to the item at hand. It can be yours for <90:26:0000>. Would you like…
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:142', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+		case 1:
+			# Of course! Here's everything you need to keep in mind for swimming in the ocean.__ ...ocean.__
+			MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:143', false)
+			run Again()
+		case 2:
+			run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
+
 flow AgainLecture_v200():
-    # With a wet suit on, you'll be able to enter the sea from any beach or rock formation and go diving! You can press  to swim. And if you see a shadow …
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4205', false)
-    # …I think that's everything. Should I run through it one more time?
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4206', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run EndLecture_v200()
-    else:
-        run AgainLecture_v200()
- 
+	# With a wet suit on, you'll be able to enter the sea from any beach or rock formation and go diving! You can press  to swim. And if you see a shadow …
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4205', false)
+	# …I think that's everything. Should I run through it one more time?
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4206', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run EndLecture_v200()
+	else:
+		run AgainLecture_v200()
+
 flow EndLecture_v200():
-    # Wonderful!<10:4> Well then, is there anything else you're interested in?
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4207', false)
-    if EventFlowSystemActor.ShopLevel() != `InResServiceTent`:
-        Player.TurnBody(13, 0.0)
-        Player.PlayerWaitTurn()
-    run SNPC_rcm_00_Common::Rcm_Common_BuyAgain2run SNPC_rcm_00_Common::Rcm_Common_BuyAgain2()
- 
+	# Wonderful!<10:4> Well then, is there anything else you're interested in?
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4207', false)
+	if EventFlowSystemActor.ShopLevel() != `InResServiceTent`:
+		Player.TurnBody(13, 0.0)
+		Player.PlayerWaitTurn()
+	run SNPC_rcm_00_Common::Rcm_Common_BuyAgain2()
+
 flow MarinesuitLecture_v200():
-    if (EventFlowSystemActor.MultiKindItemSelectInclude('MarineSuit', '', '', '', '', '', '', '', 'cItemSelect')) and (System.EventFlags['cPlayer:LectureAboutMarinesuitBuyIt']):
-        System.EventFlags['cPlayer:LectureAboutMarinesuitBuyIt'] = false
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.UIShopBuyDisappear()
-        if (not EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.ShopLevel() != `InResServiceTent`):
-            MainNpc.NpcMoveToPlayer()
-        Player.PlayerChangeStateDemoTalk()
-        Player.TurnBody(0, 0.0)
-        Player.PlayerWaitTurn()
-        # Oh, have you ever bought a wet suit before? Do you need to know how to use them?
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4203', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run AgainLecture_v200()
-        else:
-            run EndLecture_v200()
- 
+	if (EventFlowSystemActor.MultiKindItemSelectInclude('MarineSuit', '', '', '', '', '', '', '', 'cItemSelect')) and (System.EventFlags['cPlayer:LectureAboutMarinesuitBuyIt']):
+		System.EventFlags['cPlayer:LectureAboutMarinesuitBuyIt'] = false
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.UIShopBuyDisappear()
+		if (not EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.ShopLevel() != `InResServiceTent`):
+			MainNpc.NpcMoveToPlayer()
+		Player.PlayerChangeStateDemoTalk()
+		Player.TurnBody(0, 0.0)
+		Player.PlayerWaitTurn()
+		# Oh, have you ever bought a wet suit before? Do you need to know how to use them?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4203', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run AgainLecture_v200()
+		else:
+			run EndLecture_v200()
+
 flow Root():
-    System.EventFlags['cPlayer:RcmTalkAboutMarinesuitFlag'] = true
-    System.EventFlags['cPlayer:LectureAboutMarinesuitBuyIt'] = true
-    # That's a wet suit! You'll need one of those if you want to go swimming and diving in the sea!__ ...sea!__
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4201', false)
-    # Let's see… That's <90:24:0000>. What do you think?
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4202', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Processrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
-    else:
-        run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancelrun SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
- 
+	System.EventFlags['cPlayer:RcmTalkAboutMarinesuitFlag'] = true
+	System.EventFlags['cPlayer:LectureAboutMarinesuitBuyIt'] = true
+	# That's a wet suit! You'll need one of those if you want to go swimming and diving in the sea!__ ...sea!__
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4201', false)
+	# Let's see… That's <90:24:0000>. What do you think?
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4202', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+	else:
+		run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()

@@ -1,93 +1,92 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        MainNpc.NpcCopyPhrase()
-        # No, really! I never sent you fan mail, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:201', false)
-        Player.TurnNeck(1, false)
-        # Thaaat's big time weird, man! It totes has your vibe all over it. And some of your crumbs too. Anyhoo, the reason I asked if you wrote it is because …
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:202', false)
-        Player.TurnNeck(0, false)
-        # I DID WRITE IT, I DID! I used my best crayons and the least-crumpliest piece of paper! I heard you trying to sing, and I thought maybe you'd feel goo…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:203', false)
-        Player.TurnNeck(1, false)
-        # Mind if I try it out? 'K… Here we go… 'K… Hiii! It's me, <110:31:cd01>, your favest pop star, <110:6>! «Ohmigosh»! That was AMAZING! It's, like, tote…
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:204', false)
-        Player.TurnNeck(0, false)
-        # I like it, a huh huh huh! You sound almost like a real pop star, <110:31:cd01>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:205', false)
-        Player.TurnNeck(1, false)
-        # I know, riiiight, <110:6>?!
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:206', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        fork:
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Have you guys decided what you're eating for snack time? I got so many choices, I can't make up my mind.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:001', false)
-        # <20:2:cd02>I love me some snacks! What are your options?
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:002', false)
-        fork:
-            branch:
-                Player.TurnNeck(0, false)
-            branch:
-                SubNpc.TurnNeck(0, false)
-        # Well… There's <135:7:cd00>. Or <135:7:cd01>? Or <135:7:cd02>? Or <135:7:cd03>?<20:2:cd08> Or <135:7:cd04>?<20:2:cd04> Or, umm,<20:2:cd01> <135:7:cd04…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:003', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                MainNpc.TurnNeck(1, false)
-        # Hmm… That is a tough decision.
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:004', false)
-        Player.TurnNeck(0, false)
-        # <20:2:cd06>It's why I usually just eat whatever I can reach when I'm lying on the floor. Deciding is hard!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:005', false)
-        Player.TurnNeck(1, false)
-        # <20:2:cd05>Know what I do when I see TWO cute outfits I want, but I can only afford ONE? I buy both! It's totally the worst choice, but I get everyth…
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:006', false)
-        Player.TurnNeck(0, false)
-        # <20:2:cd03>Personal growth is neat! Well, I'm gonna head off to go eat all the <135:7:cd05> I can find. Or maybe some <135:7:cd06>? Oh! I forgot I ha…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:007', false)
-    else:
-        fork:
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Hiya, <110:4>! You got real great timing! <50:3><110:31:cd01> and I are trying to figure something out!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:101', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                MainNpc.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnBody(10, 0.0)
-        # Yeah, we're super stuck! Can you help us out, <110:3>? <20:2:cd06>Would you rather…lick a fish or bite a worm? We can't decide!
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:102', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # It's a game, <110:3>! You say "would you rather…" then you give two really gross choices! There's NO right answer! It's hilarious! <20:2:cd07><20:2:c…
-            SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:103', false)
-            fork:
-                branch:
-                    Player.TurnNeck(0, false)
-                branch:
-                    MainNpc.TurnNeck(10, false)
-                branch:
-                    SubNpc.TurnNeck(0, false)
-            # A huh huh huh! OK, uhhhh… Would you rather… Umm…<10:4> Wooooould yoooou…ratherrrrr… <20:2:cd05>I keep thinking about how licking a fish doesn't sound…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:104', false)
-        else:
-            # I guess me and <20:2:cd07><20:2:cd05>him will figure this out all on our own. Bye.
-            SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:105', false)
-            fork:
-                branch:
-                    Player.TurnNeck(0, false)
-                branch:
-                    MainNpc.TurnNeck(10, false)
-            # <20:2:cd05>It's OK, <110:31:cd01>. I'm willing to try doing both!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:106', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		MainNpc.NpcCopyPhrase()
+		# No, really! I never sent you fan mail, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:201', false)
+		Player.TurnNeck(1, false)
+		# Thaaat's big time weird, man! It totes has your vibe all over it. And some of your crumbs too. Anyhoo, the reason I asked if you wrote it is because …
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:202', false)
+		Player.TurnNeck(0, false)
+		# I DID WRITE IT, I DID! I used my best crayons and the least-crumpliest piece of paper! I heard you trying to sing, and I thought maybe you'd feel goo…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:203', false)
+		Player.TurnNeck(1, false)
+		# Mind if I try it out? 'K… Here we go… 'K… Hiii! It's me, <110:31:cd01>, your favest pop star, <110:6>! «Ohmigosh»! That was AMAZING! It's, like, tote…
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:204', false)
+		Player.TurnNeck(0, false)
+		# I like it, a huh huh huh! You sound almost like a real pop star, <110:31:cd01>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:205', false)
+		Player.TurnNeck(1, false)
+		# I know, riiiight, <110:6>?!
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:206', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		fork:
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Have you guys decided what you're eating for snack time? I got so many choices, I can't make up my mind.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:001', false)
+		# <20:2:cd02>I love me some snacks! What are your options?
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:002', false)
+		fork:
+			branch:
+				Player.TurnNeck(0, false)
+			branch:
+				SubNpc.TurnNeck(0, false)
+		# Well… There's <135:7:cd00>. Or <135:7:cd01>? Or <135:7:cd02>? Or <135:7:cd03>?<20:2:cd08> Or <135:7:cd04>?<20:2:cd04> Or, umm,<20:2:cd01> <135:7:cd04…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:003', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				MainNpc.TurnNeck(1, false)
+		# Hmm… That is a tough decision.
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:004', false)
+		Player.TurnNeck(0, false)
+		# <20:2:cd06>It's why I usually just eat whatever I can reach when I'm lying on the floor. Deciding is hard!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:005', false)
+		Player.TurnNeck(1, false)
+		# <20:2:cd05>Know what I do when I see TWO cute outfits I want, but I can only afford ONE? I buy both! It's totally the worst choice, but I get everyth…
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:006', false)
+		Player.TurnNeck(0, false)
+		# <20:2:cd03>Personal growth is neat! Well, I'm gonna head off to go eat all the <135:7:cd05> I can find. Or maybe some <135:7:cd06>? Oh! I forgot I ha…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:007', false)
+	else:
+		fork:
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Hiya, <110:4>! You got real great timing! <50:3><110:31:cd01> and I are trying to figure something out!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:101', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				MainNpc.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnBody(10, 0.0)
+		# Yeah, we're super stuck! Can you help us out, <110:3>? <20:2:cd06>Would you rather…lick a fish or bite a worm? We can't decide!
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:102', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# It's a game, <110:3>! You say "would you rather…" then you give two really gross choices! There's NO right answer! It's hilarious! <20:2:cd07><20:2:c…
+			SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:103', false)
+			fork:
+				branch:
+					Player.TurnNeck(0, false)
+				branch:
+					MainNpc.TurnNeck(10, false)
+				branch:
+					SubNpc.TurnNeck(0, false)
+			# A huh huh huh! OK, uhhhh… Would you rather… Umm…<10:4> Wooooould yoooou…ratherrrrr… <20:2:cd05>I keep thinking about how licking a fish doesn't sound…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:104', false)
+		else:
+			# I guess me and <20:2:cd07><20:2:cd05>him will figure this out all on our own. Bye.
+			SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:105', false)
+			fork:
+				branch:
+					Player.TurnNeck(0, false)
+				branch:
+					MainNpc.TurnNeck(10, false)
+			# <20:2:cd05>It's OK, <110:31:cd01>. I'm willing to try doing both!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_GE:106', false)

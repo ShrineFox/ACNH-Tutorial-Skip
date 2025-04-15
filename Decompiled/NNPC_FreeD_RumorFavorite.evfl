@@ -1,163 +1,162 @@
 flow Input():
-    switch EventFlowSystemActor.GeneralTalkChoice5():
-        case 0, 1, 2:
-            run Sub_grp_Event38()
-        case 3:
+	switch EventFlowSystemActor.GeneralTalkChoice5():
+		case 0, 1, 2:
+			run Sub_grp_Event38()
+		case 3:
 entrypoint Event53:
-            EventFlowSystemActor.UISoftwareKeyboardHandling('cTaste', true)
-            EventFlowSystemActor.SetTagFromUIResult('cRumorFavorite', 0)
-            # Oh, <140:13:cd00>?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:051', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Sub_grp_Event38()
-            else:
-                # Oh! Not that. Can you tell me one more time, <110:6>?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:052', false)
-                run Event53()
-        case 4:
-            if MainNpc.NpcRumorIsSelectedAllDeny():
-                # So it's still the same! I knew it was, but the bugs in my house were all "I dunno, man!" I'll show them!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:061', false)
-            else:
-                MainNpc.NpcRumorOpenMessage('107', 'cTopic')
-                MainNpc.NpcRumorSaveAnswer()
-            run NNPC_FreeD::RumorP_Favorite_Endrun NNPC_FreeD::RumorP_Favorite_End()
-            return
- 
+			EventFlowSystemActor.UISoftwareKeyboardHandling('cTaste', true)
+			EventFlowSystemActor.SetTagFromUIResult('cRumorFavorite', 0)
+			# Oh, <140:13:cd00>?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:051', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Sub_grp_Event38()
+			else:
+				# Oh! Not that. Can you tell me one more time, <110:6>?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:052', false)
+				run Event53()
+		case 4:
+			if MainNpc.NpcRumorIsSelectedAllDeny():
+				# So it's still the same! I knew it was, but the bugs in my house were all "I dunno, man!" I'll show them!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:061', false)
+			else:
+				MainNpc.NpcRumorOpenMessage('107', 'cTopic')
+				MainNpc.NpcRumorSaveAnswer()
+			run NNPC_FreeD::RumorP_Favorite_End()
+			return
+
 flow RumorOP_Favorite_Host():
-    MainNpc.NpcRumorDecidePlayer('cHostPlayer')
-    # Hey, <110:3>! Are you close with <115:0:cd00>?
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:101', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-        if MainNpc.NpcRumorIsExistAnswerTopic():
-            MainNpc.NpcRumorDecideTopic('cAnswerRandom')
-            MainNpc.NpcRumorTagSet()
-            # What? Really? Then I'm gonna tell you a thing that'll help you two become real good buddies!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:160', false)
-            if MainNpc.NpcRumorIsSelectedAllDeny():
-                MainNpc.NpcRumorOpenMessage('180', 'cTopic')
-            else:
-                MainNpc.NpcRumorOpenMessage('170', 'cCategory')
-        else:
-            # Oh? But you visiting them on their island will probably help you get closer, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:150', false)
-    elif MainNpc.NpcRumorIsExistAnswerTopic():
-        MainNpc.NpcRumorDecideTopic('cAnswerRandom')
-        MainNpc.NpcRumorTagSet()
-        if MainNpc.NpcRumorIsSelectedAllDeny():
-            MainNpc.NpcRumorOpenMessage('120', 'cTopic')
-        else:
-            MainNpc.NpcRumorOpenMessage('110', 'cCategory')
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # I knew it, a huh huh huh! It's easier to get along with somebody when ya like the same stuff, <110:6>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:130', false)
-        else:
-            # Really? Being able to get along, even when ya don't like the same stuff… That's real cool, <110:6>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:131', false)
-    else:
-        # Whaaat? I'm jealous! I wanna be friends with <115:0:cd00> too! Then I'd be able to ask 'em to their face what kinda stuff they like, <110:6>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:102', false)
- 
+	MainNpc.NpcRumorDecidePlayer('cHostPlayer')
+	# Hey, <110:3>! Are you close with <115:0:cd00>?
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:101', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		if MainNpc.NpcRumorIsExistAnswerTopic():
+			MainNpc.NpcRumorDecideTopic('cAnswerRandom')
+			MainNpc.NpcRumorTagSet()
+			# What? Really? Then I'm gonna tell you a thing that'll help you two become real good buddies!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:160', false)
+			if MainNpc.NpcRumorIsSelectedAllDeny():
+				MainNpc.NpcRumorOpenMessage('180', 'cTopic')
+			else:
+				MainNpc.NpcRumorOpenMessage('170', 'cCategory')
+		else:
+			# Oh? But you visiting them on their island will probably help you get closer, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:150', false)
+	elif MainNpc.NpcRumorIsExistAnswerTopic():
+		MainNpc.NpcRumorDecideTopic('cAnswerRandom')
+		MainNpc.NpcRumorTagSet()
+		if MainNpc.NpcRumorIsSelectedAllDeny():
+			MainNpc.NpcRumorOpenMessage('120', 'cTopic')
+		else:
+			MainNpc.NpcRumorOpenMessage('110', 'cCategory')
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# I knew it, a huh huh huh! It's easier to get along with somebody when ya like the same stuff, <110:6>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:130', false)
+		else:
+			# Really? Being able to get along, even when ya don't like the same stuff… That's real cool, <110:6>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:131', false)
+	else:
+		# Whaaat? I'm jealous! I wanna be friends with <115:0:cd00> too! Then I'd be able to ask 'em to their face what kinda stuff they like, <110:6>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:102', false)
+
 flow RumorOP_Favorite_Villager():
-    MainNpc.NpcRumorDecidePlayer('cRandom')
-    MainNpc.NpcRumorDecideTopic('cAllRandom')
-    if MainNpc.NpcRumorIsAnsweredTargetTopic():
-        MainNpc.NpcRumorTagSet()
-        if MainNpc.NpcRumorIsSelectedAllDeny():
-            MainNpc.NpcRumorOpenMessage('010', 'cTopic')
-        else:
-            MainNpc.NpcRumorOpenMessage('001', 'cCategory')
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # You knew, <110:3>?! I bet everybody knows that about <115:0:cd00>, huh? I gotta pay more attention, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:020', false)
-        elif MainNpc.NpcRumorIsAskedOwn():
-            # <50:3><115:0:cd00> told me, so I know it's true! I mean, I chat with them a bunch, so I know my facts!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:021', false)
-        else:
-            # Yuh-huh! I mean, that's what I hear. But I hear a buncha stuff. Some of it's weird, <110:6>. Real weird.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:022', false)
-    else:
-        MainNpc.NpcRumorOpenMessage('050', 'cCategory')
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Yeah, <110:3>! I knew you'd know! You two seem like you're close enough to know everything about each other.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:051', false)
-        else:
-            MainNpc.NpcRumorOpenMessage('060', 'cTopic')
- 
+	MainNpc.NpcRumorDecidePlayer('cRandom')
+	MainNpc.NpcRumorDecideTopic('cAllRandom')
+	if MainNpc.NpcRumorIsAnsweredTargetTopic():
+		MainNpc.NpcRumorTagSet()
+		if MainNpc.NpcRumorIsSelectedAllDeny():
+			MainNpc.NpcRumorOpenMessage('010', 'cTopic')
+		else:
+			MainNpc.NpcRumorOpenMessage('001', 'cCategory')
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# You knew, <110:3>?! I bet everybody knows that about <115:0:cd00>, huh? I gotta pay more attention, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:020', false)
+		elif MainNpc.NpcRumorIsAskedOwn():
+			# <50:3><115:0:cd00> told me, so I know it's true! I mean, I chat with them a bunch, so I know my facts!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:021', false)
+		else:
+			# Yuh-huh! I mean, that's what I hear. But I hear a buncha stuff. Some of it's weird, <110:6>. Real weird.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:022', false)
+	else:
+		MainNpc.NpcRumorOpenMessage('050', 'cCategory')
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Yeah, <110:3>! I knew you'd know! You two seem like you're close enough to know everything about each other.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorOP_Favorite:051', false)
+		else:
+			MainNpc.NpcRumorOpenMessage('060', 'cTopic')
+
 flow RumorP_Favorite_CurrentPlayer():
-    MainNpc.NpcRumorDecidePlayer('cCurrentPlayer')
-    MainNpc.NpcRumorDecideTopic('cAllRandom')
-    if not MainNpc.NpcRumorIsAnsweredTargetTopic():
-        if MainNpc.NpcCheckMoveInBeforePlayer():
-            # I ask everybody on the island about the stuff they like. Can I ask what's your favorite stuff?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:001', false)
-        else:
-            # I wanna be friends with everybody on the island. So I wanna learn everything about everyone!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:002', false)
-        # So…what do I wanna know first… Hmm…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:003', false)
-        MainNpc.NpcRumorOpenMessage('100', 'cTopic')
-        run Input()
-    elif (not MainNpc.NpcRumorIsSelectedAllDeny()) or (MainNpc.NpcRumorCheckAllDenyProgressDays(30)):
-        MainNpc.NpcRumorTagSet()
-        if not MainNpc.NpcRumorIsAskedOwn():
-            # Hi, <110:3>! I heard some folks talking the other day…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:020', false)
-            if MainNpc.NpcRumorIsSelectedAllDeny():
-                MainNpc.NpcRumorOpenMessage('040', 'cTopic')
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    # That's cool, dude. I just asked 'cause I was curious. No worries.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:041', false)
-                    MainNpc.NpcRumorResetLastDenyTime()
-                    run NNPC_FreeD::RumorP_Favorite_Endrun NNPC_FreeD::RumorP_Favorite_End()
-                else:
-                    run Sub_Event26()
-            else:
-                MainNpc.NpcRumorOpenMessage('030', 'cCategory')
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    if MainNpc.NpcRumorIsEqualNpcChoice('cPrev') in (0, 1, 2):
-                        MainNpc.NpcRumorOpenMessage('031', 'cCategory')
-                    else:
-                        MainNpc.NpcRumorOpenMessage('032', 'cCategory')
-                    run NNPC_FreeD::RumorP_Favorite_Endrun NNPC_FreeD::RumorP_Favorite_End()
-                else:
-                    run Sub_Event26()
-        elif not MainNpc.NpcRumorIsSelectedAllDeny():
-            MainNpc.NpcRumorOpenMessage('010', 'cCategory')
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                MainNpc.NpcRumorOpenMessage('011', 'cCategory')
-                run NNPC_FreeD::RumorP_Favorite_Endrun NNPC_FreeD::RumorP_Favorite_End()
-            else:
-                MainNpc.NpcRumorOpenMessage('101', 'cTopic')
-                run Input()
- 
+	MainNpc.NpcRumorDecidePlayer('cCurrentPlayer')
+	MainNpc.NpcRumorDecideTopic('cAllRandom')
+	if not MainNpc.NpcRumorIsAnsweredTargetTopic():
+		if MainNpc.NpcCheckMoveInBeforePlayer():
+			# I ask everybody on the island about the stuff they like. Can I ask what's your favorite stuff?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:001', false)
+		else:
+			# I wanna be friends with everybody on the island. So I wanna learn everything about everyone!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:002', false)
+		# So…what do I wanna know first… Hmm…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:003', false)
+		MainNpc.NpcRumorOpenMessage('100', 'cTopic')
+		run Input()
+	elif (not MainNpc.NpcRumorIsSelectedAllDeny()) or (MainNpc.NpcRumorCheckAllDenyProgressDays(30)):
+		MainNpc.NpcRumorTagSet()
+		if not MainNpc.NpcRumorIsAskedOwn():
+			# Hi, <110:3>! I heard some folks talking the other day…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:020', false)
+			if MainNpc.NpcRumorIsSelectedAllDeny():
+				MainNpc.NpcRumorOpenMessage('040', 'cTopic')
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# That's cool, dude. I just asked 'cause I was curious. No worries.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:041', false)
+					MainNpc.NpcRumorResetLastDenyTime()
+					run NNPC_FreeD::RumorP_Favorite_End()
+				else:
+					run Sub_Event26()
+			else:
+				MainNpc.NpcRumorOpenMessage('030', 'cCategory')
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					if MainNpc.NpcRumorIsEqualNpcChoice('cPrev') in (0, 1, 2):
+						MainNpc.NpcRumorOpenMessage('031', 'cCategory')
+					else:
+						MainNpc.NpcRumorOpenMessage('032', 'cCategory')
+					run NNPC_FreeD::RumorP_Favorite_End()
+				else:
+					run Sub_Event26()
+		elif not MainNpc.NpcRumorIsSelectedAllDeny():
+			MainNpc.NpcRumorOpenMessage('010', 'cCategory')
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				MainNpc.NpcRumorOpenMessage('011', 'cCategory')
+				run NNPC_FreeD::RumorP_Favorite_End()
+			else:
+				MainNpc.NpcRumorOpenMessage('101', 'cTopic')
+				run Input()
+
 local flow Sub_Event26():
-    # Wait, really?! Huh. Maybe I mis-listened.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:049', false)
-    MainNpc.NpcRumorOpenMessage('102', 'cTopic')
-    run Input()
- 
+	# Wait, really?! Huh. Maybe I mis-listened.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeD_RumorP_Favorite:049', false)
+	MainNpc.NpcRumorOpenMessage('102', 'cTopic')
+	run Input()
+
 local flow Sub_grp_Event38():
-    if MainNpc.NpcRumorIsEqualPreviousChoice():
-        MainNpc.NpcRumorOpenMessage('060', 'cCategory')
-        if MainNpc.NpcRumorIsAskedOwn():
-            MainNpc.NpcRumorOpenMessage('011', 'cCategory')
-        else:
-            if MainNpc.NpcRumorIsEqualNpcChoice('cCurrent') in (0, 1, 2):
-                MainNpc.NpcRumorOpenMessage('031', 'cCategory')
-            else:
-                MainNpc.NpcRumorOpenMessage('032', 'cCategory')
-        run NNPC_FreeD::RumorP_Favorite_Endrun NNPC_FreeD::RumorP_Favorite_End()
-    else:
-        switch MainNpc.NpcRumorIsEqualNpcChoice('cCurrent'):
-            case 0:
-                MainNpc.NpcRumorOpenMessage('103', 'cTopic')
-            case 1:
-                MainNpc.NpcRumorOpenMessage('104', 'cTopic')
-            case 2:
-                MainNpc.NpcRumorOpenMessage('105', 'cTopic')
-            case 3:
-                MainNpc.NpcRumorOpenMessage('106', 'cTopic')
-        MainNpc.NpcRumorSaveAnswer()
-        run NNPC_FreeD::RumorP_Favorite_Endrun NNPC_FreeD::RumorP_Favorite_End()
- 
+	if MainNpc.NpcRumorIsEqualPreviousChoice():
+		MainNpc.NpcRumorOpenMessage('060', 'cCategory')
+		if MainNpc.NpcRumorIsAskedOwn():
+			MainNpc.NpcRumorOpenMessage('011', 'cCategory')
+		else:
+			if MainNpc.NpcRumorIsEqualNpcChoice('cCurrent') in (0, 1, 2):
+				MainNpc.NpcRumorOpenMessage('031', 'cCategory')
+			else:
+				MainNpc.NpcRumorOpenMessage('032', 'cCategory')
+		run NNPC_FreeD::RumorP_Favorite_End()
+	else:
+		switch MainNpc.NpcRumorIsEqualNpcChoice('cCurrent'):
+			case 0:
+				MainNpc.NpcRumorOpenMessage('103', 'cTopic')
+			case 1:
+				MainNpc.NpcRumorOpenMessage('104', 'cTopic')
+			case 2:
+				MainNpc.NpcRumorOpenMessage('105', 'cTopic')
+			case 3:
+				MainNpc.NpcRumorOpenMessage('106', 'cTopic')
+		MainNpc.NpcRumorSaveAnswer()
+		run NNPC_FreeD::RumorP_Favorite_End()

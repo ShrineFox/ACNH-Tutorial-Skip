@@ -1,139 +1,138 @@
 flow End():
-    MainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/BO_End', '', '', '', true)
- 
+	MainNpc.NpcSelectFreeTalk('cWildCard', '', '', '', 'TalkNNpc/B1_Bo/BO_End', '', '', '', true)
+
 flow End_Bye():
-    fork:
-        branch:
-            Player.CharacterEmoticonAction('Greeting', false, '', 0, false)
-            EventFlowSystemActor.WaitFrame(30)
-            Player.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
-        branch:
-            EventFlowSystemActor@Sub.WaitFrame(10)
-            MainNpc.RequestSimple('NpcGreeting', true)
-            MainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
- 
+	fork:
+		branch:
+			Player.CharacterEmoticonAction('Greeting', false, '', 0, false)
+			EventFlowSystemActor.WaitFrame(30)
+			Player.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+		branch:
+			EventFlowSystemActor@Sub.WaitFrame(10)
+			MainNpc.RequestSimple('NpcGreeting', true)
+			MainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+
 flow End_Root():
-    if MainNpc.NpcGreetTypeNegative():
-        run End()
-    else:
-        EventFlowSystemActor.MessageSuspend()
-        run End_Bye()
- 
+	if MainNpc.NpcGreetTypeNegative():
+		run End()
+	else:
+		EventFlowSystemActor.MessageSuspend()
+		run End_Bye()
+
 flow PresentAvailable_Chk():
-    if not MainNpc.EventFlags['cNpcMemory:ReceivedFirstPresent']:
-        if MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqH']:
-            if not MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqHToday']:
-                MainNpc.EventFlags['cNpcMemory:ReceivedFirstPresent'] = true
-        elif MainNpc.CheckNpcFavorLevel() in (0, 1, 2, 3, 4):
-            MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqH'] = true
-            MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqHToday'] = true
- 
+	if not MainNpc.EventFlags['cNpcMemory:ReceivedFirstPresent']:
+		if MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqH']:
+			if not MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqHToday']:
+				MainNpc.EventFlags['cNpcMemory:ReceivedFirstPresent'] = true
+		elif MainNpc.CheckNpcFavorLevel() in (0, 1, 2, 3, 4):
+			MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqH'] = true
+			MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqHToday'] = true
+
 flow QuestOrder_Chk():
-    if (EventFlowSystemActor.IsMyVillage()) and (MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] >= 2):
-        if MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] > 9:
-            if MainNpc.NpcCanStartQuest():
-                run Sub_grp_Event23()
-        elif (MainNpc.NpcCanStartReactQuestTalk() not in (0, 1, 3)) and (not System.EventFlags['cPlayerTemp:SickQuestGossip']):
-            run NNPC_Quest_Sick_Begin::Beginrun NNPC_Quest_Sick_Begin::Begin()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            if (MainNpc.NpcCanStartQuest()) and (EventFlowSystemActor.PercentChoice(50)):
-                run Sub_grp_Event23()
- 
+	if (EventFlowSystemActor.IsMyVillage()) and (MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] >= 2):
+		if MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] > 9:
+			if MainNpc.NpcCanStartQuest():
+				run Sub_grp_Event23()
+		elif (MainNpc.NpcCanStartReactQuestTalk() not in (0, 1, 3)) and (not System.EventFlags['cPlayerTemp:SickQuestGossip']):
+			run NNPC_Quest_Sick_Begin::Begin()
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			if (MainNpc.NpcCanStartQuest()) and (EventFlowSystemActor.PercentChoice(50)):
+				run Sub_grp_Event23()
+
 flow QuestStart_Chk():
-    if MainNpc.NpcIsQuestClient('cTreasure', false, false):
-        run NNPC_Quest_TreasureHunt_End::Rootrun NNPC_Quest_TreasureHunt_End::Root()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif MainNpc.NpcIsQuestClient('cDelivery', true, false):
-        if MainNpc.QuestFlags['cDeliveryEnd']:
-            run NNPC_Quest_Delivery_Report::Reportrun NNPC_Quest_Delivery_Report::Report()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        elif EventFlowSystemActor.NpcQuestIsLimitOver('cDelivery'):
-            run NNPC_Quest_Delivery_TimeOver::TimeOverrun NNPC_Quest_Delivery_TimeOver::TimeOver()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.NpcIsQuestClient('cTreasure', false, false):
+		run NNPC_Quest_TreasureHunt_End::Root()
+		EventFlowSystemActor.ExitFlowchart()
+	elif MainNpc.NpcIsQuestClient('cDelivery', true, false):
+		if MainNpc.QuestFlags['cDeliveryEnd']:
+			run NNPC_Quest_Delivery_Report::Report()
+			EventFlowSystemActor.ExitFlowchart()
+		elif EventFlowSystemActor.NpcQuestIsLimitOver('cDelivery'):
+			run NNPC_Quest_Delivery_TimeOver::TimeOver()
+			EventFlowSystemActor.ExitFlowchart()
+
 flow Quest_ConfirmGive():
-    if MainNpc.NpcIsQuestClient('cMyQuest', true, false):
-        switch MainNpc.NpcHaveQuestType(''):
-            case 1, 2, 4, 7:
-                if MainNpc.HasNpcRequestedItem():
-                    switch MainNpc.NpcHaveQuestType(''):
-                        case 1:
-                            run NNPC_Quest_CatchFishInsect_End::Endrun NNPC_Quest_CatchFishInsect_End::End()
-                        case 2:
-                            run NNPC_Quest_LostProperty_End::Give1run NNPC_Quest_LostProperty_End::Give1()
-                        default:
-                            return
-                else:
-                    switch MainNpc.NpcHaveQuestType(''):
-                        case 1:
-                            run NNPC_Quest_CatchFishInsect_End::Confirm_Rootrun NNPC_Quest_CatchFishInsect_End::Confirm_Root()
-                        case 2:
-                            run NNPC_Quest_LostProperty_End::Confirmrun NNPC_Quest_LostProperty_End::Confirm()
-                        default:
-                            return
-            case 3:
-                if MainNpc.QuestFlags['cDeliveryEnd']:
-                    run NNPC_Quest_Delivery_Report::Reportrun NNPC_Quest_Delivery_Report::Report()
-                elif not MainNpc.IsDeliveryQuestReceiver():
-                    run NNPC_Quest_Delivery_Begin::Confirmrun NNPC_Quest_Delivery_Begin::Confirm()
-            case 5:
-                run NNPC_Quest_VisitN_Begin::Confirmrun NNPC_Quest_VisitN_Begin::Confirm()
-            case 6:
-                run NNPC_Quest_VisitP_Begin::Confirmrun NNPC_Quest_VisitP_Begin::Confirm()
-            default:
-                return
-    elif (not MainNpc.NpcIsQuestClient('cLost', false, false)) and (MainNpc.IsDeliveryQuestReceiver()) and (not MainNpc.QuestFlags['cDeliveryEnd']):
-        run NNPC_Quest_Delivery_Give::Giverun NNPC_Quest_Delivery_Give::Give()
-    elif MainNpc.HasNpcRequestedItem():
-        run NNPC_Quest_LostProperty_End::Give2run NNPC_Quest_LostProperty_End::Give2()
- 
+	if MainNpc.NpcIsQuestClient('cMyQuest', true, false):
+		switch MainNpc.NpcHaveQuestType(''):
+			case 1, 2, 4, 7:
+				if MainNpc.HasNpcRequestedItem():
+					switch MainNpc.NpcHaveQuestType(''):
+						case 1:
+run NNPC_Quest_CatchFishInsect_End::End()
+						case 2:
+run NNPC_Quest_LostProperty_End::Give1()
+						default:
+							return
+				else:
+					switch MainNpc.NpcHaveQuestType(''):
+						case 1:
+run NNPC_Quest_CatchFishInsect_End::Confirm_Root()
+						case 2:
+run NNPC_Quest_LostProperty_End::Confirm()
+						default:
+							return
+			case 3:
+				if MainNpc.QuestFlags['cDeliveryEnd']:
+					run NNPC_Quest_Delivery_Report::Report()
+				elif not MainNpc.IsDeliveryQuestReceiver():
+					run NNPC_Quest_Delivery_Begin::Confirm()
+			case 5:
+				run NNPC_Quest_VisitN_Begin::Confirm()
+			case 6:
+				run NNPC_Quest_VisitP_Begin::Confirm()
+			default:
+				return
+	elif (not MainNpc.NpcIsQuestClient('cLost', false, false)) and (MainNpc.IsDeliveryQuestReceiver()) and (not MainNpc.QuestFlags['cDeliveryEnd']):
+		run NNPC_Quest_Delivery_Give::Give()
+	elif MainNpc.HasNpcRequestedItem():
+		run NNPC_Quest_LostProperty_End::Give2()
+
 flow Root():
-    run PresentAvailable_Chk()
-    run QuestStart_Chk()
-    run NNPC_Talk_Greet::Rootrun NNPC_Talk_Greet::Root()
-    switch EventFlowSystemActor.NpcGeneralTalkChoice():
-        case 0:
-            run NNPC_FreeH::HintTalkChkrun NNPC_FreeH::HintTalkChk()
-            run NNPC_FreeH::Progress_NpcHouseBuiltrun NNPC_FreeH::Progress_NpcHouseBuilt()
-            run NNPC_FreeH::ForMarketBuilding_Chkrun NNPC_FreeH::ForMarketBuilding_Chk()
-            run NNPC_FreeA::TentFirst_Chkrun NNPC_FreeA::TentFirst_Chk()
-            if (MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] >= 1) and (MainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5)) and (EventFlowSystemActor.EnvHourCompare(2, -1, true, true) == 0):
-                run QuestOrder_Chk()
-            run NNPC_Free_Root::Rootrun NNPC_Free_Root::Root()
-        case 1:
-            run End_Root()
-        case 2:
-            run Quest_ConfirmGive()
-        case 3:
-            run NNPC_Select_Present::Rootrun NNPC_Select_Present::Root()
-        case 4:
-            run NNPC_GEvent_BirthdayP::Give_Capcakerun NNPC_GEvent_BirthdayP::Give_Capcake()
- 
+	run PresentAvailable_Chk()
+	run QuestStart_Chk()
+	run NNPC_Talk_Greet::Root()
+	switch EventFlowSystemActor.NpcGeneralTalkChoice():
+		case 0:
+			run NNPC_FreeH::HintTalkChk()
+			run NNPC_FreeH::Progress_NpcHouseBuilt()
+			run NNPC_FreeH::ForMarketBuilding_Chk()
+			run NNPC_FreeA::TentFirst_Chk()
+			if (MainNpc.EventFlags['cNpcMemory:ContinuousTalkCount'] >= 1) and (MainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5)) and (EventFlowSystemActor.EnvHourCompare(2, -1, true, true) == 0):
+				run QuestOrder_Chk()
+			run NNPC_Free_Root::Root()
+		case 1:
+			run End_Root()
+		case 2:
+			run Quest_ConfirmGive()
+		case 3:
+			run NNPC_Select_Present::Root()
+		case 4:
+			run NNPC_GEvent_BirthdayP::Give_Capcake()
+
 local flow Sub_grp_Event23():
-    if not MainNpc.NpcIsQuestClient('cMyQuest', true, true):
-        switch MainNpc.NpcHaveQuestType(''):
-            case 1:
-                run NNPC_Quest_CatchFishInsect_Begin::Beginrun NNPC_Quest_CatchFishInsect_Begin::Begin()
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 2:
-                if (not System.EventFlags['cLand:LostPropertyFound']) and (not System.EventFlags['cPlayerTemp:QuestCancell']):
-                    run NNPC_Quest_LostProperty_Begin::Beginrun NNPC_Quest_LostProperty_Begin::Begin()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 3:
-                run NNPC_Quest_Delivery_Begin::Beginrun NNPC_Quest_Delivery_Begin::Begin()
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 4:
-                run NNPC_Quest_TreasureHunt_Begin::Beginrun NNPC_Quest_TreasureHunt_Begin::Begin()
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 5:
-                if not MainNpc.EventFlags['cNpcMemory:FinishVisitNToday']:
-                    run NNPC_Quest_VisitN_Begin::Beginrun NNPC_Quest_VisitN_Begin::Begin()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 6:
-                if not MainNpc.EventFlags['cNpcMemory:FinishVisitPToday']:
-                    run NNPC_Quest_VisitP_Begin::Beginrun NNPC_Quest_VisitP_Begin::Begin()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            default:
-                return
- 
+	if not MainNpc.NpcIsQuestClient('cMyQuest', true, true):
+		switch MainNpc.NpcHaveQuestType(''):
+			case 1:
+				run NNPC_Quest_CatchFishInsect_Begin::Begin()
+				EventFlowSystemActor.ExitFlowchart()
+			case 2:
+				if (not System.EventFlags['cLand:LostPropertyFound']) and (not System.EventFlags['cPlayerTemp:QuestCancell']):
+					run NNPC_Quest_LostProperty_Begin::Begin()
+					EventFlowSystemActor.ExitFlowchart()
+			case 3:
+				run NNPC_Quest_Delivery_Begin::Begin()
+				EventFlowSystemActor.ExitFlowchart()
+			case 4:
+				run NNPC_Quest_TreasureHunt_Begin::Begin()
+				EventFlowSystemActor.ExitFlowchart()
+			case 5:
+				if not MainNpc.EventFlags['cNpcMemory:FinishVisitNToday']:
+					run NNPC_Quest_VisitN_Begin::Begin()
+					EventFlowSystemActor.ExitFlowchart()
+			case 6:
+				if not MainNpc.EventFlags['cNpcMemory:FinishVisitPToday']:
+					run NNPC_Quest_VisitP_Begin::Begin()
+					EventFlowSystemActor.ExitFlowchart()
+			default:
+				return

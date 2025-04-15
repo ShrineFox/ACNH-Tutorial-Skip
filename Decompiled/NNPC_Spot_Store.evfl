@@ -1,37 +1,36 @@
 flow Root():
-    MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = true
-    run NNPC_FreeH_Progress::Conceal_ShopBuilt2run NNPC_FreeH_Progress::Conceal_ShopBuilt2()
-    run NNPC_Talk_Situation::Situation_Spotrun NNPC_Talk_Situation::Situation_Spot()
-    if MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']:
-        MainNpc.NpcSetTalkManualChoice()
-        if EventFlowSystemActor.IsMyVillage():
-            run NNPC_Talk_Greet::Greet_Again1run NNPC_Talk_Greet::Greet_Again1()
-        else:
-            run NNPC_Talk_GreetV::GreetV_Again1run NNPC_Talk_GreetV::GreetV_Again1()
-    else:
-        run NNPC_Talk_Greet_Spot::Rootrun NNPC_Talk_Greet_Spot::Root()
-    switch EventFlowSystemActor.NpcGeneralTalkChoice():
-        case 0:
-            run Spot_Gstore()
-        case 1:
-            run NNPC_Talk_General::End_Rootrun NNPC_Talk_General::End_Root()
-        case 2:
-            run NNPC_Talk_General::Quest_ConfirmGiverun NNPC_Talk_General::Quest_ConfirmGive()
-        case 3:
-            run NNPC_Select_Present::Rootrun NNPC_Select_Present::Root()
-        case 4:
-            run NNPC_GEvent_BirthdayP::Give_Capcakerun NNPC_GEvent_BirthdayP::Give_Capcake()
- 
+	MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = true
+	run NNPC_FreeH_Progress::Conceal_ShopBuilt2()
+	run NNPC_Talk_Situation::Situation_Spot()
+	if MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillageToday']:
+		MainNpc.NpcSetTalkManualChoice()
+		if EventFlowSystemActor.IsMyVillage():
+			run NNPC_Talk_Greet::Greet_Again1()
+		else:
+			run NNPC_Talk_GreetV::GreetV_Again1()
+	else:
+		run NNPC_Talk_Greet_Spot::Root()
+	switch EventFlowSystemActor.NpcGeneralTalkChoice():
+		case 0:
+			run Spot_Gstore()
+		case 1:
+			run NNPC_Talk_General::End_Root()
+		case 2:
+			run NNPC_Talk_General::Quest_ConfirmGive()
+		case 3:
+			run NNPC_Select_Present::Root()
+		case 4:
+			run NNPC_GEvent_BirthdayP::Give_Capcake()
+
 flow Spot_Gstore():
-    if EventFlowSystemActor.FacilityOpenPastDays('cMarket2', 7):
-        # <60:1:012d012e012f>
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Gstore:003', false)
-    else:
-        if EventFlowSystemActor.IsMyVillage():
-            # <60:2:0065006600670068>
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Gstore:001', false)
-        else:
-            # <60:0:00c900ca>
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Gstore:002', false)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.FacilityOpenPastDays('cMarket2', 7):
+		# <60:1:012d012e012f>
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Gstore:003', false)
+	else:
+		if EventFlowSystemActor.IsMyVillage():
+			# <60:2:0065006600670068>
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Gstore:001', false)
+		else:
+			# <60:0:00c900ca>
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Gstore:002', false)
+	EventFlowSystemActor.ExitFlowchart()

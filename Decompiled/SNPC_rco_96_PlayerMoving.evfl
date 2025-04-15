@@ -1,487 +1,486 @@
 flow Cancel_Moving():
-    if SubflowResults@2[1] == 0:
-        # Yes, yes, we don't need to do anything right now.<10:4> In that case, let's return you to the title screen. I hope you continue to enjoy life on ISLA…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1023', false)
-        run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-    else:
-        # Yes, yes, there's nothing we need to do right now. Oh! And I'm sorry to ask this, but I'll need you to close the game. I hope you continue to enjoy i…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:590', false)
-        run Seq_ExitHome()
- 
+	if SubflowResults@2[1] == 0:
+		# Yes, yes, we don't need to do anything right now.<10:4> In that case, let's return you to the title screen. I hope you continue to enjoy life on ISLA…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1023', false)
+		run SNPC_rco_92_OtherSettings::Seq_Close()
+	else:
+		# Yes, yes, there's nothing we need to do right now. Oh! And I'm sorry to ask this, but I'll need you to close the game. I hope you continue to enjoy i…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:590', false)
+		run Seq_ExitHome()
+
 flow EndwithoutBackupOtherP():
-    # Thank you for being patient. It appears everything is ready for <115:0:cd00>'s big move! Please wish <115:0:cd00> the best on their new adventure!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006_01', false)
-    run Event77()
- 
+	# Thank you for being patient. It appears everything is ready for <115:0:cd00>'s big move! Please wish <115:0:cd00> the best on their new adventure!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006_01', false)
+	run Event77()
+
 flow EndwithoutSavedatabackup():
-    # Thank you so much for being patient. Everything is ready! I'm sure you'll have lots of fun at your new home. Do take care, hm, PLAYER?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006', false)
+	# Thank you so much for being patient. Everything is ready! I'm sure you'll have lots of fun at your new home. Do take care, hm, PLAYER?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006', false)
 entrypoint Event77:
-    EventFlowSystemActor.NetMoveSessionFinalize()
-    run Seq_ExitHome()
- 
+	EventFlowSystemActor.NetMoveSessionFinalize()
+	run Seq_ExitHome()
+
 flow HowTo_Sub1():
-    # Yes! A single player can choose to move to a different island on a different Nintendo Switch system. If the destination lacks save data for the Anima…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2011', false)
- 
+	# Yes! A single player can choose to move to a different island on a different Nintendo Switch system. If the destination lacks save data for the Anima…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2011', false)
+
 flow HowTo_Sub2():
-    # Moving to a different island requires a separate Nintendo Switch system from the one you are using now. You'll also need a second copy of the Animal …
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2012', false)
- 
+	# Moving to a different island requires a separate Nintendo Switch system from the one you are using now. You'll also need a second copy of the Animal …
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2012', false)
+
 flow HowTo_Sub3():
-    # There are a few conditions that need to be met in order to move. Players who don't have their own house, or are the island's Resident Representative,…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2013', false)
- 
+	# There are a few conditions that need to be met in order to move. Players who don't have their own house, or are the island's Resident Representative,…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2013', false)
+
 flow HowTo_Sub4():
-    # Indeed! To do this, you'll need to use the Transfer Your User Data option on this system as part of your move. First, in system settings, use the Tra…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2014', false)
- 
+	# Indeed! To do this, you'll need to use the Transfer Your User Data option on this system as part of your move. First, in system settings, use the Tra…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2014', false)
+
 flow MoveSeq_Move():
-    EventFlowSystemActor.SetTagMoveOutAccountName(0)
-    if not EventFlowSystemActor.NetMovePlayerHasPOPID():
-        run SkipNoticeWrongNA()
-    elif EventFlowSystemActor.NetMoveSameNSAID():
+	EventFlowSystemActor.SetTagMoveOutAccountName(0)
+	if not EventFlowSystemActor.NetMovePlayerHasPOPID():
+		run SkipNoticeWrongNA()
+	elif EventFlowSystemActor.NetMoveSameNSAID():
 entrypoint Event60:
-        if EventFlowSystemActor.PlayerMoveValidateDestinationIsland():
-            # It seems <140:23:cd00>'s system is ready to accept someone.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1005', false)
-            EventFlowSystemActor.MessageSuspend()
-            if SubflowResults@2[1] == 0:
-                EventFlowSystemActor.SetTagMainPlayerName(1, 0)
-            else:
-                EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
-            # The target Nintendo Switch system does not have save data for the Animal Crossing: New Horizons game. If you continue the moving process, <115:0:cd00…
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9111', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                EventFlowSystemActor.NetMoveSessionFinalize()
-                run Cancel_Moving()
-            else:
-                # Yes, yes! It appears we can continue the process of moving a player to <140:23:cd00>'s system.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1005_00', false)
-                run Event67()
-        else:
-            EventFlowSystemActor.SetTagMoveOutLandName(0)
-            # It looks like someone can move over to <115:2:cd00>, which is on <140:23:cd00>'s system! Shall we continue with moving a player to <115:2:cd00>?
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1005_01', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		if EventFlowSystemActor.PlayerMoveValidateDestinationIsland():
+			# It seems <140:23:cd00>'s system is ready to accept someone.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1005', false)
+			EventFlowSystemActor.MessageSuspend()
+			if SubflowResults@2[1] == 0:
+				EventFlowSystemActor.SetTagMainPlayerName(1, 0)
+			else:
+				EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
+			# The target Nintendo Switch system does not have save data for the Animal Crossing: New Horizons game. If you continue the moving process, <115:0:cd00…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9111', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.NetMoveSessionFinalize()
+				run Cancel_Moving()
+			else:
+				# Yes, yes! It appears we can continue the process of moving a player to <140:23:cd00>'s system.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1005_00', false)
+				run Event67()
+		else:
+			EventFlowSystemActor.SetTagMoveOutLandName(0)
+			# It looks like someone can move over to <115:2:cd00>, which is on <140:23:cd00>'s system! Shall we continue with moving a player to <115:2:cd00>?
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1005_01', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 entrypoint Event67:
-                EventFlowSystemActor.MessageLockNext(2)
-                # Now performing the moving process. Please wait. Do not touch .
-                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:204', false)
-                EventFlowSystemActor.NetMoveFinishWait()
-                EventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.MessageUnlockNext()
-                if EventFlowSystemActor.CheckErrorType(2):
-                    if SubflowResults@2[1] == 0:
-                        # Hm? It seems we've run into some connection trouble. I'm sorry, but for now let's go back to the title screen.
-                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1024', false)
-                        EventFlowSystemActor.NetMoveSessionFinalize()
-                        run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-                    else:
-                        # Hm? We've run into some connection trouble. I'm sorry, but I'll need you to close the game and start over.
-                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1024_01', false)
-                        EventFlowSystemActor.NetMoveSessionFinalize()
-                        run Seq_ExitHome()
-                elif SubflowResults@2[1] != 0:
-                    if SubflowResults@2[2] == 0:
-                        run EndwithoutBackupOtherP()
-                    else:
-                        run UploadBackupAsyncTo()
-                elif SubflowResults@2[2] == 0:
-                    run EndwithoutSavedatabackup()
-                else:
+				EventFlowSystemActor.MessageLockNext(2)
+				# Now performing the moving process. Please wait. Do not touch .
+				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:204', false)
+				EventFlowSystemActor.NetMoveFinishWait()
+				EventFlowSystemActor.MessageSuspend()
+				EventFlowSystemActor.MessageUnlockNext()
+				if EventFlowSystemActor.CheckErrorType(2):
+					if SubflowResults@2[1] == 0:
+						# Hm? It seems we've run into some connection trouble. I'm sorry, but for now let's go back to the title screen.
+						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1024', false)
+EventFlowSystemActor.NetMoveSessionFinalize()
+run SNPC_rco_92_OtherSettings::Seq_Close()
+					else:
+						# Hm? We've run into some connection trouble. I'm sorry, but I'll need you to close the game and start over.
+						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1024_01', false)
+EventFlowSystemActor.NetMoveSessionFinalize()
+  run Seq_ExitHome()
+				elif SubflowResults@2[1] != 0:
+					if SubflowResults@2[2] == 0:
+run EndwithoutBackupOtherP()
+					else:
+run UploadBackupAsyncTo()
+				elif SubflowResults@2[2] == 0:
+					run EndwithoutSavedatabackup()
+				else:
 entrypoint Event229:
-                    run UploadBackUpAsync()
-                    run Seq_ExitHome()
-            else:
-                EventFlowSystemActor.NetMoveSessionFinalize()
-                run Cancel_Moving()
-    elif EventFlowSystemActor.PlayerMoveValidateDestinationIsland():
-        # It seems <140:23:cd00>'s system is ready to accept someone.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1007', false)
-        EventFlowSystemActor.MessageSuspend()
-        if SubflowResults@2[1] == 0:
-            EventFlowSystemActor.SetTagMainPlayerName(1, 0)
-        else:
-            EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
-        # The target Nintendo Switch system does not have save data for the Animal Crossing: New Horizons game. If you continue the moving process, <115:0:cd00…
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9111', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.NetMoveSessionFinalize()
-            run Cancel_Moving()
-        else:
-            # Yes, yes! Excellent. Now, there is one more thing we need to discuss…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1007_02', false)
-            run Sub_grp_Event163()
-    else:
-        EventFlowSystemActor.SetTagMoveOutLandName(0)
-        # It looks like someone can move over to <115:2:cd00>, which is on <140:23:cd00>'s system! However…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1007_01', false)
-        run Sub_grp_Event163()
- 
+					run UploadBackUpAsync()
+					run Seq_ExitHome()
+			else:
+				EventFlowSystemActor.NetMoveSessionFinalize()
+				run Cancel_Moving()
+	elif EventFlowSystemActor.PlayerMoveValidateDestinationIsland():
+		# It seems <140:23:cd00>'s system is ready to accept someone.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1007', false)
+		EventFlowSystemActor.MessageSuspend()
+		if SubflowResults@2[1] == 0:
+			EventFlowSystemActor.SetTagMainPlayerName(1, 0)
+		else:
+			EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
+		# The target Nintendo Switch system does not have save data for the Animal Crossing: New Horizons game. If you continue the moving process, <115:0:cd00…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:9111', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.NetMoveSessionFinalize()
+			run Cancel_Moving()
+		else:
+			# Yes, yes! Excellent. Now, there is one more thing we need to discuss…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1007_02', false)
+			run Sub_grp_Event163()
+	else:
+		EventFlowSystemActor.SetTagMoveOutLandName(0)
+		# It looks like someone can move over to <115:2:cd00>, which is on <140:23:cd00>'s system! However…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1007_01', false)
+		run Sub_grp_Event163()
+
 flow MoveSeq_Notice():
-    EventFlowSystemActor.SetTagMainPlayerName(0, 0)
-    EventFlowSystemActor.SetTagMainPlayerName(1, 0)
-    # OK! There are several important things you'll need to know before leaving ISLAND.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003', false)
-    run Return_MovingNotice()
- 
+	EventFlowSystemActor.SetTagMainPlayerName(0, 0)
+	EventFlowSystemActor.SetTagMainPlayerName(1, 0)
+	# OK! There are several important things you'll need to know before leaving ISLAND.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003', false)
+	run Return_MovingNotice()
+
 flow MoveSeq_Notice_UnlinkedP():
-    SubflowResults[1] = 1
-    # Yes, yes! Everything appears to be in order. Now, before we start the moving process, we need to go over some very important information. Even if you…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:504', false)
-    run Return_MovingNotice()
- 
+	SubflowResults[1] = 1
+	# Yes, yes! Everything appears to be in order. Now, before we start the moving process, we need to go over some very important information. Even if you…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:504', false)
+	run Return_MovingNotice()
+
 flow MoveSeq_Procedure():
-    if SubflowResults@2[1] == 0:
-        # Understood. In that case, I want you to listen VERY closely to how the moving process works! You'll need another Nintendo Switch system in addition t…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004', false)
-    else:
-        # Understood. In that case, I want you to listen VERY closely to how the moving process works! You'll need another Nintendo Switch system in addition t…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004_00_01', false)
-    # Once the game launches, it will begin at the check-in counter. Please tell whoever is working the counter, "I'm moving."
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004_01', false)
-    # After that, follow the instructions on both screens to continue with the moving process! Now then, are you ready to begin searching for the second sy…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004_04', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run MoveSeq_Search()
-        case 1:
-            run Return_MovingProcedure()
-        case 2:
-            run Cancel_Moving()
- 
+	if SubflowResults@2[1] == 0:
+		# Understood. In that case, I want you to listen VERY closely to how the moving process works! You'll need another Nintendo Switch system in addition t…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004', false)
+	else:
+		# Understood. In that case, I want you to listen VERY closely to how the moving process works! You'll need another Nintendo Switch system in addition t…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004_00_01', false)
+	# Once the game launches, it will begin at the check-in counter. Please tell whoever is working the counter, "I'm moving."
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004_01', false)
+	# After that, follow the instructions on both screens to continue with the moving process! Now then, are you ready to begin searching for the second sy…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1004_04', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run MoveSeq_Search()
+		case 1:
+			run Return_MovingProcedure()
+		case 2:
+			run Cancel_Moving()
+
 flow MoveSeq_Search():
-    EventFlowSystemActor.MessageLockNext(2)
-    # The Transfer Request has been sent. Use the other system to "Start the process." ( Cancel.)
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:201', false)
-    EventFlowSystemActor.NetMoveSessionOpen()
-    EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.MessageUnlockNext()
-    if EventFlowSystemActor.MessageUseBCancel():
-        EventFlowSystemActor.NetMoveSessionFinalize()
-        # Hm? Do you still want to go through with the moving process?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1021', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Return_MovingSearch()
-        else:
-            run Cancel_Moving()
-    elif EventFlowSystemActor.CheckErrorType(2):
-        EventFlowSystemActor.NetMoveSessionFinalize()
-        # I couldn't find a Nintendo Switch system that is accepting anyone… Would you like me to try again?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1022', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Return_MovingSearch()
-        else:
-            run Cancel_Moving()
-    else:
-        run MoveSeq_Move()
- 
+	EventFlowSystemActor.MessageLockNext(2)
+	# The Transfer Request has been sent. Use the other system to "Start the process." ( Cancel.)
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:201', false)
+	EventFlowSystemActor.NetMoveSessionOpen()
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.MessageUnlockNext()
+	if EventFlowSystemActor.MessageUseBCancel():
+		EventFlowSystemActor.NetMoveSessionFinalize()
+		# Hm? Do you still want to go through with the moving process?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1021', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Return_MovingSearch()
+		else:
+			run Cancel_Moving()
+	elif EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.NetMoveSessionFinalize()
+		# I couldn't find a Nintendo Switch system that is accepting anyone… Would you like me to try again?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1022', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Return_MovingSearch()
+		else:
+			run Cancel_Moving()
+	else:
+		run MoveSeq_Move()
+
 flow MovingProcessStart():
-    run Event67()
- 
+	run Event67()
+
 flow Moving_UnlinkedP():
-    if EventFlowSystemActor.IsUnconnectedVillageLeader():
-        if EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(2):
-            # Of course! Let me walk you through moving a player. Remember, they must not be linked to a user account. Also, please keep in mind that I cannot help…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:501_00_00', false)
-            run Sub_Event126()
-        else:
-            run NoUnlinkedP()
-    elif EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(1):
-        # Of course! Let me walk you through moving a player. Remember, they must not be linked to a user account.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:501_00_01', false)
-        run Sub_Event126()
-    else:
-        run NoUnlinkedP()
- 
+	if EventFlowSystemActor.IsUnconnectedVillageLeader():
+		if EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(2):
+			# Of course! Let me walk you through moving a player. Remember, they must not be linked to a user account. Also, please keep in mind that I cannot help…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:501_00_00', false)
+			run Sub_Event126()
+		else:
+			run NoUnlinkedP()
+	elif EventFlowSystemActor.IsUnconnectedPlayerVillagerGreaterThan(1):
+		# Of course! Let me walk you through moving a player. Remember, they must not be linked to a user account.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:501_00_01', false)
+		run Sub_Event126()
+	else:
+		run NoUnlinkedP()
+
 flow NoUnlinkedP():
-    # Of course, of course. One moment… Oh! Um… Unfortunately, there aren't any players I can move off the island. You see, there are a few conditions that…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:552', false)
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        run Return_MainP_Multi()
-    else:
-        run Return_OtherP()
- 
+	# Of course, of course. One moment… Oh! Um… Unfortunately, there aren't any players I can move off the island. You see, there are a few conditions that…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:552', false)
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		run Return_MainP_Multi()
+	else:
+		run Return_OtherP()
+
 flow Return_HowTo_MainP():
-    # Yes, yes, I believe that covers that. Anything else you want to know?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2002', false)
-    run Event179()
- 
+	# Yes, yes, I believe that covers that. Anything else you want to know?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2002', false)
+	run Event179()
+
 flow Return_HowTo_OtherP():
-    # Yes, yes, I believe that covers that. Anything else you want to know?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2004', false)
-    run Event183()
- 
+	# Yes, yes, I believe that covers that. Anything else you want to know?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2004', false)
+	run Event183()
+
 flow Return_MainP():
-    # For now, all I am able to do is point you in the right direction. I hope that's helpful, PLAYER!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:005', false)
-    run Event9()
- 
+	# For now, all I am able to do is point you in the right direction. I hope that's helpful, PLAYER!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:005', false)
+	run Event9()
+
 flow Return_MainP_Multi():
-    # So, with that out of the way… How can I meet your moving needs, hm?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_04', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4():
-        case 0:
-            run Moving_UnlinkedP()
-        case 1:
-            run Root_HowTo()
-        case 2:
-            # Very well, I'll explain. First, download the Island Transfer Tool from Nintendo eShop on both systems. The Island Transfer Tool will take you through…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:004', false)
-            run Return_MainP_Multi()
-        case 3:
-            run Cancel_Moving()
- 
+	# So, with that out of the way… How can I meet your moving needs, hm?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_04', false)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			run Moving_UnlinkedP()
+		case 1:
+			run Root_HowTo()
+		case 2:
+			# Very well, I'll explain. First, download the Island Transfer Tool from Nintendo eShop on both systems. The Island Transfer Tool will take you through…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:004', false)
+			run Return_MainP_Multi()
+		case 3:
+			run Cancel_Moving()
+
 flow Return_MovingNotice():
-    # When someone moves, they bring the items in their pockets, their home, and the furniture inside that home. They also bring the Bells in their bank ac…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_01', false)
-    if EventFlowSystemActor.PlayerHasOwnedMyDesign():
-        # After they move, they'll still be able to use their current NookPhone and all the apps installed on it. Although…we should have a chat about the cust…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_02', false)
-    else:
-        # Oh! And it may give players peace of mind to know they can keep using their NookPhone and their apps!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_02_01', false)
-    if EventFlowSystemActor.NetHasPOPID(true):
-        # One last thing we should discuss… It's about features that use the internet, like the Best Friends List and the Custom Designs Portal. If the mover w…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_03', false)
-    EventFlowSystemActor.MessageSuspend()
-    if (EventFlowSystemActor.BackupAgentExist()) and (not EventFlowSystemActor.SaveIsEnabledBackupSetting()) and (EventFlowSystemActor.BackupAgentIsMainPlayer()) and (not EventFlowSystemActor.SaveCompareBackupAgentNSAID()):
-        # As a final step in the transfer process, your backed-up save data will be updated. An internet connection is required to back up save data.
-        MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9113', false)
-        SubflowResults[2] = 1
-    # The save data transfer process will take some time. If you're playing in handheld mode, please connect the system to the Nintendo Switch AC adapter b…
-    MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9112', false)
-    # …Yes, yes, I believe that covers everything. Are you ready to start the moving process now?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_04', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run MoveSeq_Procedure()
-        case 1:
-            run Return_MovingNotice()
-        case 2:
-            run Cancel_Moving()
- 
+	# When someone moves, they bring the items in their pockets, their home, and the furniture inside that home. They also bring the Bells in their bank ac…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_01', false)
+	if EventFlowSystemActor.PlayerHasOwnedMyDesign():
+		# After they move, they'll still be able to use their current NookPhone and all the apps installed on it. Although…we should have a chat about the cust…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_02', false)
+	else:
+		# Oh! And it may give players peace of mind to know they can keep using their NookPhone and their apps!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_02_01', false)
+	if EventFlowSystemActor.NetHasPOPID(true):
+		# One last thing we should discuss… It's about features that use the internet, like the Best Friends List and the Custom Designs Portal. If the mover w…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_03', false)
+	EventFlowSystemActor.MessageSuspend()
+	if (EventFlowSystemActor.BackupAgentExist()) and (not EventFlowSystemActor.SaveIsEnabledBackupSetting()) and (EventFlowSystemActor.BackupAgentIsMainPlayer()) and (not EventFlowSystemActor.SaveCompareBackupAgentNSAID()):
+		# As a final step in the transfer process, your backed-up save data will be updated. An internet connection is required to back up save data.
+		MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9113', false)
+		SubflowResults[2] = 1
+	# The save data transfer process will take some time. If you're playing in handheld mode, please connect the system to the Nintendo Switch AC adapter b…
+	MainNpc.OpenMessageWindow('Dialog/DIALOG_Msg:9112', false)
+	# …Yes, yes, I believe that covers everything. Are you ready to start the moving process now?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1003_04', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run MoveSeq_Procedure()
+		case 1:
+			run Return_MovingNotice()
+		case 2:
+			run Cancel_Moving()
+
 flow Return_MovingProcedure():
-    run MoveSeq_Procedure()
- 
+	run MoveSeq_Procedure()
+
 flow Return_MovingSearch():
-    run MoveSeq_Search()
- 
+	run MoveSeq_Search()
+
 flow Return_OtherP():
-    # So, with that out of the way… How can I meet your moving needs, hm?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:902', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4():
-        case 0:
-            if System.EventFlags['cPlayer:PlayerMovingEnable']:
-                # You want to move to another island? I know everyone will miss you, but I support you on this new adventure!
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1001', false)
-                # I just want to confirm… You wish to move to a different island on another Nintendo Switch system, correct?
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1002', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    SubflowResults[1] = 0
-                    EventFlowSystemActor.SetMoveOutPlayer()
-                    run MoveSeq_Notice()
-                else:
-                    # I appreciate you giving this ample thought. It's a big decision. For now, let's go back to the title screen. I hope you continue to enjoy life on ISL…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1801', false)
-                    run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-            else:
-                # You want to move to another island? I see, I see… I really wish I could help you, but I'm afraid I can't. You see, in order to start the moving proce…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1901', false)
-                switch EventFlowSystemActor.GeneralTalkChoice2():
-                    case 0, 1:
-                        # Thank you for understanding. I'll send you back to the title screen for now. I hope you continue to enjoy your life on ISLAND!
-                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1902', false)
-                        run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-        case 1:
-            run Moving_UnlinkedP()
-        case 2:
-            run Root_HowTo()
-        case 3:
-            run Cancel_Moving()
- 
+	# So, with that out of the way… How can I meet your moving needs, hm?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:902', false)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			if System.EventFlags['cPlayer:PlayerMovingEnable']:
+				# You want to move to another island? I know everyone will miss you, but I support you on this new adventure!
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1001', false)
+				# I just want to confirm… You wish to move to a different island on another Nintendo Switch system, correct?
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1002', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					SubflowResults[1] = 0
+					EventFlowSystemActor.SetMoveOutPlayer()
+					run MoveSeq_Notice()
+				else:
+					# I appreciate you giving this ample thought. It's a big decision. For now, let's go back to the title screen. I hope you continue to enjoy life on ISL…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1801', false)
+					run SNPC_rco_92_OtherSettings::Seq_Close()
+			else:
+				# You want to move to another island? I see, I see… I really wish I could help you, but I'm afraid I can't. You see, in order to start the moving proce…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1901', false)
+				switch EventFlowSystemActor.GeneralTalkChoice2():
+					case 0, 1:
+						# Thank you for understanding. I'll send you back to the title screen for now. I hope you continue to enjoy your life on ISLAND!
+						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1902', false)
+run SNPC_rco_92_OtherSettings::Seq_Close()
+		case 1:
+			run Moving_UnlinkedP()
+		case 2:
+			run Root_HowTo()
+		case 3:
+			run Cancel_Moving()
+
 flow Root():
-    if System.EventFlags['cPlayer:BuiltMyHome']:
-        System.EventFlags['cPlayer:PlayerMovingEnable'] = true
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        run Root_MainP()
-    else:
-        run Root_OtherP()
- 
+	if System.EventFlags['cPlayer:BuiltMyHome']:
+		System.EventFlags['cPlayer:PlayerMovingEnable'] = true
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		run Root_MainP()
+	else:
+		run Root_OtherP()
+
 flow Root_HowTo():
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        # Of course, of course! What would you like to know about moving to a different island?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2001', false)
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		# Of course, of course! What would you like to know about moving to a different island?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2001', false)
 entrypoint Event179:
-        switch EventFlowSystemActor.GeneralTalkChoice4():
-            case 0:
-                run HowTo_Sub1()
-                run Return_HowTo_MainP()
-            case 1:
-                run HowTo_Sub2()
-                run Return_HowTo_MainP()
-            case 2:
-                run HowTo_Sub3()
-                run Return_HowTo_MainP()
-            case 3:
-                run Return_MainP_Multi()
-    else:
-        # Of course, of course! What would you like to know about moving to a different island?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2003', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run HowTo_Sub1()
+				run Return_HowTo_MainP()
+			case 1:
+				run HowTo_Sub2()
+				run Return_HowTo_MainP()
+			case 2:
+				run HowTo_Sub3()
+				run Return_HowTo_MainP()
+			case 3:
+				run Return_MainP_Multi()
+	else:
+		# Of course, of course! What would you like to know about moving to a different island?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:2003', false)
 entrypoint Event183:
-        switch EventFlowSystemActor.GeneralTalkChoice5():
-            case 0:
-                run HowTo_Sub1()
-                run Return_HowTo_OtherP()
-            case 1:
-                run HowTo_Sub2()
-                run Return_HowTo_OtherP()
-            case 2:
-                run HowTo_Sub3()
-                run Return_HowTo_OtherP()
-            case 3:
-                run HowTo_Sub4()
-                run Return_HowTo_OtherP()
-            case 4:
-                run Return_OtherP()
- 
+		switch EventFlowSystemActor.GeneralTalkChoice5():
+			case 0:
+				run HowTo_Sub1()
+				run Return_HowTo_OtherP()
+			case 1:
+				run HowTo_Sub2()
+				run Return_HowTo_OtherP()
+			case 2:
+				run HowTo_Sub3()
+				run Return_HowTo_OtherP()
+			case 3:
+				run HowTo_Sub4()
+				run Return_HowTo_OtherP()
+			case 4:
+				run Return_OtherP()
+
 flow Root_MainP():
-    if EventFlowSystemActor.PlayerVillagerCount(2):
-        # So you're thinking about leaving ISLAND, hm? I see, I see… Well, I'm afraid that, because you're our Resident Representative, I can't help you leave …
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_01', false)
-        # Now, although I can't help you move yourself to a different island, maybe you want to move someone else? If you want to begin the moving process on b…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_02', false)
-        # Please note that I can only move players who currently own a house on this island. Oh! And I can't move players who are linked to a user account on t…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_03', false)
-        run Return_MainP_Multi()
-    else:
-        # So you're thinking about leaving ISLAND, hm? I see, I see… Well, I'm afraid it doesn't quite work like that, since you're our Resident Representative…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:001', false)
-        # I can help you move the entirety of ISLAND to a different Nintendo Switch system. …If that is something that interests you at this time. However, I c…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002', false)
+	if EventFlowSystemActor.PlayerVillagerCount(2):
+		# So you're thinking about leaving ISLAND, hm? I see, I see… Well, I'm afraid that, because you're our Resident Representative, I can't help you leave …
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_01', false)
+		# Now, although I can't help you move yourself to a different island, maybe you want to move someone else? If you want to begin the moving process on b…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_02', false)
+		# Please note that I can only move players who currently own a house on this island. Oh! And I can't move players who are linked to a user account on t…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002_03', false)
+		run Return_MainP_Multi()
+	else:
+		# So you're thinking about leaving ISLAND, hm? I see, I see… Well, I'm afraid it doesn't quite work like that, since you're our Resident Representative…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:001', false)
+		# I can help you move the entirety of ISLAND to a different Nintendo Switch system. …If that is something that interests you at this time. However, I c…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:002', false)
 entrypoint Event9:
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # I'm relieved to hear that!<10:4> In that case, let's get you back to the title screen, hm? I hope you continue enjoying life on ISLAND!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:003', false)
-            run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-        else:
-            # Very well, I'll explain. First, download the Island Transfer Tool from Nintendo eShop on both systems. The Island Transfer Tool will take you through…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:004', false)
-            run Return_MainP()
- 
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# I'm relieved to hear that!<10:4> In that case, let's get you back to the title screen, hm? I hope you continue enjoying life on ISLAND!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:003', false)
+			run SNPC_rco_92_OtherSettings::Seq_Close()
+		else:
+			# Very well, I'll explain. First, download the Island Transfer Tool from Nintendo eShop on both systems. The Island Transfer Tool will take you through…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:004', false)
+			run Return_MainP()
+
 flow Root_OtherP():
-    # So you're thinking about leaving ISLAND, hm? I see, I see… If you're sure about moving off this island and Nintendo Switch system, say, "Move me off …
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:901', false)
-    # I can also help you begin the moving process on behalf of another player.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:901_01', false)
-    # Please note that I can only move players who currently own a house on this island. Also, I can't move this island's Resident Representative. They're …
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:901_02', false)
-    run Return_OtherP()
- 
+	# So you're thinking about leaving ISLAND, hm? I see, I see… If you're sure about moving off this island and Nintendo Switch system, say, "Move me off …
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:901', false)
+	# I can also help you begin the moving process on behalf of another player.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:901_01', false)
+	# Please note that I can only move players who currently own a house on this island. Also, I can't move this island's Resident Representative. They're …
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:901_02', false)
+	run Return_OtherP()
+
 flow Seq_ExitHome():
-    EventFlowSystemActor.MessageLockNext(3)
-    # Please close the game from the HOME Menu.
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
-    EventFlowSystemActor.WaitFrame(-1)
- 
+	EventFlowSystemActor.MessageLockNext(3)
+	# Please close the game from the HOME Menu.
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
+	EventFlowSystemActor.WaitFrame(-1)
+
 flow SkipNoticeWrongNA():
-    run Event60()
- 
+	run Event60()
+
 local flow Sub_Event126():
-    # The first step is to select which player will be moving to a different Nintendo Switch system.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:501_01', false)
-    EventFlowSystemActor.UIMsgCardAdrHandling('cPlayerMoving')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.SetTagFromUIResult('cSelectPlayerName', 0)
-        EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
-        # And are you absolutely sure that <115:0:cd00> wants to move?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:502', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                # Understood, understood! One moment while I make sure that <115:0:cd00> can move.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:503', false)
-                EventFlowSystemActor.MessageLockNext(2)
-                # Checking resident save data… Do not touch .
-                EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:013', false)
-                EventFlowSystemActor.SaveSimpleSave('cAll')
-                EventFlowSystemActor.SaveSimpleLoad('cMoveOutPlayer')
-                EventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.MessageUnlockNext()
-                if EventFlowSystemActor.EventFlagMovePlayerBool('cPlayer:PlayerMovingEnable'):
-                    run MoveSeq_Notice_UnlinkedP()
-                else:
-                    # I hate to be the bearer of bad news, but…right now, <115:0:cd00> can't move to a new system. You see, I can't move someone until they have their own …
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:551', false)
-                    EventFlowSystemActor.MessageLockNext(3)
-                    # Please close the game from the HOME Menu.
-                    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
-                    EventFlowSystemActor.WaitFrame(-1)
-            case 1:
-                run Moving_UnlinkedP()
-            case 2:
-                run Cancel_Moving()
-    else:
-        run Cancel_Moving()
- 
+	# The first step is to select which player will be moving to a different Nintendo Switch system.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:501_01', false)
+	EventFlowSystemActor.UIMsgCardAdrHandling('cPlayerMoving')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cSelectPlayerName', 0)
+		EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
+		# And are you absolutely sure that <115:0:cd00> wants to move?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:502', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				# Understood, understood! One moment while I make sure that <115:0:cd00> can move.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:503', false)
+				EventFlowSystemActor.MessageLockNext(2)
+				# Checking resident save data… Do not touch .
+				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:013', false)
+				EventFlowSystemActor.SaveSimpleSave('cAll')
+				EventFlowSystemActor.SaveSimpleLoad('cMoveOutPlayer')
+				EventFlowSystemActor.MessageSuspend()
+				EventFlowSystemActor.MessageUnlockNext()
+				if EventFlowSystemActor.EventFlagMovePlayerBool('cPlayer:PlayerMovingEnable'):
+					run MoveSeq_Notice_UnlinkedP()
+				else:
+					# I hate to be the bearer of bad news, but…right now, <115:0:cd00> can't move to a new system. You see, I can't move someone until they have their own …
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:551', false)
+					EventFlowSystemActor.MessageLockNext(3)
+					# Please close the game from the HOME Menu.
+					EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:004', false)
+					EventFlowSystemActor.WaitFrame(-1)
+			case 1:
+				run Moving_UnlinkedP()
+			case 2:
+				run Cancel_Moving()
+	else:
+		run Cancel_Moving()
+
 local flow Sub_grp_Event163():
-    if SubflowResults@2[1] == 0:
-        if EventFlowSystemActor.NetMoveHasEnableNSAIDTarget():
-            # The Nintendo Account used on the other system is not the same as the one you're using now…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1008', false)
-        else:
-            # The user on the other system doesn't appear to be using a Nintendo Account…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1008_01', false)
-        # If you continue with the move, all features that use the internet, like the Best Friends List, will be reset. I just want to make sure that you under…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1009', false)
-    else:
-        if EventFlowSystemActor.NetMoveHasEnableNSAIDTarget():
-            # The Nintendo Account in use on the other system isn't the same as the one <115:0:cd00> uses…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1011', false)
-        else:
-            # The user on the target system isn't linked to a Nintendo Account. And yet, a Nintendo Account is linked to <115:0:cd00> here…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1011_01', false)
-        # That means that all features that use the internet, like their Best Friends List, will be reset if they move.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1012', false)
-    if EventFlowSystemActor.PlayerMoveValidateDestinationIsland():
-        # After hearing that, do you still want to move someone over to <140:23:cd00>'s system?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1010', false)
-    else:
-        # After hearing that, do you still want to move someone to <115:2:cd00>?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1010_01', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run MovingProcessStart()
-    else:
-        EventFlowSystemActor.NetMoveSessionFinalize()
-        # Understood! We'll stop here. If someone plans to use their data from features which use the internet after they move between systems… that person's u…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1019', false)
-        if SubflowResults@2[1] == 0:
-            # For now, let's go back to the title screen, shall we?
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1020', false)
-            run SNPC_rco_92_OtherSettings::Seq_Closerun SNPC_rco_92_OtherSettings::Seq_Close()
-        else:
-            # Oh! And I'm sorry to ask this, but I'll need you to close the game.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1020_01', false)
-            run Seq_ExitHome()
- 
+	if SubflowResults@2[1] == 0:
+		if EventFlowSystemActor.NetMoveHasEnableNSAIDTarget():
+			# The Nintendo Account used on the other system is not the same as the one you're using now…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1008', false)
+		else:
+			# The user on the other system doesn't appear to be using a Nintendo Account…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1008_01', false)
+		# If you continue with the move, all features that use the internet, like the Best Friends List, will be reset. I just want to make sure that you under…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1009', false)
+	else:
+		if EventFlowSystemActor.NetMoveHasEnableNSAIDTarget():
+			# The Nintendo Account in use on the other system isn't the same as the one <115:0:cd00> uses…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1011', false)
+		else:
+			# The user on the target system isn't linked to a Nintendo Account. And yet, a Nintendo Account is linked to <115:0:cd00> here…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1011_01', false)
+		# That means that all features that use the internet, like their Best Friends List, will be reset if they move.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1012', false)
+	if EventFlowSystemActor.PlayerMoveValidateDestinationIsland():
+		# After hearing that, do you still want to move someone over to <140:23:cd00>'s system?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1010', false)
+	else:
+		# After hearing that, do you still want to move someone to <115:2:cd00>?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1010_01', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run MovingProcessStart()
+	else:
+		EventFlowSystemActor.NetMoveSessionFinalize()
+		# Understood! We'll stop here. If someone plans to use their data from features which use the internet after they move between systems… that person's u…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1019', false)
+		if SubflowResults@2[1] == 0:
+			# For now, let's go back to the title screen, shall we?
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1020', false)
+			run SNPC_rco_92_OtherSettings::Seq_Close()
+		else:
+			# Oh! And I'm sorry to ask this, but I'll need you to close the game.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1020_01', false)
+			run Seq_ExitHome()
+
 flow UploadBackUpAsync():
-    EventFlowSystemActor.NetMoveSessionFinalize()
-    EventFlowSystemActor.MessageLockNext(2)
-    # Connecting to the internet to update your save data backup… Do not touch .
-    MainNpc.OpenMessageWindow('TalkSys/SYS_Save:014', false)
-    EventFlowSystemActor.SaveUploadBackup()
-    if not EventFlowSystemActor.SaveIsUploadedBackup():
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.MessageUnlockNext()
-        # Your backup has been updated.
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Save:015', false)
-    if SubflowResults@2[1] == 0:
-        # Thank you so much for being patient. Everything is ready! I'm sure you'll have lots of fun at your new home. Do take care, hm, PLAYER?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006', false)
-    else:
-        # Thank you for being patient. It appears everything is ready for <115:0:cd00>'s big move! Please wish <115:0:cd00> the best on their new adventure!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006_01', false)
- 
+	EventFlowSystemActor.NetMoveSessionFinalize()
+	EventFlowSystemActor.MessageLockNext(2)
+	# Connecting to the internet to update your save data backup… Do not touch .
+	MainNpc.OpenMessageWindow('TalkSys/SYS_Save:014', false)
+	EventFlowSystemActor.SaveUploadBackup()
+	if not EventFlowSystemActor.SaveIsUploadedBackup():
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.MessageUnlockNext()
+		# Your backup has been updated.
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Save:015', false)
+	if SubflowResults@2[1] == 0:
+		# Thank you so much for being patient. Everything is ready! I'm sure you'll have lots of fun at your new home. Do take care, hm, PLAYER?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006', false)
+	else:
+		# Thank you for being patient. It appears everything is ready for <115:0:cd00>'s big move! Please wish <115:0:cd00> the best on their new adventure!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_95_PlayerMoving:1006_01', false)
+
 flow UploadBackupAsyncTo():
-    run Event229()
- 
+	run Event229()

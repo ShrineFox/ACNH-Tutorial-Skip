@@ -1,116 +1,115 @@
 flow HGS_FriendshipChk():
-    if (MainNpc.NpcLabel('hgs')) and (System.EventFlags['cPlayer:HgsCloseness'] < 3):
-        SubflowResults[0] = 1
- 
+	if (MainNpc.NpcLabel('hgs')) and (System.EventFlags['cPlayer:HgsCloseness'] < 3):
+		SubflowResults[0] = 1
+
 flow Man_Emot():
-    switch EventFlowSystemActor.RandomChoice3(3):
-        case 0:
-            MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, true)
-        case 1:
-            MainNpc.CharacterEmoticonAction('QuestionMark', false, '', 0, true)
-        case 2:
-            MainNpc.CharacterEmoticonAction('Nodding', false, '', 0, true)
-    EventFlowSystemActor.WaitFrame(45)
- 
+	switch EventFlowSystemActor.RandomChoice3(3):
+		case 0:
+			MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, true)
+		case 1:
+			MainNpc.CharacterEmoticonAction('QuestionMark', false, '', 0, true)
+		case 2:
+			MainNpc.CharacterEmoticonAction('Nodding', false, '', 0, true)
+	EventFlowSystemActor.WaitFrame(45)
+
 flow Root():
-    run Takumi_FriendshipChk()
-    run HGS_FriendshipChk()
-    run Twins_SetInvitationChk()
-    run XCT_TalkedCheck()
-    run SubFlow1Chk()
-    if (MainNpc.NpcLabel('pyn')) and (MainNpc.NpcIsTalkedFromBehind()):
-        run SNPC_pyn::Pyn_TalkFromBackrun SNPC_pyn::Pyn_TalkFromBack()
-    elif MainNpc.MuseumCafeNpcTalkCount() == 0:
-        MainNpc.AddMuseumCafeTalkCount()
-        if MainNpc.NpcLabel('man'):
-            MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, true)
-            EventFlowSystemActor.WaitFrame(45)
-        elif MainNpc.MuseumCafeAmiiboNpc() == 0:
-            switch SubflowResults@4[0]:
-                case 0, 2:
-                    if MainNpc.NpcMuseumCafeCallCount() == 0:
-                        # Hey there, squirt! Thanks for callin' me over!
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:001_01', false)
-                    else:
-                        # Yello, I'm here again. How're you?
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:002_01', false)
-                case 1:
-                    # 
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:201', false)
-                case 3:
-                    if MainNpc.NpcMuseumCafeCallCount() == 0:
-                        # 
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:301', false)
-                    else:
-                        # 
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:302', false)
-        elif SubflowResults@2[1] == 0:
-            switch SubflowResults@4[0]:
-                case 0:
-                    # Hey! Hope you don't mind, but Reese and I decided to make a date of it.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:003_01', false)
-                case 1:
-                    # 
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:202', false)
-                case 2:
-                    # Hey there, squirt! Thanks for callin' me over!
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:001_01', false)
-                case 3:
-                    # 
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:303', false)
-        else:
-            # 
-            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:401', false)
-    else:
-        MainNpc.AddMuseumCafeTalkCount()
-        if not MainNpc.NpcLabel('man'):
-            switch SubflowResults@4[0]:
-                case 0, 2:
-                    # RANDOM: I'm strugglin' to come up with any way … // Y'know, Brewster sometimes asks for my … // Everythin' in here seems so carefully b… // Reese and I love this place. The key to… // Word has it everyone on this island doe…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:101', false)
-                case 1:
-                    # 
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:203', false)
-                case 3:
-                    if not MainNpc.NpcLabel('mnc'):
-                        # 
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:304', false)
-                    elif EventFlowSystemActor.RandomChoice2(2) == 0:
-                        # 
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:304', false)
-                    else:
-                        # RANDOM: I'm strugglin' to come up with any way … // Y'know, Brewster sometimes asks for my … // Everythin' in here seems so carefully b… // Reese and I love this place. The key to… // Word has it everyone on this island doe…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:101', false)
-        elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-            run Man_Emot()
-        else:
-            # RANDOM: I'm strugglin' to come up with any way … // Y'know, Brewster sometimes asks for my … // Everythin' in here seems so carefully b… // Reese and I love this place. The key to… // Word has it everyone on this island doe…
-            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:101', false)
- 
+	run Takumi_FriendshipChk()
+	run HGS_FriendshipChk()
+	run Twins_SetInvitationChk()
+	run XCT_TalkedCheck()
+	run SubFlow1Chk()
+	if (MainNpc.NpcLabel('pyn')) and (MainNpc.NpcIsTalkedFromBehind()):
+		run SNPC_pyn::Pyn_TalkFromBack()
+	elif MainNpc.MuseumCafeNpcTalkCount() == 0:
+		MainNpc.AddMuseumCafeTalkCount()
+		if MainNpc.NpcLabel('man'):
+			MainNpc.CharacterEmoticonAction('Greeting', false, '', 0, true)
+			EventFlowSystemActor.WaitFrame(45)
+		elif MainNpc.MuseumCafeAmiiboNpc() == 0:
+			switch SubflowResults@4[0]:
+				case 0, 2:
+					if MainNpc.NpcMuseumCafeCallCount() == 0:
+						# Hey there, squirt! Thanks for callin' me over!
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:001_01', false)
+					else:
+						# Yello, I'm here again. How're you?
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:002_01', false)
+				case 1:
+					# 
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:201', false)
+				case 3:
+					if MainNpc.NpcMuseumCafeCallCount() == 0:
+						# 
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:301', false)
+					else:
+						# 
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:302', false)
+		elif SubflowResults@2[1] == 0:
+			switch SubflowResults@4[0]:
+				case 0:
+					# Hey! Hope you don't mind, but Reese and I decided to make a date of it.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:003_01', false)
+				case 1:
+					# 
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:202', false)
+				case 2:
+					# Hey there, squirt! Thanks for callin' me over!
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:001_01', false)
+				case 3:
+					# 
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:303', false)
+		else:
+			# 
+			MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:401', false)
+	else:
+		MainNpc.AddMuseumCafeTalkCount()
+		if not MainNpc.NpcLabel('man'):
+			switch SubflowResults@4[0]:
+				case 0, 2:
+					# RANDOM: I'm strugglin' to come up with any way … // Y'know, Brewster sometimes asks for my … // Everythin' in here seems so carefully b… // Reese and I love this place. The key to… // Word has it everyone on this island doe…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:101', false)
+				case 1:
+					# 
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:203', false)
+				case 3:
+					if not MainNpc.NpcLabel('mnc'):
+						# 
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:304', false)
+					elif EventFlowSystemActor.RandomChoice2(2) == 0:
+						# 
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:304', false)
+					else:
+						# RANDOM: I'm strugglin' to come up with any way … // Y'know, Brewster sometimes asks for my … // Everythin' in here seems so carefully b… // Reese and I love this place. The key to… // Word has it everyone on this island doe…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:101', false)
+		elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			run Man_Emot()
+		else:
+			# RANDOM: I'm strugglin' to come up with any way … // Y'know, Brewster sometimes asks for my … // Everythin' in here seems so carefully b… // Reese and I love this place. The key to… // Word has it everyone on this island doe…
+			MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Amiibo/SP_CafeAmiibo_alp:101', false)
+
 flow SubFlow1Chk():
-    if MainNpc.NpcLabel('boc'):
-        if EventFlowSystemActor.EnvDayOfWeek() == `Sunday`:
-            SubflowResults[1] = 1
-    elif MainNpc.NpcLabel('bey'):
-        if EventFlowSystemActor.GlobalEventNow('FishingConvention', 'cMainOnly', false):
-            SubflowResults[1] = 1
-    elif MainNpc.NpcLabel('doc'):
-        if EventFlowSystemActor.EnvDayOfWeek() in (`Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`):
-            SubflowResults[1] = 1
-    else:
-        if (MainNpc.NpcLabel('hgh')) and (EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`)):
-            SubflowResults[1] = 1
- 
+	if MainNpc.NpcLabel('boc'):
+		if EventFlowSystemActor.EnvDayOfWeek() == `Sunday`:
+			SubflowResults[1] = 1
+	elif MainNpc.NpcLabel('bey'):
+		if EventFlowSystemActor.GlobalEventNow('FishingConvention', 'cMainOnly', false):
+			SubflowResults[1] = 1
+	elif MainNpc.NpcLabel('doc'):
+		if EventFlowSystemActor.EnvDayOfWeek() in (`Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`):
+			SubflowResults[1] = 1
+	else:
+		if (MainNpc.NpcLabel('hgh')) and (EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`)):
+			SubflowResults[1] = 1
+
 flow Takumi_FriendshipChk():
-    if (System.EventFlags['cPlayerTemp:CefeInvitingTakumiStuff']) and (EventFlowSystemActor.SaveHasWherearenIslands()):
-        SubflowResults[0] = 3
- 
+	if (System.EventFlags['cPlayerTemp:CefeInvitingTakumiStuff']) and (EventFlowSystemActor.SaveHasWherearenIslands()):
+		SubflowResults[0] = 3
+
 flow Twins_SetInvitationChk():
-    if System.EventFlags['cPlayerTemp:CafeInvitingTwins']:
-        SubflowResults[0] = 2
- 
+	if System.EventFlags['cPlayerTemp:CafeInvitingTwins']:
+		SubflowResults[0] = 2
+
 flow XCT_TalkedCheck():
-    if MainNpc.NpcLabel('xct'):
-        System.EventFlags['cPlayer:MuseumCafe_Telephone_Calledxct'] = true
-        System.EventFlags['cPlayer:MuseumCafe_Tel_CalledThisYearXct'] = true
- 
+	if MainNpc.NpcLabel('xct'):
+		System.EventFlags['cPlayer:MuseumCafe_Telephone_Calledxct'] = true
+		System.EventFlags['cPlayer:MuseumCafe_Tel_CalledThisYearXct'] = true

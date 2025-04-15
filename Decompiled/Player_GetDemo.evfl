@@ -1,321 +1,320 @@
 flow FullItem():
-    run Event24()
- 
+	run Event24()
+
 flow FullItem_Plant():
-    # ...Huh? My pockets are full already! Should I swap it with something?
-    Player.OpenMessageWindow('TalkSys/SYS_Player:017', true)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run Event59()
- 
+	# ...Huh? My pockets are full already! Should I swap it with something?
+	Player.OpenMessageWindow('TalkSys/SYS_Player:017', true)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run Event59()
+
 flow GetFish_NomalSeq():
-    run Event6()
- 
+	run Event6()
+
 flow GetRecipe_PitFallSeed_FullItem():
-    # ...Huh? My pockets are full already! Should I swap it with something?
-    Player.OpenMessageWindow('TalkSys/SYS_Player:003_01', false)
-    run Event18()
- 
+	# ...Huh? My pockets are full already! Should I swap it with something?
+	Player.OpenMessageWindow('TalkSys/SYS_Player:003_01', false)
+	run Event18()
+
 flow Get_CatchFishCompleteDemo():
-    run Player_GetDemo_BeyDaily::BeyDailyQ_GetFishrun Player_GetDemo_BeyDaily::BeyDailyQ_GetFish()
-    if (Player.PlayerGetDemoCollectStatus('cCompleteThisTime')) or ((Player.PlayerGetDemoCollectStatus('cCompleteAlready')) and (not System.EventFlags['cPlayer:CompleteFish'])):
-        # <10:12>Wait a minute. That means...
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:002', false)
-        Player.PlayerPlayCompleteAnimation()
-        # <10:12>WOO-HOO!!! <10:12>I've caught ALL of the fish! You'd think I'd have a pun for this occasion...
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:003', false)
-        Player.PlayerWaitAsFinish()
-        System.EventFlags['cPlayer:CompleteFish'] = true
- 
+	run Player_GetDemo_BeyDaily::BeyDailyQ_GetFish()
+	if (Player.PlayerGetDemoCollectStatus('cCompleteThisTime')) or ((Player.PlayerGetDemoCollectStatus('cCompleteAlready')) and (not System.EventFlags['cPlayer:CompleteFish'])):
+		# <10:12>Wait a minute. That means...
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:002', false)
+		Player.PlayerPlayCompleteAnimation()
+		# <10:12>WOO-HOO!!! <10:12>I've caught ALL of the fish! You'd think I'd have a pun for this occasion...
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:003', false)
+		Player.PlayerWaitAsFinish()
+		System.EventFlags['cPlayer:CompleteFish'] = true
+
 flow Get_CatchInsectCompleteDemo():
-    if (Player.PlayerGetDemoCollectStatus('cCompleteThisTime')) or ((Player.PlayerGetDemoCollectStatus('cCompleteAlready')) and (not System.EventFlags['cPlayer:CompleteInsects'])):
-        # <10:12>Huh? So that means...
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:002', false)
-        Player.PlayerPlayCompleteAnimation()
-        # <10:12>I did it! <10:12>I caught all the bugs! What do I do with this net now?
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:003', false)
-        Player.PlayerWaitAsFinish()
-        System.EventFlags['cPlayer:CompleteInsects'] = true
- 
+	if (Player.PlayerGetDemoCollectStatus('cCompleteThisTime')) or ((Player.PlayerGetDemoCollectStatus('cCompleteAlready')) and (not System.EventFlags['cPlayer:CompleteInsects'])):
+		# <10:12>Huh? So that means...
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:002', false)
+		Player.PlayerPlayCompleteAnimation()
+		# <10:12>I did it! <10:12>I caught all the bugs! What do I do with this net now?
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:003', false)
+		Player.PlayerWaitAsFinish()
+		System.EventFlags['cPlayer:CompleteInsects'] = true
+
 flow Get_Fish():
-    if (Player.PlayerGetDemoCheckItem('cTrash')) or (Player.PlayerGetDemoCheckItem('cOre')):
-        run Player_GetDemo_20_Fishing::Fishing_Get_Trashrun Player_GetDemo_20_Fishing::Fishing_Get_Trash()
-    elif Player.PlayerGetDemoCheckItem('cFishEgg'):
-        run Player_GetDemo_Easter::GetWaterEggrun Player_GetDemo_Easter::GetWaterEgg()
-    elif EventFlowSystemActor.NetIsDreaming():
-        EventFlowSystemActor.SetTagFromSystem('cChachFish', 'cDegit', 0, 0, '')
-        # <10:12>I caught [a|an]<125:3:cd00>! ...But I'm still dreaming.
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:021', false)
-        run Sub_grp_Event32()
-    elif Player.PlayerGetDemoCollectStatus('cFirstGet'):
-        # <10:12>Yes!
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:001', false)
-        run GetFish_NomalSeq()
-    elif Player.PlayerGetDemoCheckItem('cDojou'):
-        if System.EventFlags['cPlayer:Got2ndLoach']:
-            run GetFish_NomalSeq()
-        else:
-            run Player_GetDemo_20_Fishing::Fishing_Get_2ndLoachrun Player_GetDemo_20_Fishing::Fishing_Get_2ndLoach()
-            run Sub_Event159()
-    else:
+	if (Player.PlayerGetDemoCheckItem('cTrash')) or (Player.PlayerGetDemoCheckItem('cOre')):
+		run Player_GetDemo_20_Fishing::Fishing_Get_Trash()
+	elif Player.PlayerGetDemoCheckItem('cFishEgg'):
+		run Player_GetDemo_Easter::GetWaterEgg()
+	elif EventFlowSystemActor.NetIsDreaming():
+		EventFlowSystemActor.SetTagFromSystem('cChachFish', 'cDegit', 0, 0, '')
+		# <10:12>I caught [a|an]<125:3:cd00>! ...But I'm still dreaming.
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:021', false)
+		run Sub_grp_Event32()
+	elif Player.PlayerGetDemoCollectStatus('cFirstGet'):
+		# <10:12>Yes!
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:001', false)
+		run GetFish_NomalSeq()
+	elif Player.PlayerGetDemoCheckItem('cDojou'):
+		if System.EventFlags['cPlayer:Got2ndLoach']:
+			run GetFish_NomalSeq()
+		else:
+			run Player_GetDemo_20_Fishing::Fishing_Get_2ndLoach()
+			run Sub_Event159()
+	else:
 entrypoint Event6:
-        Player.PlayerOpenFishGetMessage()
-        run Sub_Event159()
- 
+		Player.PlayerOpenFishGetMessage()
+		run Sub_Event159()
+
 flow Get_FishFes():
-    EventFlowSystemActor.SetTagFromSystem('cChachFish', '"cDegit"', 0, 0, '""')
-    # I caught [a|an] <125:3:cd00>! Gotta keep this up!
-    Player.OpenMessageWindow('TalkSys/SYS_Get_Insect_Fish_Fes:002', true)
-    run Get_CatchFishCompleteDemo()
- 
+	EventFlowSystemActor.SetTagFromSystem('cChachFish', '"cDegit"', 0, 0, '""')
+	# I caught [a|an] <125:3:cd00>! Gotta keep this up!
+	Player.OpenMessageWindow('TalkSys/SYS_Get_Insect_Fish_Fes:002', true)
+	run Get_CatchFishCompleteDemo()
+
 flow Get_GulParts():
-    if Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
-        # Look! I dug up [a|an]<125:0:0000>!
-        Player.OpenMessageWindow('TalkSys/SYS_Player:002', false)
-        if Player.PlayerHasExchaneableItem(true, true, true, false):
-            # ...But I can't carry anything else! Should I swap it with something?
-            Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                Player.PlayerPlayPutawayWaitAnimation()
-                EventFlowSystemActor.UIItemSelectWindowHandling('cScoopDigFull', 65534, '', '', 'cExchangeByScoop', false)
-        else:
-            # ...But I don't have any room for it! Guess I'll just forget it, then.
-            Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
-    else:
-        # I found a <item>communicator part!
-        Player.OpenMessageWindow('TalkSys/SYS_Get_ShellFish:100', false)
- 
+	if Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
+		# Look! I dug up [a|an]<125:0:0000>!
+		Player.OpenMessageWindow('TalkSys/SYS_Player:002', false)
+		if Player.PlayerHasExchaneableItem(true, true, true, false):
+			# ...But I can't carry anything else! Should I swap it with something?
+			Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				Player.PlayerPlayPutawayWaitAnimation()
+				EventFlowSystemActor.UIItemSelectWindowHandling('cScoopDigFull', 65534, '', '', 'cExchangeByScoop', false)
+		else:
+			# ...But I don't have any room for it! Guess I'll just forget it, then.
+			Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
+	else:
+		# I found a <item>communicator part!
+		Player.OpenMessageWindow('TalkSys/SYS_Get_ShellFish:100', false)
+
 flow Get_Insect():
-    if (Player.PlayerGetDemoCheckItem('cSnowCrystal')) or (Player.PlayerGetDemoCheckItem('cSakurapetal')) or (Player.PlayerGetDemoCheckItem('cAutumnLeaf')) or (Player.PlayerGetDemoCheckItem('cFeather')):
-        run Get_SnowCrystal()
-    elif Player.PlayerGetDemoCheckItem('cYutaroWisp'):
-        run Get_YutaroWisp()
-    else:
-        if EventFlowSystemActor.NetIsDreaming():
-            EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
-            # <10:12>I caught [a|an]<125:2:cd00>! ...But I'm still dreaming.
-            Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:301', false)
-        else:
-            if Player.PlayerGetDemoCollectStatus('cFirstGet'):
-                # <10:12>Yes!
-                Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:001', false)
-            Player.PlayerOpenInsectGetMessage()
-            run Get_CatchInsectCompleteDemo()
-        if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
-            if Player.PlayerGetDemoCheckItem('cSeminonukegara'):
-                run Get_Insect_Nukegara()
-            elif Player.PlayerHasExchaneableItem(true, true, true, false):
-                # ...But I can't carry anything else! Should I swap it with something?
-                Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    Player.PlayerPlayPutawayWaitAnimation()
-                    EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
-            else:
-                # ...But I don't have any room for it! Oh well. I guess I'll let it go.
-                Player.OpenMessageWindow('TalkSys/SYS_Player:007', true)
- 
+	if (Player.PlayerGetDemoCheckItem('cSnowCrystal')) or (Player.PlayerGetDemoCheckItem('cSakurapetal')) or (Player.PlayerGetDemoCheckItem('cAutumnLeaf')) or (Player.PlayerGetDemoCheckItem('cFeather')):
+		run Get_SnowCrystal()
+	elif Player.PlayerGetDemoCheckItem('cYutaroWisp'):
+		run Get_YutaroWisp()
+	else:
+		if EventFlowSystemActor.NetIsDreaming():
+			EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
+			# <10:12>I caught [a|an]<125:2:cd00>! ...But I'm still dreaming.
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:301', false)
+		else:
+			if Player.PlayerGetDemoCollectStatus('cFirstGet'):
+				# <10:12>Yes!
+				Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:001', false)
+			Player.PlayerOpenInsectGetMessage()
+			run Get_CatchInsectCompleteDemo()
+		if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
+			if Player.PlayerGetDemoCheckItem('cSeminonukegara'):
+				run Get_Insect_Nukegara()
+			elif Player.PlayerHasExchaneableItem(true, true, true, false):
+				# ...But I can't carry anything else! Should I swap it with something?
+				Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					Player.PlayerPlayPutawayWaitAnimation()
+					EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
+			else:
+				# ...But I don't have any room for it! Oh well. I guess I'll let it go.
+				Player.OpenMessageWindow('TalkSys/SYS_Player:007', true)
+
 flow Get_InsectFes():
-    EventFlowSystemActor.SetTagFromSystem('cChachInsect', '"cDegit"', 0, 0, '""')
-    # I caught [a|an] <125:2:cd00>! Gotta keep this up!
-    Player.OpenMessageWindow('TalkSys/SYS_Get_Insect_Fish_Fes:001', true)
-    run Get_CatchInsectCompleteDemo()
- 
+	EventFlowSystemActor.SetTagFromSystem('cChachInsect', '"cDegit"', 0, 0, '""')
+	# I caught [a|an] <125:2:cd00>! Gotta keep this up!
+	Player.OpenMessageWindow('TalkSys/SYS_Get_Insect_Fish_Fes:001', true)
+	run Get_CatchInsectCompleteDemo()
+
 flow Get_Insect_Nukegara():
-    if Player.PlayerHasExchaneableItem(true, true, true, false):
-        # ...But I can't carry anything else! Should I swap it with something?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            Player.PlayerPlayPutawayWaitAnimation()
-            EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
-    else:
-        # ...But I don't have any room for it! Guess I'll just forget it, then.
-        Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
- 
+	if Player.PlayerHasExchaneableItem(true, true, true, false):
+		# ...But I can't carry anything else! Should I swap it with something?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			Player.PlayerPlayPutawayWaitAnimation()
+			EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
+	else:
+		# ...But I don't have any room for it! Guess I'll just forget it, then.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
+
 flow Get_LostQuest():
-    # I picked up [a|an] <125:0:0000>! I should probably try to reunite this with its owner!
-    Player.OpenMessageWindow('TalkSys/SYS_Player:101', false)
-    if Player.PlayerCheckAI('cGetDemo_PickupFullItem'):
-        run Event73()
-    else:
-        System.EventFlags['cLand:LostPropertyFound'] = true
- 
+	# I picked up [a|an] <125:0:0000>! I should probably try to reunite this with its owner!
+	Player.OpenMessageWindow('TalkSys/SYS_Player:101', false)
+	if Player.PlayerCheckAI('cGetDemo_PickupFullItem'):
+		run Event73()
+	else:
+		System.EventFlags['cLand:LostPropertyFound'] = true
+
 flow Get_Pickup():
-    EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
-    if Player.PlayerGetDemoCheckItem('cLostItem'):
-        run Get_LostQuest()
-    elif Player.PlayerCheckAI('cGetDemo_PickupFullItem'):
+	EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
+	if Player.PlayerGetDemoCheckItem('cLostItem'):
+		run Get_LostQuest()
+	elif Player.PlayerCheckAI('cGetDemo_PickupFullItem'):
 entrypoint Event73:
-        if Player.PlayerHasExchaneableItem(true, true, true, false):
-            # ...Huh? My pockets are full already! Should I swap it with something?
-            Player.OpenMessageWindow('TalkSys/SYS_Player:001', true)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                Player.PlayerPlayPutawayWaitAnimation()
-                EventFlowSystemActor.UIItemSelectWindowHandling('cPickupFull', 65534, '', '', 'cExchangeByPickup', false)
-                if (EventFlowSystemActor.UIResultMenuDecide()) and (Player.PlayerGetDemoCheckItem('cLostItem')):
-                    System.EventFlags['cLand:LostPropertyFound'] = true
-        else:
-            # ...Huh? My pockets are full! Guess I'll just leave this here, then.
-            Player.OpenMessageWindow('TalkSys/SYS_Player:015', false)
- 
+		if Player.PlayerHasExchaneableItem(true, true, true, false):
+			# ...Huh? My pockets are full already! Should I swap it with something?
+			Player.OpenMessageWindow('TalkSys/SYS_Player:001', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				Player.PlayerPlayPutawayWaitAnimation()
+				EventFlowSystemActor.UIItemSelectWindowHandling('cPickupFull', 65534, '', '', 'cExchangeByPickup', false)
+				if (EventFlowSystemActor.UIResultMenuDecide()) and (Player.PlayerGetDemoCheckItem('cLostItem')):
+					System.EventFlags['cLand:LostPropertyFound'] = true
+		else:
+			# ...Huh? My pockets are full! Guess I'll just leave this here, then.
+			Player.OpenMessageWindow('TalkSys/SYS_Player:015', false)
+
 flow Get_Scoop():
-    EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
-    if Player.PlayerGetDemoCheckItem('cTreasure'):
-        run Get_TreasureHunt()
-    elif Player.PlayerGetDemoCheckItem('cGatheringShellfish'):
-        if EventFlowSystemActor.NetIsDreaming():
-            # <10:12>I got a <item>manila clam! ...But I'm still dreaming.
-            Player.OpenMessageWindow('TalkSys/SYS_Get_ShellFish:201', false)
-        else:
-            System.EventFlags['cLifeSupportAchievement:DigShell'] += 1
-            Player.PlayerOpenShellFishGetMessage()
-        if not Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
-            SubflowResults[1] = 1
-            run Player_GetDemo_Recipe_DIY::ChumDIY_Chkrun Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
-        elif Player.PlayerHasExchaneableItem(true, true, true, true):
-            # ...But I can't carry anything else! Should I swap it with something?
-            Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
-            run Event18()
-        else:
-            # ...But I don't have any room for it! Oh well. I guess I'll let it go.
-            Player.OpenMessageWindow('TalkSys/SYS_Player:007', true)
-    else:
-        if Player.PlayerGetDemoCheckItem('cJohnnyQuestByShellFish'):
-            run Get_GulParts()
-        else:
-            # Look! I dug up [a|an]<125:0:0000>!
-            Player.OpenMessageWindow('TalkSys/SYS_Player:002', false)
-            if Player.PlayerGetDemoCheckItem('cGroundEgg'):
-                run Player_GetDemo_Easter::GetEarthEggrun Player_GetDemo_Easter::GetEarthEgg()
-            elif Player.PlayerGetDemoCheckItem('cPitfallSeed'):
-                run Player_GetDemo_Recipe_DIY::PitFallDIY_Chkrun Player_GetDemo_Recipe_DIY::PitFallDIY_Chk()
-            elif Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
+	EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
+	if Player.PlayerGetDemoCheckItem('cTreasure'):
+		run Get_TreasureHunt()
+	elif Player.PlayerGetDemoCheckItem('cGatheringShellfish'):
+		if EventFlowSystemActor.NetIsDreaming():
+			# <10:12>I got a <item>manila clam! ...But I'm still dreaming.
+			Player.OpenMessageWindow('TalkSys/SYS_Get_ShellFish:201', false)
+		else:
+			System.EventFlags['cLifeSupportAchievement:DigShell'] += 1
+			Player.PlayerOpenShellFishGetMessage()
+		if not Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
+			SubflowResults[1] = 1
+			run Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
+		elif Player.PlayerHasExchaneableItem(true, true, true, true):
+			# ...But I can't carry anything else! Should I swap it with something?
+			Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
+			run Event18()
+		else:
+			# ...But I don't have any room for it! Oh well. I guess I'll let it go.
+			Player.OpenMessageWindow('TalkSys/SYS_Player:007', true)
+	else:
+		if Player.PlayerGetDemoCheckItem('cJohnnyQuestByShellFish'):
+			run Get_GulParts()
+		else:
+			# Look! I dug up [a|an]<125:0:0000>!
+			Player.OpenMessageWindow('TalkSys/SYS_Player:002', false)
+			if Player.PlayerGetDemoCheckItem('cGroundEgg'):
+				run Player_GetDemo_Easter::GetEarthEgg()
+			elif Player.PlayerGetDemoCheckItem('cPitfallSeed'):
+				run Player_GetDemo_Recipe_DIY::PitFallDIY_Chk()
+			elif Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
 entrypoint Event24:
-                # ...But I can't carry anything else! Should I swap it with something?
-                Player.OpenMessageWindow('TalkSys/SYS_Player:003', true)
+				# ...But I can't carry anything else! Should I swap it with something?
+				Player.OpenMessageWindow('TalkSys/SYS_Player:003', true)
 entrypoint Event18:
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 entrypoint Event59:
-                    Player.PlayerPlayPutawayWaitAnimation()
-                    EventFlowSystemActor.UIItemSelectWindowHandling('cScoopDigFull', 65534, '', '', 'cExchangeByScoop', false)
-                    if Player.PlayerGetDemoCheckItem('cGatheringShellfish'):
-                        if EventFlowSystemActor.UIResultMenuDecide():
-                            run Player_GetDemo_Recipe_DIY::ChumDIY_Chkrun Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
-                    elif Player.PlayerGetDemoCheckItem('cTreasure'):
-                        if EventFlowSystemActor.UIResultMenuDecide():
-                            run TreasureHunt_Finish()
-                    elif (Player.PlayerGetDemoCheckItem('cPitfallSeed')) and (EventFlowSystemActor.UIResultMenuDecide()):
-                        run Player_GetDemo_Recipe_DIY::PitFallDIY_Chk_AfterReplacerun Player_GetDemo_Recipe_DIY::PitFallDIY_Chk_AfterReplace()
- 
+					Player.PlayerPlayPutawayWaitAnimation()
+					EventFlowSystemActor.UIItemSelectWindowHandling('cScoopDigFull', 65534, '', '', 'cExchangeByScoop', false)
+					if Player.PlayerGetDemoCheckItem('cGatheringShellfish'):
+						if EventFlowSystemActor.UIResultMenuDecide():
+run Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
+					elif Player.PlayerGetDemoCheckItem('cTreasure'):
+						if EventFlowSystemActor.UIResultMenuDecide():
+ run TreasureHunt_Finish()
+					elif (Player.PlayerGetDemoCheckItem('cPitfallSeed')) and (EventFlowSystemActor.UIResultMenuDecide()):
+run Player_GetDemo_Recipe_DIY::PitFallDIY_Chk_AfterReplace()
+
 flow Get_SnowCrystal():
-    if EventFlowSystemActor.NetIsDreaming():
-        EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
-        # <10:12>I got [a|an]<125:2:cd00>! ...But I'm still dreaming.
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:302', false)
-    else:
-        Player.PlayerOpenInsectGetMessage()
-    if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
-        if Player.PlayerHasExchaneableItem(true, false, true, false):
-            # ...But I can't carry anything else! Should I swap it with something?
-            Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                Player.PlayerPlayPutawayWaitAnimation()
-                EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
-        else:
-            # ...But I don't have any room for it! Guess I'll just forget it, then.
-            Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
- 
+	if EventFlowSystemActor.NetIsDreaming():
+		EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
+		# <10:12>I got [a|an]<125:2:cd00>! ...But I'm still dreaming.
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:302', false)
+	else:
+		Player.PlayerOpenInsectGetMessage()
+	if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
+		if Player.PlayerHasExchaneableItem(true, false, true, false):
+			# ...But I can't carry anything else! Should I swap it with something?
+			Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				Player.PlayerPlayPutawayWaitAnimation()
+				EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
+		else:
+			# ...But I don't have any room for it! Guess I'll just forget it, then.
+			Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
+
 flow Get_TreasureHunt():
-    run Get_TreasureHunt_2()
- 
+	run Get_TreasureHunt_2()
+
 flow Get_TreasureHunt_2():
-    if EventFlowSystemActor.IsMyVillage():
-        if EventFlowSystemActor.NpcQuestIsLimitOver('cTreasure'):
-            System.EventFlags['cPlayer:TreasurePlayerWin'] = false
-            if EventFlowSystemActor.TresureQuestLimitOverWithinXSec(2):
-                System.EventFlags['cPlayer:TreasureHuntJustMissed'] = 1
-        else:
-            System.EventFlags['cPlayer:TreasurePlayerWin'] = true
-            if EventFlowSystemActor.TresureQuestLimitOverWithinXSec(2):
-                System.EventFlags['cPlayer:TreasureHuntJustMissed'] = 2
-        EventFlowSystemActor.UIMiniGameFinishAppear()
-        # I found treasure!
-        Player.OpenMessageWindow('TalkSys/SYS_Player:100', true)
-        if Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
-            run FullItem()
-        else:
-            run TreasureHunt_Finish0()
-    else:
-        # I found treasure! It probably belongs to an island resident. I guess I'll leave it here. For now...
-        Player.OpenMessageWindow('TalkSys/SYS_Player:100_01', true)
- 
+	if EventFlowSystemActor.IsMyVillage():
+		if EventFlowSystemActor.NpcQuestIsLimitOver('cTreasure'):
+			System.EventFlags['cPlayer:TreasurePlayerWin'] = false
+			if EventFlowSystemActor.TresureQuestLimitOverWithinXSec(2):
+				System.EventFlags['cPlayer:TreasureHuntJustMissed'] = 1
+		else:
+			System.EventFlags['cPlayer:TreasurePlayerWin'] = true
+			if EventFlowSystemActor.TresureQuestLimitOverWithinXSec(2):
+				System.EventFlags['cPlayer:TreasureHuntJustMissed'] = 2
+		EventFlowSystemActor.UIMiniGameFinishAppear()
+		# I found treasure!
+		Player.OpenMessageWindow('TalkSys/SYS_Player:100', true)
+		if Player.PlayerCheckAI('cGetDemo_ScoopFullItem'):
+			run FullItem()
+		else:
+			run TreasureHunt_Finish0()
+	else:
+		# I found treasure! It probably belongs to an island resident. I guess I'll leave it here. For now...
+		Player.OpenMessageWindow('TalkSys/SYS_Player:100_01', true)
+
 flow Get_YutaroWisp():
-    if EventFlowSystemActor.NetIsDreaming():
-        EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
-        # <10:12>I caught [a|an]<125:2:cd00>! ...But I'm still dreaming.
-        Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:301', false)
-    else:
-        if EventFlowSystemActor.HasTargetItem(4702, 4):
-            # <10:12>I caught a <item>Wisp spirit piece! Yay! That's the last one! Let's go return them to Wisp!
-            Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:204', false)
-        elif EventFlowSystemActor.HasTargetItem(4702, 3):
-            # <10:12>I caught a <item>Wisp spirit piece! Whew... One more to go!
-            Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:203', false)
-        elif EventFlowSystemActor.HasTargetItem(4702, 2):
-            # <10:12>I caught a <item>Wisp spirit piece! That makes three!
-            Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:202', false)
-        elif EventFlowSystemActor.HasTargetItem(4702, 1):
-            # <10:12>I caught a <item>Wisp spirit piece! That's the second piece.
-            Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:201', false)
-        else:
-            # <10:12>I caught a <item>Wisp spirit piece! Brrrr—it's kinda cold!
-            Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:200', false)
-    if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
-        if Player.PlayerHasExchaneableItem(true, true, true, false):
-            # ...But I can't carry anything else! Should I swap it with something?
-            Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                Player.PlayerPlayPutawayWaitAnimation()
-                EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
-        else:
-            # ...But I don't have any room for it! Guess I'll just forget it, then.
-            Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
- 
+	if EventFlowSystemActor.NetIsDreaming():
+		EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
+		# <10:12>I caught [a|an]<125:2:cd00>! ...But I'm still dreaming.
+		Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:301', false)
+	else:
+		if EventFlowSystemActor.HasTargetItem(4702, 4):
+			# <10:12>I caught a <item>Wisp spirit piece! Yay! That's the last one! Let's go return them to Wisp!
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:204', false)
+		elif EventFlowSystemActor.HasTargetItem(4702, 3):
+			# <10:12>I caught a <item>Wisp spirit piece! Whew... One more to go!
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:203', false)
+		elif EventFlowSystemActor.HasTargetItem(4702, 2):
+			# <10:12>I caught a <item>Wisp spirit piece! That makes three!
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:202', false)
+		elif EventFlowSystemActor.HasTargetItem(4702, 1):
+			# <10:12>I caught a <item>Wisp spirit piece! That's the second piece.
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:201', false)
+		else:
+			# <10:12>I caught a <item>Wisp spirit piece! Brrrr—it's kinda cold!
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:200', false)
+	if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
+		if Player.PlayerHasExchaneableItem(true, true, true, false):
+			# ...But I can't carry anything else! Should I swap it with something?
+			Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				Player.PlayerPlayPutawayWaitAnimation()
+				EventFlowSystemActor.UIItemSelectWindowHandling('cInsectGetFull', 65534, '', '', 'cExchangeByHarvest', false)
+		else:
+			# ...But I don't have any room for it! Guess I'll just forget it, then.
+			Player.OpenMessageWindow('TalkSys/SYS_Player:016', true)
+
 flow LostQuest_Cant_Receive():
-    EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
-    # Somebody lost their <125:0:0000>! I wonder who lost it. I don't want to cause the owner any extra trouble, so I'll just leave it here.
-    Player.OpenMessageWindow('TalkSys/SYS_Player:103', false)
- 
+	EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
+	# Somebody lost their <125:0:0000>! I wonder who lost it. I don't want to cause the owner any extra trouble, so I'll just leave it here.
+	Player.OpenMessageWindow('TalkSys/SYS_Player:103', false)
+
 flow LostQuest_OtherVillage():
-    EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
-    # Somebody lost their <125:0:0000>! I bet it belongs to a resident of this island. I don't want to accidentally take it home, so I'll leave it here.
-    Player.OpenMessageWindow('TalkSys/SYS_Player:102', false)
- 
+	EventFlowSystemActor.SetTagFromSystem('cPlayerGetItemName', '"cDegit"', 0, 0, '""')
+	# Somebody lost their <125:0:0000>! I bet it belongs to a resident of this island. I don't want to accidentally take it home, so I'll leave it here.
+	Player.OpenMessageWindow('TalkSys/SYS_Player:102', false)
+
 local flow Sub_Event159():
-    run Get_CatchFishCompleteDemo()
-    run Sub_grp_Event32()
- 
+	run Get_CatchFishCompleteDemo()
+	run Sub_grp_Event32()
+
 local flow Sub_grp_Event32():
-    if not Player.PlayerCheckAI('cGetDemo_FishFullItem'):
-        run Player_GetDemo_20_Fishing::Chk_FishCookingReciperun Player_GetDemo_20_Fishing::Chk_FishCookingRecipe()
-    elif Player.PlayerHasExchaneableItem(true, true, true, false):
-        # ...But I can't carry anything else! Should I swap it with something?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            Player.PlayerPlayPutawayWaitAnimation()
-            EventFlowSystemActor.UIItemSelectWindowHandling('cFishGetFull', 65534, '', '', 'cExchangeByHarvest', false)
-            if EventFlowSystemActor.UIResultMenuDecide():
-                run Player_GetDemo_20_Fishing::Chk_FishCookingReciperun Player_GetDemo_20_Fishing::Chk_FishCookingRecipe()
-    else:
-        # ...But I don't have any room for it! Oh well. I guess I'll let it go.
-        Player.OpenMessageWindow('TalkSys/SYS_Player:007', true)
- 
+	if not Player.PlayerCheckAI('cGetDemo_FishFullItem'):
+		run Player_GetDemo_20_Fishing::Chk_FishCookingRecipe()
+	elif Player.PlayerHasExchaneableItem(true, true, true, false):
+		# ...But I can't carry anything else! Should I swap it with something?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			Player.PlayerPlayPutawayWaitAnimation()
+			EventFlowSystemActor.UIItemSelectWindowHandling('cFishGetFull', 65534, '', '', 'cExchangeByHarvest', false)
+			if EventFlowSystemActor.UIResultMenuDecide():
+				run Player_GetDemo_20_Fishing::Chk_FishCookingRecipe()
+	else:
+		# ...But I don't have any room for it! Oh well. I guess I'll let it go.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:007', true)
+
 flow TreasureHunt_Finish():
-    EventFlowSystemActor.UIMiniGameFinishAppear()
-    EventFlowSystemActor.BGMPropertyControl(13)
-    EventFlowSystemActor.QuestFlags['cTreasureFind'] = true
-    EventFlowSystemActor.SetTreasureFindState()
- 
+	EventFlowSystemActor.UIMiniGameFinishAppear()
+	EventFlowSystemActor.BGMPropertyControl(13)
+	EventFlowSystemActor.QuestFlags['cTreasureFind'] = true
+	EventFlowSystemActor.SetTreasureFindState()
+
 flow TreasureHunt_Finish0():
-    EventFlowSystemActor.BGMPropertyControl(13)
-    EventFlowSystemActor.QuestFlags['cTreasureFind'] = true
-    EventFlowSystemActor.SetTreasureFindState()
- 
+	EventFlowSystemActor.BGMPropertyControl(13)
+	EventFlowSystemActor.QuestFlags['cTreasureFind'] = true
+	EventFlowSystemActor.SetTreasureFindState()

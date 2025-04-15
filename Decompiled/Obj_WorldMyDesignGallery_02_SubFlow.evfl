@@ -1,28 +1,27 @@
 flow GetMyIdList():
-    if not System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList']:
-        EventFlowSystemActor.UINetConnectWaitAppear()
-        EventFlowSystemActor.NetSearchMyDesign('cMyIDList')
-        EventFlowSystemActor.UINetConnectWaitDisappear()
-        if EventFlowSystemActor.CheckErrorType(2):
-            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
-        else:
-            System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList'] = true
- 
+	if not System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList']:
+		EventFlowSystemActor.UINetConnectWaitAppear()
+		EventFlowSystemActor.NetSearchMyDesign('cMyIDList')
+		EventFlowSystemActor.UINetConnectWaitDisappear()
+		if EventFlowSystemActor.CheckErrorType(2):
+			run Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+		else:
+			System.EventFlags['cPlayerTemp:MyDesignExchangeCallMyIdList'] = true
+
 flow PreCheckConnection():
-    EventFlowSystemActor.MyDesignExchangeResetError()
-    EventFlowSystemActor.NetConnectInit('cConnectInet', true)
-    if EventFlowSystemActor.CheckErrorType(2):
-        # Do you want to try to connect to the internet again?
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0810', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
-        else:
-            run PreCheckConnection()
-    else:
-        EventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
-        if EventFlowSystemActor.CheckErrorType(2):
-            run Obj_WorldMyDesignGallery_01_MainScene::MainUIrun Obj_WorldMyDesignGallery_01_MainScene::MainUI()
- 
+	EventFlowSystemActor.MyDesignExchangeResetError()
+	EventFlowSystemActor.NetConnectInit('cConnectInet', true)
+	if EventFlowSystemActor.CheckErrorType(2):
+		# Do you want to try to connect to the internet again?
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0810', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+		else:
+			run PreCheckConnection()
+	else:
+		EventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+		if EventFlowSystemActor.CheckErrorType(2):
+			run Obj_WorldMyDesignGallery_01_MainScene::MainUI()
+
 flow WaitForPreview():
-    EventFlowSystemActor.WaitDownloadMyDesignDataForPreview()
- 
+	EventFlowSystemActor.WaitDownloadMyDesignDataForPreview()

@@ -1,32 +1,31 @@
 flow Init():
-    MainNpc.NpcAISetting(4, false)
-    MainNpc.NpcAISetting(21, true)
-    MainNpc.NpcDisableServiceMotion()
-    MainNpc.NpcRegistAIBlackBoard('IsEndSpeak', 0)
- 
+	MainNpc.NpcAISetting(4, false)
+	MainNpc.NpcAISetting(21, true)
+	MainNpc.NpcDisableServiceMotion()
+	MainNpc.NpcRegistAIBlackBoard('IsEndSpeak', 0)
+
 flow Leave():
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
- 
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
+
 flow Leave_NotEntrance():
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave_NotEntrance')
- 
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave_NotEntrance')
+
 flow Root():
-    if System.EventFlags['cPlayerTemp:WHEREAREN_IsPartyPlaceInFacility']:
-        if (EventFlowSystemActor.SystemCheckPreStage('cWhrerearenOffice')) and (MainNpc.NpcCheckStateSelectTiming('cInit')):
-            EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Party', 'Place:EditArea', false)
-            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_otg_25_WherearenEvent_PartyAtRestaurant')
-        elif MainNpc.NpcBlackBoard('IsEndSpeak', 1):
-            MainNpc.NpcSetAIBlackBoard('IsEndSpeak', 0)
-            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
-        else:
-            MainNpc.NpcChangeAIState('cWherearenPartyInFacility', '', 'SNPC_otg_18_WherearenEvent_Party', 'Root', false, false)
-    elif (EventFlowSystemActor.SystemCheckPreStage('cWhrerearenOffice')) and (MainNpc.NpcCheckStateSelectTiming('cInit')):
-        EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Party', 'CameraTag:Party', false)
-        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='PartyInOffice')
-    elif MainNpc.NpcBlackBoard('IsEndSpeak', 1):
-        MainNpc.NpcSetAIBlackBoard('IsEndSpeak', 0)
-        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
-    else:
-        MainNpc.NpcAISetting(8, true)
-        MainNpc.NpcChangeAIState('cWherearenPartyInOffice', '', 'SNPC_otg_18_WherearenEvent_Party', 'Root', false, false)
- 
+	if System.EventFlags['cPlayerTemp:WHEREAREN_IsPartyPlaceInFacility']:
+		if (EventFlowSystemActor.SystemCheckPreStage('cWhrerearenOffice')) and (MainNpc.NpcCheckStateSelectTiming('cInit')):
+			EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Party', 'Place:EditArea', false)
+			run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_otg_25_WherearenEvent_PartyAtRestaurant')
+		elif MainNpc.NpcBlackBoard('IsEndSpeak', 1):
+			MainNpc.NpcSetAIBlackBoard('IsEndSpeak', 0)
+			run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
+		else:
+			MainNpc.NpcChangeAIState('cWherearenPartyInFacility', '', 'SNPC_otg_18_WherearenEvent_Party', 'Root', false, false)
+	elif (EventFlowSystemActor.SystemCheckPreStage('cWhrerearenOffice')) and (MainNpc.NpcCheckStateSelectTiming('cInit')):
+		EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:Party', 'CameraTag:Party', false)
+		run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='PartyInOffice')
+	elif MainNpc.NpcBlackBoard('IsEndSpeak', 1):
+		MainNpc.NpcSetAIBlackBoard('IsEndSpeak', 0)
+		run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_otg_18_WherearenEvent_Party', EntryName='Leave')
+	else:
+		MainNpc.NpcAISetting(8, true)
+		MainNpc.NpcChangeAIState('cWherearenPartyInOffice', '', 'SNPC_otg_18_WherearenEvent_Party', 'Root', false, false)

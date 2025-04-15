@@ -1,446 +1,445 @@
 flow HowToLookfor():
-    if System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']:
-        if System.EventFlags['cWherearenPlayer:CompleteAppearanceRestaurant']:
-            # If I were a potential roomie, I'd be hanging out at the restaurant or the café. Try those places!
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:007', false)
-        else:
-            # I bet you'll drum up some possible roomies at the café. Maybe head over and see what's what.
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:006', false)
-    else:
-        # Seems like the restaurant would have some potential roommates. Maybe head on over.
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:005', false)
-    # Oh! If you have an amiibo, you can use the office <item>amiibo scanner to invite a specific potential roomie.
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:007_01', false)
- 
+	if System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']:
+		if System.EventFlags['cWherearenPlayer:CompleteAppearanceRestaurant']:
+			# If I were a potential roomie, I'd be hanging out at the restaurant or the café. Try those places!
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:007', false)
+		else:
+			# I bet you'll drum up some possible roomies at the café. Maybe head over and see what's what.
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:006', false)
+	else:
+		# Seems like the restaurant would have some potential roommates. Maybe head on over.
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:005', false)
+	# Oh! If you have an amiibo, you can use the office <item>amiibo scanner to invite a specific potential roomie.
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:007_01', false)
+
 flow LookforHouseMate():
-    EventFlowSystemActor.SoundDuckingOn(68)
-    EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
-    EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
-    if Player.PlayerCheckWaitType('cSit'):
-        run PlayerTurn()
-        Player.TurnNeck(0, false)
-    if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
-        # Umm… What's up?
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:003_01', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                run Sub_Event68()
-            case 1:
-                run Sub_Event9()
-            case 2:
-                run Sub_Event8()
-    else:
-        # Umm… What's up?
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:003', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4():
-            case 0:
-                run Sub_Event68()
-            case 1:
-                run Sub_Event9()
-            case 2:
-                # Whaaat?!<10:4> You— You know the client is sitting right there waiting, right?! Are we not going to finish this?
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:016', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    # Huh. OK then. Got it. I'll go ahead and talk to the client myself!<10:4> You'll get 'em next time!
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:017', true)
-                    EventFlowSystemActor.SettingCustomerAIForCancelOrder()
-                    EventFlowSystemActor.WherearenOrderCallback('cCancel')
-                    EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
-                    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-                    EventFlowSystemActor.BGMPropertyControl(127)
-                    EventFlowSystemActor.SoundFadeOutDuckingOn(10)
-                    EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-                else:
-                    # Right?! It's kinda fun to play Island- Vacation Roomie Matchmaker, huh? So let the roomie hunt continue!
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:018', true)
-                    run PlayerStandUp()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 3:
-                run Sub_Event8()
- 
+	EventFlowSystemActor.SoundDuckingOn(68)
+	EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
+	EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+	if Player.PlayerCheckWaitType('cSit'):
+		run PlayerTurn()
+		Player.TurnNeck(0, false)
+	if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
+		# Umm… What's up?
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:003_01', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run Sub_Event68()
+			case 1:
+				run Sub_Event9()
+			case 2:
+				run Sub_Event8()
+	else:
+		# Umm… What's up?
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:003', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run Sub_Event68()
+			case 1:
+				run Sub_Event9()
+			case 2:
+				# Whaaat?!<10:4> You— You know the client is sitting right there waiting, right?! Are we not going to finish this?
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:016', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# Huh. OK then. Got it. I'll go ahead and talk to the client myself!<10:4> You'll get 'em next time!
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:017', true)
+					EventFlowSystemActor.SettingCustomerAIForCancelOrder()
+					EventFlowSystemActor.WherearenOrderCallback('cCancel')
+					EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+					System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+					EventFlowSystemActor.BGMPropertyControl(127)
+					EventFlowSystemActor.SoundFadeOutDuckingOn(10)
+					EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+				else:
+					# Right?! It's kinda fun to play Island- Vacation Roomie Matchmaker, huh? So let the roomie hunt continue!
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:018', true)
+					run PlayerStandUp()
+					EventFlowSystemActor.ExitFlowchart()
+			case 3:
+				run Sub_Event8()
+
 flow LookforHouseMate_Init():
-    MainNpc.NpcAITalkCastSetting('WherearenOrder')
-    if Player.PlayerCheckWaitType('cSit'):
-        MainNpc.NpcAISetting(4, false)
- 
+	MainNpc.NpcAITalkCastSetting('WherearenOrder')
+	if Player.PlayerCheckWaitType('cSit'):
+		MainNpc.NpcAISetting(4, false)
+
 flow MatchingTalk():
-    run SetupPlayerNeck()
-    SubNpc.CharacterEmoticonAction('Explain', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(60)
-    fork:
-        branch:
-            SubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-        branch:
-            switch Npc_2.CheckNpcLook():
-                case 0, 3, 4, 7:
-                    Npc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-                case 1, 5:
-                    Npc_2.CharacterEmoticonAction('Smiling', true, '', 0, false)
-                case 2, 6:
-                    Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(30)
-    Npc_1.SetNpcName(0, 1)
-    Npc_2.SetNpcName(0, 2)
-    fork:
-        branch:
-            MainNpc.TurnNeck(2, false)
-        branch:
-            Player.TurnNeck(1, false)
-    if (Npc_1.IsVillagerNpc()) and (Npc_2.IsVillagerNpc()):
-        # A huh huh, yeah! I knew that me and <115:1:cd01> would get along!
-        Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:101_01', false)
-    else:
-        # Ya know, it means a lot to me that you like <135:7:cd00> as much as I do, <115:1:cd01>.
-        Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:101', false)
-    Npc_1.CharacterEmoticonAction('Nodding', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(20)
-    MainNpc.TurnNeck(1, false)
-    # It seems like[target N1>N0,N2>N0] the two of you are already getting along really well… So? Do you think you want to give moving in together a try?
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:101', false)
-    if (Npc_1.IsVillagerNpc()) and (Npc_2.IsVillagerNpc()):
-        # Let's be roommates! It'll be real fun and probably wacky, <110:6>! Folks love wacky.
-        Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:102_01', false)
-        # It'd be fun to be even closer pals with <115:1:cd01>. I'm talkin' both friendship and adjacency here. Let's do this thing, <110:6>!
-        Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:103_01', false)
-    else:
-        # I didn't think we'd click this well, but here we are! Ready to be roommates.
-        Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:102', false)
-        # I bet we're gonna get along super good. This'll be so fun, <110:6>!
-        Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:103', false)
-    EventFlowSystemActor.BGMPropertyControl(139)
-    # OK, OK! Looks like we've got a lot of roomie enthusiasm! That's great! Thank you both!
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:102', false)
-    EventFlowSystemActor.WherearenOrderCallback('cConfirm')
-    if (System.EventFlags['cWherearenPlayer:Unlock_Extension']) and (not Npc_1.WherearenIsNpcHouseExtended()):
-        # Hey, would you like to take this opportunity to add a second floor to your vacation home?
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:104', false)
-        Npc_1.TurnNeck(10, false)
-        # Expansion? I guess space IS kinda tight for two of us, plus the bugs I hide in the walls… What should I do?
-        Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:104', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # You're right, <150:6>! I'm gonna leave it like it is for now, <110:6>.
-            Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:106', false)
-            # OK, gotcha! There will be other chances. So think about it!
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:106', false)
-        else:
-            # You think so? OK, let's do it! You've never done me wrong before, <150:6>!
-            Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:105', false)
-            # Understood!
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:105', false)
-            Npc_1.WherearenExpandNpcHouse()
-    MainNpc.TurnNeck(10, true)
-    fork:
-        branch:
-            if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
-                # Let's head to <115:9:cd01>'s vacation home, PLAYER. I know you'll give [him|her] a great remodel so the roomies can vacation together in comfort and …
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:611', true)
-            else:
-                # OK, PLAYER! Please go ahead and lead the way to <115:1:cd01>'s vacation home!
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:103', false)
-        branch:
-            EventFlowSystemActor.WaitFrame(4)
-            Npc_1.TurnNeck(10, false)
-            EventFlowSystemActor.WaitFrame(2)
-            Npc_2.TurnNeck(10, false)
-    run SNPC_otg_02_WherearenOrder::NPC_CloseEmotionrun SNPC_otg_02_WherearenOrder::NPC_CloseEmotion()
-    EventFlowSystemActor.WaitFrame(30)
-    System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = true
-    EventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcGarden')
-    run Demo_Common_Wherearen::SetCamera_GardenVisitrun Demo_Common_Wherearen::SetCamera_GardenVisit()
-    EventFlowSystemActor.BGMPropertyControl(140)
-    EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, true)
-    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-    EventFlowSystemActor.ReserveEnterGardenPattern(3)
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcStageSelected', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
- 
+	run SetupPlayerNeck()
+	SubNpc.CharacterEmoticonAction('Explain', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(60)
+	fork:
+		branch:
+			SubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+		branch:
+			switch Npc_2.CheckNpcLook():
+				case 0, 3, 4, 7:
+					Npc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+				case 1, 5:
+					Npc_2.CharacterEmoticonAction('Smiling', true, '', 0, false)
+				case 2, 6:
+					Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(30)
+	Npc_1.SetNpcName(0, 1)
+	Npc_2.SetNpcName(0, 2)
+	fork:
+		branch:
+			MainNpc.TurnNeck(2, false)
+		branch:
+			Player.TurnNeck(1, false)
+	if (Npc_1.IsVillagerNpc()) and (Npc_2.IsVillagerNpc()):
+		# A huh huh, yeah! I knew that me and <115:1:cd01> would get along!
+		Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:101_01', false)
+	else:
+		# Ya know, it means a lot to me that you like <135:7:cd00> as much as I do, <115:1:cd01>.
+		Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:101', false)
+	Npc_1.CharacterEmoticonAction('Nodding', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(20)
+	MainNpc.TurnNeck(1, false)
+	# It seems like[target N1>N0,N2>N0] the two of you are already getting along really well… So? Do you think you want to give moving in together a try?
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:101', false)
+	if (Npc_1.IsVillagerNpc()) and (Npc_2.IsVillagerNpc()):
+		# Let's be roommates! It'll be real fun and probably wacky, <110:6>! Folks love wacky.
+		Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:102_01', false)
+		# It'd be fun to be even closer pals with <115:1:cd01>. I'm talkin' both friendship and adjacency here. Let's do this thing, <110:6>!
+		Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:103_01', false)
+	else:
+		# I didn't think we'd click this well, but here we are! Ready to be roommates.
+		Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:102', false)
+		# I bet we're gonna get along super good. This'll be so fun, <110:6>!
+		Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:103', false)
+	EventFlowSystemActor.BGMPropertyControl(139)
+	# OK, OK! Looks like we've got a lot of roomie enthusiasm! That's great! Thank you both!
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:102', false)
+	EventFlowSystemActor.WherearenOrderCallback('cConfirm')
+	if (System.EventFlags['cWherearenPlayer:Unlock_Extension']) and (not Npc_1.WherearenIsNpcHouseExtended()):
+		# Hey, would you like to take this opportunity to add a second floor to your vacation home?
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:104', false)
+		Npc_1.TurnNeck(10, false)
+		# Expansion? I guess space IS kinda tight for two of us, plus the bugs I hide in the walls… What should I do?
+		Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:104', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# You're right, <150:6>! I'm gonna leave it like it is for now, <110:6>.
+			Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:106', false)
+			# OK, gotcha! There will be other chances. So think about it!
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:106', false)
+		else:
+			# You think so? OK, let's do it! You've never done me wrong before, <150:6>!
+			Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:105', false)
+			# Understood!
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:105', false)
+			Npc_1.WherearenExpandNpcHouse()
+	MainNpc.TurnNeck(10, true)
+	fork:
+		branch:
+			if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
+				# Let's head to <115:9:cd01>'s vacation home, PLAYER. I know you'll give [him|her] a great remodel so the roomies can vacation together in comfort and …
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:611', true)
+			else:
+				# OK, PLAYER! Please go ahead and lead the way to <115:1:cd01>'s vacation home!
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:103', false)
+		branch:
+			EventFlowSystemActor.WaitFrame(4)
+			Npc_1.TurnNeck(10, false)
+			EventFlowSystemActor.WaitFrame(2)
+			Npc_2.TurnNeck(10, false)
+	run SNPC_otg_02_WherearenOrder::NPC_CloseEmotion()
+	EventFlowSystemActor.WaitFrame(30)
+	System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = true
+	EventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcGarden')
+	run Demo_Common_Wherearen::SetCamera_GardenVisit()
+	EventFlowSystemActor.BGMPropertyControl(140)
+	EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, true)
+	EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+	EventFlowSystemActor.ReserveEnterGardenPattern(3)
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcStageSelected', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+
 flow MatchingTalk_Init():
-    run OrderTalk_Init()
- 
+	run OrderTalk_Init()
+
 flow NFC_CheckResidentNNPC():
-    SubflowResults[0] = 0
-    if EventFlowSystemActor.IsUISelectNpcLiving():
-        if not EventFlowSystemActor.IsUISelectNpcAcquaintance():
-            SubflowResults[0] = 1
-        elif (EventFlowSystemActor.IsUISelectNpcSick()) or (EventFlowSystemActor.IsUISelectNpcMoveInToday()):
-            SubflowResults[0] = 1
-        elif EventFlowSystemActor.IsUISelectNpcMoveOut() != 0:
-            SubflowResults[0] = 1
-        elif (EventFlowSystemActor.IsUISelectNpcBirthday()) and (EventFlowSystemActor.IsHoldNpcBirthday()):
-            SubflowResults[0] = 1
- 
+	SubflowResults[0] = 0
+	if EventFlowSystemActor.IsUISelectNpcLiving():
+		if not EventFlowSystemActor.IsUISelectNpcAcquaintance():
+			SubflowResults[0] = 1
+		elif (EventFlowSystemActor.IsUISelectNpcSick()) or (EventFlowSystemActor.IsUISelectNpcMoveInToday()):
+			SubflowResults[0] = 1
+		elif EventFlowSystemActor.IsUISelectNpcMoveOut() != 0:
+			SubflowResults[0] = 1
+		elif (EventFlowSystemActor.IsUISelectNpcBirthday()) and (EventFlowSystemActor.IsHoldNpcBirthday()):
+			SubflowResults[0] = 1
+
 flow NewHouse_OtgSick():
-    run Test_NewHouse_OtgSick()
- 
+	run Test_NewHouse_OtgSick()
+
 flow OpenFadeMatchingTalk():
-    run SetupPlayerNeck()
-    MainNpc.NpcAISetting(4, false)
-    EventFlowSystemActor.CameraSetDemoParam('OrderCut0', '', '', false, false, true, 0)
-    EventFlowSystemActor.SoundDuckingOn(51)
-    MainNpc.TurnNeck(1, false)
-    Npc_1.TurnNeck(2, false)
-    Npc_2.TurnNeck(1, false)
-    EventFlowSystemActor.WaitFrame(15)
-    EventFlowSystemActor.SoundDuckingOff(54)
-    EventFlowSystemActor.BGMPropertyControl(182)
-    EventFlowSystemActor.FadeIn(true)
-    run MatchingTalk()
- 
+	run SetupPlayerNeck()
+	MainNpc.NpcAISetting(4, false)
+	EventFlowSystemActor.CameraSetDemoParam('OrderCut0', '', '', false, false, true, 0)
+	EventFlowSystemActor.SoundDuckingOn(51)
+	MainNpc.TurnNeck(1, false)
+	Npc_1.TurnNeck(2, false)
+	Npc_2.TurnNeck(1, false)
+	EventFlowSystemActor.WaitFrame(15)
+	EventFlowSystemActor.SoundDuckingOff(54)
+	EventFlowSystemActor.BGMPropertyControl(182)
+	EventFlowSystemActor.FadeIn(true)
+	run MatchingTalk()
+
 flow OpenFadeMatchingTalk_Init():
-    run OrderTalk_Init()
- 
+	run OrderTalk_Init()
+
 flow OpenFadeOrder():
-    EventFlowSystemActor.SoundDuckingOn(51)
-    run SetupPlayerNeck()
-    MainNpc.NpcAISetting(4, false)
-    EventFlowSystemActor.CameraSetDemoParam('OrderCut0', '', '', false, false, true, 0)
-    MainNpc.TurnNeck(1, false)
-    SubNpc.TurnNeck(0, false)
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.SoundDuckingOff(54)
-    EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
-    EventFlowSystemActor.BGMPropertyControl(182)
-    EventFlowSystemActor.SoundFadeOutDuckingOff()
-    EventFlowSystemActor.FadeIn(true)
+	EventFlowSystemActor.SoundDuckingOn(51)
+	run SetupPlayerNeck()
+	MainNpc.NpcAISetting(4, false)
+	EventFlowSystemActor.CameraSetDemoParam('OrderCut0', '', '', false, false, true, 0)
+	MainNpc.TurnNeck(1, false)
+	SubNpc.TurnNeck(0, false)
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.SoundDuckingOff(54)
+	EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+	EventFlowSystemActor.BGMPropertyControl(182)
+	EventFlowSystemActor.SoundFadeOutDuckingOff()
+	EventFlowSystemActor.FadeIn(true)
 entrypoint Event207:
-    EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
-    if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
-        run ShareHouseTutorial()
-    else:
-        MainNpc.TurnNeck(1, false)
-        # <20:4:0022004e0030003e004e0031002c004e0031003e004e0030002c00500030003e004e0031>Thanks for putting in your request! So! Let's talk roommates!
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:001', false)
-        MainNpc.TurnNeck(10, true)
-        # <20:4:000a004e0030003e00500030>Alright! [target N1>P0]You can find our client here the perfect roomie—right, PLAYER? Get to it!
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:002', true)
-    EventFlowSystemActor.WherearenOrderCallback('cStartLookForHousemate')
-    EventFlowSystemActor.SoundDuckingOff(51)
-    EventFlowSystemActor.BGMPropertyControl(138)
-    EventFlowSystemActor.StoreNormalCamera(false, '')
-    Player.TurnNeck(11, false)
-    Player.PlayerChairStandup(3)
-    EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, false)
-    EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
-    EventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
-    EventFlowSystemActor.UIThemeAppear('cSharehouse')
- 
+	EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+	if System.EventFlags['cWherearenPlayer:SeqShareHouseOngoing']:
+		run ShareHouseTutorial()
+	else:
+		MainNpc.TurnNeck(1, false)
+		# <20:4:0022004e0030003e004e0031002c004e0031003e004e0030002c00500030003e004e0031>Thanks for putting in your request! So! Let's talk roommates!
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:001', false)
+		MainNpc.TurnNeck(10, true)
+		# <20:4:000a004e0030003e00500030>Alright! [target N1>P0]You can find our client here the perfect roomie—right, PLAYER? Get to it!
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:002', true)
+	EventFlowSystemActor.WherearenOrderCallback('cStartLookForHousemate')
+	EventFlowSystemActor.SoundDuckingOff(51)
+	EventFlowSystemActor.BGMPropertyControl(138)
+	EventFlowSystemActor.StoreNormalCamera(false, '')
+	Player.TurnNeck(11, false)
+	Player.PlayerChairStandup(3)
+	EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(false, false)
+	EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+	EventFlowSystemActor.UIMainMenuSetInvalidFrame(80)
+	EventFlowSystemActor.UIThemeAppear('cSharehouse')
+
 flow OpenFadeOrder_Init():
-    run OrderTalk_Init()
- 
+	run OrderTalk_Init()
+
 flow OpenSceneMatchingTalk():
-    run SetupPlayerNeck()
-    MainNpc.TurnNeck(1, false)
-    Npc_1.TurnNeck(2, false)
-    Npc_2.TurnNeck(1, false)
-    EventFlowSystemActor.WaitFrame(15)
-    run MatchingTalk()
- 
+	run SetupPlayerNeck()
+	MainNpc.TurnNeck(1, false)
+	Npc_1.TurnNeck(2, false)
+	Npc_2.TurnNeck(1, false)
+	EventFlowSystemActor.WaitFrame(15)
+	run MatchingTalk()
+
 flow OpenSceneMatchingTalk_Init():
-    run OrderTalk_Init()
- 
+	run OrderTalk_Init()
+
 flow OrderTalk():
-    run SetupPlayerNeck()
-    run Event207()
- 
+	run SetupPlayerNeck()
+	run Event207()
+
 flow OrderTalk_Init():
-    MainNpc.NpcAISetting(9, false)
-    if EventFlowSystemActor.WherearenLookForHousemateState() in (0, 2):
-        MainNpc.NpcAITalkCastSetting('WherearenOrder')
-    else:
-        MainNpc.NpcAITalkCastSetting('WherearenShareHouse')
-    if MainNpc.IsOtgOpenFade():
-        MainNpc.NpcAISetting(4, false)
- 
+	MainNpc.NpcAISetting(9, false)
+	if EventFlowSystemActor.WherearenLookForHousemateState() in (0, 2):
+		MainNpc.NpcAITalkCastSetting('WherearenOrder')
+	else:
+		MainNpc.NpcAITalkCastSetting('WherearenShareHouse')
+	if MainNpc.IsOtgOpenFade():
+		MainNpc.NpcAISetting(4, false)
+
 flow PlayerStandUp():
-    if Player.PlayerCheckWaitType('cSit'):
-        Player.TurnNeck(11, false)
-        Player.PlayerChairStandup(3)
- 
+	if Player.PlayerCheckWaitType('cSit'):
+		Player.TurnNeck(11, false)
+		Player.PlayerChairStandup(3)
+
 flow PlayerTurn():
-    switch Player.PlayerCardinalDirection():
-        case 1:
-            Player.PlayerChairSitdownTurn('cLeft')
-            Player.PlayerChairSitdownTurn('cLeft')
-        case 2:
-            Player.PlayerChairSitdownTurn('cLeft')
-        case 3:
-            Player.PlayerChairSitdownTurn('cRight')
-        default:
-            return
- 
+	switch Player.PlayerCardinalDirection():
+		case 1:
+			Player.PlayerChairSitdownTurn('cLeft')
+			Player.PlayerChairSitdownTurn('cLeft')
+		case 2:
+			Player.PlayerChairSitdownTurn('cLeft')
+		case 3:
+			Player.PlayerChairSitdownTurn('cRight')
+		default:
+			return
+
 flow ReSelectCustomer():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # OK, so which client am I calling?
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:013', false)
-        run SelectCustomer()
-    else:
-        # Well, OK then. Lemme know if you need me!
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:014', true)
-        run PlayerStandUp()
-        EventFlowSystemActor.SoundDuckingOff(68)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# OK, so which client am I calling?
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:013', false)
+		run SelectCustomer()
+	else:
+		# Well, OK then. Lemme know if you need me!
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:014', true)
+		run PlayerStandUp()
+		EventFlowSystemActor.SoundDuckingOff(68)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow SelectCustomer():
-    EventFlowSystemActor.UIMsgCardAdrHandling('cWherearenIslandResident')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.SetTagFromUIResult('cWherearenIslandsNpc', 1)
-        if EventFlowSystemActor.WherearenCheckAdrUISelectNpc('cIsShareHouse'):
-            fork:
-                branch:
-                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegFromUISelect', 0, false, 0.0, 0.0, '')
-                branch:
-                    # Uhhh, pretty sure they're roomies with someone else, so… Naaah, let's not call them. The islands must have a perfect roommate in mind for our client!…
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_04', false)
-            EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-            run ReSelectCustomer()
-        else:
-            fork:
-                branch:
-                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegFromUISelect', 0, false, 0.0, 0.0, '')
-                branch:
-                    # <115:1:cd01> it is! [He|She] knows that [his|her] current home will be torn down if [he|she] accepts? <115:1:cd01> is OK with that?
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_01', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-                # OK! I'm making the call!
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_02', true)
-                EventFlowSystemActor.CameraSetDemoParam('OrderCut1', 'OrderCameraRP', '', false, false, false, 0)
-                run Demo_Common_PhoneCall::MakingPhoneCall_Generalrun Demo_Common_PhoneCall::MakingPhoneCall_General()
-                if EventFlowSystemActor.WherearenCheckAdrUISelectNpc('cIsSpecial'):
-                    # Hi! Hello? Hi! This is Niko from Paradise Planning! So, I wanted to run something by you… See, I have a client here who's looking for a roommate. And…
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:010_01', true)
-                    run Demo_Common_PhoneCall::FinishingPhoneCall_Generalrun Demo_Common_PhoneCall::FinishingPhoneCall_General()
-                    EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
-                    EventFlowSystemActor.WaitFrame(15)
-                    # Whew! Well, yeah, that's a no-go. They said they're not really looking for a roomie… But that's OK. Should I try someone else?
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:011_01', false)
-                    run ReSelectCustomer()
-                else:
-                    run NFC_CheckResidentNNPC()
-                    if SubflowResults@2[0] == 0:
-                        # Hi! Hello? Hi! This is Niko from Paradise Planning! So, I wanted to run something by you… See, I have a client here who's looking for a roommate. And…
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:010', true)
-                        run Demo_Common_PhoneCall::FinishingPhoneCall_Generalrun Demo_Common_PhoneCall::FinishingPhoneCall_General()
-                        EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
-                        EventFlowSystemActor.WaitFrame(15)
-                        # And island life smiles on us again! They said they'll come hear us out. That was a good pick! So, next up… Time to surf some roomie-negotiation waves!
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:011', true)
-                        EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-                        EventFlowSystemActor.SoundDuckingOff(68)
-                        EventFlowSystemActor.SummonUISelectNpc()
-                        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, false)
-                        EventFlowSystemActor.WaitFrame(60)
-                        EventFlowSystemActor.WherearenOrderCallback('cFinishLookForHousemate')
-                    else:
-                        # Hi! Hello? Hi! This is Niko from Paradise Planning! So, I wanted to run something by you… See, I have a client here who's looking for a roommate. And…
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:010_02', true)
-                        run Demo_Common_PhoneCall::FinishingPhoneCall_Generalrun Demo_Common_PhoneCall::FinishingPhoneCall_General()
-                        EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
-                        EventFlowSystemActor.WaitFrame(15)
-                        # Whew! Well, yeah, that's a no-go. It sounds like they're kinda stuck on ISLAND today… Should I try someone else?
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:011_02', false)
-                        run ReSelectCustomer()
-            else:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-                # Right, right. Well, should I try calling another potential roomie, then?
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_03', false)
-                run ReSelectCustomer()
-    else:
-        # Hm? Calling it quits for now?
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:012', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Well, OK then. Lemme know if you need me!
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:014', true)
-            run PlayerStandUp()
-            EventFlowSystemActor.SoundDuckingOff(68)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            # OK, so which client am I calling?
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:013', false)
-            run SelectCustomer()
- 
+	EventFlowSystemActor.UIMsgCardAdrHandling('cWherearenIslandResident')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cWherearenIslandsNpc', 1)
+		if EventFlowSystemActor.WherearenCheckAdrUISelectNpc('cIsShareHouse'):
+			fork:
+				branch:
+					EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegFromUISelect', 0, false, 0.0, 0.0, '')
+				branch:
+					# Uhhh, pretty sure they're roomies with someone else, so… Naaah, let's not call them. The islands must have a perfect roommate in mind for our client!…
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_04', false)
+			EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+			run ReSelectCustomer()
+		else:
+			fork:
+				branch:
+					EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpegFromUISelect', 0, false, 0.0, 0.0, '')
+				branch:
+					# <115:1:cd01> it is! [He|She] knows that [his|her] current home will be torn down if [he|she] accepts? <115:1:cd01> is OK with that?
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_01', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+				# OK! I'm making the call!
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_02', true)
+				EventFlowSystemActor.CameraSetDemoParam('OrderCut1', 'OrderCameraRP', '', false, false, false, 0)
+				run Demo_Common_PhoneCall::MakingPhoneCall_General()
+				if EventFlowSystemActor.WherearenCheckAdrUISelectNpc('cIsSpecial'):
+					# Hi! Hello? Hi! This is Niko from Paradise Planning! So, I wanted to run something by you… See, I have a client here who's looking for a roommate. And…
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:010_01', true)
+					run Demo_Common_PhoneCall::FinishingPhoneCall_General()
+					EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
+					EventFlowSystemActor.WaitFrame(15)
+					# Whew! Well, yeah, that's a no-go. They said they're not really looking for a roomie… But that's OK. Should I try someone else?
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:011_01', false)
+					run ReSelectCustomer()
+				else:
+					run NFC_CheckResidentNNPC()
+					if SubflowResults@2[0] == 0:
+						# Hi! Hello? Hi! This is Niko from Paradise Planning! So, I wanted to run something by you… See, I have a client here who's looking for a roommate. And…
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:010', true)
+run Demo_Common_PhoneCall::FinishingPhoneCall_General()
+						EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
+EventFlowSystemActor.WaitFrame(15)
+						# And island life smiles on us again! They said they'll come hear us out. That was a good pick! So, next up… Time to surf some roomie-negotiation waves!
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:011', true)
+						EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+EventFlowSystemActor.SoundDuckingOff(68)
+EventFlowSystemActor.SummonUISelectNpc()
+						EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, false)
+EventFlowSystemActor.WaitFrame(60)
+EventFlowSystemActor.WherearenOrderCallback('cFinishLookForHousemate')
+					else:
+						# Hi! Hello? Hi! This is Niko from Paradise Planning! So, I wanted to run something by you… See, I have a client here who's looking for a roommate. And…
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:010_02', true)
+run Demo_Common_PhoneCall::FinishingPhoneCall_General()
+						EventFlowSystemActor.CameraSetDemoParam('OrderCut0', 'cDefault', '', false, false, true, 0)
+EventFlowSystemActor.WaitFrame(15)
+						# Whew! Well, yeah, that's a no-go. It sounds like they're kinda stuck on ISLAND today… Should I try someone else?
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:011_02', false)
+run ReSelectCustomer()
+			else:
+				EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+				# Right, right. Well, should I try calling another potential roomie, then?
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009_03', false)
+				run ReSelectCustomer()
+	else:
+		# Hm? Calling it quits for now?
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:012', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Well, OK then. Lemme know if you need me!
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:014', true)
+			run PlayerStandUp()
+			EventFlowSystemActor.SoundDuckingOff(68)
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			# OK, so which client am I calling?
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:013', false)
+			run SelectCustomer()
+
 flow SetupPlayerNeck():
-    Player.TurnNeck(11, false)
-    MainNpc.NpcAISetting(5, true)
- 
+	Player.TurnNeck(11, false)
+	MainNpc.NpcAISetting(5, true)
+
 flow ShareHouseTutorial():
-    SubNpc.SetNpcName(0, 0)
-    MainNpc.TurnNeck(1, false)
-    # Okey dokey, please just sit tight for a minute, <115:1:cd00>.
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:601', true)
-    SubNpc.CharacterEmoticonAction('Nodding', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(40)
-    MainNpc.TurnNeck(10, true)
-    SubNpc.TurnNeck(10, false)
-    Player.TurnNeck(0, false)
-    # OK. So. You'll find a roomie for our client, right, PLAYER? An island visitor who'll be a great match for <115:1:cd00>? Find 'em, explain the details…
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:602', false)
-    run HowToLookfor()
-    # Or if you want to talk to someone who already has a vacation home, take a seat, and I'll call 'em up. OK, we're counting on you!
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:603', true)
- 
+	SubNpc.SetNpcName(0, 0)
+	MainNpc.TurnNeck(1, false)
+	# Okey dokey, please just sit tight for a minute, <115:1:cd00>.
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:601', true)
+	SubNpc.CharacterEmoticonAction('Nodding', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(40)
+	MainNpc.TurnNeck(10, true)
+	SubNpc.TurnNeck(10, false)
+	Player.TurnNeck(0, false)
+	# OK. So. You'll find a roomie for our client, right, PLAYER? An island visitor who'll be a great match for <115:1:cd00>? Find 'em, explain the details…
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:602', false)
+	run HowToLookfor()
+	# Or if you want to talk to someone who already has a vacation home, take a seat, and I'll call 'em up. OK, we're counting on you!
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:603', true)
+
 local flow Sub_Event68():
-    # A whole bunch of folks are out there just milling around, no? Loitering? Lazing? Possibly lonely? It'd be so nice if you could connect them with our …
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:004', false)
-    run HowToLookfor()
-    # Maybe you want to talk to someone who already has a vacation home. I can help you with that! Say the word, and I'll call 'em for you. So, OK then. Le…
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:008', true)
-    run PlayerStandUp()
-    EventFlowSystemActor.SoundDuckingOff(68)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	# A whole bunch of folks are out there just milling around, no? Loitering? Lazing? Possibly lonely? It'd be so nice if you could connect them with our …
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:004', false)
+	run HowToLookfor()
+	# Maybe you want to talk to someone who already has a vacation home. I can help you with that! Say the word, and I'll call 'em for you. So, OK then. Le…
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:008', true)
+	run PlayerStandUp()
+	EventFlowSystemActor.SoundDuckingOff(68)
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event8():
-    # OK, cool. Get out there and do some business!
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:015', true)
-    run PlayerStandUp()
-    EventFlowSystemActor.SoundDuckingOff(68)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	# OK, cool. Get out there and do some business!
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:015', true)
+	run PlayerStandUp()
+	EventFlowSystemActor.SoundDuckingOff(68)
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event9():
-    # OK, so I'm contacting a client who already has a vacation home, then?<10:4> Who are we thinking, here?
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009', false)
-    run SelectCustomer()
- 
+	# OK, so I'm contacting a client who already has a vacation home, then?<10:4> Who are we thinking, here?
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_03_WherearenOrder:009', false)
+	run SelectCustomer()
+
 flow Test_NewHouse_OtgSick():
-    # A huh huh! This is neat.
-    SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003_01', false)
-    # So I was thinking it'd be nice if my vacation home was kinda like this…
-    SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003_02', true)
-    run SNPC_otg_02_WherearenOrder::ShowOrderrun SNPC_otg_02_WherearenOrder::ShowOrder()
-    # Um… Th-that's very nice. I…really like your concept!
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:310', false)
-    MainNpc.TurnNeck(10, true)
-    EventFlowSystemActor.WaitFrame(12)
-    Player.TurnNeck(0, false)
-    # Errr… What comes next?
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:311', false)
-    switch EventFlowSystemActor.GeneralTalkChoice2():
-        case 0, 1:
-            # Right! OK… Now the next step is to pick out a suitable location. <50:3>PLAYER, that's you!
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:312', false)
-            Player.TurnNeck(11, true)
-            EventFlowSystemActor.WaitFrame(10)
-            run SNPC_otg_02_WherearenOrder::SelectFieldrun SNPC_otg_02_WherearenOrder::SelectField()
-            fork:
-                branch:
-                    # Whoa! That spot looks cool! I can't wait to go there, <110:6>!
-                    SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003_03', true)
-                branch:
-                    EventFlowSystemActor.WaitFrame(20)
-                    MainNpc.TurnNeck(1, true)
-            # Um…by the way, the house can have two floors. Or just one, of course! Which would you like?
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:314', false)
-            # Hmm, I dunno… Both sound good!<10:4> What do you think, <110:6>?
-            SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                # Good idea! I'll take me a one-floor home! It's easier to find all my stuff if it's all on the same floor!
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:004', false)
-            else:
-                # OK! Let's do two floors! It'll be like a double-decker sandwich, but kinda harder to chew!
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:005', false)
-                Npc_1.WherearenExpandNpcHouse()
-            # OK, and then… Oh, right. Cool, so, <115:1:cd00>…[target N1>N0,P0>N1] Now we just go to check out the site for ourselves! <20:4:000a004e0030003e005000…
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:313', true)
-            Player.TurnNeck(1, false)
-            System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = true
-            run SNPC_otg_02_WherearenOrder::NewHouseOrderEndrun SNPC_otg_02_WherearenOrder::NewHouseOrderEnd()
- 
+	# A huh huh! This is neat.
+	SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003_01', false)
+	# So I was thinking it'd be nice if my vacation home was kinda like this…
+	SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003_02', true)
+	run SNPC_otg_02_WherearenOrder::ShowOrder()
+	# Um… Th-that's very nice. I…really like your concept!
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:310', false)
+	MainNpc.TurnNeck(10, true)
+	EventFlowSystemActor.WaitFrame(12)
+	Player.TurnNeck(0, false)
+	# Errr… What comes next?
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:311', false)
+	switch EventFlowSystemActor.GeneralTalkChoice2():
+		case 0, 1:
+			# Right! OK… Now the next step is to pick out a suitable location. <50:3>PLAYER, that's you!
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:312', false)
+			Player.TurnNeck(11, true)
+			EventFlowSystemActor.WaitFrame(10)
+			run SNPC_otg_02_WherearenOrder::SelectField()
+			fork:
+				branch:
+					# Whoa! That spot looks cool! I can't wait to go there, <110:6>!
+					SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003_03', true)
+				branch:
+					EventFlowSystemActor.WaitFrame(20)
+					MainNpc.TurnNeck(1, true)
+			# Um…by the way, the house can have two floors. Or just one, of course! Which would you like?
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:314', false)
+			# Hmm, I dunno… Both sound good!<10:4> What do you think, <110:6>?
+			SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:003', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# Good idea! I'll take me a one-floor home! It's easier to find all my stuff if it's all on the same floor!
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:004', false)
+			else:
+				# OK! Let's do two floors! It'll be like a double-decker sandwich, but kinda harder to chew!
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenOrder:005', false)
+				Npc_1.WherearenExpandNpcHouse()
+			# OK, and then… Oh, right. Cool, so, <115:1:cd00>…[target N1>N0,P0>N1] Now we just go to check out the site for ourselves! <20:4:000a004e0030003e005000…
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenOrder:313', true)
+			Player.TurnNeck(1, false)
+			System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden'] = true
+			run SNPC_otg_02_WherearenOrder::NewHouseOrderEnd()

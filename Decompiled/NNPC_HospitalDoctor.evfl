@@ -1,280 +1,279 @@
 flow Baggage_Chk():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # For treatment, I'm guessing maybe we oughta… Hold on, looks like we can't do it after all. Your pockets are full, so I can't give you this medical th…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:046', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# For treatment, I'm guessing maybe we oughta… Hold on, looks like we can't do it after all. Your pockets are full, so I can't give you this medical th…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:046', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Cancell():
-    # Really?! I'm glad nothing's wrong… Nothing beats being healthy!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:045', false)
- 
+	# Really?! I'm glad nothing's wrong… Nothing beats being healthy!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:045', false)
+
 flow Examine():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    if EventFlowSystemActor.IsImmendiatelyAfterWherearenDoctorEvent():
-        run FacilityName_Chk()
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:204', true)
-        run KKFes_Chk()
-    elif (System.EventFlags['cWherearenPlayer:DoctorEventStart']) and (not System.EventFlags['cWherearenPlayer:GetMedicalEquipToday']) and (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenOrderStatus() == 0):
-        run HospitalEvent()
-    else:
-        MainNpc.WherearenSetTagFacilityNpcName('cHospitalExamination', false, false, 0)
-        run FacilityName_Chk()
-        # RANDOM: <20:2:cd0e>How did you say you were fee… // <20:2:cd06>If I walk around looking lik… // <20:2:cd0e>"Be sure to drink lots of wa… // <20:2:cd06>I don't know a lotta medicin… // <20:2:cd06>Help! There's so many patien…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:201', true)
-        run KKFes_Chk()
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	if EventFlowSystemActor.IsImmendiatelyAfterWherearenDoctorEvent():
+		run FacilityName_Chk()
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:204', true)
+		run KKFes_Chk()
+	elif (System.EventFlags['cWherearenPlayer:DoctorEventStart']) and (not System.EventFlags['cWherearenPlayer:GetMedicalEquipToday']) and (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenOrderStatus() == 0):
+		run HospitalEvent()
+	else:
+		MainNpc.WherearenSetTagFacilityNpcName('cHospitalExamination', false, false, 0)
+		run FacilityName_Chk()
+		# RANDOM: <20:2:cd0e>How did you say you were fee… // <20:2:cd06>If I walk around looking lik… // <20:2:cd0e>"Be sure to drink lots of wa… // <20:2:cd06>I don't know a lotta medicin… // <20:2:cd06>Help! There's so many patien…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:201', true)
+		run KKFes_Chk()
+
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityName('cHospital')) and (not EventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cHospital')
-        # <20:2:cd06>Relax! I'm basically a doctor, so I'll get you all patched up real quick!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:203', false)
-        run KKFes_Chk()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.WherearenExistFacilityName('cHospital')) and (not EventFlowSystemActor.PercentChoice(80)):
+		EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cHospital')
+		# <20:2:cd06>Relax! I'm basically a doctor, so I'll get you all patched up real quick!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:203', false)
+		run KKFes_Chk()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow HeadGear_Chk():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
-        System.EventFlags['cPlayerTemp:WHEREAREN_OperationFlag'] = 3
- 
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
+		System.EventFlags['cPlayerTemp:WHEREAREN_OperationFlag'] = 3
+
 flow Head_A1():
-    EventFlowSystemActor.SetItemToPocket(12975, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(12975, 1)
+
 flow Head_A2():
-    EventFlowSystemActor.SetItemToPocket(4452, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(4452, 1)
+
 flow Head_B1():
-    EventFlowSystemActor.SetItemToPocket(4677, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(4677, 1)
+
 flow Head_B2():
-    EventFlowSystemActor.SetItemToPocket(5324, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(5324, 1)
+
 flow Head_B3():
-    switch EventFlowSystemActor.RandomChoice5(5):
-        case 0:
-            EventFlowSystemActor.SetItemToPocket(14673, 1)
-        case 1:
-            EventFlowSystemActor.SetItemToPocket(14675, 1)
-        case 2:
-            EventFlowSystemActor.SetItemToPocket(14676, 1)
-        case 3:
-            EventFlowSystemActor.SetItemToPocket(12963, 1)
-        case 4:
-            EventFlowSystemActor.SetItemToPocket(14674, 1)
- 
+	switch EventFlowSystemActor.RandomChoice5(5):
+		case 0:
+			EventFlowSystemActor.SetItemToPocket(14673, 1)
+		case 1:
+			EventFlowSystemActor.SetItemToPocket(14675, 1)
+		case 2:
+			EventFlowSystemActor.SetItemToPocket(14676, 1)
+		case 3:
+			EventFlowSystemActor.SetItemToPocket(12963, 1)
+		case 4:
+			EventFlowSystemActor.SetItemToPocket(14674, 1)
+
 flow HospitalEvent():
-    MainNpc.TurnNeck(10, false)
-    MainNpc.TurnBody(10, 0.0)
-    if (MainNpc.NpcIsTalkedFromBehind()) and (MainNpc.NpcNowPosture() != 0):
-        # Can you move a little bit? I can't examinate you if you aren't standing in front of me.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:030', false)
-    else:
-        switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:HospitalReceptionFlag'):
-            case 0:
-                MainNpc.WherearenSetTagFacilityNpcName('cHospitalExamination', false, false, 0)
-                # RANDOM: <20:2:cd0e>How did you say you were fee… // <20:2:cd06>If I walk around looking lik… // <20:2:cd0e>"Be sure to drink lots of wa… // <20:2:cd06>I don't know a lotta medicin… // <20:2:cd06>Help! There's so many patien…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:201', true)
-            case 1:
-                # Your head hurts? I've had that too. It was like I had a stampede happening inside my brain box. What kind of hurt have you got?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:031', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        # You're dizzy? Yeah…I've been there. One time I spun around in circles for 13 hours, and…hoo boy.
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:041_01', false)
-                        run Baggage_Chk()
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            run Treatment_Demo()
-                            run Head_A1()
-                            # OK, you're all set! I put <item>eye gauze in your pockets. That'll fix things real good, probably!
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:051_01', false)
-                            run Sub_Event44()
-                        else:
-                            run Treatment_Demo()
-                            run Head_A2()
-                            # Alrighty, you're all set! I just put a <item>post-op patch in your pockets so you can wear it and feel all better!
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:051_02', false)
-                            run Sub_Event44()
-                    case 1:
-                        # Your head is pounding… Is it like a throbbing or thumping? Is it a steady-enough beat that I can play a funky bass guitar to it?
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:041_02', false)
-                        run Baggage_Chk()
-                        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                            case 0:
-                                run Treatment_Demo()
-                                run Head_B1()
-                                # I put a <item>bandage in your pockets! So that will probably make things all better! It's my best idea, anyway.
-                                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:052_01', false)
-                                run Sub_Event44()
-                            case 1:
-                                run Treatment_Demo()
-                                run Head_B2()
-                                # OK! I put a <item>mummy mask in your pockets. Use that, and you'll look cool and be healthy in no time!
-                                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:052_02', false)
-                                run Sub_Event44()
-                            case 2:
-                                run Treatment_Demo()
-                                run Head_B3()
-                                # OK, I put some <item>head bandages in your pockets to help out with, um, the head problem you got!
-                                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:052_03', false)
-                                run Sub_Event44()
-                    case 2:
-                        run Cancell()
-            case 2:
-                # You have a runny nose? Ugh. Nose gunk is so gross. I got some on my hand once, and… Sorry. This is about you, not me. What can you tell me about how …
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:032', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        # Hmm, I see… A drippy nose. Hmm… I'll need to consult some of my medical picture books.
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:042_01', false)
-                        run Baggage_Chk()
-                        run Treatment_Demo()
-                        run Nose_A1()
-                        # You're all set! I put a <item>nose tissue in your pockets. Use it when ya need to, and you'll get better real quick!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:053_01', false)
-                        run Sub_Event43()
-                    case 1:
-                        # Running like a faucet, eh? Pretty gross faucet, don'tcha think? Kinda weird, icky analogy, yeah?
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:042_02', false)
-                        run Baggage_Chk()
-                        run Treatment_Demo()
-                        run Nose_B1()
-                        # OK! I put <item>double nose tissues in your pockets. Just stuff 'em in nose holes, and you'll get better real quick!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:054_01', false)
-                        run Sub_Event43()
-                    case 2:
-                        run Cancell()
-            case 3:
-                # So your knee hurts? Can you tell me more about it?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:034', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        # It stings? That sounds painful! Don't tell me that! Gah! I can imagine it like it's my knee! Stupid empathy!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:044_01', false)
-                        run Baggage_Chk()
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            run Treatment_Demo()
-                            run Knee_A1()
-                            # I'm pretty sure the <item>knee bandages I just put in your pockets will fix you right up!
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:057_01', false)
-                            run Sub_Event41()
-                        else:
-                            run Sub_Event24()
-                    case 1:
-                        # A dull pain, huh? Yeah, knees ain't supposed to feel like that.
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:044_02', false)
-                        run Baggage_Chk()
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            run Sub_Event24()
-                        else:
-                            run Treatment_Demo()
-                            run Knee_B1()
-                            # OK! I put a <item>cast in your pockets! The reason a <item>cast works is your body is kinda like a potato chip… If you break it, just cover it in dip…
-                            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:058_01', false)
-                            run Sub_Event41()
-                    case 2:
-                        run Cancell()
- 
+	MainNpc.TurnNeck(10, false)
+	MainNpc.TurnBody(10, 0.0)
+	if (MainNpc.NpcIsTalkedFromBehind()) and (MainNpc.NpcNowPosture() != 0):
+		# Can you move a little bit? I can't examinate you if you aren't standing in front of me.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:030', false)
+	else:
+		switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:HospitalReceptionFlag'):
+			case 0:
+				MainNpc.WherearenSetTagFacilityNpcName('cHospitalExamination', false, false, 0)
+				# RANDOM: <20:2:cd0e>How did you say you were fee… // <20:2:cd06>If I walk around looking lik… // <20:2:cd0e>"Be sure to drink lots of wa… // <20:2:cd06>I don't know a lotta medicin… // <20:2:cd06>Help! There's so many patien…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:201', true)
+			case 1:
+				# Your head hurts? I've had that too. It was like I had a stampede happening inside my brain box. What kind of hurt have you got?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:031', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						# You're dizzy? Yeah…I've been there. One time I spun around in circles for 13 hours, and…hoo boy.
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:041_01', false)
+	run Baggage_Chk()
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+	run Treatment_Demo()
+		run Head_A1()
+							# OK, you're all set! I put <item>eye gauze in your pockets. That'll fix things real good, probably!
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:051_01', false)
+	  run Sub_Event44()
+						else:
+	run Treatment_Demo()
+		run Head_A2()
+							# Alrighty, you're all set! I just put a <item>post-op patch in your pockets so you can wear it and feel all better!
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:051_02', false)
+	  run Sub_Event44()
+					case 1:
+						# Your head is pounding… Is it like a throbbing or thumping? Is it a steady-enough beat that I can play a funky bass guitar to it?
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:041_02', false)
+	run Baggage_Chk()
+						switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+							case 0:
+	  run Treatment_Demo()
+		  run Head_B1()
+								# I put a <item>bandage in your pockets! So that will probably make things all better! It's my best idea, anyway.
+								MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:052_01', false)
+		run Sub_Event44()
+							case 1:
+	  run Treatment_Demo()
+		  run Head_B2()
+								# OK! I put a <item>mummy mask in your pockets. Use that, and you'll look cool and be healthy in no time!
+								MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:052_02', false)
+		run Sub_Event44()
+							case 2:
+	  run Treatment_Demo()
+		  run Head_B3()
+								# OK, I put some <item>head bandages in your pockets to help out with, um, the head problem you got!
+								MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:052_03', false)
+		run Sub_Event44()
+					case 2:
+						run Cancell()
+			case 2:
+				# You have a runny nose? Ugh. Nose gunk is so gross. I got some on my hand once, and… Sorry. This is about you, not me. What can you tell me about how …
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:032', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						# Hmm, I see… A drippy nose. Hmm… I'll need to consult some of my medical picture books.
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:042_01', false)
+	run Baggage_Chk()
+ run Treatment_Demo()
+						run Nose_A1()
+						# You're all set! I put a <item>nose tissue in your pockets. Use it when ya need to, and you'll get better real quick!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:053_01', false)
+	run Sub_Event43()
+					case 1:
+						# Running like a faucet, eh? Pretty gross faucet, don'tcha think? Kinda weird, icky analogy, yeah?
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:042_02', false)
+	run Baggage_Chk()
+ run Treatment_Demo()
+						run Nose_B1()
+						# OK! I put <item>double nose tissues in your pockets. Just stuff 'em in nose holes, and you'll get better real quick!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:054_01', false)
+	run Sub_Event43()
+					case 2:
+						run Cancell()
+			case 3:
+				# So your knee hurts? Can you tell me more about it?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:034', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						# It stings? That sounds painful! Don't tell me that! Gah! I can imagine it like it's my knee! Stupid empathy!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:044_01', false)
+	run Baggage_Chk()
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+	run Treatment_Demo()
+		run Knee_A1()
+							# I'm pretty sure the <item>knee bandages I just put in your pockets will fix you right up!
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:057_01', false)
+	  run Sub_Event41()
+						else:
+	  run Sub_Event24()
+					case 1:
+						# A dull pain, huh? Yeah, knees ain't supposed to feel like that.
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:044_02', false)
+	run Baggage_Chk()
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+	  run Sub_Event24()
+						else:
+	run Treatment_Demo()
+		run Knee_B1()
+							# OK! I put a <item>cast in your pockets! The reason a <item>cast works is your body is kinda like a potato chip… If you break it, just cover it in dip…
+							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:058_01', false)
+	  run Sub_Event41()
+					case 2:
+						run Cancell()
+
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeck(10, true)
-        # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Hmm, yes. My doctor brain says if we have a good time, the patients will feel better too! Let's go dance, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:103', true)
-            run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
-        else:
-            # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+		MainNpc.TurnNeck(10, true)
+		# RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
+		MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Hmm, yes. My doctor brain says if we have a good time, the patients will feel better too! Let's go dance, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:103', true)
+			run Demo_Common_Wherearen::ToKKFesDemoLive()
+		else:
+			# RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+			EventFlowSystemActor.ExitFlowchart()
+
 flow Knee_2():
-    EventFlowSystemActor.SetItemToPocket(3607, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(3607, 1)
+
 flow Knee_A1():
-    EventFlowSystemActor.SetItemToPocket(12966, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(12966, 1)
+
 flow Knee_B1():
-    switch EventFlowSystemActor.RandomChoice5(5):
-        case 0:
-            EventFlowSystemActor.SetItemToPocket(14669, 1)
-        case 1:
-            EventFlowSystemActor.SetItemToPocket(14671, 1)
-        case 2:
-            EventFlowSystemActor.SetItemToPocket(14672, 1)
-        case 3:
-            EventFlowSystemActor.SetItemToPocket(12960, 1)
-        case 4:
-            EventFlowSystemActor.SetItemToPocket(14670, 1)
- 
+	switch EventFlowSystemActor.RandomChoice5(5):
+		case 0:
+			EventFlowSystemActor.SetItemToPocket(14669, 1)
+		case 1:
+			EventFlowSystemActor.SetItemToPocket(14671, 1)
+		case 2:
+			EventFlowSystemActor.SetItemToPocket(14672, 1)
+		case 3:
+			EventFlowSystemActor.SetItemToPocket(12960, 1)
+		case 4:
+			EventFlowSystemActor.SetItemToPocket(14670, 1)
+
 flow Nose_A1():
-    EventFlowSystemActor.SetItemToPocket(12965, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(12965, 1)
+
 flow Nose_B1():
-    EventFlowSystemActor.SetItemToPocket(14247, 1)
- 
+	EventFlowSystemActor.SetItemToPocket(14247, 1)
+
 flow OnePiece_Chk():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 2:
-        System.EventFlags['cPlayerTemp:WHEREAREN_OperationFlag'] = 2
- 
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 2:
+		System.EventFlags['cPlayerTemp:WHEREAREN_OperationFlag'] = 2
+
 flow Root():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    if EventFlowSystemActor.IsImmendiatelyAfterWherearenDoctorEvent():
-        run FacilityName_Chk()
-        # RANDOM: <20:2:cd06>You'll be fine if you sleep … // <20:2:cd06>Have you tried not feeling l… // <20:2:cd06>Well, you seem fine… But sin…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:205', true)
-        run KKFes_Chk()
-    elif (System.EventFlags['cWherearenPlayer:DoctorEventStart']) and (not System.EventFlags['cWherearenPlayer:GetMedicalEquipToday']) and (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenOrderStatus() == 0):
-        run HospitalEvent()
-    else:
-        MainNpc.WherearenSetTagFacilityNpcName('cHospitalExamination', false, false, 0)
-        run FacilityName_Chk()
-        # RANDOM: <20:2:cd0e>Hmm…I see…OK… Of course… Huh… // <20:2:cd06>You'll be fine if you sleep … // <20:2:cd06>Have you tried not feeling l… // <20:2:cd0e>Well, you seem fine… But sin… // <20:2:cd0e>OK, it's medicine time! I go…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:202', true)
-        run KKFes_Chk()
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	if EventFlowSystemActor.IsImmendiatelyAfterWherearenDoctorEvent():
+		run FacilityName_Chk()
+		# RANDOM: <20:2:cd06>You'll be fine if you sleep … // <20:2:cd06>Have you tried not feeling l… // <20:2:cd06>Well, you seem fine… But sin…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:205', true)
+		run KKFes_Chk()
+	elif (System.EventFlags['cWherearenPlayer:DoctorEventStart']) and (not System.EventFlags['cWherearenPlayer:GetMedicalEquipToday']) and (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenOrderStatus() == 0):
+		run HospitalEvent()
+	else:
+		MainNpc.WherearenSetTagFacilityNpcName('cHospitalExamination', false, false, 0)
+		run FacilityName_Chk()
+		# RANDOM: <20:2:cd0e>Hmm…I see…OK… Of course… Huh… // <20:2:cd06>You'll be fine if you sleep … // <20:2:cd06>Have you tried not feeling l… // <20:2:cd0e>Well, you seem fine… But sin… // <20:2:cd0e>OK, it's medicine time! I go…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Hospital:202', true)
+		run KKFes_Chk()
+
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeck(10, false)
-        run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.WherearenOrderStatus() == 1:
+		MainNpc.TurnNeck(10, false)
+		run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow StandSleep():
-    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
- 
+	run NNPC_RestaurantCustomer::`StandSleep_2.1`()
+
 local flow Sub_Event24():
-    run Treatment_Demo()
-    run Knee_2()
-    # I just slipped a <item>mummy outfit in your pockets! Now you can stomp around goin' "Raar, I'm a mummy!" And it'll make ya feel better too!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:056_02', false)
-    run Sub_Event41()
- 
+	run Treatment_Demo()
+	run Knee_2()
+	# I just slipped a <item>mummy outfit in your pockets! Now you can stomp around goin' "Raar, I'm a mummy!" And it'll make ya feel better too!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:056_02', false)
+	run Sub_Event41()
+
 local flow Sub_Event41():
-    # RANDOM: You got nothin' to worry about now that… // You'll be OK as long as ya use what I g… // You're all healthy now! You can trust m…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:060', false)
-    System.EventFlags['cWherearenPlayer:GetMedicalEquipToday'] = true
-    System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 0
- 
+	# RANDOM: You got nothin' to worry about now that… // You'll be OK as long as ya use what I g… // You're all healthy now! You can trust m…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:060', false)
+	System.EventFlags['cWherearenPlayer:GetMedicalEquipToday'] = true
+	System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 0
+
 local flow Sub_Event43():
-    # RANDOM: You got nothin' to worry about now that… // You'll be OK as long as ya use what I g… // You're all healthy now! You can trust m…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:060', false)
-    System.EventFlags['cWherearenPlayer:GetMedicalEquipToday'] = true
-    System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 0
- 
+	# RANDOM: You got nothin' to worry about now that… // You'll be OK as long as ya use what I g… // You're all healthy now! You can trust m…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:060', false)
+	System.EventFlags['cWherearenPlayer:GetMedicalEquipToday'] = true
+	System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 0
+
 local flow Sub_Event44():
-    # RANDOM: You got nothin' to worry about now that… // You'll be OK as long as ya use what I g… // You're all healthy now! You can trust m…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:060', false)
-    System.EventFlags['cWherearenPlayer:GetMedicalEquipToday'] = true
-    System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 0
- 
+	# RANDOM: You got nothin' to worry about now that… // You'll be OK as long as ya use what I g… // You're all healthy now! You can trust m…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:060', false)
+	System.EventFlags['cWherearenPlayer:GetMedicalEquipToday'] = true
+	System.EventFlags['cWherearenPlayer:HospitalReceptionFlag'] = 0
+
 flow Treatment_Demo():
-    # Alright, let's start treatment. Hold real still now…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:047', true)
-    run Treatment_Fade()
- 
+	# Alright, let's start treatment. Hold real still now…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_FacilityEvent_Hospital:047', true)
+	run Treatment_Fade()
+
 flow Treatment_Fade():
-    run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-    MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(40)
-    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
- 
+	run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(40)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)

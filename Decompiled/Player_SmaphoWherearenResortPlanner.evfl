@@ -1,35 +1,34 @@
 flow Root():
-    if not EventFlowSystemActor.IsMyVillage():
-        # The Happy Home Network app cannot be used while I'm visiting other people's islands.
-        MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:416', false)
-    elif EventFlowSystemActor.NetIsConnected():
-        if EventFlowSystemActor.NetHasVisitor():
-            # The Happy Home Network app cannot be used while company is visiting the island.
-            MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:414', false)
-        elif EventFlowSystemActor.IsVillageGateOpened():
-            # The Happy Home Network app cannot be used while the airport gate is open.
-            MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:413', false)
-        else:
-            # The Happy Home Network app cannot be used while network communications are active. I'll need to shut them off at the airport first.
-            MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:415', false)
-    elif EventFlowSystemActor.IsSharePlay(0):
-        # The Happy Home Network app cannot be used during Party Play.
-        MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:417', false)
-    elif (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')):
-        switch EventFlowSystemActor.UICheckSceneChangable(2):
-            case 0:
-                run System_WherearenResortPlanner::Setting_PlannerApprun System_WherearenResortPlanner::Setting_PlannerApp()
-                EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerApp', 'cWherearenPlannerGo', 'cWherearenPlannerGo', 'cBlack', 1.0, 1.0)
-            case 1:
-                # The Happy Home Network app cannot be used while network communications are active. I'll need to shut them off at the airport first.
-                MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:415', false)
-            case 2:
-                # The Happy Home Network app cannot be used during Party Play.
-                MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:417', false)
-            case 3:
-                # Everyone's celebrating your birthday. Maybe you should do this later...
-                MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:345', false)
-    else:
-        # You can't use this app while you're on a tour. Try again once you get back to your island.
-        MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:346', false)
- 
+	if not EventFlowSystemActor.IsMyVillage():
+		# The Happy Home Network app cannot be used while I'm visiting other people's islands.
+		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:416', false)
+	elif EventFlowSystemActor.NetIsConnected():
+		if EventFlowSystemActor.NetHasVisitor():
+			# The Happy Home Network app cannot be used while company is visiting the island.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:414', false)
+		elif EventFlowSystemActor.IsVillageGateOpened():
+			# The Happy Home Network app cannot be used while the airport gate is open.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:413', false)
+		else:
+			# The Happy Home Network app cannot be used while network communications are active. I'll need to shut them off at the airport first.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:415', false)
+	elif EventFlowSystemActor.IsSharePlay(0):
+		# The Happy Home Network app cannot be used during Party Play.
+		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:417', false)
+	elif (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')):
+		switch EventFlowSystemActor.UICheckSceneChangable(2):
+			case 0:
+				run System_WherearenResortPlanner::Setting_PlannerApp()
+				EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerApp', 'cWherearenPlannerGo', 'cWherearenPlannerGo', 'cBlack', 1.0, 1.0)
+			case 1:
+				# The Happy Home Network app cannot be used while network communications are active. I'll need to shut them off at the airport first.
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:415', false)
+			case 2:
+				# The Happy Home Network app cannot be used during Party Play.
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:417', false)
+			case 3:
+				# Everyone's celebrating your birthday. Maybe you should do this later...
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:345', false)
+	else:
+		# You can't use this app while you're on a tour. Try again once you get back to your island.
+		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:346', false)

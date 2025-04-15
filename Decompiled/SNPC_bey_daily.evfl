@@ -1,551 +1,550 @@
 flow BeyDaily_TalkAfter_ObjEntry():
-    # Just an FYI, genius takes time. My partner's on it, though, so as soon as it's done I'll drop you a line.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:206', false)
- 
+	# Just an FYI, genius takes time. My partner's on it, though, so as soon as it's done I'll drop you a line.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:206', false)
+
 flow Bey_ObjEntryCount():
-    if not System.EventFlags['cPlayer:BeyDaily_ObjEntry1']:
-        System.EventFlags['cPlayer:BeyDaily_ObjEntry1'] = true
-    elif not System.EventFlags['cPlayer:BeyDaily_ObjEntry2']:
-        System.EventFlags['cPlayer:BeyDaily_ObjEntry2'] = true
-    elif not System.EventFlags['cPlayer:BeyDaily_ObjEntry3']:
-        System.EventFlags['cPlayer:BeyDaily_ObjEntry3'] = true
- 
+	if not System.EventFlags['cPlayer:BeyDaily_ObjEntry1']:
+		System.EventFlags['cPlayer:BeyDaily_ObjEntry1'] = true
+	elif not System.EventFlags['cPlayer:BeyDaily_ObjEntry2']:
+		System.EventFlags['cPlayer:BeyDaily_ObjEntry2'] = true
+	elif not System.EventFlags['cPlayer:BeyDaily_ObjEntry3']:
+		System.EventFlags['cPlayer:BeyDaily_ObjEntry3'] = true
+
 flow ExplainQ_BeforeQ():
-    # I wanna see those fishing skills, and I just KNOW my viewers do too. Here's how it'll go. I'll tell you what fish to catch, and you get fishin'. But …
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:015', false)
-    switch MainNpc.BeyDailyFishSize():
-        case 0:
-            MainNpc.SetItemName(29, 3, 0)
-            # Today my viewers want you to reel in <90:0:0000> big-time fish in a row. So, like, <125:3:cd00>-ish in size or so.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:016', false)
-        case 1, 2:
-            MainNpc.SetItemName(29, 3, 0)
-            # Today I wanna showcase a small fry, so…<125:3:cd00>-ish in size. Think you can catch <90:0:0000> in a row?
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:017', false)
-        case 3:
-            # Gonna take it easy today. Just catch <90:0:0004> fish in a row. Any kind is good. Nyuk nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:018', false)
-    # If you wow my viewers, I'll wow YOU with some serious Bells! I'll buy those fish off you like THAT.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:019', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run Quest_Start()
-        case 1:
-            run ExplainQ_BeforeQ()
-        case 2:
-            run Talk_Always()
- 
+	# I wanna see those fishing skills, and I just KNOW my viewers do too. Here's how it'll go. I'll tell you what fish to catch, and you get fishin'. But …
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:015', false)
+	switch MainNpc.BeyDailyFishSize():
+		case 0:
+			MainNpc.SetItemName(29, 3, 0)
+			# Today my viewers want you to reel in <90:0:0000> big-time fish in a row. So, like, <125:3:cd00>-ish in size or so.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:016', false)
+		case 1, 2:
+			MainNpc.SetItemName(29, 3, 0)
+			# Today I wanna showcase a small fry, so…<125:3:cd00>-ish in size. Think you can catch <90:0:0000> in a row?
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:017', false)
+		case 3:
+			# Gonna take it easy today. Just catch <90:0:0004> fish in a row. Any kind is good. Nyuk nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:018', false)
+	# If you wow my viewers, I'll wow YOU with some serious Bells! I'll buy those fish off you like THAT.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:019', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run Quest_Start()
+		case 1:
+			run ExplainQ_BeforeQ()
+		case 2:
+			run Talk_Always()
+
 flow Explain_ReqOBJ():
-    run Event81()
- 
+	run Event81()
+
 flow Obj_Entry():
-    if System.EventFlags['cPlayer:BeyDaily_ReqObj']:
-        MainNpc.NpcDecideOrderBeforeItem('cBeyFish')
-        MainNpc.SetItemName(28, 0, 3)
-        # Yup! Yours is comin'. [A|An] <125:0:0003>, right? Yeah, I saw it being worked on. It's still kinda rough, but it's gonna be SO SLICK. Just hold tight…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:202', false)
-    elif System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']:
-        # Oh! You wanna get a collectible goin'? Well, alright!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:210', false)
-        run Sub_grp_Event131()
-    else:
-        System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First'] = true
-        # Ha! Knew that'd hook you. Yeah, you put in an order for a collectible, I'll get you a SUPER reelistic model of your favorite fish. My partner's a tot…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:200', false)
+	if System.EventFlags['cPlayer:BeyDaily_ReqObj']:
+		MainNpc.NpcDecideOrderBeforeItem('cBeyFish')
+		MainNpc.SetItemName(28, 0, 3)
+		# Yup! Yours is comin'. [A|An] <125:0:0003>, right? Yeah, I saw it being worked on. It's still kinda rough, but it's gonna be SO SLICK. Just hold tight…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:202', false)
+	elif System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']:
+		# Oh! You wanna get a collectible goin'? Well, alright!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:210', false)
+		run Sub_grp_Event131()
+	else:
+		System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First'] = true
+		# Ha! Knew that'd hook you. Yeah, you put in an order for a collectible, I'll get you a SUPER reelistic model of your favorite fish. My partner's a tot…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:200', false)
 entrypoint Event81:
-        # Just bring me <90:0:0003> of the same kind of fish and I'll get it goin' for you, all for the low, low price of NOTHIN'!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:201', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                run Sub_grp_Event131()
-            case 1:
-                # Oh, totally! Collectibles are hot. I can get you a SUPER reelistic, collectible model of any fish you want, easy. I just cast a line out to my partne…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:208', false)
-                run Explain_ReqOBJ()
-            case 2:
-                # All good, all good. Just drop me a line if you change your mind. Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:207', false)
- 
+		# Just bring me <90:0:0003> of the same kind of fish and I'll get it goin' for you, all for the low, low price of NOTHIN'!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:201', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run Sub_grp_Event131()
+			case 1:
+				# Oh, totally! Collectibles are hot. I can get you a SUPER reelistic, collectible model of any fish you want, easy. I just cast a line out to my partne…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:208', false)
+				run Explain_ReqOBJ()
+			case 2:
+				# All good, all good. Just drop me a line if you change your mind. Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:207', false)
+
 flow Quest_Entry():
-    if System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
-        run Quest_Start()
-    else:
-        System.EventFlags['cPlayer:BeyDaily_ExolainQ_First'] = true
-        run ExplainQ_BeforeQ()
- 
+	if System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
+		run Quest_Start()
+	else:
+		System.EventFlags['cPlayer:BeyDaily_ExolainQ_First'] = true
+		run ExplainQ_BeforeQ()
+
 flow Quest_Start():
-    System.EventFlags['cPlayer:BeyDaily_QuestStart'] = true
-    # You got it, chum! Time to dive in and school this challenge! Nyuk!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:010', false)
-    switch MainNpc.BeyDailyFishSize():
-        case 0:
-            MainNpc.SetItemName(29, 3, 0)
-            # Alright, today I want you to catch <90:0:0000> big-time fish in a row, all about the size of [a|an]<125:3:cd00>. And critters like <item>soft-shelled…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:011', false)
-            # And don't go catchin' other-sized fish or my subscribers will get mad and there goes your streak. Oh, and don't let 'em slip off your hook either. Th…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:014', false)
-        case 1, 2:
-            MainNpc.SetItemName(29, 3, 0)
-            # Today I wanna see those small fry catchin' skills! Reel in <90:0:0000> in a row, all <125:3:cd00>-ish or so in size. As long as it's small, it'll cou…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:012', false)
-            # And don't go catchin' other-sized fish or my subscribers will get mad and there goes your streak. Oh, and don't let 'em slip off your hook either. Th…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:014', false)
-        case 3:
-            # Today is freestyle day, so show us what you got. Just catch whatever's out there. But do it <90:0:0004> times in a row!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:013', false)
-            # Oh, and if any fish slip off your hook, that'll break your streak. For reel. Now go catch <90:0:0004> fish in a row! Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:049', false)
- 
+	System.EventFlags['cPlayer:BeyDaily_QuestStart'] = true
+	# You got it, chum! Time to dive in and school this challenge! Nyuk!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:010', false)
+	switch MainNpc.BeyDailyFishSize():
+		case 0:
+			MainNpc.SetItemName(29, 3, 0)
+			# Alright, today I want you to catch <90:0:0000> big-time fish in a row, all about the size of [a|an]<125:3:cd00>. And critters like <item>soft-shelled…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:011', false)
+			# And don't go catchin' other-sized fish or my subscribers will get mad and there goes your streak. Oh, and don't let 'em slip off your hook either. Th…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:014', false)
+		case 1, 2:
+			MainNpc.SetItemName(29, 3, 0)
+			# Today I wanna see those small fry catchin' skills! Reel in <90:0:0000> in a row, all <125:3:cd00>-ish or so in size. As long as it's small, it'll cou…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:012', false)
+			# And don't go catchin' other-sized fish or my subscribers will get mad and there goes your streak. Oh, and don't let 'em slip off your hook either. Th…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:014', false)
+		case 3:
+			# Today is freestyle day, so show us what you got. Just catch whatever's out there. But do it <90:0:0004> times in a row!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:013', false)
+			# Oh, and if any fish slip off your hook, that'll break your streak. For reel. Now go catch <90:0:0004> fish in a row! Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:049', false)
+
 flow Root():
-    run Tag_daily_SET_HOUR()
-    run Tag_daily_Num()
-    if not EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayerVisit:DC_BeyDaily_TalkFirst']:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # I have this feelin'…like someone's gonna reel in the big one, and then I'll get to talk about it on my show! I get nervous when someone wants to sell…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:253', false)
-                case 1:
-                    # Yo! 'Sup? You fishin' out here? Nyuk! Pro tip! Make friends with a local and ask 'em about the best fishin' spots. You never know what's out there! I…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:252', false)
-                case 2:
-                    # It's kinda cool how every island's got its own types of fish. And also kinda crazy. It can be SO MUCH WORK to show off a certain fish on my stream th…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:251', false)
-        else:
-            System.EventFlags['cPlayerVisit:DC_BeyDaily_TalkFirst'] = true
-            # What is up, fishionista! C.J. here, comin' at you live from, uh…here. I'm tourin' the islands looking for fresh faces and fresher fish to show off on…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:250', false)
-    elif not System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
-        System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
-        # What up, fishionista! C.J. here, comin' at you live from, uh… r-right in front of you! Nyuk! I'm tourin' the islands looking for fresh faces and fres…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:000', false)
-        run Sub_Event19()
-    elif System.EventFlags['cPlayer:BeyDaily_TalkFirstDay']:
-        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-            switch EventFlowSystemActor.EnvWeather():
-                case `Clear0`, `Clear1`, `Clear2`, `Clear7`:
-                    # What up, fishionista! Picked a name for your anglersona yet? Nyuk!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:020', false)
-                case `Rain3`, `Rain4`:
-                    # SOME folks see this weather and say, "Can't fish, it's raining." I look at it and say, "Fish don't know I'm wet."
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:022', false)
-                case `Snow5`, `Snow6`:
-                    # SOME folks see this weather and say, "Can't fish, it's snowing." I look at it and say, "Fish can't throw snowballs."
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:023', false)
-        else:
-            # What up, fishionista! Picked a name for your anglersona yet? Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:020', false)
-        if System.EventFlags['cPlayer:BeyDaily_QuestClear']:
-            if (System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']) and (not System.EventFlags['cPlayer:BeyDaily_ReqObj']):
-                # Hey, if you got fish to sell, I'm your hookup! I got Bells jinglin' a hole in my pocket.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:103', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        run Sub_grp_Event51()
-                    case 1:
-                        run Obj_Entry()
-                    case 2:
-                        run Talk_Always()
-            else:
-                # Hey, if you got fish to sell, I'm your hookup! I got Bells jinglin' a hole in my pocket.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:100', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        run Sub_grp_Event51()
-                    case 1:
-                        run Obj_Entry()
-                    case 2:
-                        run Talk_Always()
-        elif not System.EventFlags['cPlayer:BeyDaily_QuestStart']:
-            if System.EventFlags['cPlayer:BeyDaily_ReqObj']:
-                if System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
-                    # I'm gonna put your name on a seasports challenge highlight reel and get you PAID! Nyuk nyuk! Anytime you wanna step up, just, uh…y-yeah, just step up.
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:024', false)
-                    switch EventFlowSystemActor.GeneralTalkChoice3():
-                        case 0:
-                            run Quest_Entry()
-                        case 1:
-                            run Obj_Entry()
-                        case 2:
-                            run Talk_Always()
-                else:
-                    # I'm gonna put your name on a seasports challenge highlight reel and get you PAID! Nyuk nyuk! Anytime you wanna step up, just, uh…y-yeah, just step up.
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:021', false)
-                    switch EventFlowSystemActor.GeneralTalkChoice3():
-                        case 0:
-                            run Quest_Entry()
-                        case 1:
-                            run Obj_Entry()
-                        case 2:
-                            run Talk_Always()
-            else:
-                run Sub_grp_Event192()
-        elif MainNpc.BeyDailyFishSize() in (0, 1, 2):
-            if System.EventFlags['cPlayer:BeyDaily_QuestCount'] < 3:
-                run Sub_grp_Event204()
-            else:
-                run Sub_Event156()
-        else:
-            if System.EventFlags['cPlayer:BeyDaily_QuestCount'] < 5:
-                run Sub_grp_Event204()
-            else:
-                run Sub_Event156()
-    else:
-        # C.J. here, comin' at you, um… Well, it's more like standin' by you, I guess. Nyuk, nyuk! Anywave, ever since I started doing my seasports challenges,…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:001', false)
-        run Sub_Event19()
- 
+	run Tag_daily_SET_HOUR()
+	run Tag_daily_Num()
+	if not EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayerVisit:DC_BeyDaily_TalkFirst']:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# I have this feelin'…like someone's gonna reel in the big one, and then I'll get to talk about it on my show! I get nervous when someone wants to sell…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:253', false)
+				case 1:
+					# Yo! 'Sup? You fishin' out here? Nyuk! Pro tip! Make friends with a local and ask 'em about the best fishin' spots. You never know what's out there! I…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:252', false)
+				case 2:
+					# It's kinda cool how every island's got its own types of fish. And also kinda crazy. It can be SO MUCH WORK to show off a certain fish on my stream th…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:251', false)
+		else:
+			System.EventFlags['cPlayerVisit:DC_BeyDaily_TalkFirst'] = true
+			# What is up, fishionista! C.J. here, comin' at you live from, uh…here. I'm tourin' the islands looking for fresh faces and fresher fish to show off on…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:250', false)
+	elif not System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
+		System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
+		# What up, fishionista! C.J. here, comin' at you live from, uh… r-right in front of you! Nyuk! I'm tourin' the islands looking for fresh faces and fres…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:000', false)
+		run Sub_Event19()
+	elif System.EventFlags['cPlayer:BeyDaily_TalkFirstDay']:
+		if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			switch EventFlowSystemActor.EnvWeather():
+				case `Clear0`, `Clear1`, `Clear2`, `Clear7`:
+					# What up, fishionista! Picked a name for your anglersona yet? Nyuk!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:020', false)
+				case `Rain3`, `Rain4`:
+					# SOME folks see this weather and say, "Can't fish, it's raining." I look at it and say, "Fish don't know I'm wet."
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:022', false)
+				case `Snow5`, `Snow6`:
+					# SOME folks see this weather and say, "Can't fish, it's snowing." I look at it and say, "Fish can't throw snowballs."
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:023', false)
+		else:
+			# What up, fishionista! Picked a name for your anglersona yet? Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:020', false)
+		if System.EventFlags['cPlayer:BeyDaily_QuestClear']:
+			if (System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']) and (not System.EventFlags['cPlayer:BeyDaily_ReqObj']):
+				# Hey, if you got fish to sell, I'm your hookup! I got Bells jinglin' a hole in my pocket.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:103', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+ run Sub_grp_Event51()
+					case 1:
+						run Obj_Entry()
+					case 2:
+	run Talk_Always()
+			else:
+				# Hey, if you got fish to sell, I'm your hookup! I got Bells jinglin' a hole in my pocket.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:100', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+ run Sub_grp_Event51()
+					case 1:
+						run Obj_Entry()
+					case 2:
+	run Talk_Always()
+		elif not System.EventFlags['cPlayer:BeyDaily_QuestStart']:
+			if System.EventFlags['cPlayer:BeyDaily_ReqObj']:
+				if System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
+					# I'm gonna put your name on a seasports challenge highlight reel and get you PAID! Nyuk nyuk! Anytime you wanna step up, just, uh…y-yeah, just step up.
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:024', false)
+					switch EventFlowSystemActor.GeneralTalkChoice3():
+						case 0:
+	  run Quest_Entry()
+						case 1:
+	   run Obj_Entry()
+						case 2:
+	  run Talk_Always()
+				else:
+					# I'm gonna put your name on a seasports challenge highlight reel and get you PAID! Nyuk nyuk! Anytime you wanna step up, just, uh…y-yeah, just step up.
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:021', false)
+					switch EventFlowSystemActor.GeneralTalkChoice3():
+						case 0:
+	  run Quest_Entry()
+						case 1:
+	   run Obj_Entry()
+						case 2:
+	  run Talk_Always()
+			else:
+				run Sub_grp_Event192()
+		elif MainNpc.BeyDailyFishSize() in (0, 1, 2):
+			if System.EventFlags['cPlayer:BeyDaily_QuestCount'] < 3:
+				run Sub_grp_Event204()
+			else:
+				run Sub_Event156()
+		else:
+			if System.EventFlags['cPlayer:BeyDaily_QuestCount'] < 5:
+				run Sub_grp_Event204()
+			else:
+				run Sub_Event156()
+	else:
+		# C.J. here, comin' at you, um… Well, it's more like standin' by you, I guess. Nyuk, nyuk! Anywave, ever since I started doing my seasports challenges,…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:001', false)
+		run Sub_Event19()
+
 flow SellFish_Cancel():
-    if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
-        # Oh, OK. I'll be treadin' water here till <90:37:cd00> <110:21:cd00> or so tomorrow, so hit me up if you change your mind. Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:057', false)
-    else:
-        # Oh, OK. I'll be treadin' water here till <90:37:cd00> <110:21:cd00> or so, so hit me up if you change your mind. Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:058', false)
- 
+	if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
+		# Oh, OK. I'll be treadin' water here till <90:37:cd00> <110:21:cd00> or so tomorrow, so hit me up if you change your mind. Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:057', false)
+	else:
+		# Oh, OK. I'll be treadin' water here till <90:37:cd00> <110:21:cd00> or so, so hit me up if you change your mind. Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:058', false)
+
 flow SellFish_Cancel_Talk():
-    # Oh! Changed your mind? That's cool.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:153', false)
- 
+	# Oh! Changed your mind? That's cool.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:153', false)
+
 flow SelllFish_daily(SellTotal: int = 0):
-    EventFlowSystemActor.UIItemSelectWindowHandling('cFishSell', 65534, 'Fish', '', 'cItemSelect', false)
-    if EventFlowSystemActor.UIResultMenuDecide():
-        MainNpc.SetDeliveryItem(4, false)
-        MainNpc.NpcDelivery(0, 'Keep')
-        MainNpc.ShopSellCalc(SellTotal, 1.5, true, false)
-        EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 2, SellTotal, '""')
-        if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
-            EventFlowSystemActor.UIMoneyAppear()
-            # Oh, you got a whole school for me? All together that'll be… <90:26:0002>. Deal?
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:151', true)
-            run Sub_Event43(SellTotal=SellTotal)
-        else:
-            if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
-                EventFlowSystemActor.SetTagFromUIResult('cItemName', 1)
-                EventFlowSystemActor.UIMoneyAppear()
-                # [A|An]<125:0:0001>! Reel nice! I'll pay…<90:26:0002> for your <125:0:0001>. Sound good?
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:150', true)
-                run Sub_Event43(SellTotal=SellTotal)
-            else:
-                run Sub_Event220(SellTotal=SellTotal)
-    else:
-        run SellFish_Cancel_Talk()
-        run SellFish_Cancel()
- 
+	EventFlowSystemActor.UIItemSelectWindowHandling('cFishSell', 65534, 'Fish', '', 'cItemSelect', false)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		MainNpc.SetDeliveryItem(4, false)
+		MainNpc.NpcDelivery(0, 'Keep')
+		MainNpc.ShopSellCalc(SellTotal, 1.5, true, false)
+		EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 2, SellTotal, '""')
+		if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
+			EventFlowSystemActor.UIMoneyAppear()
+			# Oh, you got a whole school for me? All together that'll be… <90:26:0002>. Deal?
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:151', true)
+			run Sub_Event43(SellTotal=SellTotal)
+		else:
+			if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
+				EventFlowSystemActor.SetTagFromUIResult('cItemName', 1)
+				EventFlowSystemActor.UIMoneyAppear()
+				# [A|An]<125:0:0001>! Reel nice! I'll pay…<90:26:0002> for your <125:0:0001>. Sound good?
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:150', true)
+				run Sub_Event43(SellTotal=SellTotal)
+			else:
+				run Sub_Event220(SellTotal=SellTotal)
+	else:
+		run SellFish_Cancel_Talk()
+		run SellFish_Cancel()
+
 local flow Sub_Event11():
-    MainNpc.SmartPhone(5)
-    EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:BeyDaily_QuestCount')
-    if System.EventFlags['cPlayer:BeyDaily_QuestCount'] >= 2:
-        switch MainNpc.BeyDailyFishSize():
-            case 0:
-                # …Look at you, flyfisher! You've caught <90:0:0001> big-time fish in a row!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:036', false)
-                run Sub_Event13()
-            case 1, 2:
-                # …Nice! Everyone's gonna love how you reeled in that last small fry. Oh, and you're up to <90:0:0001> in a row.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:037', false)
-                run Sub_Event13()
-            case 3:
-                # …Look at you, flyfisher! You've caught <90:0:0001> fish in a row! You are CRUISIN' through my seasports challenge. Remember, your target is to net <9…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:038', false)
-                run Sub_Event178()
-    elif System.EventFlags['cPlayer:BeyDaily_QuestCount'] < 1:
-        switch MainNpc.BeyDailyFishSize():
-            case 0:
-                # Oh! Uh, it looks like you haven't caught any big-time fish yet? Might wanna get on that.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:044', false)
-                run Sub_Event93()
-            case 1, 2:
-                # Oh! Uh, doesn't look like you've caught a single small fry yet. You should get on that.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:045', false)
-                run Sub_Event93()
-            case 3:
-                # Oh! Uh, it looks like you haven't caught any fish yet? Feel free to dive in whenever.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:046', false)
-                run Sub_Event178()
-    else:
-        switch MainNpc.BeyDailyFishSize():
-            case 0:
-                # Oh, nice! Looks like you've caught <90:0:0001> big-time fish already.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:040', false)
-                run Sub_Event49()
-            case 1, 2:
-                # Oh, nice! Looks like you've caught <90:0:0001> small fry already.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:041', false)
-                run Sub_Event49()
-            case 3:
-                # Oh, nice! Looks like you've caught <90:0:0001> fish already.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:042', false)
-                run Sub_Event178()
- 
+	MainNpc.SmartPhone(5)
+	EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:BeyDaily_QuestCount')
+	if System.EventFlags['cPlayer:BeyDaily_QuestCount'] >= 2:
+		switch MainNpc.BeyDailyFishSize():
+			case 0:
+				# …Look at you, flyfisher! You've caught <90:0:0001> big-time fish in a row!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:036', false)
+				run Sub_Event13()
+			case 1, 2:
+				# …Nice! Everyone's gonna love how you reeled in that last small fry. Oh, and you're up to <90:0:0001> in a row.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:037', false)
+				run Sub_Event13()
+			case 3:
+				# …Look at you, flyfisher! You've caught <90:0:0001> fish in a row! You are CRUISIN' through my seasports challenge. Remember, your target is to net <9…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:038', false)
+				run Sub_Event178()
+	elif System.EventFlags['cPlayer:BeyDaily_QuestCount'] < 1:
+		switch MainNpc.BeyDailyFishSize():
+			case 0:
+				# Oh! Uh, it looks like you haven't caught any big-time fish yet? Might wanna get on that.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:044', false)
+				run Sub_Event93()
+			case 1, 2:
+				# Oh! Uh, doesn't look like you've caught a single small fry yet. You should get on that.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:045', false)
+				run Sub_Event93()
+			case 3:
+				# Oh! Uh, it looks like you haven't caught any fish yet? Feel free to dive in whenever.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:046', false)
+				run Sub_Event178()
+	else:
+		switch MainNpc.BeyDailyFishSize():
+			case 0:
+				# Oh, nice! Looks like you've caught <90:0:0001> big-time fish already.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:040', false)
+				run Sub_Event49()
+			case 1, 2:
+				# Oh, nice! Looks like you've caught <90:0:0001> small fry already.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:041', false)
+				run Sub_Event49()
+			case 3:
+				# Oh, nice! Looks like you've caught <90:0:0001> fish already.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:042', false)
+				run Sub_Event178()
+
 local flow Sub_Event13():
-    # Yeah, you're CRUISIN' through my seasports challenge. Remember, your target is to net <90:0:0000> in a row.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:039', false)
-    run Sub_Event93()
- 
+	# Yeah, you're CRUISIN' through my seasports challenge. Remember, your target is to net <90:0:0000> in a row.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:039', false)
+	run Sub_Event93()
+
 local flow Sub_Event153():
-    # I…thought I went over that. Maybe my stream dropped out? Alright, no big deal! Here goes…again. My seasports challenges help me show who's got the pa…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:031', false)
-    MainNpc.SetItemName(29, 3, 0)
-    switch MainNpc.BeyDailyFishSize():
-        case 0:
-            # Today my viewers want you to reel in <90:0:0000> big-time fish in a row. That's, like, <125:3:cd00>-ish in size or so. And critters like <item>soft-s…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:032', false)
-        case 1, 2:
-            # Today I'm doin' a small fry showcase, so…<125:3:cd00>-ish in size. Can you catch me <90:0:0000> in a row? As long as it's small, it'll count, so if y…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:033', false)
-        case 3:
-            # Today we're takin' it easy breezy. Just catch whatever's in the water, but do it <90:0:0004> times in a row. Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:034', false)
-    MainNpc.SmartPhone(0)
-    MainNpc.SmartPhone(4)
-    # Now let's see how you're doin'…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:035', false)
-    run Sub_Event11()
- 
+	# I…thought I went over that. Maybe my stream dropped out? Alright, no big deal! Here goes…again. My seasports challenges help me show who's got the pa…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:031', false)
+	MainNpc.SetItemName(29, 3, 0)
+	switch MainNpc.BeyDailyFishSize():
+		case 0:
+			# Today my viewers want you to reel in <90:0:0000> big-time fish in a row. That's, like, <125:3:cd00>-ish in size or so. And critters like <item>soft-s…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:032', false)
+		case 1, 2:
+			# Today I'm doin' a small fry showcase, so…<125:3:cd00>-ish in size. Can you catch me <90:0:0000> in a row? As long as it's small, it'll count, so if y…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:033', false)
+		case 3:
+			# Today we're takin' it easy breezy. Just catch whatever's in the water, but do it <90:0:0004> times in a row. Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:034', false)
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+	# Now let's see how you're doin'…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:035', false)
+	run Sub_Event11()
+
 local flow Sub_Event156():
-    System.EventFlags['cPlayer:BeyDaily_QuestClear'] = true
-    run TalkFirst_ClearQ()
- 
+	System.EventFlags['cPlayer:BeyDaily_QuestClear'] = true
+	run TalkFirst_ClearQ()
+
 local flow Sub_Event178():
-    MainNpc.SmartPhone(1)
-    # Oh, and if any fish slip off your hook, that'll break your streak. For reel. Now go catch <90:0:0004> fish in a row! Nyuk!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:049', false)
- 
+	MainNpc.SmartPhone(1)
+	# Oh, and if any fish slip off your hook, that'll break your streak. For reel. Now go catch <90:0:0004> fish in a row! Nyuk!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:049', false)
+
 local flow Sub_Event19():
-    System.EventFlags['cPlayer:BeyDaily_TalkFirstDay'] = true
-    run Sub_grp_Event192()
- 
+	System.EventFlags['cPlayer:BeyDaily_TalkFirstDay'] = true
+	run Sub_grp_Event192()
+
 local flow Sub_Event220(SellTotal: int):
-    run SellFish_Cancel_Talk()
-    MainNpc.NpcDelivery(10, 'Default')
-    run SellFish_Cancel()
- 
+	run SellFish_Cancel_Talk()
+	MainNpc.NpcDelivery(10, 'Default')
+	run SellFish_Cancel()
+
 local flow Sub_Event43(SellTotal: int):
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.NpcDelivery(7, 'Default')
-        MainNpc.ShopSellDone(1.5, false)
-        EventFlowSystemActor.UIMoneyDisappear()
-        if (EventFlowSystemActor.BeyWeekEndEvent() in (0, 1)) and (not System.EventFlags['cPlayer:BeyDaily_AnnounceEvent']):
-            System.EventFlags['cPlayer:BeyDaily_AnnounceEvent'] = true
-            # Fintastic! Keepin' my followers hooked is SO MUCH WORK. So, thanks for the help. Oh yeah! I'm anchorin' a special event soon—the Fishing Tourney. You…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:154', true)
-        else:
-            # SPLASH! Make my viewers happy, and I'll make YOU happy. Let's make it RING! Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:152', true)
-    else:
-        run Sub_Event220(SellTotal=SellTotal)
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		MainNpc.NpcDelivery(7, 'Default')
+		MainNpc.ShopSellDone(1.5, false)
+		EventFlowSystemActor.UIMoneyDisappear()
+		if (EventFlowSystemActor.BeyWeekEndEvent() in (0, 1)) and (not System.EventFlags['cPlayer:BeyDaily_AnnounceEvent']):
+			System.EventFlags['cPlayer:BeyDaily_AnnounceEvent'] = true
+			# Fintastic! Keepin' my followers hooked is SO MUCH WORK. So, thanks for the help. Oh yeah! I'm anchorin' a special event soon—the Fishing Tourney. You…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:154', true)
+		else:
+			# SPLASH! Make my viewers happy, and I'll make YOU happy. Let's make it RING! Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:152', true)
+	else:
+		run Sub_Event220(SellTotal=SellTotal)
+
 local flow Sub_Event49():
-    # I can't wait to see you sink this seasports challenge. Remember, your target is to net <90:0:0000> in a row.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:043', false)
-    run Sub_Event93()
- 
+	# I can't wait to see you sink this seasports challenge. Remember, your target is to net <90:0:0000> in a row.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:043', false)
+	run Sub_Event93()
+
 local flow Sub_Event85():
-    MainNpc.SmartPhone(0)
-    MainNpc.SmartPhone(4)
-    # Sure. Let's see how you're doin'…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:048', false)
-    run Sub_Event11()
- 
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+	# Sure. Let's see how you're doin'…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:048', false)
+	run Sub_Event11()
+
 local flow Sub_Event93():
-    MainNpc.SmartPhone(1)
-    # Also, don't catch any other-sized fish, OR let one slip off your hook. That'll wipe out your streak. Nyuk! OK, that's enough from me. You got this. I…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:047', false)
- 
+	MainNpc.SmartPhone(1)
+	# Also, don't catch any other-sized fish, OR let one slip off your hook. That'll wipe out your streak. Nyuk! OK, that's enough from me. You got this. I…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:047', false)
+
 local flow Sub_grp_Event131():
-    if MainNpc.BeyHaveThreeOrMoreSameFish():
-        # Let's! Alright, check your tackle box, pick out your fish, and I'll have my partner start castin' your collectible.
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:204', false)
-        EventFlowSystemActor.UIItemSelectWindowHandling('cFishToyExchange', 65534, 'Fish', '', 'cItemSelect', false)
-        if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
-            EventFlowSystemActor.SetTagFromUIResult('cItemName', 2)
-            # Nice <125:0:0002>! And you're cool with givin' me <90:0:0003> of 'em?
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:205', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                MainNpc.MessageSuspend()
-                System.EventFlags['cPlayer:BeyDaily_ReqObj'] = true
-                run Bey_ObjEntryCount()
-                MainNpc.BeySetFishToy()
-                EventFlowSystemActor.SystemMailSend('cBey', 'MAIL_SNpc_bey_daily', 1, 'cBeyFish', 'cFastTomorrow', 'cReward', false, false)
-                MainNpc.SetOrderBeforeItem('cBeyFish')
-                EventFlowSystemActor.DeleteSelectUIItem(3)
-                MainNpc.SetDeliveryItem(4, false)
-                MainNpc.NpcDelivery(14, 'Keep')
-                MainNpc.SmartPhone(0)
-                MainNpc.NpcStartAS('BeyTakePictures', false, false)
-                # Fintastic! You got it! I'll get your <125:0:0002> collectible goin'!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:209', false)
-                MainNpc.SmartPhone(1)
-                MainNpc.NpcDelivery(19, 'Default')
-                if not System.EventFlags['cPlayer:BeyDaily_TalkAlways1']:
-                    if System.EventFlags['cPlayer:ChyDaily_ObjEntry1']:
-                        System.EventFlags['cPlayer:BeyDaily_TalkAlways1'] = true
-                        # Your order's aweigh! It's gonna be so slick. You'll see. Nyuk! All this fish stuff… Y'know, if my old man had never showed me the ropes, I don't thin…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:211', false)
-                        # Doesn't stop him from grabbing his fishing pole and floatin' out in his boat every chance he gets, though. I think he just likes bein' on the water. …
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:211_01', false)
-                    else:
-                        run BeyDaily_TalkAfter_ObjEntry()
-                elif System.EventFlags['cPlayer:BeyDaily_TalkAlways2']:
-                    if (not System.EventFlags['cPlayer:BeyDaily_TalkAlways3']) and (System.EventFlags['cPlayer:ChyDaily_ObjEntry3']):
-                        System.EventFlags['cPlayer:BeyDaily_TalkAlways3'] = true
-                        # Your order's set to sail. I'll get Flick on deck as soon as I get home. Nyuk! Huh? Oh, Flick's my roommate. When we both shipped out on our own, it j…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:213', false)
-                        # Now I've got my streamin' setup, and he's got a harbor to make his slick art. It's pretty swell! And speaking of, you'll get that collectible as soon…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:213_01', false)
-                    else:
-                        run BeyDaily_TalkAfter_ObjEntry()
-                else:
-                    if System.EventFlags['cPlayer:ChyDaily_ObjEntry2']:
-                        System.EventFlags['cPlayer:BeyDaily_TalkAlways2'] = true
-                        # Your order's off! It's all smooth sailin' from here. Nyuk! Hey, you ever ordered any of the bug stuff Flick makes? Did you know he's castin' these fi…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:212', false)
-                        # I remember his dad was OBSESSED with bugs. That's pretty much where Flick gets it from… I mean, Flick and his dad used to plan vacations out to SWAMP…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:212_01', false)
-                    else:
-                        run BeyDaily_TalkAfter_ObjEntry()
-            else:
-                # All good, all good. Just drop me a line if you change your mind. Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:207', false)
-        else:
-            # All good, all good. Just drop me a line if you change your mind. Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:207', false)
-    else:
-        # Tempting bait, eh? Look, I really wanna, but it doesn't look like you have enough fish. Nyuk! If you're gonna order something, my partner needs <90:0…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:203', false)
- 
+	if MainNpc.BeyHaveThreeOrMoreSameFish():
+		# Let's! Alright, check your tackle box, pick out your fish, and I'll have my partner start castin' your collectible.
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:204', false)
+		EventFlowSystemActor.UIItemSelectWindowHandling('cFishToyExchange', 65534, 'Fish', '', 'cItemSelect', false)
+		if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
+			EventFlowSystemActor.SetTagFromUIResult('cItemName', 2)
+			# Nice <125:0:0002>! And you're cool with givin' me <90:0:0003> of 'em?
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:205', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				MainNpc.MessageSuspend()
+				System.EventFlags['cPlayer:BeyDaily_ReqObj'] = true
+				run Bey_ObjEntryCount()
+				MainNpc.BeySetFishToy()
+				EventFlowSystemActor.SystemMailSend('cBey', 'MAIL_SNpc_bey_daily', 1, 'cBeyFish', 'cFastTomorrow', 'cReward', false, false)
+				MainNpc.SetOrderBeforeItem('cBeyFish')
+				EventFlowSystemActor.DeleteSelectUIItem(3)
+				MainNpc.SetDeliveryItem(4, false)
+				MainNpc.NpcDelivery(14, 'Keep')
+				MainNpc.SmartPhone(0)
+				MainNpc.NpcStartAS('BeyTakePictures', false, false)
+				# Fintastic! You got it! I'll get your <125:0:0002> collectible goin'!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:209', false)
+				MainNpc.SmartPhone(1)
+				MainNpc.NpcDelivery(19, 'Default')
+				if not System.EventFlags['cPlayer:BeyDaily_TalkAlways1']:
+					if System.EventFlags['cPlayer:ChyDaily_ObjEntry1']:
+System.EventFlags['cPlayer:BeyDaily_TalkAlways1'] = true
+						# Your order's aweigh! It's gonna be so slick. You'll see. Nyuk! All this fish stuff… Y'know, if my old man had never showed me the ropes, I don't thin…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:211', false)
+						# Doesn't stop him from grabbing his fishing pole and floatin' out in his boat every chance he gets, though. I think he just likes bein' on the water. …
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:211_01', false)
+					else:
+run BeyDaily_TalkAfter_ObjEntry()
+				elif System.EventFlags['cPlayer:BeyDaily_TalkAlways2']:
+					if (not System.EventFlags['cPlayer:BeyDaily_TalkAlways3']) and (System.EventFlags['cPlayer:ChyDaily_ObjEntry3']):
+System.EventFlags['cPlayer:BeyDaily_TalkAlways3'] = true
+						# Your order's set to sail. I'll get Flick on deck as soon as I get home. Nyuk! Huh? Oh, Flick's my roommate. When we both shipped out on our own, it j…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:213', false)
+						# Now I've got my streamin' setup, and he's got a harbor to make his slick art. It's pretty swell! And speaking of, you'll get that collectible as soon…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:213_01', false)
+					else:
+run BeyDaily_TalkAfter_ObjEntry()
+				else:
+					if System.EventFlags['cPlayer:ChyDaily_ObjEntry2']:
+System.EventFlags['cPlayer:BeyDaily_TalkAlways2'] = true
+						# Your order's off! It's all smooth sailin' from here. Nyuk! Hey, you ever ordered any of the bug stuff Flick makes? Did you know he's castin' these fi…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:212', false)
+						# I remember his dad was OBSESSED with bugs. That's pretty much where Flick gets it from… I mean, Flick and his dad used to plan vacations out to SWAMP…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:212_01', false)
+					else:
+run BeyDaily_TalkAfter_ObjEntry()
+			else:
+				# All good, all good. Just drop me a line if you change your mind. Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:207', false)
+		else:
+			# All good, all good. Just drop me a line if you change your mind. Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:207', false)
+	else:
+		# Tempting bait, eh? Look, I really wanna, but it doesn't look like you have enough fish. Nyuk! If you're gonna order something, my partner needs <90:0…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:203', false)
+
 local flow Sub_grp_Event192():
-    if System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']:
-        if System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
-            # So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:005', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3():
-                case 0:
-                    run Quest_Entry()
-                case 1:
-                    run Obj_Entry()
-                case 2:
-                    run Talk_Always()
-        else:
-            # So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:004', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3():
-                case 0:
-                    run Quest_Entry()
-                case 1:
-                    run Obj_Entry()
-                case 2:
-                    run Talk_Always()
-    elif System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
-        # So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:003', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                run Quest_Entry()
-            case 1:
-                run Obj_Entry()
-            case 2:
-                run Talk_Always()
-    else:
-        # So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:002', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                run Quest_Entry()
-            case 1:
-                run Obj_Entry()
-            case 2:
-                run Talk_Always()
- 
+	if System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']:
+		if System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
+			# So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:005', false)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					run Quest_Entry()
+				case 1:
+					run Obj_Entry()
+				case 2:
+					run Talk_Always()
+		else:
+			# So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:004', false)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					run Quest_Entry()
+				case 1:
+					run Obj_Entry()
+				case 2:
+					run Talk_Always()
+	elif System.EventFlags['cPlayer:BeyDaily_ExolainQ_First']:
+		# So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:003', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run Quest_Entry()
+			case 1:
+				run Obj_Entry()
+			case 2:
+				run Talk_Always()
+	else:
+		# So! How 'bout a challenge, seasports style? Right now! Win and I'll make it RING, and talk you up on my stream. Plus my partner's into makin' slick c…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:002', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run Quest_Entry()
+			case 1:
+				run Obj_Entry()
+			case 2:
+				run Talk_Always()
+
 local flow Sub_grp_Event204():
-    if (System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']) and (not System.EventFlags['cPlayer:BeyDaily_ReqObj']):
-        # You're like some kind of seasport savant. I'm gonna get followers, and likes, and even subscribes! Thanks. Seriously. Hit me up if there's anything I…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:028', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4():
-            case 0:
-                run Sub_Event85()
-            case 1:
-                run Sub_Event153()
-            case 2:
-                run Obj_Entry()
-            case 3:
-                # No worries. Later!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:029', false)
-    else:
-        # You're like some kind of seasport savant. I'm gonna get followers, and likes, and even subscribes! Thanks. Seriously. Hit me up if there's anything I…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:030', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4():
-            case 0:
-                run Sub_Event85()
-            case 1:
-                run Sub_Event153()
-            case 2:
-                run Obj_Entry()
-            case 3:
-                # No worries. Later!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:029', false)
- 
+	if (System.EventFlags['cPlayer:BeyDaily_ExplainReqObj_First']) and (not System.EventFlags['cPlayer:BeyDaily_ReqObj']):
+		# You're like some kind of seasport savant. I'm gonna get followers, and likes, and even subscribes! Thanks. Seriously. Hit me up if there's anything I…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:028', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run Sub_Event85()
+			case 1:
+				run Sub_Event153()
+			case 2:
+				run Obj_Entry()
+			case 3:
+				# No worries. Later!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:029', false)
+	else:
+		# You're like some kind of seasport savant. I'm gonna get followers, and likes, and even subscribes! Thanks. Seriously. Hit me up if there's anything I…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:030', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run Sub_Event85()
+			case 1:
+				run Sub_Event153()
+			case 2:
+				run Obj_Entry()
+			case 3:
+				# No worries. Later!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:029', false)
+
 local flow Sub_grp_Event51():
-    if EventFlowSystemActor.HasKindItem('cKind', 'Fish', ''):
-        # Great! What do you wanna sell?
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:102', true)
-        run SelllFish_daily()
-    else:
-        # Uh…I don't wanna be rude but… What fish? Wait, are you trawling me? 'Cause that's pretty good. Anywave, I can't buy what you don't have. No big, thou…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:101', true)
- 
+	if EventFlowSystemActor.HasKindItem('cKind', 'Fish', ''):
+		# Great! What do you wanna sell?
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:102', true)
+		run SelllFish_daily()
+	else:
+		# Uh…I don't wanna be rude but… What fish? Wait, are you trawling me? 'Cause that's pretty good. Anywave, I can't buy what you don't have. No big, thou…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:101', true)
+
 flow Tag_daily_Num():
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 3, '')
-    EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:BeyDaily_QuestCount')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 3, 3, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 4, 5, '')
- 
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 3, '')
+	EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:BeyDaily_QuestCount')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 3, 3, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 4, 5, '')
+
 flow Tag_daily_SET_HOUR():
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 0, 5, '')
- 
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 0, 5, '')
+
 flow TalkFirst_ClearQ():
-    switch MainNpc.BeyDailyFishSize():
-        case 0:
-            # …What?! You caught <90:0:0000> big-time fish in a row already?
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:050', false)
-        case 1, 2:
-            # …Huh?! You caught <90:0:0000> fish in a row? AND every one was a small fry?!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:051', false)
-        case 3:
-            # …No way! You ALREADY caught <90:0:0004> fish in a row?
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:052', false)
-    MainNpc.SmartPhone(0)
-    MainNpc.SmartPhone(4)
-    # Now THAT'S gonna make the chat explode. So much for my seasports challenge. Way to fish!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:053', false)
-    MainNpc.SmartPhone(5)
-    # Photo op!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:060', false)
-    MainNpc.NpcStartAS('BeyTakePictures', false, false)
-    # Way to wreck that seasports challenge! What a haul!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:061', false)
-    MainNpc.SmartPhone(1)
-    if EventFlowSystemActor.HasKindItem('cKind', 'Fish', ''):
-        # Hey! Wanna sell any of those fish? 'Cause I wanna buy! I've got Bells for nautical miles, so chime on in.
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:054', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Yeah, flyfisher! Show me what you wanna sell!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:056', false)
-            run SelllFish_daily()
-        else:
-            # Oh, OK. Maybe later!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:055', false)
-            run SellFish_Cancel()
-    else:
-        # If you got fish to sell, then I wanna buy. I got a whole tackle box full of Bells, so just let me know!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:059', false)
- 
+	switch MainNpc.BeyDailyFishSize():
+		case 0:
+			# …What?! You caught <90:0:0000> big-time fish in a row already?
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:050', false)
+		case 1, 2:
+			# …Huh?! You caught <90:0:0000> fish in a row? AND every one was a small fry?!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:051', false)
+		case 3:
+			# …No way! You ALREADY caught <90:0:0004> fish in a row?
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:052', false)
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+	# Now THAT'S gonna make the chat explode. So much for my seasports challenge. Way to fish!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:053', false)
+	MainNpc.SmartPhone(5)
+	# Photo op!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:060', false)
+	MainNpc.NpcStartAS('BeyTakePictures', false, false)
+	# Way to wreck that seasports challenge! What a haul!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:061', false)
+	MainNpc.SmartPhone(1)
+	if EventFlowSystemActor.HasKindItem('cKind', 'Fish', ''):
+		# Hey! Wanna sell any of those fish? 'Cause I wanna buy! I've got Bells for nautical miles, so chime on in.
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:054', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Yeah, flyfisher! Show me what you wanna sell!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:056', false)
+			run SelllFish_daily()
+		else:
+			# Oh, OK. Maybe later!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:055', false)
+			run SellFish_Cancel()
+	else:
+		# If you got fish to sell, then I wanna buy. I got a whole tackle box full of Bells, so just let me know!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:059', false)
+
 flow Talk_Always():
-    if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
-        # Huh? Oh, OK. I'll be floatin' here until <90:37:cd00> <110:21:cd00> or so tomorrow, so hit me up if you change your mind.
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:008', false)
-    else:
-        # Huh? Oh, OK. I'll be floatin' here until <90:37:cd00> <110:21:cd00> or so, so hit me up if you change your mind. Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:009', false)
- 
+	if EventFlowSystemActor.EnvTimeZone() in (`05:00-07:59`, `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`):
+		# Huh? Oh, OK. I'll be floatin' here until <90:37:cd00> <110:21:cd00> or so tomorrow, so hit me up if you change your mind.
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:008', false)
+	else:
+		# Huh? Oh, OK. I'll be floatin' here until <90:37:cd00> <110:21:cd00> or so, so hit me up if you change your mind. Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_daily:009', false)

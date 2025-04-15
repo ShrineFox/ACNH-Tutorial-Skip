@@ -1,378 +1,377 @@
 flow AI_Rco_ChkForceImmQ():
-    if (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cLand:RcmImmQuestOpen']) and (not System.EventFlags['cLand:RcmImmQuestComplete']):
-        if not System.EventFlags['cLand:RcmImmQuestRunning']:
-            run Rco_Force_ImmQ_Intro()
-        elif System.EventFlags['cPlayer:ImmQRunningForPlayer']:
-            if System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet']:
-                run Rco_Force_ImmQ_BridgeSet()
-            elif (System.EventFlags['cLand:ImmQ_SetBridge']) and (System.EventFlags['cPlayer:ImmQSetBridgeKitMySelf']) and (System.EventFlags['cLand:ImmQ_A_GetHousing']) and (System.EventFlags['cPlayer:ImmQHeardNoticeRemoveFtr']):
-                System.EventFlags['cPlayerTemp:RcoForceTalk'] = true
-                run Rco_Force_ImmQ_ClearTalk()
- 
+	if (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cLand:RcmImmQuestOpen']) and (not System.EventFlags['cLand:RcmImmQuestComplete']):
+		if not System.EventFlags['cLand:RcmImmQuestRunning']:
+			run Rco_Force_ImmQ_Intro()
+		elif System.EventFlags['cPlayer:ImmQRunningForPlayer']:
+			if System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet']:
+				run Rco_Force_ImmQ_BridgeSet()
+			elif (System.EventFlags['cLand:ImmQ_SetBridge']) and (System.EventFlags['cPlayer:ImmQSetBridgeKitMySelf']) and (System.EventFlags['cLand:ImmQ_A_GetHousing']) and (System.EventFlags['cPlayer:ImmQHeardNoticeRemoveFtr']):
+				System.EventFlags['cPlayerTemp:RcoForceTalk'] = true
+				run Rco_Force_ImmQ_ClearTalk()
+
 flow AI_Rco_ChkForceIslandDevelopment():
-    if (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cLand:RcoBuildCampsiteOngoing']):
-        if not System.EventFlags['cLand:RcoBuildCampsiteComplete']:
-            switch System.EventFlags['cPlayer:IslandDevQuestGetRecipeCampKit']:
-                default:
-                    return
-        elif not System.EventFlags['cLand:CampSiteBuilt']:
-            if (System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']) and (not System.EventFlags['cPlayer:IslandDevQuestTalkAfterCampSet']):
-                run Rco_Force_IslandDev_SetCampSite()
-        elif System.EventFlags['cLand:RcoMeetFirstVisitorRequest']:
-            run Root2CampSiteVisitor()
-        elif (System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']) and (not System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp']):
-            run Rco_Force_IslandDev_BuildCampSite()
- 
+	if (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cLand:RcoBuildCampsiteOngoing']):
+		if not System.EventFlags['cLand:RcoBuildCampsiteComplete']:
+			switch System.EventFlags['cPlayer:IslandDevQuestGetRecipeCampKit']:
+				default:
+					return
+		elif not System.EventFlags['cLand:CampSiteBuilt']:
+			if (System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']) and (not System.EventFlags['cPlayer:IslandDevQuestTalkAfterCampSet']):
+				run Rco_Force_IslandDev_SetCampSite()
+		elif System.EventFlags['cLand:RcoMeetFirstVisitorRequest']:
+			run Root2CampSiteVisitor()
+		elif (System.EventFlags['cPlayer:IslandDevQuestCampSetMySelf']) and (not System.EventFlags['cPlayer:IslandDevQuestTalkAfterBuildCamp']):
+			run Rco_Force_IslandDev_BuildCampSite()
+
 flow AI_Rco_Disable_OfficeFirstTalk():
-    if System.EventFlags['cPlayer:CanGetMileTicketTrialForMoving']:
-        if System.EventFlags['cLand:RcoRcmTalkingAboutStoreMaterial']:
-            run Rco_Force_GiveMileTicket()
-        elif not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-            run Rco_Force_GiveMileTicket()
-        elif System.EventFlags['cPlayer:RcmTookQuestReq']:
-            run Rco_Force_GiveMileTicket()
-        else:
-            run Rco_Force_BuiltHouse_ShopMaterial()
-    elif System.EventFlags['cPlayer:PlayerLoanFinish1st']:
-        run Rco_Force_FinishLoan()
-    elif not System.EventFlags['cPlayer:RcoAfterHouseRemodel']:
-        run NoHouseMovingSubP_SkipAfterRemodel()
-    elif System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']:
-        run NoHouseMovingSubP_SkipAfterRemodel()
-    elif (System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']) or (System.EventFlags['cLand:RcoRcmTalkingAboutStoreMaterial']):
-        run Rco_Force_AfterRemodel()
-    else:
-        if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-            if System.EventFlags['cPlayer:RcmTookQuestReq']:
-                run Rco_Force_AfterRemodel()
-            else:
-                if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-                    run Rco_Force_AfterRemodel()
-                else:
-                    run Rco_Force_BuiltHouse_ShopMaterial()
-        else:
-            run Rco_Force_AfterRemodel()
- 
+	if System.EventFlags['cPlayer:CanGetMileTicketTrialForMoving']:
+		if System.EventFlags['cLand:RcoRcmTalkingAboutStoreMaterial']:
+			run Rco_Force_GiveMileTicket()
+		elif not System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+			run Rco_Force_GiveMileTicket()
+		elif System.EventFlags['cPlayer:RcmTookQuestReq']:
+			run Rco_Force_GiveMileTicket()
+		else:
+			run Rco_Force_BuiltHouse_ShopMaterial()
+	elif System.EventFlags['cPlayer:PlayerLoanFinish1st']:
+		run Rco_Force_FinishLoan()
+	elif not System.EventFlags['cPlayer:RcoAfterHouseRemodel']:
+		run NoHouseMovingSubP_SkipAfterRemodel()
+	elif System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']:
+		run NoHouseMovingSubP_SkipAfterRemodel()
+	elif (System.EventFlags['cPlayer:RcoGetTvForCongratsHouse']) or (System.EventFlags['cLand:RcoRcmTalkingAboutStoreMaterial']):
+		run Rco_Force_AfterRemodel()
+	else:
+		if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+			if System.EventFlags['cPlayer:RcmTookQuestReq']:
+				run Rco_Force_AfterRemodel()
+			else:
+				if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+					run Rco_Force_AfterRemodel()
+				else:
+					run Rco_Force_BuiltHouse_ShopMaterial()
+		else:
+			run Rco_Force_AfterRemodel()
+
 flow AI_Rco_Force_EntryProcess():
-    MainNpc.NpcAISetting(13, true)
-    MainNpc.NpcAISetting(18, true)
- 
+	MainNpc.NpcAISetting(13, true)
+	MainNpc.NpcAISetting(18, true)
+
 flow AI_Rco_NormalTalk():
-    if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
-        MainNpc.NpcChangeAIState('cOfficeWait', '', 'SNPC_rco', 'Root', true, true)
-        MainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
-        if EventFlowSystemActor.NetIsConnected():
-            MainNpc.NpcDisableServiceMotion()
-            MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
-        elif (not System.EventFlags['cPlayer:EnableDiyRemake']) and (System.EventFlags['cPlayer:RcoEnableRemakeTrial']):
-            MainNpc.NpcDisableServiceMotion()
-            MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
-    else:
-        MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
- 
+	if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
+		MainNpc.NpcChangeAIState('cOfficeWait', '', 'SNPC_rco', 'Root', true, true)
+		MainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
+		if EventFlowSystemActor.NetIsConnected():
+			MainNpc.NpcDisableServiceMotion()
+			MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+		elif (not System.EventFlags['cPlayer:EnableDiyRemake']) and (System.EventFlags['cPlayer:RcoEnableRemakeTrial']):
+			MainNpc.NpcDisableServiceMotion()
+			MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+	else:
+		MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+
 flow CheckRob_ATM():
-    run CheckRob_ATM_Direction()
-    if SubflowResults@4[0] == 0:
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
-    else:
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
- 
+	run CheckRob_ATM_Direction()
+	if SubflowResults@4[0] == 0:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	else:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
+
 flow CheckRob_ATM_Direction():
-    if not EventFlowSystemActor.IsMyVillage():
-        SubflowResults[0] = 0
-    elif EventFlowSystemActor.NetHasVisitor():
-        SubflowResults[0] = 0
-    elif System.EventFlags['cPlayerTemp:RcoMachineTalkCntl']:
-        SubflowResults[0] = 0
-    elif not System.EventFlags['cPlayer:ObjRcoMachineHeardExplanation']:
-        SubflowResults[0] = 1
-    elif EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`):
-        if not System.EventFlags['cLand:TanuportAmiiboCampUnlock']:
-            SubflowResults[0] = 0
-        elif System.EventFlags['cPlayer:RcoMachineAmiiboCamperUnlock']:
-            SubflowResults[0] = 0
-        else:
-            SubflowResults[0] = 3
-    elif System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        SubflowResults[0] = 0
-    elif not System.EventFlags['cLand:RcmImmQuestComplete']:
-        SubflowResults[0] = 0
-    elif System.EventFlags['cPlayer:ObjRcoMachineHeardFenceRecipe']:
-        SubflowResults[0] = 0
-    elif System.EventFlags['cPlayer:RcoMachineEnableExchange']:
-        SubflowResults[0] = 2
-    else:
-        SubflowResults[0] = 0
- 
+	if not EventFlowSystemActor.IsMyVillage():
+		SubflowResults[0] = 0
+	elif EventFlowSystemActor.NetHasVisitor():
+		SubflowResults[0] = 0
+	elif System.EventFlags['cPlayerTemp:RcoMachineTalkCntl']:
+		SubflowResults[0] = 0
+	elif not System.EventFlags['cPlayer:ObjRcoMachineHeardExplanation']:
+		SubflowResults[0] = 1
+	elif EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`):
+		if not System.EventFlags['cLand:TanuportAmiiboCampUnlock']:
+			SubflowResults[0] = 0
+		elif System.EventFlags['cPlayer:RcoMachineAmiiboCamperUnlock']:
+			SubflowResults[0] = 0
+		else:
+			SubflowResults[0] = 3
+	elif System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		SubflowResults[0] = 0
+	elif not System.EventFlags['cLand:RcmImmQuestComplete']:
+		SubflowResults[0] = 0
+	elif System.EventFlags['cPlayer:ObjRcoMachineHeardFenceRecipe']:
+		SubflowResults[0] = 0
+	elif System.EventFlags['cPlayer:RcoMachineEnableExchange']:
+		SubflowResults[0] = 2
+	else:
+		SubflowResults[0] = 0
+
 flow CheckRob_LostPropertyBox():
-    if not EventFlowSystemActor.IsMyVillage():
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
-    elif EventFlowSystemActor.NetHasVisitor():
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
-    elif System.EventFlags['cPlayer:AccessLostPropertyBox1st']:
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
-    else:
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
- 
+	if not EventFlowSystemActor.IsMyVillage():
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	elif EventFlowSystemActor.NetHasVisitor():
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	elif System.EventFlags['cPlayer:AccessLostPropertyBox1st']:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	else:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
+
 flow CheckRob_WorkBench():
-    if not EventFlowSystemActor.IsMyVillage():
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
-    elif (not EventFlowSystemActor.NetHasVisitor()) and (not System.EventFlags['cPlayer:MainmenuRecipe']) and (not System.EventFlags['cPlayer:RcoDIYtrialGetMaterial']) and (System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']):
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
-    else:
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
- 
+	if not EventFlowSystemActor.IsMyVillage():
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	elif (not EventFlowSystemActor.NetHasVisitor()) and (not System.EventFlags['cPlayer:MainmenuRecipe']) and (not System.EventFlags['cPlayer:RcoDIYtrialGetMaterial']) and (System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']):
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
+	else:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+
 flow Init():
-    MainNpc.NpcRegistAIBlackBoard('CheckRobResult', 0)
-    MainNpc.NpcRegistAIBlackBoard('SpeakTypeChair', 0)
-    if EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
-        MainNpc.NpcAISetCheckRobFunc('cTanukichiLostItemBox', 'CheckRob_LostPropertyBox', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoRecycleBox1st', false, true)
-        MainNpc.NpcAISetCheckRobFunc('cTanukichiATM', 'CheckRob_ATM', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoMachineCheck1st', false, true)
-        MainNpc.NpcAISetCheckRobFunc('cTanukichiTent', 'CheckRob_WorkBench', 'Ftr_Working', 'Root_Tutorial', false, false)
-        MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
-        MainNpc.NpcAISetExitStrc('Smiling', 'cTriggerType_EnterStrc', 30)
-        MainNpc.SetSightRange(0, 32)
-        MainNpc.NpcChangeHeadCtrlMode('cPlayer', true)
-        MainNpc.NpcAISetting(20, true)
-        if EventFlowSystemActor.NetIsConnected():
-            MainNpc.NpcDisableServiceMotion()
-    else:
-        if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
-            MainNpc.NpcAISetCheckRobFunc('cTanukichiLostItemBox', 'CheckRob_LostPropertyBox', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoRecycleBox1st', false, true)
-            MainNpc.NpcAISetCheckRobFunc('cTanukichiTent', 'CheckRob_WorkBench', 'Ftr_Working', 'Root_Tutorial', false, false)
-            MainNpc.NpcAISetCheckRobFunc('cTanukichiATM', 'CheckRob_ATM', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoMachineCheck1st', false, true)
-            MainNpc.NpcSetTalkDistance(25.0)
-    MainNpc.NpcAISetting(0, true)
-    MainNpc.NpcAISetting(1, true)
-    MainNpc.NpcAISetting(8, true)
-    MainNpc.NpcRegistAIBlackBoard('ForceImmQIntro', 0)
- 
+	MainNpc.NpcRegistAIBlackBoard('CheckRobResult', 0)
+	MainNpc.NpcRegistAIBlackBoard('SpeakTypeChair', 0)
+	if EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
+		MainNpc.NpcAISetCheckRobFunc('cTanukichiLostItemBox', 'CheckRob_LostPropertyBox', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoRecycleBox1st', false, true)
+		MainNpc.NpcAISetCheckRobFunc('cTanukichiATM', 'CheckRob_ATM', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoMachineCheck1st', false, true)
+		MainNpc.NpcAISetCheckRobFunc('cTanukichiTent', 'CheckRob_WorkBench', 'Ftr_Working', 'Root_Tutorial', false, false)
+		MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+		MainNpc.NpcAISetExitStrc('Smiling', 'cTriggerType_EnterStrc', 30)
+		MainNpc.SetSightRange(0, 32)
+		MainNpc.NpcChangeHeadCtrlMode('cPlayer', true)
+		MainNpc.NpcAISetting(20, true)
+		if EventFlowSystemActor.NetIsConnected():
+			MainNpc.NpcDisableServiceMotion()
+	else:
+		if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
+			MainNpc.NpcAISetCheckRobFunc('cTanukichiLostItemBox', 'CheckRob_LostPropertyBox', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoRecycleBox1st', false, true)
+			MainNpc.NpcAISetCheckRobFunc('cTanukichiTent', 'CheckRob_WorkBench', 'Ftr_Working', 'Root_Tutorial', false, false)
+			MainNpc.NpcAISetCheckRobFunc('cTanukichiATM', 'CheckRob_ATM', 'SNPC_rco_91_BreakInSpeak', 'ObjRcoMachineCheck1st', false, true)
+			MainNpc.NpcSetTalkDistance(25.0)
+	MainNpc.NpcAISetting(0, true)
+	MainNpc.NpcAISetting(1, true)
+	MainNpc.NpcAISetting(8, true)
+	MainNpc.NpcRegistAIBlackBoard('ForceImmQIntro', 0)
+
 flow NoHouseMovingSubP_SkipAfterRemodel():
-    if EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`):
-        run AI_Rco_ChkForceIslandDevelopment()
-        run Sub_grp_Event245()
-    elif System.EventFlags['cPlayer:RcoTalkAfterMuseumTent']:
-        run Rco_Force_OwlTentSet()
-    else:
-        run AI_Rco_ChkForceImmQ()
-        run Sub_grp_Event245()
- 
+	if EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`):
+		run AI_Rco_ChkForceIslandDevelopment()
+		run Sub_grp_Event245()
+	elif System.EventFlags['cPlayer:RcoTalkAfterMuseumTent']:
+		run Rco_Force_OwlTentSet()
+	else:
+		run AI_Rco_ChkForceImmQ()
+		run Sub_grp_Event245()
+
 flow Rco_Force_AfterRemodel():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='AfterRemodel_Force', FlowName='SNPC_rco_03_ChkAfterRemodel')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='AfterRemodel_Force', FlowName='SNPC_rco_03_ChkAfterRemodel')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_BuiltHouse_ShopMaterial():
-    MainNpc.SetNpcSpeakFlow('SNPC_rco_03_ChkAfterRemodel', 'RcoRcmTalkAboutStoreMaterial_Force')
-    MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_rco_03_ChkAfterRemodel', 'Root', false, true, ArgInt0=1, ArgStr0='rcm')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.SetNpcSpeakFlow('SNPC_rco_03_ChkAfterRemodel', 'RcoRcmTalkAboutStoreMaterial_Force')
+	MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_rco_03_ChkAfterRemodel', 'Root', false, true, ArgInt0=1, ArgStr0='rcm')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_FinishLoan():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_04_ChkFinishLoan', EntryName='FinishLoan_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_04_ChkFinishLoan', EntryName='FinishLoan_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_FirstVisit():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='RcoFirstVisit_Force', FlowName='SNPC_rco')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='RcoFirstVisit_Force', FlowName='SNPC_rco')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_GiveMileTicket():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_03_ChkAfterRemodel', EntryName='GiveMileTicketForMovingPlayer_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_03_ChkAfterRemodel', EntryName='GiveMileTicketForMovingPlayer_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_ImmQ_BridgeSet():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_53_MigrantsQuest', EntryName='FinishBridge_Force')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_53_MigrantsQuest', EntryName='FinishBridge_Force')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_ImmQ_ClearTalk():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_53_MigrantsQuest', EntryName='Rco_ImmQ_ClearTalk_Force')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_53_MigrantsQuest', EntryName='Rco_ImmQ_ClearTalk_Force')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_ImmQ_Intro():
-    run AI_Rco_Force_EntryProcess()
-    MainNpc.NpcAISetting(15, true)
-    MainNpc.NpcSetAIBlackBoard('ForceImmQIntro', 1)
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_01_Tent_1_Entries', EntryName='RcoTentImmQuestIntro_Force')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	MainNpc.NpcAISetting(15, true)
+	MainNpc.NpcSetAIBlackBoard('ForceImmQIntro', 1)
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_01_Tent_1_Entries', EntryName='RcoTentImmQuestIntro_Force')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_InviteRemakeWorkshop():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='RcoRemakeTrialIntro_Force', FlowName='SNPC_rco_01_Tent_1_Entries')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='RcoRemakeTrialIntro_Force', FlowName='SNPC_rco_01_Tent_1_Entries')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_IslandDev_AfterSetCamperHouse():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='FirstCamperHouseComplete_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='FirstCamperHouseComplete_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_IslandDev_BuildCampSite():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='CampSiteBuild_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='CampSiteBuild_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_IslandDev_EnvUnlockWithsza():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='IslandEvaluationStartForce')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='IslandEvaluationStartForce')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_IslandDev_RequestMeetCamper():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='MeetFirstCamperRequest_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_54_IslandDevelopment', EntryName='MeetFirstCamperRequest_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_IslandDev_SetCampSite():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='CampSiteRequestComplete_Force', FlowName='SNPC_rco_54_IslandDevelopment')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='CampSiteRequestComplete_Force', FlowName='SNPC_rco_54_IslandDevelopment')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_NoticeStorageExpansion():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_10_Common_ExpandHouseStorage', EntryName='NoticeExpandStorage_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_10_Common_ExpandHouseStorage', EntryName='NoticeExpandStorage_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_OfficeFirstTalk():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_01_Office_1_Entries', EntryName='OfficeOpening_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_01_Office_1_Entries', EntryName='OfficeOpening_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_OwlTentSet():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='AboutBuildMuseumTent_Force', FlowName='SNPC_rco_01_Tent_1_Entries')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='AboutBuildMuseumTent_Force', FlowName='SNPC_rco_01_Tent_1_Entries')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_v200_AfterExpandStorage():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_10_Common_ExpandHouseStorage', EntryName='v200_AfterExpandStorage_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_10_Common_ExpandHouseStorage', EntryName='v200_AfterExpandStorage_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_v200_NoticeAddLevelExpandStorage():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_10_Common_ExpandHouseStorage', EntryName='v200_AddNoticeExpandStorage_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_10_Common_ExpandHouseStorage', EntryName='v200_AddNoticeExpandStorage_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_v200_RestartNHC_AfterPMoving():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_01_Office_1_Entries', EntryName='NpcHouseCoordeRestartPMoving_Force')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_rco_01_Office_1_Entries', EntryName='NpcHouseCoordeRestartPMoving_Force')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Rco_Force_v200_UnlockNpcHouseCoordinate():
-    run AI_Rco_Force_EntryProcess()
-    run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='NpcHouseCoordeOpen_Force', FlowName='SNPC_rco_01_Office_1_Entries')
-    run SetOfficeForceTalk()
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run AI_Rco_Force_EntryProcess()
+	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='NpcHouseCoordeOpen_Force', FlowName='SNPC_rco_01_Office_1_Entries')
+	run SetOfficeForceTalk()
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Root():
-    if (EventFlowSystemActor.SystemCheckNowStage('cField')) and (EventFlowSystemActor.EventBranch(false, 0) not in (`None`, `FishingConvention`, `InsectConvention`, `Easter`, `Fireworks`, `Halloween`, `HarvestFestival`, `XmasEve`, `Unknown9`)):
-        MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco_GEvent_Countdown', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
-        MainNpc.NpcAISetting(8, true)
-    elif not MainNpc.NpcCheckStateSelectTiming('cInit'):
-        if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
-            MainNpc.NpcChangeAIState('cOfficeWait', '', 'SNPC_rco', 'Root', true, true)
-            if MainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
-                MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
-        else:
-            MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
-    elif EventFlowSystemActor.NetIsConnected():
-        run AI_Rco_NormalTalk()
-    elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
-        if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-            run System_MigrantsQuestProcess::ImmQClearChkrun System_MigrantsQuestProcess::ImmQClearChk()
-            run Sub_grp_Event133()
-        else:
-            run Sub_grp_Event133()
-    else:
-        if System.EventFlags['cLandTemp:NpcInteriorCoordinate']:
-            MainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
-            MainNpc.NpcSetAIBlackBoard('SpeakTypeChair', 1)
-            System.EventFlags['cPlayerTemp:OfficeTalkSitDown'] = 2
-            run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='ForceTalk_Return', FlowName='SNPC_rco_11_CoordinateNpcHouse_Office')
-        else:
-            run Sub_grp_Event133()
- 
+	if (EventFlowSystemActor.SystemCheckNowStage('cField')) and (EventFlowSystemActor.EventBranch(false, 0) not in (`None`, `FishingConvention`, `InsectConvention`, `Easter`, `Fireworks`, `Halloween`, `HarvestFestival`, `XmasEve`, `Unknown9`)):
+		MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco_GEvent_Countdown', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+		MainNpc.NpcAISetting(8, true)
+	elif not MainNpc.NpcCheckStateSelectTiming('cInit'):
+		if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
+			MainNpc.NpcChangeAIState('cOfficeWait', '', 'SNPC_rco', 'Root', true, true)
+			if MainNpc.NpcCheckStateSelectTiming('cTalkEnd'):
+				MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+		else:
+			MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_rco', 'Root', true, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+	elif EventFlowSystemActor.NetIsConnected():
+		run AI_Rco_NormalTalk()
+	elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+		if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+			run System_MigrantsQuestProcess::ImmQClearChk()
+			run Sub_grp_Event133()
+		else:
+			run Sub_grp_Event133()
+	else:
+		if System.EventFlags['cLandTemp:NpcInteriorCoordinate']:
+			MainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
+			MainNpc.NpcSetAIBlackBoard('SpeakTypeChair', 1)
+			System.EventFlags['cPlayerTemp:OfficeTalkSitDown'] = 2
+			run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='ForceTalk_Return', FlowName='SNPC_rco_11_CoordinateNpcHouse_Office')
+		else:
+			run Sub_grp_Event133()
+
 flow Root2CampSiteVisitor():
-    if not System.EventFlags['cLand:RcoMeetFirstVisitorComplete']:
-        if System.EventFlags['cLand:RcoMeetFirstVisitorOngoing']:
-            switch System.EventFlags['cPlayer:IslandDevQuestTalkAboutFirstCamper']:
-                default:
-                    return
-        else:
-            run Rco_Force_IslandDev_RequestMeetCamper()
-    elif not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing']:
-        switch System.EventFlags['cPlayer:IslandDevQuestOrderFirstCamperMyself']:
-            default:
-                return
-    elif not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitComplete']:
-        switch System.EventFlags['cPlayer:GetHousingKitForFirstCamper']:
-            default:
-                return
-    elif (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 6) or (System.EventFlags['cLand:TanuportAmiiboCampUnlock']):
-        run Root3IslandEvaluation()
-    elif (System.EventFlags['cPlayer:SetHousingKitForFirstCamper']) and (not System.EventFlags['cPlayer:SzaHeardAboutHousingKit']):
-        run Rco_Force_IslandDev_AfterSetCamperHouse()
- 
+	if not System.EventFlags['cLand:RcoMeetFirstVisitorComplete']:
+		if System.EventFlags['cLand:RcoMeetFirstVisitorOngoing']:
+			switch System.EventFlags['cPlayer:IslandDevQuestTalkAboutFirstCamper']:
+				default:
+					return
+		else:
+			run Rco_Force_IslandDev_RequestMeetCamper()
+	elif not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitOngoing']:
+		switch System.EventFlags['cPlayer:IslandDevQuestOrderFirstCamperMyself']:
+			default:
+				return
+	elif not System.EventFlags['cLand:RcoBuildFirstVisitorsHousingKitComplete']:
+		switch System.EventFlags['cPlayer:GetHousingKitForFirstCamper']:
+			default:
+				return
+	elif (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 6) or (System.EventFlags['cLand:TanuportAmiiboCampUnlock']):
+		run Root3IslandEvaluation()
+	elif (System.EventFlags['cPlayer:SetHousingKitForFirstCamper']) and (not System.EventFlags['cPlayer:SzaHeardAboutHousingKit']):
+		run Rco_Force_IslandDev_AfterSetCamperHouse()
+
 flow Root3IslandEvaluation():
-    if (not System.EventFlags['cPlayer:RcoHeardAboutEvaluationStart']) and (EventFlowSystemActor.EventCheck('Fireworks') == 3):
-        run Rco_Force_IslandDev_EnvUnlockWithsza()
- 
+	if (not System.EventFlags['cPlayer:RcoHeardAboutEvaluationStart']) and (EventFlowSystemActor.EventCheck('Fireworks') == 3):
+		run Rco_Force_IslandDev_EnvUnlockWithsza()
+
 flow SetOfficeForceTalk():
-    if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
-        MainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
-        MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
- 
+	if EventFlowSystemActor.SystemCheckNowStage('cIdrOffice'):
+		MainNpc.NpcAISetRequestSpeakFunc('cSitDownOffice', true)
+		MainNpc.NpcAISetExitStrc('Greeting', 'cTriggerType_ExitStrc', 0)
+
 flow Skip_NoticeUnlockNpcHouseCoordinate():
-    if System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial']:
-        run Rco_Force_InviteRemakeWorkshop()
-    else:
-        run AI_Rco_NormalTalk()
- 
+	if System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial']:
+		run Rco_Force_InviteRemakeWorkshop()
+	else:
+		run AI_Rco_NormalTalk()
+
 local flow Sub_grp_Event133():
-    if (EventFlowSystemActor.IsSharePlay(0)) or (EventFlowSystemActor.DuringTransitionByUIStage()):
-        run AI_Rco_NormalTalk()
-    elif not System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']:
-        run Rco_Force_FirstVisit()
-    elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
-        run AI_Rco_Disable_OfficeFirstTalk()
-    elif System.EventFlags['cPlayer:RcoFirstTalkNewOffice']:
-        run AI_Rco_Disable_OfficeFirstTalk()
-    elif System.EventFlags['cPlayer:SzaTalkFirstNotOffice']:
-        run AI_Rco_Disable_OfficeFirstTalk()
-    elif EventFlowSystemActor.EventCheck('Fireworks') in (0, 1, 2):
-        run AI_Rco_Disable_OfficeFirstTalk()
-    else:
-        run Rco_Force_OfficeFirstTalk()
- 
+	if (EventFlowSystemActor.IsSharePlay(0)) or (EventFlowSystemActor.DuringTransitionByUIStage()):
+		run AI_Rco_NormalTalk()
+	elif not System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']:
+		run Rco_Force_FirstVisit()
+	elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
+		run AI_Rco_Disable_OfficeFirstTalk()
+	elif System.EventFlags['cPlayer:RcoFirstTalkNewOffice']:
+		run AI_Rco_Disable_OfficeFirstTalk()
+	elif System.EventFlags['cPlayer:SzaTalkFirstNotOffice']:
+		run AI_Rco_Disable_OfficeFirstTalk()
+	elif EventFlowSystemActor.EventCheck('Fireworks') in (0, 1, 2):
+		run AI_Rco_Disable_OfficeFirstTalk()
+	else:
+		run Rco_Force_OfficeFirstTalk()
+
 local flow Sub_grp_Event245():
-    if System.EventFlags['cPlayer:RcoStandbyNoticeStorageExpansion']:
-        run Rco_Force_NoticeStorageExpansion()
-    elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AddStorage']:
-        run Rco_Force_v200_NoticeAddLevelExpandStorage()
-    elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion']:
-        run Rco_Force_v200_AfterExpandStorage()
-    elif (System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
-        run Rco_Force_v200_RestartNHC_AfterPMoving()
-    elif not System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']:
-        run Skip_NoticeUnlockNpcHouseCoordinate()
-    elif (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
-        run Rco_Force_v200_UnlockNpcHouseCoordinate()
-    else:
-        run Skip_NoticeUnlockNpcHouseCoordinate()
- 
+	if System.EventFlags['cPlayer:RcoStandbyNoticeStorageExpansion']:
+		run Rco_Force_NoticeStorageExpansion()
+	elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AddStorage']:
+		run Rco_Force_v200_NoticeAddLevelExpandStorage()
+	elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion']:
+		run Rco_Force_v200_AfterExpandStorage()
+	elif (System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
+		run Rco_Force_v200_RestartNHC_AfterPMoving()
+	elif not System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']:
+		run Skip_NoticeUnlockNpcHouseCoordinate()
+	elif (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
+		run Rco_Force_v200_UnlockNpcHouseCoordinate()
+	else:
+		run Skip_NoticeUnlockNpcHouseCoordinate()

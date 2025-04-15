@@ -1,66 +1,65 @@
 flow EntryPoint_EditNPC():
-    run EntryPoint_EditPlayer()
- 
+	run EntryPoint_EditPlayer()
+
 flow EntryPoint_EditPlayer():
-    EventFlowSystemActor.UIMoneyDisappear()
-    EventFlowSystemActor.UIMsgCardEditTextHandling('')
-    if not EventFlowSystemActor.UIResultMenuDecide():
-        run Obj_MessageCardRack::EntryPoint_EditCancelrun Obj_MessageCardRack::EntryPoint_EditCancel()
-    elif EventFlowSystemActor.HasFreeInPostOffice('cToVillagePlayer'):
-        EventFlowSystemActor.UIMoneyAppear()
-        EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
-        if EventFlowSystemActor.HasBellCount(200):
-            # Alright, delivery fee comes to 200 Bells.
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:500', true)
-            EventFlowSystemActor.BellCountDown(-200, false)
-            EventFlowSystemActor.DropIntoPostOffice('cSaveMailUserInfo')
-            # Letter sent! Thanks for your business!
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:501', false)
-            EventFlowSystemActor.UIMoneyDisappear()
-        else:
-            # Wuh-oh! You don't have quite enough Bells here. When you've got 200, come see me again! In the meanwhile, I'll just hold on to the letter for you. I …
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:510', false)
-            EventFlowSystemActor.UIMoneyDisappear()
-            run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoneyrun Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
-    else:
-        run Obj_MessageCardRack::EntryPoint_StockFullrun Obj_MessageCardRack::EntryPoint_StockFull()
- 
+	EventFlowSystemActor.UIMoneyDisappear()
+	EventFlowSystemActor.UIMsgCardEditTextHandling('')
+	if not EventFlowSystemActor.UIResultMenuDecide():
+		run Obj_MessageCardRack::EntryPoint_EditCancel()
+	elif EventFlowSystemActor.HasFreeInPostOffice('cToVillagePlayer'):
+		EventFlowSystemActor.UIMoneyAppear()
+		EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
+		if EventFlowSystemActor.HasBellCount(200):
+			# Alright, delivery fee comes to 200 Bells.
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:500', true)
+			EventFlowSystemActor.BellCountDown(-200, false)
+			EventFlowSystemActor.DropIntoPostOffice('cSaveMailUserInfo')
+			# Letter sent! Thanks for your business!
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:501', false)
+			EventFlowSystemActor.UIMoneyDisappear()
+		else:
+			# Wuh-oh! You don't have quite enough Bells here. When you've got 200, come see me again! In the meanwhile, I'll just hold on to the letter for you. I …
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:510', false)
+			EventFlowSystemActor.UIMoneyDisappear()
+			run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
+	else:
+		run Obj_MessageCardRack::EntryPoint_StockFull()
+
 flow EntryPoint_SendVillage():
-    EventFlowSystemActor.UIMoneyDisappear()
-    # Gotcha. Someone on this island. Who, exactly?
-    DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:200', false)
-    EventFlowSystemActor.UIMsgCardAdrHandling('cResident')
-    if not EventFlowSystemActor.UIResultMenuDecide():
-        run Obj_MessageCardRack::EntryPoint_CancelNegarun Obj_MessageCardRack::EntryPoint_CancelNega()
-    elif EventFlowSystemActor.UIIsAdrSelect():
-        if EventFlowSystemActor.HasFreeInPostOffice('cToVillagePlayer'):
-            EventFlowSystemActor.SetTagFromUIResult('cSelectPlayerName', 0)
-            # Sending to <115:0:cd00>? No problem!
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_01', false)
-            run Sub_grp_Event48()
-        else:
-            run Obj_MessageCardRack::EntryPoint_StockFullrun Obj_MessageCardRack::EntryPoint_StockFull()
-    elif EventFlowSystemActor.HasFreeInPostOffice('cToNpc'):
-        EventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
-        # To <115:1:cd00>? Sounds good!
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_02', false)
-        run Sub_grp_Event48()
-    else:
-        run Obj_MessageCardRack::EntryPoint_StockFullrun Obj_MessageCardRack::EntryPoint_StockFull()
- 
+	EventFlowSystemActor.UIMoneyDisappear()
+	# Gotcha. Someone on this island. Who, exactly?
+	DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:200', false)
+	EventFlowSystemActor.UIMsgCardAdrHandling('cResident')
+	if not EventFlowSystemActor.UIResultMenuDecide():
+		run Obj_MessageCardRack::EntryPoint_CancelNega()
+	elif EventFlowSystemActor.UIIsAdrSelect():
+		if EventFlowSystemActor.HasFreeInPostOffice('cToVillagePlayer'):
+			EventFlowSystemActor.SetTagFromUIResult('cSelectPlayerName', 0)
+			# Sending to <115:0:cd00>? No problem!
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_01', false)
+			run Sub_grp_Event48()
+		else:
+			run Obj_MessageCardRack::EntryPoint_StockFull()
+	elif EventFlowSystemActor.HasFreeInPostOffice('cToNpc'):
+		EventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
+		# To <115:1:cd00>? Sounds good!
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_02', false)
+		run Sub_grp_Event48()
+	else:
+		run Obj_MessageCardRack::EntryPoint_StockFull()
+
 local flow Sub_grp_Event48():
-    if EventFlowSystemActor.ExistUnfinishMail():
-        EventFlowSystemActor.ChangeAddressUnfinishMail()
-        # Alrighty then. Here's your card!
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_02', false)
-        run EntryPoint_EditPlayer()
-    else:
-        # Just choose a card and write your letter on it!
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_01', false)
-        EventFlowSystemActor.UIMoneyDisappear()
-        EventFlowSystemActor.UIMsgCardSelectHandling()
-        if EventFlowSystemActor.UIResultMenuDecide():
-            run EntryPoint_EditPlayer()
-        else:
-            run Obj_MessageCardRack::EntryPoint_CancelNegarun Obj_MessageCardRack::EntryPoint_CancelNega()
- 
+	if EventFlowSystemActor.ExistUnfinishMail():
+		EventFlowSystemActor.ChangeAddressUnfinishMail()
+		# Alrighty then. Here's your card!
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_02', false)
+		run EntryPoint_EditPlayer()
+	else:
+		# Just choose a card and write your letter on it!
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_01', false)
+		EventFlowSystemActor.UIMoneyDisappear()
+		EventFlowSystemActor.UIMsgCardSelectHandling()
+		if EventFlowSystemActor.UIResultMenuDecide():
+			run EntryPoint_EditPlayer()
+		else:
+			run Obj_MessageCardRack::EntryPoint_CancelNega()

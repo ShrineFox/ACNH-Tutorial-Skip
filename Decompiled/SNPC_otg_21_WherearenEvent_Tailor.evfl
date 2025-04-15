@@ -1,190 +1,189 @@
 flow IntroduceFacility():
-    EventFlowSystemActor.BGMPropertyControl(148)
-    EventFlowSystemActor.FadeIn(false)
-    EventFlowSystemActor.CameraSetDemoParam('FacilityTailorEditStartDemo', 'FacilityEditStartDemo_0', 'Player', false, false, false, 0)
-    fork:
-        branch:
-            Player.PlayerMoveToTarget(false, 632.0, 400.0, 0.0, 0.0, false, '')
-            Player.TurnBody(12, 180.0)
-        branch:
-            MainNpc.NpcMoveDirection(180.0, 25.0, 1, false, false)
-            MainNpc.TurnBody(12, 180.0)
-    EventFlowSystemActor.WaitFrame(30)
-    # Alright, here we are! This is the plot we reserved for the apparel shop.
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:021', false)
-    fork:
-        branch:
-            Player.TurnBody(0, 0.0)
-        branch:
-            MainNpc.TurnBody(10, 0.0)
-    # You know how they say that location is everything? Well, our apparel shop will be a hot spot on the main street. Let's focus on the outside first. We…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:022', true)
-    run Demo_Common_Wherearen::EditFacilityExteriorrun Demo_Common_Wherearen::EditFacilityExterior()
-    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
-    EventFlowSystemActor.ReserveSkipSceneStartDemo()
-    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-    run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cWherearenFacilityOrder', FadeOutSpeed=0.0, FadeInSpeed='cNormal', FadeOutKindString='cCircle', FadeInKindString='cCircle')
- 
+	EventFlowSystemActor.BGMPropertyControl(148)
+	EventFlowSystemActor.FadeIn(false)
+	EventFlowSystemActor.CameraSetDemoParam('FacilityTailorEditStartDemo', 'FacilityEditStartDemo_0', 'Player', false, false, false, 0)
+	fork:
+		branch:
+			Player.PlayerMoveToTarget(false, 632.0, 400.0, 0.0, 0.0, false, '')
+			Player.TurnBody(12, 180.0)
+		branch:
+			MainNpc.NpcMoveDirection(180.0, 25.0, 1, false, false)
+			MainNpc.TurnBody(12, 180.0)
+	EventFlowSystemActor.WaitFrame(30)
+	# Alright, here we are! This is the plot we reserved for the apparel shop.
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:021', false)
+	fork:
+		branch:
+			Player.TurnBody(0, 0.0)
+		branch:
+			MainNpc.TurnBody(10, 0.0)
+	# You know how they say that location is everything? Well, our apparel shop will be a hot spot on the main street. Let's focus on the outside first. We…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:022', true)
+	run Demo_Common_Wherearen::EditFacilityExterior()
+	System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
+	EventFlowSystemActor.ReserveSkipSceneStartDemo()
+	System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+	run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cWherearenFacilityOrder', FadeOutSpeed=0.0, FadeInSpeed='cNormal', FadeOutKindString='cCircle', FadeInKindString='cCircle')
+
 flow PostEdit():
-    System.EventFlags['cWherearenPlayer:SeqTailorEditOngoing'] = false
-    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
- 
+	System.EventFlags['cWherearenPlayer:SeqTailorEditOngoing'] = false
+	System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+
 flow PreEdit():
-    EventFlowSystemActor.BGMPropertyControl(147)
-    MainNpc.TurnBody(10, 0.0)
-    EventFlowSystemActor.WaitFrame(5)
-    Player.TurnBody(0, 0.0)
-    if System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone']:
-        # Alright, time to start working on the apparel shop again! The products will be displayed on special mannequins. You can place up to 6 of them. You ca…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:051', false)
-    else:
-        # Alright, it's up to you to make this a wonderful apparel shop! The plan is to change the available selection on a daily basis.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:041', true)
-        MainNpc.TurnNeck(11, false)
-        MainNpc.TurnBody(12, 180.0)
-        EventFlowSystemActor.WaitFrame(12)
-        Player.TurnBody(12, 180.0)
-        EventFlowSystemActor.WaitFrame(15)
-        # The products available will be displayed on those special mannequins over there. As you can see, there are three kinds of mannequins, each one for sh…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:042', false)
-        MainNpc.TurnBody(10, 0.0)
-        fork:
-            branch:
-                # You can use up to 6 mannequins in any combination you like. Press  and look in Order to pick them. Alright, PLAYER. This is the last of the facilit…
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:043', true)
-            branch:
-                EventFlowSystemActor.WaitFrame(15)
-                Player.TurnBody(0, 0.0)
-        System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone'] = true
- 
+	EventFlowSystemActor.BGMPropertyControl(147)
+	MainNpc.TurnBody(10, 0.0)
+	EventFlowSystemActor.WaitFrame(5)
+	Player.TurnBody(0, 0.0)
+	if System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone']:
+		# Alright, time to start working on the apparel shop again! The products will be displayed on special mannequins. You can place up to 6 of them. You ca…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:051', false)
+	else:
+		# Alright, it's up to you to make this a wonderful apparel shop! The plan is to change the available selection on a daily basis.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:041', true)
+		MainNpc.TurnNeck(11, false)
+		MainNpc.TurnBody(12, 180.0)
+		EventFlowSystemActor.WaitFrame(12)
+		Player.TurnBody(12, 180.0)
+		EventFlowSystemActor.WaitFrame(15)
+		# The products available will be displayed on those special mannequins over there. As you can see, there are three kinds of mannequins, each one for sh…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:042', false)
+		MainNpc.TurnBody(10, 0.0)
+		fork:
+			branch:
+				# You can use up to 6 mannequins in any combination you like. Press  and look in Order to pick them. Alright, PLAYER. This is the last of the facilit…
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:043', true)
+			branch:
+				EventFlowSystemActor.WaitFrame(15)
+				Player.TurnBody(0, 0.0)
+		System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone'] = true
+
 flow ReturnOffice():
-    if EventFlowSystemActor.SystemCheckNowStage('cWherearenOffice1'):
-        MainNpc.TurnNeck(10, false)
-        Player.TurnNeck(0, false)
-        EventFlowSystemActor.WaitFrame(20)
-        EventFlowSystemActor.SystemFaderRelease()
-        EventFlowSystemActor.WaitFrame(30)
-        # Now that all of the facilities are complete, we can finally hold our special event! It's been a long road to get to this point, but time just flew ri…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:061', false)
-        fork:
-            branch:
-                # Things sure have gotten lively around here, what with the vacation homes and all the amenities…
-                SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:062', false)
-            branch:
-                EventFlowSystemActor.WaitFrame(20)
-                MainNpc.TurnNeck(1, false)
-                Npc_2.TurnNeck(1, false)
-            branch:
-                EventFlowSystemActor@sub.WaitFrame(15)
-                Player.TurnNeck(1, false)
-        SubNpc.TurnNeck(0, false)
-        fork:
-            branch:
-                # We owe our clients gratitude, yes, but we were only able to come this far because you all worked so hard. [target N0>N1]Niko, [target N0>N2]Wardell, …
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:063', false)
-            branch:
-                EventFlowSystemActor.WaitFrame(20)
-                Npc_2.TurnNeck(0, false)
-            branch:
-                EventFlowSystemActor@sub.WaitFrame(15)
-                Player.TurnNeck(0, false)
-        switch EventFlowSystemActor.GeneralTalkChoice2():
-            case 0, 1:
-                fork:
-                    branch:
-                        # I really am so thankful to you all! And now, let's head over to the venue for the special event!
-                        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:065', true)
-                    branch:
-                        EventFlowSystemActor.WaitFrame(20)
-                        SubNpc.TurnNeck(0, false)
-                        Npc_2.TurnNeck(0, false)
-                    branch:
-                        EventFlowSystemActor@sub.WaitFrame(15)
-                        Player.TurnNeck(0, false)
-                run ReturnOfficePose2F()
-                System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone'] = false
-                System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
-                System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes'] = true
-                System.EventFlags['cWherearenPlayer:FirstKKFesStep'] = 2
-                run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
-    else:
-        run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
-        # Ah, back at home base! Oof, I danced so much, my back hurts… Sorry this is late, but…here's your payment for the apparel shop. You earned <90:44:0000…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:071', true)
-        run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
-        Npc_2.TurnNeck(10, false)
-        fork:
-            branch:
-                # <150:5>I left some products for the music festival<150:5>at the apparel shop<150:5>
-                Npc_2.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:075', true)
-            branch:
-                MainNpc.TurnNeck(2, false)
-            branch:
-                Player.TurnNeck(2, false)
-        MainNpc.TurnNeck(10, false)
-        fork:
-            branch:
-                # Thank you, Wardell! <20:4:001600500030003e004e0030002c004e0030003e00500030>Say, why don't you go check out the shop! Take the rest of the day off, an…
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:073', true)
-            branch:
-                Player.TurnNeck(0, false)
-        System.EventFlags['cWherearenPlayer:Unlock_Faclility_Tailor'] = true
-        System.EventFlags['cPlayer:OtgTipsCompleteBoutiqueBuild'] = true
-        SubflowResults[3] = 0
-        run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
-        Player.TurnNeck(0, false)
-        Player.TurnBody(0, 0.0)
-        EventFlowSystemActor.WaitFrame(20)
-        # Dancing your heart out is a great way to express yourself! You should go dancing!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:074', true)
-        if not System.EventFlags['cPlayer:EnableEmoticonUI']:
-            System.EventFlags['cPlayer:EnableEmoticonUI'] = true
-            System.EventFlags['cPlayer:EnabledEmoticonIrregular'] = true
-            # When you want to use Reactions, press , then choose how you want to express yourself.
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:076', false)
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Emoticons', 'Get_Emoticon_FesDance', 'cNowDemoEnd', false)
- 
+	if EventFlowSystemActor.SystemCheckNowStage('cWherearenOffice1'):
+		MainNpc.TurnNeck(10, false)
+		Player.TurnNeck(0, false)
+		EventFlowSystemActor.WaitFrame(20)
+		EventFlowSystemActor.SystemFaderRelease()
+		EventFlowSystemActor.WaitFrame(30)
+		# Now that all of the facilities are complete, we can finally hold our special event! It's been a long road to get to this point, but time just flew ri…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:061', false)
+		fork:
+			branch:
+				# Things sure have gotten lively around here, what with the vacation homes and all the amenities…
+				SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:062', false)
+			branch:
+				EventFlowSystemActor.WaitFrame(20)
+				MainNpc.TurnNeck(1, false)
+				Npc_2.TurnNeck(1, false)
+			branch:
+				EventFlowSystemActor@sub.WaitFrame(15)
+				Player.TurnNeck(1, false)
+		SubNpc.TurnNeck(0, false)
+		fork:
+			branch:
+				# We owe our clients gratitude, yes, but we were only able to come this far because you all worked so hard. [target N0>N1]Niko, [target N0>N2]Wardell, …
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:063', false)
+			branch:
+				EventFlowSystemActor.WaitFrame(20)
+				Npc_2.TurnNeck(0, false)
+			branch:
+				EventFlowSystemActor@sub.WaitFrame(15)
+				Player.TurnNeck(0, false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0, 1:
+				fork:
+					branch:
+						# I really am so thankful to you all! And now, let's head over to the venue for the special event!
+						MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:065', true)
+					branch:
+EventFlowSystemActor.WaitFrame(20)
+						SubNpc.TurnNeck(0, false)
+						Npc_2.TurnNeck(0, false)
+					branch:
+EventFlowSystemActor@sub.WaitFrame(15)
+						Player.TurnNeck(0, false)
+				run ReturnOfficePose2F()
+				System.EventFlags['cWherearenPlayer:FacilityPreEditTalkDone'] = false
+				System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
+				System.EventFlags['cPlayerTemp:WHEREAREN_IsSequenceFirstKKFes'] = true
+				System.EventFlags['cWherearenPlayer:FirstKKFesStep'] = 2
+				run Demo_Common_Wherearen::ToKKFesDemoLive()
+	else:
+		run SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+		# Ah, back at home base! Oof, I danced so much, my back hurts… Sorry this is late, but…here's your payment for the apparel shop. You earned <90:44:0000…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:071', true)
+		run SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+		Npc_2.TurnNeck(10, false)
+		fork:
+			branch:
+				# <150:5>I left some products for the music festival<150:5>at the apparel shop<150:5>
+				Npc_2.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:075', true)
+			branch:
+				MainNpc.TurnNeck(2, false)
+			branch:
+				Player.TurnNeck(2, false)
+		MainNpc.TurnNeck(10, false)
+		fork:
+			branch:
+				# Thank you, Wardell! <20:4:001600500030003e004e0030002c004e0030003e00500030>Say, why don't you go check out the shop! Take the rest of the day off, an…
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:073', true)
+			branch:
+				Player.TurnNeck(0, false)
+		System.EventFlags['cWherearenPlayer:Unlock_Faclility_Tailor'] = true
+		System.EventFlags['cPlayer:OtgTipsCompleteBoutiqueBuild'] = true
+		SubflowResults[3] = 0
+		run SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+		Player.TurnNeck(0, false)
+		Player.TurnBody(0, 0.0)
+		EventFlowSystemActor.WaitFrame(20)
+		# Dancing your heart out is a great way to express yourself! You should go dancing!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:074', true)
+		if not System.EventFlags['cPlayer:EnableEmoticonUI']:
+			System.EventFlags['cPlayer:EnableEmoticonUI'] = true
+			System.EventFlags['cPlayer:EnabledEmoticonIrregular'] = true
+			# When you want to use Reactions, press , then choose how you want to express yourself.
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:076', false)
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Emoticons', 'Get_Emoticon_FesDance', 'cNowDemoEnd', false)
+
 flow ReturnOfficePose2F():
-    Player.TurnBody(0, 0.0)
-    run SNPC_otg_18_WherearenEvent_Party::LookCamerarun SNPC_otg_18_WherearenEvent_Party::LookCamera()
-    Player.CharacterEmoticonAction('Nodding', false, '', 0, false)
-    MainNpc.CharacterEmoticonAction('OtgHappy', true, '', 0, false)
-    SubNpc.CharacterEmoticonAction('Clapping', true, '', 0, false)
-    Npc_2.NpcChangeHandTool(14700, 'cNone', false)
-    Npc_2.CharacterEmoticonAction('Smiling', true, '', 0, false)
- 
+	Player.TurnBody(0, 0.0)
+	run SNPC_otg_18_WherearenEvent_Party::LookCamera()
+	Player.CharacterEmoticonAction('Nodding', false, '', 0, false)
+	MainNpc.CharacterEmoticonAction('OtgHappy', true, '', 0, false)
+	SubNpc.CharacterEmoticonAction('Clapping', true, '', 0, false)
+	Npc_2.NpcChangeHandTool(14700, 'cNone', false)
+	Npc_2.CharacterEmoticonAction('Smiling', true, '', 0, false)
+
 flow ReturnOffice_Init():
-    MainNpc.NpcAITalkCastSetting('WherearenPrologue')
- 
+	MainNpc.NpcAITalkCastSetting('WherearenPrologue')
+
 flow Root():
-    # You're raring to go, aren't you! Alright then… We're in the final stages of getting ready for the event. Let's build an apparel shop to finish things…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:001', false)
-    # After all, looking fashionable always puts folks in high spirits. Doubly so at a big event!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:003', false)
-    # A special day calls for special clothes, am I right? Let's head over to the site. We're going to create an amazing apparel shop and make our event as…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:004', true)
-    System.EventFlags['cWherearenPlayer:SeqTailorEditOngoing'] = true
-    System.EventFlags['cWherearenPlayer:IsFacilityEditStartDemo'] = 1
-    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
-    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-    EventFlowSystemActor.ReserveSkipSceneStartDemo()
-    run StartReaction()
- 
+	# You're raring to go, aren't you! Alright then… We're in the final stages of getting ready for the event. Let's build an apparel shop to finish things…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:001', false)
+	# After all, looking fashionable always puts folks in high spirits. Doubly so at a big event!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:003', false)
+	# A special day calls for special clothes, am I right? Let's head over to the site. We're going to create an amazing apparel shop and make our event as…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_08_WherearenEvent_Tailor:004', true)
+	System.EventFlags['cWherearenPlayer:SeqTailorEditOngoing'] = true
+	System.EventFlags['cWherearenPlayer:IsFacilityEditStartDemo'] = 1
+	System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
+	System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+	EventFlowSystemActor.ReserveSkipSceneStartDemo()
+	run StartReaction()
+
 flow StartReaction():
-    EventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
-    fork:
-        branch:
-            Player.CharacterEmoticonAction('Assent', true, '', 0, false)
-        branch:
-            MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.WherearenTakeOnFacilityOrder('cTailor', 'cNew')
-    EventFlowSystemActor.WherearenOrderCallback('cStart')
-    EventFlowSystemActor.WherearenOrderCallback('cConfirm')
-    EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
-    EventFlowSystemActor.WaitFrame(6)
-    EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
-    EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
-    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:TailorEditStartDemo_0', 'Player', false)
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilitySuspended', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.SystemBGMVolumeFadeOut(0.800000011920929, 0, 0.0)
+	fork:
+		branch:
+			Player.CharacterEmoticonAction('Assent', true, '', 0, false)
+		branch:
+			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.WherearenTakeOnFacilityOrder('cTailor', 'cNew')
+	EventFlowSystemActor.WherearenOrderCallback('cStart')
+	EventFlowSystemActor.WherearenOrderCallback('cConfirm')
+	EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+	EventFlowSystemActor.WaitFrame(6)
+	EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+	EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:TailorEditStartDemo_0', 'Player', false)
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilitySuspended', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)

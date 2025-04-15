@@ -1,120 +1,119 @@
 flow ChkCommuneShopNum(ShopNum: int = 0):
-    SubflowResults[4] = 0
-    ShopNum = 0
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSloDonation') not in (0, 1):
-        ShopNum += 1
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneCmlDonation') not in (0, 1):
-        ShopNum += 1
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneFoxDonation') not in (0, 1):
-        ShopNum += 1
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneBptDonation') not in (0, 1):
-        ShopNum += 1
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSkkDonation') not in (0, 1):
-        ShopNum += 1
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneAlpDonation') not in (0, 1):
-        ShopNum += 1
-    if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneTtlDonation') not in (0, 1):
-        ShopNum += 1
-    if ShopNum < 3:
-        SubflowResults[4] = 0
-    elif ShopNum < 7:
-        SubflowResults[4] = 1
-    else:
-        SubflowResults[4] = 2
- 
+	SubflowResults[4] = 0
+	ShopNum = 0
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSloDonation') not in (0, 1):
+		ShopNum += 1
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneCmlDonation') not in (0, 1):
+		ShopNum += 1
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneFoxDonation') not in (0, 1):
+		ShopNum += 1
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneBptDonation') not in (0, 1):
+		ShopNum += 1
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneSkkDonation') not in (0, 1):
+		ShopNum += 1
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneAlpDonation') not in (0, 1):
+		ShopNum += 1
+	if EventFlowSystemActor.FlagSystemIntValue3(3, 'cLand:CommuneTtlDonation') not in (0, 1):
+		ShopNum += 1
+	if ShopNum < 3:
+		SubflowResults[4] = 0
+	elif ShopNum < 7:
+		SubflowResults[4] = 1
+	else:
+		SubflowResults[4] = 2
+
 flow NightPos():
-    run Event14()
- 
+	run Event14()
+
 flow Root():
-    if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace') not in (0, 1, 2, 4):
-        SubflowResults[1] = 0
-        run SNPC_poo_03_Commune_HairStyling::Rootrun SNPC_poo_03_Commune_HairStyling::Root()
-    elif EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace') == 0:
-        if System.EventFlags['cPlayer:PooTalkAfterJuneBride']:
-            run Sub_grp_Event6()
-        else:
-            run Sub_grp_Event2()
-    else:
-        System.EventFlags['cPlayer:PooTalkAfterJuneBride'] = false
-        run Sub_grp_Event2()
- 
+	if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace') not in (0, 1, 2, 4):
+		SubflowResults[1] = 0
+		run SNPC_poo_03_Commune_HairStyling::Root()
+	elif EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace') == 0:
+		if System.EventFlags['cPlayer:PooTalkAfterJuneBride']:
+			run Sub_grp_Event6()
+		else:
+			run Sub_grp_Event2()
+	else:
+		System.EventFlags['cPlayer:PooTalkAfterJuneBride'] = false
+		run Sub_grp_Event2()
+
 flow SamePosSpn():
-    if EventFlowSystemActor.RandomChoice2(2) == 0:
-        # Harv gets so happy when you come by to visit, sugar!
-        MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:012', false)
-    else:
-        # We are living free and easy lives, just as we do every other day. Take it easy and enjoy, hon.
-        MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:011', false)
- 
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		# Harv gets so happy when you come by to visit, sugar!
+		MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:012', false)
+	else:
+		# We are living free and easy lives, just as we do every other day. Take it easy and enjoy, hon.
+		MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:011', false)
+
 flow Sitdown_StylingChair():
-    SubflowResults[1] = 1
-    run SNPC_poo_03_Commune_HairStyling::Rootrun SNPC_poo_03_Commune_HairStyling::Root()
- 
+	SubflowResults[1] = 1
+	run SNPC_poo_03_Commune_HairStyling::Root()
+
 local flow Sub_grp_Event2():
-    if System.EventFlags['cPlayer:PooTalkToday']:
-        run ChkCommuneShopNum()
-        switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace'):
-            case 0:
-                run Sub_grp_Event6()
-            case 1, 4:
-                if EventFlowSystemActor.PercentChoice(50):
-                    run NightPos()
-                else:
-                    switch SubflowResults@3[4]:
-                        case 0:
-                            # Harv is working so hard to get the shops here. It's so, so great to see him more energetic than before!
-                            MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:031', false)
-                        case 1:
-                            # There's more and more shops here, and this plaza is getting real lively. Check it all out, sugar! Have fun!
-                            MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:032', false)
-                        case 2:
-                            # This plaza is just so bustlin' now that we have all these shops here. It makes Harv so happy, and, well, seeing that makes me happy! Have fun while y…
-                            MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:033', false)
-            case 2:
-                run NightPos()
-            default:
-                return
-    else:
-        # Oh, welcome! Take your time here, sugar.
-        MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:001', false)
-        System.EventFlags['cPlayer:PooTalkToday'] = true
- 
+	if System.EventFlags['cPlayer:PooTalkToday']:
+		run ChkCommuneShopNum()
+		switch EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace'):
+			case 0:
+				run Sub_grp_Event6()
+			case 1, 4:
+				if EventFlowSystemActor.PercentChoice(50):
+					run NightPos()
+				else:
+					switch SubflowResults@3[4]:
+						case 0:
+							# Harv is working so hard to get the shops here. It's so, so great to see him more energetic than before!
+							MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:031', false)
+						case 1:
+							# There's more and more shops here, and this plaza is getting real lively. Check it all out, sugar! Have fun!
+							MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:032', false)
+						case 2:
+							# This plaza is just so bustlin' now that we have all these shops here. It makes Harv so happy, and, well, seeing that makes me happy! Have fun while y…
+							MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:033', false)
+			case 2:
+				run NightPos()
+			default:
+				return
+	else:
+		# Oh, welcome! Take your time here, sugar.
+		MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:001', false)
+		System.EventFlags['cPlayer:PooTalkToday'] = true
+
 local flow Sub_grp_Event6():
-    if EventFlowSystemActor.TermEventNow('JuneBride', false):
-        if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-            # Here to help with the anniversary photos? Be sure to let Harv know if you're going to help him out!
-            MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:022', false)
-        elif System.EventFlags['cPlayer:PooTalkAfterJuneBride']:
-            # Great job today! Reese and Cyrus looked so happy. Way to wow those two lovebugs, you shutterbug!
-            MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:023', false)
-            System.EventFlags['cPlayer:PooTalkToday'] = true
-        else:
-            run NightPos()
-    elif EventFlowSystemActor.PercentChoice(25):
-        # Are you gonna use Photopia today? Well, it looks like it's open now. You can totally go use it, sugar!
-        MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:021', false)
-    else:
+	if EventFlowSystemActor.TermEventNow('JuneBride', false):
+		if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+			# Here to help with the anniversary photos? Be sure to let Harv know if you're going to help him out!
+			MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:022', false)
+		elif System.EventFlags['cPlayer:PooTalkAfterJuneBride']:
+			# Great job today! Reese and Cyrus looked so happy. Way to wow those two lovebugs, you shutterbug!
+			MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:023', false)
+			System.EventFlags['cPlayer:PooTalkToday'] = true
+		else:
+			run NightPos()
+	elif EventFlowSystemActor.PercentChoice(25):
+		# Are you gonna use Photopia today? Well, it looks like it's open now. You can totally go use it, sugar!
+		MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:021', false)
+	else:
 entrypoint Event14:
-        if System.EventFlags['cPlayer:PooTalkFirstToday']:
-            # After all my years in the shop, I got used to never being outside… But this new lifestyle is just about the most invigorating thing I've ever done! W…
-            MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:013', false)
-        else:
-            switch EventFlowSystemActor.RandomChoice4(4):
-                case 0:
-                    # After all my years in the shop, I got used to never being outside… But this new lifestyle is just about the most invigorating thing I've ever done! W…
-                    MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:013', false)
-                case 1:
-                    # Harv gets so happy when you come by to visit, sugar!
-                    MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:012', false)
-                case 2:
-                    # We are living free and easy lives, just as we do every other day. Take it easy and enjoy, hon.
-                    MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:011', false)
-                case 3:
-                    if EventFlowSystemActor.EventFlagSystemComqare('cPlayerTemp:SpnCheckPlace', 'cPlayerTemp:PooCheckPlace') not in (0, 2):
-                        run SamePosSpn()
-                    elif System.EventFlags['cPlayer:SpnSendMailCommuneExpansion']:
-                        # Were you Harv's friend before he built his plaza, PLAYER? He looks like he's all casual and doesn't have any worries, but I've known him to have a fe…
-                        MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:014', false)
-                    else:
-                        run SamePosSpn()
- 
+		if System.EventFlags['cPlayer:PooTalkFirstToday']:
+			# After all my years in the shop, I got used to never being outside… But this new lifestyle is just about the most invigorating thing I've ever done! W…
+			MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:013', false)
+		else:
+			switch EventFlowSystemActor.RandomChoice4(4):
+				case 0:
+					# After all my years in the shop, I got used to never being outside… But this new lifestyle is just about the most invigorating thing I've ever done! W…
+					MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:013', false)
+				case 1:
+					# Harv gets so happy when you come by to visit, sugar!
+					MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:012', false)
+				case 2:
+					# We are living free and easy lives, just as we do every other day. Take it easy and enjoy, hon.
+					MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:011', false)
+				case 3:
+					if EventFlowSystemActor.EventFlagSystemComqare('cPlayerTemp:SpnCheckPlace', 'cPlayerTemp:PooCheckPlace') not in (0, 2):
+	run SamePosSpn()
+					elif System.EventFlags['cPlayer:SpnSendMailCommuneExpansion']:
+						# Were you Harv's friend before he built his plaza, PLAYER? He looks like he's all casual and doesn't have any worries, but I've known him to have a fe…
+						MainNpc.OpenMessageWindow('TalkSNpc/poo/SP_poo_02_Commune:014', false)
+					else:
+	run SamePosSpn()

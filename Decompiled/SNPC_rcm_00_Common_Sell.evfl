@@ -1,274 +1,273 @@
 flow CannotSellTurnip(SellTotal: int = 0):
-    run Event92()
- 
+	run Event92()
+
 flow ChkSellSpecificItem():
-    if EventFlowSystemActor.MultiKindItemSelectInclude('SculptureFake', 'PictureFake', '', '', '', '', '', '', 'cItemSelect'):
-        # Ah… My apologies, but…we cannot accept any fake works of art… I'm sorry for the hassle, but can we start over exactly where we were and pretend this …
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:025', false)
-        run Sell_NoSunday0()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        if EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TreasureQuestDust', '', '', '', '', '', '', 'cItemSelect'):
-            SubflowResults[2] = 1
-        else:
-            SubflowResults[2] = 0
-        if EventFlowSystemActor.IsMyVillage():
-            if (not System.EventFlags['cPlayer:HeardEatingHintAtShop']) and (EventFlowSystemActor.MultiItemSelectInclude(2287, 2214, 2285, 2286, 2213, 65534, 65534, 65534, 'cItemSelect')):
-                System.EventFlags['cPlayerTemp:StoreSellFruitChk'] = true
-            if (EventFlowSystemActor.ShopLevel() == `InResServiceTent`) and (System.EventFlags['cLand:VillageDaysCount'] <= 3) and (EventFlowSystemActor.MultiItemSelectInclude(4081, 1432, 3697, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')):
-                System.EventFlags['cPlayerTemp:RcmSellCampingStuff'] = true
- 
+	if EventFlowSystemActor.MultiKindItemSelectInclude('SculptureFake', 'PictureFake', '', '', '', '', '', '', 'cItemSelect'):
+		# Ah… My apologies, but…we cannot accept any fake works of art… I'm sorry for the hassle, but can we start over exactly where we were and pretend this …
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:025', false)
+		run Sell_NoSunday0()
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		if EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TreasureQuestDust', '', '', '', '', '', '', 'cItemSelect'):
+			SubflowResults[2] = 1
+		else:
+			SubflowResults[2] = 0
+		if EventFlowSystemActor.IsMyVillage():
+			if (not System.EventFlags['cPlayer:HeardEatingHintAtShop']) and (EventFlowSystemActor.MultiItemSelectInclude(2287, 2214, 2285, 2286, 2213, 65534, 65534, 65534, 'cItemSelect')):
+				System.EventFlags['cPlayerTemp:StoreSellFruitChk'] = true
+			if (EventFlowSystemActor.ShopLevel() == `InResServiceTent`) and (System.EventFlags['cLand:VillageDaysCount'] <= 3) and (EventFlowSystemActor.MultiItemSelectInclude(4081, 1432, 3697, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')):
+				System.EventFlags['cPlayerTemp:RcmSellCampingStuff'] = true
+
 flow Cmn_After_Sell_Confirm():
-    if System.EventFlags['cPlayerTemp:RcmSellItemSingle']:
-        MainNpc.NpcDelivery(3, 'Default')
-        System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = false
-    if (EventFlowSystemActor.IsMyVillage()) and (not System.EventFlags['cPlayer:HeardEatingHintAtShop']) and (System.EventFlags['cPlayerTemp:StoreSellFruitChk']):
-        # Oh, before I forget! I wanted to tell you something about the fruit you just sold me… When you eat food like fruit, you'll find yourself energized wi…
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_01', false)
-        if System.EventFlags['cLand:MuseumBuilt']:
-            # What I mean is, you could break open rocks or maybe even dig up a whole tree…with a shovel, of course.
-            MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_03', false)
-        else:
-            # What I mean is, you could break open rocks or maybe even dig up a whole tree if you had the right tool!
-            MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_02', false)
-        # Now, it's fine for you to sell me your fruit, but you should try eating it once in a while too!__ ...too!__
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_04', false)
-        System.EventFlags['cPlayer:HeardEatingHintAtShop'] = true
-        System.EventFlags['cPlayerTemp:StoreSellFruitChk'] = false
- 
+	if System.EventFlags['cPlayerTemp:RcmSellItemSingle']:
+		MainNpc.NpcDelivery(3, 'Default')
+		System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = false
+	if (EventFlowSystemActor.IsMyVillage()) and (not System.EventFlags['cPlayer:HeardEatingHintAtShop']) and (System.EventFlags['cPlayerTemp:StoreSellFruitChk']):
+		# Oh, before I forget! I wanted to tell you something about the fruit you just sold me… When you eat food like fruit, you'll find yourself energized wi…
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_01', false)
+		if System.EventFlags['cLand:MuseumBuilt']:
+			# What I mean is, you could break open rocks or maybe even dig up a whole tree…with a shovel, of course.
+			MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_03', false)
+		else:
+			# What I mean is, you could break open rocks or maybe even dig up a whole tree if you had the right tool!
+			MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_02', false)
+		# Now, it's fine for you to sell me your fruit, but you should try eating it once in a while too!__ ...too!__
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:056_04', false)
+		System.EventFlags['cPlayer:HeardEatingHintAtShop'] = true
+		System.EventFlags['cPlayerTemp:StoreSellFruitChk'] = false
+
 flow MovingPlayer2P():
-    run Event52()
- 
+	run Event52()
+
 flow RcmSellSeveralItemNormal():
-    if EventFlowSystemActor.ItemValuables():
-        # So many fine thi… Huh? I'm seeing an extremely valuable recipe in the mix. Are you sure about this?
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:043', false)
-        run Sub_grp_Event88()
-    elif EventFlowSystemActor.DIYRecipeSelectInclude(13792, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-        # So many fine thi— OH! I'm seeing an extremely valuable recipe in the mix. Are you sure about this?
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:043_01', false)
-        run Sub_grp_Event88()
-    else:
-        run Event81()
- 
+	if EventFlowSystemActor.ItemValuables():
+		# So many fine thi… Huh? I'm seeing an extremely valuable recipe in the mix. Are you sure about this?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:043', false)
+		run Sub_grp_Event88()
+	elif EventFlowSystemActor.DIYRecipeSelectInclude(13792, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+		# So many fine thi— OH! I'm seeing an extremely valuable recipe in the mix. Are you sure about this?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:043_01', false)
+		run Sub_grp_Event88()
+	else:
+		run Event81()
+
 flow RcmSellSingleItemNormal():
-    run Event37()
- 
+	run Event37()
+
 flow Root(SellTotal: int = 0):
-    if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
-        run Sub_Event32(SellTotal=SellTotal)
-    else:
-        if EventFlowSystemActor.EnvDayOfWeek() != `Sunday`:
+	if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+		run Sub_Event32(SellTotal=SellTotal)
+	else:
+		if EventFlowSystemActor.EnvDayOfWeek() != `Sunday`:
 entrypoint Event1:
-            # Of course! What exactly are you offering?__ ...offering?__
-            MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:021', false)
-            MainNpc.SetKabuka()
-            EventFlowSystemActor.UIItemSelectWindowHandling('cSell', 65534, '', '', 'cItemSelect', false)
-        elif System.EventFlags['cPlayer:RcmNoTurnipSellToday']:
-            run Sub_Event32(SellTotal=SellTotal)
-        else:
-            System.EventFlags['cPlayer:RcmNoTurnipSellToday'] = true
-            # Now, we have a policy in place of not buying turnips on Sundays. I'm sure you understand. So, what would you like to sell?
-            MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:022', false)
-            run Sell_Sunday(SellTotal=SellTotal)
-    if EventFlowSystemActor.UIResultMenuDecide():
-        switch EventFlowSystemActor.EnvDayOfWeek():
-            case `Sunday`:
+			# Of course! What exactly are you offering?__ ...offering?__
+			MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:021', false)
+			MainNpc.SetKabuka()
+			EventFlowSystemActor.UIItemSelectWindowHandling('cSell', 65534, '', '', 'cItemSelect', false)
+		elif System.EventFlags['cPlayer:RcmNoTurnipSellToday']:
+			run Sub_Event32(SellTotal=SellTotal)
+		else:
+			System.EventFlags['cPlayer:RcmNoTurnipSellToday'] = true
+			# Now, we have a policy in place of not buying turnips on Sundays. I'm sure you understand. So, what would you like to sell?
+			MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:022', false)
+			run Sell_Sunday(SellTotal=SellTotal)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		switch EventFlowSystemActor.EnvDayOfWeek():
+			case `Sunday`:
 entrypoint Event92:
-                if EventFlowSystemActor.MultiKindItemSelectInclude('Turnip', '', '', '', '', '', '', '', 'cItemSelect'):
-                    # Ummm… Sincerest apologies, but… since it's Sunday, some items, such as turnips, are off the table now… Sorry for the trouble, but please reselect wha…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:024', false)
-                    run Sell_Sunday()
-                else:
-                    run Sub_Event20(SellTotal=SellTotal)
-            case `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`:
-                run Sub_Event20(SellTotal=SellTotal)
-            case `Saturday`:
-                if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) == 0:
-                    run Sub_Event20(SellTotal=SellTotal)
-                else:
-                    run CannotSellTurnip()
-    else:
-        run rcm_Sell_Cancel()
- 
+				if EventFlowSystemActor.MultiKindItemSelectInclude('Turnip', '', '', '', '', '', '', '', 'cItemSelect'):
+					# Ummm… Sincerest apologies, but… since it's Sunday, some items, such as turnips, are off the table now… Sorry for the trouble, but please reselect wha…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:024', false)
+					run Sell_Sunday()
+				else:
+					run Sub_Event20(SellTotal=SellTotal)
+			case `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`:
+				run Sub_Event20(SellTotal=SellTotal)
+			case `Saturday`:
+				if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) == 0:
+					run Sub_Event20(SellTotal=SellTotal)
+				else:
+					run CannotSellTurnip()
+	else:
+		run rcm_Sell_Cancel()
+
 flow Sell_NoSunday0(SellTotal: int = 0):
-    run Event1()
- 
+	run Event1()
+
 flow Sell_Sunday(SellTotal: int = 0):
-    EventFlowSystemActor.UIItemSelectWindowHandling('cSellWithoutTurnip', 65534, '', '', 'cItemSelect', false)
- 
+	EventFlowSystemActor.UIItemSelectWindowHandling('cSellWithoutTurnip', 65534, '', '', 'cItemSelect', false)
+
 local flow Sub_Event20(SellTotal: int):
-    run ChkSellSpecificItem()
-    MainNpc.ShopSellCalc(SellTotal, 1.0, true, false)
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, SellTotal, '')
-    if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
-        if EventFlowSystemActor.IsMyVillage():
-            if System.EventFlags['cPlayer:RcmSellCampingStuffReaction']:
+	run ChkSellSpecificItem()
+	MainNpc.ShopSellCalc(SellTotal, 1.0, true, false)
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, SellTotal, '')
+	if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
+		if EventFlowSystemActor.IsMyVillage():
+			if System.EventFlags['cPlayer:RcmSellCampingStuffReaction']:
 entrypoint Event81:
-                if EventFlowSystemActor.ExpensivePurchase():
-                    # Look at this fine selection! Let's see… I'll run the numbers…take any high-value hot items…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:041_02', false)
+				if EventFlowSystemActor.ExpensivePurchase():
+					# Look at this fine selection! Let's see… I'll run the numbers…take any high-value hot items…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:041_02', false)
 entrypoint Event105:
-                    if SubflowResults@2[2] == 0:
-                        # And done! I can buy these from you for a total of <90:26:0000>. Sound good?
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:042', false)
-                        run rcm_Sell_Confirm()
-                    elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1:
-                        # Oh… I'm sorry, but I can't pay you for items like these. I can dispose of them for free if you don't need these things, though.
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:046', false)
-                        run rcm_Sell_Confirm()
-                    else:
-                        # And done! There is a portion of your submission I cannot pay Bells for. I can dispose of any unwanted items, though. That said, your total comes out …
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:045', false)
-                        SubflowResults[2] = 0
-                        run rcm_Sell_Confirm()
-                else:
-                    # Look at all the fine things you've brought in today! Allow me just a moment to run the numbers…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:041', false)
+					if SubflowResults@2[2] == 0:
+						# And done! I can buy these from you for a total of <90:26:0000>. Sound good?
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:042', false)
+run rcm_Sell_Confirm()
+					elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1:
+						# Oh… I'm sorry, but I can't pay you for items like these. I can dispose of them for free if you don't need these things, though.
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:046', false)
+run rcm_Sell_Confirm()
+					else:
+						# And done! There is a portion of your submission I cannot pay Bells for. I can dispose of any unwanted items, though. That said, your total comes out …
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:045', false)
+ SubflowResults[2] = 0
+run rcm_Sell_Confirm()
+				else:
+					# Look at all the fine things you've brought in today! Allow me just a moment to run the numbers…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:041', false)
 entrypoint Event105:
-                    if SubflowResults@2[2] == 0:
-                        # And done! I can buy these from you for a total of <90:26:0000>. Sound good?
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:042', false)
-                        run rcm_Sell_Confirm()
-                    elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1:
-                        # Oh… I'm sorry, but I can't pay you for items like these. I can dispose of them for free if you don't need these things, though.
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:046', false)
-                        run rcm_Sell_Confirm()
-                    else:
-                        # And done! There is a portion of your submission I cannot pay Bells for. I can dispose of any unwanted items, though. That said, your total comes out …
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:045', false)
-                        SubflowResults[2] = 0
-                        run rcm_Sell_Confirm()
-            else:
-                if System.EventFlags['cPlayerTemp:RcmSellCampingStuff']:
-                    System.EventFlags['cPlayer:RcmSellCampingStuffReaction'] = true
-                    # Look at all the fine things you've brought in today!<10:4> Wait… Are they selling… Oh! It's nothing! Nothing! I'll start running the numbers…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:041_01', false)
+					if SubflowResults@2[2] == 0:
+						# And done! I can buy these from you for a total of <90:26:0000>. Sound good?
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:042', false)
+run rcm_Sell_Confirm()
+					elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1:
+						# Oh… I'm sorry, but I can't pay you for items like these. I can dispose of them for free if you don't need these things, though.
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:046', false)
+run rcm_Sell_Confirm()
+					else:
+						# And done! There is a portion of your submission I cannot pay Bells for. I can dispose of any unwanted items, though. That said, your total comes out …
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:045', false)
+ SubflowResults[2] = 0
+run rcm_Sell_Confirm()
+			else:
+				if System.EventFlags['cPlayerTemp:RcmSellCampingStuff']:
+					System.EventFlags['cPlayer:RcmSellCampingStuffReaction'] = true
+					# Look at all the fine things you've brought in today!<10:4> Wait… Are they selling… Oh! It's nothing! Nothing! I'll start running the numbers…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:041_01', false)
 entrypoint Event105:
-                    if SubflowResults@2[2] == 0:
-                        # And done! I can buy these from you for a total of <90:26:0000>. Sound good?
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:042', false)
-                        run rcm_Sell_Confirm()
-                    elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1:
-                        # Oh… I'm sorry, but I can't pay you for items like these. I can dispose of them for free if you don't need these things, though.
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:046', false)
-                        run rcm_Sell_Confirm()
-                    else:
-                        # And done! There is a portion of your submission I cannot pay Bells for. I can dispose of any unwanted items, though. That said, your total comes out …
-                        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:045', false)
-                        SubflowResults[2] = 0
-                        run rcm_Sell_Confirm()
-                else:
-                    run RcmSellSeveralItemNormal()
-        else:
-            run RcmSellSeveralItemNormal()
-    else:
-        if EventFlowSystemActor.MultiKindItemSelectInclude('FlowerBud', '', '', '', '', '', '', '', 'cItemSelect'):
-            MainNpc.SetDeliveryItemAtRandom(2626, false, 'cVillageRemakePattern', 0)
-        else:
-            MainNpc.SetDeliveryItem(4, false)
-        MainNpc.NpcDelivery(0, 'Keep')
-        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-        System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = true
-        if System.EventFlags['cPlayer:RcmSellCampingStuffReaction']:
-            run RcmSellSingleItemNormal()
-        else:
-            if System.EventFlags['cPlayerTemp:RcmSellCampingStuff']:
-                System.EventFlags['cPlayer:RcmSellCampingStuffReaction'] = true
-                # Ah… Could this <125:0:0000> be… Oh! Don't mind me! Just rambling. I can give you <90:25:0000> for your <125:0:0000>.
-                MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:035', false)
-            else:
+					if SubflowResults@2[2] == 0:
+						# And done! I can buy these from you for a total of <90:26:0000>. Sound good?
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:042', false)
+run rcm_Sell_Confirm()
+					elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 1:
+						# Oh… I'm sorry, but I can't pay you for items like these. I can dispose of them for free if you don't need these things, though.
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:046', false)
+run rcm_Sell_Confirm()
+					else:
+						# And done! There is a portion of your submission I cannot pay Bells for. I can dispose of any unwanted items, though. That said, your total comes out …
+						MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:045', false)
+ SubflowResults[2] = 0
+run rcm_Sell_Confirm()
+				else:
+					run RcmSellSeveralItemNormal()
+		else:
+			run RcmSellSeveralItemNormal()
+	else:
+		if EventFlowSystemActor.MultiKindItemSelectInclude('FlowerBud', '', '', '', '', '', '', '', 'cItemSelect'):
+			MainNpc.SetDeliveryItemAtRandom(2626, false, 'cVillageRemakePattern', 0)
+		else:
+			MainNpc.SetDeliveryItem(4, false)
+		MainNpc.NpcDelivery(0, 'Keep')
+		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+		System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = true
+		if System.EventFlags['cPlayer:RcmSellCampingStuffReaction']:
+			run RcmSellSingleItemNormal()
+		else:
+			if System.EventFlags['cPlayerTemp:RcmSellCampingStuff']:
+				System.EventFlags['cPlayer:RcmSellCampingStuffReaction'] = true
+				# Ah… Could this <125:0:0000> be… Oh! Don't mind me! Just rambling. I can give you <90:25:0000> for your <125:0:0000>.
+				MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:035', false)
+			else:
 entrypoint Event37:
-                if EventFlowSystemActor.ItemValuables():
-                    # OH! This is the DIY recipe for [a|an] <125:0:0000>! This is an extremely valuable recipe. Are you really sure you want to part with it? I can give yo…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:037', false)
-                elif EventFlowSystemActor.DIYRecipeSelectInclude(13792, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-                    # Oh my! This is a DIY recipe for [a|an]<125:0:0000>! It's quite rare and valuable. Are you sure you want to sell it? We can only offer <90:21:0000>, I…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:037_01', false)
-                elif EventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
-                    # Ah! This is a DIY recipe for [a|an] <125:0:0000>! I can pay you <90:21:0000> for it!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:036', false)
-                elif EventFlowSystemActor.ExpensivePurchase():
-                    # [A|An]<125:0:0000>! I'll give twice the usual amount, so… <90:24:0000>. Is that OK?
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:122', false)
-                elif SubflowResults@2[2] == 0:
-                    # [A|An]<125:0:0000>! Sure! How about if I offer you <90:26:0000>?
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:031', false)
-                else:
-                    # Oh… I'm sorry, but I can't pay you for items like this. I can dispose of it for free if you don't need it, though.
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:038', false)
-            run rcm_Sell_Confirm()
- 
+				if EventFlowSystemActor.ItemValuables():
+					# OH! This is the DIY recipe for [a|an] <125:0:0000>! This is an extremely valuable recipe. Are you really sure you want to part with it? I can give yo…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:037', false)
+				elif EventFlowSystemActor.DIYRecipeSelectInclude(13792, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+					# Oh my! This is a DIY recipe for [a|an]<125:0:0000>! It's quite rare and valuable. Are you sure you want to sell it? We can only offer <90:21:0000>, I…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:037_01', false)
+				elif EventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '', '', '', '', '', '', '', 'cItemSelect'):
+					# Ah! This is a DIY recipe for [a|an] <125:0:0000>! I can pay you <90:21:0000> for it!
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:036', false)
+				elif EventFlowSystemActor.ExpensivePurchase():
+					# [A|An]<125:0:0000>! I'll give twice the usual amount, so… <90:24:0000>. Is that OK?
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:122', false)
+				elif SubflowResults@2[2] == 0:
+					# [A|An]<125:0:0000>! Sure! How about if I offer you <90:26:0000>?
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:031', false)
+				else:
+					# Oh… I'm sorry, but I can't pay you for items like this. I can dispose of it for free if you don't need it, though.
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:038', false)
+			run rcm_Sell_Confirm()
+
 local flow Sub_Event32(SellTotal: int):
-    # Of course! What exactly are you offering?__ ...offering?__
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:021', false)
-    run Sell_Sunday(SellTotal=SellTotal)
- 
+	# Of course! What exactly are you offering?__ ...offering?__
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:021', false)
+	run Sell_Sunday(SellTotal=SellTotal)
+
 local flow Sub_Event5(SellTotal: int):
-    System.EventFlags['cLifeSupportAchievement:SellItemRcm'] += 1
-    run Cmn_After_Sell_Confirm()
- 
+	System.EventFlags['cLifeSupportAchievement:SellItemRcm'] += 1
+	run Cmn_After_Sell_Confirm()
+
 local flow Sub_grp_Event88():
-    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-        run rcm_Sell_Cancel_GoldenToolRecipe()
-    elif EventFlowSystemActor.ExpensivePurchase():
-        # Understood!__ ...understood!__ Well, I'll run the numbers, taking any hot items into consideration…
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:044_02', false)
-        run Event105()
-    else:
-        # Understood!__ ...understood!__ I'll just run the numbers…
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:044_01', false)
-        run Event105()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		run rcm_Sell_Cancel_GoldenToolRecipe()
+	elif EventFlowSystemActor.ExpensivePurchase():
+		# Understood!__ ...understood!__ Well, I'll run the numbers, taking any hot items into consideration…
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:044_02', false)
+		run Event105()
+	else:
+		# Understood!__ ...understood!__ I'll just run the numbers…
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:044_01', false)
+		run Event105()
+
 flow rcm_Sell_Cancel():
-    # Oh? Are you sure? Well, if there's anything else I can help you with, please let me know.__ ...know!__
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:901', false)
+	# Oh? Are you sure? Well, if there's anything else I can help you with, please let me know.__ ...know!__
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:901', false)
 entrypoint Event78:
-    System.EventFlags['cPlayerTemp:StoreSellFruitChk'] = false
-    System.EventFlags['cPlayerTemp:RcmSellCampingStuff'] = false
-    if System.EventFlags['cPlayerTemp:RcmSellItemSingle']:
-        MainNpc.NpcDelivery(10, 'Default')
-        System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = false
- 
+	System.EventFlags['cPlayerTemp:StoreSellFruitChk'] = false
+	System.EventFlags['cPlayerTemp:RcmSellCampingStuff'] = false
+	if System.EventFlags['cPlayerTemp:RcmSellItemSingle']:
+		MainNpc.NpcDelivery(10, 'Default')
+		System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = false
+
 flow rcm_Sell_Cancel_GoldenToolRecipe():
-    # Well then, please don't hesitate to ask if you need assistance!__ ...assistance!__
-    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:905', false)
-    run Event78()
- 
+	# Well then, please don't hesitate to ask if you need assistance!__ ...assistance!__
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:905', false)
+	run Event78()
+
 flow rcm_Sell_Confirm(SellTotal: int = 0):
-    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-        run rcm_Sell_Cancel()
-    elif SubflowResults@2[2] == 0:
-        MainNpc.ShopSellCalc(SellTotal, 1.0, true, false)
-        switch EventFlowSystemActor.MoneyCapacity(SellTotal, 'cShop'):
-            case 0:
-                MainNpc.ShopSellDone(1.0, false)
-                # Thank you! Please come again!__ ...again!__
-                MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:051', false)
-                run Sub_Event5(SellTotal=SellTotal)
-            case 1:
-                MainNpc.ShopSellDone(1.0, false)
-                # Thank you for your business! I'll go ahead and put any excess Bells into bags in your pockets!
-                MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:052', false)
-                run Sub_Event5(SellTotal=SellTotal)
-            case 2:
-                if EventFlowSystemActor.PlayerHouseLevel() != `Homeless`:
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		run rcm_Sell_Cancel()
+	elif SubflowResults@2[2] == 0:
+		MainNpc.ShopSellCalc(SellTotal, 1.0, true, false)
+		switch EventFlowSystemActor.MoneyCapacity(SellTotal, 'cShop'):
+			case 0:
+				MainNpc.ShopSellDone(1.0, false)
+				# Thank you! Please come again!__ ...again!__
+				MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:051', false)
+				run Sub_Event5(SellTotal=SellTotal)
+			case 1:
+				MainNpc.ShopSellDone(1.0, false)
+				# Thank you for your business! I'll go ahead and put any excess Bells into bags in your pockets!
+				MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:052', false)
+				run Sub_Event5(SellTotal=SellTotal)
+			case 2:
+				if EventFlowSystemActor.PlayerHouseLevel() != `Homeless`:
 entrypoint Event52:
-                    # Thank you very much! Your wallet and pockets are full, so I'll just wire the payment to your account.
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:053', true)
-                    MainNpc.ShopSellDone(1.0, false)
-                    run Sub_Event5(SellTotal=SellTotal)
-                elif System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']:
-                    run MovingPlayer2P()
-                else:
-                    # Oh dear!__ ...oh dear!__ It doesn't seem like you can carry your full payment at this time, so I can't pay you… Please take a moment to organize your…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:054', true)
-                    if System.EventFlags['cPlayerTemp:RcmSellItemSingle']:
-                        MainNpc.NpcDelivery(10, 'Default')
-                        System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = false
-    else:
-        MainNpc.ShopSellDone(1.0, false)
-        # Understood!__ ...understood!__ We'll take care of disposal.
-        MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:051_01', false)
-        run Cmn_After_Sell_Confirm()
- 
+					# Thank you very much! Your wallet and pockets are full, so I'll just wire the payment to your account.
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:053', true)
+					MainNpc.ShopSellDone(1.0, false)
+					run Sub_Event5(SellTotal=SellTotal)
+				elif System.EventFlags['cPlayer:NotBuilt2PMyHomeAfterMoving']:
+					run MovingPlayer2P()
+				else:
+					# Oh dear!__ ...oh dear!__ It doesn't seem like you can carry your full payment at this time, so I can't pay you… Please take a moment to organize your…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:054', true)
+					if System.EventFlags['cPlayerTemp:RcmSellItemSingle']:
+						MainNpc.NpcDelivery(10, 'Default')
+System.EventFlags['cPlayerTemp:RcmSellItemSingle'] = false
+	else:
+		MainNpc.ShopSellDone(1.0, false)
+		# Understood!__ ...understood!__ We'll take care of disposal.
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:051_01', false)
+		run Cmn_After_Sell_Confirm()

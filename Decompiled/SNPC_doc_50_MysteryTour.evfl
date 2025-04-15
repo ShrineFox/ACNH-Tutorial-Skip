@@ -1,95 +1,94 @@
 flow CloseUI():
-    fork:
-        branch:
-            EventFlowSystemActor.UISonkatsuPointDisappear()
-        branch:
-            EventFlowSystemActor@UI.UIShopBuyDisappear()
- 
+	fork:
+		branch:
+			EventFlowSystemActor.UISonkatsuPointDisappear()
+		branch:
+			EventFlowSystemActor@UI.UIShopBuyDisappear()
+
 flow DocCmnCancel():
-    # Roger! Belayed and backing off. Whenever you need our services, just flag this dodo down.
-    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:008', false)
- 
+	# Roger! Belayed and backing off. Whenever you need our services, just flag this dodo down.
+	MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:008', false)
+
 flow ExchangeCancel():
-    run CloseUI()
-    # Oh, you're leveled out and loaded up? Roger. Let me know if you need something.
-    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:013', false)
- 
+	run CloseUI()
+	# Oh, you're leveled out and loaded up? Roger. Let me know if you need something.
+	MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:013', false)
+
 flow FaintEntry():
-    # Whew! Had me worried there, civilian. Thought you might have fought the barn! <10:12>Dodo Tower this is Dodo One, cancel red alert. Ground-pounder's …
-    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:021', false)
-    System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
- 
+	# Whew! Had me worried there, civilian. Thought you might have fought the barn! <10:12>Dodo Tower this is Dodo One, cancel red alert. Ground-pounder's …
+	MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:021', false)
+	System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
+
 flow Root():
-    System.EventFlags['cPlayer:RcoMachineExplainAboutPlaneTicket'] = true
-    if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol01'):
-        run SNPC_doc_54_MayDayTour::Rootrun SNPC_doc_54_MayDayTour::Root()
-    elif System.EventFlags['cPlayerTemp:DodTalkSceneFlag']:
-        # Bellbottom <135:4:cd00> this is stovetop <135:5:cd00>, do you require assistance? Over.
-        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:002', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                # You ready to punt pontoons and fly Soaring <50:4><135:2:cd00> here back to <110:34>? You positive? Be VERY positive, 'cause I wouldn't want you leavi…
-                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:003', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    # Roger! Lifting off November Oscar Whisker.
-                    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:004', true)
-                    EventFlowSystemActor.BGMPropertyControl(76)
-                    EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
-                    System.EventFlags['cLandTemp:DocReturnFromIsland'] = true
-                    EventFlowSystemActor.SystemRequestChangeStage('cFromOutlierToHomeland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
-                else:
-                    run DocCmnCancel()
-            case 1:
-                if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                    # Tools? Sorry, civilian—your gear's at the limit already. Come back when you've got a free hand for a tool.
-                    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:012', true)
-                else:
-                    # Tools? Roger! Lemme just pull up the Mileage Menu for you…
-                    MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:011', false)
-                    fork:
-                        branch:
-                            EventFlowSystemActor.UISonkatsuPointAppear()
-                        branch:
-                            EventFlowSystemActor@UI.UIShopBuyAppear('cRodly')
-                    if EventFlowSystemActor.UIResultMenuDecide():
-                        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-                        EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 100, '')
-                        if EventFlowSystemActor.HasLifeSupportPoint(100, 'Now'):
-                            # [A|An]<125:0:0000> is <90:40:cd00>. Is that gonna fly?
-                            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:015', false)
-                            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                                EventFlowSystemActor.LifeSupportPointCountDown(-100, false)
-                                run CloseUI()
-                                MainNpc.SetDeliveryItem(4, false)
-                                # Roger! Utilize it or futilize it!
-                                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:016', true)
-                                MainNpc.NpcDelivery(1, 'Default')
-                                EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-                                MainNpc.ShopBuyDone(false, false, false, false)
-                                # Give a squawk if you need anything else.
-                                MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:017', false)
-                            else:
-                                run ExchangeCancel()
-                        else:
-                            # [A|An]<125:0:0000> is  <90:40:cd00>, but it looks like you're low on go and dry on mi…les. Once you top up the tank, come on back to barter for barga…
-                            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:014', false)
-                            run CloseUI()
-                    else:
-                        run ExchangeCancel()
-            case 2:
-                run DocCmnCancel()
-    else:
-        System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
-        # Alright, we are two down and docked at the target <110:32>! Delta Oscar Delta Oscar is go.
-        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:001_01', false)
-        if not System.EventFlags['cPlayer:DocMysterytourExplain1st']:
-            # First time getting your pontoons wet on tour? Let me brief you on mystery-island procedure. First, we run the "finders keepers" protocol here. Lumber…
-            MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:001_02', false)
-            System.EventFlags['cPlayer:DocMysterytourExplain1st'] = true
-        # Meanwhile, I'll be in a holding pattern here. Get in touch when you need tools or travel. Go catch some bees and chop some trees!
-        MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:001_03', false)
- 
+	System.EventFlags['cPlayer:RcoMachineExplainAboutPlaneTicket'] = true
+	if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol01'):
+		run SNPC_doc_54_MayDayTour::Root()
+	elif System.EventFlags['cPlayerTemp:DodTalkSceneFlag']:
+		# Bellbottom <135:4:cd00> this is stovetop <135:5:cd00>, do you require assistance? Over.
+		MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:002', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				# You ready to punt pontoons and fly Soaring <50:4><135:2:cd00> here back to <110:34>? You positive? Be VERY positive, 'cause I wouldn't want you leavi…
+				MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:003', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# Roger! Lifting off November Oscar Whisker.
+					MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:004', true)
+					EventFlowSystemActor.BGMPropertyControl(76)
+					EventFlowSystemActor.SoundTriggerEmit('Airplane_Takeoff_Short', -1)
+					System.EventFlags['cLandTemp:DocReturnFromIsland'] = true
+					EventFlowSystemActor.SystemRequestChangeStage('cFromOutlierToHomeland', 'cDALWithLoadWait', 'cCircle', 'cBlack', 1.0, 1.0)
+				else:
+					run DocCmnCancel()
+			case 1:
+				if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+					# Tools? Sorry, civilian—your gear's at the limit already. Come back when you've got a free hand for a tool.
+					MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:012', true)
+				else:
+					# Tools? Roger! Lemme just pull up the Mileage Menu for you…
+					MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:011', false)
+					fork:
+						branch:
+EventFlowSystemActor.UISonkatsuPointAppear()
+						branch:
+EventFlowSystemActor@UI.UIShopBuyAppear('cRodly')
+					if EventFlowSystemActor.UIResultMenuDecide():
+						EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+						EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 100, '')
+						if EventFlowSystemActor.HasLifeSupportPoint(100, 'Now'):
+							# [A|An]<125:0:0000> is <90:40:cd00>. Is that gonna fly?
+							MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:015', false)
+							if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+								EventFlowSystemActor.LifeSupportPointCountDown(-100, false)
+		  run CloseUI()
+								MainNpc.SetDeliveryItem(4, false)
+								# Roger! Utilize it or futilize it!
+								MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:016', true)
+								MainNpc.NpcDelivery(1, 'Default')
+								EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+								MainNpc.ShopBuyDone(false, false, false, false)
+								# Give a squawk if you need anything else.
+								MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:017', false)
+							else:
+	  run ExchangeCancel()
+						else:
+							# [A|An]<125:0:0000> is  <90:40:cd00>, but it looks like you're low on go and dry on mi…les. Once you top up the tank, come on back to barter for barga…
+							MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:014', false)
+		run CloseUI()
+					else:
+ run ExchangeCancel()
+			case 2:
+				run DocCmnCancel()
+	else:
+		System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
+		# Alright, we are two down and docked at the target <110:32>! Delta Oscar Delta Oscar is go.
+		MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:001_01', false)
+		if not System.EventFlags['cPlayer:DocMysterytourExplain1st']:
+			# First time getting your pontoons wet on tour? Let me brief you on mystery-island procedure. First, we run the "finders keepers" protocol here. Lumber…
+			MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:001_02', false)
+			System.EventFlags['cPlayer:DocMysterytourExplain1st'] = true
+		# Meanwhile, I'll be in a holding pattern here. Get in touch when you need tools or travel. Go catch some bees and chop some trees!
+		MainNpc.OpenMessageWindow('TalkSNpc/doc/SP_doc_51_MysteryTour:001_03', false)
+
 flow Root_Init():
-    if MainNpc.NpcBlackBoard('SceneReenter', 1):
-        System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true
- 
+	if MainNpc.NpcBlackBoard('SceneReenter', 1):
+		System.EventFlags['cPlayerTemp:DodTalkSceneFlag'] = true

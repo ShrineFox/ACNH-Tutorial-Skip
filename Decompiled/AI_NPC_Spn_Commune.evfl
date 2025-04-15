@@ -1,141 +1,140 @@
 flow CheckRob():
-    if (not EventFlowSystemActor.CommuneShopEvent('cSloShop')) and (not EventFlowSystemActor.CommuneShopEvent('cCmlShop')) and (not EventFlowSystemActor.CommuneShopEvent('cFoxShop')) and (not EventFlowSystemActor.CommuneShopEvent('cBptShop')) and (not EventFlowSystemActor.CommuneShopEvent('cSkkShop')) and (not EventFlowSystemActor.CommuneShopEvent('cAlpShop')) and (not EventFlowSystemActor.CommuneShopEvent('cTtlShop')):
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
-    else:
-        MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
- 
+	if (not EventFlowSystemActor.CommuneShopEvent('cSloShop')) and (not EventFlowSystemActor.CommuneShopEvent('cCmlShop')) and (not EventFlowSystemActor.CommuneShopEvent('cFoxShop')) and (not EventFlowSystemActor.CommuneShopEvent('cBptShop')) and (not EventFlowSystemActor.CommuneShopEvent('cSkkShop')) and (not EventFlowSystemActor.CommuneShopEvent('cAlpShop')) and (not EventFlowSystemActor.CommuneShopEvent('cTtlShop')):
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	else:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
+
 flow Check_Expansion_Pos():
-    System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = false
-    if (not System.EventFlags['cPlayer:SpnTodayExplainedPhotoStudio']) and (System.EventFlags['cLand:CommuneExpanded']) and (System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']):
-        if MainNpc.NpcCheckStateSelectTiming('cInit'):
-            run Spn_Pos()
-        switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:SpnCheckPlace'):
-            case 1:
-                MainNpc.NpcDisableServiceMotion()
-                MainNpc.NpcAISetting(8, false)
-                MainNpc.NpcChangeAIState('cCommuneWanderWait', '', 'SNPC_spn', 'Root', false, true)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            case 2:
-                MainNpc.NpcDisableServiceMotion()
-                if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace') == 2:
-                    MainNpc.NpcChangeAIState('cWait', '', 'SNPC_spn', 'Root', false, true)
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            default:
-                return
- 
+	System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = false
+	if (not System.EventFlags['cPlayer:SpnTodayExplainedPhotoStudio']) and (System.EventFlags['cLand:CommuneExpanded']) and (System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']):
+		if MainNpc.NpcCheckStateSelectTiming('cInit'):
+			run Spn_Pos()
+		switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:SpnCheckPlace'):
+			case 1:
+				MainNpc.NpcDisableServiceMotion()
+				MainNpc.NpcAISetting(8, false)
+				MainNpc.NpcChangeAIState('cCommuneWanderWait', '', 'SNPC_spn', 'Root', false, true)
+				EventFlowSystemActor.ExitFlowchart()
+			case 2:
+				MainNpc.NpcDisableServiceMotion()
+				if EventFlowSystemActor.FlagSystemIntValue5(5, 'cPlayerTemp:PooCheckPlace') == 2:
+					MainNpc.NpcChangeAIState('cWait', '', 'SNPC_spn', 'Root', false, true)
+					EventFlowSystemActor.ExitFlowchart()
+			default:
+				return
+
 flow Commune_LandExpansion_Event():
-    if System.EventFlags['cLand:CommuneExpanded']:
-        if System.EventFlags['cPlayer:ReserveCommuneExpansion']:
-            System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-            if MainNpc.NpcBlackBoard('CommuneDemoSpeak', 1):
-                MainNpc.NpcAISetting(4, false)
-                MainNpc.NpcSetAIBlackBoard('CommuneDemoSpeak', 0)
-                run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_spn_11_Commune_LandExpansion', EntryName='Root')
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                run Demo_Common_Commune::CommuneExpand_SpnPosrun Demo_Common_Commune::CommuneExpand_SpnPos()
-                MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-                MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_11_Commune_LandExpansion', 'Root', false, true, ArgInt0=0, ArgStr0='poo')
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            run ShopOpen()
- 
+	if System.EventFlags['cLand:CommuneExpanded']:
+		if System.EventFlags['cPlayer:ReserveCommuneExpansion']:
+			System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+			if MainNpc.NpcBlackBoard('CommuneDemoSpeak', 1):
+				MainNpc.NpcAISetting(4, false)
+				MainNpc.NpcSetAIBlackBoard('CommuneDemoSpeak', 0)
+				run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_spn_11_Commune_LandExpansion', EntryName='Root')
+				EventFlowSystemActor.ExitFlowchart()
+			else:
+				run Demo_Common_Commune::CommuneExpand_SpnPos()
+				MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+				MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_11_Commune_LandExpansion', 'Root', false, true, ArgInt0=0, ArgStr0='poo')
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			run ShopOpen()
+
 flow Init():
-    MainNpc.NpcChangeHeadCtrlMode('cPlayer', true)
-    MainNpc.NpcAISetting(8, true)
-    MainNpc.NpcRegistAIBlackBoard('DemoSpeak', 0)
-    MainNpc.NpcRegistAIBlackBoard('CommuneDemoSpeak', 0)
-    MainNpc.NpcRegistAIBlackBoard('CheckRobResult', 0)
- 
+	MainNpc.NpcChangeHeadCtrlMode('cPlayer', true)
+	MainNpc.NpcAISetting(8, true)
+	MainNpc.NpcRegistAIBlackBoard('DemoSpeak', 0)
+	MainNpc.NpcRegistAIBlackBoard('CommuneDemoSpeak', 0)
+	MainNpc.NpcRegistAIBlackBoard('CheckRobResult', 0)
+
 flow Root():
-    if (not MainNpc.NpcCheckStateSelectTiming('cInit')) and (MainNpc.NpcBlackBoard('DemoSpeak', 1)):
-        MainNpc.NpcAISetting(3, false)
-        MainNpc.NpcAISetting(2, false)
-        MainNpc.NpcAISetting(4, false)
-        MainNpc.NpcSetAIBlackBoard('DemoSpeak', 0)
-        MainNpc.NpcAISetting(3, false)
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_spn_04_JuneBride', EntryName='Spn_FirstJuneBride')
-    elif (EventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']):
-        if not System.EventFlags['cPlayer:SpnJuneBrideTalkEventFrag']:
-            MainNpc.NpcAISetPos(22.0, 25.0, 90.0, true, false)
-            MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn', 'Root', false, true, ArgInt0=0, ArgStr0='alw')
-            MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        elif System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
-            MainNpc.NpcAISetPos(7.0, 14.0, 69.0, true, false)
-            MainNpc.NpcDisableServiceMotion()
-            MainNpc.NpcChangeAIState('cWait', '', '', 'Root', false, true)
-        else:
-            if (EventFlowSystemActor.IsReturnJuneBridePhotoStudio()) and (MainNpc.NpcCheckStateSelectTiming('cInit')):
-                run Commune_LandExpansion_Event()
-                MainNpc.NpcChangeAIState('cSpnReturnJB', '', 'SNPC_spn', 'Root', false, true)
-            else:
-                run Sub_Event29()
-    else:
-        run Sub_Event29()
- 
+	if (not MainNpc.NpcCheckStateSelectTiming('cInit')) and (MainNpc.NpcBlackBoard('DemoSpeak', 1)):
+		MainNpc.NpcAISetting(3, false)
+		MainNpc.NpcAISetting(2, false)
+		MainNpc.NpcAISetting(4, false)
+		MainNpc.NpcSetAIBlackBoard('DemoSpeak', 0)
+		MainNpc.NpcAISetting(3, false)
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_spn_04_JuneBride', EntryName='Spn_FirstJuneBride')
+	elif (EventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']):
+		if not System.EventFlags['cPlayer:SpnJuneBrideTalkEventFrag']:
+			MainNpc.NpcAISetPos(22.0, 25.0, 90.0, true, false)
+			MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn', 'Root', false, true, ArgInt0=0, ArgStr0='alw')
+			MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		elif System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
+			MainNpc.NpcAISetPos(7.0, 14.0, 69.0, true, false)
+			MainNpc.NpcDisableServiceMotion()
+			MainNpc.NpcChangeAIState('cWait', '', '', 'Root', false, true)
+		else:
+			if (EventFlowSystemActor.IsReturnJuneBridePhotoStudio()) and (MainNpc.NpcCheckStateSelectTiming('cInit')):
+				run Commune_LandExpansion_Event()
+				MainNpc.NpcChangeAIState('cSpnReturnJB', '', 'SNPC_spn', 'Root', false, true)
+			else:
+				run Sub_Event29()
+	else:
+		run Sub_Event29()
+
 flow ShopOpen():
-    if EventFlowSystemActor.CommuneShopEvent('cSloShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::SloOpen_SpnPosrun Demo_Common_Commune::SloOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnSloShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Slo_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Slo_ShopOpen', false, true, ArgInt0=0, ArgStr0='slo')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.CommuneShopEvent('cCmlShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::CmlOpen_SpnPosrun Demo_Common_Commune::CmlOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnCmlShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Cml_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Cml_ShopOpen', false, true, ArgInt0=0, ArgStr0='cml')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.CommuneShopEvent('cFoxShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::FoxOpen_SpnPosrun Demo_Common_Commune::FoxOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnFoxShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Fox_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Fox_ShopOpen', false, true, ArgInt0=0, ArgStr0='fox')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.CommuneShopEvent('cBptShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::BptOpen_SpnPosrun Demo_Common_Commune::BptOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnBptShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Bpt_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Bpt_ShopOpen', false, true, ArgInt0=0, ArgStr0='bpt')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.CommuneShopEvent('cSkkShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::SkkOpen_SpnPosrun Demo_Common_Commune::SkkOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnSkkShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Skk_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Skk_ShopOpen', false, true, ArgInt0=0, ArgStr0='skk')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.CommuneShopEvent('cAlpShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::AlpOpen_SpnPosrun Demo_Common_Commune::AlpOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnAlpShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Alp_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Alp_ShopOpen', false, true, ArgInt0=0, ArgStr0='alp')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.CommuneShopEvent('cTtlShop'):
-        System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
-        run Demo_Common_Commune::TtlOpen_SpnPosrun Demo_Common_Commune::TtlOpen_SpnPos()
-        MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
-        MainNpc.NpcAISetCheckRobFunc('cCommuneSpnTtlShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Ttl_ShopOpen', false, false)
-        MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Ttl_ShopOpen', false, true, ArgInt0=0, ArgStr0='ttl')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.CommuneShopEvent('cSloShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::SloOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnSloShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Slo_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Slo_ShopOpen', false, true, ArgInt0=0, ArgStr0='slo')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CommuneShopEvent('cCmlShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::CmlOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnCmlShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Cml_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Cml_ShopOpen', false, true, ArgInt0=0, ArgStr0='cml')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CommuneShopEvent('cFoxShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::FoxOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnFoxShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Fox_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Fox_ShopOpen', false, true, ArgInt0=0, ArgStr0='fox')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CommuneShopEvent('cBptShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::BptOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnBptShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Bpt_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Bpt_ShopOpen', false, true, ArgInt0=0, ArgStr0='bpt')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CommuneShopEvent('cSkkShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::SkkOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnSkkShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Skk_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Skk_ShopOpen', false, true, ArgInt0=0, ArgStr0='skk')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CommuneShopEvent('cAlpShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::AlpOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnAlpShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Alp_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Alp_ShopOpen', false, true, ArgInt0=0, ArgStr0='alp')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CommuneShopEvent('cTtlShop'):
+		System.EventFlags['cPlayerTemp:PhotoStudioDoorClose'] = true
+		run Demo_Common_Commune::TtlOpen_SpnPos()
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetCheckRobFunc('cCommuneSpnTtlShopEvent', 'CheckRob', 'SNPC_spn_12_Commune_ShopOpen', 'Ttl_ShopOpen', false, false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_spn_12_Commune_ShopOpen', 'Ttl_ShopOpen', false, true, ArgInt0=0, ArgStr0='ttl')
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Spn_Pos():
-    switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:SpnCheckPlace'):
-        case 0:
-            EventFlowSystemActor.NpcSetPos(650.0, 795.0, 0.0, 'spn')
-        case 1:
-            EventFlowSystemActor.NpcSetPos(680.0, 620.0, 0.0, 'spn')
-        case 2:
-            EventFlowSystemActor.NpcSetPos(680.0, 650.0, 0.0, 'spn')
- 
+	switch EventFlowSystemActor.FlagSystemIntValue3(3, 'cPlayerTemp:SpnCheckPlace'):
+		case 0:
+			EventFlowSystemActor.NpcSetPos(650.0, 795.0, 0.0, 'spn')
+		case 1:
+			EventFlowSystemActor.NpcSetPos(680.0, 620.0, 0.0, 'spn')
+		case 2:
+			EventFlowSystemActor.NpcSetPos(680.0, 650.0, 0.0, 'spn')
+
 local flow Sub_Event29():
-    run Commune_LandExpansion_Event()
-    run Check_Expansion_Pos()
-    MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_spn', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
- 
+	run Commune_LandExpansion_Event()
+	run Check_Expansion_Pos()
+	MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_spn', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=2, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')

@@ -1,49 +1,48 @@
 flow Book():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
-    # RANDOM: Hm? There's something stuck in the page… // Listening to the teacher talk makes my … // <20:2:cd0e>The teacher is looking at me… // Argh…I gotta go to the bathroom. And no… // If I open a book juuust like this, I ca…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:103', false)
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
+	# RANDOM: Hm? There's something stuck in the page… // Listening to the teacher talk makes my … // <20:2:cd0e>The teacher is looking at me… // Argh…I gotta go to the bathroom. And no… // If I open a book juuust like this, I ca…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:103', false)
+
 flow Demand_Chk():
-    if MainNpc.IsWherearenFacilityInteraction():
-        MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
-        # RANDOM: GAH! I overslept?! I gotta…<20:2:cd0e> … // Whoa, for real?!<20:2:cd0e> It's luncht… // What?! WHAT?! I don't understand anythi…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:202', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.IsWherearenFacilityInteraction():
+		MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
+		# RANDOM: GAH! I overslept?! I gotta…<20:2:cd0e> … // Whoa, for real?!<20:2:cd0e> It's luncht… // What?! WHAT?! I don't understand anythi…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:202', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityName('cSchool')) and (not EventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cSchool')
-        # <20:2:cd06>What a lotta folks don't appreciate is that I can eat more than anyone else at <150:3:cd00>.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:104', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.WherearenExistFacilityName('cSchool')) and (not EventFlowSystemActor.PercentChoice(80)):
+		EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cSchool')
+		# <20:2:cd06>What a lotta folks don't appreciate is that I can eat more than anyone else at <150:3:cd00>.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:104', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Root():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
-    run FacilityName_Chk()
-    # RANDOM: <20:2:cd06>Yaaawn…I get PLENTY of sleep… // <20:2:cd06>A huh huh huh! I wonder what… // <20:2:cd06>The clock goes faster during… // <20:2:cd06>Sniff, sniff…I smell someone… // <20:2:cd06>School is the best 'cause I …
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:101', false)
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
+	run FacilityName_Chk()
+	# RANDOM: <20:2:cd06>Yaaawn…I get PLENTY of sleep… // <20:2:cd06>A huh huh huh! I wonder what… // <20:2:cd06>The clock goes faster during… // <20:2:cd06>Sniff, sniff…I smell someone… // <20:2:cd06>School is the best 'cause I …
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:101', false)
+
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeck(10, false)
-        run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.WherearenOrderStatus() == 1:
+		MainNpc.TurnNeck(10, false)
+		run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Sleep():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
-    run Demand_Chk()
-    # RANDOM: Nyum nyum… What? Yeah! I can distend my… // Mrmm… My pencil's got erasers on both e… // Nyum nyum… I got it! I am a…what's the … // Mrmm…I'm not sleeping! My eyes are just… // Nyum nyum… I'm gonna eat all I want, an…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:102', false)
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	MainNpc.WherearenSetTagFacilityNpcName('cSchoolTeacher', false, false, 1)
+	run Demand_Chk()
+	# RANDOM: Nyum nyum… What? Yeah! I can distend my… // Mrmm… My pencil's got erasers on both e… // Nyum nyum… I got it! I am a…what's the … // Mrmm…I'm not sleeping! My eyes are just… // Nyum nyum… I'm gonna eat all I want, an…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_School:102', false)
+
 flow StandSleep():
-    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
- 
+	run NNPC_RestaurantCustomer::`StandSleep_2.1`()
+
 flow Walk():
-    run Root()
- 
+	run Root()

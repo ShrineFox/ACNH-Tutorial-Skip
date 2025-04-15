@@ -1,293 +1,292 @@
 flow BridgeReserveKit(BuildTiming: str):
-    EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
-    EventFlowSystemActor.StructureStartPreviewGuide('cBridge', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cBridge', 'cPlayer', BuildTiming):
-        # Should I reserve this spot for [a|an]<125:0:0000>?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:906', true)
-        run HousingKitCommon(StructureType='cBridge', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        System.EventFlags['cPlayer:ContributedBuildBridgeorSlope'] = true
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Bridge', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cBridge', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
+	EventFlowSystemActor.StructureStartPreviewGuide('cBridge', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cBridge', 'cPlayer', BuildTiming):
+		# Should I reserve this spot for [a|an]<125:0:0000>?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:906', true)
+		run HousingKitCommon(StructureType='cBridge', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		System.EventFlags['cPlayer:ContributedBuildBridgeorSlope'] = true
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Bridge', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cBridge', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow CampSiteReserveKit(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cCampSite', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cCampSite', 'cPlayer', BuildTiming):
-        # Is this a good spot for the campsite?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:909_03', true)
-        run HousingKitCommon(BuildTiming=BuildTiming, StructureType='cCampSite', StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_CampSite_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cCampSite', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cCampSite', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cCampSite', 'cPlayer', BuildTiming):
+		# Is this a good spot for the campsite?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:909_03', true)
+		run HousingKitCommon(BuildTiming=BuildTiming, StructureType='cCampSite', StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_CampSite_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cCampSite', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow FacilityBuild_Root():
-    if EventFlowSystemActor.UIPocketMenuItemSelected(2755, 1, true):
-        run MuseumReserveKit(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(2756, 1, true):
-        run ShopReserveKit(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(4411, 1, true):
-        run TailorReserveKit(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5166, 1, true):
-        run CampSiteReserveKit(BuildTiming='cNew')
-    else:
-        run Moving_root()
- 
+	if EventFlowSystemActor.UIPocketMenuItemSelected(2755, 1, true):
+		run MuseumReserveKit(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(2756, 1, true):
+		run ShopReserveKit(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(4411, 1, true):
+		run TailorReserveKit(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5166, 1, true):
+		run CampSiteReserveKit(BuildTiming='cNew')
+	else:
+		run Moving_root()
+
 flow FirstNNPCTentKit(BuildTiming: str):
-    EventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
-    EventFlowSystemActor.StructureStartPreviewGuide('cNormalNpcHouse', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cNormalNpcHouse', 'cPlayer', BuildTiming):
-        # Should I put <115:1:cd00>'s tent here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:904', true)
-        run HousingKitCommon(StructureType='cNormalNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        if EventFlowSystemActor.UIResultHousingKitNpcType() == 0:
-            EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_HATent_Built', 'cNowDemoEnd', false)
-        else:
-            EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_ANTent_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cNormalNpcHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
+	EventFlowSystemActor.StructureStartPreviewGuide('cNormalNpcHouse', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cNormalNpcHouse', 'cPlayer', BuildTiming):
+		# Should I put <115:1:cd00>'s tent here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:904', true)
+		run HousingKitCommon(StructureType='cNormalNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		if EventFlowSystemActor.UIResultHousingKitNpcType() == 0:
+			EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_HATent_Built', 'cNowDemoEnd', false)
+		else:
+			EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_ANTent_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cNormalNpcHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow HouseBuild_Root():
-    Player.PlayerDemoTurn('cNorth')
-    if EventFlowSystemActor.UIPocketMenuItemSelected(3349, 1, true):
-        run NNPCReserveKit(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(2750, 1, true):
-        run PlayerTentkit(BuildTiming='cNew')
-    elif (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (EventFlowSystemActor.UIPocketMenuItemSelected(13346, 1, true)):
-        run HousingKit_PlayerSaveMoving(BuildTiming='cPlayerMove')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(2757, 1, true):
-        run FirstNNPCTentKit(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5827, 1, true):
-        run MigrateQuestA(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5828, 1, true):
-        run MigrateQuestB(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5829, 1, true):
-        run MigrateQuestC(BuildTiming='cNew')
-    else:
-        run FacilityBuild_Root()
- 
+	Player.PlayerDemoTurn('cNorth')
+	if EventFlowSystemActor.UIPocketMenuItemSelected(3349, 1, true):
+		run NNPCReserveKit(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(2750, 1, true):
+		run PlayerTentkit(BuildTiming='cNew')
+	elif (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (EventFlowSystemActor.UIPocketMenuItemSelected(13346, 1, true)):
+		run HousingKit_PlayerSaveMoving(BuildTiming='cPlayerMove')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(2757, 1, true):
+		run FirstNNPCTentKit(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5827, 1, true):
+		run MigrateQuestA(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5828, 1, true):
+		run MigrateQuestB(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5829, 1, true):
+		run MigrateQuestC(BuildTiming='cNew')
+	else:
+		run FacilityBuild_Root()
+
 flow HousingKitCommon(StructureType: str, StructureBuildPosType: str, BuildTiming: str):
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            EventFlowSystemActor.WaitFrame(15)
-            Player.CharacterEmoticonAction('AbsentMindedness', true, '', 0, false)
-            EventFlowSystemActor.WaitFrame(20)
-            run System_Structure_Common::PreviewStructurerun System_Structure_Common::PreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
-            Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-            EventFlowSystemActor.WaitFrame(10)
-            if EventFlowSystemActor.HasObstacle(StructureType, StructureBuildPosType, BuildTiming):
-                # <10:12>We'll have to do a little landscaping, but we can make this work. Should we go ahead?
-                MainNpc.OpenMessageWindow('TalkSys/SYS_Player:931', true)
-            else:
-                # <10:12>Is this a good spot?
-                MainNpc.OpenMessageWindow('TalkSys/SYS_Player:932', true)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
-                run System_Structure_Common::DeletePreviewAndBuildStructurerun System_Structure_Common::DeletePreviewAndBuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
-                EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
-            else:
-                run System_Structure_Common::DeletePreviewStructurerun System_Structure_Common::DeletePreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        case 1:
-            EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
-            run System_Structure_Common::BuildStructurerun System_Structure_Common::BuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
-            EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
-        case 2:
-            EventFlowSystemActor.StructureDeletePreviewGuide(false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			EventFlowSystemActor.WaitFrame(15)
+			Player.CharacterEmoticonAction('AbsentMindedness', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(20)
+			run System_Structure_Common::PreviewStructurerun System_Structure_Common::PreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+			Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(10)
+			if EventFlowSystemActor.HasObstacle(StructureType, StructureBuildPosType, BuildTiming):
+				# <10:12>We'll have to do a little landscaping, but we can make this work. Should we go ahead?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:931', true)
+			else:
+				# <10:12>Is this a good spot?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:932', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
+				run System_Structure_Common::DeletePreviewAndBuildStructurerun System_Structure_Common::DeletePreviewAndBuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+				EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+			else:
+				run System_Structure_Common::DeletePreviewStructurerun System_Structure_Common::DeletePreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType)
+				EventFlowSystemActor.ExitFlowchart()
+		case 1:
+			EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
+			run System_Structure_Common::BuildStructurerun System_Structure_Common::BuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+			EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+		case 2:
+			EventFlowSystemActor.StructureDeletePreviewGuide(false)
+			EventFlowSystemActor.ExitFlowchart()
+
 flow HousingKitCommonError(StructureType: str, StructureBuildPosType: str, StructureBuildTiming: str):
-    EventFlowSystemActor.BuildStructureErrorMsg(StructureType, StructureBuildPosType, StructureBuildTiming)
-    EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, StructureBuildTiming)
-    EventFlowSystemActor.StructureDeletePreviewGuide(false)
- 
+	EventFlowSystemActor.BuildStructureErrorMsg(StructureType, StructureBuildPosType, StructureBuildTiming)
+	EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, StructureBuildTiming)
+	EventFlowSystemActor.StructureDeletePreviewGuide(false)
+
 flow HousingKit_PlayerSaveMoving(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cPlayerHouse', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cPlayerHouse', 'cPlayer', BuildTiming):
-        # Should I set up my home here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:901_01', true)
-        run HousingKitCommon(StructureType='cPlayerHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_MovingOtherP_PcHouse_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cPlayerHouse', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cPlayerHouse', 'cPlayer', BuildTiming):
+		# Should I set up my home here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:901_01', true)
+		run HousingKitCommon(StructureType='cPlayerHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_MovingOtherP_PcHouse_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow MigrateQuestA(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cSettlerQuest', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cSettlerQuest', BuildTiming):
-        # Should I set this area aside as plot one?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:909', true)
-        run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcImmigrateQuestA', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cSettlerQuest', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cSettlerQuest', BuildTiming):
+		# Should I set this area aside as plot one?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:909', true)
+		run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcImmigrateQuestA', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
+
 flow MigrateQuestB(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cSettlerQuest', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cSettlerQuest', BuildTiming):
-        # Should I set this area aside as plot two?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:909_01', true)
-        run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcImmigrateQuestB', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildPosType='cSettlerQuest', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cSettlerQuest', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cSettlerQuest', BuildTiming):
+		# Should I set this area aside as plot two?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:909_01', true)
+		run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcImmigrateQuestB', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildPosType='cSettlerQuest', StructureBuildTiming=BuildTiming)
+
 flow MigrateQuestC(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cSettlerQuest', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cSettlerQuest', BuildTiming):
-        # Should I set this area aside as plot three?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:909_02', true)
-        run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcImmigrateQuestC', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildPosType='cSettlerQuest', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cSettlerQuest', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cSettlerQuest', BuildTiming):
+		# Should I set this area aside as plot three?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:909_02', true)
+		run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cSettlerQuest')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcImmigrateQuestC', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildPosType='cSettlerQuest', StructureBuildTiming=BuildTiming)
+
 flow MovingKit_CampSite(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cCampSite', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cCampSite', 'cPlayer', BuildTiming):
-        # This seems like a good spot. Should I move the campsite here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:909_04', true)
-        run HousingKitCommon(BuildTiming=BuildTiming, StructureType='cCampSite', StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_CampSiteMove', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cCampSite', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cCampSite', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cCampSite', 'cPlayer', BuildTiming):
+		# This seems like a good spot. Should I move the campsite here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:909_04', true)
+		run HousingKitCommon(BuildTiming=BuildTiming, StructureType='cCampSite', StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_CampSiteMove', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cCampSite', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow MovingKit_Museum(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cMuseum', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cMuseum', 'cPlayer', BuildTiming):
-        # Should the museum move here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:943', true)
-        run HousingKitCommon(StructureType='cMuseum', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_MuseumMove', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cMuseum', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cMuseum', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cMuseum', 'cPlayer', BuildTiming):
+		# Should the museum move here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:943', true)
+		run HousingKitCommon(StructureType='cMuseum', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_MuseumMove', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cMuseum', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow MovingKit_NNPC(BuildTiming: str):
-    EventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
-    EventFlowSystemActor.StructureStartPreviewGuide('cNormalNpcHouse', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cNormalNpcHouse', 'cPlayer', BuildTiming):
-        # Should <115:1:cd00> move here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:942', true)
-        run HousingKitCommon(BuildTiming=BuildTiming, StructureType='cNormalNpcHouse', StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NPCHouseMove', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cNormalNpcHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.SetTagFromUIResult('cTentNpcName', 0)
+	EventFlowSystemActor.StructureStartPreviewGuide('cNormalNpcHouse', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cNormalNpcHouse', 'cPlayer', BuildTiming):
+		# Should <115:1:cd00> move here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:942', true)
+		run HousingKitCommon(BuildTiming=BuildTiming, StructureType='cNormalNpcHouse', StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NPCHouseMove', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cNormalNpcHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow MovingKit_Player(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cPlayerHouse', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cPlayerHouse', 'cPlayer', BuildTiming):
-        # Should I move here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:941', true)
-        run HousingKitCommon(StructureType='cPlayerHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_PcHouseMove', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cPlayerHouse', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cPlayerHouse', 'cPlayer', BuildTiming):
+		# Should I move here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:941', true)
+		run HousingKitCommon(StructureType='cPlayerHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_PcHouseMove', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow MovingKit_Shop(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cMarket', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cMarket', 'cPlayer', BuildTiming):
-        # Should the shop move here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:944', true)
-        run HousingKitCommon(StructureType='cMarket', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_ShopMove', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cMarket', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cMarket', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cMarket', 'cPlayer', BuildTiming):
+		# Should the shop move here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:944', true)
+		run HousingKitCommon(StructureType='cMarket', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_ShopMove', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cMarket', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow MovingKit_Tailor(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cTailor', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cTailor', 'cPlayer', BuildTiming):
-        # Should the tailor shop move here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:945', true)
-        run HousingKitCommon(StructureType='cTailor', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_TailorMove', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cTailor', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cTailor', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cTailor', 'cPlayer', BuildTiming):
+		# Should the tailor shop move here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:945', true)
+		run HousingKitCommon(StructureType='cTailor', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_TailorMove', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cTailor', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow Moving_root():
-    Player.PlayerDemoTurn('cNorth')
-    if EventFlowSystemActor.UIPocketMenuItemSelected(5358, 1, true):
-        run MovingKit_Player(BuildTiming='cMoving')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5357, 1, true):
-        run MovingKit_NNPC(BuildTiming='cMoving')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5361, 1, true):
-        run MovingKit_Museum(BuildTiming='cMoving')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5360, 1, true):
-        run MovingKit_Shop(BuildTiming='cMoving')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(5359, 1, true):
-        run MovingKit_Tailor(BuildTiming='cMoving')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(6841, 1, true):
-        run MovingKit_CampSite(BuildTiming='cMoving')
- 
+	Player.PlayerDemoTurn('cNorth')
+	if EventFlowSystemActor.UIPocketMenuItemSelected(5358, 1, true):
+		run MovingKit_Player(BuildTiming='cMoving')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5357, 1, true):
+		run MovingKit_NNPC(BuildTiming='cMoving')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5361, 1, true):
+		run MovingKit_Museum(BuildTiming='cMoving')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5360, 1, true):
+		run MovingKit_Shop(BuildTiming='cMoving')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5359, 1, true):
+		run MovingKit_Tailor(BuildTiming='cMoving')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(6841, 1, true):
+		run MovingKit_CampSite(BuildTiming='cMoving')
+
 flow MuseumReserveKit(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cMuseum', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cMuseum', 'cPlayer', BuildTiming):
-        # Would this be a good place for Blathers's tent?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:902', true)
-        run HousingKitCommon(StructureType='cMuseum', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_OwlTent_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cMuseum', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cMuseum', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cMuseum', 'cPlayer', BuildTiming):
+		# Would this be a good place for Blathers's tent?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:902', true)
+		run HousingKitCommon(StructureType='cMuseum', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_OwlTent_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cMuseum', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow NNPCReserveKit(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cPlayer', BuildTiming):
-        # Should I reserve this space for a new home?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:905', true)
-        run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        if System.EventFlags['cLand:RcoMeetFirstVisitorOngoing']:
-            System.EventFlags['cLand:RcoMeetFirstVisitorComplete'] = true
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcNewProperty', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cReserveNpcHouse', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cReserveNpcHouse', 'cPlayer', BuildTiming):
+		# Should I reserve this space for a new home?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:905', true)
+		run HousingKitCommon(StructureType='cReserveNpcHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		if System.EventFlags['cLand:RcoMeetFirstVisitorOngoing']:
+			System.EventFlags['cLand:RcoMeetFirstVisitorComplete'] = true
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_NnpcNewProperty', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cReserveNpcHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow PlayerTentkit(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cPlayerHouse', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cPlayerHouse', 'cPlayer', BuildTiming):
-        # Should I put my tent here?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:901', true)
-        run HousingKitCommon(StructureType='cPlayerHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_PcTent_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cPlayerHouse', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cPlayerHouse', 'cPlayer', BuildTiming):
+		# Should I put my tent here?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:901', true)
+		run HousingKitCommon(StructureType='cPlayerHouse', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_PcTent_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow Root():
-    if EventFlowSystemActor.IsRunningMiniGame('cTreasure'):
-        # I'm searching for treasure right now, so I'll look for a good place for this some other time.
-        Player.OpenMessageWindow('TalkSys/SYS_Player:990', false)
-    elif (EventFlowSystemActor.UIPocketMenuItemSelected(4310, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelected(7211, 1, true)):
-        run BridgeReserveKit(BuildTiming='cNew')
-    elif EventFlowSystemActor.UIPocketMenuItemSelected(4311, 1, true):
-        run SlopeReserveKit(BuildTiming='cNew')
-    else:
-        run HouseBuild_Root()
- 
+	if EventFlowSystemActor.IsRunningMiniGame('cTreasure'):
+		# I'm searching for treasure right now, so I'll look for a good place for this some other time.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:990', false)
+	elif (EventFlowSystemActor.UIPocketMenuItemSelected(4310, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelected(7211, 1, true)):
+		run BridgeReserveKit(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(4311, 1, true):
+		run SlopeReserveKit(BuildTiming='cNew')
+	else:
+		run HouseBuild_Root()
+
 flow ShopReserveKit(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cMarket', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cMarket', 'cPlayer', BuildTiming):
-        # Should I reserve this space for the shop?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:903', true)
-        run HousingKitCommon(StructureType='cMarket', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Shop_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cMarket', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cMarket', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cMarket', 'cPlayer', BuildTiming):
+		# Should I reserve this space for the shop?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:903', true)
+		run HousingKitCommon(StructureType='cMarket', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Shop_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cMarket', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow SlopeReserveKit(BuildTiming: str):
-    EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
-    EventFlowSystemActor.StructureStartPreviewGuide('cSlope', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cSlope', 'cPlayer', BuildTiming):
-        # Should I reserve this spot for [a|an]<125:0:0000>?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:907', true)
-        run HousingKitCommon(StructureType='cSlope', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        System.EventFlags['cPlayer:ContributedBuildBridgeorSlope'] = true
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Slope', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cSlope', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
+	EventFlowSystemActor.StructureStartPreviewGuide('cSlope', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cSlope', 'cPlayer', BuildTiming):
+		# Should I reserve this spot for [a|an]<125:0:0000>?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:907', true)
+		run HousingKitCommon(StructureType='cSlope', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		System.EventFlags['cPlayer:ContributedBuildBridgeorSlope'] = true
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Slope', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cSlope', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
 flow TailorReserveKit(BuildTiming: str):
-    EventFlowSystemActor.StructureStartPreviewGuide('cTailor', 'cPlayer', BuildTiming)
-    if EventFlowSystemActor.CanBuildHere('cTailor', 'cPlayer', BuildTiming):
-        # Should I reserve this space for the tailor shop?
-        MainNpc.OpenMessageWindow('TalkSys/SYS_Player:908', true)
-        run HousingKitCommon(StructureType='cTailor', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
-        EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Tailor_Built', 'cNowDemoEnd', false)
-    else:
-        run HousingKitCommonError(StructureType='cTailor', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
- 
+	EventFlowSystemActor.StructureStartPreviewGuide('cTailor', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cTailor', 'cPlayer', BuildTiming):
+		# Should I reserve this space for the tailor shop?
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:908', true)
+		run HousingKitCommon(StructureType='cTailor', BuildTiming=BuildTiming, StructureBuildPosType='cPlayer')
+		EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Tailor_Built', 'cNowDemoEnd', false)
+	else:
+		run HousingKitCommonError(StructureType='cTailor', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)

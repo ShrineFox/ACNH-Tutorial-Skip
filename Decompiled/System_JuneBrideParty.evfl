@@ -1,51 +1,50 @@
 flow PartyEnd_Wipe():
-    EventFlowSystemActor.AfterWeddingBGMEnd()
-    if System.EventFlags['cPlayer:AlwJuneBrideDayCount'] < 6:
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.NextLPFadeOff()
-        EventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 3, 0.0)
-        System.EventFlags['cPlayer:JuneBridePlacementDataClearFlag'] = true
-        EventFlowSystemActor.SystemRequestChangeStage('cPhotoStudioIslandHouse', 'cNormalFader', 'cCircle', 'cBlack', 0.125, 1.0)
-    else:
-        System.EventFlags['cPlayer:JuneBridePlacementDataClearFlag'] = true
-        System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow'] = false
-        System.EventFlags['cLandTemp:RemakeJuneBrideTalkTimeAfterNow'] = true
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.SystemRequestChangeStage('cJuneBrideStudio', 'cHeartWipe', 'cHeartWipe', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.AfterWeddingBGMEnd()
+	if System.EventFlags['cPlayer:AlwJuneBrideDayCount'] < 6:
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.NextLPFadeOff()
+		EventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 3, 0.0)
+		System.EventFlags['cPlayer:JuneBridePlacementDataClearFlag'] = true
+		EventFlowSystemActor.SystemRequestChangeStage('cPhotoStudioIslandHouse', 'cNormalFader', 'cCircle', 'cBlack', 0.125, 1.0)
+	else:
+		System.EventFlags['cPlayer:JuneBridePlacementDataClearFlag'] = true
+		System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow'] = false
+		System.EventFlags['cLandTemp:RemakeJuneBrideTalkTimeAfterNow'] = true
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.SystemRequestChangeStage('cJuneBrideStudio', 'cHeartWipe', 'cHeartWipe', 'cBlack', 1.0, 1.0)
+
 flow PartyStart_Wipe():
-    run SNPC_alw_01_Studio::Alw_DayChkrun SNPC_alw_01_Studio::Alw_DayChk()
-    EventFlowSystemActor.CalcJuneBrideScore()
-    run SNPC_alw_01_Studio::Alw_ScoreCountrun SNPC_alw_01_Studio::Alw_ScoreCount()
-    EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.WeddingBGMStart()
-    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
-    EventFlowSystemActor.UIGuideBalloonWeddingParty(0)
-    EventFlowSystemActor.SystemRequestChangeStage('cJuneBrideDemo', 'cHeartWipe', 'cHeartWipe', 'cBlack', 1.0, 1.0)
- 
+	run SNPC_alw_01_Studio::Alw_DayChk()
+	EventFlowSystemActor.CalcJuneBrideScore()
+	run SNPC_alw_01_Studio::Alw_ScoreCount()
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.WeddingBGMStart()
+	System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
+	EventFlowSystemActor.UIGuideBalloonWeddingParty(0)
+	EventFlowSystemActor.SystemRequestChangeStage('cJuneBrideDemo', 'cHeartWipe', 'cHeartWipe', 'cBlack', 1.0, 1.0)
+
 flow Root():
-    if System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
-        run Root_PartyEnd()
-    else:
-        # Start party with this set?
-        Player.OpenMessageWindow('TalkSys/SYS_GEvent:001', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.CalcJuneBrideScore()
-            if not EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
-                # I need to put a set together to start the party.
-                Player.OpenMessageWindow('TalkSys/SYS_GEvent:003', false)
-            elif not EventFlowSystemActor.CheckCalledNpcNumNormal(1):
-                # I need to call some guests to start the party.
-                Player.OpenMessageWindow('TalkSys/SYS_GEvent:004', false)
-            elif EventFlowSystemActor.AlwAlpIsOnBedJuneBride():
-                # I need to wake up Reese and Cyrus to start the party.
-                Player.OpenMessageWindow('TalkSys/SYS_GEvent:005', false)
-            else:
-                run PartyStart_Wipe()
- 
+	if System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
+		run Root_PartyEnd()
+	else:
+		# Start party with this set?
+		Player.OpenMessageWindow('TalkSys/SYS_GEvent:001', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.CalcJuneBrideScore()
+			if not EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
+				# I need to put a set together to start the party.
+				Player.OpenMessageWindow('TalkSys/SYS_GEvent:003', false)
+			elif not EventFlowSystemActor.CheckCalledNpcNumNormal(1):
+				# I need to call some guests to start the party.
+				Player.OpenMessageWindow('TalkSys/SYS_GEvent:004', false)
+			elif EventFlowSystemActor.AlwAlpIsOnBedJuneBride():
+				# I need to wake up Reese and Cyrus to start the party.
+				Player.OpenMessageWindow('TalkSys/SYS_GEvent:005', false)
+			else:
+				run PartyStart_Wipe()
+
 flow Root_PartyEnd():
-    # End party?
-    Player.OpenMessageWindow('TalkSys/SYS_GEvent:002', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run PartyEnd_Wipe()
- 
+	# End party?
+	Player.OpenMessageWindow('TalkSys/SYS_GEvent:002', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run PartyEnd_Wipe()

@@ -1,100 +1,99 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        MainNpc.NpcCopyPhrase()
-        # Which do you think is sweeter, <110:31:cd01>? <50:3><135:7:cd00> or…um…uh… <135:7:cd01>, <110:6>?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:201', false)
-        Player.TurnNeck(1, false)
-        # Hrmmm… I don't care for sweets. They're a waste of teeth! But that "<110:5>" you just said—that's pretty good.
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:202', false)
-        Player.TurnNeck(0, false)
-        # Huh? You mean, "<110:5>"? There's something you like?!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:203', false)
-        Player.TurnNeck(1, false)
-        # Of course I like things! For example, I like not liking things! I like it a lot! Anyhow, I don't suppose you'd mind if I used that catchphrase too?
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:204', false)
-        Player.TurnNeck(0, false)
-        # You bet! Go ahead and use it all ya want!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:205', false)
-        Player.TurnNeck(1, false)
-        # Thanks, squirt! Gotta switch things up every once in a while, <110:6>!
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:206', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        fork:
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Hey, <110:4>? Don'tcha think <110:31:cd01> acts real cool and mature?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:001', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                MainNpc.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnNeck(0, false)
-        # What's with the sudden compliments, <110:31:cd00>? I don't have any food to give you.
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:002', false)
-        Player.TurnNeck(0, false)
-        # I mean it! You're real tough and smart! You're just the bestest!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:003', false)
-        Player.TurnNeck(1, false)
-        # Gahaha! Sounds like I'm finally getting some respect around here! <20:2:cd06><20:3:cd08>Oy! <50:3><110:3>! Don't you have anything to say to me too?
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:004', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                MainNpc.TurnNeck(1, false)
-                # Y—ya think so? All these compliments are making my elbows feel squirmy! <20:2:cd07>What next, flying pigs?! Gahaha, <110:6>!
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:005', false)
-            case 1:
-                MainNpc.TurnNeck(1, false)
-                # R-right… Are you trying to compliment me? Because you're off the mark, <110:5>…
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:006', false)
-            case 2:
-                MainNpc.TurnNeck(1, false)
-                # <20:2:cd07>D-dagnabbit… Is my face really that scary?
-                SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:007', false)
-    else:
-        # <110:31:cd01>? Is it true you have a great singing voice? I wanna hear you sing!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:101', false)
-        Player.TurnNeck(1, false)
-        # I dunno, kid… I only know the one song and, well, it's special to me. I don't wanna just go singin' it whenever, y'know?
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:102', false)
-        fork:
-            branch:
-                Player.TurnNeck(0, false)
-            branch:
-                MainNpc.TurnNeck(10, false)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Ya know that old cowboy song, "Occasional Cowboy Party"? I heard <110:31:cd01> can sing it real good. <20:3:cd06>Can you help me convince him to sing…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:103', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                MainNpc.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnBody(10, 0.0)
-        # Aw, no need to butter my muffin, kiddo. I don't want to brag, but yeah, I do sing it pretty well.
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:104', false)
-        fork:
-            branch:
-                Player.TurnNeck(0, false)
-            branch:
-                MainNpc.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnNeck(0, false)
-        # Butter?<10:4> Muffin?<10:4> I didn't know you had muffins. I want a muffin. Give me a muffin.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:105', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        # Muffins? What in tarnation do you— <20:2:cd08>We were talking about a SONG, <20:2:cd07>now you're on about muffins?!
-        SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:106', false)
-        Player.TurnNeck(0, false)
-        # You don't have muffins?<10:4> I'm so confuuused!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:107', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		MainNpc.NpcCopyPhrase()
+		# Which do you think is sweeter, <110:31:cd01>? <50:3><135:7:cd00> or…um…uh… <135:7:cd01>, <110:6>?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:201', false)
+		Player.TurnNeck(1, false)
+		# Hrmmm… I don't care for sweets. They're a waste of teeth! But that "<110:5>" you just said—that's pretty good.
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:202', false)
+		Player.TurnNeck(0, false)
+		# Huh? You mean, "<110:5>"? There's something you like?!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:203', false)
+		Player.TurnNeck(1, false)
+		# Of course I like things! For example, I like not liking things! I like it a lot! Anyhow, I don't suppose you'd mind if I used that catchphrase too?
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:204', false)
+		Player.TurnNeck(0, false)
+		# You bet! Go ahead and use it all ya want!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:205', false)
+		Player.TurnNeck(1, false)
+		# Thanks, squirt! Gotta switch things up every once in a while, <110:6>!
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:206', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		fork:
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Hey, <110:4>? Don'tcha think <110:31:cd01> acts real cool and mature?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:001', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				MainNpc.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnNeck(0, false)
+		# What's with the sudden compliments, <110:31:cd00>? I don't have any food to give you.
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:002', false)
+		Player.TurnNeck(0, false)
+		# I mean it! You're real tough and smart! You're just the bestest!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:003', false)
+		Player.TurnNeck(1, false)
+		# Gahaha! Sounds like I'm finally getting some respect around here! <20:2:cd06><20:3:cd08>Oy! <50:3><110:3>! Don't you have anything to say to me too?
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:004', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				MainNpc.TurnNeck(1, false)
+				# Y—ya think so? All these compliments are making my elbows feel squirmy! <20:2:cd07>What next, flying pigs?! Gahaha, <110:6>!
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:005', false)
+			case 1:
+				MainNpc.TurnNeck(1, false)
+				# R-right… Are you trying to compliment me? Because you're off the mark, <110:5>…
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:006', false)
+			case 2:
+				MainNpc.TurnNeck(1, false)
+				# <20:2:cd07>D-dagnabbit… Is my face really that scary?
+				SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:007', false)
+	else:
+		# <110:31:cd01>? Is it true you have a great singing voice? I wanna hear you sing!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:101', false)
+		Player.TurnNeck(1, false)
+		# I dunno, kid… I only know the one song and, well, it's special to me. I don't wanna just go singin' it whenever, y'know?
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:102', false)
+		fork:
+			branch:
+				Player.TurnNeck(0, false)
+			branch:
+				MainNpc.TurnNeck(10, false)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Ya know that old cowboy song, "Occasional Cowboy Party"? I heard <110:31:cd01> can sing it real good. <20:3:cd06>Can you help me convince him to sing…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:103', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				MainNpc.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnBody(10, 0.0)
+		# Aw, no need to butter my muffin, kiddo. I don't want to brag, but yeah, I do sing it pretty well.
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:104', false)
+		fork:
+			branch:
+				Player.TurnNeck(0, false)
+			branch:
+				MainNpc.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnNeck(0, false)
+		# Butter?<10:4> Muffin?<10:4> I didn't know you had muffins. I want a muffin. Give me a muffin.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:105', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		# Muffins? What in tarnation do you— <20:2:cd08>We were talking about a SONG, <20:2:cd07>now you're on about muffins?!
+		SubNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:106', false)
+		Player.TurnNeck(0, false)
+		# You don't have muffins?<10:4> I'm so confuuused!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Conv/BO_Conv_KO:107', false)

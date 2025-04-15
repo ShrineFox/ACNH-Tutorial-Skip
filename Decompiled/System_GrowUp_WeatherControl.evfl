@@ -1,33 +1,32 @@
 flow Always():
-    switch EventFlowSystemActor.EventBranch(true, 0):
-        case `Fireworks`:
-            if not System.EventFlags['cLand:GrowUpAfterPatch1_4']:
-                EventFlowSystemActor.SetWeatherPattern('EventDay00')
-        case `HarvestFestival`:
-            if not System.EventFlags['cLand:GrowUpAfterPatch1_6']:
-                EventFlowSystemActor.SetWeatherPattern('EventDay00')
-        default:
-            return
- 
+	switch EventFlowSystemActor.EventBranch(true, 0):
+		case `Fireworks`:
+			if not System.EventFlags['cLand:GrowUpAfterPatch1_4']:
+				EventFlowSystemActor.SetWeatherPattern('EventDay00')
+		case `HarvestFestival`:
+			if not System.EventFlags['cLand:GrowUpAfterPatch1_6']:
+				EventFlowSystemActor.SetWeatherPattern('EventDay00')
+		default:
+			return
+
 flow ChristmasDay():
-    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-        EventFlowSystemActor.SetWeatherPattern('EventDay03')
-    else:
-        EventFlowSystemActor.SetWeatherPattern('EventDay00')
- 
+	if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+		EventFlowSystemActor.SetWeatherPattern('EventDay03')
+	else:
+		EventFlowSystemActor.SetWeatherPattern('EventDay00')
+
 flow ChristmasEve():
-    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-        EventFlowSystemActor.SetWeatherPattern('EventDay02')
-    else:
-        EventFlowSystemActor.SetWeatherPattern('EventDay00')
- 
+	if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+		EventFlowSystemActor.SetWeatherPattern('EventDay02')
+	else:
+		EventFlowSystemActor.SetWeatherPattern('EventDay00')
+
 flow FirstDay():
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        EventFlowSystemActor.SetWeatherPattern('EventDay00')
-    elif not EventFlowSystemActor.EnvSameDate('cWeatherEventDay', 'cLastGrowUpTime'):
-        EventFlowSystemActor.SetWeatherPattern('EventDay00')
- 
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		EventFlowSystemActor.SetWeatherPattern('EventDay00')
+	elif not EventFlowSystemActor.EnvSameDate('cWeatherEventDay', 'cLastGrowUpTime'):
+		EventFlowSystemActor.SetWeatherPattern('EventDay00')
+
 flow FirstLive():
-    if (EventFlowSystemActor.EventBranch(true, 0) == `None`) and (not System.EventFlags['cLand:TkkFirstLive']) and (System.EventFlags['cLand:IslandEvaluationClearTkkLive']):
-        EventFlowSystemActor.SetWeatherPattern('EventDay00')
- 
+	if (EventFlowSystemActor.EventBranch(true, 0) == `None`) and (not System.EventFlags['cLand:TkkFirstLive']) and (System.EventFlags['cLand:IslandEvaluationClearTkkLive']):
+		EventFlowSystemActor.SetWeatherPattern('EventDay00')

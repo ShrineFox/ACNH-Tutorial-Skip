@@ -1,100 +1,99 @@
 flow EntryPoint_DeleteFuture():
-    EventFlowSystemActor.UIMsgCardAdrHandling('cOneselfFuture')
-    if EventFlowSystemActor.ExistUnfinishMail():
-        EventFlowSystemActor.ChangeAddressUnfinishMail()
-        run EntryPoint_EditFuture()
-    else:
-        EventFlowSystemActor.UIMoneyDisappear()
-        EventFlowSystemActor.UIMsgCardSelectHandling()
-        if EventFlowSystemActor.UIResultMenuDecide():
-            run EntryPoint_EditFuture()
-        else:
-            run Obj_MessageCardRack::EntryPoint_CancelNegarun Obj_MessageCardRack::EntryPoint_CancelNega()
- 
+	EventFlowSystemActor.UIMsgCardAdrHandling('cOneselfFuture')
+	if EventFlowSystemActor.ExistUnfinishMail():
+		EventFlowSystemActor.ChangeAddressUnfinishMail()
+		run EntryPoint_EditFuture()
+	else:
+		EventFlowSystemActor.UIMoneyDisappear()
+		EventFlowSystemActor.UIMsgCardSelectHandling()
+		if EventFlowSystemActor.UIResultMenuDecide():
+			run EntryPoint_EditFuture()
+		else:
+			run Obj_MessageCardRack::EntryPoint_CancelNega()
+
 flow EntryPoint_EditFuture():
-    EventFlowSystemActor.UIMoneyDisappear()
-    EventFlowSystemActor.UIMsgCardEditTextHandling('')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
-        EventFlowSystemActor.UIDateCreate('cFutureDate')
-        # So, how far into the future should I be sending this thing?
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:401', true)
-        run EntryPoint_WrongDate()
-    else:
-        run Obj_MessageCardRack::EntryPoint_EditCancelrun Obj_MessageCardRack::EntryPoint_EditCancel()
- 
+	EventFlowSystemActor.UIMoneyDisappear()
+	EventFlowSystemActor.UIMsgCardEditTextHandling('')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
+		EventFlowSystemActor.UIDateCreate('cFutureDate')
+		# So, how far into the future should I be sending this thing?
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:401', true)
+		run EntryPoint_WrongDate()
+	else:
+		run Obj_MessageCardRack::EntryPoint_EditCancel()
+
 flow EntryPoint_SendFuture():
-    EventFlowSystemActor.UIMoneyDisappear()
-    if EventFlowSystemActor.ReservedFutureMail():
-        # Okeydoke! Oh, wait a minute! Looks like you've already got a letter in the hopper for future PLAYER. If you wanna send another future letter, you got…
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:415', true)
-        EventFlowSystemActor.UIFutureMsgCardHandling()
-        if EventFlowSystemActor.UIManageFutureMessage():
-            # Read ya loud and clear!<10:4> I'll just hold on to your letter until the delivery date.
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:803', false)
-            EventFlowSystemActor.UIMoneyDisappear()
-        elif not EventFlowSystemActor.ReservedFutureMailWithPresent():
-            EventFlowSystemActor.DeleteFutureMail()
-            if EventFlowSystemActor.ExistUnfinishMail():
-                # I'll go ahead and throw away the letter you were going to send to the future you. So take this card and edit it. To send to yourself. In the future.
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:420_01', false)
-            else:
-                # Alright, we deleted that letter. Ready to write a new one?
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:420', true)
-            run EntryPoint_DeleteFuture()
-        elif EventFlowSystemActor.CanReturnToPocketFutureMailPresent():
-            EventFlowSystemActor.ReturnToPocketFutureMailPresent()
-            EventFlowSystemActor.DeleteFutureMail()
-            if EventFlowSystemActor.ExistUnfinishMail():
-                # Heard ya loud and clear.<10:4> The card has a present attached, so I'll give that back, and just toss the card itself. Take this card and edit it to …
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:421_01', false)
-            else:
-                # Heard ya loud and clear.<10:4> The card has a present attached, so I'll give that back, and just toss the card itself. Go ahead and pick out a new ca…
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:421', true)
-            run EntryPoint_DeleteFuture()
-        else:
-            # I was gonna return the present to you before we delete the letter, but it looks like you're all full up. Sorry, couldja come back again after you mak…
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:416', true)
-    else:
-        # To PLAYER of the future, then!
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_03', false)
-        if EventFlowSystemActor.ExistUnfinishMail():
-            # Alrighty then. Here's your card!
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_02', false)
-            run EntryPoint_DeleteFuture()
-        else:
-            # Just choose a card and write your letter on it!
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_01', false)
-            run EntryPoint_DeleteFuture()
- 
+	EventFlowSystemActor.UIMoneyDisappear()
+	if EventFlowSystemActor.ReservedFutureMail():
+		# Okeydoke! Oh, wait a minute! Looks like you've already got a letter in the hopper for future PLAYER. If you wanna send another future letter, you got…
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:415', true)
+		EventFlowSystemActor.UIFutureMsgCardHandling()
+		if EventFlowSystemActor.UIManageFutureMessage():
+			# Read ya loud and clear!<10:4> I'll just hold on to your letter until the delivery date.
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:803', false)
+			EventFlowSystemActor.UIMoneyDisappear()
+		elif not EventFlowSystemActor.ReservedFutureMailWithPresent():
+			EventFlowSystemActor.DeleteFutureMail()
+			if EventFlowSystemActor.ExistUnfinishMail():
+				# I'll go ahead and throw away the letter you were going to send to the future you. So take this card and edit it. To send to yourself. In the future.
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:420_01', false)
+			else:
+				# Alright, we deleted that letter. Ready to write a new one?
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:420', true)
+			run EntryPoint_DeleteFuture()
+		elif EventFlowSystemActor.CanReturnToPocketFutureMailPresent():
+			EventFlowSystemActor.ReturnToPocketFutureMailPresent()
+			EventFlowSystemActor.DeleteFutureMail()
+			if EventFlowSystemActor.ExistUnfinishMail():
+				# Heard ya loud and clear.<10:4> The card has a present attached, so I'll give that back, and just toss the card itself. Take this card and edit it to …
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:421_01', false)
+			else:
+				# Heard ya loud and clear.<10:4> The card has a present attached, so I'll give that back, and just toss the card itself. Go ahead and pick out a new ca…
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:421', true)
+			run EntryPoint_DeleteFuture()
+		else:
+			# I was gonna return the present to you before we delete the letter, but it looks like you're all full up. Sorry, couldja come back again after you mak…
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:416', true)
+	else:
+		# To PLAYER of the future, then!
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_03', false)
+		if EventFlowSystemActor.ExistUnfinishMail():
+			# Alrighty then. Here's your card!
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_02', false)
+			run EntryPoint_DeleteFuture()
+		else:
+			# Just choose a card and write your letter on it!
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:220_01', false)
+			run EntryPoint_DeleteFuture()
+
 flow EntryPoint_WrongDate():
-    EventFlowSystemActor.UIDateHandling('cDate')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.SetTagFromUIResult('cSetYMD', 0)
-        # You wanna send it to <90:35:cd00> <90:36:cd00>, <90:34:cd00>?
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:402', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.UIMoneyAppear()
-            if EventFlowSystemActor.HasBellCount(200):
-                # Alright, delivery fee comes to 200 Bells.
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:500', true)
-                EventFlowSystemActor.BellCountDown(-200, false)
-                EventFlowSystemActor.ReserveFutureMail()
-                EventFlowSystemActor.WaitFrame(10)
-                # Thanks a bunch! I'll be sure to send your letter on the day you requested!
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:502', false)
-                EventFlowSystemActor.UIMoneyDisappear()
-            else:
-                # Wuh-oh! You don't have quite enough Bells here. When you've got 200, come see me again! In the meanwhile, I'll just hold on to the letter for you. I …
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:510', false)
-                EventFlowSystemActor.UIMoneyDisappear()
-                run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoneyrun Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
-        else:
-            # Did I goof? Sorry. Couldja try again?
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:410', true)
-            run EntryPoint_WrongDate()
-    else:
-        # Wrapping it up for now, eh? Well, lemme just save your work for later.
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:521', false)
-        run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoneyrun Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
- 
+	EventFlowSystemActor.UIDateHandling('cDate')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cSetYMD', 0)
+		# You wanna send it to <90:35:cd00> <90:36:cd00>, <90:34:cd00>?
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:402', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.UIMoneyAppear()
+			if EventFlowSystemActor.HasBellCount(200):
+				# Alright, delivery fee comes to 200 Bells.
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:500', true)
+				EventFlowSystemActor.BellCountDown(-200, false)
+				EventFlowSystemActor.ReserveFutureMail()
+				EventFlowSystemActor.WaitFrame(10)
+				# Thanks a bunch! I'll be sure to send your letter on the day you requested!
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:502', false)
+				EventFlowSystemActor.UIMoneyDisappear()
+			else:
+				# Wuh-oh! You don't have quite enough Bells here. When you've got 200, come see me again! In the meanwhile, I'll just hold on to the letter for you. I …
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:510', false)
+				EventFlowSystemActor.UIMoneyDisappear()
+				run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
+		else:
+			# Did I goof? Sorry. Couldja try again?
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:410', true)
+			run EntryPoint_WrongDate()
+	else:
+		# Wrapping it up for now, eh? Well, lemme just save your work for later.
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:521', false)
+		run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()

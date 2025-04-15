@@ -1,104 +1,103 @@
 flow BoaFreeTalk():
-    if EventFlowSystemActor.PercentChoice(50):
-        # RANDOM: The part that's bothering me most? I su… // What's bothering me? I suppose it's my … // Where's it hurt? My arms. Oh, but they … // What's hurting? These old shoulders of …
-        MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:103', false)
-    else:
-        # RANDOM: My granddaughter just can't seem to get… // I've never known anyone who eats as man… // My granddaughter adores turnips. She ge… // I love the way my granddaughter just li…
-        MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:104', false)
- 
+	if EventFlowSystemActor.PercentChoice(50):
+		# RANDOM: The part that's bothering me most? I su… // What's bothering me? I suppose it's my … // Where's it hurt? My arms. Oh, but they … // What's hurting? These old shoulders of …
+		MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:103', false)
+	else:
+		# RANDOM: My granddaughter just can't seem to get… // I've never known anyone who eats as man… // My granddaughter adores turnips. She ge… // I love the way my granddaughter just li…
+		MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:104', false)
+
 flow BoaTurnipTalk():
-    switch EventFlowSystemActor.PercentChoice3(50, 30, 20):
-        case 0:
-            # Y'know, I happened to pick a few turnips before I left home today. Why don't you take 'em, kiddo?
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:105_01', false)
+	switch EventFlowSystemActor.PercentChoice3(50, 30, 20):
+		case 0:
+			# Y'know, I happened to pick a few turnips before I left home today. Why don't you take 'em, kiddo?
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:105_01', false)
 entrypoint Event9:
-            MainNpc.SetDeliveryItemAtRandom(2634, true, 'cVillageRemakePattern', 0)
-            # There you are—30 turnips!
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:106_01', false)
-            MainNpc.NpcDelivery(1, 'Default')
-        case 1:
-            # Y'know, I happened to pick a few turnips before I left home today. Why don't you take 'em, kiddo?
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:105_01', false)
+			MainNpc.SetDeliveryItemAtRandom(2634, true, 'cVillageRemakePattern', 0)
+			# There you are—30 turnips!
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:106_01', false)
+			MainNpc.NpcDelivery(1, 'Default')
+		case 1:
+			# Y'know, I happened to pick a few turnips before I left home today. Why don't you take 'em, kiddo?
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:105_01', false)
 entrypoint Event5:
-            MainNpc.SetDeliveryItemAtRandom(2636, true, 'cVillageRemakePattern', 0)
-            # There you are—50 turnips!
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:106_02', false)
-            MainNpc.NpcDelivery(1, 'Default')
-        case 2:
-            # Y'know, I happen to have a bundle of freshly picked turnips with me today. Why don't you take 'em, kiddo?
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:105_02', false)
+			MainNpc.SetDeliveryItemAtRandom(2636, true, 'cVillageRemakePattern', 0)
+			# There you are—50 turnips!
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:106_02', false)
+			MainNpc.NpcDelivery(1, 'Default')
+		case 2:
+			# Y'know, I happen to have a bundle of freshly picked turnips with me today. Why don't you take 'em, kiddo?
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:105_02', false)
 entrypoint Event11:
-            MainNpc.SetDeliveryItemAtRandom(2641, true, 'cVillageRemakePattern', 0)
-            # There you are—100 turnips!
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:106_03', false)
-            MainNpc.NpcDelivery(1, 'Default')
-    # And that look on your face tells me you know just what you wanna do with 'em. Hyeh heh heh…
-    MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:107', true)
-    System.EventFlags['cWherearenPlayer:BoaGetTurnipToday'] = true
-    System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed'] = false
- 
+			MainNpc.SetDeliveryItemAtRandom(2641, true, 'cVillageRemakePattern', 0)
+			# There you are—100 turnips!
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:106_03', false)
+			MainNpc.NpcDelivery(1, 'Default')
+	# And that look on your face tells me you know just what you wanna do with 'em. Hyeh heh heh…
+	MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:107', true)
+	System.EventFlags['cWherearenPlayer:BoaGetTurnipToday'] = true
+	System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed'] = false
+
 flow BoaTurnipTalk_100():
-    run Event11()
- 
+	run Event11()
+
 flow BoaTurnipTalk_30():
-    run Event9()
- 
+	run Event9()
+
 flow BoaTurnipTalk_50():
-    run Event5()
- 
+	run Event5()
+
 flow Root():
-    run Walk()
- 
+	run Walk()
+
 flow Sit():
-    run Walk()
- 
+	run Walk()
+
 local flow Sub_Event30():
-    System.EventFlags['cWherearenPlayer:BoaTalkToday'] = true
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # Y'know, I have a bundle of fresh turnips with me. How'd you like a few, kiddo? Oh… It seems like you're already carrying about as many things as thos…
-        MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:108', false)
-        System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed'] = true
-    elif MainNpc.NpcIsSitting() == 4:
-        run BoaTurnipTalk()
-        System.EventFlags['cWherearenPlayer:BoaGetTurnipToday'] = true
- 
+	System.EventFlags['cWherearenPlayer:BoaTalkToday'] = true
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Y'know, I have a bundle of fresh turnips with me. How'd you like a few, kiddo? Oh… It seems like you're already carrying about as many things as thos…
+		MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:108', false)
+		System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed'] = true
+	elif MainNpc.NpcIsSitting() == 4:
+		run BoaTurnipTalk()
+		System.EventFlags['cWherearenPlayer:BoaGetTurnipToday'] = true
+
 flow Walk():
-    if System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed']:
-        if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-            run BoaFreeTalk()
-        else:
-            # Back for the turnips, huh? I've got them right here for you.
-            MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:109', false)
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # Huh? Your pockets are still full. Come on, now—go clear some space so I can give these to you.
-                MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:110', false)
-            else:
-                switch EventFlowSystemActor.PercentChoice3(50, 30, 20):
-                    case 0:
-                        run BoaTurnipTalk_30()
-                    case 1:
-                        run BoaTurnipTalk_50()
-                    case 2:
-                        run BoaTurnipTalk_100()
-    elif not System.EventFlags['cWherearenPlayer:BoaTalkedWherearen']:
-        System.EventFlags['cWherearenPlayer:BoaTalkedWherearen'] = true
-        # Well, hey, kiddo. What're you doing here? Are you feeling alright? Me?<10:4> Oh, it's no biggie. I've been working the fields too long, that's all. I…
-        MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:101', false)
-        run Sub_Event30()
-    elif System.EventFlags['cWherearenPlayer:BoaTalkToday']:
-        if System.EventFlags['cWherearenPlayer:BoaGetTurnipToday']:
-            run BoaFreeTalk()
-        else:
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # Y'know, I have a bundle of fresh turnips with me. How'd you like a few, kiddo? Oh… It seems like you're already carrying about as many things as thos…
-                MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:108', false)
-                System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed'] = true
-            elif MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-                run BoaFreeTalk()
-            else:
-                run BoaTurnipTalk()
-    else:
-        # You here to get something looked at too, kiddo? Me? My body's just starting to feel its age, is all. I'm here for my usual Monday checkup. Hyeh heh h…
-        MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:102', false)
-        run Sub_Event30()
- 
+	if System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed']:
+		if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+			run BoaFreeTalk()
+		else:
+			# Back for the turnips, huh? I've got them right here for you.
+			MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:109', false)
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Huh? Your pockets are still full. Come on, now—go clear some space so I can give these to you.
+				MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:110', false)
+			else:
+				switch EventFlowSystemActor.PercentChoice3(50, 30, 20):
+					case 0:
+run BoaTurnipTalk_30()
+					case 1:
+run BoaTurnipTalk_50()
+					case 2:
+run BoaTurnipTalk_100()
+	elif not System.EventFlags['cWherearenPlayer:BoaTalkedWherearen']:
+		System.EventFlags['cWherearenPlayer:BoaTalkedWherearen'] = true
+		# Well, hey, kiddo. What're you doing here? Are you feeling alright? Me?<10:4> Oh, it's no biggie. I've been working the fields too long, that's all. I…
+		MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:101', false)
+		run Sub_Event30()
+	elif System.EventFlags['cWherearenPlayer:BoaTalkToday']:
+		if System.EventFlags['cWherearenPlayer:BoaGetTurnipToday']:
+			run BoaFreeTalk()
+		else:
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Y'know, I have a bundle of fresh turnips with me. How'd you like a few, kiddo? Oh… It seems like you're already carrying about as many things as thos…
+				MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:108', false)
+				System.EventFlags['cWherearenPlayer:BoaGiveTurnipFailed'] = true
+			elif MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+				run BoaFreeTalk()
+			else:
+				run BoaTurnipTalk()
+	else:
+		# You here to get something looked at too, kiddo? Me? My body's just starting to feel its age, is all. I'm here for my usual Monday checkup. Hyeh heh h…
+		MainNpc.OpenMessageWindow('TalkSNpc/boa/SP_boa_WherearenEvent:102', false)
+		run Sub_Event30()

@@ -1,77 +1,76 @@
 flow Bpt_Friendship_Result():
-    switch MainNpc.BptGetFriendship():
-        case 0:
-            # I am one with <115:1:cd00>'s consciousness… I see many faces… But I do not see…<10:4> No, I do not see yours among them. From this evidence, I wonder…
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:211', false)
-        case 1:
-            # I see that, as one neighbor might recognize another, so too does this <115:1:cd00> recognize you… This is pleasant… But perhaps they are thinking it …
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:212', false)
-            run Sub_grp_Event33()
-        case 2:
-            # As someone who lives with you on the same island, your acquaintance <115:1:cd00> knows you well. If you want to be closer, continue speaking to them …
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:213', false)
-            run Sub_grp_Event33()
-        case 3:
-            # I see…many faces before me…in <115:1:cd00>'s consciousness. Oh, and there is your face… And again… And again… Perhaps 20 percent of the faces I see a…
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:214', false)
-            run Sub_grp_Event33()
-        case 4:
-            # I float within the consciousness of <115:1:cd00>… When [he|she] eats or sleeps, [he|she] thinks of you… Doing chores, having fun… [he|she] thinks of …
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:215', false)
-            run Sub_grp_Event33()
-        case 5, 6:
-            # I float within the consciousness of <115:1:cd00>… I see many faces before me… You smile… You frown… Your eye seems puffy…perhaps from a wasp sting… F…
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:216', false)
- 
+	switch MainNpc.BptGetFriendship():
+		case 0:
+			# I am one with <115:1:cd00>'s consciousness… I see many faces… But I do not see…<10:4> No, I do not see yours among them. From this evidence, I wonder…
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:211', false)
+		case 1:
+			# I see that, as one neighbor might recognize another, so too does this <115:1:cd00> recognize you… This is pleasant… But perhaps they are thinking it …
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:212', false)
+			run Sub_grp_Event33()
+		case 2:
+			# As someone who lives with you on the same island, your acquaintance <115:1:cd00> knows you well. If you want to be closer, continue speaking to them …
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:213', false)
+			run Sub_grp_Event33()
+		case 3:
+			# I see…many faces before me…in <115:1:cd00>'s consciousness. Oh, and there is your face… And again… And again… Perhaps 20 percent of the faces I see a…
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:214', false)
+			run Sub_grp_Event33()
+		case 4:
+			# I float within the consciousness of <115:1:cd00>… When [he|she] eats or sleeps, [he|she] thinks of you… Doing chores, having fun… [he|she] thinks of …
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:215', false)
+			run Sub_grp_Event33()
+		case 5, 6:
+			# I float within the consciousness of <115:1:cd00>… I see many faces before me… You smile… You frown… Your eye seems puffy…perhaps from a wasp sting… F…
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:216', false)
+
 flow Root():
-    # I can see many faces in my crystal… With whom shall I divine your friendship?
-    MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:201', false)
-    EventFlowSystemActor.UIMsgCardAdrHandling('cFortuneTelling')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        System.EventFlags['cPlayer:Bpt_FinishCompatibilityToday'] = true
-        System.EventFlags['cPlayer:Bpt_1stTalk'] = true
-        EventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
-        run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_PayFortuneFeerun SNPC_bpt_02_Commune_2_CmnProcess::Bpt_PayFortuneFee()
-        EventFlowSystemActor.PrepareCommuneDecoFortuneDisplayContent('cNPCIcon')
-        SubflowResults[3] = 1
-        # Very well.<10:4> Let me consult my crystal about your friendship with <115:1:cd00>.
-        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:203', false)
-        run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Start_FortuneTellingrun SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Start_FortuneTelling()
-        run Bpt_Friendship_Result()
-        run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Finish_FortuneTellingrun SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Finish_FortuneTelling()
-        if SubflowResults@2[2] == 0:
-            # I have given you nearly everything that I can give you… I hope that my crystal will guide you in a most healthy way as you interact with <115:1:cd00>…
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:221', false)
-            EventFlowSystemActor.SetPlayReporterBptTelling('cFriendship', false, false)
-        else:
-            # Now… I can perform a special friendship blessing for you, should you wish. Such blessings require very powerful energy, so I would of course need sig…
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:222', true)
-            EventFlowSystemActor.WaitFrame(10)
-            EventFlowSystemActor.UIMoneyAppear()
-            # Let me see… Shall I bless you for…<10:4> 10,000 Bells?
-            MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:223', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_PayExtraFeerun SNPC_bpt_02_Commune_2_CmnProcess::Bpt_PayExtraFee()
-                SubflowResults[3] = 3
-                EventFlowSystemActor.PrepareCommuneDecoFortuneDisplayContent('cNPCIcon')
-                # I understand. I will pray sincerely that you strengthen your friendship with <115:1:cd00>.
-                MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:225', false)
-                run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Start_FortuneTellingrun SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Start_FortuneTelling()
-                run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Finish_FortuneTellingrun SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Finish_FortuneTelling()
-                # …That is all. I hope that my crystal will guide you as you strengthen your friendship with <115:1:cd00>… Goodbye…
-                MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:226', false)
-                EventFlowSystemActor.SetPlayReporterBptTelling('cFriendship', false, true)
-                MainNpc.BptAddFriendShip(2)
-            else:
-                # Finding your own way without depending on others… That is one way that things are sometimes done. I hope that my crystal will guide you as you streng…
-                MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:224', false)
-                EventFlowSystemActor.SetPlayReporterBptTelling('cFriendship', false, false)
-    else:
-        # Oh… Will you not do this after all? Commune with others based on your intuition… That is one way that things are sometimes done. Goodbye…
-        MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:202', false)
-        EventFlowSystemActor.UIMoneyDisappear()
- 
+	# I can see many faces in my crystal… With whom shall I divine your friendship?
+	MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:201', false)
+	EventFlowSystemActor.UIMsgCardAdrHandling('cFortuneTelling')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		System.EventFlags['cPlayer:Bpt_FinishCompatibilityToday'] = true
+		System.EventFlags['cPlayer:Bpt_1stTalk'] = true
+		EventFlowSystemActor.SetTagFromUIResult('cSelectNpcName', 0)
+		run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_PayFortuneFee()
+		EventFlowSystemActor.PrepareCommuneDecoFortuneDisplayContent('cNPCIcon')
+		SubflowResults[3] = 1
+		# Very well.<10:4> Let me consult my crystal about your friendship with <115:1:cd00>.
+		MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:203', false)
+		run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Start_FortuneTelling()
+		run Bpt_Friendship_Result()
+		run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Finish_FortuneTelling()
+		if SubflowResults@2[2] == 0:
+			# I have given you nearly everything that I can give you… I hope that my crystal will guide you in a most healthy way as you interact with <115:1:cd00>…
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:221', false)
+			EventFlowSystemActor.SetPlayReporterBptTelling('cFriendship', false, false)
+		else:
+			# Now… I can perform a special friendship blessing for you, should you wish. Such blessings require very powerful energy, so I would of course need sig…
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:222', true)
+			EventFlowSystemActor.WaitFrame(10)
+			EventFlowSystemActor.UIMoneyAppear()
+			# Let me see… Shall I bless you for…<10:4> 10,000 Bells?
+			MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:223', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_PayExtraFee()
+				SubflowResults[3] = 3
+				EventFlowSystemActor.PrepareCommuneDecoFortuneDisplayContent('cNPCIcon')
+				# I understand. I will pray sincerely that you strengthen your friendship with <115:1:cd00>.
+				MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:225', false)
+				run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Start_FortuneTelling()
+				run SNPC_bpt_02_Commune_2_CmnProcess::Bpt_Finish_FortuneTelling()
+				# …That is all. I hope that my crystal will guide you as you strengthen your friendship with <115:1:cd00>… Goodbye…
+				MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:226', false)
+				EventFlowSystemActor.SetPlayReporterBptTelling('cFriendship', false, true)
+				MainNpc.BptAddFriendShip(2)
+			else:
+				# Finding your own way without depending on others… That is one way that things are sometimes done. I hope that my crystal will guide you as you streng…
+				MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:224', false)
+				EventFlowSystemActor.SetPlayReporterBptTelling('cFriendship', false, false)
+	else:
+		# Oh… Will you not do this after all? Commune with others based on your intuition… That is one way that things are sometimes done. Goodbye…
+		MainNpc.OpenMessageWindow('TalkSNpc/bpt/SP_bpt_02_Commune:202', false)
+		EventFlowSystemActor.UIMoneyDisappear()
+
 local flow Sub_grp_Event33():
-    if EventFlowSystemActor.HasBellCount(10000):
-        SubflowResults[2] = 1
- 
+	if EventFlowSystemActor.HasBellCount(10000):
+		SubflowResults[2] = 1

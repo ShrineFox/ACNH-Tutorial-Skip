@@ -1,173 +1,172 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        MainNpc.NpcCopyPhrase()
-        Player.TurnNeck(0, false)
-        # OK, <110:31:cd01>! You pumped to get swole? Don't worry, we're gonna start off niiiiiice and sloooow. All set? One hundred squats! Let's do this, <11…
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:201', false)
-        Player.TurnNeck(1, false)
-        # Whaaat? That's a lot of squat—WAIT! Did you just say "<110:5>"?
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:202', false)
-        Player.TurnNeck(0, false)
-        # <50:3><110:5>? Oh. Yeah! I say that all the time. You like it? Does it get you PUMPED, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:203', false)
-        Player.TurnNeck(1, false)
-        # Yeah it does! I kinda wanna say it all the time. Oh, um…you don't mind, do you, <110:5>?
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:204', false)
-        Player.TurnNeck(0, false)
-        # Ha ha ha! Doesn't bother me. As long as it gets you pumped, say it all you like, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:205', false)
-        Player.TurnNeck(1, false)
-        # Yaaay! Thanks, <110:31:cd00>! Now I can get as pumped as you are WITHOUT doing any squats, <110:6>!
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:206', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        Player.TurnNeck(0, false)
-        # Alright, <110:31:cd01>! We're gonna run a hundred laps around the island. You pumped? YOU READY?!
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:001', false)
-        Player.TurnNeck(1, false)
-        # Huh? Yeah, um…I don't know about this anymore. It sounds kinda hard.
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:002', false)
-        Player.TurnNeck(0, false)
-        # Of course it's gonna be hard! Hard is how you get buff! C'mon, one hundred laps. LET'S DO THIS!
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:003', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnBody(10, 0.0)
-        # <50:3><110:3>! <20:2:cd06>I-I can't run a hundred laps! That's…that's a hundred too many! HELP!
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:004', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        MainNpc.TurnBody(10, 0.0)
-                    branch:
-                        SubNpc.TurnNeck(0, false)
-                # Hey, <20:3:cd07>one way or another, we're doing a hundred laps. <20:2:cd05>This is gonna happen even if I have to carry you, <110:31:cd01>. …Actually…
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:005', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(1, false)
-                    branch:
-                        SubNpc.TurnBody(0, 0.0)
-                # Um… Suuuure. You can carry me home, then do the rest of the run by yourself. Sound good?
-                SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:006', false)
-            case 1:
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        SubNpc.TurnNeck(0, false)
-                # <20:3:cd05>You heard <110:3>! <50:3><110:31:cd01>, you ready to run?
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:007', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(1, false)
-                    branch:
-                        SubNpc.TurnNeck(10, false)
-                # Whaaaat? No! Um, m-my<20:2:cd07>…ankle! Yeah, my ankle really hurts! I can't run today. Ow! It's too bad, 'cause running sounded really…fun.
-                SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:008', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        MainNpc.TurnBody(1, 0.0)
-                # Oh no! We shoulda warmed up more! Alright, you rest up that ankle. Guess I'm running by myself!
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:009', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(1, false)
-                    branch:
-                        SubNpc.TurnBody(0, 0.0)
-                # <10:12>Whew! It worked.
-                SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:010', false)
-            case 2:
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        MainNpc.TurnBody(10, 0.0)
-                    branch:
-                        SubNpc.TurnNeck(0, false)
-                # Oh, <110:3>, you wanna run too? Sweet!
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:011', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(1, false)
-                    branch:
-                        MainNpc.TurnNeck(1, false)
-                    branch:
-                        SubNpc.TurnBody(10, 0.0)
-                # Cool! Um, you two have fun, alright? I'll be cheering you on from…from my sofa, <110:5>!
-                SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:012', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        MainNpc.TurnNeck(10, false)
-                # Is that so…<20:2:cd07> <20:2:cd05>Look, if you're not gonna run those laps, then I will, <110:31:cd01>. Two hundred laps for me! <20:2:cd06>How about…
-                MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:013', false)
-    else:
-        Player.TurnNeck(0, false)
-        # Hey! I said stop asking, <110:31:cd01>! They're not ready yet!
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:101', false)
-        Player.TurnNeck(1, false)
-        # I just wanna see, OK? I won't tell anyone about 'em. Promise!<20:3:cd06>
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:102', false)
-        fork:
-            branch:
-                Player.TurnNeck(0, false)
-            branch:
-                MainNpc.TurnBody(10, 0.0)
-            branch:
-                SubNpc.TurnNeck(10, false)
-        # Hey, <110:3>! Can you help me out? I kinda…told everyone I was gonna throw a party to show off my brand new eight-pack abs. Only now <110:31:cd01> ke…
-        MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:103', false)
-        fork:
-            branch:
-                Player.TurnNeck(1, false)
-            branch:
-                SubNpc.TurnBody(10, 0.0)
-        # I don't know what the big deal is! He's ALWAYS talkin' about how much he works out. How can his eight-pack NOT be ready? C'mon, <110:3>, what do YOU …
-        SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:104', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            fork:
-                branch:
-                    SubNpc.TurnNeck(0, false)
-                branch:
-                    Player.TurnNeck(0, false)
-            # <20:2:cd07><10:12><10:10>THEY'RE. NOT. READY! <10:9>Look… Soon the WHOLE WORLD'S gonna see my eight-pack. <20:2:cd05>It's gonna be epic! You gotta tr…
-            MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:105', false)
-            fork:
-                branch:
-                    Player.TurnNeck(1, false)
-                branch:
-                    SubNpc.TurnBody(0, 0.0)
-            # C'moooooon! I don't wanna waaaait! …Oh, fine. You go do whatever. I'll see your dumb eight-pack when everyone else does. <20:2:cd08>I don't even know…
-            SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:106', false)
-            Player.TurnNeck(0, false)
-            # You'll see, <110:31:cd01>. <20:2:cd07>I'll make sure you get in to the premiere. Just be patient! It's more of a two-and-a-half-pack right now, anywa…
-            MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:107', false)
-        else:
-            fork:
-                branch:
-                    Player.TurnNeck(0, false)
-                branch:
-                    MainNpc.TurnNeck(1, false)
-                branch:
-                    SubNpc.TurnNeck(0, false)
-            # <20:2:cd03>See! <20:3:cd07><50:3><110:3> knows the wait'll be worth it, <110:5>! <20:3:cd05>The premiere's gonna be epic. It'll have fireworks, celeb…
-            MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:108', false)
-            fork:
-                branch:
-                    Player.TurnNeck(1, false)
-                branch:
-                    SubNpc.TurnBody(0, 0.0)
-            # Fireworks? CATERING?! Why didn't you say so? Alright. I'll let you off the hook for now. I didn't know it was gonna be THAT awesome!
-            SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:109', false)
-            Player.TurnNeck(0, false)
-            # Just you wait, <110:31:cd01>. You're gonna love it! That was really close! My abs aren't anywhere near ready and, um… nothing else is either.
-            MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:110', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		MainNpc.NpcCopyPhrase()
+		Player.TurnNeck(0, false)
+		# OK, <110:31:cd01>! You pumped to get swole? Don't worry, we're gonna start off niiiiiice and sloooow. All set? One hundred squats! Let's do this, <11…
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:201', false)
+		Player.TurnNeck(1, false)
+		# Whaaat? That's a lot of squat—WAIT! Did you just say "<110:5>"?
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:202', false)
+		Player.TurnNeck(0, false)
+		# <50:3><110:5>? Oh. Yeah! I say that all the time. You like it? Does it get you PUMPED, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:203', false)
+		Player.TurnNeck(1, false)
+		# Yeah it does! I kinda wanna say it all the time. Oh, um…you don't mind, do you, <110:5>?
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:204', false)
+		Player.TurnNeck(0, false)
+		# Ha ha ha! Doesn't bother me. As long as it gets you pumped, say it all you like, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:205', false)
+		Player.TurnNeck(1, false)
+		# Yaaay! Thanks, <110:31:cd00>! Now I can get as pumped as you are WITHOUT doing any squats, <110:6>!
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:206', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		Player.TurnNeck(0, false)
+		# Alright, <110:31:cd01>! We're gonna run a hundred laps around the island. You pumped? YOU READY?!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:001', false)
+		Player.TurnNeck(1, false)
+		# Huh? Yeah, um…I don't know about this anymore. It sounds kinda hard.
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:002', false)
+		Player.TurnNeck(0, false)
+		# Of course it's gonna be hard! Hard is how you get buff! C'mon, one hundred laps. LET'S DO THIS!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:003', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnBody(10, 0.0)
+		# <50:3><110:3>! <20:2:cd06>I-I can't run a hundred laps! That's…that's a hundred too many! HELP!
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:004', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						MainNpc.TurnBody(10, 0.0)
+					branch:
+						SubNpc.TurnNeck(0, false)
+				# Hey, <20:3:cd07>one way or another, we're doing a hundred laps. <20:2:cd05>This is gonna happen even if I have to carry you, <110:31:cd01>. …Actually…
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:005', false)
+				fork:
+					branch:
+						Player.TurnNeck(1, false)
+					branch:
+						SubNpc.TurnBody(0, 0.0)
+				# Um… Suuuure. You can carry me home, then do the rest of the run by yourself. Sound good?
+				SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:006', false)
+			case 1:
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						SubNpc.TurnNeck(0, false)
+				# <20:3:cd05>You heard <110:3>! <50:3><110:31:cd01>, you ready to run?
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:007', false)
+				fork:
+					branch:
+						Player.TurnNeck(1, false)
+					branch:
+						SubNpc.TurnNeck(10, false)
+				# Whaaaat? No! Um, m-my<20:2:cd07>…ankle! Yeah, my ankle really hurts! I can't run today. Ow! It's too bad, 'cause running sounded really…fun.
+				SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:008', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						MainNpc.TurnBody(1, 0.0)
+				# Oh no! We shoulda warmed up more! Alright, you rest up that ankle. Guess I'm running by myself!
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:009', false)
+				fork:
+					branch:
+						Player.TurnNeck(1, false)
+					branch:
+						SubNpc.TurnBody(0, 0.0)
+				# <10:12>Whew! It worked.
+				SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:010', false)
+			case 2:
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						MainNpc.TurnBody(10, 0.0)
+					branch:
+						SubNpc.TurnNeck(0, false)
+				# Oh, <110:3>, you wanna run too? Sweet!
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:011', false)
+				fork:
+					branch:
+						Player.TurnNeck(1, false)
+					branch:
+						MainNpc.TurnNeck(1, false)
+					branch:
+						SubNpc.TurnBody(10, 0.0)
+				# Cool! Um, you two have fun, alright? I'll be cheering you on from…from my sofa, <110:5>!
+				SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:012', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						MainNpc.TurnNeck(10, false)
+				# Is that so…<20:2:cd07> <20:2:cd05>Look, if you're not gonna run those laps, then I will, <110:31:cd01>. Two hundred laps for me! <20:2:cd06>How about…
+				MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:013', false)
+	else:
+		Player.TurnNeck(0, false)
+		# Hey! I said stop asking, <110:31:cd01>! They're not ready yet!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:101', false)
+		Player.TurnNeck(1, false)
+		# I just wanna see, OK? I won't tell anyone about 'em. Promise!<20:3:cd06>
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:102', false)
+		fork:
+			branch:
+				Player.TurnNeck(0, false)
+			branch:
+				MainNpc.TurnBody(10, 0.0)
+			branch:
+				SubNpc.TurnNeck(10, false)
+		# Hey, <110:3>! Can you help me out? I kinda…told everyone I was gonna throw a party to show off my brand new eight-pack abs. Only now <110:31:cd01> ke…
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:103', false)
+		fork:
+			branch:
+				Player.TurnNeck(1, false)
+			branch:
+				SubNpc.TurnBody(10, 0.0)
+		# I don't know what the big deal is! He's ALWAYS talkin' about how much he works out. How can his eight-pack NOT be ready? C'mon, <110:3>, what do YOU …
+		SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:104', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			fork:
+				branch:
+					SubNpc.TurnNeck(0, false)
+				branch:
+					Player.TurnNeck(0, false)
+			# <20:2:cd07><10:12><10:10>THEY'RE. NOT. READY! <10:9>Look… Soon the WHOLE WORLD'S gonna see my eight-pack. <20:2:cd05>It's gonna be epic! You gotta tr…
+			MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:105', false)
+			fork:
+				branch:
+					Player.TurnNeck(1, false)
+				branch:
+					SubNpc.TurnBody(0, 0.0)
+			# C'moooooon! I don't wanna waaaait! …Oh, fine. You go do whatever. I'll see your dumb eight-pack when everyone else does. <20:2:cd08>I don't even know…
+			SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:106', false)
+			Player.TurnNeck(0, false)
+			# You'll see, <110:31:cd01>. <20:2:cd07>I'll make sure you get in to the premiere. Just be patient! It's more of a two-and-a-half-pack right now, anywa…
+			MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:107', false)
+		else:
+			fork:
+				branch:
+					Player.TurnNeck(0, false)
+				branch:
+					MainNpc.TurnNeck(1, false)
+				branch:
+					SubNpc.TurnNeck(0, false)
+			# <20:2:cd03>See! <20:3:cd07><50:3><110:3> knows the wait'll be worth it, <110:5>! <20:3:cd05>The premiere's gonna be epic. It'll have fireworks, celeb…
+			MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:108', false)
+			fork:
+				branch:
+					Player.TurnNeck(1, false)
+				branch:
+					SubNpc.TurnBody(0, 0.0)
+			# Fireworks? CATERING?! Why didn't you say so? Alright. I'll let you off the hook for now. I didn't know it was gonna be THAT awesome!
+			SubNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:109', false)
+			Player.TurnNeck(0, false)
+			# Just you wait, <110:31:cd01>. You're gonna love it! That was really close! My abs aren't anywhere near ready and, um… nothing else is either.
+			MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Conv/HA_Conv_BO:110', false)

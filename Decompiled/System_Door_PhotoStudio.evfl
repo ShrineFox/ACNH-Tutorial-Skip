@@ -1,54 +1,53 @@
 flow ChkCommuneShopOpenEv():
-    if System.EventFlags['cLand:ReserveCommuneSloOpenEvent']:
-        if System.EventFlags['cPlayer:DoneCommuneSloOpenEvent']:
-            run Open()
-        else:
-            run Close()
-    elif System.EventFlags['cLand:ReserveCommuneCmlOpenEvent']:
-        if System.EventFlags['cPlayer:DoneCommuneCmlOpenEvent']:
-            run Open()
-        else:
-            run Close()
-    elif System.EventFlags['cLand:ReserveCommuneFoxOpenEvent']:
-        if System.EventFlags['cPlayer:DoneCommuneFoxOpenEvent']:
-            run Open()
-        else:
-            run Close()
-    elif System.EventFlags['cLand:ReserveCommuneBptOpenEvent']:
-        if System.EventFlags['cPlayer:DoneCommuneBptOpenEvent']:
-            run Open()
-        else:
-            run Close()
-    elif System.EventFlags['cLand:ReserveCommuneSkkOpenEvent']:
-        if System.EventFlags['cPlayer:DoneCommuneSkkOpenEvent']:
-            run Open()
-        else:
-            run Close()
-    elif System.EventFlags['cLand:ReserveCommuneAlpOpenEvent']:
-        if System.EventFlags['cPlayer:DoneCommuneAlpOpenEvent']:
-            run Open()
-        else:
-            run Close()
-    elif not System.EventFlags['cLand:ReserveCommuneTtlOpenEvent']:
-        run Open()
-    elif System.EventFlags['cPlayer:DoneCommuneTtlOpenEvent']:
-        run Open()
-    else:
-        run Close()
- 
+	if System.EventFlags['cLand:ReserveCommuneSloOpenEvent']:
+		if System.EventFlags['cPlayer:DoneCommuneSloOpenEvent']:
+			run Open()
+		else:
+			run Close()
+	elif System.EventFlags['cLand:ReserveCommuneCmlOpenEvent']:
+		if System.EventFlags['cPlayer:DoneCommuneCmlOpenEvent']:
+			run Open()
+		else:
+			run Close()
+	elif System.EventFlags['cLand:ReserveCommuneFoxOpenEvent']:
+		if System.EventFlags['cPlayer:DoneCommuneFoxOpenEvent']:
+			run Open()
+		else:
+			run Close()
+	elif System.EventFlags['cLand:ReserveCommuneBptOpenEvent']:
+		if System.EventFlags['cPlayer:DoneCommuneBptOpenEvent']:
+			run Open()
+		else:
+			run Close()
+	elif System.EventFlags['cLand:ReserveCommuneSkkOpenEvent']:
+		if System.EventFlags['cPlayer:DoneCommuneSkkOpenEvent']:
+			run Open()
+		else:
+			run Close()
+	elif System.EventFlags['cLand:ReserveCommuneAlpOpenEvent']:
+		if System.EventFlags['cPlayer:DoneCommuneAlpOpenEvent']:
+			run Open()
+		else:
+			run Close()
+	elif not System.EventFlags['cLand:ReserveCommuneTtlOpenEvent']:
+		run Open()
+	elif System.EventFlags['cPlayer:DoneCommuneTtlOpenEvent']:
+		run Open()
+	else:
+		run Close()
+
 flow Close():
-    # It looks like the door is locked…
-    Player.OpenMessageWindow('TalkSys/SYS_Door:117', false)
-    EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
- 
+	# It looks like the door is locked…
+	Player.OpenMessageWindow('TalkSys/SYS_Door:117', false)
+	EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=1)
+
 flow Open():
-    EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=0)
- 
+	EventFlowSystemActor.SetCheckResultStructureDoor(CheckResult=0)
+
 flow Root():
-    if not System.EventFlags['cLand:CommuneExpanded']:
-        run Open()
-    elif System.EventFlags['cPlayerTemp:PhotoStudioDoorClose']:
-        run Close()
-    else:
-        run Open()
- 
+	if not System.EventFlags['cLand:CommuneExpanded']:
+		run Open()
+	elif System.EventFlags['cPlayerTemp:PhotoStudioDoorClose']:
+		run Close()
+	else:
+		run Open()

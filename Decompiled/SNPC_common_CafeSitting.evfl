@@ -1,412 +1,411 @@
 flow Root():
-    if not MainNpc.IsTalkedInMuseumCafe():
-        MainNpc.SetIsTalkedInMuseumCafe()
-        switch MainNpc.MuseumCafeMeetCount():
-            case 0:
-                # Hey. Thought I'd pop in for a quick cup of mud.
-                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:001', false)
-            case 1:
-                # How about that coffee? Brewster's brew is all the way tasty.
-                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:002', false)
-            case 2:
-                # Hey, cool cat. Good to catch you here again.
-                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:003', false)
-            case 3:
-                # Hey, cool cat. Good to catch you here again.
-                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:004', false)
-            case 4:
-                # Hey, cool cat. Good to catch you here again.
-                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:005', false)
-        MainNpc.AddMuseumCafeMeetCount()
-    elif System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']:
-        # RANDOM: Some folks dig moo juice in their java,… // Now that…is some fine coffee.<10:4> Whe… // Swing by and catch my live act sometime… // These quiet hours, when the island's fo… // Mmm-mmm. That coffee hits a real cool g…
-        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:021', false)
-    elif MainNpc.NpcLabel('chy'):
-        if EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true) not in (0, 1, 2, 3, 4, 5, 6, 7):
-            if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                switch MainNpc.EnvWeatherNNpcTalkCustom():
-                    case `Fine`, `Blossom`:
-                        # When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
-                    case `Cloudy`, `Rain`, `HeavyRain`:
-                        # When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
-                    case `Snow`, `HeavySnow`:
-                        # Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
-            else:
-                switch EventFlowSystemActor.EnvSeason():
-                    case `Spring`:
-                        # Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
-                    case `Summer`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
-                        else:
-                            # Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
-                    case `Autumn`:
-                        # Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
-                    default:
-                        return
-        elif not EventFlowSystemActor.CatchFesFreeQuery2('cChmQueryType_AttendFishingConvention'):
-            if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                    case 0:
-                        # Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
-                    case 1:
-                        # Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
-                    case 2:
-                        # Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
-            else:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
-                    case 0:
-                        # I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
-                    case 1:
-                        # These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
-                    case 2:
-                        # Swing by and catch my live act sometime, daddio.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
-                    case 3:
-                        # Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
-                    case 4:
-                        # Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
-                    case 5:
-                        # Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
-                    case 6:
-                        # I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
-                    case 7:
-                        # Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
-                    case 8:
-                        # A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
-        elif EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
-                case 0:
-                    # Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
-                case 1:
-                    # Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
-                case 2:
-                    # Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
-                case 3:
-                    # C.J. encouraged me to create my first bug sculptures. I had been content to explore the mysteries of the Infested Realms on my own. He convinced me t…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_chy:011_04', false)
-        else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious10(10, true):
-                case 0:
-                    # I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
-                case 1:
-                    # These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
-                case 2:
-                    # Swing by and catch my live act sometime, daddio.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
-                case 3:
-                    # Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
-                case 4:
-                    # Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
-                case 5:
-                    if (System.EventFlags['cPlayer:BeyDaily_ReqObj']) and (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0):
-                        # I accept commissions for fish models, but the scaly water sprites will never be my true muse. I still throw everything I have into those models, thou…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_chy:011_23', false)
-                    else:
-                        # C.J. is certainly unusual. But then, so am I. I guess that's how we get along…unusually.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_chy:011_10', false)
-                case 6:
-                    # Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
-                case 7:
-                    # I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
-                case 8:
-                    # Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
-                case 9:
-                    # A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
-    elif MainNpc.NpcLabel('bey'):
-        if EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true) not in (0, 1, 2, 3, 4, 5, 6, 7):
-            if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                switch MainNpc.EnvWeatherNNpcTalkCustom():
-                    case `Fine`, `Blossom`:
-                        # When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
-                    case `Cloudy`, `Rain`, `HeavyRain`:
-                        # When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
-                    case `Snow`, `HeavySnow`:
-                        # Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
-            else:
-                switch EventFlowSystemActor.EnvSeason():
-                    case `Spring`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
-                        else:
-                            # Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
-                    case `Summer`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
-                        else:
-                            # Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
-                    case `Autumn`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
-                        else:
-                            # I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
-                    case `Winter`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
-                        else:
-                            # A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
-        elif not EventFlowSystemActor.CatchFesFreeQuery2('cChmQueryType_AttendInsectConvention'):
-            if EventFlowSystemActor.RandomChoice3(3) == 0:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                    case 0:
-                        # Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
-                    case 1:
-                        # Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
-                    case 2:
-                        # Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
-            else:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
-                    case 0:
-                        # I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
-                    case 1:
-                        # These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
-                    case 2:
-                        # Swing by and catch my live act sometime, daddio.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
-                    case 3:
-                        # Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
-                    case 4:
-                        # Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
-        elif EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
-                case 0:
-                    # Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
-                case 1:
-                    # Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
-                case 2:
-                    # Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
-                case 3:
-                    # Flick and his old man have some baggage and bad blood. It's a shame, but I don't think you gotta force a relationship just because you're family. Blo…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_bey:011_04', false)
-        else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious7(7, true):
-                case 0:
-                    # I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
-                case 1:
-                    # These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
-                case 2:
-                    # Swing by and catch my live act sometime, daddio.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
-                case 3:
-                    # Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
-                case 4:
-                    # Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
-                case 5:
-                    # I hear Flick comes here for a drink after his Bug-Off events. He doesn't make friends as easily as I do, so if you see him, would you chat with him a…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_bey:011_24', false)
-                case 6:
-                    # I always notice the seasons changing in the fish I catch, but Flick does the same thing with bugs! However you do it, it's cool to be in touch with n…
-                    MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_bey:011_23', false)
-    elif (not MainNpc.NpcLabel('boc')) and (not MainNpc.NpcLabel('doc')):
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
-            case 0, 1, 2, 3, 4, 5:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
-                    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                        case 0:
-                            # Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
-                        case 1:
-                            # Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
-                        case 2:
-                            # Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
-                else:
-                    switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
-                        case 0:
-                            # I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
-                        case 1:
-                            # These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
-                        case 2:
-                            # Swing by and catch my live act sometime, daddio.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
-                        case 3:
-                            # Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
-                        case 4:
-                            # Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
-            case 6:
-                switch MainNpc.EnvWeatherNNpcTalkCustom():
-                    case `Fine`, `Blossom`:
-                        # When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
-                    case `Cloudy`, `Rain`, `HeavyRain`:
-                        # When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
-                    case `Snow`, `HeavySnow`:
-                        # Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
-            case 7, 8:
-                switch EventFlowSystemActor.EnvSeason():
-                    case `Spring`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
-                        else:
-                            # Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
-                    case `Summer`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
-                        else:
-                            # Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
-                    case `Autumn`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
-                        else:
-                            # I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
-                    case `Winter`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
-                        else:
-                            # A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
-    else:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
-            case 0, 1, 2, 3, 4, 5, 6:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
-                    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                        case 0:
-                            # Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
-                        case 1:
-                            # Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
-                        case 2:
-                            # Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
-                else:
-                    switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
-                        case 0:
-                            # I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
-                        case 1:
-                            # These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
-                        case 2:
-                            # Swing by and catch my live act sometime, daddio.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
-                        case 3:
-                            # Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
-                        case 4:
-                            # Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
-            case 7:
-                switch MainNpc.EnvWeatherNNpcTalkCustom():
-                    case `Fine`, `Blossom`:
-                        # When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
-                    case `Cloudy`, `Rain`, `HeavyRain`:
-                        # When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
-                    case `Snow`, `HeavySnow`:
-                        # Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
-                        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
-            case 8:
-                switch EventFlowSystemActor.EnvSeason():
-                    case `Spring`:
-                        if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-                            if EventFlowSystemActor.EnvCheckBetweenDate(4, 1, 4, 10, 'cLastGrowUpTime'):
-                                run Sub_grp_Event144()
-                            else:
-                                # Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
-                                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
-                        else:
-                            if EventFlowSystemActor.EnvCheckBetweenDate(10, 1, 10, 10, 'cLastGrowUpTime'):
-                                run Sub_grp_Event144()
-                            else:
-                                # Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
-                                MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
-                    case `Summer`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
-                        else:
-                            # Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
-                    case `Autumn`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
-                        else:
-                            # I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
-                    case `Winter`:
-                        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                            # Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
-                        else:
-                            # A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
-                            MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
- 
+	if not MainNpc.IsTalkedInMuseumCafe():
+		MainNpc.SetIsTalkedInMuseumCafe()
+		switch MainNpc.MuseumCafeMeetCount():
+			case 0:
+				# Hey. Thought I'd pop in for a quick cup of mud.
+				MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:001', false)
+			case 1:
+				# How about that coffee? Brewster's brew is all the way tasty.
+				MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:002', false)
+			case 2:
+				# Hey, cool cat. Good to catch you here again.
+				MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:003', false)
+			case 3:
+				# Hey, cool cat. Good to catch you here again.
+				MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:004', false)
+			case 4:
+				# Hey, cool cat. Good to catch you here again.
+				MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:005', false)
+		MainNpc.AddMuseumCafeMeetCount()
+	elif System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']:
+		# RANDOM: Some folks dig moo juice in their java,… // Now that…is some fine coffee.<10:4> Whe… // Swing by and catch my live act sometime… // These quiet hours, when the island's fo… // Mmm-mmm. That coffee hits a real cool g…
+		MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:021', false)
+	elif MainNpc.NpcLabel('chy'):
+		if EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true) not in (0, 1, 2, 3, 4, 5, 6, 7):
+			if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+				switch MainNpc.EnvWeatherNNpcTalkCustom():
+					case `Fine`, `Blossom`:
+						# When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
+					case `Cloudy`, `Rain`, `HeavyRain`:
+						# When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
+					case `Snow`, `HeavySnow`:
+						# Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
+			else:
+				switch EventFlowSystemActor.EnvSeason():
+					case `Spring`:
+						# Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
+					case `Summer`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
+						else:
+							# Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
+					case `Autumn`:
+						# Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
+					default:
+						return
+		elif not EventFlowSystemActor.CatchFesFreeQuery2('cChmQueryType_AttendFishingConvention'):
+			if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
+					case 1:
+						# Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
+					case 2:
+						# Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
+			else:
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
+					case 0:
+						# I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
+					case 1:
+						# These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
+					case 2:
+						# Swing by and catch my live act sometime, daddio.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
+					case 3:
+						# Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
+					case 4:
+						# Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
+					case 5:
+						# Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
+					case 6:
+						# I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
+					case 7:
+						# Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
+					case 8:
+						# A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
+		elif EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+				case 0:
+					# Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
+				case 1:
+					# Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
+				case 2:
+					# Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
+				case 3:
+					# C.J. encouraged me to create my first bug sculptures. I had been content to explore the mysteries of the Infested Realms on my own. He convinced me t…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_chy:011_04', false)
+		else:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious10(10, true):
+				case 0:
+					# I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
+				case 1:
+					# These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
+				case 2:
+					# Swing by and catch my live act sometime, daddio.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
+				case 3:
+					# Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
+				case 4:
+					# Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
+				case 5:
+					if (System.EventFlags['cPlayer:BeyDaily_ReqObj']) and (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0):
+						# I accept commissions for fish models, but the scaly water sprites will never be my true muse. I still throw everything I have into those models, thou…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_chy:011_23', false)
+					else:
+						# C.J. is certainly unusual. But then, so am I. I guess that's how we get along…unusually.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_chy:011_10', false)
+				case 6:
+					# Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
+				case 7:
+					# I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
+				case 8:
+					# Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
+				case 9:
+					# A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
+	elif MainNpc.NpcLabel('bey'):
+		if EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true) not in (0, 1, 2, 3, 4, 5, 6, 7):
+			if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+				switch MainNpc.EnvWeatherNNpcTalkCustom():
+					case `Fine`, `Blossom`:
+						# When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
+					case `Cloudy`, `Rain`, `HeavyRain`:
+						# When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
+					case `Snow`, `HeavySnow`:
+						# Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
+			else:
+				switch EventFlowSystemActor.EnvSeason():
+					case `Spring`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
+						else:
+							# Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
+					case `Summer`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
+						else:
+							# Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
+					case `Autumn`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
+						else:
+							# I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
+					case `Winter`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
+						else:
+							# A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
+		elif not EventFlowSystemActor.CatchFesFreeQuery2('cChmQueryType_AttendInsectConvention'):
+			if EventFlowSystemActor.RandomChoice3(3) == 0:
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
+					case 1:
+						# Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
+					case 2:
+						# Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
+			else:
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+					case 0:
+						# I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
+					case 1:
+						# These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
+					case 2:
+						# Swing by and catch my live act sometime, daddio.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
+					case 3:
+						# Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
+					case 4:
+						# Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
+		elif EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+				case 0:
+					# Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
+				case 1:
+					# Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
+				case 2:
+					# Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
+				case 3:
+					# Flick and his old man have some baggage and bad blood. It's a shame, but I don't think you gotta force a relationship just because you're family. Blo…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_bey:011_04', false)
+		else:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious7(7, true):
+				case 0:
+					# I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
+				case 1:
+					# These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
+				case 2:
+					# Swing by and catch my live act sometime, daddio.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
+				case 3:
+					# Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
+				case 4:
+					# Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
+				case 5:
+					# I hear Flick comes here for a drink after his Bug-Off events. He doesn't make friends as easily as I do, so if you see him, would you chat with him a…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_bey:011_24', false)
+				case 6:
+					# I always notice the seasons changing in the fish I catch, but Flick does the same thing with bugs! However you do it, it's cool to be in touch with n…
+					MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_bey:011_23', false)
+	elif (not MainNpc.NpcLabel('boc')) and (not MainNpc.NpcLabel('doc')):
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
+			case 0, 1, 2, 3, 4, 5:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+					switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+						case 0:
+							# Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
+						case 1:
+							# Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
+						case 2:
+							# Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
+				else:
+					switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+						case 0:
+							# I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
+						case 1:
+							# These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
+						case 2:
+							# Swing by and catch my live act sometime, daddio.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
+						case 3:
+							# Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
+						case 4:
+							# Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
+			case 6:
+				switch MainNpc.EnvWeatherNNpcTalkCustom():
+					case `Fine`, `Blossom`:
+						# When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
+					case `Cloudy`, `Rain`, `HeavyRain`:
+						# When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
+					case `Snow`, `HeavySnow`:
+						# Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
+			case 7, 8:
+				switch EventFlowSystemActor.EnvSeason():
+					case `Spring`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
+						else:
+							# Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
+					case `Summer`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
+						else:
+							# Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
+					case `Autumn`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
+						else:
+							# I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
+					case `Winter`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
+						else:
+							# A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
+	else:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious9(9, true):
+			case 0, 1, 2, 3, 4, 5, 6:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+					switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+						case 0:
+							# Some folks dig moo juice in their java, or maybe a lump of sugar… Me, I take my coffee with a little music. That's what's brewing in my noodle as I s…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_01', false)
+						case 1:
+							# Brewster and I've got a lot of history, so when I drink his special blend, it takes me all the way back. Smelling that coffee, setting up a stool for…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_02', false)
+						case 2:
+							# Now that…is some fine coffee.<10:4> When you get something this good, it works a little magic on your soul. Nothing ever moves your heart if you know…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_03', false)
+				else:
+					switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+						case 0:
+							# I take Brewster's brew just the way he makes it. You don't need to dress up your cup with beans this keen.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_05', false)
+						case 1:
+							# These quiet hours, when the island's folks are all sound asleep… If you ask me, that's the right time for grabbing a cup of joe and letting your mind…
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_07', false)
+						case 2:
+							# Swing by and catch my live act sometime, daddio.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_06', false)
+						case 3:
+							# Just like some folks are fans of music, maybe even fans of mine, I'm a fan of Brewster's coffee.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_08', false)
+						case 4:
+							# Mmm-mmm. That coffee hits a real cool groove. Hmm… Got me thinking about my next song.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_09', false)
+			case 7:
+				switch MainNpc.EnvWeatherNNpcTalkCustom():
+					case `Fine`, `Blossom`:
+						# When the weather's as nice as it is today, there's no finer feeling than being outside, singing a tune.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_11', false)
+					case `Cloudy`, `Rain`, `HeavyRain`:
+						# When I hear the sound of rain, it makes me feel like…the world is always overflowing with music.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_12', false)
+					case `Snow`, `HeavySnow`:
+						# Snow absorbs the sound. Swallows it right up. But quiet nights like this… They're not half bad.
+						MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_13', false)
+			case 8:
+				switch EventFlowSystemActor.EnvSeason():
+					case `Spring`:
+						if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+							if EventFlowSystemActor.EnvCheckBetweenDate(4, 1, 4, 10, 'cLastGrowUpTime'):
+	 run Sub_grp_Event144()
+							else:
+								# Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
+								MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
+						else:
+							if EventFlowSystemActor.EnvCheckBetweenDate(10, 1, 10, 10, 'cLastGrowUpTime'):
+	 run Sub_grp_Event144()
+							else:
+								# Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
+								MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
+					case `Summer`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Summer days are crazy hot. But when the mercury's been climbing high, the cool night wind feels great.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_17', false)
+						else:
+							# Summer makes me want to listen to that ocean beat. When I hear waves lapping at the beach… It's strange, but just the sound alone can cool down this …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_18', false)
+					case `Autumn`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Fall nights are all about that bug music. Those long, lonely nights aren't half so lonely, thanks to them.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_19', false)
+						else:
+							# I like folks to hear my music live, but that's no dig against listening to an album when it's all you've got. Albums can be good friends to keep you …
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_20', false)
+					case `Winter`:
+						if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+							# Ah, that warms the bones. Brewster's brew is all it takes to get my frozen digits back to snapping.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_21', false)
+						else:
+							# A nice, hot cup of java really mellows my nerves when I'm wound up. Ah, I can feel a song coming on.
+							MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_22', false)
+
 local flow Sub_grp_Event144():
-    if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-        # Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
-        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
-    else:
-        # Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
-        MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)
- 
+	if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		# Spring's a season for renewing and refreshing… Dropping in on old friends, and remembering old times.
+		MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_15', false)
+	else:
+		# Kicking back on a warm spring day, strumming a guitar… It's no bad way to be, daddio. And when folks pass you by, they don't even know it, but they g…
+		MainNpc.OpenMessageWindow('TalkSNpc/ForCafe/Normal_Sitting/SP_CafeSitting_tkk:011_16', false)

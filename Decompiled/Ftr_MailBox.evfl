@@ -1,27 +1,26 @@
 flow NormalSeq():
-    EventFlowSystemActor.CheckFreeCommunication(false)
-    EventFlowSystemActor.UIWaitReceivingMailAppear()
-    EventFlowSystemActor.UIPostHandling()
-    switch EventFlowSystemActor.UIResultMenuDecide():
-        default:
-            return
- 
+	EventFlowSystemActor.CheckFreeCommunication(false)
+	EventFlowSystemActor.UIWaitReceivingMailAppear()
+	EventFlowSystemActor.UIPostHandling()
+	switch EventFlowSystemActor.UIResultMenuDecide():
+		default:
+			return
+
 flow Root():
-    EventFlowSystemActor.NetFriendMailCheck()
-    EventFlowSystemActor.UIPostCreate()
-    if (Ftr.IsMyPost()) and (EventFlowSystemActor.IsMyVillage()):
-        if System.EventFlags['cLand:ValidateVillageSave']:
-            run NormalSeq()
-        else:
-            run Stop_ForMovingPlayerTutorial()
- 
+	EventFlowSystemActor.NetFriendMailCheck()
+	EventFlowSystemActor.UIPostCreate()
+	if (Ftr.IsMyPost()) and (EventFlowSystemActor.IsMyVillage()):
+		if System.EventFlags['cLand:ValidateVillageSave']:
+			run NormalSeq()
+		else:
+			run Stop_ForMovingPlayerTutorial()
+
 flow Stop_ForMovingPlayerTutorial():
-    if not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
-        run NormalSeq()
-    elif System.EventFlags['cPlayer:AllowPcTentEntering']:
-        # I should probably take a rest in my tent before doing that...
-        EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_MailBox:002', false)
-    else:
-        # I should get my new home set up first...
-        EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_MailBox:001', false)
- 
+	if not System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+		run NormalSeq()
+	elif System.EventFlags['cPlayer:AllowPcTentEntering']:
+		# I should probably take a rest in my tent before doing that...
+		EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_MailBox:002', false)
+	else:
+		# I should get my new home set up first...
+		EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_MailBox:001', false)

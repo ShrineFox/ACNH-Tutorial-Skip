@@ -1,91 +1,90 @@
 flow PartyEnd_LisaTalk():
-    if System.EventFlags['cPlayerTemp:AlwJuneBridePartyEndFlag']:
-        # Do you think we should wrap up the party?
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:090', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # I think you're right. Fun is fun, but knowing when to call it a day is important too.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:093', true)
-            EventFlowSystemActor.WaitFrame(15)
-            run System_JuneBrideParty::PartyEnd_Wiperun System_JuneBrideParty::PartyEnd_Wipe()
-        else:
-            # That's the spirit! We don't do this EVERY day, so let's make the most of it, right?
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:094', false)
-    else:
-        # This is so much fun, don't you think? I feel like my Cy-Guy and I are newly married all over again! Oh, I know it can't go on forever, of course. Wou…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:092', false)
-        System.EventFlags['cPlayerTemp:AlwJuneBridePartyEndFlag'] = true
- 
+	if System.EventFlags['cPlayerTemp:AlwJuneBridePartyEndFlag']:
+		# Do you think we should wrap up the party?
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:090', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# I think you're right. Fun is fun, but knowing when to call it a day is important too.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:093', true)
+			EventFlowSystemActor.WaitFrame(15)
+			run System_JuneBrideParty::PartyEnd_Wipe()
+		else:
+			# That's the spirit! We don't do this EVERY day, so let's make the most of it, right?
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:094', false)
+	else:
+		# This is so much fun, don't you think? I feel like my Cy-Guy and I are newly married all over again! Oh, I know it can't go on forever, of course. Wou…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:092', false)
+		System.EventFlags['cPlayerTemp:AlwJuneBridePartyEndFlag'] = true
+
 flow PartyEnd_Stop():
-    # Oh, do you need to head out? I just wanted to wrap things up here first if so. So, shall I go ahead and do that? Or do you want to keep going?
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:091', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # I think you're right. Fun is fun, but knowing when to call it a day is important too.
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:093', true)
-        EventFlowSystemActor.WaitFrame(15)
-        run System_JuneBrideParty::PartyEnd_Wiperun System_JuneBrideParty::PartyEnd_Wipe()
-    else:
-        # That's the spirit! We don't do this EVERY day, so let's make the most of it, right?
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:094', false)
-        Player.PlayerDemoMove('cNextInfoAngle', 3)
- 
+	# Oh, do you need to head out? I just wanted to wrap things up here first if so. So, shall I go ahead and do that? Or do you want to keep going?
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:091', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# I think you're right. Fun is fun, but knowing when to call it a day is important too.
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:093', true)
+		EventFlowSystemActor.WaitFrame(15)
+		run System_JuneBrideParty::PartyEnd_Wipe()
+	else:
+		# That's the spirit! We don't do this EVERY day, so let's make the most of it, right?
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:094', false)
+		Player.PlayerDemoMove('cNextInfoAngle', 3)
+
 flow PartyNow_alp():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # This is a hoot and a half! Ha ha ha!
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:105', false)
-        case 1:
-            # Just look at her…I must be the luckiest fella in the whole world.
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:106', false)
-        case 2:
-            # I can't thank you enough for helpin' us put all this together.
-            MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:107', false)
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# This is a hoot and a half! Ha ha ha!
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:105', false)
+		case 1:
+			# Just look at her…I must be the luckiest fella in the whole world.
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:106', false)
+		case 2:
+			# I can't thank you enough for helpin' us put all this together.
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/GEvent/SP_alp_GEvent_JuneBride:107', false)
+
 flow Root():
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.SetEventFlagAttendJuneBrideDemo()
-    MainNpc.TurnBody(12, 0.0)
-    EventFlowSystemActor.WaitFrame(30)
-    run WeddingParty_Demo()
-    System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow'] = true
-    EventFlowSystemActor.NextLPFadeOff()
-    EventFlowSystemActor.AfterWeddingBGMStart()
-    if EventFlowSystemActor.CanHearAudioMusicAtFocusPoint():
-        EventFlowSystemActor.SystemBGMVolumeFadeOut(4.0, 3, 0.0)
-    EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.SystemReenterStage(4, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.SetEventFlagAttendJuneBrideDemo()
+	MainNpc.TurnBody(12, 0.0)
+	EventFlowSystemActor.WaitFrame(30)
+	run WeddingParty_Demo()
+	System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow'] = true
+	EventFlowSystemActor.NextLPFadeOff()
+	EventFlowSystemActor.AfterWeddingBGMStart()
+	if EventFlowSystemActor.CanHearAudioMusicAtFocusPoint():
+		EventFlowSystemActor.SystemBGMVolumeFadeOut(4.0, 3, 0.0)
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.SystemReenterStage(4, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
 flow WeddingParty_Demo():
-    # Hello, everyone!
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:080', false)
-    EventFlowSystemActor.CeremonyStandup()
-    fork:
-        branch:
-            MainNpc.TurnBody(12, 0.0)
-        branch:
-            SubNpc.TurnBody(12, 0.0)
-        branch:
-            EventFlowSystemActor.CeremonyTurn(true, 'cFacilitator', false, true)
-        branch:
-            EventFlowSystemActor@look.CeremonyLookAt(false, 'cFacilitator', false, true, 0.0, 0.0, 0.0)
-    # I know you're all so, so hard at work back home, so I truly appreciate all of you taking the time to join us.
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:081', false)
-    EventFlowSystemActor.CeremonyEmoticon('FaintSmile', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
-    # Today we're celebrating the love that my Cy-Guy and I share all over again! Now, I wish you all could have celebrated with us the first time, but I h…
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:082', false)
-    EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'Clapping', 'Smiling', 'HappyFlower', 'HappyDance', 'Clapping', 'Smiling', 'HappyFlower', 'HappyDance', 75, false)
-    # Now…does everyone have a party popper?
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:083', false)
-    EventFlowSystemActor.CeremonyLookAt(false, 'cCamera', false, false, 0.0, 0.0, 0.0)
-    EventFlowSystemActor.CeremonyTurn(false, 'cCamera', false, false)
-    EventFlowSystemActor.CeremonyEquipCracker(0, 6)
-    # It's time to fire 'em off. Let's party! In three, two, one…
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:084', true)
-    EventFlowSystemActor.CeremonyUseCracker()
-    fork:
-        branch:
-            MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, true)
-        branch:
-            EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'HappyFlower', 'Smiling', 'HappyFlower', 'HappyDance', 'Smiling', 'Smiling', 'Smiling', 'HappyDance', -1, false)
-    # Whee! That was great! Let's keep the party going, everyone!
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:085', false)
- 
+	# Hello, everyone!
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:080', false)
+	EventFlowSystemActor.CeremonyStandup()
+	fork:
+		branch:
+			MainNpc.TurnBody(12, 0.0)
+		branch:
+			SubNpc.TurnBody(12, 0.0)
+		branch:
+			EventFlowSystemActor.CeremonyTurn(true, 'cFacilitator', false, true)
+		branch:
+			EventFlowSystemActor@look.CeremonyLookAt(false, 'cFacilitator', false, true, 0.0, 0.0, 0.0)
+	# I know you're all so, so hard at work back home, so I truly appreciate all of you taking the time to join us.
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:081', false)
+	EventFlowSystemActor.CeremonyEmoticon('FaintSmile', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+	# Today we're celebrating the love that my Cy-Guy and I share all over again! Now, I wish you all could have celebrated with us the first time, but I h…
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:082', false)
+	EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'Clapping', 'Smiling', 'HappyFlower', 'HappyDance', 'Clapping', 'Smiling', 'HappyFlower', 'HappyDance', 75, false)
+	# Now…does everyone have a party popper?
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:083', false)
+	EventFlowSystemActor.CeremonyLookAt(false, 'cCamera', false, false, 0.0, 0.0, 0.0)
+	EventFlowSystemActor.CeremonyTurn(false, 'cCamera', false, false)
+	EventFlowSystemActor.CeremonyEquipCracker(0, 6)
+	# It's time to fire 'em off. Let's party! In three, two, one…
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:084', true)
+	EventFlowSystemActor.CeremonyUseCracker()
+	fork:
+		branch:
+			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, true)
+		branch:
+			EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'HappyFlower', 'Smiling', 'HappyFlower', 'HappyDance', 'Smiling', 'Smiling', 'Smiling', 'HappyDance', -1, false)
+	# Whee! That was great! Let's keep the party going, everyone!
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:085', false)

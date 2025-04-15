@@ -1,70 +1,69 @@
 flow EasterNpc_GetEgg():
-    if System.EventFlags['cPlayer:EasterNnpcRecipeCount'] < 1:
-        EventFlowSystemActor.SelectRewardItemDirect(12514, 5, 'cVillageRemakePattern', 0)
-    else:
-        EventFlowSystemActor.SelectRewardItemDirect(12513, 5, 'cVillageRemakePattern', 0)
-    MainNpc.SetItemName(1, 0, 0)
-    # Guess what? I was digging in my couch, and I found a whooole lotta <125:0:0200>! A WHOLE lot. But now I'm bored of the taste, and I don't know what t…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:013', false)
-    if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-        MainNpc.SetDeliveryItem(1, true)
-        MainNpc.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        # I wonder if anyone else wants some. I'm gonna go ask around!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:014', false)
-        System.EventFlags['cPlayer:EasterNnpcRecipeCount'] += 1
-        MainNpc.EventFlags['cNpcMemory:EasterGetRecipeFlag'] = true
-    else:
-        # Oh! Your pockets are full. Sooo, uh… this is awkward. Can you maybe go make some space and come back?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:015', false)
-        MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcRecipeFlag'] = true
-        System.EventFlags['cPlayer:EasterCannotGetNnpcRecipeFlag'] = true
- 
+	if System.EventFlags['cPlayer:EasterNnpcRecipeCount'] < 1:
+		EventFlowSystemActor.SelectRewardItemDirect(12514, 5, 'cVillageRemakePattern', 0)
+	else:
+		EventFlowSystemActor.SelectRewardItemDirect(12513, 5, 'cVillageRemakePattern', 0)
+	MainNpc.SetItemName(1, 0, 0)
+	# Guess what? I was digging in my couch, and I found a whooole lotta <125:0:0200>! A WHOLE lot. But now I'm bored of the taste, and I don't know what t…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:013', false)
+	if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+		MainNpc.SetDeliveryItem(1, true)
+		MainNpc.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		# I wonder if anyone else wants some. I'm gonna go ask around!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:014', false)
+		System.EventFlags['cPlayer:EasterNnpcRecipeCount'] += 1
+		MainNpc.EventFlags['cNpcMemory:EasterGetRecipeFlag'] = true
+	else:
+		# Oh! Your pockets are full. Sooo, uh… this is awkward. Can you maybe go make some space and come back?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:015', false)
+		MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcRecipeFlag'] = true
+		System.EventFlags['cPlayer:EasterCannotGetNnpcRecipeFlag'] = true
+
 flow GetEasterRecipe1():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # Oh! You don't have enough room in your pockets! No problem! Go clear some pocket space and come back. I'll find some ants to hang out with, <110:5>.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:003', false)
-        MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcRecipeFlag'] = true
-        System.EventFlags['cPlayer:EasterCannotGetNnpcRecipeFlag'] = true
-        MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcIsRecipeFlag'] = true
-    else:
-        MainNpc.NpcSetRewardRecipe(12445, false)
-        MainNpc.SetDeliveryItem(1, true)
-        MainNpc.NpcDelivery(1, 'Default')
-        # I wonder if there are any more recipes… I'm gonna go looking after snack time, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:002', false)
-        System.EventFlags['cPlayer:EasterNnpcRecipeCount'] += 1
-        MainNpc.EventFlags['cNpcMemory:EasterGetRecipeFlag'] = true
- 
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Oh! You don't have enough room in your pockets! No problem! Go clear some pocket space and come back. I'll find some ants to hang out with, <110:5>.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:003', false)
+		MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcRecipeFlag'] = true
+		System.EventFlags['cPlayer:EasterCannotGetNnpcRecipeFlag'] = true
+		MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcIsRecipeFlag'] = true
+	else:
+		MainNpc.NpcSetRewardRecipe(12445, false)
+		MainNpc.SetDeliveryItem(1, true)
+		MainNpc.NpcDelivery(1, 'Default')
+		# I wonder if there are any more recipes… I'm gonna go looking after snack time, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:002', false)
+		System.EventFlags['cPlayer:EasterNnpcRecipeCount'] += 1
+		MainNpc.EventFlags['cNpcMemory:EasterGetRecipeFlag'] = true
+
 flow GetEasterRecipe2():
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # Huh? Um… Did you know your pockets are full, <110:5>? Well, the bugs were nice to me, so I wanna be nice to you. Go make some pocket space and come b…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:012', false)
-        MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcRecipeFlag'] = true
-        System.EventFlags['cPlayer:EasterCannotGetNnpcRecipeFlag'] = true
-        MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcIsRecipeFlag'] = true
-    else:
-        MainNpc.NpcSetRewardRecipe(12447, false)
-        MainNpc.SetDeliveryItem(1, true)
-        MainNpc.NpcDelivery(1, 'Default')
-        # Bugs are so thoughtful. I'm gonna go find some eggs so I can make a <item>Bunny Day bag too, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:011', false)
-        System.EventFlags['cPlayer:EasterNnpcRecipeCount'] += 1
-        MainNpc.EventFlags['cNpcMemory:EasterGetRecipeFlag'] = true
- 
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Huh? Um… Did you know your pockets are full, <110:5>? Well, the bugs were nice to me, so I wanna be nice to you. Go make some pocket space and come b…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:012', false)
+		MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcRecipeFlag'] = true
+		System.EventFlags['cPlayer:EasterCannotGetNnpcRecipeFlag'] = true
+		MainNpc.EventFlags['cNpcMemory:EasterCannotGetNnpcIsRecipeFlag'] = true
+	else:
+		MainNpc.NpcSetRewardRecipe(12447, false)
+		MainNpc.SetDeliveryItem(1, true)
+		MainNpc.NpcDelivery(1, 'Default')
+		# Bugs are so thoughtful. I'm gonna go find some eggs so I can make a <item>Bunny Day bag too, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:011', false)
+		System.EventFlags['cPlayer:EasterNnpcRecipeCount'] += 1
+		MainNpc.EventFlags['cNpcMemory:EasterGetRecipeFlag'] = true
+
 flow Root():
-    MainNpc.SetEasterApproachVillagerIndex(0)
-    if System.EventFlags['cPlayer:EasterNnpcRecipeCount'] >= 1:
-        if EventFlowSystemActor.PlayerHasCraftRecipe('', 12447):
-            run EasterNpc_GetEgg()
-        else:
-            # Look! Some bugs brought me a DIY recipe for a <item>Bunny Day bag. Aren't they the best? Here, take it.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:010', false)
-            run GetEasterRecipe2()
-    elif EventFlowSystemActor.PlayerHasCraftRecipe('', 12445):
-        run EasterNpc_GetEgg()
-    else:
-        # Hey! I found something super neat in my cereal this morning. It's a DIY recipe for a <item>Bunny Day crown! Here, you can have it. Just…read around t…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:001', false)
-        run GetEasterRecipe1()
- 
+	MainNpc.SetEasterApproachVillagerIndex(0)
+	if System.EventFlags['cPlayer:EasterNnpcRecipeCount'] >= 1:
+		if EventFlowSystemActor.PlayerHasCraftRecipe('', 12447):
+			run EasterNpc_GetEgg()
+		else:
+			# Look! Some bugs brought me a DIY recipe for a <item>Bunny Day bag. Aren't they the best? Here, take it.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:010', false)
+			run GetEasterRecipe2()
+	elif EventFlowSystemActor.PlayerHasCraftRecipe('', 12445):
+		run EasterNpc_GetEgg()
+	else:
+		# Hey! I found something super neat in my cereal this morning. It's a DIY recipe for a <item>Bunny Day crown! Here, you can have it. Just…read around t…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Easter:001', false)
+		run GetEasterRecipe1()

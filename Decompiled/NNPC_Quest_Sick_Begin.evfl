@@ -1,69 +1,68 @@
 flow Begin():
-    MainNpc.SetNpcName(7, 0)
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # I heard <115:1:cd00> is sick! Ya know, it always makes me happy when you come to visit… Maybe you oughta go visit <115:1:cd00>, <110:5>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Begin:001', false)
-        case 1:
-            # I just heard that <115:1:cd00> is feeling real gross! Man, I hope [he's|she's] OK. Could you go check, <110:5>?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Begin:002', false)
-        case 2:
-            # I guess <115:1:cd00> can't leave the house because [he's|she's] sick! I bet <115:1:cd00> will cheer up if you go to visit, <110:5>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Begin:003', false)
-    System.EventFlags['cPlayerTemp:SickQuestGossip'] = true
- 
+	MainNpc.SetNpcName(7, 0)
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# I heard <115:1:cd00> is sick! Ya know, it always makes me happy when you come to visit… Maybe you oughta go visit <115:1:cd00>, <110:5>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Begin:001', false)
+		case 1:
+			# I just heard that <115:1:cd00> is feeling real gross! Man, I hope [he's|she's] OK. Could you go check, <110:5>?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Begin:002', false)
+		case 2:
+			# I guess <115:1:cd00> can't leave the house because [he's|she's] sick! I bet <115:1:cd00> will cheer up if you go to visit, <110:5>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Begin:003', false)
+	System.EventFlags['cPlayerTemp:SickQuestGossip'] = true
+
 flow Cured():
-    if MainNpc.EventFlags['cNpcMemory:TalkSickCured']:
-        run NNPC_Talk_Sequence::Rootrun NNPC_Talk_Sequence::Root()
-    elif MainNpc.EventFlags['cNpcMemory:TalkedDuringSick']:
-        MainNpc.SetPlayerName(2)
-        if MainNpc.NpcIsQuestClient('cSick', true, true):
-            if MainNpc.EventFlags['cNpcTemp:SickCured']:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                    case 0:
-                        # <50:3><110:3>! Thanks for the medicine! You're my hero!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:101', false)
-                    case 1:
-                        # That medicine really helped! Man, if it weren't for you, I'd still be sick! Thank you!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:102', false)
-                    case 2:
-                        # I should keep some medicine handy. Just in case of a total downer. Like today!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:103', false)
-            else:
-                run NNPC_Talk_Sequence::Rootrun NNPC_Talk_Sequence::Root()
-        else:
-            if MainNpc.NpcSickCuredBeforeYesterday():
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    # Sorry about the other day! You came to visit, but I felt like a wreck and couldn't play at all! <50:3><115:0:cd00> brought me medicine and I'm all be…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:003', false)
-                    MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
-                else:
-                    # Thanks for visiting me when I was sick the other day! <50:3><115:0:cd00> brought me some medicine, so now I'm eating snacks, talking to bugs, and liv…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:004', false)
-                    MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
-            elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                # Hey, sorry about today… I know ya wanted to hang out, but I just felt lousy! No worries. <50:3><115:0:cd00> brought me medicine. I'm feeling all bett…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:001', false)
-                MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
-            else:
-                # Thanks for checking in on me when I was sick today. You made the whole day less of a downer! <50:3><115:0:cd00> brought me medicine and I'm all bette…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:002', false)
-                MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
-    else:
-        run NNPC_Reaction_First_Root::Rootrun NNPC_Reaction_First_Root::Root()
-        MainNpc.SetPlayerName(2)
-        if MainNpc.NpcSickCuredBeforeYesterday():
-            if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                # I was stuck in bed the other day feeling like curdled pigeon milk… But <115:0:cd00> brought me some medicine, and now I'm feeling great!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:007', false)
-            else:
-                # Man, I was so weak and dizzy the other morning! It was a real downer. But then <115:0:cd00> brought me some medicine, and I feel real good again, <11…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:008', false)
-        elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-            # I laid on the floor all day because I was sick, and listening to the bugs in the floor made me feel better. But I feel fine now! It was real cool of …
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:005', false)
-        else:
-            # What a morning! I was all stuffy and sneezy and I thought I heard a fish say he wanted to talk. But I took the medicine <115:0:cd00> gave me, and I'm…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:006', false)
-        MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
- 
+	if MainNpc.EventFlags['cNpcMemory:TalkSickCured']:
+		run NNPC_Talk_Sequence::Root()
+	elif MainNpc.EventFlags['cNpcMemory:TalkedDuringSick']:
+		MainNpc.SetPlayerName(2)
+		if MainNpc.NpcIsQuestClient('cSick', true, true):
+			if MainNpc.EventFlags['cNpcTemp:SickCured']:
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# <50:3><110:3>! Thanks for the medicine! You're my hero!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:101', false)
+					case 1:
+						# That medicine really helped! Man, if it weren't for you, I'd still be sick! Thank you!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:102', false)
+					case 2:
+						# I should keep some medicine handy. Just in case of a total downer. Like today!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:103', false)
+			else:
+				run NNPC_Talk_Sequence::Root()
+		else:
+			if MainNpc.NpcSickCuredBeforeYesterday():
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					# Sorry about the other day! You came to visit, but I felt like a wreck and couldn't play at all! <50:3><115:0:cd00> brought me medicine and I'm all be…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:003', false)
+					MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
+				else:
+					# Thanks for visiting me when I was sick the other day! <50:3><115:0:cd00> brought me some medicine, so now I'm eating snacks, talking to bugs, and liv…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:004', false)
+					MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
+			elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+				# Hey, sorry about today… I know ya wanted to hang out, but I just felt lousy! No worries. <50:3><115:0:cd00> brought me medicine. I'm feeling all bett…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:001', false)
+				MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
+			else:
+				# Thanks for checking in on me when I was sick today. You made the whole day less of a downer! <50:3><115:0:cd00> brought me medicine and I'm all bette…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:002', false)
+				MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true
+	else:
+		run NNPC_Reaction_First_Root::Root()
+		MainNpc.SetPlayerName(2)
+		if MainNpc.NpcSickCuredBeforeYesterday():
+			if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+				# I was stuck in bed the other day feeling like curdled pigeon milk… But <115:0:cd00> brought me some medicine, and now I'm feeling great!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:007', false)
+			else:
+				# Man, I was so weak and dizzy the other morning! It was a real downer. But then <115:0:cd00> brought me some medicine, and I feel real good again, <11…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:008', false)
+		elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			# I laid on the floor all day because I was sick, and listening to the bugs in the floor made me feel better. But I feel fine now! It was real cool of …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:005', false)
+		else:
+			# What a morning! I was all stuffy and sneezy and I thought I heard a fish say he wanted to talk. But I took the medicine <115:0:cd00> gave me, and I'm…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_Sick_Cured:006', false)
+		MainNpc.EventFlags['cNpcMemory:TalkSickCured'] = true

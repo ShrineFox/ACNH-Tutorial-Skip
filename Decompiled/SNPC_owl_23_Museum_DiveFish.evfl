@@ -1,175 +1,174 @@
 flow ChkCompReport():
-    if (not System.EventFlags['cLand:OwlFoundDiveFish']) and (not EventFlowSystemActor.MuseumComplete()) and (System.EventFlags['cLand:OwlFoundFossil']) and (not System.EventFlags['cPlayer:OwlExplainDiveFishAfterComp']):
-        System.EventFlags['cPlayer:OwlExplainDiveFishAfterComp'] = true
-        System.EventFlags['cPlayer:FutaExplanationDonationComp'] = false
-        System.EventFlags['cPlayer:OwlPaintingDiveFish'] = true
-        # Hoot, that reminds me! I've received news I simply must discuss with you, PLAYER! Sea creatures and other marine wonders can be found off the shores …
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:001', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (not System.EventFlags['cLand:OwlFoundDiveFish']) and (not EventFlowSystemActor.MuseumComplete()) and (System.EventFlags['cLand:OwlFoundFossil']) and (not System.EventFlags['cPlayer:OwlExplainDiveFishAfterComp']):
+		System.EventFlags['cPlayer:OwlExplainDiveFishAfterComp'] = true
+		System.EventFlags['cPlayer:FutaExplanationDonationComp'] = false
+		System.EventFlags['cPlayer:OwlPaintingDiveFish'] = true
+		# Hoot, that reminds me! I've received news I simply must discuss with you, PLAYER! Sea creatures and other marine wonders can be found off the shores …
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:001', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow ChkDiveFishNoticeAtToday1stTalk():
-    if (System.EventFlags['cLand:OwlFoundDiveFish']) and (not System.EventFlags['cPlayer:OwlShowDiveFishReport']):
-        # Hootie-hoo! That reminds me, PLAYER—I have news! It has been confirmed that sea creatures can be found off the shore of ISLAND, wot wot! Indeed, as o…
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:301', false)
-        System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (System.EventFlags['cLand:OwlFoundDiveFish']) and (not System.EventFlags['cPlayer:OwlShowDiveFishReport']):
+		# Hootie-hoo! That reminds me, PLAYER—I have news! It has been confirmed that sea creatures can be found off the shore of ISLAND, wot wot! Indeed, as o…
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:301', false)
+		System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
+		EventFlowSystemActor.ExitFlowchart()
+
 flow DonateDiveFish(MultiComplete: bool = false, CompleteRoomType: int = 0):
-    # Is that so?! What manner of marine life might it be? My pinfeathers are aprickle in anticipation!
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:201', false)
-    EventFlowSystemActor.UIItemSelectWindowHandling('cItemKind', 65534, 'DiveFish', '', '', false)
-    if EventFlowSystemActor.UIResultMenuDecide():
-        System.EventFlags['cLand:OwlFoundDiveFish'] = true
-        System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
-        System.EventFlags['cPlayer:FutaExplanationDonationComp'] = false
-        MainNpc.SetDeliveryItem(4, false)
-        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-        MainNpc.NpcDelivery(0, 'Keep')
-        # RANDOM: Hoo hoo! Why, this is… [a|an]<125:0:000… // Hootie hoo! This must be… [a|an]<125:0:… // Hoo! Woo hoo! This is undoubtedly… [a|a…
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:120', false)
-        # Sea creatures are extraordinary things, are they not? I wonder, would you entrust this marvelous marine find to me?
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:205', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Hoo hoo! How wonderful! I shall gladly take you up on your offer.
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:206', false)
-            # Now, might I interest you in a few fascinating facts about your <125:0:0000>?
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:131', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                # Wonderful! I would love nothing more!
-                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:132', false)
-                MainNpc.OwlOpenItemMessage()
-                # And there you have it. Fascinating stuff, no?
-                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:133', false)
-                # Rest assured, all donations are displayed in a timely manner.<10:4> You have my gratitude!
-                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:113', true)
-            else:
-                # Ah, I see.<10:4> Another time, perhaps… Well then, let me assure you we shall take very good care of your donation.
-                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:134', true)
-            MainNpc.NpcDelivery(3, '"Default"')
-            MainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
-        else:
-            # Ah, I guessed as much. I'm sure you worked hard to acquire it. As much as I hate to part with it, I will return it to you. Hoot, here you go.
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:207', false)
-            MainNpc.NpcDelivery(10, '"Default"')
-        # Hoot, but moreover, it must be said that we are most fortunate to have an island such as this! One with a veritable bounty of ocean wonders to discov…
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:204', false)
-    else:
-        # Hoo-what? Changed your mind, did you?<10:4> As you wish, I suppose. Of course, I'd love to see a sea creature if the opportunity arises. Any opportun…
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:202', false)
- 
+	# Is that so?! What manner of marine life might it be? My pinfeathers are aprickle in anticipation!
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:201', false)
+	EventFlowSystemActor.UIItemSelectWindowHandling('cItemKind', 65534, 'DiveFish', '', '', false)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		System.EventFlags['cLand:OwlFoundDiveFish'] = true
+		System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
+		System.EventFlags['cPlayer:FutaExplanationDonationComp'] = false
+		MainNpc.SetDeliveryItem(4, false)
+		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+		MainNpc.NpcDelivery(0, 'Keep')
+		# RANDOM: Hoo hoo! Why, this is… [a|an]<125:0:000… // Hootie hoo! This must be… [a|an]<125:0:… // Hoo! Woo hoo! This is undoubtedly… [a|a…
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:120', false)
+		# Sea creatures are extraordinary things, are they not? I wonder, would you entrust this marvelous marine find to me?
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:205', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Hoo hoo! How wonderful! I shall gladly take you up on your offer.
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:206', false)
+			# Now, might I interest you in a few fascinating facts about your <125:0:0000>?
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:131', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# Wonderful! I would love nothing more!
+				MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:132', false)
+				MainNpc.OwlOpenItemMessage()
+				# And there you have it. Fascinating stuff, no?
+				MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:133', false)
+				# Rest assured, all donations are displayed in a timely manner.<10:4> You have my gratitude!
+				MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:113', true)
+			else:
+				# Ah, I see.<10:4> Another time, perhaps… Well then, let me assure you we shall take very good care of your donation.
+				MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:134', true)
+			MainNpc.NpcDelivery(3, '"Default"')
+			MainNpc.OwlDonationDone(MultiComplete, CompleteRoomType)
+		else:
+			# Ah, I guessed as much. I'm sure you worked hard to acquire it. As much as I hate to part with it, I will return it to you. Hoot, here you go.
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:207', false)
+			MainNpc.NpcDelivery(10, '"Default"')
+		# Hoot, but moreover, it must be said that we are most fortunate to have an island such as this! One with a veritable bounty of ocean wonders to discov…
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:204', false)
+	else:
+		# Hoo-what? Changed your mind, did you?<10:4> As you wish, I suppose. Of course, I'd love to see a sea creature if the opportunity arises. Any opportun…
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:202', false)
+
 flow Root():
-    if not System.EventFlags['cLand:OwlFoundDiveFish']:
-        switch EventFlowSystemActor.MuseumLevel():
-            case `BlathersMuseumNoArt`:
-                if (System.EventFlags['cLand:OwlWantsPainting']) and (not System.EventFlags['cLand:MuseumGrowupEnable2']) and (System.EventFlags['cPlayer:OwlPaintingQuestExplain']):
-                    if System.EventFlags['cPlayer:OwlPaintingDiveFish']:
-                        run Select4_DiveFish()
-                else:
-                    run Select5_DiveFish()
-            case `BlathersMuseumArt`:
-                if System.EventFlags['cPlayer:OwlPaintingDiveFish']:
-                    run Select5_DiveFish()
-            case `BlathersCafe`:
-                System.EventFlags['cLand:OwlFoundDiveFish'] = true
-                run SNPC_owl_22_Museum_RenualQuest::Rootrun SNPC_owl_22_Museum_RenualQuest::Root()
-            default:
-                return
-    elif System.EventFlags['cPlayer:OwlShowDiveFishReport']:
-        switch EventFlowSystemActor.MuseumLevel():
-            case `BlathersTent`:
-                run SNPC_owl_10_Tent::OwlTentDefaultChoicerun SNPC_owl_10_Tent::OwlTentDefaultChoice()
-            case `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`:
-                run SNPC_owl_22_Museum_RenualQuest::Rootrun SNPC_owl_22_Museum_RenualQuest::Root()
-            default:
-                return
-    else:
-        run TodayTalk1st()
- 
+	if not System.EventFlags['cLand:OwlFoundDiveFish']:
+		switch EventFlowSystemActor.MuseumLevel():
+			case `BlathersMuseumNoArt`:
+				if (System.EventFlags['cLand:OwlWantsPainting']) and (not System.EventFlags['cLand:MuseumGrowupEnable2']) and (System.EventFlags['cPlayer:OwlPaintingQuestExplain']):
+					if System.EventFlags['cPlayer:OwlPaintingDiveFish']:
+run Select4_DiveFish()
+				else:
+					run Select5_DiveFish()
+			case `BlathersMuseumArt`:
+				if System.EventFlags['cPlayer:OwlPaintingDiveFish']:
+					run Select5_DiveFish()
+			case `BlathersCafe`:
+				System.EventFlags['cLand:OwlFoundDiveFish'] = true
+				run SNPC_owl_22_Museum_RenualQuest::Root()
+			default:
+				return
+	elif System.EventFlags['cPlayer:OwlShowDiveFishReport']:
+		switch EventFlowSystemActor.MuseumLevel():
+			case `BlathersTent`:
+				run SNPC_owl_10_Tent::OwlTentDefaultChoice()
+			case `BlathersMuseumNoArt`, `BlathersMuseumArt`, `BlathersCafe`:
+				run SNPC_owl_22_Museum_RenualQuest::Root()
+			default:
+				return
+	else:
+		run TodayTalk1st()
+
 flow Select4_DiveFish():
-    if not EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
-        if (EventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')) and (not System.EventFlags['cLand:Museum3Built']):
-            run SNPC_owl_22_Museum_RenualQuest::Select5_Paintingrun SNPC_owl_22_Museum_RenualQuest::Select5_Painting()
-        else:
-            run SNPC_owl_00_Common::owlNoFishArtrun SNPC_owl_00_Common::owlNoFishArt()
-    elif (EventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')) and (not System.EventFlags['cLand:Museum3Built']):
-        # How may I be of service?
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:103', false)
-        switch EventFlowSystemActor.GeneralTalkChoice6():
-            case 0:
-                run DonateDiveFish()
-            case 1:
-                run SNPC_owl_22_Museum_RenualQuest::DonatePaintingrun SNPC_owl_22_Museum_RenualQuest::DonatePainting()
-            case 2:
-                run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
-            case 3:
-                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
-            case 4:
-                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
-            case 5:
-                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
-    else:
-        run Select5_DiveFish()
- 
+	if not EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
+		if (EventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')) and (not System.EventFlags['cLand:Museum3Built']):
+			run SNPC_owl_22_Museum_RenualQuest::Select5_Painting()
+		else:
+			run SNPC_owl_00_Common::owlNoFishArt()
+	elif (EventFlowSystemActor.HasKindItem('cFilter', 'Picture', 'OwlDonation1_5')) and (not System.EventFlags['cLand:Museum3Built']):
+		# How may I be of service?
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:103', false)
+		switch EventFlowSystemActor.GeneralTalkChoice6():
+			case 0:
+				run DonateDiveFish()
+			case 1:
+				run SNPC_owl_22_Museum_RenualQuest::DonatePainting()
+			case 2:
+				run SNPC_owl_01_Museum_Donation::Root()
+			case 3:
+				run SNPC_owl_02_Museum_Judgment::Root()
+			case 4:
+				run SNPC_owl_03_Museum_Commentary::Root()
+			case 5:
+				run SNPC_owl_00_Common::End()
+	else:
+		run Select5_DiveFish()
+
 flow Select4_DiveFish_Again():
-    if EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
-        # Might I help you with anything else?
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:104', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4():
-            case 0:
-                run DonateDiveFish()
-            case 1:
-                run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
-            case 2:
-                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
-            case 3:
-                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
-    else:
-        run SNPC_owl_00_Common::Select3_Againrun SNPC_owl_00_Common::Select3_Again()
- 
+	if EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
+		# Might I help you with anything else?
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:104', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run DonateDiveFish()
+			case 1:
+				run SNPC_owl_01_Museum_Donation::Root()
+			case 2:
+				run SNPC_owl_02_Museum_Judgment::Root()
+			case 3:
+				run SNPC_owl_00_Common::End()
+	else:
+		run SNPC_owl_00_Common::Select3_Again()
+
 flow Select5_DiveFish():
-    if EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
-        # How may I be of service?
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:101', false)
-        switch EventFlowSystemActor.GeneralTalkChoice5():
-            case 0:
-                run DonateDiveFish()
-            case 1:
-                run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
-            case 2:
-                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
-            case 3:
-                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
-            case 4:
-                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
-    else:
-        run SNPC_owl_22_Museum_RenualQuest::Rootrun SNPC_owl_22_Museum_RenualQuest::Root()
- 
+	if EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
+		# How may I be of service?
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:101', false)
+		switch EventFlowSystemActor.GeneralTalkChoice5():
+			case 0:
+				run DonateDiveFish()
+			case 1:
+				run SNPC_owl_01_Museum_Donation::Root()
+			case 2:
+				run SNPC_owl_02_Museum_Judgment::Root()
+			case 3:
+				run SNPC_owl_03_Museum_Commentary::Root()
+			case 4:
+				run SNPC_owl_00_Common::End()
+	else:
+		run SNPC_owl_22_Museum_RenualQuest::Root()
+
 flow Select5_DiveFish_Again():
-    if EventFlowSystemActor.NetHasVisitor():
-        run SNPC_owl::NoTopicrun SNPC_owl::NoTopic()
-    elif EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
-        # Might I help you with anything else?
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:102', false)
-        switch EventFlowSystemActor.GeneralTalkChoice5():
-            case 0:
-                run DonateDiveFish()
-            case 1:
-                run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
-            case 2:
-                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
-            case 3:
-                run SNPC_owl_03_Museum_Commentary::Rootrun SNPC_owl_03_Museum_Commentary::Root()
-            case 4:
-                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
-    else:
-        run SNPC_owl_00_Common::Painting_Againrun SNPC_owl_00_Common::Painting_Again()
- 
+	if EventFlowSystemActor.NetHasVisitor():
+		run SNPC_owl::NoTopic()
+	elif EventFlowSystemActor.HasKindItem('cKind', 'DiveFish', ''):
+		# Might I help you with anything else?
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:102', false)
+		switch EventFlowSystemActor.GeneralTalkChoice5():
+			case 0:
+				run DonateDiveFish()
+			case 1:
+				run SNPC_owl_01_Museum_Donation::Root()
+			case 2:
+				run SNPC_owl_02_Museum_Judgment::Root()
+			case 3:
+				run SNPC_owl_03_Museum_Commentary::Root()
+			case 4:
+				run SNPC_owl_00_Common::End()
+	else:
+		run SNPC_owl_00_Common::Painting_Again()
+
 flow SkipDIveFishNotice_Comp():
-    if (System.EventFlags['cLand:OwlFoundDiveFish']) and (not System.EventFlags['cPlayer:OwlShowDiveFishReport']):
-        System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
- 
+	if (System.EventFlags['cLand:OwlFoundDiveFish']) and (not System.EventFlags['cPlayer:OwlShowDiveFishReport']):
+		System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
+
 flow TodayTalk1st():
-    # Hootie-hoo! That reminds me, PLAYER—I have news! It has been confirmed that sea creatures can be found off the shore of ISLAND, wot wot! Indeed, as o…
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:301', false)
-    System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true
- 
+	# Hootie-hoo! That reminds me, PLAYER—I have news! It has been confirmed that sea creatures can be found off the shore of ISLAND, wot wot! Indeed, as o…
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_23_Museum_DiveFish:301', false)
+	System.EventFlags['cPlayer:OwlShowDiveFishReport'] = true

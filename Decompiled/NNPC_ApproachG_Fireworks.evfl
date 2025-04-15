@@ -1,46 +1,45 @@
 flow FireworksSet_Blue():
-    MainNpc.SetDeliveryItemAtRandom(12974, true, 'cVillageRemakePattern', 0)
- 
+	MainNpc.SetDeliveryItemAtRandom(12974, true, 'cVillageRemakePattern', 0)
+
 flow FireworksSet_Red():
-    MainNpc.SetDeliveryItemAtRandom(5743, true, 'cVillageRemakePattern', 0)
- 
+	MainNpc.SetDeliveryItemAtRandom(5743, true, 'cVillageRemakePattern', 0)
+
 flow GetFireworksItem():
-    if EventFlowSystemActor.PercentChoice(50):
-        run FireworksSet_Red()
-        if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 5743):
-            run Sub_Event16()
-        else:
-            run FireworksSet_Blue()
-            if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 12974):
-                run Sub_Event16()
-            else:
-                run Sub_Event23()
-    else:
-        run FireworksSet_Blue()
-        if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 12974):
-            run Sub_Event16()
-        else:
-            run FireworksSet_Red()
-            if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 5743):
-                run Sub_Event16()
-            else:
-                run Sub_Event23()
- 
+	if EventFlowSystemActor.PercentChoice(50):
+		run FireworksSet_Red()
+		if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 5743):
+			run Sub_Event16()
+		else:
+			run FireworksSet_Blue()
+			if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 12974):
+				run Sub_Event16()
+			else:
+				run Sub_Event23()
+	else:
+		run FireworksSet_Blue()
+		if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 12974):
+			run Sub_Event16()
+		else:
+			run FireworksSet_Red()
+			if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 5743):
+				run Sub_Event16()
+			else:
+				run Sub_Event23()
+
 flow Root():
-    if MainNpc.IsFirewoksApproachNpc():
-        # I have something superduper cool to show you, but you gotta guess what it is first. A huh huh huh! Oh, I'll just tell ya. It's my very own sparkler, …
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Fireworks:001', false)
-        run GetFireworksItem()
- 
+	if MainNpc.IsFirewoksApproachNpc():
+		# I have something superduper cool to show you, but you gotta guess what it is first. A huh huh huh! Oh, I'll just tell ya. It's my very own sparkler, …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Fireworks:001', false)
+		run GetFireworksItem()
+
 local flow Sub_Event16():
-    MainNpc.NpcDelivery(1, 'Default')
-    # I love those thingies! Like, a lot. But I should probably limit myself, so I'm happy to share, <110:5>. I know you'll love those thingies too.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Fireworks:002', false)
-    MainNpc.EventFlags['cNpcMemory:FireworksGetItemFlag'] = true
- 
+	MainNpc.NpcDelivery(1, 'Default')
+	# I love those thingies! Like, a lot. But I should probably limit myself, so I'm happy to share, <110:5>. I know you'll love those thingies too.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Fireworks:002', false)
+	MainNpc.EventFlags['cNpcMemory:FireworksGetItemFlag'] = true
+
 local flow Sub_Event23():
-    # Looks like your pockets are full right now, so how 'bout I hold onto this until you've got more room. Don't worry. It's safe here with me.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Fireworks:003', false)
-    MainNpc.EventFlags['cNpcMemory:FireworksCannotGetNnpcItemFlag'] = true
-    System.EventFlags['cPlayer:FireworkCannotGetNnpcItemFlag'] = true
- 
+	# Looks like your pockets are full right now, so how 'bout I hold onto this until you've got more room. Don't worry. It's safe here with me.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Approach/BO_ApproachG_Fireworks:003', false)
+	MainNpc.EventFlags['cNpcMemory:FireworksCannotGetNnpcItemFlag'] = true
+	System.EventFlags['cPlayer:FireworkCannotGetNnpcItemFlag'] = true

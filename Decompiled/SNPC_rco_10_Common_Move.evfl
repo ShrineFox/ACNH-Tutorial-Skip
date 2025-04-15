@@ -1,113 +1,112 @@
 flow MoveBuildError():
-    run MoveBuildStateChk()
-    run MoveBuildKindChk()
-    run MoveBuildErrorSub()
-    switch SubflowResults@3[0]:
-        case 1:
-            if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-                switch SubflowResults@7[1]:
-                    case 1:
-                        if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
-                            # If you pick a location today, we should be wrapped up by tomorrow, so let's discuss future requests then!
-                            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_02', false)
-                        else:
-                            # I do believe everything will be wrapped up by tomorrow at the earliest, so let's speak another day!
-                            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_01', false)
-                    case 2, 3, 4, 5, 6:
-                        # If you pick a location today, we should be wrapped up by tomorrow, so let's discuss future requests then!
-                        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_02', false)
-                    default:
-                        return
-            else:
-                if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
-                    # If you pick a location today, we should be wrapped up by tomorrow, so let's discuss future requests then!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_02', false)
-                else:
-                    # I do believe everything will be wrapped up by tomorrow at the earliest, so let's speak another day!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_01', false)
-        case 2:
-            # Everything should be wrapped up by tomorrow, so let's discuss this then. Or whenever it's convenient.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521', false)
-        default:
-            return
- 
+	run MoveBuildStateChk()
+	run MoveBuildKindChk()
+	run MoveBuildErrorSub()
+	switch SubflowResults@3[0]:
+		case 1:
+			if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+				switch SubflowResults@7[1]:
+					case 1:
+						if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
+							# If you pick a location today, we should be wrapped up by tomorrow, so let's discuss future requests then!
+							MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_02', false)
+						else:
+							# I do believe everything will be wrapped up by tomorrow at the earliest, so let's speak another day!
+							MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_01', false)
+					case 2, 3, 4, 5, 6:
+						# If you pick a location today, we should be wrapped up by tomorrow, so let's discuss future requests then!
+						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_02', false)
+					default:
+						return
+			else:
+				if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
+					# If you pick a location today, we should be wrapped up by tomorrow, so let's discuss future requests then!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_02', false)
+				else:
+					# I do believe everything will be wrapped up by tomorrow at the earliest, so let's speak another day!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521_01', false)
+		case 2:
+			# Everything should be wrapped up by tomorrow, so let's discuss this then. Or whenever it's convenient.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:521', false)
+		default:
+			return
+
 flow MoveBuildErrorSub():
-    EventFlowSystemActor.StructureMoveSetTag(0, 0)
-    EventFlowSystemActor.StructureMoveSetTag(1, 1)
-    if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-        switch SubflowResults@7[1]:
-            case 1:
-                if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
-                    # Oh dear. Sorry, but since you asked me to move your home, my paws are full at the moment…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:501', false)
-                else:
-                    # Oh. I'm deeply sorry, but I'm having <115:0:cd00>'s home moved. My paws are full…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:511', false)
-            case 2:
-                # Oh, I'm sorry, but my paws are full with moving <115:1:cd01>'s home at the moment…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:502', false)
-            case 3:
-                # Oh! I'm sorry, but my paws are full with moving the museum at the moment…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:504', false)
-            case 4:
-                # Oh dear. I'm sorry, but my paws are full moving the shop at the moment…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:503', false)
-            case 5:
-                # I'm sorry, but my paws are full right now. I'm in the process of moving the tailor shop at the moment…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:505', false)
-            case 6:
-                # Oh my. I…I'm sorry, but my paws are full at the moment. I'm getting the campsite moved.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:506', false)
-            default:
-                return
-    else:
-        switch SubflowResults@7[1]:
-            case 1:
-                if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
-                    # Oh dear. Sorry, but since you asked me to move your home, my paws are full at the moment…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:501', false)
-                else:
-                    # Oh. I'm deeply sorry, but I'm having <115:0:cd00>'s home moved. My paws are full…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:511', false)
-            case 2:
-                # My paws are full right now. I'm busy moving <115:1:cd01>'s home at <115:0:cd00>'s request.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:512', false)
-            case 3:
-                # I'm sorry. <50:3><115:0:cd00> asked me to relocate the museum, so I'm rather busy with that at the moment.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:514', false)
-            case 4:
-                # I'm sorry. <50:3><115:0:cd00> asked me to relocate the shop, so I'm rather busy with that at the moment.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:513', false)
-            case 5:
-                # I'm sorry. <50:3><115:0:cd00> asked me to relocate the tailor shop, so my paws are rather full at the moment.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:515', false)
-            case 6:
-                # I'm sorry. <50:3><115:0:cd00> asked me to relocate the campsite, so I've got my paws full right now.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:516', false)
-            default:
-                return
- 
+	EventFlowSystemActor.StructureMoveSetTag(0, 0)
+	EventFlowSystemActor.StructureMoveSetTag(1, 1)
+	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
+		switch SubflowResults@7[1]:
+			case 1:
+				if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
+					# Oh dear. Sorry, but since you asked me to move your home, my paws are full at the moment…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:501', false)
+				else:
+					# Oh. I'm deeply sorry, but I'm having <115:0:cd00>'s home moved. My paws are full…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:511', false)
+			case 2:
+				# Oh, I'm sorry, but my paws are full with moving <115:1:cd01>'s home at the moment…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:502', false)
+			case 3:
+				# Oh! I'm sorry, but my paws are full with moving the museum at the moment…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:504', false)
+			case 4:
+				# Oh dear. I'm sorry, but my paws are full moving the shop at the moment…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:503', false)
+			case 5:
+				# I'm sorry, but my paws are full right now. I'm in the process of moving the tailor shop at the moment…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:505', false)
+			case 6:
+				# Oh my. I…I'm sorry, but my paws are full at the moment. I'm getting the campsite moved.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:506', false)
+			default:
+				return
+	else:
+		switch SubflowResults@7[1]:
+			case 1:
+				if System.EventFlags['cPlayer:RcoMoveHouseReserved']:
+					# Oh dear. Sorry, but since you asked me to move your home, my paws are full at the moment…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:501', false)
+				else:
+					# Oh. I'm deeply sorry, but I'm having <115:0:cd00>'s home moved. My paws are full…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:511', false)
+			case 2:
+				# My paws are full right now. I'm busy moving <115:1:cd01>'s home at <115:0:cd00>'s request.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:512', false)
+			case 3:
+				# I'm sorry. <50:3><115:0:cd00> asked me to relocate the museum, so I'm rather busy with that at the moment.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:514', false)
+			case 4:
+				# I'm sorry. <50:3><115:0:cd00> asked me to relocate the shop, so I'm rather busy with that at the moment.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:513', false)
+			case 5:
+				# I'm sorry. <50:3><115:0:cd00> asked me to relocate the tailor shop, so my paws are rather full at the moment.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:515', false)
+			case 6:
+				# I'm sorry. <50:3><115:0:cd00> asked me to relocate the campsite, so I've got my paws full right now.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_13_Infra_MoveStructure:516', false)
+			default:
+				return
+
 flow MoveBuildKindChk():
-    if System.EventFlags['cLand:RcoMoveReservedKind'] >= 6:
-        SubflowResults[1] = 6
-    elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 5:
-        SubflowResults[1] = 5
-    elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 4:
-        SubflowResults[1] = 4
-    elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 3:
-        SubflowResults[1] = 3
-    elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 2:
-        SubflowResults[1] = 2
-    elif System.EventFlags['cLand:RcoMoveReservedKind'] < 1:
-        SubflowResults[1] = 0
-    else:
-        SubflowResults[1] = 1
- 
+	if System.EventFlags['cLand:RcoMoveReservedKind'] >= 6:
+		SubflowResults[1] = 6
+	elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 5:
+		SubflowResults[1] = 5
+	elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 4:
+		SubflowResults[1] = 4
+	elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 3:
+		SubflowResults[1] = 3
+	elif System.EventFlags['cLand:RcoMoveReservedKind'] >= 2:
+		SubflowResults[1] = 2
+	elif System.EventFlags['cLand:RcoMoveReservedKind'] < 1:
+		SubflowResults[1] = 0
+	else:
+		SubflowResults[1] = 1
+
 flow MoveBuildStateChk():
-    if System.EventFlags['cLand:RcoMoveReservedAnyone'] >= 2:
-        SubflowResults[0] = 2
-    elif System.EventFlags['cLand:RcoMoveReservedAnyone'] < 1:
-        SubflowResults[0] = 0
-    else:
-        SubflowResults[0] = 1
- 
+	if System.EventFlags['cLand:RcoMoveReservedAnyone'] >= 2:
+		SubflowResults[0] = 2
+	elif System.EventFlags['cLand:RcoMoveReservedAnyone'] < 1:
+		SubflowResults[0] = 0
+	else:
+		SubflowResults[0] = 1

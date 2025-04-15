@@ -1,162 +1,161 @@
 flow EntryPoint_CheckUnlockFriend():
-    if System.EventFlags['cPlayer:FriendMailSendEnable']:
-        run Obj_MessageCardRack::EntryPoint_StartTalkrun Obj_MessageCardRack::EntryPoint_StartTalk()
-    elif (System.EventFlags['cPlayer:NetIsRegistHomeLand']) and (EventFlowSystemActor.NetHasAddressData('cFriend')):
-        System.EventFlags['cPlayer:FriendMailSendEnable'] = true
-        # Oh, hey, PLAYER! Didja know that you can now send letters to friends you've played with?
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:010', false)
-        if not System.EventFlags['cPlayer:FriendMailGuideRetentionPeriod']:
-            # Before you can use the service, though, the legal eagles say I gotta show you the fine print. Would you read through this for me so I don't get in tr…
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:020', true)
-            # Once a message card is received, it is saved on the Nintendo Switch system and can't be received again. Unreceived message cards are stored on the se…
-            EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0335', false)
-            System.EventFlags['cPlayer:FriendMailGuideRetentionPeriod'] = true
-        # OK! Now that we got that over with, you wanna send a letter?
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:040', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Obj_MessageCardRack::EntryPoint_SelectTorun Obj_MessageCardRack::EntryPoint_SelectTo()
-        else:
-            run Obj_MessageCardRack::EntryPoint_Cancelrun Obj_MessageCardRack::EntryPoint_Cancel()
-    else:
-        run Obj_MessageCardRack::EntryPoint_StartTalkrun Obj_MessageCardRack::EntryPoint_StartTalk()
- 
+	if System.EventFlags['cPlayer:FriendMailSendEnable']:
+		run Obj_MessageCardRack::EntryPoint_StartTalk()
+	elif (System.EventFlags['cPlayer:NetIsRegistHomeLand']) and (EventFlowSystemActor.NetHasAddressData('cFriend')):
+		System.EventFlags['cPlayer:FriendMailSendEnable'] = true
+		# Oh, hey, PLAYER! Didja know that you can now send letters to friends you've played with?
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:010', false)
+		if not System.EventFlags['cPlayer:FriendMailGuideRetentionPeriod']:
+			# Before you can use the service, though, the legal eagles say I gotta show you the fine print. Would you read through this for me so I don't get in tr…
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:020', true)
+			# Once a message card is received, it is saved on the Nintendo Switch system and can't be received again. Unreceived message cards are stored on the se…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0335', false)
+			System.EventFlags['cPlayer:FriendMailGuideRetentionPeriod'] = true
+		# OK! Now that we got that over with, you wanna send a letter?
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:040', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Obj_MessageCardRack::EntryPoint_SelectTo()
+		else:
+			run Obj_MessageCardRack::EntryPoint_Cancel()
+	else:
+		run Obj_MessageCardRack::EntryPoint_StartTalk()
+
 flow EntryPoint_EditFriend():
-    EventFlowSystemActor.CheckFreeCommunication(true)
-    if EventFlowSystemActor.IsApprovedFreeCommunication():
-        run Sub_Event46()
-    else:
-        # Hm. You can't send letters to friends until "Communicating with Others" is enabled in Parental Controls.
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:311', true)
- 
+	EventFlowSystemActor.CheckFreeCommunication(true)
+	if EventFlowSystemActor.IsApprovedFreeCommunication():
+		run Sub_Event46()
+	else:
+		# Hm. You can't send letters to friends until "Communicating with Others" is enabled in Parental Controls.
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:311', true)
+
 flow EntryPoint_RetrySendFriend():
-    run Obj_MessageCardRack::EntryPoint_PreProcedurerun Obj_MessageCardRack::EntryPoint_PreProcedure(ContinueAS=true)
-    EventFlowSystemActor.MessageLockNext(1)
-    # Connecting to the internet...
-    DynamicCast_dod.OpenMessageWindow('TalkSys/SYS_Network:001', false)
-    EventFlowSystemActor.NetConnectInit('cConnectInet', true)
-    if EventFlowSystemActor.CheckErrorType(2):
-        run EntryPoint_SendError()
-    else:
-        EventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
-        if EventFlowSystemActor.CheckErrorType(2):
-            run EntryPoint_SendError()
-        else:
-            if not System.EventFlags['cPlayer:NetIsRegistHomeLand']:
-                run Popid_Check()
-            EventFlowSystemActor.MessageSuspend()
-            # Sending card...
-            DynamicCast_dod.OpenMessageWindow('TalkSys/SYS_Network:010', false)
-            EventFlowSystemActor.SuspendSharePlayCtrlCheck()
-            EventFlowSystemActor.UISaveIconAppear()
-            EventFlowSystemActor.NetSendMailPreProc('cMessageCard')
-            EventFlowSystemActor.SaveSimpleSave('cAll')
-            EventFlowSystemActor.UISaveIconDisappear()
-            EventFlowSystemActor.NetSendMail()
-            if EventFlowSystemActor.CheckErrorType(2):
-                EventFlowSystemActor.NetSendMailAfterFailProc()
-                EventFlowSystemActor.ResumeSharePlayCtrlCheck()
-                run EntryPoint_SendError()
-            else:
-                System.EventFlags['cPlayer:MessageCardPayment'] = false
-                EventFlowSystemActor.ResumeSharePlayCtrlCheck()
-                EventFlowSystemActor.MessageSuspend()
-                EventFlowSystemActor.MessageUnlockNext()
-                run Obj_MessageCardRack::EntryPoint_PostProcedurerun Obj_MessageCardRack::EntryPoint_PostProcedure()
-                # Letter sent! Thanks for your business!
-                DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:501', true)
-                EventFlowSystemActor.UIMoneyDisappear()
- 
+	run Obj_MessageCardRack::EntryPoint_PreProcedure(ContinueAS=true)
+	EventFlowSystemActor.MessageLockNext(1)
+	# Connecting to the internet...
+	DynamicCast_dod.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+	EventFlowSystemActor.NetConnectInit('cConnectInet', true)
+	if EventFlowSystemActor.CheckErrorType(2):
+		run EntryPoint_SendError()
+	else:
+		EventFlowSystemActor.NetCheckNSA('cCheckNSA', true)
+		if EventFlowSystemActor.CheckErrorType(2):
+			run EntryPoint_SendError()
+		else:
+			if not System.EventFlags['cPlayer:NetIsRegistHomeLand']:
+				run Popid_Check()
+			EventFlowSystemActor.MessageSuspend()
+			# Sending card...
+			DynamicCast_dod.OpenMessageWindow('TalkSys/SYS_Network:010', false)
+			EventFlowSystemActor.SuspendSharePlayCtrlCheck()
+			EventFlowSystemActor.UISaveIconAppear()
+			EventFlowSystemActor.NetSendMailPreProc('cMessageCard')
+			EventFlowSystemActor.SaveSimpleSave('cAll')
+			EventFlowSystemActor.UISaveIconDisappear()
+			EventFlowSystemActor.NetSendMail()
+			if EventFlowSystemActor.CheckErrorType(2):
+				EventFlowSystemActor.NetSendMailAfterFailProc()
+				EventFlowSystemActor.ResumeSharePlayCtrlCheck()
+				run EntryPoint_SendError()
+			else:
+				System.EventFlags['cPlayer:MessageCardPayment'] = false
+				EventFlowSystemActor.ResumeSharePlayCtrlCheck()
+				EventFlowSystemActor.MessageSuspend()
+				EventFlowSystemActor.MessageUnlockNext()
+				run Obj_MessageCardRack::EntryPoint_PostProcedure()
+				# Letter sent! Thanks for your business!
+				DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:501', true)
+				EventFlowSystemActor.UIMoneyDisappear()
+
 flow EntryPoint_SendError():
-    EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.MessageUnlockNext()
-    run Obj_MessageCardRack::EntryPoint_PostProcedurerun Obj_MessageCardRack::EntryPoint_PostProcedure()
-    EventFlowSystemActor.UIMoneyAppear()
-    # Huh. Looks like it didn't take. You wanna try again right away, or just do it later?
-    DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:380', true)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run EntryPoint_RetrySendFriend()
-    else:
-        # Alright, I'll refund your Bells, then.
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:381', false)
-        EventFlowSystemActor.BellCountDown(200, false)
-        if EventFlowSystemActor.HasAttachedPresent():
-            # Oh, and let me give you back the present you were gonna send too!
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:382', true)
-            EventFlowSystemActor.ReturnAttachedPresentToBaggage()
-        EventFlowSystemActor.MessageSuspend()
-        System.EventFlags['cPlayer:MessageCardPayment'] = false
-        EventFlowSystemActor.UIMoneyDisappear()
-        run Obj_MessageCardRack::EntryPoint_SaveToMenurun Obj_MessageCardRack::EntryPoint_SaveToMenu()
- 
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.MessageUnlockNext()
+	run Obj_MessageCardRack::EntryPoint_PostProcedure()
+	EventFlowSystemActor.UIMoneyAppear()
+	# Huh. Looks like it didn't take. You wanna try again right away, or just do it later?
+	DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:380', true)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run EntryPoint_RetrySendFriend()
+	else:
+		# Alright, I'll refund your Bells, then.
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:381', false)
+		EventFlowSystemActor.BellCountDown(200, false)
+		if EventFlowSystemActor.HasAttachedPresent():
+			# Oh, and let me give you back the present you were gonna send too!
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:382', true)
+			EventFlowSystemActor.ReturnAttachedPresentToBaggage()
+		EventFlowSystemActor.MessageSuspend()
+		System.EventFlags['cPlayer:MessageCardPayment'] = false
+		EventFlowSystemActor.UIMoneyDisappear()
+		run Obj_MessageCardRack::EntryPoint_SaveToMenu()
+
 flow EntryPoint_SendFriend():
-    EventFlowSystemActor.UIMoneyDisappear()
-    EventFlowSystemActor.CheckFreeCommunication(true)
-    if not EventFlowSystemActor.IsApprovedFreeCommunication():
-        # Hm. You can't send letters to friends until "Communicating with Others" is enabled in Parental Controls.
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:311', true)
-    elif EventFlowSystemActor.NetHasPOPID(false):
-        EventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
-        if EventFlowSystemActor.NetHasAddressData('cFriend'):
-            # Sure thing! Which friend do you want to write to?
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:301', true)
-            EventFlowSystemActor.UIMoneyDisappear()
-            EventFlowSystemActor.UIAddresseeFriendHandling()
-            if EventFlowSystemActor.UIResultMenuDecide():
-                EventFlowSystemActor.SetTagFromUIResult('cSelectFriendName', 0)
-                if EventFlowSystemActor.LimitSendMailToFriend():
-                    # Oh! Looks like you already sent two letters today to <115:0:cd00>. You can send more tomorrow, so how about we just wait?
-                    DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:320', true)
-                else:
-                    # Sending to <115:0:cd00>? No problem!
-                    DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_01', true)
-                    if EventFlowSystemActor.ExistUnfinishMail():
-                        EventFlowSystemActor.ChangeAddressUnfinishMail()
-                        run Sub_Event46()
-                    else:
-                        EventFlowSystemActor.UIMoneyDisappear()
-                        EventFlowSystemActor.UIMsgCardSelectHandling()
-                        if EventFlowSystemActor.UIResultMenuDecide():
-                            run Sub_Event46()
-                        else:
-                            run Obj_MessageCardRack::EntryPoint_Cancelrun Obj_MessageCardRack::EntryPoint_Cancel()
-            else:
-                run Obj_MessageCardRack::EntryPoint_Cancelrun Obj_MessageCardRack::EntryPoint_Cancel()
-        else:
-            # Oh, looks like you don't have any friends' addresses yet. Visit a friend online to send them letters later!
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:312', true)
-    else:
-        # Oh, looks like you don't have any friends' addresses yet. Visit a friend online to send them letters later!
-        DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:312', true)
- 
+	EventFlowSystemActor.UIMoneyDisappear()
+	EventFlowSystemActor.CheckFreeCommunication(true)
+	if not EventFlowSystemActor.IsApprovedFreeCommunication():
+		# Hm. You can't send letters to friends until "Communicating with Others" is enabled in Parental Controls.
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:311', true)
+	elif EventFlowSystemActor.NetHasPOPID(false):
+		EventFlowSystemActor.NetUpdateFriendList('cFriendOnly')
+		if EventFlowSystemActor.NetHasAddressData('cFriend'):
+			# Sure thing! Which friend do you want to write to?
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:301', true)
+			EventFlowSystemActor.UIMoneyDisappear()
+			EventFlowSystemActor.UIAddresseeFriendHandling()
+			if EventFlowSystemActor.UIResultMenuDecide():
+				EventFlowSystemActor.SetTagFromUIResult('cSelectFriendName', 0)
+				if EventFlowSystemActor.LimitSendMailToFriend():
+					# Oh! Looks like you already sent two letters today to <115:0:cd00>. You can send more tomorrow, so how about we just wait?
+					DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:320', true)
+				else:
+					# Sending to <115:0:cd00>? No problem!
+					DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:210_01', true)
+					if EventFlowSystemActor.ExistUnfinishMail():
+EventFlowSystemActor.ChangeAddressUnfinishMail()
+	run Sub_Event46()
+					else:
+EventFlowSystemActor.UIMoneyDisappear()
+EventFlowSystemActor.UIMsgCardSelectHandling()
+						if EventFlowSystemActor.UIResultMenuDecide():
+	  run Sub_Event46()
+						else:
+run Obj_MessageCardRack::EntryPoint_Cancel()
+			else:
+				run Obj_MessageCardRack::EntryPoint_Cancel()
+		else:
+			# Oh, looks like you don't have any friends' addresses yet. Visit a friend online to send them letters later!
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:312', true)
+	else:
+		# Oh, looks like you don't have any friends' addresses yet. Visit a friend online to send them letters later!
+		DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:312', true)
+
 flow Popid_Check():
-    EventFlowSystemActor.NetGetPOPID(true)
-    if EventFlowSystemActor.CheckErrorType(2):
-        run EntryPoint_SendError()
-    else:
-        run System_ServerRegistration::UploadProfileCorerun System_ServerRegistration::UploadProfileCore(IgnoreError=false, Terminate=false)
-        if EventFlowSystemActor.CheckErrorType(2):
-            run EntryPoint_SendError()
- 
+	EventFlowSystemActor.NetGetPOPID(true)
+	if EventFlowSystemActor.CheckErrorType(2):
+		run EntryPoint_SendError()
+	else:
+		run System_ServerRegistration::UploadProfileCorerun System_ServerRegistration::UploadProfileCore(IgnoreError=false, Terminate=false)
+		if EventFlowSystemActor.CheckErrorType(2):
+			run EntryPoint_SendError()
+
 local flow Sub_Event46():
-    EventFlowSystemActor.UIMoneyDisappear()
-    EventFlowSystemActor.UIMsgCardEditTextHandling('cMessageCard')
-    if EventFlowSystemActor.UIResultMenuDecide():
-        EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
-        EventFlowSystemActor.UIMoneyAppear()
-        if EventFlowSystemActor.HasBellCount(200):
-            # Alright, delivery fee comes to 200 Bells.
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:500', true)
-            System.EventFlags['cPlayer:MessageCardPayment'] = true
-            EventFlowSystemActor.BellCountDown(-200, false)
-            # Alright, we'll get your mail…mailed.
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:321', true)
-            EventFlowSystemActor.UIMoneyDisappear()
-            run EntryPoint_RetrySendFriend()
-        else:
-            # Wuh-oh! You don't have quite enough Bells here. When you've got 200, come see me again! In the meanwhile, I'll just hold on to the letter for you. I …
-            DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:510', true)
-            EventFlowSystemActor.UIMoneyDisappear()
-            run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoneyrun Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
-    else:
-        run Obj_MessageCardRack::EntryPoint_EditCancelrun Obj_MessageCardRack::EntryPoint_EditCancel()
- 
+	EventFlowSystemActor.UIMoneyDisappear()
+	EventFlowSystemActor.UIMsgCardEditTextHandling('cMessageCard')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SaveSetFromUIResult('cMsgCard')
+		EventFlowSystemActor.UIMoneyAppear()
+		if EventFlowSystemActor.HasBellCount(200):
+			# Alright, delivery fee comes to 200 Bells.
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:500', true)
+			System.EventFlags['cPlayer:MessageCardPayment'] = true
+			EventFlowSystemActor.BellCountDown(-200, false)
+			# Alright, we'll get your mail…mailed.
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:321', true)
+			EventFlowSystemActor.UIMoneyDisappear()
+			run EntryPoint_RetrySendFriend()
+		else:
+			# Wuh-oh! You don't have quite enough Bells here. When you've got 200, come see me again! In the meanwhile, I'll just hold on to the letter for you. I …
+			DynamicCast_dod.OpenMessageWindow('TalkSNpc/dod/SP_dod_50_PostOffice:510', true)
+			EventFlowSystemActor.UIMoneyDisappear()
+			run Obj_MessageCardRack::EntryPoint_EditKeepByNoMoney()
+	else:
+		run Obj_MessageCardRack::EntryPoint_EditCancel()

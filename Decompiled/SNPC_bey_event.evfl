@@ -1,1004 +1,1003 @@
 flow AfterEv():
-    if not EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_AfterEv']:
-            run AfterEv_2nd()
-        else:
-            System.EventFlags['cPlayerVisit:DC_BevTalkFirst_AfterEv'] = true
-            if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
-                run AfterEv_First()
-            else:
-                run AfterEv_SNPC_First()
-    elif System.EventFlags['cPlayer:BevTalkFirst_AfterEv']:
-        run AfterEv_2nd()
-    else:
-        System.EventFlags['cPlayer:BevTalkFirst_AfterEv'] = true
-        if System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
+	if not EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_AfterEv']:
+			run AfterEv_2nd()
+		else:
+			System.EventFlags['cPlayerVisit:DC_BevTalkFirst_AfterEv'] = true
+			if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
+				run AfterEv_First()
+			else:
+				run AfterEv_SNPC_First()
+	elif System.EventFlags['cPlayer:BevTalkFirst_AfterEv']:
+		run AfterEv_2nd()
+	else:
+		System.EventFlags['cPlayer:BevTalkFirst_AfterEv'] = true
+		if System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
 entrypoint Event343:
-            if EventFlowSystemActor.IsSharePlay(0):
-                run Sub_grp_Event344()
-            else:
-                # And that's gonna do it for this <110:17>'s Fishing Tourney! How was it? Have fun?
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:080', false)
-                switch EventFlowSystemActor.GeneralTalkChoice3():
-                    case 0:
-                        # Reel glad to hear it, but you know that gushing won't get you extra points, right? Nyuk!
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:081', false)
-                    case 1:
-                        # Hey, smooth sailin' is smooth sailin'. I'll take it.
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:082', false)
-                    case 2:
-                        # Feelin' sea salty? Well, at least you're keepin' it reel…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:083', false)
-                if System.EventFlags['cPlayer:CatchFishFesCount'] > 10:
-                    # But that's not important. What IS important is that you've got a cargo hold full of points from the tourney! You've got <90:8:0001> <50:8:0100000c007…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:085', false)
-                    run Sub_grp_Event437()
-                elif System.EventFlags['cPlayer:CatchFishFesCount'] == 10:
-                    # More importantly, your tackle box is soaked with points from the tourney! You have <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:084', false)
-                    run Sub_grp_Event437()
-                elif EventFlowSystemActor.EventCheck('FishingConvention') not in (0, 1, 2):
-                    run TalkAfterEvent()
-                elif EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
-                    # The next Fishing Tourney sets sail in <90:35:cd00>. Hope I catch you then! Nyuk nyuk!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:086', false)
-                else:
-                    # The next Fishing Tourney embarks in <90:35:cd00> of next year. Hope you'll paddle by. Nyuk nyuk!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:087', false)
-        else:
-            System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
-            if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
-                run Sub_grp_Event344()
-            else:
-                System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
+			if EventFlowSystemActor.IsSharePlay(0):
+				run Sub_grp_Event344()
+			else:
+				# And that's gonna do it for this <110:17>'s Fishing Tourney! How was it? Have fun?
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:080', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						# Reel glad to hear it, but you know that gushing won't get you extra points, right? Nyuk!
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:081', false)
+					case 1:
+						# Hey, smooth sailin' is smooth sailin'. I'll take it.
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:082', false)
+					case 2:
+						# Feelin' sea salty? Well, at least you're keepin' it reel…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:083', false)
+				if System.EventFlags['cPlayer:CatchFishFesCount'] > 10:
+					# But that's not important. What IS important is that you've got a cargo hold full of points from the tourney! You've got <90:8:0001> <50:8:0100000c007…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:085', false)
+					run Sub_grp_Event437()
+				elif System.EventFlags['cPlayer:CatchFishFesCount'] == 10:
+					# More importantly, your tackle box is soaked with points from the tourney! You have <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:084', false)
+					run Sub_grp_Event437()
+				elif EventFlowSystemActor.EventCheck('FishingConvention') not in (0, 1, 2):
+					run TalkAfterEvent()
+				elif EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
+					# The next Fishing Tourney sets sail in <90:35:cd00>. Hope I catch you then! Nyuk nyuk!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:086', false)
+				else:
+					# The next Fishing Tourney embarks in <90:35:cd00> of next year. Hope you'll paddle by. Nyuk nyuk!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:087', false)
+		else:
+			System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
+			if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
+				run Sub_grp_Event344()
+			else:
+				System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
 entrypoint Event25:
-                if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-                    # What up, fishionista? C.J. here and… WOW am I wrung out from anchorin' today's Fishing Tourney. I gotta be honest, I don't remember if I saw you out …
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:090_01', false)
-                else:
-                    # What up, fishionista? C.J. here and… WOW am I wrung out from anchorin' today's Fishing Tourney. I gotta be honest, I don't remember if I saw you out …
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:090', false)
-                    run Sub_grp_Event264()
- 
+				if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+					# What up, fishionista? C.J. here and… WOW am I wrung out from anchorin' today's Fishing Tourney. I gotta be honest, I don't remember if I saw you out …
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:090_01', false)
+				else:
+					# What up, fishionista? C.J. here and… WOW am I wrung out from anchorin' today's Fishing Tourney. I gotta be honest, I don't remember if I saw you out …
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:090', false)
+					run Sub_grp_Event264()
+
 flow AfterEv_2nd():
-    if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-        run AfterEv_Always()
-    else:
-        # Yo, flyfisher!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:100', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run PointCheck()
-        else:
-            run AfterEv_Always()
- 
+	if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+		run AfterEv_Always()
+	else:
+		# Yo, flyfisher!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:100', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run PointCheck()
+		else:
+			run AfterEv_Always()
+
 flow AfterEv_Always():
-    if EventFlowSystemActor.EventCheck('FishingConvention') not in (0, 1, 2):
-        run TalkAfterEvent()
-    elif EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
-        switch EventFlowSystemActor.RandomChoice3(3):
-            case 0:
-                # I'm anchorin' ISLAND's next Fishing Tourney too. That'll be in <90:35:cd00>. Catch you then! Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:101', false)
-            case 1:
-                # That Fishing Tourney was a rush, wasn't it? Like, you could FEEL the tension on the line. Nyuk! I'm absolutely HOOKED on doin' streams for the Fishin…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:102', false)
-            case 2:
-                run TalkAfterEvent()
-    else:
-        switch EventFlowSystemActor.RandomChoice3(3):
-            case 0:
-                run TalkAfterEvent()
-            case 1:
-                # Well, that's gonna do it for the YEAR Fishing Tourney season. The next Fishing Tourney will be in <90:35:cd00> of next year. So until then, this is C…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:104', false)
-            case 2:
-                # Next year's Fishing Tourneys are gonna need a perfect storm to top this… What a year! Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:105', false)
- 
+	if EventFlowSystemActor.EventCheck('FishingConvention') not in (0, 1, 2):
+		run TalkAfterEvent()
+	elif EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
+		switch EventFlowSystemActor.RandomChoice3(3):
+			case 0:
+				# I'm anchorin' ISLAND's next Fishing Tourney too. That'll be in <90:35:cd00>. Catch you then! Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:101', false)
+			case 1:
+				# That Fishing Tourney was a rush, wasn't it? Like, you could FEEL the tension on the line. Nyuk! I'm absolutely HOOKED on doin' streams for the Fishin…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:102', false)
+			case 2:
+				run TalkAfterEvent()
+	else:
+		switch EventFlowSystemActor.RandomChoice3(3):
+			case 0:
+				run TalkAfterEvent()
+			case 1:
+				# Well, that's gonna do it for the YEAR Fishing Tourney season. The next Fishing Tourney will be in <90:35:cd00> of next year. So until then, this is C…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:104', false)
+			case 2:
+				# Next year's Fishing Tourneys are gonna need a perfect storm to top this… What a year! Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:105', false)
+
 flow AfterEv_First():
-    run Event343()
- 
+	run Event343()
+
 flow AfterEv_SNPC_First():
-    run Event25()
- 
+	run Event25()
+
 flow BeforeEV_SNPC_First():
-    # Who's ready for some seasports? You, that's who! Nyuk nyuk! I'm here in front of…one, uh… probably caffeinated fish fan for the apex of seasports act…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:000', true)
- 
+	# Who's ready for some seasports? You, that's who! Nyuk nyuk! I'm here in front of…one, uh… probably caffeinated fish fan for the apex of seasports act…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:000', true)
+
 flow BeforeEv():
-    if not EventFlowSystemActor.IsMyVillage():
-        if not System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
-            System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
-            run BeforeEV_SNPC_First()
-        elif System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-            run BeforeEv_Always()
-        elif System.EventFlags['cPlayer:BevTalkPoint_BeforeEv']:
-            run BeforeEv_2nd()
-        else:
-            System.EventFlags['cPlayer:BevTalkPoint_BeforeEv'] = true
-            run BeforeEv_PointCheck()
-    elif not System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
-        System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
-        if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
-            # Yo! What up, seasports fan! I'm C.J. coming at you live… You know what? It's too early for that. I'll save it. So you know I'll be anchorin' the big …
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:007', true)
-        else:
-            System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
-            if EventFlowSystemActor.IsSharePlay(0):
-                # C.J. here, comin' at you live from the ISLAND <110:17> Fishing Tourney! All the drama, all the adventure, all the SMELLS! It all starts here at <90:3…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:169', true)
-            else:
-                run BeforeEV_SNPC_First()
-    elif System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-        run BeforeEv_Always()
-    elif System.EventFlags['cPlayer:BevTalkPoint_BeforeEv']:
-        run BeforeEv_2nd()
-    else:
-        System.EventFlags['cPlayer:BevTalkPoint_BeforeEv'] = true
-        run BeforeEv_PointCheck()
- 
+	if not EventFlowSystemActor.IsMyVillage():
+		if not System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
+			System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
+			run BeforeEV_SNPC_First()
+		elif System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+			run BeforeEv_Always()
+		elif System.EventFlags['cPlayer:BevTalkPoint_BeforeEv']:
+			run BeforeEv_2nd()
+		else:
+			System.EventFlags['cPlayer:BevTalkPoint_BeforeEv'] = true
+			run BeforeEv_PointCheck()
+	elif not System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
+		System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
+		if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
+			# Yo! What up, seasports fan! I'm C.J. coming at you live… You know what? It's too early for that. I'll save it. So you know I'll be anchorin' the big …
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:007', true)
+		else:
+			System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
+			if EventFlowSystemActor.IsSharePlay(0):
+				# C.J. here, comin' at you live from the ISLAND <110:17> Fishing Tourney! All the drama, all the adventure, all the SMELLS! It all starts here at <90:3…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:169', true)
+			else:
+				run BeforeEV_SNPC_First()
+	elif System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+		run BeforeEv_Always()
+	elif System.EventFlags['cPlayer:BevTalkPoint_BeforeEv']:
+		run BeforeEv_2nd()
+	else:
+		System.EventFlags['cPlayer:BevTalkPoint_BeforeEv'] = true
+		run BeforeEv_PointCheck()
+
 flow BeforeEv_2nd():
-    # What up, flyfisher?
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:006', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run PointExchange()
-    else:
-        run BeforeEv_Always()
- 
+	# What up, flyfisher?
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:006', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run PointExchange()
+	else:
+		run BeforeEv_Always()
+
 flow BeforeEv_Always():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # Glad I caught ya, flyfisher! You look hyped. You look ready. You look… caffeinated. I gotta get on that. Anywave, the big Fishing Tourney shoves off …
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:001', true)
-        case 1:
-            # To me, the Fishing Tourney's about showin' off the sport from all angles. Folks catching fish is just the bait. Everyone's got a hook. Fishing's got …
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:002', true)
-        case 2:
-            # The Fishing Tourney starts at <90:37:cd00> <110:21:cd00>! Get HYPE! Nyuk nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:003', true)
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Glad I caught ya, flyfisher! You look hyped. You look ready. You look… caffeinated. I gotta get on that. Anywave, the big Fishing Tourney shoves off …
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:001', true)
+		case 1:
+			# To me, the Fishing Tourney's about showin' off the sport from all angles. Folks catching fish is just the bait. Everyone's got a hook. Fishing's got …
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:002', true)
+		case 2:
+			# The Fishing Tourney starts at <90:37:cd00> <110:21:cd00>! Get HYPE! Nyuk nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:003', true)
+
 flow BeforeEv_PointCheck():
-    if System.EventFlags['cPlayer:CatchFishFesCount'] != 10:
-        # Yo, flyfisher? You know you're still swimmin' in points from the last tourney, right? Let's see… Yep! You've got <90:8:0001> <50:8:0100000c0070006f00…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:004', false)
-    else:
-        # Hey, flyfisher! You know you still got some points bobbin' around from the last tourney, right? It ain't the deepest pool, but there's still <90:8:00…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:005', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run PointExchange()
-    else:
-        run PointExCancel()
- 
+	if System.EventFlags['cPlayer:CatchFishFesCount'] != 10:
+		# Yo, flyfisher? You know you're still swimmin' in points from the last tourney, right? Let's see… Yep! You've got <90:8:0001> <50:8:0100000c0070006f00…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:004', false)
+	else:
+		# Hey, flyfisher! You know you still got some points bobbin' around from the last tourney, right? It ain't the deepest pool, but there's still <90:8:00…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:005', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run PointExchange()
+	else:
+		run PointExCancel()
+
 flow Bey_AfterMinigame_Talk():
-    run Event151()
- 
+	run Event151()
+
 flow Check_EvQ_Entry():
-    if not EventFlowSystemActor.NetHasVisitor():
-        run Check_Item()
-    elif not EventFlowSystemActor.UIMiniGameCanStart():
-        # I fathom there's some anglers still lobbin' bobbers out there. Swim by later and I'll help you out. Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:068', true)
-    elif not MainNpc.ChmFreeQuery2('cChmQueryType_FesBoxNotEmpty'):
-        run Check_Item()
-    elif MainNpc.ChmFreeQuery2('cChmQueryType_BoxNotEmptyNum'):
-        EventFlowSystemActor.SetTagFromSystem('cInsectBoxPlayer', 'cDegit', 0, 0, '')
-        # Cool. Hey, uh… <50:3><115:0:cd00>'s still got fish in the cooler. Know the deal with that? I can't ship another round till that thing's empty. Tourne…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:066', true)
-    else:
-        # Sweet. Hey, uh… Someone's still got fish in the cooler. Any idea what's up with that? I can't launch another round till that thing's empty. Tourney r…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:067', true)
- 
+	if not EventFlowSystemActor.NetHasVisitor():
+		run Check_Item()
+	elif not EventFlowSystemActor.UIMiniGameCanStart():
+		# I fathom there's some anglers still lobbin' bobbers out there. Swim by later and I'll help you out. Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:068', true)
+	elif not MainNpc.ChmFreeQuery2('cChmQueryType_FesBoxNotEmpty'):
+		run Check_Item()
+	elif MainNpc.ChmFreeQuery2('cChmQueryType_BoxNotEmptyNum'):
+		EventFlowSystemActor.SetTagFromSystem('cInsectBoxPlayer', 'cDegit', 0, 0, '')
+		# Cool. Hey, uh… <50:3><115:0:cd00>'s still got fish in the cooler. Know the deal with that? I can't ship another round till that thing's empty. Tourne…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:066', true)
+	else:
+		# Sweet. Hey, uh… Someone's still got fish in the cooler. Any idea what's up with that? I can't launch another round till that thing's empty. Tourney r…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:067', true)
+
 flow Check_Item():
-    if EventFlowSystemActor.HasKindItem('cKind', 'FishingRod', ''):
-        run EvQ_Entry()
-    else:
-        # YES! Nobody can resist the siren song of the Fishing Tourney. Are you ready to get… Uh, wait up. How're you gonna compete without a fishing rod? No r…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:060', true)
- 
+	if EventFlowSystemActor.HasKindItem('cKind', 'FishingRod', ''):
+		run EvQ_Entry()
+	else:
+		# YES! Nobody can resist the siren song of the Fishing Tourney. Are you ready to get… Uh, wait up. How're you gonna compete without a fishing rod? No r…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:060', true)
+
 flow Check_TotalPoint():
-    MainNpc.SmartPhone(4)
-    if System.EventFlags['cPlayer:BeyEvent_TotalPoint'] >= 300:
-        if System.EventFlags['cPlayer:BeyEvent_TalkTrophyGold']:
-            run GetPoint_next()
-        else:
-            # Which means… WHOA! I don't believe it! You've hooked a Fishing Tourney net total of over <90:2:000b> points! You're a castin' LEGEND! Wait'll my subs…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:200', false)
-            run SmartPhone_TotalPoint()
-            System.EventFlags['cPlayer:BeyEvent_TalkTrophyGold'] = true
-            if System.EventFlags['cPlayer:BeyEvent_TalkTrophySilver']:
-                run GetPoint_next()
-            else:
-                run Sub_Event364()
-    elif System.EventFlags['cPlayer:BeyEvent_TotalPoint'] < 200:
-        if (System.EventFlags['cPlayer:BeyEvent_TotalPoint'] >= 100) and (not System.EventFlags['cPlayer:BeyEvent_TalkTrophyCopper']):
-            # Which means… Whoa! FINTASTIC! You've hooked a Fishing Tourney net total of over <90:2:000d> points. You're takin' the scene by storm! I can't wait to…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:202', false)
-            run SmartPhone_TotalPoint()
-            run Sub_Event396()
-        else:
-            run GetPoint_next()
-    else:
-        if System.EventFlags['cPlayer:BeyEvent_TalkTrophySilver']:
-            run GetPoint_next()
-        else:
-            # Which means… INCREDIBLE! You've hooked a Fishing Tourney net total of over <90:2:000c> points. You're like a tidal force out there! Am I really stand…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:201', false)
-            run SmartPhone_TotalPoint()
-            run Sub_Event364()
- 
+	MainNpc.SmartPhone(4)
+	if System.EventFlags['cPlayer:BeyEvent_TotalPoint'] >= 300:
+		if System.EventFlags['cPlayer:BeyEvent_TalkTrophyGold']:
+			run GetPoint_next()
+		else:
+			# Which means… WHOA! I don't believe it! You've hooked a Fishing Tourney net total of over <90:2:000b> points! You're a castin' LEGEND! Wait'll my subs…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:200', false)
+			run SmartPhone_TotalPoint()
+			System.EventFlags['cPlayer:BeyEvent_TalkTrophyGold'] = true
+			if System.EventFlags['cPlayer:BeyEvent_TalkTrophySilver']:
+				run GetPoint_next()
+			else:
+				run Sub_Event364()
+	elif System.EventFlags['cPlayer:BeyEvent_TotalPoint'] < 200:
+		if (System.EventFlags['cPlayer:BeyEvent_TotalPoint'] >= 100) and (not System.EventFlags['cPlayer:BeyEvent_TalkTrophyCopper']):
+			# Which means… Whoa! FINTASTIC! You've hooked a Fishing Tourney net total of over <90:2:000d> points. You're takin' the scene by storm! I can't wait to…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:202', false)
+			run SmartPhone_TotalPoint()
+			run Sub_Event396()
+		else:
+			run GetPoint_next()
+	else:
+		if System.EventFlags['cPlayer:BeyEvent_TalkTrophySilver']:
+			run GetPoint_next()
+		else:
+			# Which means… INCREDIBLE! You've hooked a Fishing Tourney net total of over <90:2:000c> points. You're like a tidal force out there! Am I really stand…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:201', false)
+			run SmartPhone_TotalPoint()
+			run Sub_Event364()
+
 flow Check_pay500():
-    EventFlowSystemActor.UIMoneyAppear()
-    # Knew you'd be on board! That'll be <90:21:0002>.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:062_01', false)
-    EventFlowSystemActor.BellCountDown(500, true)
-    EventFlowSystemActor.UIMoneyDisappear()
- 
+	EventFlowSystemActor.UIMoneyAppear()
+	# Knew you'd be on board! That'll be <90:21:0002>.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:062_01', false)
+	EventFlowSystemActor.BellCountDown(500, true)
+	EventFlowSystemActor.UIMoneyDisappear()
+
 flow EvQ_Entry():
-    if EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish']:
-            if EventFlowSystemActor.NetHasVisitor():
+	if EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish']:
+			if EventFlowSystemActor.NetHasVisitor():
 entrypoint Event92:
-                # OK, I'm gonna spray <90:0:000e> minutes on the clock for you to catch as many fish as you can. Everyone embarks at the same time too. Keeps things on…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:064', true)
-                run Sub_Event95()
-            else:
-                # YES! Nobody can resist the siren song of the Fishing Tourney. One thing. Since you already sailed the tourney seas today, I gotta have <90:21:0002> f…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:062', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-                    run EvQ_Entry_Cancel()
-                elif EventFlowSystemActor.HasBellCount(500):
-                    run Check_pay500()
-                    run Sub_Event354()
-                else:
-                    # Uh… I love your passion, but it looks like your Bells are runnin' kinda shallow! Nyuk! That fee keeps the fish fund funded and all that fun fin fluff…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:061', true)
-        else:
-            run Sub_Event97()
-    else:
-        if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_EvQuestFinish']:
-            run EvQ_Start()
-        else:
-            run Sub_Event97()
- 
+				# OK, I'm gonna spray <90:0:000e> minutes on the clock for you to catch as many fish as you can. Everyone embarks at the same time too. Keeps things on…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:064', true)
+				run Sub_Event95()
+			else:
+				# YES! Nobody can resist the siren song of the Fishing Tourney. One thing. Since you already sailed the tourney seas today, I gotta have <90:21:0002> f…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:062', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+					run EvQ_Entry_Cancel()
+				elif EventFlowSystemActor.HasBellCount(500):
+					run Check_pay500()
+					run Sub_Event354()
+				else:
+					# Uh… I love your passion, but it looks like your Bells are runnin' kinda shallow! Nyuk! That fee keeps the fish fund funded and all that fun fin fluff…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:061', true)
+		else:
+			run Sub_Event97()
+	else:
+		if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_EvQuestFinish']:
+			run EvQ_Start()
+		else:
+			run Sub_Event97()
+
 flow EvQ_Entry_Cancel():
-    # What? Really? Way to be the one that got away… Well, alright. The Fishing Tourney is on till <90:37:cd01> <110:21:cd01> if the tide decides to turn f…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:024', false)
- 
+	# What? Really? Way to be the one that got away… Well, alright. The Fishing Tourney is on till <90:37:cd01> <110:21:cd01> if the tide decides to turn f…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:024', false)
+
 flow EvQ_Start():
-    run Event92()
- 
+	run Event92()
+
 flow GetPoint_next():
-    MainNpc.SmartPhone(5)
-    # …pour that into your points pool…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:151', false)
-    if EventFlowSystemActor.EnvHourCompare(18, -1, true, true) == 0:
-        # If you've got enough points in your pool, you can swap 'em for some slick fish swag.
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:203', false)
-    else:
-        # Fishing Tourney points don't spoil, so you can save some in your pool and use 'em in the next one! Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:209', false)
-    MainNpc.SmartPhone(1)
- 
+	MainNpc.SmartPhone(5)
+	# …pour that into your points pool…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:151', false)
+	if EventFlowSystemActor.EnvHourCompare(18, -1, true, true) == 0:
+		# If you've got enough points in your pool, you can swap 'em for some slick fish swag.
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:203', false)
+	else:
+		# Fishing Tourney points don't spoil, so you can save some in your pool and use 'em in the next one! Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:209', false)
+	MainNpc.SmartPhone(1)
+
 flow OpenEv():
-    if not EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_EvQuestFinish']:
-            run OpenEv_AfterQ()
-        elif System.EventFlags['cPlayerVisit:DC_BevTalkRuleFirst']:
-            run OpenEv_BeforeQ()
-        else:
-            System.EventFlags['cPlayerVisit:DC_BevTalkRuleFirst'] = true
-            if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
-                run OpenEv_BeforeQ_First()
-            else:
-                System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
-                run OpenEv_SNPC_First()
-    elif System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish']:
-        run OpenEv_AfterQ()
-    else:
-        if System.EventFlags['cPlayer:BevTalkRuleFirst']:
+	if not EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_EvQuestFinish']:
+			run OpenEv_AfterQ()
+		elif System.EventFlags['cPlayerVisit:DC_BevTalkRuleFirst']:
+			run OpenEv_BeforeQ()
+		else:
+			System.EventFlags['cPlayerVisit:DC_BevTalkRuleFirst'] = true
+			if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
+				run OpenEv_BeforeQ_First()
+			else:
+				System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
+				run OpenEv_SNPC_First()
+	elif System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish']:
+		run OpenEv_AfterQ()
+	else:
+		if System.EventFlags['cPlayer:BevTalkRuleFirst']:
 entrypoint Event210:
-            if EventFlowSystemActor.NetHasVisitor():
-                # Yo! You wanna dip those toes in the Fishing Tourney? There's no entry fee if off-island visitors are around.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:034', false)
-            elif EventFlowSystemActor.IsSharePlay(0):
-                # Ready to chart a course to Fishing Tourney glory? Since it'll be your first run today as Team Leader, the entry fee is waived. Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:171', false)
-            else:
-                # What up, flyfisher! Wanna dip those toes in the Fishing Tourney? The entry fee is waived for the first run.
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:026', false)
-        else:
-            System.EventFlags['cPlayer:BevTalkRuleFirst'] = true
-            if System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
+			if EventFlowSystemActor.NetHasVisitor():
+				# Yo! You wanna dip those toes in the Fishing Tourney? There's no entry fee if off-island visitors are around.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:034', false)
+			elif EventFlowSystemActor.IsSharePlay(0):
+				# Ready to chart a course to Fishing Tourney glory? Since it'll be your first run today as Team Leader, the entry fee is waived. Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:171', false)
+			else:
+				# What up, flyfisher! Wanna dip those toes in the Fishing Tourney? The entry fee is waived for the first run.
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:026', false)
+		else:
+			System.EventFlags['cPlayer:BevTalkRuleFirst'] = true
+			if System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
 entrypoint Event227:
-                if EventFlowSystemActor.EnvHourCompare(10, -1, true, true) == 0:
-                    # It all comes down to this. Every hook, every line, every sinker. The time has come…for the Fishing Tourney. I'm C.J., and as always, I'm your anchor …
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:020', false)
-                else:
-                    # Can ya feel 'em? The crestin' waves of tension and excitement? The Fishing Tourney is ON! Wanna hook yourself some slick fish swag? You've got from n…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:031', false)
-            else:
-                System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
-                if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
-                    # Yo! What up, seasports fan! I'm C.J. coming at you live… Hang on, of COURSE I'm live. I'm right here. Anywave, I'm anchorin' the premiere event of th…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:037', false)
-                else:
+				if EventFlowSystemActor.EnvHourCompare(10, -1, true, true) == 0:
+					# It all comes down to this. Every hook, every line, every sinker. The time has come…for the Fishing Tourney. I'm C.J., and as always, I'm your anchor …
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:020', false)
+				else:
+					# Can ya feel 'em? The crestin' waves of tension and excitement? The Fishing Tourney is ON! Wanna hook yourself some slick fish swag? You've got from n…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:031', false)
+			else:
+				System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
+				if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
+					# Yo! What up, seasports fan! I'm C.J. coming at you live… Hang on, of COURSE I'm live. I'm right here. Anywave, I'm anchorin' the premiere event of th…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:037', false)
+				else:
 entrypoint Event219:
-                    System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
-                    if EventFlowSystemActor.IsSharePlay(0):
-                        # What is up, fishionista! The Fishing Tourney is ON! I'm C.J. and I'm your anchor for this once-a-season angler onslaught. So shine those hooks and ge…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:168', false)
-                    else:
-                        # Who's ready for some seasports? You, that's who! Nyuk nyuk! I'm here in front of, uh…just you right now…for the apex of seasports action, the Fishing…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:036', false)
-            if EventFlowSystemActor.NetHasVisitor():
-                # The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. Every fish you catch nets you …
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:022', false)
-                # Simple, right? And you can enter as many times as you like. OK, wanna get your feet wet in the Fishing Tourney? There's no entry fee if off-island vi…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:032', false)
-            elif EventFlowSystemActor.IsSharePlay(0):
-                # The Fishing Tourney rules are easy breezy. Everyone just has to catch as many fish as they can in <90:0:000e> minutes. Each fish caught nets points. …
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:161', false)
-                # Also, there's a cooler in the tent. Any fish you catch will automatically get stowed there. Keeps the pockets dry! That means as long as you've got a…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:162', false)
-                # Simple, right? And you can enter as many times as you like. So! You ready to dip your toes in the Fishing Tourney? It's your first run today as Leade…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:167', false)
-            else:
-                # The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. Every fish you catch nets you …
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:021', false)
-                # Simple, right? And you can enter as many times as you like. Whaddaya say? Ready to get your feet wet in the Fishing Tourney? The entry fee is waived …
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:023', false)
-        switch EventFlowSystemActor.GeneralTalkChoice4():
-            case 0:
-                run Check_EvQ_Entry()
-            case 1:
-                run TalkRule()
-            case 2:
-                run PointCheck()
-            case 3:
-                run EvQ_Entry_Cancel()
- 
+					System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
+					if EventFlowSystemActor.IsSharePlay(0):
+						# What is up, fishionista! The Fishing Tourney is ON! I'm C.J. and I'm your anchor for this once-a-season angler onslaught. So shine those hooks and ge…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:168', false)
+					else:
+						# Who's ready for some seasports? You, that's who! Nyuk nyuk! I'm here in front of, uh…just you right now…for the apex of seasports action, the Fishing…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:036', false)
+			if EventFlowSystemActor.NetHasVisitor():
+				# The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. Every fish you catch nets you …
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:022', false)
+				# Simple, right? And you can enter as many times as you like. OK, wanna get your feet wet in the Fishing Tourney? There's no entry fee if off-island vi…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:032', false)
+			elif EventFlowSystemActor.IsSharePlay(0):
+				# The Fishing Tourney rules are easy breezy. Everyone just has to catch as many fish as they can in <90:0:000e> minutes. Each fish caught nets points. …
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:161', false)
+				# Also, there's a cooler in the tent. Any fish you catch will automatically get stowed there. Keeps the pockets dry! That means as long as you've got a…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:162', false)
+				# Simple, right? And you can enter as many times as you like. So! You ready to dip your toes in the Fishing Tourney? It's your first run today as Leade…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:167', false)
+			else:
+				# The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. Every fish you catch nets you …
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:021', false)
+				# Simple, right? And you can enter as many times as you like. Whaddaya say? Ready to get your feet wet in the Fishing Tourney? The entry fee is waived …
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:023', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run Check_EvQ_Entry()
+			case 1:
+				run TalkRule()
+			case 2:
+				run PointCheck()
+			case 3:
+				run EvQ_Entry_Cancel()
+
 flow OpenEv_AfterQ():
-    # Yo, flyfisher?
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:035', false)
-    run Select_OpenEv_AfterQ()
- 
+	# Yo, flyfisher?
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:035', false)
+	run Select_OpenEv_AfterQ()
+
 flow OpenEv_BeforeQ():
-    run Event210()
- 
+	run Event210()
+
 flow OpenEv_BeforeQ_First():
-    run Event227()
- 
+	run Event227()
+
 flow OpenEv_SNPC_First():
-    run Event219()
- 
+	run Event219()
+
 flow PointCheck():
-    run SmartPhone_entry()
-    # Hmm… You've got <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073> in your pool, so…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:025', false)
-    MainNpc.SmartPhone(5)
-    if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-        # Sorry, but no. If you ain't got at least <90:1:0000> points, then you're not gettin' fish swag. You gotta earn it. Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:039', true)
-        MainNpc.SmartPhone(1)
-    else:
-        run PointExchange()
- 
+	run SmartPhone_entry()
+	# Hmm… You've got <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073> in your pool, so…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:025', false)
+	MainNpc.SmartPhone(5)
+	if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+		# Sorry, but no. If you ain't got at least <90:1:0000> points, then you're not gettin' fish swag. You gotta earn it. Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:039', true)
+		MainNpc.SmartPhone(1)
+	else:
+		run PointExchange()
+
 flow PointExCancel():
-    switch EventFlowSystemActor.EventCheck('FishingConvention'):
-        case 0, 1:
-            # No worries, I get it. Cruise on back anytime. The swag'll be here. Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:017', true)
-        case 2:
-            if EventFlowSystemActor.EnvHourCompare(20, -1, true, true) in (0, 1):
-                # It's all good. Just FYI, I'm sailin' off around <90:37:cd02> <110:21:cd02> if you change your mind. Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:018', true)
-            else:
-                run AfterEv_Always()
-        case 3:
-            run AfterEv_Always()
- 
+	switch EventFlowSystemActor.EventCheck('FishingConvention'):
+		case 0, 1:
+			# No worries, I get it. Cruise on back anytime. The swag'll be here. Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:017', true)
+		case 2:
+			if EventFlowSystemActor.EnvHourCompare(20, -1, true, true) in (0, 1):
+				# It's all good. Just FYI, I'm sailin' off around <90:37:cd02> <110:21:cd02> if you change your mind. Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:018', true)
+			else:
+				run AfterEv_Always()
+		case 3:
+			run AfterEv_Always()
+
 flow PointExchange():
-    # You got it, chum!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:011', false)
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # Oh… Y'know, I'd love to, but your pockets, they're kinda full. Go drop some cargo and we'll do this, OK?
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:010', true)
-        MainNpc.SmartPhone(1)
-    else:
-        MainNpc.SmartPhone(1)
-        System.EventFlags['cPlayer:CatchFishFesCount'] += -10
-        MainNpc.DecideEventReward('cTournamentFishing')
-        EventFlowSystemActor.SetMemoryEventPlayerReward('cBlancoEventPlayer:PE_CatchFishFes_Exchange')
-        MainNpc.SetDeliveryItem(1, false)
-        EventFlowSystemActor.PlayReport('cBeyPointExchange', 0)
-        MainNpc.SetEventRewardToPlayerBaggage('cFree')
-        MainNpc.SetItemName(1, 4, 0)
-        MainNpc.NpcDelivery(1, '"Default"')
-        # THERE'S a keeper! Your very own <125:4:0000>. Nyuk nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:012', false)
-        if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-            switch EventFlowSystemActor.EventCheck('FishingConvention'):
-                case 0:
-                    # Oh, hey, don't forget that the big Fishing Tourney starts at <90:37:cd00> <110:21:cd00>! It's gonna be a total lunker! Nyuk!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:013', true)
-                case 1:
-                    # The Fishing Tourney goes till <90:37:cd01> <110:21:cd01>! There's plenty of fish in the sea…and rivers and ponds too, so get castin'!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:014', true)
-                case 2, 3:
-                    run AfterEv_Always()
-            MainNpc.SmartPhone(1)
-        else:
-            EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:CatchFishFesCount')
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # Oh, and just so you know, you still got a bunch of points in your fishbowl, but… Well, your pockets are full. No big deal. Just go drop some cargo an…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:015', true)
-                MainNpc.SmartPhone(1)
-            else:
-                # Looks like you still got a few points on the line. Could I lure you into spendin' a few more? Nyuk!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:016', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run PointExchange()
-                else:
-                    run PointExCancel()
-                    MainNpc.SmartPhone(1)
- 
+	# You got it, chum!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:011', false)
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Oh… Y'know, I'd love to, but your pockets, they're kinda full. Go drop some cargo and we'll do this, OK?
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:010', true)
+		MainNpc.SmartPhone(1)
+	else:
+		MainNpc.SmartPhone(1)
+		System.EventFlags['cPlayer:CatchFishFesCount'] += -10
+		MainNpc.DecideEventReward('cTournamentFishing')
+		EventFlowSystemActor.SetMemoryEventPlayerReward('cBlancoEventPlayer:PE_CatchFishFes_Exchange')
+		MainNpc.SetDeliveryItem(1, false)
+		EventFlowSystemActor.PlayReport('cBeyPointExchange', 0)
+		MainNpc.SetEventRewardToPlayerBaggage('cFree')
+		MainNpc.SetItemName(1, 4, 0)
+		MainNpc.NpcDelivery(1, '"Default"')
+		# THERE'S a keeper! Your very own <125:4:0000>. Nyuk nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:012', false)
+		if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+			switch EventFlowSystemActor.EventCheck('FishingConvention'):
+				case 0:
+					# Oh, hey, don't forget that the big Fishing Tourney starts at <90:37:cd00> <110:21:cd00>! It's gonna be a total lunker! Nyuk!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:013', true)
+				case 1:
+					# The Fishing Tourney goes till <90:37:cd01> <110:21:cd01>! There's plenty of fish in the sea…and rivers and ponds too, so get castin'!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:014', true)
+				case 2, 3:
+					run AfterEv_Always()
+			MainNpc.SmartPhone(1)
+		else:
+			EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:CatchFishFesCount')
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Oh, and just so you know, you still got a bunch of points in your fishbowl, but… Well, your pockets are full. No big deal. Just go drop some cargo an…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:015', true)
+				MainNpc.SmartPhone(1)
+			else:
+				# Looks like you still got a few points on the line. Could I lure you into spendin' a few more? Nyuk!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:016', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run PointExchange()
+				else:
+					run PointExCancel()
+					MainNpc.SmartPhone(1)
+
 flow Quest_Result():
-    if EventFlowSystemActor.IsMyVillage():
-        System.EventFlags['cPlayer:BevQuestFinish'] = false
-        System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish'] = true
-        if System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
+	if EventFlowSystemActor.IsMyVillage():
+		System.EventFlags['cPlayer:BevQuestFinish'] = false
+		System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish'] = true
+		if System.EventFlags['cPlayer:BeyEvent_TalkFirst']:
 entrypoint Event151:
-            # Hey hey! There's my favorite angler! So how was it? Have fun? Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:141', false)
-            run Sub_grp_Event288()
-        else:
-            System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
-            if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
-                # Yo! What up! I'm C.J., and I'm here anchorin'…the FISHING TOURNEY! It's the apex of—hang on a sec. Didn't I see you anglin' up a storm earlier? Yeah,…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:152', false)
-                run Sub_grp_Event288()
-            else:
-                System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
-                run Sub_Event148()
-    else:
-        System.EventFlags['cPlayerVisit:DC_BevQuestFinish'] = false
-        System.EventFlags['cPlayerVisit:DC_BevTalkFirst_EvQuestFinish'] = true
-        if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
-            run Bey_AfterMinigame_Talk()
-        else:
-            System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
-            run Sub_Event148()
- 
+			# Hey hey! There's my favorite angler! So how was it? Have fun? Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:141', false)
+			run Sub_grp_Event288()
+		else:
+			System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
+			if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
+				# Yo! What up! I'm C.J., and I'm here anchorin'…the FISHING TOURNEY! It's the apex of—hang on a sec. Didn't I see you anglin' up a storm earlier? Yeah,…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:152', false)
+				run Sub_grp_Event288()
+			else:
+				System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
+				run Sub_Event148()
+	else:
+		System.EventFlags['cPlayerVisit:DC_BevQuestFinish'] = false
+		System.EventFlags['cPlayerVisit:DC_BevTalkFirst_EvQuestFinish'] = true
+		if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
+			run Bey_AfterMinigame_Talk()
+		else:
+			System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
+			run Sub_Event148()
+
 flow Result_Bonus_DC():
-    run Event294()
- 
+	run Event294()
+
 flow Result_CatchP():
-    run Event292()
- 
+	run Event292()
+
 flow Result_CatchP-Bonus_C():
-    run Event309()
- 
+	run Event309()
+
 flow Result_CatchP-Bonus_DC():
-    run Event310()
- 
+	run Event310()
+
 flow Result_CatchP-Bonus_DC-C():
-    run Event311()
- 
+	run Event311()
+
 flow Result_CatchPOver-Bonus_C():
-    run Event467()
- 
+	run Event467()
+
 flow Result_CatchPOver-Bonus_DC-C():
-    run Event428()
- 
+	run Event428()
+
 flow Result_NoPoint():
-    # Oh. They weren't bitin' for ya, huh…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:142', false)
-    MainNpc.SmartPhone(5)
-    # Once you net <90:1:0000> or more points, you can swap 'em for some slick fish swag. Give it a whirl!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:155', false)
-    if EventFlowSystemActor.NetHasVisitor():
-        # Hey, I don't know if I mentioned, but you get bonus points for wadin' into the tourney with off-island friends. 'Cause friends that sail together pre…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:143', false)
-    MainNpc.SmartPhone(4)
-    # Let's see how many points ya got.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:144', false)
-    MainNpc.SmartPhone(5)
-    if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-        if System.EventFlags['cPlayer:CatchFishFesCount'] != 0:
-            # Only <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>, huh? Hey, it's all good. Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:040', false)
-            run TalkNextSchedule()
-        else:
-            # <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>! Oh.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:041', false)
-            run TalkNextSchedule()
-    else:
-        if System.EventFlags['cPlayer:CatchFishFesCount'] != 10:
-            # <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>! Reel nice! Wanna swap <90:1:0000> points for…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:046', false)
-        else:
-            # Exactly <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>! Just enough for some fish swag.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:045', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run PointExchange()
-        else:
-            run PointExCancel()
-            MainNpc.SmartPhone(1)
- 
+	# Oh. They weren't bitin' for ya, huh…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:142', false)
+	MainNpc.SmartPhone(5)
+	# Once you net <90:1:0000> or more points, you can swap 'em for some slick fish swag. Give it a whirl!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:155', false)
+	if EventFlowSystemActor.NetHasVisitor():
+		# Hey, I don't know if I mentioned, but you get bonus points for wadin' into the tourney with off-island friends. 'Cause friends that sail together pre…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:143', false)
+	MainNpc.SmartPhone(4)
+	# Let's see how many points ya got.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:144', false)
+	MainNpc.SmartPhone(5)
+	if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+		if System.EventFlags['cPlayer:CatchFishFesCount'] != 0:
+			# Only <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>, huh? Hey, it's all good. Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:040', false)
+			run TalkNextSchedule()
+		else:
+			# <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>! Oh.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:041', false)
+			run TalkNextSchedule()
+	else:
+		if System.EventFlags['cPlayer:CatchFishFesCount'] != 10:
+			# <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>! Reel nice! Wanna swap <90:1:0000> points for…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:046', false)
+		else:
+			# Exactly <90:8:0001> <50:8:0100000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>! Just enough for some fish swag.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:045', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run PointExchange()
+		else:
+			run PointExCancel()
+			MainNpc.SmartPhone(1)
+
 flow Root():
-    run Tag_Num()
-    run Tag_SET_HOUR()
-    run Tag_SET_MONTH()
-    if System.EventFlags['cLandTemp:CatchFishFesQuestStart']:
-        System.EventFlags['cLandTemp:FesEnterBalloon'] = true
-        if EventFlowSystemActor.IsMyVillage():
-            if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
-                run Sub_grp_Event5()
-            else:
-                System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
-                System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
-                # Glad to meet a fellow fishionista, but right now is "Fishing Tourney" time, not "spout at C.J." time. Good luck!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:073', false)
-        elif MainNpc.ChmFreeQuery2('cChmQueryType_IsEntryQuestBey'):
-            if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
-                run Sub_grp_Event5()
-            else:
-                System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
-                # Glad to meet a fellow fishionista, but right now is "Fishing Tourney" time, not "spout at C.J." time. Good luck!
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:073', false)
-        elif System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # Huh! I wasn't sure I had what it took, but wow! This is goin' SUPER good. Like, it's just flowin'! Nyuk! Oh, hey! Guess I drifted for a sec… The late…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:112', false)
-                case 1:
-                    # I wanna bring the fishing hype to EVERYBODY. Young, old, frogs, cats, horses, gators, robots…everybody! That means you too, except uh… looks like it'…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:113', false)
-                case 2:
-                    # I see ya. You're hyped. You're ready. You've charted your course to Fishing Tourney glory. I love it. But hold your seahorses. The latest run's still…
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:114', false)
-        else:
-            System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
-            # What up, fishing fan! C.J. here, comin' at you live from, uh… r-right in front of you. Nyuk! You cruised in from off-island, right? Welcome to ISLAND…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:110', false)
-    elif EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayer:BevQuestFinish']:
-            run Quest_Result()
-        else:
-            run Sub_grp_Event254()
-    else:
-        if System.EventFlags['cPlayerVisit:DC_BevQuestFinish']:
-            run Quest_Result()
-        else:
-            run Sub_grp_Event254()
- 
+	run Tag_Num()
+	run Tag_SET_HOUR()
+	run Tag_SET_MONTH()
+	if System.EventFlags['cLandTemp:CatchFishFesQuestStart']:
+		System.EventFlags['cLandTemp:FesEnterBalloon'] = true
+		if EventFlowSystemActor.IsMyVillage():
+			if System.EventFlags['cPlayer:BeyDaily_TalkFirst']:
+				run Sub_grp_Event5()
+			else:
+				System.EventFlags['cPlayer:BeyDaily_TalkFirst'] = true
+				System.EventFlags['cPlayer:BeyEvent_TalkFirst'] = true
+				# Glad to meet a fellow fishionista, but right now is "Fishing Tourney" time, not "spout at C.J." time. Good luck!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:073', false)
+		elif MainNpc.ChmFreeQuery2('cChmQueryType_IsEntryQuestBey'):
+			if System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
+				run Sub_grp_Event5()
+			else:
+				System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
+				# Glad to meet a fellow fishionista, but right now is "Fishing Tourney" time, not "spout at C.J." time. Good luck!
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:073', false)
+		elif System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv']:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# Huh! I wasn't sure I had what it took, but wow! This is goin' SUPER good. Like, it's just flowin'! Nyuk! Oh, hey! Guess I drifted for a sec… The late…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:112', false)
+				case 1:
+					# I wanna bring the fishing hype to EVERYBODY. Young, old, frogs, cats, horses, gators, robots…everybody! That means you too, except uh… looks like it'…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:113', false)
+				case 2:
+					# I see ya. You're hyped. You're ready. You've charted your course to Fishing Tourney glory. I love it. But hold your seahorses. The latest run's still…
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:114', false)
+		else:
+			System.EventFlags['cPlayerVisit:DC_BevTalkFirst_BeforeEv'] = true
+			# What up, fishing fan! C.J. here, comin' at you live from, uh… r-right in front of you. Nyuk! You cruised in from off-island, right? Welcome to ISLAND…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:110', false)
+	elif EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayer:BevQuestFinish']:
+			run Quest_Result()
+		else:
+			run Sub_grp_Event254()
+	else:
+		if System.EventFlags['cPlayerVisit:DC_BevQuestFinish']:
+			run Quest_Result()
+		else:
+			run Sub_grp_Event254()
+
 flow Select_OpenEv_AfterQ():
-    # I am packed to the gills with Fishing Tourney knowledge. Ask me almost anything!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:047', false)
-    switch EventFlowSystemActor.GeneralTalkChoice4():
-        case 0:
-            run Check_EvQ_Entry()
-        case 1:
-            run TalkRule()
-        case 2:
-            # Somethin' else like…OH! Have I told you about my livestream and needin' fresh fish to gush over? Nyuk! If you got fish to sell, I wanna pay too much …
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:049', false)
-            switch EventFlowSystemActor.GeneralTalkChoice4():
-                case 0:
-                    run SellFish()
-                case 1:
-                    run PointCheck()
-                case 2:
-                    run Select_OpenEv_AfterQ()
-                case 3:
-                    # Oh, uh…OK, then! Glad I could…not help. Well, I'm here till <90:37:cd02> <110:21:cd02> today if you get a brain wave! Nyuk nyuk!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:048', false)
-        case 3:
-            # Oh, uh…OK, then! Glad I could…not help. Well, I'm here till <90:37:cd02> <110:21:cd02> today if you get a brain wave! Nyuk nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:048', false)
- 
+	# I am packed to the gills with Fishing Tourney knowledge. Ask me almost anything!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:047', false)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			run Check_EvQ_Entry()
+		case 1:
+			run TalkRule()
+		case 2:
+			# Somethin' else like…OH! Have I told you about my livestream and needin' fresh fish to gush over? Nyuk! If you got fish to sell, I wanna pay too much …
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:049', false)
+			switch EventFlowSystemActor.GeneralTalkChoice4():
+				case 0:
+					run SellFish()
+				case 1:
+					run PointCheck()
+				case 2:
+					run Select_OpenEv_AfterQ()
+				case 3:
+					# Oh, uh…OK, then! Glad I could…not help. Well, I'm here till <90:37:cd02> <110:21:cd02> today if you get a brain wave! Nyuk nyuk!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:048', false)
+		case 3:
+			# Oh, uh…OK, then! Glad I could…not help. Well, I'm here till <90:37:cd02> <110:21:cd02> today if you get a brain wave! Nyuk nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:048', false)
+
 flow SellBOX(SellTotal: int = 0):
-    # Yo yo yo! Had a look in your cooler lately? If you've got fish in there to sell, then I wanna buy. Nyuk!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:120', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            MainNpc.InsectFishBoxSellCalc(SellTotal, 1.5)
-            EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 5, SellTotal, '')
-            EventFlowSystemActor.SetTagFromSystem('cInsectFishBoxNum', 'cDegit', 6, SellTotal, '')
-            # Empty your cooler. Got it!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:134', false)
-            run SmartPhone_entry()
-            # OK, let's see… There's <90:1:0006> fish in the cooler. Add 'em up, carry the <90:0:0100>…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:135', false)
-            MainNpc.SmartPhone(1)
-            # How's <90:26:0005> sound? That hook you?
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:123', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                EventFlowSystemActor.UIMoneyAppear()
-                switch EventFlowSystemActor.MoneyCapacity(SellTotal, 'cFishInsectFes'):
-                    case 0:
-                        MainNpc.InsectFishBoxSellDone(1.5)
-                        # What a haul! Thanks!
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:125', false)
-                    case 1:
-                        MainNpc.InsectFishBoxSellDone(1.5)
-                        # You got it! Uh, hang on…you been chasin' treasure maps or something? Your hold's too full for more Bells. No big. I got a few pouches here. I'll just…
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:126', false)
-                    case 2:
-                        # You got it! Eh, wait. Hang on…you been lootin' galleons or something? Your hold's too full for more Bells. No big. I'll just wire it to your account.
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:124', false)
-                        MainNpc.InsectFishBoxSellDone(1.5)
-                switch EventFlowSystemActor.EventCheck('FishingConvention'):
-                    case 0, 1:
-                        # Also, I'll make sure the cooler's clear if you wanna surf the tourney again. Nyuk nyuk!
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:127', false)
-                    case 2:
-                        if EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
-                            # Anywave, the next Fishing Tourney sets sail in <90:35:cd00>. Hope I catch you there! Nyuk!
-                            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:128', false)
-                        else:
-                            # Oh yeah! The next Fishing Tourney embarks in <90:35:cd00> of next year. Hope I catch you there! Nyuk!
-                            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:129', false)
-                    case 3:
-                        run TalkAfterEvent()
-            else:
-                run SellBoxCancel()
-        case 1:
-            # Oh! The cooler stows all the fish you catch during the tourney. It's over in the tent if you wanna see.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:130', true)
-        case 2:
+	# Yo yo yo! Had a look in your cooler lately? If you've got fish in there to sell, then I wanna buy. Nyuk!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:120', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			MainNpc.InsectFishBoxSellCalc(SellTotal, 1.5)
+			EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 5, SellTotal, '')
+			EventFlowSystemActor.SetTagFromSystem('cInsectFishBoxNum', 'cDegit', 6, SellTotal, '')
+			# Empty your cooler. Got it!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:134', false)
+			run SmartPhone_entry()
+			# OK, let's see… There's <90:1:0006> fish in the cooler. Add 'em up, carry the <90:0:0100>…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:135', false)
+			MainNpc.SmartPhone(1)
+			# How's <90:26:0005> sound? That hook you?
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:123', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.UIMoneyAppear()
+				switch EventFlowSystemActor.MoneyCapacity(SellTotal, 'cFishInsectFes'):
+					case 0:
+MainNpc.InsectFishBoxSellDone(1.5)
+						# What a haul! Thanks!
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:125', false)
+					case 1:
+MainNpc.InsectFishBoxSellDone(1.5)
+						# You got it! Uh, hang on…you been chasin' treasure maps or something? Your hold's too full for more Bells. No big. I got a few pouches here. I'll just…
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:126', false)
+					case 2:
+						# You got it! Eh, wait. Hang on…you been lootin' galleons or something? Your hold's too full for more Bells. No big. I'll just wire it to your account.
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:124', false)
+MainNpc.InsectFishBoxSellDone(1.5)
+				switch EventFlowSystemActor.EventCheck('FishingConvention'):
+					case 0, 1:
+						# Also, I'll make sure the cooler's clear if you wanna surf the tourney again. Nyuk nyuk!
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:127', false)
+					case 2:
+						if EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
+							# Anywave, the next Fishing Tourney sets sail in <90:35:cd00>. Hope I catch you there! Nyuk!
+							MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:128', false)
+						else:
+							# Oh yeah! The next Fishing Tourney embarks in <90:35:cd00> of next year. Hope I catch you there! Nyuk!
+							MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:129', false)
+					case 3:
+ run TalkAfterEvent()
+			else:
+				run SellBoxCancel()
+		case 1:
+			# Oh! The cooler stows all the fish you catch during the tourney. It's over in the tent if you wanna see.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:130', true)
+		case 2:
 entrypoint Event114:
-            switch EventFlowSystemActor.EventCheck('FishingConvention'):
-                case 0:
-                    # Oh! The cooler stows all the fish you catch during the tourney. It's over in the tent if you wanna see.
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:130', true)
-                case 1:
-                    # No prob! By the way, I can't ship the next tourney round until the cooler's empty. Rules're rules. Nyuk!
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:131', true)
-                case 2:
-                    if EventFlowSystemActor.EnvHourCompare(20, -1, true, true) == 0:
-                        # Sounds good! I'm moored here till <90:37:cd02> <110:21:cd02> if you got anything in there you wanna sell. Nyuk!
-                        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:132', true)
-                    else:
-                        if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) == 0:
-                            # Sure. I'll be cleanin' out the cooler at <90:37:cd03> <110:21:cd03> tomorrow, so fish out your fish before then. Nyuk!
-                            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:133', true)
-                        else:
-                            run AfterEv_Always()
-                case 3:
-                    run AfterEv_Always()
- 
+			switch EventFlowSystemActor.EventCheck('FishingConvention'):
+				case 0:
+					# Oh! The cooler stows all the fish you catch during the tourney. It's over in the tent if you wanna see.
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:130', true)
+				case 1:
+					# No prob! By the way, I can't ship the next tourney round until the cooler's empty. Rules're rules. Nyuk!
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:131', true)
+				case 2:
+					if EventFlowSystemActor.EnvHourCompare(20, -1, true, true) == 0:
+						# Sounds good! I'm moored here till <90:37:cd02> <110:21:cd02> if you got anything in there you wanna sell. Nyuk!
+						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:132', true)
+					else:
+						if EventFlowSystemActor.EnvHourCompare(0, -1, true, true) == 0:
+							# Sure. I'll be cleanin' out the cooler at <90:37:cd03> <110:21:cd03> tomorrow, so fish out your fish before then. Nyuk!
+							MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:133', true)
+						else:
+	run AfterEv_Always()
+				case 3:
+					run AfterEv_Always()
+
 flow SellBoxCancel():
-    run Event114()
- 
+	run Event114()
+
 flow SellFish(SellTotal: int = 0):
-    if EventFlowSystemActor.HasKindItem('cKind', 'Fish', ''):
-        # Fintastic! What're you sellin'?
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:050', false)
-        EventFlowSystemActor.UIItemSelectWindowHandling('cFishSell', 65534, 'Fish', '', 'cItemSelect', false)
-        if EventFlowSystemActor.UIResultMenuDecide():
-            MainNpc.SetDeliveryItem(4, false)
-            MainNpc.NpcDelivery(0, 'Keep')
-            MainNpc.ShopSellCalc(SellTotal, 1.5, true, false)
-            EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 3, SellTotal, '""')
-            if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
-                # Spillin' a whole school, huh? All together that's…<90:26:0003>. How's that sound?
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:051', true)
-                run Sub_Event43(SellTotal=SellTotal)
-            else:
-                if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
-                    EventFlowSystemActor.SetTagFromUIResult('cItemName', 1)
-                    # [A|An]<125:0:0001>! Reel nice! How 'bout…<90:26:0003> for your <125:0:0001>. Sound good?
-                    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:052', true)
-                    run Sub_Event43(SellTotal=SellTotal)
-                else:
-                    run Sub_Event448(SellTotal=SellTotal)
-        else:
-            run SellFish_Cancel()
-    else:
-        # Uh… What fish? Hang on, you're trawling me, right? Ha ha ha! That's pretty good. Anywave, I can't buy what you don't have. No big, though. Just drift…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:056', true)
- 
+	if EventFlowSystemActor.HasKindItem('cKind', 'Fish', ''):
+		# Fintastic! What're you sellin'?
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:050', false)
+		EventFlowSystemActor.UIItemSelectWindowHandling('cFishSell', 65534, 'Fish', '', 'cItemSelect', false)
+		if EventFlowSystemActor.UIResultMenuDecide():
+			MainNpc.SetDeliveryItem(4, false)
+			MainNpc.NpcDelivery(0, 'Keep')
+			MainNpc.ShopSellCalc(SellTotal, 1.5, true, false)
+			EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 3, SellTotal, '""')
+			if EventFlowSystemActor.UIResultItemWindowNumCheck(2, 'cItemSelect'):
+				# Spillin' a whole school, huh? All together that's…<90:26:0003>. How's that sound?
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:051', true)
+				run Sub_Event43(SellTotal=SellTotal)
+			else:
+				if EventFlowSystemActor.UIResultItemWindowNumCheck(1, 'cItemSelect'):
+					EventFlowSystemActor.SetTagFromUIResult('cItemName', 1)
+					# [A|An]<125:0:0001>! Reel nice! How 'bout…<90:26:0003> for your <125:0:0001>. Sound good?
+					MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:052', true)
+					run Sub_Event43(SellTotal=SellTotal)
+				else:
+					run Sub_Event448(SellTotal=SellTotal)
+		else:
+			run SellFish_Cancel()
+	else:
+		# Uh… What fish? Hang on, you're trawling me, right? Ha ha ha! That's pretty good. Anywave, I can't buy what you don't have. No big, though. Just drift…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:056', true)
+
 flow SellFish_Cancel():
-    # Oh. Well, you're the navigator. Nyuk!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:057', true)
- 
+	# Oh. Well, you're the navigator. Nyuk!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:057', true)
+
 flow SmartPhone_ResultCatchPOver():
-    # Alright. Looks like there were… <90:1:0008> fish bathing in the cooler. You got a reel angle on anglin'. Nice!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:156', false)
-    MainNpc.SmartPhone(5)
-    # Oh, hey. The cooler can tilt if you stick over 20 fish in there. I didn't want it capsizin', so I took a few out. Don't worry. I shipped 'em off to a…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:156_01', false)
-    MainNpc.SmartPhone(4)
- 
+	# Alright. Looks like there were… <90:1:0008> fish bathing in the cooler. You got a reel angle on anglin'. Nice!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:156', false)
+	MainNpc.SmartPhone(5)
+	# Oh, hey. The cooler can tilt if you stick over 20 fish in there. I didn't want it capsizin', so I took a few out. Don't worry. I shipped 'em off to a…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:156_01', false)
+	MainNpc.SmartPhone(4)
+
 flow SmartPhone_TotalPoint():
-    MainNpc.SmartPhone(5)
-    # Ahem! Way to make waves. I've got something special for surgin' to such a high-water mark. I fathom you'll like it. Keep an eye on the mail.
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:207', false)
- 
+	MainNpc.SmartPhone(5)
+	# Ahem! Way to make waves. I've got something special for surgin' to such a high-water mark. I fathom you'll like it. Keep an eye on the mail.
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:207', false)
+
 flow SmartPhone_entry():
-    MainNpc.SmartPhone(0)
-    MainNpc.SmartPhone(4)
- 
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+
 local flow Sub_Event148():
-    # Who's ready for some seasports? You, that's who! Nyuk nyuk! Yo, I'm C.J. and I'm anchorin'…the FISHING TOURNEY! It's the apex of seasports ac—hang on…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:140', false)
-    run Sub_grp_Event288()
- 
+	# Who's ready for some seasports? You, that's who! Nyuk nyuk! Yo, I'm C.J. and I'm anchorin'…the FISHING TOURNEY! It's the apex of seasports ac—hang on…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:140', false)
+	run Sub_grp_Event288()
+
 local flow Sub_Event354():
-    if EventFlowSystemActor.IsSharePlay(0):
-        # Alright, I'm gonna spray <90:0:000e> minutes on the clock for everyone to catch as many fish as they can. No matter who catches 'em, the fish'll flop…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:163', true)
-        run Sub_Event95()
-    else:
-        # Alright, I'm gonna spray <90:0:000e> minutes on the clock for you to catch as many fish as you can. Oh! And there's also a bonus that'll backstroke i…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:063', true)
-        run Sub_Event95()
- 
+	if EventFlowSystemActor.IsSharePlay(0):
+		# Alright, I'm gonna spray <90:0:000e> minutes on the clock for everyone to catch as many fish as they can. No matter who catches 'em, the fish'll flop…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:163', true)
+		run Sub_Event95()
+	else:
+		# Alright, I'm gonna spray <90:0:000e> minutes on the clock for you to catch as many fish as you can. Oh! And there's also a bonus that'll backstroke i…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:063', true)
+		run Sub_Event95()
+
 local flow Sub_Event364():
-    System.EventFlags['cPlayer:BeyEvent_TalkTrophySilver'] = true
-    if System.EventFlags['cPlayer:BeyEvent_TalkTrophyCopper']:
-        run GetPoint_next()
-    else:
-        run Sub_Event396()
- 
+	System.EventFlags['cPlayer:BeyEvent_TalkTrophySilver'] = true
+	if System.EventFlags['cPlayer:BeyEvent_TalkTrophyCopper']:
+		run GetPoint_next()
+	else:
+		run Sub_Event396()
+
 local flow Sub_Event396():
-    System.EventFlags['cPlayer:BeyEvent_TalkTrophyCopper'] = true
-    run GetPoint_next()
- 
+	System.EventFlags['cPlayer:BeyEvent_TalkTrophyCopper'] = true
+	run GetPoint_next()
+
 local flow Sub_Event411():
-    MainNpc.SmartPhone(5)
-    # SPLASH! That's <90:2:0007> <50:8:0700000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:153', false)
-    MainNpc.NpcStartAS('BeyTakePictures', false, false)
-    # I am SO hyped!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:154', false)
-    run Check_TotalPoint()
- 
+	MainNpc.SmartPhone(5)
+	# SPLASH! That's <90:2:0007> <50:8:0700000c0070006f0069006e00740073000a0070006f0069006e0074000c0070006f0069006e00740073>!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:153', false)
+	MainNpc.NpcStartAS('BeyTakePictures', false, false)
+	# I am SO hyped!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:154', false)
+	run Check_TotalPoint()
+
 local flow Sub_Event43(SellTotal: int):
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        EventFlowSystemActor.UIMoneyAppear()
-        MainNpc.NpcDelivery(7, 'Default')
-        MainNpc.ShopSellDone(1.5, false)
-        EventFlowSystemActor.UIMoneyDisappear()
-        # SPLASH! Now you're swimmin' in Bells. Paddle back if you catch anythin' else to sell! Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:053', false)
-    else:
-        run Sub_Event448(SellTotal=SellTotal)
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		EventFlowSystemActor.UIMoneyAppear()
+		MainNpc.NpcDelivery(7, 'Default')
+		MainNpc.ShopSellDone(1.5, false)
+		EventFlowSystemActor.UIMoneyDisappear()
+		# SPLASH! Now you're swimmin' in Bells. Paddle back if you catch anythin' else to sell! Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:053', false)
+	else:
+		run Sub_Event448(SellTotal=SellTotal)
+
 local flow Sub_Event448(SellTotal: int):
-    run SellFish_Cancel()
-    MainNpc.NpcDelivery(10, 'Default')
- 
+	run SellFish_Cancel()
+	MainNpc.NpcDelivery(10, 'Default')
+
 local flow Sub_Event74():
-    run SmartPhone_entry()
-    if not EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayerVisit:DC_CatchFishFes_CooperativeBonus']:
-            run Result_Bonus_DC()
-        else:
-            run Result_NoPoint()
-    elif System.EventFlags['cPlayer:CatchFishFes_CooperativeBonus']:
+	run SmartPhone_entry()
+	if not EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayerVisit:DC_CatchFishFes_CooperativeBonus']:
+			run Result_Bonus_DC()
+		else:
+			run Result_NoPoint()
+	elif System.EventFlags['cPlayer:CatchFishFes_CooperativeBonus']:
 entrypoint Event294:
-        # Oh! Weren't nibblin' for ya, eh? OK, so it looks like the total haul for everyone was…<90:1:0009> fish, with a co-op bonus wadin' in at <90:1:000a> o…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:145', false)
-        run Sub_Event411()
-    else:
-        run Result_NoPoint()
- 
+		# Oh! Weren't nibblin' for ya, eh? OK, so it looks like the total haul for everyone was…<90:1:0009> fish, with a co-op bonus wadin' in at <90:1:000a> o…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:145', false)
+		run Sub_Event411()
+	else:
+		run Result_NoPoint()
+
 local flow Sub_Event95():
-    MainNpc.MessageSuspend()
-    System.EventFlags['cLand:CatchFishFesGetTotalNum'] = 0
-    System.EventFlags['cLandTemp:CatchFishFesQuestStart'] = true
-    System.EventFlags['cLandTemp:FesEnterBalloon'] = false
-    MainNpc.ChmFreeAction('cChmActionType_FishFesEntry')
-    if EventFlowSystemActor.IsSharePlay(0):
-        EventFlowSystemActor.SetSharePlayChangeCondition(true)
-    MainNpc.ChmFreeAction('cChmActionType_FishFesStart')
-    EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_CatchFishFes_Join')
- 
+	MainNpc.MessageSuspend()
+	System.EventFlags['cLand:CatchFishFesGetTotalNum'] = 0
+	System.EventFlags['cLandTemp:CatchFishFesQuestStart'] = true
+	System.EventFlags['cLandTemp:FesEnterBalloon'] = false
+	MainNpc.ChmFreeAction('cChmActionType_FishFesEntry')
+	if EventFlowSystemActor.IsSharePlay(0):
+		EventFlowSystemActor.SetSharePlayChangeCondition(true)
+	MainNpc.ChmFreeAction('cChmActionType_FishFesStart')
+	EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_CatchFishFes_Join')
+
 local flow Sub_Event97():
-    # Aye aye!
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:065', false)
-    if EventFlowSystemActor.NetHasVisitor():
-        run EvQ_Start()
-    else:
-        run Sub_Event354()
- 
+	# Aye aye!
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:065', false)
+	if EventFlowSystemActor.NetHasVisitor():
+		run EvQ_Start()
+	else:
+		run Sub_Event354()
+
 local flow Sub_grp_Event254():
-    if EventFlowSystemActor.InsectFishBoxIsEmpty():
-        run SellBOX()
-    else:
-        switch EventFlowSystemActor.EventCheck('FishingConvention'):
-            case 0:
-                run BeforeEv()
-            case 1:
-                System.EventFlags['cLandTemp:NNPC_CatchFishFesAction_Continue'] = true
-                run OpenEv()
-                System.EventFlags['cLandTemp:NNPC_CatchFishFesAction_Continue'] = false
-            case 2, 3:
-                run AfterEv()
- 
+	if EventFlowSystemActor.InsectFishBoxIsEmpty():
+		run SellBOX()
+	else:
+		switch EventFlowSystemActor.EventCheck('FishingConvention'):
+			case 0:
+				run BeforeEv()
+			case 1:
+				System.EventFlags['cLandTemp:NNPC_CatchFishFesAction_Continue'] = true
+				run OpenEv()
+				System.EventFlags['cLandTemp:NNPC_CatchFishFesAction_Continue'] = false
+			case 2, 3:
+				run AfterEv()
+
 local flow Sub_grp_Event264():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run PointCheck()
-    elif EventFlowSystemActor.EnvHourCompare(20, -1, true, true) == 0:
-        # Cool! Always happy to meet a fellow fishionista. I'll be moored here till <90:37:cd02> <110:21:cd02> if you need somethin'.
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:092', false)
-    else:
-        run AfterEv_Always()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run PointCheck()
+	elif EventFlowSystemActor.EnvHourCompare(20, -1, true, true) == 0:
+		# Cool! Always happy to meet a fellow fishionista. I'll be moored here till <90:37:cd02> <110:21:cd02> if you need somethin'.
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:092', false)
+	else:
+		run AfterEv_Always()
+
 local flow Sub_grp_Event288():
-    if EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayer:BeyEvent_ResultGetFish'] < 1:
-            run Sub_Event74()
-        else:
-            run Sub_grp_Event356()
-    else:
-        if System.EventFlags['cPlayerTemp:CatchFishFesGetNum'] < 1:
-            run Sub_Event74()
-        else:
-            run Sub_grp_Event356()
- 
+	if EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayer:BeyEvent_ResultGetFish'] < 1:
+			run Sub_Event74()
+		else:
+			run Sub_grp_Event356()
+	else:
+		if System.EventFlags['cPlayerTemp:CatchFishFesGetNum'] < 1:
+			run Sub_Event74()
+		else:
+			run Sub_grp_Event356()
+
 local flow Sub_grp_Event344():
-    if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
-        # Whew! Another <110:17>, another Fishing Tourney in the creel! Can't wait for the next one!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:170_01', false)
-    else:
-        # What up, fishionista? C.J. here and… WOW am I wrung out from anchorin' today's Fishing Tourney. I gotta be honest, I don't remember if I saw you out …
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:170', false)
-        run Sub_grp_Event264()
- 
+	if System.EventFlags['cPlayer:CatchFishFesCount'] < 10:
+		# Whew! Another <110:17>, another Fishing Tourney in the creel! Can't wait for the next one!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:170_01', false)
+	else:
+		# What up, fishionista? C.J. here and… WOW am I wrung out from anchorin' today's Fishing Tourney. I gotta be honest, I don't remember if I saw you out …
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:170', false)
+		run Sub_grp_Event264()
+
 local flow Sub_grp_Event356():
-    if EventFlowSystemActor.IsSharePlay(0):
-        # The fish that everyone caught are all partyin' in the cooler. You can sort out the keepers later. Or if nobody wants 'em, I'll buy 'em. I need fresh …
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:160', false)
-    else:
-        # The fish you caught are all partyin' in the cooler. You can fetch 'em later. Or if you don't want 'em, I'll buy 'em. I need fresh fish for my livestr…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:146', false)
-    run SmartPhone_entry()
-    if EventFlowSystemActor.IsMyVillage():
-        if System.EventFlags['cPlayer:CatchFishFes_CooperativeBonus']:
-            if not System.EventFlags['cPlayer:CatchFishFes_Bonus']:
+	if EventFlowSystemActor.IsSharePlay(0):
+		# The fish that everyone caught are all partyin' in the cooler. You can sort out the keepers later. Or if nobody wants 'em, I'll buy 'em. I need fresh …
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:160', false)
+	else:
+		# The fish you caught are all partyin' in the cooler. You can fetch 'em later. Or if you don't want 'em, I'll buy 'em. I need fresh fish for my livestr…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:146', false)
+	run SmartPhone_entry()
+	if EventFlowSystemActor.IsMyVillage():
+		if System.EventFlags['cPlayer:CatchFishFes_CooperativeBonus']:
+			if not System.EventFlags['cPlayer:CatchFishFes_Bonus']:
 entrypoint Event310:
-                # OK, so it looks like the total haul for everyone was…<90:1:0009> fish, with a co-op bonus wadin' in at <90:1:000a> or more fish. Also, you brought in…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:149', false)
-                run Sub_Event411()
-            elif System.EventFlags['cPlayer:BeyEvent_ResultGetFish'] < 21:
+				# OK, so it looks like the total haul for everyone was…<90:1:0009> fish, with a co-op bonus wadin' in at <90:1:000a> or more fish. Also, you brought in…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:149', false)
+				run Sub_Event411()
+			elif System.EventFlags['cPlayer:BeyEvent_ResultGetFish'] < 21:
 entrypoint Event311:
-                # Alright, it looks like the total haul for everyone was…<90:2:0009> fish, with a co-op bonus wadin' in at <90:1:000a> or more fish. And YOU caught <90…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:150', false)
-                run Sub_Event411()
-            else:
+				# Alright, it looks like the total haul for everyone was…<90:2:0009> fish, with a co-op bonus wadin' in at <90:1:000a> or more fish. And YOU caught <90…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:150', false)
+				run Sub_Event411()
+			else:
 entrypoint Event428:
-                run SmartPhone_ResultCatchPOver()
-                # Anywave! On top of the standard <90:1:0008> points you earned, you'll also get a bonus for catchin' <90:1:0004> or more fish! Oh, and the total haul …
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:157', false)
-                run Sub_Event411()
-        elif not System.EventFlags['cPlayer:CatchFishFes_Bonus']:
+				run SmartPhone_ResultCatchPOver()
+				# Anywave! On top of the standard <90:1:0008> points you earned, you'll also get a bonus for catchin' <90:1:0004> or more fish! Oh, and the total haul …
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:157', false)
+				run Sub_Event411()
+		elif not System.EventFlags['cPlayer:CatchFishFes_Bonus']:
 entrypoint Event292:
-            # Looks like you stowed <90:1:0008> fish in the cooler.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:147', false)
-            run Sub_Event411()
-        elif System.EventFlags['cPlayer:BeyEvent_ResultGetFish'] < 21:
+			# Looks like you stowed <90:1:0008> fish in the cooler.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:147', false)
+			run Sub_Event411()
+		elif System.EventFlags['cPlayer:BeyEvent_ResultGetFish'] < 21:
 entrypoint Event309:
-            # Looks like you stowed <90:1:0008> fish in the cooler. Oh! With a solo bonus wading in at <90:1:0004> or more fish.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:148', false)
-            run Sub_Event411()
-        else:
+			# Looks like you stowed <90:1:0008> fish in the cooler. Oh! With a solo bonus wading in at <90:1:0004> or more fish.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:148', false)
+			run Sub_Event411()
+		else:
 entrypoint Event467:
-            run SmartPhone_ResultCatchPOver()
-            # Anywave! On top of the standard <90:1:0008> points you earned, you'll also get a bonus for haulin' in <90:1:0004> or more fish!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:158', false)
-            run Sub_Event411()
-    else:
-        if not System.EventFlags['cPlayerVisit:DC_CatchFishFes_CooperativeBonus']:
-            if System.EventFlags['cPlayerVisit:DC_CatchFishFes_Bonus']:
-                run Result_CatchP-Bonus_C()
-            else:
-                run Result_CatchP()
-        elif not System.EventFlags['cPlayerVisit:DC_CatchFishFes_Bonus']:
-            run Result_CatchP-Bonus_DC()
-        elif System.EventFlags['cPlayerTemp:CatchFishFesGetNum'] < 21:
-            run Result_CatchP-Bonus_DC-C()
-        else:
-            run Result_CatchPOver-Bonus_DC-C()
- 
+			run SmartPhone_ResultCatchPOver()
+			# Anywave! On top of the standard <90:1:0008> points you earned, you'll also get a bonus for haulin' in <90:1:0004> or more fish!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:158', false)
+			run Sub_Event411()
+	else:
+		if not System.EventFlags['cPlayerVisit:DC_CatchFishFes_CooperativeBonus']:
+			if System.EventFlags['cPlayerVisit:DC_CatchFishFes_Bonus']:
+				run Result_CatchP-Bonus_C()
+			else:
+				run Result_CatchP()
+		elif not System.EventFlags['cPlayerVisit:DC_CatchFishFes_Bonus']:
+			run Result_CatchP-Bonus_DC()
+		elif System.EventFlags['cPlayerTemp:CatchFishFesGetNum'] < 21:
+			run Result_CatchP-Bonus_DC-C()
+		else:
+			run Result_CatchPOver-Bonus_DC-C()
+
 local flow Sub_grp_Event437():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run PointExchange()
-    else:
-        run PointExCancel()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run PointExchange()
+	else:
+		run PointExCancel()
+
 local flow Sub_grp_Event5():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # Come on, flyfisher! You got a tourney to quench! Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:070', true)
-        case 1:
-            # What're you babblin' at me for? Go catch somethin'! Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:071', true)
-        case 2:
-            # Those fish ain't gonna catch themselves! Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:072', true)
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Come on, flyfisher! You got a tourney to quench! Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:070', true)
+		case 1:
+			# What're you babblin' at me for? Go catch somethin'! Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:071', true)
+		case 2:
+			# Those fish ain't gonna catch themselves! Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:072', true)
+
 flow Tag_Num():
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 10, '')
-    EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:CatchFishFesCount')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 2, 500, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 4, 3, '')
-    if EventFlowSystemActor.IsMyVillage():
-        EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 7, 0, 'cPlayer:BeyEvent_ResultGetPoint')
-        EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 8, 0, 'cPlayer:BeyEvent_ResultGetFish')
-    else:
-        EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 7, 0, 'cPlayerTemp:CatchFesGetPoint')
-        EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 8, 0, 'cPlayerTemp:CatchFishFesGetNum')
-    EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 9, 0, 'cLand:CatchFishFesGetTotalNum')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 10, 5, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 11, 300, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 12, 200, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 13, 100, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 14, 3, '')
- 
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 10, '')
+	EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 1, 0, 'cPlayer:CatchFishFesCount')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 2, 500, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 4, 3, '')
+	if EventFlowSystemActor.IsMyVillage():
+		EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 7, 0, 'cPlayer:BeyEvent_ResultGetPoint')
+		EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 8, 0, 'cPlayer:BeyEvent_ResultGetFish')
+	else:
+		EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 7, 0, 'cPlayerTemp:CatchFesGetPoint')
+		EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 8, 0, 'cPlayerTemp:CatchFishFesGetNum')
+	EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 9, 0, 'cLand:CatchFishFesGetTotalNum')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 10, 5, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 11, 300, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 12, 200, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 13, 100, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 14, 3, '')
+
 flow Tag_SET_HOUR():
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 0, 9, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 1, 18, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 2, 20, '')
-    EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 3, 5, '')
- 
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 0, 9, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 1, 18, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 2, 20, '')
+	EventFlowSystemActor.SetTagFromSystem('cFlow', 'cHour', 3, 5, '')
+
 flow Tag_SET_MONTH():
-    EventFlowSystemActor.SetTagFromSystem('cNextFishingEvent', 'cDegit', 0, 0, '')
- 
+	EventFlowSystemActor.SetTagFromSystem('cNextFishingEvent', 'cDegit', 0, 0, '')
+
 flow TalkAfterEvent():
-    # That was some serious seasports. You could feel the tension creepin' in like a tide! Nyuk nyuk! Well, another <110:17>, another Fishing Tourney in th…
-    MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:103', false)
- 
+	# That was some serious seasports. You could feel the tension creepin' in like a tide! Nyuk nyuk! Well, another <110:17>, another Fishing Tourney in th…
+	MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:103', false)
+
 flow TalkNextSchedule():
-    if EventFlowSystemActor.EnvHourCompare(18, -1, true, true) == 0:
-        # You can cast yourself out there as many times as you wanna. The tourney's on till <90:37:cd01> <110:21:cd01>. Nyuk!
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:042', true)
-    else:
-        if EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
-            # OK, I wanna see you reelin' in the points at the next Fishing Tourney when it makes landfall in <90:35:cd00>.
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:044', true)
-        else:
-            # OK, the next Fishing Tourney comes ashore in <90:35:cd00> of next year. I'd better catch you there! Nyuk!
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:043', true)
-    MainNpc.SmartPhone(1)
- 
+	if EventFlowSystemActor.EnvHourCompare(18, -1, true, true) == 0:
+		# You can cast yourself out there as many times as you wanna. The tourney's on till <90:37:cd01> <110:21:cd01>. Nyuk!
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:042', true)
+	else:
+		if EventFlowSystemActor.EnvMonth() in (`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`):
+			# OK, I wanna see you reelin' in the points at the next Fishing Tourney when it makes landfall in <90:35:cd00>.
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:044', true)
+		else:
+			# OK, the next Fishing Tourney comes ashore in <90:35:cd00> of next year. I'd better catch you there! Nyuk!
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:043', true)
+	MainNpc.SmartPhone(1)
+
 flow TalkRule():
-    if EventFlowSystemActor.NetHasVisitor():
-        # You got it, chum. Nyuk nyuk! The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. E…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:038', false)
-        # Also, there's a cooler in the tent. Any fish you catch will automatically get stowed there. Keeps the pockets dry! That means as long as you've got a…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:028', false)
-    else:
-        # Sure. Nyuk nyuk! The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. Every fish yo…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:027', false)
-        if EventFlowSystemActor.IsSharePlay(0):
-            # If you tugged in some friends, you gotta pick a Team Leader, 'cause ONLY the Leader can earn points. And it doesn't matter who catches what. Every fi…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:164', false)
-        else:
-            # Also, there's a cooler in the tent. Any fish you catch will automatically get stowed there. Keeps the pockets dry! That means as long as you've got a…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:028', false)
-    if EventFlowSystemActor.NetHasVisitor():
-        # Simple, right? And you can enter as many times as you like. OK, wanna get your feet wet in the Fishing Tourney? There's no entry fee if off-island vi…
-        MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:033', false)
-    else:
-        if System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish']:
-            if EventFlowSystemActor.IsSharePlay(0):
-                # Simple, right? And you can enter as many times as you like. So whaddaya say, Team Leader? The Fishing Tourney awaits. Ready for another run? Entry is…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:165', false)
-            else:
-                # Simple, right? And you can enter as many times as you like. Whaddaya say, flyfisher? Ready for another lap in the Fishing Tourney? It'll only cost ya…
-                MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:029', false)
-        elif EventFlowSystemActor.IsSharePlay(0):
-            # Simple, right? And you can enter as many times as you like. So! The Fishing Tourney! Ready to get your feet wet? It's your first run today as Leader,…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:166', false)
-        else:
-            # Simple, right? And you can enter as many times as you like. Whaddaya say? Ready to dip those toes in the Fishing Tourney? The entry fee is waived for…
-            MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:030', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run Check_EvQ_Entry()
-    else:
-        run EvQ_Entry_Cancel()
- 
+	if EventFlowSystemActor.NetHasVisitor():
+		# You got it, chum. Nyuk nyuk! The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. E…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:038', false)
+		# Also, there's a cooler in the tent. Any fish you catch will automatically get stowed there. Keeps the pockets dry! That means as long as you've got a…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:028', false)
+	else:
+		# Sure. Nyuk nyuk! The rules of the Fishing Tourney are easy breezy. You just gotta catch as many fish as you can in <90:0:000e> minutes. Every fish yo…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:027', false)
+		if EventFlowSystemActor.IsSharePlay(0):
+			# If you tugged in some friends, you gotta pick a Team Leader, 'cause ONLY the Leader can earn points. And it doesn't matter who catches what. Every fi…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:164', false)
+		else:
+			# Also, there's a cooler in the tent. Any fish you catch will automatically get stowed there. Keeps the pockets dry! That means as long as you've got a…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:028', false)
+	if EventFlowSystemActor.NetHasVisitor():
+		# Simple, right? And you can enter as many times as you like. OK, wanna get your feet wet in the Fishing Tourney? There's no entry fee if off-island vi…
+		MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:033', false)
+	else:
+		if System.EventFlags['cPlayer:BevTalkFirst_EvQuestFinish']:
+			if EventFlowSystemActor.IsSharePlay(0):
+				# Simple, right? And you can enter as many times as you like. So whaddaya say, Team Leader? The Fishing Tourney awaits. Ready for another run? Entry is…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:165', false)
+			else:
+				# Simple, right? And you can enter as many times as you like. Whaddaya say, flyfisher? Ready for another lap in the Fishing Tourney? It'll only cost ya…
+				MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:029', false)
+		elif EventFlowSystemActor.IsSharePlay(0):
+			# Simple, right? And you can enter as many times as you like. So! The Fishing Tourney! Ready to get your feet wet? It's your first run today as Leader,…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:166', false)
+		else:
+			# Simple, right? And you can enter as many times as you like. Whaddaya say? Ready to dip those toes in the Fishing Tourney? The entry fee is waived for…
+			MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:030', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run Check_EvQ_Entry()
+	else:
+		run EvQ_Entry_Cancel()

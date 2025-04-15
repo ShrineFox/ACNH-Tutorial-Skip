@@ -1,264 +1,263 @@
 flow Bridge():
-    return
- 
+	return
+
 flow CheckKKFes():
-    SubflowResults[1] = 0
-    if EventFlowSystemActor.WherearenKKFesStatus(false) == 2:
-        if EventFlowSystemActor.WherearenNpcFreeQuery2('tkkA', 'cSuspendCustomer'):
-            SubflowResults[1] = 1
-        elif EventFlowSystemActor.WherearenNpcFreeQuery2('tkkB', 'cSuspendCustomer'):
-            SubflowResults[1] = 1
- 
+	SubflowResults[1] = 0
+	if EventFlowSystemActor.WherearenKKFesStatus(false) == 2:
+		if EventFlowSystemActor.WherearenNpcFreeQuery2('tkkA', 'cSuspendCustomer'):
+			SubflowResults[1] = 1
+		elif EventFlowSystemActor.WherearenNpcFreeQuery2('tkkB', 'cSuspendCustomer'):
+			SubflowResults[1] = 1
+
 flow ForceTalk():
-    System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Bridge'] = false
-    if System.EventFlags['cWherearenPlayer:ResortPlannerCancel']:
-        System.EventFlags['cWherearenPlayer:ResortPlannerCancel'] = false
-        run ReturnResortPlanner()
-    else:
-        if System.EventFlags['cWherearenPlayer:MncBridgeTalkToday']:
-            SubflowResults[0] = 0
-        else:
-            System.EventFlags['cWherearenPlayer:MncBridgeTalkToday'] = true
-            SubflowResults[0] = 1
-        run StoryEventChk_ForceTalk()
-        if EventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 2, 3, 5, 6, 7):
-            EventFlowSystemActor.CameraSetDemoParam('Demo:BridgeForceTalk', 'cDefault', 'CameraTag:Bridge', false, false, false, 0)
-            EventFlowSystemActor.WaitFrame(12)
-            run CheckKKFes()
-            fork:
-                branch:
-                    if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
-                        Npc_2.TurnBody(10, 0.0)
-                branch:
-                    if SubflowResults@2[1] == 0:
-                        Npc_1.TurnBody(10, 0.0)
-                branch:
-                    Player.TurnBody(0, 0.0)
-            EventFlowSystemActor.WaitFrame(15)
-            fork:
-                branch:
-                    if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
-                        Npc_2.CharacterEmoticonAction('Smiling', true, '', 0, false)
-                        EventFlowSystemActor.WaitFrame(25)
-                        Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-                branch:
-                    if SubflowResults@2[1] == 0:
-                        Npc_1.CharacterEmoticonAction('Hello', true, '', 0, false)
-                branch:
-                    MainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
-                    EventFlowSystemActor@sub.WaitFrame(45)
-            MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-            switch EventFlowSystemActor.WherearenResumeOrderType():
-                case 0:
-                    if SubflowResults@2[1] == 0:
-                        EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
-                        if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cSuspendCustomer'):
-                            # There you are, PLAYER! Let's get back to the site right away!
-                            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:205', false)
-                        elif (not EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cSuspendCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2('man', 'cSuspendCustomer')):
-                            # Now that that's outta the way, the client can hardly wait, so let's get back to the site right away!
-                            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:203', true)
-                        else:
-                            # There you are, PLAYER! <115:1:cd00> can hardly wait, so let's get back to the site!
-                            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:206', false)
-                    else:
-                        # There you are, PLAYER! Let's get back to the site!
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:207', false)
-                    EventFlowSystemActor.ChangeWherearenWorkMode(false, true)
-                    EventFlowSystemActor.WherearenResumeOrder()
-                    EventFlowSystemActor.WherearenSetNpcGardenVisitBy('cTalkMnc')
-                    System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Garden'] = true
-                    run bridgeTalkClose()
-                    EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-                    if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
-                        EventFlowSystemActor.ReserveEnterGardenPattern(3)
-                    else:
-                        EventFlowSystemActor.ReserveEnterGardenPattern(2)
-                    EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
-                case 1:
-                    # Shall we?
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:204', false)
-                    # Let's head back to the site.
-                    Npc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_00_Wherearen:001', true)
-                    EventFlowSystemActor.ChangeWherearenWorkMode(false, true)
-                    EventFlowSystemActor.WherearenResumeOrder()
-                    System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
-                    run bridgeTalkClose()
-                    EventFlowSystemActor.ReserveSkipSceneStartDemo()
-                    System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-                    EventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilityOrder', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-                default:
-                    return
-        elif System.EventFlags['cWherearenPlayer:SeqMncEventLesson01']:
-            run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson01run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson01()
-        elif System.EventFlags['cWherearenPlayer:SeqMncEventLesson02']:
-            run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson02run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson02()
-            if System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice']:
-                # …Oh, right! I was supposed to tell you somethin' from Lottie! Before you visit any clients' homes or anything, she wants you to pop by the office. Me…
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:311', true)
-                System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-            run bridgeTalkClose()
-        else:
-            if not System.EventFlags['cWherearenPlayer:BridgeFromGrowUp']:
-                Player.TurnBody(0, 0.0)
-                EventFlowSystemActor.WaitFrame(15)
-                MainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
-                EventFlowSystemActor.WaitFrame(20)
-            if System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice']:
-                # Hey, here's to another day of gettin' things done! Oh, and I've got a message from Lottie for you. Before you visit any clients' homes, she wants you…
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:310', true)
-                System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-                run bridgeTalkClose()
-            elif System.EventFlags['cWherearenPlayer:ChocolateDemoEnd']:
-                # Ah, you brought a friend along from ISLAND! I hope they enjoy the island!
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:313', false)
-                run bridgeTalkClose()
-            elif SubflowResults@2[0] == 0:
-                # Hey there! Don't work too hard, 'K? Island life is meant to be relaxing.
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:302', false)
-                run bridgeTalkClose()
-            else:
-                switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:mncLongTimeNoSee'):
-                    case 0:
-                        if EventFlowSystemActor.IsDayBeforeKKFes():
-                            # The music festival is almost here! Maybe I'll sneak over and try to see it too…
-                            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:314', false)
-                            run bridgeTalkClose()
-                        else:
-                            switch EventFlowSystemActor.WherearenKKFesStatus(false):
-                                case 0, 3:
-                                    if System.EventFlags['cWherearenPlayer:BridgeFromGrowUp']:
-                                        # Oh! You didn't make it back to ISLAND, huh? Well, that's alright! You're here and ready to hit the ground running. Let's have a great day!
-                                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:304', false)
-                                    else:
-                                        # Hey! Good to see you. You should say hi to Lottie when you can.
-                                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:301', false)
-                                    run bridgeTalkClose()
-                                case 1:
-                                    # You won't forget about the festival, right? It starts at 6 PM tonight! It's gonna be a blast. See you at 6 PM on the north beach. Don't be late!
-                                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:303_01', false)
-                                    run bridgeTalkClose()
-                                case 2:
-                                    # The music festival is happening right now, PLAYER! Why don't you take it easy with work and go check it out?
-                                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:303', false)
-                                    run bridgeTalkClose()
-                    case 1:
-                        # Hey, PLAYER, it's been a while, huh? If you're here to work, go see Lottie first!
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:305_01', false)
-                        run bridgeTalkClose()
-                    case 2:
-                        # Well, hello, stranger! Everything good, PLAYER? If you're here to work, go check in with Lottie first!
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:305_02', false)
-                        run bridgeTalkClose()
-                    case 3:
-                        # It's been a really, really long time! Everyone's been waiting for you to come back, PLAYER! Remember, if you're here to work, you gotta go see Lottie…
-                        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:305_03', false)
-                        run bridgeTalkClose()
- 
+	System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Bridge'] = false
+	if System.EventFlags['cWherearenPlayer:ResortPlannerCancel']:
+		System.EventFlags['cWherearenPlayer:ResortPlannerCancel'] = false
+		run ReturnResortPlanner()
+	else:
+		if System.EventFlags['cWherearenPlayer:MncBridgeTalkToday']:
+			SubflowResults[0] = 0
+		else:
+			System.EventFlags['cWherearenPlayer:MncBridgeTalkToday'] = true
+			SubflowResults[0] = 1
+		run StoryEventChk_ForceTalk()
+		if EventFlowSystemActor.WherearenOrderStatus() not in (0, 1, 2, 3, 5, 6, 7):
+			EventFlowSystemActor.CameraSetDemoParam('Demo:BridgeForceTalk', 'cDefault', 'CameraTag:Bridge', false, false, false, 0)
+			EventFlowSystemActor.WaitFrame(12)
+			run CheckKKFes()
+			fork:
+				branch:
+					if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
+						Npc_2.TurnBody(10, 0.0)
+				branch:
+					if SubflowResults@2[1] == 0:
+						Npc_1.TurnBody(10, 0.0)
+				branch:
+					Player.TurnBody(0, 0.0)
+			EventFlowSystemActor.WaitFrame(15)
+			fork:
+				branch:
+					if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
+						Npc_2.CharacterEmoticonAction('Smiling', true, '', 0, false)
+EventFlowSystemActor.WaitFrame(25)
+						Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+				branch:
+					if SubflowResults@2[1] == 0:
+						Npc_1.CharacterEmoticonAction('Hello', true, '', 0, false)
+				branch:
+					MainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
+					EventFlowSystemActor@sub.WaitFrame(45)
+			MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+			switch EventFlowSystemActor.WherearenResumeOrderType():
+				case 0:
+					if SubflowResults@2[1] == 0:
+						EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)
+						if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cSuspendCustomer'):
+							# There you are, PLAYER! Let's get back to the site right away!
+							MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:205', false)
+						elif (not EventFlowSystemActor.WherearenNpcFreeQuery2('otg', 'cSuspendCustomer')) and (not EventFlowSystemActor.WherearenNpcFreeQuery2('man', 'cSuspendCustomer')):
+							# Now that that's outta the way, the client can hardly wait, so let's get back to the site right away!
+							MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:203', true)
+						else:
+							# There you are, PLAYER! <115:1:cd00> can hardly wait, so let's get back to the site!
+							MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:206', false)
+					else:
+						# There you are, PLAYER! Let's get back to the site!
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:207', false)
+					EventFlowSystemActor.ChangeWherearenWorkMode(false, true)
+					EventFlowSystemActor.WherearenResumeOrder()
+					EventFlowSystemActor.WherearenSetNpcGardenVisitBy('cTalkMnc')
+					System.EventFlags['cPlayerTemp:WHEREAREN_MncTalkReserve_Garden'] = true
+					run bridgeTalkClose()
+					EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+					if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
+EventFlowSystemActor.ReserveEnterGardenPattern(3)
+					else:
+EventFlowSystemActor.ReserveEnterGardenPattern(2)
+					EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcGarden', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+				case 1:
+					# Shall we?
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:204', false)
+					# Let's head back to the site.
+					Npc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_00_Wherearen:001', true)
+					EventFlowSystemActor.ChangeWherearenWorkMode(false, true)
+					EventFlowSystemActor.WherearenResumeOrder()
+					System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Facility'] = true
+					run bridgeTalkClose()
+					EventFlowSystemActor.ReserveSkipSceneStartDemo()
+					System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+					EventFlowSystemActor.SystemRequestChangeStage('cWherearenFacilityOrder', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+				default:
+					return
+		elif System.EventFlags['cWherearenPlayer:SeqMncEventLesson01']:
+			run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson01()
+		elif System.EventFlags['cWherearenPlayer:SeqMncEventLesson02']:
+			run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson02()
+			if System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice']:
+				# …Oh, right! I was supposed to tell you somethin' from Lottie! Before you visit any clients' homes or anything, she wants you to pop by the office. Me…
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:311', true)
+				System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+			run bridgeTalkClose()
+		else:
+			if not System.EventFlags['cWherearenPlayer:BridgeFromGrowUp']:
+				Player.TurnBody(0, 0.0)
+				EventFlowSystemActor.WaitFrame(15)
+				MainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
+				EventFlowSystemActor.WaitFrame(20)
+			if System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice']:
+				# Hey, here's to another day of gettin' things done! Oh, and I've got a message from Lottie for you. Before you visit any clients' homes, she wants you…
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:310', true)
+				System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+				run bridgeTalkClose()
+			elif System.EventFlags['cWherearenPlayer:ChocolateDemoEnd']:
+				# Ah, you brought a friend along from ISLAND! I hope they enjoy the island!
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:313', false)
+				run bridgeTalkClose()
+			elif SubflowResults@2[0] == 0:
+				# Hey there! Don't work too hard, 'K? Island life is meant to be relaxing.
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:302', false)
+				run bridgeTalkClose()
+			else:
+				switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cWherearenPlayer:mncLongTimeNoSee'):
+					case 0:
+						if EventFlowSystemActor.IsDayBeforeKKFes():
+							# The music festival is almost here! Maybe I'll sneak over and try to see it too…
+							MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:314', false)
+	run bridgeTalkClose()
+						else:
+							switch EventFlowSystemActor.WherearenKKFesStatus(false):
+								case 0, 3:
+									if System.EventFlags['cWherearenPlayer:BridgeFromGrowUp']:
+										# Oh! You didn't make it back to ISLAND, huh? Well, that's alright! You're here and ready to hit the ground running. Let's have a great day!
+										MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:304', false)
+									else:
+										# Hey! Good to see you. You should say hi to Lottie when you can.
+										MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:301', false)
+		run bridgeTalkClose()
+								case 1:
+									# You won't forget about the festival, right? It starts at 6 PM tonight! It's gonna be a blast. See you at 6 PM on the north beach. Don't be late!
+									MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:303_01', false)
+		run bridgeTalkClose()
+								case 2:
+									# The music festival is happening right now, PLAYER! Why don't you take it easy with work and go check it out?
+									MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:303', false)
+		run bridgeTalkClose()
+					case 1:
+						# Hey, PLAYER, it's been a while, huh? If you're here to work, go see Lottie first!
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:305_01', false)
+ run bridgeTalkClose()
+					case 2:
+						# Well, hello, stranger! Everything good, PLAYER? If you're here to work, go check in with Lottie first!
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:305_02', false)
+ run bridgeTalkClose()
+					case 3:
+						# It's been a really, really long time! Everyone's been waiting for you to come back, PLAYER! Remember, if you're here to work, you gotta go see Lottie…
+						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:305_03', false)
+ run bridgeTalkClose()
+
 flow ForceTalk_Init():
-    if EventFlowSystemActor.WherearenOrderStatus() == 4:
-        switch EventFlowSystemActor.WherearenResumeOrderType():
-            case 0:
-                if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cSuspendCustomer'):
-                    MainNpc.NpcAITalkSubCastEntry('otg', 1)
-                elif (EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3)) or (not ((EventFlowSystemActor.WherearenNpcFreeQuery2('tkkA', 'cSuspendCustomer')) or (EventFlowSystemActor.WherearenNpcFreeQuery2('tkkB', 'cSuspendCustomer')))):
-                    MainNpc.WherearenCustomerEntrySubCast(1, false, false, false, true, false)
-                    if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
-                        MainNpc.WherearenCustomerEntrySubCast(2, false, false, false, false, true)
-            case 1:
-                MainNpc.NpcAITalkSubCastEntry('otg', 1)
-            default:
-                return
- 
+	if EventFlowSystemActor.WherearenOrderStatus() == 4:
+		switch EventFlowSystemActor.WherearenResumeOrderType():
+			case 0:
+				if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cSuspendCustomer'):
+					MainNpc.NpcAITalkSubCastEntry('otg', 1)
+				elif (EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3)) or (not ((EventFlowSystemActor.WherearenNpcFreeQuery2('tkkA', 'cSuspendCustomer')) or (EventFlowSystemActor.WherearenNpcFreeQuery2('tkkB', 'cSuspendCustomer')))):
+					MainNpc.WherearenCustomerEntrySubCast(1, false, false, false, true, false)
+					if EventFlowSystemActor.WherearenIsResumeNpcLiveTogether():
+						MainNpc.WherearenCustomerEntrySubCast(2, false, false, false, false, true)
+			case 1:
+				MainNpc.NpcAITalkSubCastEntry('otg', 1)
+			default:
+				return
+
 flow FromGrowUp():
-    EventFlowSystemActor.SoundDuckingOn(59)
-    Player.PlayerStretch()
-    EventFlowSystemActor.SetNpcAIBlackBoardByLabel('mnc', 'FirstTalk', 1, 1)
-    EventFlowSystemActor.SoundDuckingOff(59)
- 
+	EventFlowSystemActor.SoundDuckingOn(59)
+	Player.PlayerStretch()
+	EventFlowSystemActor.SetNpcAIBlackBoardByLabel('mnc', 'FirstTalk', 1, 1)
+	EventFlowSystemActor.SoundDuckingOff(59)
+
 flow LessonEventChk():
-    if System.EventFlags['cWherearenPlayer:SeqMncEventLesson02']:
-        run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson02run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson02()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cWherearenPlayer:SeqMncEventLesson01']:
-        run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson01run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson01()
- 
+	if System.EventFlags['cWherearenPlayer:SeqMncEventLesson02']:
+		run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson02()
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cWherearenPlayer:SeqMncEventLesson01']:
+		run SNPC_mnc_17_WherearenEvent_Lesson::Root_Lesson01()
+
 flow OpenResortPlanner():
-    Player.SmartPhone(0)
-    Player.SmartPhone(4)
-    EventFlowSystemActor.WaitFrame(10)
-    run System_WherearenResortPlanner::Setting_OpenNpcrun System_WherearenResortPlanner::Setting_OpenNpc()
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerApp', 'cWherearenPlannerGoFromMnc', 'cWherearenPlannerGo', 'cBlack', 1.0, 1.0)
- 
+	Player.SmartPhone(0)
+	Player.SmartPhone(4)
+	EventFlowSystemActor.WaitFrame(10)
+	run System_WherearenResortPlanner::Setting_OpenNpc()
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenPlannerApp', 'cWherearenPlannerGoFromMnc', 'cWherearenPlannerGo', 'cBlack', 1.0, 1.0)
+
 flow ReturnResortPlanner():
-    # Change of plans? That's OK. Come see me if you change 'em again.
-    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:113', false)
- 
+	# Change of plans? That's OK. Come see me if you change 'em again.
+	MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:113', false)
+
 flow Root():
-    if System.EventFlags['cWherearenPlayer:Unlock_MncBridgeBoat']:
-        run StoryEventChk()
-        run LessonEventChk()
-        if (EventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3)) and (EventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7)):
-            # Hi! What's up?
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:101_01', false)
-            switch EventFlowSystemActor.GeneralTalkChoice3():
-                case 0:
-                    run Sub_grp_Event54()
-                case 1:
-                    # I love it! I can already feel the music!
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:103', true)
-                    run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
-                case 2:
-                    # Oh! Uh, OK. Well, I'm here if you decide you need something.
-                    MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:112', false)
-        else:
-            # Hi! What's up?
-            MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:101', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Sub_grp_Event54()
-            else:
-                # Oh! Uh, OK. Well, I'm here if you decide you need something.
-                MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:112', false)
-    elif System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
-        run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::Departurerun SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::Departure()
-    elif (System.EventFlags['cWherearenPlayer:NewBuildCount'] == 1) and (System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialDone']):
-        run SNPC_mnc_11_WherearenEvent_TakeOder::Talk_Fieldrun SNPC_mnc_11_WherearenEvent_TakeOder::Talk_Field()
-    else:
-        # RANDOM: So, do you feel like you've made friend… // Hey, you're from ISLAND, right? Is it t…
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:601', true)
- 
+	if System.EventFlags['cWherearenPlayer:Unlock_MncBridgeBoat']:
+		run StoryEventChk()
+		run LessonEventChk()
+		if (EventFlowSystemActor.WherearenKKFesStatus(false) not in (0, 1, 3)) and (EventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7)):
+			# Hi! What's up?
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:101_01', false)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					run Sub_grp_Event54()
+				case 1:
+					# I love it! I can already feel the music!
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:103', true)
+					run Demo_Common_Wherearen::ToKKFesDemoLive()
+				case 2:
+					# Oh! Uh, OK. Well, I'm here if you decide you need something.
+					MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:112', false)
+		else:
+			# Hi! What's up?
+			MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:101', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Sub_grp_Event54()
+			else:
+				# Oh! Uh, OK. Well, I'm here if you decide you need something.
+				MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:112', false)
+	elif System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+		run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::Departure()
+	elif (System.EventFlags['cWherearenPlayer:NewBuildCount'] == 1) and (System.EventFlags['cWherearenPlayer:SeqTakeOrderTutorialDone']):
+		run SNPC_mnc_11_WherearenEvent_TakeOder::Talk_Field()
+	else:
+		# RANDOM: So, do you feel like you've made friend… // Hey, you're from ISLAND, right? Is it t…
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:601', true)
+
 flow StoryEventChk():
-    if System.EventFlags['cWherearenPlayer:MncCannotGetRecipe']:
-        run SNPC_mnc_16_WherearenEvent_DIYCatalog::ReceiveReciperun SNPC_mnc_16_WherearenEvent_DIYCatalog::ReceiveRecipe()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing']:
-        run SNPC_mnc_16_WherearenEvent_DIYCatalog::Rootrun SNPC_mnc_16_WherearenEvent_DIYCatalog::Root()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
-        run SNPC_mnc_16_WherearenEvent_DIYCatalog::AfterTalkrun SNPC_mnc_16_WherearenEvent_DIYCatalog::AfterTalk()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if System.EventFlags['cWherearenPlayer:MncCannotGetRecipe']:
+		run SNPC_mnc_16_WherearenEvent_DIYCatalog::ReceiveRecipe()
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cWherearenPlayer:SeqMncDIYRecipeOngoing']:
+		run SNPC_mnc_16_WherearenEvent_DIYCatalog::Root()
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cWherearenPlayer:SeqDIYCatalogOngoing']:
+		run SNPC_mnc_16_WherearenEvent_DIYCatalog::AfterTalk()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow StoryEventChk_ForceTalk():
-    if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
-        if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerMncTalk']:
-            run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::ForceTalkBridgerun SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::ForceTalkBridge()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.IsWherearenResumeFirstShareHouse():
-        run SNPC_otg_22_WherearenEvent_ShareHouse::Resume_LookForHousematerun SNPC_otg_22_WherearenEvent_ShareHouse::Resume_LookForHousemate()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
+		if System.EventFlags['cWherearenPlayer:SeqFirstVisitCustomerMncTalk']:
+			run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::ForceTalkBridge()
+			EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.IsWherearenResumeFirstShareHouse():
+		run SNPC_otg_22_WherearenEvent_ShareHouse::Resume_LookForHousemate()
+		EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_grp_Event54():
-    if not System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
-        # OK, then I'm your guy! Where do you want to go?
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:102', true)
-        run OpenResortPlanner()
-    elif System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice']:
-        # You know Lottie's waiting for you, right? Go on ahead to the office.
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:115', true)
-    else:
-        # Wait—aren't you on break right now? You don't wanna waste that sweet, sweet break time. Relax a bit!
-        MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:114', true)
- 
+	if not System.EventFlags['cWherearenPlayer:Prohibit_NewOrder']:
+		# OK, then I'm your guy! Where do you want to go?
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:102', true)
+		run OpenResortPlanner()
+	elif System.EventFlags['cWherearenPlayer:SeqEventReserveInOffice']:
+		# You know Lottie's waiting for you, right? Go on ahead to the office.
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:115', true)
+	else:
+		# Wait—aren't you on break right now? You don't wanna waste that sweet, sweet break time. Relax a bit!
+		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_01_Wherearen:114', true)
+
 flow bridgeTalkClose():
-    System.EventFlags['cWherearenPlayer:BridgeFromGrowUp'] = false
- 
+	System.EventFlags['cWherearenPlayer:BridgeFromGrowUp'] = false

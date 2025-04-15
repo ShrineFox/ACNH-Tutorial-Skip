@@ -1,96 +1,95 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        MainNpc.NpcCopyPhrase()
-        # …So I snuck up behind 'em and screamed with everything I had. <10:12><50:3><110:6>! Bwa ha ha! They were so scared!
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:201', false)
-        Player.TurnNeck(1, false)
-        # You're so tough, <110:31:cd00>. I'm a little envious! Hey, um…you wouldn't mind if I started saying "<110:5>" would you? I want to be tough too!
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:202', false)
-        Player.TurnNeck(0, false)
-        # Huh? No, I don't think you're scary enough, <110:5>. Sorry, <110:31:cd01>.
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:203', false)
-        Player.TurnNeck(1, false)
-        # What? Aww. Please! I can be scary! Watch this…<10:4> <50:3><110:5>!
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:204', false)
-        Player.TurnNeck(0, false)
-        # Pfft. You can do better than that. C'mon, <110:5>! Scare me!
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:205', false)
-        Player.TurnNeck(1, false)
-        # Uh…alright. How's this… <10:12><10:10><50:3><110:6>!
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:206', false)
-        Player.TurnNeck(0, false)
-        # YEOW! Guess I won't need to clean my ears for a while, <110:5>… Well, if nothing else, you scared my hearing into hidin' under a ringing noise. It's …
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:207', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        # I flat out don't get how you wake up so early, <110:31:cd01>. How do you do it?
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:001', false)
-        Player.TurnNeck(1, false)
-        # Oh, there's no secret or anything. I just go to bed early.
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:002', false)
-        Player.TurnNeck(0, false)
-        # Bwa ha ha! You go to bed early? Ha! That's…oh, you're serious. Um, that's gonna be a no for me. Isn't there, like, an easier way?
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:003', false)
-        Player.TurnNeck(1, false)
-        # An easier way to wake up early? Um…I don't know! <20:2:cd08>What do you think, <110:3>?<20:2:cd06>
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:004', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                SubNpc.TurnBody(10, 0.0)
-                # <20:2:cd07>See! <20:2:cd05>Getting to bed early is all there is to it! It's really not that hard.
-                SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:005', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        MainNpc.TurnBody(10, 0.0)
-                # You're taking HER side on this, <110:3>? I thought we were a team.
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:006', false)
-                # Let me help you, <110:31:cd00>. <20:3:cd02>I've got some nice teas, and books on relaxation you can borrow.
-                SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:007', false)
-                Player.TurnNeck(0, false)
-                # <20:2:cd03>I don't read anything that doesn't have a robot, a dragon, or a spaceship on the cover. I'll take those teas, though!
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:008', false)
-            case 1:
-                SubNpc.TurnBody(10, 0.0)
-                # That could work. A cup of coffee can be a great way to jump-start the morning!
-                SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:009', false)
-                MainNpc.TurnNeck(1, false)
-                # I'm already up to 12 cups a day!<20:3:cd01> Do you really think another morning mug will help?
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:010', false)
-                # <20:2:cd04>12 cups?! <110:31:cd00>, that's a LOT of coffee! All that coffee must be making it hard to sleep. Maybe if you cut back, you'll sleep bett…
-                SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:011', false)
-                # <20:2:cd03>Ha! Nope. You do NOT want me cuttin' back on coffee. I'd be kicked outta ISLAND in a week!
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:012', false)
-            case 2:
-                SubNpc.TurnBody(10, 0.0)
-                # Hee-hee! You're such a jokester, <110:3>. Never sleeping? That's just silly.
-                SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:013', false)
-                # <20:2:cd03>Now THAT could work! <20:2:cd07>I'm already a night <110:15:cd00>. Why NOT just stay up forever? That's genius!
-                MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:014', false)
-                # <50:3><110:31:cd00>, no! <20:2:cd02>That's really, really dangerous. Sleep is very important! Maybe mornings just aren't for you.
-                SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:015', false)
-    else:
-        # This island's got a ton of cool flowers I've never grown before. I can't wait to get my hands dirty with 'em!
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:101', false)
-        Player.TurnNeck(1, false)
-        # Could you grow [a|an]<135:2:cd00> for me? I'm making <135:3:cd00> and I want [a|an]<135:2:cd00> for garnish.
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:102', false)
-        Player.TurnNeck(0, false)
-        # Hold up, let me get this straight… You want me to break my back raisin' [a|an]<135:2:cd00> to use as GARNISH?!
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:103', false)
-        Player.TurnNeck(1, false)
-        # Well…I'd only need one!
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:104', false)
-        Player.TurnNeck(0, false)
-        # No way! EVERY flower is my friend. I'm not just gonna let you serve 'em next to a… Wait, did you say <135:3:cd00>?! Uh, wow. I haven't had that in fo…
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:105', false)
-        Player.TurnNeck(1, false)
-        # Aww, thanks! And it's all yours for the low price of a single <135:2:cd00>.
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:106', false)
-        Player.TurnNeck(0, false)
-        # Just one <135:2:cd00>, huh? I mean, I guess that's not so much…
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:107', false)
-        Player.TurnNeck(1, false)
-        # Oh! Then for dessert I can make <135:7:cd00>! Mmm-mm! This will be so good, <110:31:cd00>! Then we can discuss the <135:2:cd00> potpourri I want your…
-        SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:108', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		MainNpc.NpcCopyPhrase()
+		# …So I snuck up behind 'em and screamed with everything I had. <10:12><50:3><110:6>! Bwa ha ha! They were so scared!
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:201', false)
+		Player.TurnNeck(1, false)
+		# You're so tough, <110:31:cd00>. I'm a little envious! Hey, um…you wouldn't mind if I started saying "<110:5>" would you? I want to be tough too!
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:202', false)
+		Player.TurnNeck(0, false)
+		# Huh? No, I don't think you're scary enough, <110:5>. Sorry, <110:31:cd01>.
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:203', false)
+		Player.TurnNeck(1, false)
+		# What? Aww. Please! I can be scary! Watch this…<10:4> <50:3><110:5>!
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:204', false)
+		Player.TurnNeck(0, false)
+		# Pfft. You can do better than that. C'mon, <110:5>! Scare me!
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:205', false)
+		Player.TurnNeck(1, false)
+		# Uh…alright. How's this… <10:12><10:10><50:3><110:6>!
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:206', false)
+		Player.TurnNeck(0, false)
+		# YEOW! Guess I won't need to clean my ears for a while, <110:5>… Well, if nothing else, you scared my hearing into hidin' under a ringing noise. It's …
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:207', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		# I flat out don't get how you wake up so early, <110:31:cd01>. How do you do it?
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:001', false)
+		Player.TurnNeck(1, false)
+		# Oh, there's no secret or anything. I just go to bed early.
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:002', false)
+		Player.TurnNeck(0, false)
+		# Bwa ha ha! You go to bed early? Ha! That's…oh, you're serious. Um, that's gonna be a no for me. Isn't there, like, an easier way?
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:003', false)
+		Player.TurnNeck(1, false)
+		# An easier way to wake up early? Um…I don't know! <20:2:cd08>What do you think, <110:3>?<20:2:cd06>
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:004', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				SubNpc.TurnBody(10, 0.0)
+				# <20:2:cd07>See! <20:2:cd05>Getting to bed early is all there is to it! It's really not that hard.
+				SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:005', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						MainNpc.TurnBody(10, 0.0)
+				# You're taking HER side on this, <110:3>? I thought we were a team.
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:006', false)
+				# Let me help you, <110:31:cd00>. <20:3:cd02>I've got some nice teas, and books on relaxation you can borrow.
+				SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:007', false)
+				Player.TurnNeck(0, false)
+				# <20:2:cd03>I don't read anything that doesn't have a robot, a dragon, or a spaceship on the cover. I'll take those teas, though!
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:008', false)
+			case 1:
+				SubNpc.TurnBody(10, 0.0)
+				# That could work. A cup of coffee can be a great way to jump-start the morning!
+				SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:009', false)
+				MainNpc.TurnNeck(1, false)
+				# I'm already up to 12 cups a day!<20:3:cd01> Do you really think another morning mug will help?
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:010', false)
+				# <20:2:cd04>12 cups?! <110:31:cd00>, that's a LOT of coffee! All that coffee must be making it hard to sleep. Maybe if you cut back, you'll sleep bett…
+				SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:011', false)
+				# <20:2:cd03>Ha! Nope. You do NOT want me cuttin' back on coffee. I'd be kicked outta ISLAND in a week!
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:012', false)
+			case 2:
+				SubNpc.TurnBody(10, 0.0)
+				# Hee-hee! You're such a jokester, <110:3>. Never sleeping? That's just silly.
+				SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:013', false)
+				# <20:2:cd03>Now THAT could work! <20:2:cd07>I'm already a night <110:15:cd00>. Why NOT just stay up forever? That's genius!
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:014', false)
+				# <50:3><110:31:cd00>, no! <20:2:cd02>That's really, really dangerous. Sleep is very important! Maybe mornings just aren't for you.
+				SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:015', false)
+	else:
+		# This island's got a ton of cool flowers I've never grown before. I can't wait to get my hands dirty with 'em!
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:101', false)
+		Player.TurnNeck(1, false)
+		# Could you grow [a|an]<135:2:cd00> for me? I'm making <135:3:cd00> and I want [a|an]<135:2:cd00> for garnish.
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:102', false)
+		Player.TurnNeck(0, false)
+		# Hold up, let me get this straight… You want me to break my back raisin' [a|an]<135:2:cd00> to use as GARNISH?!
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:103', false)
+		Player.TurnNeck(1, false)
+		# Well…I'd only need one!
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:104', false)
+		Player.TurnNeck(0, false)
+		# No way! EVERY flower is my friend. I'm not just gonna let you serve 'em next to a… Wait, did you say <135:3:cd00>?! Uh, wow. I haven't had that in fo…
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:105', false)
+		Player.TurnNeck(1, false)
+		# Aww, thanks! And it's all yours for the low price of a single <135:2:cd00>.
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:106', false)
+		Player.TurnNeck(0, false)
+		# Just one <135:2:cd00>, huh? I mean, I guess that's not so much…
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:107', false)
+		Player.TurnNeck(1, false)
+		# Oh! Then for dessert I can make <135:7:cd00>! Mmm-mm! This will be so good, <110:31:cd00>! Then we can discuss the <135:2:cd00> potpourri I want your…
+		SubNpc.OpenMessageWindow('TalkNNpc/G4_An/Conv/AN_Conv_FU:108', false)

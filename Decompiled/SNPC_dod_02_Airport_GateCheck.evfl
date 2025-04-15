@@ -1,46 +1,45 @@
 flow Dod_ChangeGate():
-    if EventFlowSystemActor.IsVillageGateOpened():
-        run Dod_CloseGate()
-    else:
-        run Dod_OpenGate()
- 
+	if EventFlowSystemActor.IsVillageGateOpened():
+		run Dod_CloseGate()
+	else:
+		run Dod_OpenGate()
+
 flow Dod_CloseGate():
-    # Roger!
-    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
-    run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-    EventFlowSystemActor.NetCloseSession('cCloseSession', false)
-    run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.CloseVillageGate()
-    EventFlowSystemActor.WaitFrame(10)
-    # Gotcha. If you want to let more company in, just let me know and I'll open the gate up.
-    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:252', true)
-    EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
- 
+	# Roger!
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
+	run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
+	EventFlowSystemActor.NetCloseSession('cCloseSession', false)
+	run SNPC_dod_AirPort::EntryPoint_PostProcedure()
+	EventFlowSystemActor.CloseVillageGate()
+	EventFlowSystemActor.WaitFrame(10)
+	# Gotcha. If you want to let more company in, just let me know and I'll open the gate up.
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:252', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+
 flow Dod_OpenGate():
-    # Roger!
-    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
-    run SNPC_dod_AirPort::EntryPoint_PreProcedurerun SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-    EventFlowSystemActor.NetOpenSession('cOpenSession', false)
-    run SNPC_dod_AirPort::EntryPoint_PostProcedurerun SNPC_dod_AirPort::EntryPoint_PostProcedure()
-    EventFlowSystemActor.OpenVillageGate(false)
-    EventFlowSystemActor.WaitFrame(10)
-    # When you're ready to close the gate, just say the word.
-    MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:262', true)
-    EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
- 
+	# Roger!
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:802', true)
+	run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
+	EventFlowSystemActor.NetOpenSession('cOpenSession', false)
+	run SNPC_dod_AirPort::EntryPoint_PostProcedure()
+	EventFlowSystemActor.OpenVillageGate(false)
+	EventFlowSystemActor.WaitFrame(10)
+	# When you're ready to close the gate, just say the word.
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:262', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+
 flow EntryPoint_GateCheck():
-    if EventFlowSystemActor.IsVillageGateOpened():
-        # By the way, is there anything I can do to help you out?
-        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:306', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Dod_CloseGate()
-        else:
-            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
-    else:
-        # By the way, is there anything I can do to help you out?
-        MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:305', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Dod_OpenGate()
-        else:
-            run SNPC_dod_AirPort::EntryPoint_Cancelrun SNPC_dod_AirPort::EntryPoint_Cancel()
- 
+	if EventFlowSystemActor.IsVillageGateOpened():
+		# By the way, is there anything I can do to help you out?
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:306', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Dod_CloseGate()
+		else:
+			run SNPC_dod_AirPort::EntryPoint_Cancel()
+	else:
+		# By the way, is there anything I can do to help you out?
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:305', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Dod_OpenGate()
+		else:
+			run SNPC_dod_AirPort::EntryPoint_Cancel()

@@ -1,25 +1,24 @@
 flow Init():
-    if MainNpc.IsMuseumCafeTakeoutCustomer():
-        MainNpc.NpcAISetting(4, false)
-        MainNpc.NpcAISetting(19, true)
-    elif MainNpc.MuseumCafeAmiiboNpc() in (0, 1):
-        MainNpc.NpcAISetRequestSpeakFunc('cSitdownCafeCustomer', false)
- 
+	if MainNpc.IsMuseumCafeTakeoutCustomer():
+		MainNpc.NpcAISetting(4, false)
+		MainNpc.NpcAISetting(19, true)
+	elif MainNpc.MuseumCafeAmiiboNpc() in (0, 1):
+		MainNpc.NpcAISetRequestSpeakFunc('cSitdownCafeCustomer', false)
+
 flow Root():
-    if MainNpc.IsMuseumCafeTakeoutCustomer():
-        MainNpc.NpcChangeAIState('cTakeout', '', 'SNPC_common_CafeTakeout', 'Root', true, false)
-    else:
-        MainNpc.NpcAISetting(2, false)
-        if MainNpc.MuseumCafeAmiiboNpc() not in (0, 1):
-            if MainNpc.IsNpcType() == 0:
-                MainNpc.NpcChangeAIState('cSitCafeChair', '', 'NNPC_Spot_Cafe_Normal', 'Root', true, false)
-            else:
-                MainNpc.NpcChangeAIState('cSitCafeChair', '', 'SNPC_common_CafeSitting', 'Root', true, false)
-        elif MainNpc.IsNpcType() == 0:
-            MainNpc.SetNpcSpeakFlow('NNPC_Spot_Cafe_Amiibo', 'Root')
-            MainNpc.NpcChangeAIState('cSitCafeChair', '', 'NNPC_Spot_Cafe_Amiibo', 'Root', true, false)
-        else:
-            MainNpc.NpcAITalkCastSetting('CafeAmiiboCustomer')
-            MainNpc.SetNpcSpeakFlow('SNPC_common_CafeAmiibo', 'Root')
-            MainNpc.NpcChangeAIState('cSitCafeChair', '', 'SNPC_common_CafeAmiibo', 'Root', true, false)
- 
+	if MainNpc.IsMuseumCafeTakeoutCustomer():
+		MainNpc.NpcChangeAIState('cTakeout', '', 'SNPC_common_CafeTakeout', 'Root', true, false)
+	else:
+		MainNpc.NpcAISetting(2, false)
+		if MainNpc.MuseumCafeAmiiboNpc() not in (0, 1):
+			if MainNpc.IsNpcType() == 0:
+				MainNpc.NpcChangeAIState('cSitCafeChair', '', 'NNPC_Spot_Cafe_Normal', 'Root', true, false)
+			else:
+				MainNpc.NpcChangeAIState('cSitCafeChair', '', 'SNPC_common_CafeSitting', 'Root', true, false)
+		elif MainNpc.IsNpcType() == 0:
+			MainNpc.SetNpcSpeakFlow('NNPC_Spot_Cafe_Amiibo', 'Root')
+			MainNpc.NpcChangeAIState('cSitCafeChair', '', 'NNPC_Spot_Cafe_Amiibo', 'Root', true, false)
+		else:
+			MainNpc.NpcAITalkCastSetting('CafeAmiiboCustomer')
+			MainNpc.SetNpcSpeakFlow('SNPC_common_CafeAmiibo', 'Root')
+			MainNpc.NpcChangeAIState('cSitCafeChair', '', 'SNPC_common_CafeAmiibo', 'Root', true, false)

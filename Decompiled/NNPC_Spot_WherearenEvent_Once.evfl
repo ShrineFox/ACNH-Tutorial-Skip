@@ -1,88 +1,87 @@
 flow FirstVisitCustomer_Talk():
-    # RANDOM: I'm glad you're doing this before I've … // If there's a particular spot you want m… // If I need a wardrobe change, you can al…
-    MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:101', false)
-    # So, how's it going so far?
-    MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:102', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-        # Take as many as you need to get that elusive, perfect shot, <110:6>.
-        MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:105', true)
-    elif EventFlowSystemActor.WherearenExistsTempSavePhoto():
-        # Well, this was a pleasure, and feel free to stop by anytime. You're always welcome, <110:6>.
-        MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:103', true)
-        System.EventFlags['cWherearenPlayer:VisitHouseReturn'] = true
-        EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
-        System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-        System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
-        EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, true)
-        EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
-        EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
-    else:
-        # What? I'm afraid I'm confused… You haven't taken a single photo, darling!
-        MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:104', true)
- 
+	# RANDOM: I'm glad you're doing this before I've … // If there's a particular spot you want m… // If I need a wardrobe change, you can al…
+	MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:101', false)
+	# So, how's it going so far?
+	MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:102', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		# Take as many as you need to get that elusive, perfect shot, <110:6>.
+		MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:105', true)
+	elif EventFlowSystemActor.WherearenExistsTempSavePhoto():
+		# Well, this was a pleasure, and feel free to stop by anytime. You're always welcome, <110:6>.
+		MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:103', true)
+		System.EventFlags['cWherearenPlayer:VisitHouseReturn'] = true
+		EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+		System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+		System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = true
+		EventFlowSystemActor.SetWherearenPlayerRemoveBinderSeq(true, true)
+		EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
+		EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
+	else:
+		# What? I'm afraid I'm confused… You haven't taken a single photo, darling!
+		MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/OneRoom/OT_WherearenEvent_Once:104', true)
+
 flow HousePhoto_Done():
-    if EventFlowSystemActor.WherearenExistsTempSavePhoto():
-        # Did you take some good pictures?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:012', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            MainNpc.MessageSuspend()
-            EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpeg_SuspendSave', 0, false, 0.0, 0.0, '')
-            EventFlowSystemActor.WaitFrame(20)
-            # Oooh, that's a real good picture!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:013', false)
-            fork:
-                branch:
-                    # Thanks bunches for all your help, <50:3><150:6>! You've made me real happy.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:014', true)
-                branch:
-                    EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-            System.EventFlags['cWherearenPlayer:SeqHousePhotoTutorialDone'] = true
-            EventFlowSystemActor.WherearenOrderCallback('cCompleteDemoEnd')
-            run Demo_Common_Wherearen::WorkDoneReturnOfficerun Demo_Common_Wherearen::WorkDoneReturnOffice()
-        else:
-            # I gotcha. No rush! I know that once you get one you like, I'll say "Oooh, that's a real good picture!"
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:015', true)
-    else:
-        # RANDOM: Use the Camera app on your NookPhone to… // I can't believe this vacation house is …
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:011', true)
- 
+	if EventFlowSystemActor.WherearenExistsTempSavePhoto():
+		# Did you take some good pictures?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:012', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			MainNpc.MessageSuspend()
+			EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpeg_SuspendSave', 0, false, 0.0, 0.0, '')
+			EventFlowSystemActor.WaitFrame(20)
+			# Oooh, that's a real good picture!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:013', false)
+			fork:
+				branch:
+					# Thanks bunches for all your help, <50:3><150:6>! You've made me real happy.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:014', true)
+				branch:
+					EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+			System.EventFlags['cWherearenPlayer:SeqHousePhotoTutorialDone'] = true
+			EventFlowSystemActor.WherearenOrderCallback('cCompleteDemoEnd')
+			run Demo_Common_Wherearen::WorkDoneReturnOffice()
+		else:
+			# I gotcha. No rush! I know that once you get one you like, I'll say "Oooh, that's a real good picture!"
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:015', true)
+	else:
+		# RANDOM: Use the Camera app on your NookPhone to… // I can't believe this vacation house is …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:011', true)
+
 flow HousePhoto_Start():
-    MainNpc.TurnNeck(10, false)
-    SubNpc.TurnNeck(0, false)
-    Player.TurnNeck(0, false)
-    # My new vacation house is real cool. You're a big-time, super-talented architecturalist, <150:6>!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:001', false)
-    # Ooh! We oughta take a picture of my new vacation house, <110:6>!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:002', false)
-    switch EventFlowSystemActor.GeneralTalkChoice2():
-        case 0, 1:
-            EventFlowSystemActor.WaitFrame(20)
-            # You oughta use the Camera app on your NookPhone. That's what it's there for, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:003', true)
-            fork:
-                branch:
-                    # Speaking of cameras, we have a design portfolio with photos of the properties we've handled. Would it be OK with you if we showed yours in there?
-                    SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:031', true)
-                branch:
-                    EventFlowSystemActor.WaitFrame(20)
-                    Player.TurnNeck(1, false)
-                    MainNpc.TurnNeck(1, false)
-            # Go right ahead! Take as many as ya want! My vacation house isn't shy, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:004', true)
-            # Great! Thank you so much!
-            SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:032', false)
-            SubNpc.TurnNeck(10, false)
-            # OK then, go get some amazing pictures, PLAYER! When you get a shot that screams "that's the one," close the Camera app for a sec and show the client.…
-            SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:033', true)
-            run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
-            SubNpc.NpcSetVisibleAction(false)
-            MainNpc.TurnNeck(10, false)
-            Player.TurnNeck(0, false)
-            EventFlowSystemActor.WaitFrame(20)
-            run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
-            # Lemme know if you snap a good one!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:005', true)
-            System.EventFlags['cWherearenPlayer:Unlock_HousePhoto'] = true
-            EventFlowSystemActor.BGMPropertyControl(180)
-            EventFlowSystemActor.ReserveSystemFlowDemo('System_WherearenUIDialog', 'NoticeAboutNpcEdit', true, false, false)
- 
+	MainNpc.TurnNeck(10, false)
+	SubNpc.TurnNeck(0, false)
+	Player.TurnNeck(0, false)
+	# My new vacation house is real cool. You're a big-time, super-talented architecturalist, <150:6>!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:001', false)
+	# Ooh! We oughta take a picture of my new vacation house, <110:6>!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:002', false)
+	switch EventFlowSystemActor.GeneralTalkChoice2():
+		case 0, 1:
+			EventFlowSystemActor.WaitFrame(20)
+			# You oughta use the Camera app on your NookPhone. That's what it's there for, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:003', true)
+			fork:
+				branch:
+					# Speaking of cameras, we have a design portfolio with photos of the properties we've handled. Would it be OK with you if we showed yours in there?
+					SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:031', true)
+				branch:
+					EventFlowSystemActor.WaitFrame(20)
+					Player.TurnNeck(1, false)
+					MainNpc.TurnNeck(1, false)
+			# Go right ahead! Take as many as ya want! My vacation house isn't shy, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:004', true)
+			# Great! Thank you so much!
+			SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:032', false)
+			SubNpc.TurnNeck(10, false)
+			# OK then, go get some amazing pictures, PLAYER! When you get a shot that screams "that's the one," close the Camera app for a sec and show the client.…
+			SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:033', true)
+			run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+			SubNpc.NpcSetVisibleAction(false)
+			MainNpc.TurnNeck(10, false)
+			Player.TurnNeck(0, false)
+			EventFlowSystemActor.WaitFrame(20)
+			run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+			# Lemme know if you snap a good one!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:005', true)
+			System.EventFlags['cWherearenPlayer:Unlock_HousePhoto'] = true
+			EventFlowSystemActor.BGMPropertyControl(180)
+			EventFlowSystemActor.ReserveSystemFlowDemo('System_WherearenUIDialog', 'NoticeAboutNpcEdit', true, false, false)

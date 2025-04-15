@@ -1,328 +1,327 @@
 flow Free_VisitN():
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
-    if (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (not MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame']):
-        run Game_VisitN()
-    elif EventFlowSystemActor.PercentChoice(30):
-        run NNPC_FreeC::RoomN_Chkrun NNPC_FreeC::RoomN_Chk()
-    else:
-        run NNPC_FreeC::FunitureN_Chkrun NNPC_FreeC::FunitureN_Chk()
- 
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+	if (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (not MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame']):
+		run Game_VisitN()
+	elif EventFlowSystemActor.PercentChoice(30):
+		run NNPC_FreeC::RoomN_Chk()
+	else:
+		run NNPC_FreeC::FunitureN_Chk()
+
 flow Game_VisitN():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # Since you're here and all, how about we play a game, <110:3>?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:200', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Since you're here and all, how about we play a game, <110:3>?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:200', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 entrypoint Event88:
-                run NNPC_Game_2ChoiceQuiz::Rootrun NNPC_Game_2ChoiceQuiz::Root()
-                MainNpc.NpcAddFriendship(1)
-            else:
+				run NNPC_Game_2ChoiceQuiz::Root()
+				MainNpc.NpcAddFriendship(1)
+			else:
 entrypoint Event90:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                    case 0:
-                        # Oh, OK. We'll just have fun hanging out, <110:5>.
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:203', false)
-                    case 1:
-                        # Oh, OK. I guess you're, like, more interested in checking out the place, <110:5>.
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:204', false)
-                    case 2:
-                        # No worries! Just, um, enjoy exploring my house, <110:6>!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:205', false)
-        case 1:
-            # Hey! You wanna play a game?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:201', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Yes()
-            else:
-                run RefuseGame()
-        case 2:
-            # <50:3><110:3>! I got an idea. Let's play a game! Whaddaya say?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:202', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Yes()
-            else:
-                run RefuseGame()
-    MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame'] = true
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# Oh, OK. We'll just have fun hanging out, <110:5>.
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:203', false)
+					case 1:
+						# Oh, OK. I guess you're, like, more interested in checking out the place, <110:5>.
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:204', false)
+					case 2:
+						# No worries! Just, um, enjoy exploring my house, <110:6>!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:205', false)
+		case 1:
+			# Hey! You wanna play a game?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:201', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Yes()
+			else:
+				run RefuseGame()
+		case 2:
+			# <50:3><110:3>! I got an idea. Let's play a game! Whaddaya say?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:202', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Yes()
+			else:
+				run RefuseGame()
+	MainNpc.EventFlags['cNpcTemp:IsPlayedQuestMiniGame'] = true
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow Home_Buy(ItemPrice: int = 0):
-    MainNpc.NpcSetTradeFtrInfo(ItemPrice)
-    if MainNpc.NpcIsTradableFtr():
-        run Present_Chk()
-        EventFlowSystemActor.UIMoneyAppear()
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # <50:3><50:1><125:0:0000>? Hmm… I dunno… That'll be <90:21:0000>, please.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:100', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run Sub_grp_Event129(ItemPrice=ItemPrice)
-                else:
-                    run NotBuy()
-            case 1:
-                # <50:3><50:1><125:0:0000>? Nice choice, <110:3>! Let's see… How's <90:21:0000>?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:101', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run Sub_grp_Event129(ItemPrice=ItemPrice)
-                else:
-                    run NotBuy()
-            case 2:
-                # The <125:0:0000>! Yeah, I love it too! OK, how's <90:21:0000>?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:102', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run Sub_grp_Event129(ItemPrice=ItemPrice)
-                else:
-                    run NotBuy()
-    else:
-        run Present_Chk()
-        MainNpc.NpcOpenTradeBanReasonMessage()
-        MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+	MainNpc.NpcSetTradeFtrInfo(ItemPrice)
+	if MainNpc.NpcIsTradableFtr():
+		run Present_Chk()
+		EventFlowSystemActor.UIMoneyAppear()
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# <50:3><50:1><125:0:0000>? Hmm… I dunno… That'll be <90:21:0000>, please.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:100', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run Sub_grp_Event129(ItemPrice=ItemPrice)
+				else:
+					run NotBuy()
+			case 1:
+				# <50:3><50:1><125:0:0000>? Nice choice, <110:3>! Let's see… How's <90:21:0000>?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:101', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run Sub_grp_Event129(ItemPrice=ItemPrice)
+				else:
+					run NotBuy()
+			case 2:
+				# The <125:0:0000>! Yeah, I love it too! OK, how's <90:21:0000>?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:102', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run Sub_grp_Event129(ItemPrice=ItemPrice)
+				else:
+					run NotBuy()
+	else:
+		run Present_Chk()
+		MainNpc.NpcOpenTradeBanReasonMessage()
+		MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow Home_In():
-    MainNpc.EventFlags['cNpcMemory:FinishVisitNToday'] = true
-    MainNpc.EventFlags['cNpcTemp:NotAddIndoorTalkCount'] = true
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] = 0
-    MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = false
-    MainNpc.SystemSetVisitQuestPlayerEnterFlag()
-    EventFlowSystemActor.SetSharePlayChangeCondition(true)
-    if MainNpc.SystemVisitQuestKind('cNpc'):
-        switch EventFlowSystemActor.EnvTimeZone():
-            case `05:00-07:59`:
-                # Good morning! I'm so happy you came over so early, <110:5>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:004', true)
-            case `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`:
-                if EventFlowSystemActor.EnvHourCompare(23, -1, true, true) == 0:
-                    # Welcome! To <110:10>'s abode! The bugs say it's cool. I hope you think so too!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:005', true)
-                else:
-                    # I've been waiting for you! I knew you'd come. Get on in here!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:006', true)
-            case `00:00-04:59`:
-                # Welcome! It feels like I've been waiting forever, <110:5>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:007', true)
-        if System.EventFlags['cPlayer:PlayerStungByBee']:
-            MainNpc.EventFlags['cNpcMemory:TalkBeefaceToday'] = true
-    else:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # Hey, hey! Come on in, <110:5>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:001', true)
-            case 1:
-                # <50:3><110:3>! Feel free to say, "I'm home!"
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:002', true)
-            case 2:
-                # Wow! I can't believe you're here! Kick back and relax, <110:5>.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:003', true)
- 
+	MainNpc.EventFlags['cNpcMemory:FinishVisitNToday'] = true
+	MainNpc.EventFlags['cNpcTemp:NotAddIndoorTalkCount'] = true
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] = 0
+	MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = false
+	MainNpc.SystemSetVisitQuestPlayerEnterFlag()
+	EventFlowSystemActor.SetSharePlayChangeCondition(true)
+	if MainNpc.SystemVisitQuestKind('cNpc'):
+		switch EventFlowSystemActor.EnvTimeZone():
+			case `05:00-07:59`:
+				# Good morning! I'm so happy you came over so early, <110:5>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:004', true)
+			case `08:00-11:59`, `12:00-15:59`, `16:00-18:59`, `19:00-23:59`:
+				if EventFlowSystemActor.EnvHourCompare(23, -1, true, true) == 0:
+					# Welcome! To <110:10>'s abode! The bugs say it's cool. I hope you think so too!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:005', true)
+				else:
+					# I've been waiting for you! I knew you'd come. Get on in here!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:006', true)
+			case `00:00-04:59`:
+				# Welcome! It feels like I've been waiting forever, <110:5>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:007', true)
+		if System.EventFlags['cPlayer:PlayerStungByBee']:
+			MainNpc.EventFlags['cNpcMemory:TalkBeefaceToday'] = true
+	else:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Hey, hey! Come on in, <110:5>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:001', true)
+			case 1:
+				# <50:3><110:3>! Feel free to say, "I'm home!"
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:002', true)
+			case 2:
+				# Wow! I can't believe you're here! Kick back and relax, <110:5>.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:003', true)
+
 flow Home_Talk():
-    MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = true
-    if MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] < 1:
-        if MainNpc.SystemVisitQuestKind('cNpc'):
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # I'm glad you remembered our plans to hang out, <110:3>! Make yourself comfy, <110:5>.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:103', false)
-                case 1:
-                    # I hope you enjoy it here! I'm pretty proud of my house, <110:5>!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:104', false)
-                case 2:
-                    # <50:3><110:3>! Hey, thanks for coming, <110:5>! My casa is su casa.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:105', false)
-        else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # Welcome home, <110:5>! Heh heh, just kidding.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:100', false)
-                case 1:
-                    # Kick back and relax! My home is your home, <110:5>!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:101', false)
-                case 2:
-                    # A huh huh huh! Feel free to check out my house from corner to corner!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:102', false)
-        MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
-    else:
-        if MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade']:
-            run PreTrade()
-        elif MainNpc.EventFlags['cNpcTemp:FurnitureTradeFinish']:
-            run Free_VisitN()
-        elif MainNpc.IsInteriorReformed():
-            run Free_VisitN()
-        elif (MainNpc.NpcIsExistTradableFtr()) and (EventFlowSystemActor.HasBellCount(8000)) and (EventFlowSystemActor.NowRoomFtrNum(4)) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (EventFlowSystemActor.PercentChoice(30)):
-            run StartTrade()
-        else:
-            run Free_VisitN()
- 
+	MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = true
+	if MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] < 1:
+		if MainNpc.SystemVisitQuestKind('cNpc'):
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# I'm glad you remembered our plans to hang out, <110:3>! Make yourself comfy, <110:5>.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:103', false)
+				case 1:
+					# I hope you enjoy it here! I'm pretty proud of my house, <110:5>!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:104', false)
+				case 2:
+					# <50:3><110:3>! Hey, thanks for coming, <110:5>! My casa is su casa.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:105', false)
+		else:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# Welcome home, <110:5>! Heh heh, just kidding.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:100', false)
+				case 1:
+					# Kick back and relax! My home is your home, <110:5>!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:101', false)
+				case 2:
+					# A huh huh huh! Feel free to check out my house from corner to corner!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Home:102', false)
+		MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+	else:
+		if MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade']:
+			run PreTrade()
+		elif MainNpc.EventFlags['cNpcTemp:FurnitureTradeFinish']:
+			run Free_VisitN()
+		elif MainNpc.IsInteriorReformed():
+			run Free_VisitN()
+		elif (MainNpc.NpcIsExistTradableFtr()) and (EventFlowSystemActor.HasBellCount(8000)) and (EventFlowSystemActor.NowRoomFtrNum(4)) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (EventFlowSystemActor.PercentChoice(30)):
+			run StartTrade()
+		else:
+			run Free_VisitN()
+
 flow NotBuy():
-    # Did you change your mind? That's a shame, <110:6>!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:103', false)
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+	# Did you change your mind? That's a shame, <110:6>!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:103', false)
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow PreTrade():
-    if System.EventFlags['cPlayerTemp:TradeTalkCount'] < 2:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # Tell me if you see something you like! Maybe I'd, like, part with it or something, <110:5>.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:001', false)
-            case 1:
-                # Let me know if there's anything you like, <110:6>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:002', false)
-            case 2:
-                # Man, just tell me if you want something, OK? I can sell it if it's not one of my favorites!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:003', false)
-        System.EventFlags['cPlayerTemp:TradeTalkCount'] += 1
-    else:
-        # Really? Nothing catches your eye?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:013', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # That works out for me. I finally got everything right where I want it.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:014', false)
-            MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = false
-            MainNpc.EventFlags['cNpcTemp:FurnitureTradeFinish'] = true
-        else:
-            # Ah, of course. No rush! This is all I've got planned for the day. Well, other than snack breaks.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:015', false)
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+	if System.EventFlags['cPlayerTemp:TradeTalkCount'] < 2:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Tell me if you see something you like! Maybe I'd, like, part with it or something, <110:5>.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:001', false)
+			case 1:
+				# Let me know if there's anything you like, <110:6>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:002', false)
+			case 2:
+				# Man, just tell me if you want something, OK? I can sell it if it's not one of my favorites!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:003', false)
+		System.EventFlags['cPlayerTemp:TradeTalkCount'] += 1
+	else:
+		# Really? Nothing catches your eye?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:013', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# That works out for me. I finally got everything right where I want it.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:014', false)
+			MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = false
+			MainNpc.EventFlags['cNpcTemp:FurnitureTradeFinish'] = true
+		else:
+			# Ah, of course. No rush! This is all I've got planned for the day. Well, other than snack breaks.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:015', false)
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow Present_Chk():
-    if MainNpc.IsTouchedFtrFromPlayer(0):
-        # My <125:0:0000>? Heh…wow. Remember when you gave me my <125:0:0000> and I got so happy? Good times. I guess happy doesn't always last forever, huh?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:107', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # Awww, OK. If it means thaaat much to ya…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:108', false)
-            MainNpc.EventFlags['cNpcTemp:VisitNFtrReturnToPlayer'] = true
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                if MainNpc.TradeFtrCanAttachLetter():
-                    MainNpc.NpcDeleteBuyFtr()
-                    MainNpc.NpcMailSend('MAIL_XX_Quest_VisitN', 4, 'cNone', 'cFastTomorrow', 'cReward', false)
-                    EventFlowSystemActor.WaitFrame(30)
-                    # Oh. Your pockets are too full. I'll send it to your house later, then. Thanks, <110:6>!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:206', false)
-                    run Sub_Event141()
-                else:
-                    # Oh, looks like your pockets are full! Sorry—I'm not allowed to give this to you if you don't have space.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:208', false)
-                    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
-            else:
-                MainNpc.NpcDeleteBuyFtr()
-                MainNpc.NpcSetQuestRewardToPlayerBaggage('cFree')
-                EventFlowSystemActor.WaitFrame(30)
-                MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
-                run Sub_Event141()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            # Yaaay! Whew! I was super worried. But now I'm not! This whole thing's been a roller coaster.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:109', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif MainNpc.IsTouchedFtrFromPlayer(1):
-        # Oh! I was worried you'd look at my <125:0:0000>… Sorry, I can't let you have that. Can you find something else? I'm pretty chill about most of my stu…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:106', false)
-        MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.IsTouchedFtrFromPlayer(0):
+		# My <125:0:0000>? Heh…wow. Remember when you gave me my <125:0:0000> and I got so happy? Good times. I guess happy doesn't always last forever, huh?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:107', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Awww, OK. If it means thaaat much to ya…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:108', false)
+			MainNpc.EventFlags['cNpcTemp:VisitNFtrReturnToPlayer'] = true
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				if MainNpc.TradeFtrCanAttachLetter():
+					MainNpc.NpcDeleteBuyFtr()
+					MainNpc.NpcMailSend('MAIL_XX_Quest_VisitN', 4, 'cNone', 'cFastTomorrow', 'cReward', false)
+					EventFlowSystemActor.WaitFrame(30)
+					# Oh. Your pockets are too full. I'll send it to your house later, then. Thanks, <110:6>!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:206', false)
+					run Sub_Event141()
+				else:
+					# Oh, looks like your pockets are full! Sorry—I'm not allowed to give this to you if you don't have space.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:208', false)
+					MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+			else:
+				MainNpc.NpcDeleteBuyFtr()
+				MainNpc.NpcSetQuestRewardToPlayerBaggage('cFree')
+				EventFlowSystemActor.WaitFrame(30)
+				MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+				run Sub_Event141()
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			# Yaaay! Whew! I was super worried. But now I'm not! This whole thing's been a roller coaster.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:109', false)
+			EventFlowSystemActor.ExitFlowchart()
+	elif MainNpc.IsTouchedFtrFromPlayer(1):
+		# Oh! I was worried you'd look at my <125:0:0000>… Sorry, I can't let you have that. Can you find something else? I'm pretty chill about most of my stu…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:106', false)
+		MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+		EventFlowSystemActor.ExitFlowchart()
+
 flow RefuseGame():
-    run Event90()
- 
+	run Event90()
+
 flow StartTrade():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # Like my place, <110:3>? If you see something you want, I can sell it to ya for cheap!<10:4> After all, a fella needs snack money.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:004', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Trade_Yes()
-            else:
-                run Trade_No()
-        case 1:
-            # Isn't my room great? I decorated it with all my favorite things! And some other stuff too! If there's, like, something you dig, lemme know. Maybe I c…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:005', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Trade_Yes()
-            else:
-                run Trade_No()
-        case 2:
-            # What do you think of my room? Custom designed by me…for me! If ya see something you like, maybe I'll sell it to ya! Because, man oh man, is it fun to…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:006', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Trade_Yes()
-            else:
-                run Trade_No()
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Like my place, <110:3>? If you see something you want, I can sell it to ya for cheap!<10:4> After all, a fella needs snack money.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:004', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Trade_Yes()
+			else:
+				run Trade_No()
+		case 1:
+			# Isn't my room great? I decorated it with all my favorite things! And some other stuff too! If there's, like, something you dig, lemme know. Maybe I c…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:005', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Trade_Yes()
+			else:
+				run Trade_No()
+		case 2:
+			# What do you think of my room? Custom designed by me…for me! If ya see something you like, maybe I'll sell it to ya! Because, man oh man, is it fun to…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:006', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Trade_Yes()
+			else:
+				run Trade_No()
+
 local flow Sub_Event141():
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
-    MainNpc.RegistToReleaseItemList(4)
- 
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+	MainNpc.RegistToReleaseItemList(4)
+
 local flow Sub_grp_Event129(ItemPrice: int):
-    if EventFlowSystemActor.HasBellCount(ItemPrice):
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # Yaaay!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:200', true)
-            case 1:
-                # Yaaay! Thank you!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:201', true)
-            case 2:
-                # Pleasure doin' business! A huh huh! I'm a shopkeeper, <110:5>.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:202', true)
-        MainNpc.NpcDeleteBuyFtr()
-        EventFlowSystemActor.BellCountDown(ItemPrice, true)
-        if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-            MainNpc.NpcMailSend('MAIL_XX_Quest_VisitN', 4, 'cNone', 'cFastTomorrow', 'cReward', false)
-            EventFlowSystemActor.WaitFrame(30)
-            # Oh. Your pockets are too full. I'll send it to your house later, then. Thanks, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:206', false)
-        else:
-            MainNpc.NpcSetQuestRewardToPlayerBaggage('cFree')
-            EventFlowSystemActor.WaitFrame(30)
-            if MainNpc.TouchedFtrIsFood():
-                # Hey, be careful not to drop it, OK? That'd be so awful. Just thinking about it gets me all choked up!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:207', false)
-            else:
-                switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                    case 0:
-                        # I've took real good care of it, so it's not smelly or too sticky! You take care of it too, OK?
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:203', false)
-                    case 1:
-                        # I hope you treat it like it's a part of me, <110:5>!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:204', false)
-                    case 2:
-                        # My <125:0:0000> could tell ya so many stories… There's a stain from when I spilled <135:1:cd00>… Oh! And a bite mark from when I was sleepy…and hungr…
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:205', false)
-        EventFlowSystemActor.UIMoneyDisappear()
-        MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = false
-        MainNpc.EventFlags['cNpcTemp:FurnitureTradeFinish'] = true
-        MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
-        MainNpc.RegistToReleaseItemList(6)
-    else:
-        # Um, like, you don't have enough Bells, <110:3>. I can't sell it to ya, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:104', false)
-        MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+	if EventFlowSystemActor.HasBellCount(ItemPrice):
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Yaaay!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:200', true)
+			case 1:
+				# Yaaay! Thank you!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:201', true)
+			case 2:
+				# Pleasure doin' business! A huh huh! I'm a shopkeeper, <110:5>.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:202', true)
+		MainNpc.NpcDeleteBuyFtr()
+		EventFlowSystemActor.BellCountDown(ItemPrice, true)
+		if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+			MainNpc.NpcMailSend('MAIL_XX_Quest_VisitN', 4, 'cNone', 'cFastTomorrow', 'cReward', false)
+			EventFlowSystemActor.WaitFrame(30)
+			# Oh. Your pockets are too full. I'll send it to your house later, then. Thanks, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:206', false)
+		else:
+			MainNpc.NpcSetQuestRewardToPlayerBaggage('cFree')
+			EventFlowSystemActor.WaitFrame(30)
+			if MainNpc.TouchedFtrIsFood():
+				# Hey, be careful not to drop it, OK? That'd be so awful. Just thinking about it gets me all choked up!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:207', false)
+			else:
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# I've took real good care of it, so it's not smelly or too sticky! You take care of it too, OK?
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:203', false)
+					case 1:
+						# I hope you treat it like it's a part of me, <110:5>!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:204', false)
+					case 2:
+						# My <125:0:0000> could tell ya so many stories… There's a stain from when I spilled <135:1:cd00>… Oh! And a bite mark from when I was sleepy…and hungr…
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:205', false)
+		EventFlowSystemActor.UIMoneyDisappear()
+		MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = false
+		MainNpc.EventFlags['cNpcTemp:FurnitureTradeFinish'] = true
+		MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+		MainNpc.RegistToReleaseItemList(6)
+	else:
+		# Um, like, you don't have enough Bells, <110:3>. I can't sell it to ya, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:104', false)
+		MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow Trade_No():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # You don't want ANYTHING? That's a shame, <110:5>…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:010', false)
-        case 1:
-            # But…there are so many cool things!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:011', false)
-        case 2:
-            # Nothing at all? But…I thought we'd like the same things and you'd want one of my things and… That's OK… I guess…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:012', false)
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# You don't want ANYTHING? That's a shame, <110:5>…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:010', false)
+		case 1:
+			# But…there are so many cool things!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:011', false)
+		case 2:
+			# Nothing at all? But…I thought we'd like the same things and you'd want one of my things and… That's OK… I guess…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:012', false)
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow Trade_Yes():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # Heh heh, which one you want? I can sell one thing, so what'll it be?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:007', false)
-        case 1:
-            # You found something you like? I'll sell you ONE thing, so be sure ya want it, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:008', false)
-        case 2:
-            # A huh huh… I knew we'd have similar tastes in things! AND that we'd like tastes of similar things… Take your time to think it over. I ain't goin' any…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:009', false)
-    MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = true
-    MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Heh heh, which one you want? I can sell one thing, so what'll it be?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:007', false)
+		case 1:
+			# You found something you like? I'll sell you ONE thing, so be sure ya want it, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:008', false)
+		case 2:
+			# A huh huh… I knew we'd have similar tastes in things! AND that we'd like tastes of similar things… Take your time to think it over. I ain't goin' any…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Quest/BO_Quest_VisitN_Trade:009', false)
+	MainNpc.EventFlags['cNpcTemp:VisitQuestFurnitureTrade'] = true
+	MainNpc.EventFlags['cNpcMemory:TalkCountInHouseToday'] += 1
+
 flow Yes():
-    run Event88()
- 
+	run Event88()

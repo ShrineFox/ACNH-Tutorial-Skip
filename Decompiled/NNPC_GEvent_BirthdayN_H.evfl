@@ -1,448 +1,447 @@
 flow Add_Coloseness():
-    MainNpc.EventFlags['cNpcMemory:BirhdayNPresentFlag'] = true
-    System.EventFlags['cPlayer:BirthdayNGavePresentFlag'] = true
-    System.EventFlags['cPlayerVisit:BirthdayNGavePresent_DC'] = true
-    System.EventFlags['cLifeSupportAchievement:CelebrateVillagersBithday'] += 1
-    if EventFlowSystemActor.MultiKindItemSelectInclude('Flower', '', '', '', '', '', '', '', 'cItemSelect'):
-        System.EventFlags['cLifeSupportDaily:EDSendFlower'] = true
-    MainNpc.NpcDelivery(3, '"Default"')
-    if EventFlowSystemActor.TermEventNow('Valentine', false):
-        if EventFlowSystemActor.MultiItemSelectInclude(14029, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-            MainNpc.RegistValentinePresentInfo()
-            MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag'] = true
-        elif EventFlowSystemActor.MultiItemSelectInclude(13488, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-            MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag'] = true
-        else:
-            MainNpc.SetItemToNpcStockList(0, 1)
-    else:
-        MainNpc.SetItemToNpcStockList(0, 1)
-    MainNpc.AddMemoryEventPlayerForNpc('BirthdayEvent_NNPC')
-    MainNpc.AddMemoryEventPlayerForNpc('Present_ToNNPC')
-    switch SubflowResults@3[1]:
-        case 0:
-            if SubflowResults@2[0] == 0:
-                MainNpc.NpcAddFriendship(8)
-                run Sub_grp_Event137()
-            else:
-                MainNpc.NpcAddFriendship(5)
-                run Sub_grp_Event137()
-        case 1:
-            if SubflowResults@2[0] == 0:
-                MainNpc.NpcAddFriendship(6)
-            else:
-                MainNpc.NpcAddFriendship(4)
-            if MainNpc.CheckNpcFavorLevel() in (0, 1, 2, 3):
-                run Sub_grp_Event137()
-            else:
-                run Reward_Rere()
-        case 2:
-            if SubflowResults@2[0] == 0:
-                MainNpc.NpcAddFriendship(4)
-            else:
-                MainNpc.NpcAddFriendship(3)
-            if MainNpc.CheckNpcFavorLevel() not in (0, 1, 2, 3):
-                run Reward_Normal()
-            elif (not EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect')) and (not EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false)):
-                run Reward_Rere()
-            else:
-                run Reward_Normal()
- 
+	MainNpc.EventFlags['cNpcMemory:BirhdayNPresentFlag'] = true
+	System.EventFlags['cPlayer:BirthdayNGavePresentFlag'] = true
+	System.EventFlags['cPlayerVisit:BirthdayNGavePresent_DC'] = true
+	System.EventFlags['cLifeSupportAchievement:CelebrateVillagersBithday'] += 1
+	if EventFlowSystemActor.MultiKindItemSelectInclude('Flower', '', '', '', '', '', '', '', 'cItemSelect'):
+		System.EventFlags['cLifeSupportDaily:EDSendFlower'] = true
+	MainNpc.NpcDelivery(3, '"Default"')
+	if EventFlowSystemActor.TermEventNow('Valentine', false):
+		if EventFlowSystemActor.MultiItemSelectInclude(14029, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+			MainNpc.RegistValentinePresentInfo()
+			MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag'] = true
+		elif EventFlowSystemActor.MultiItemSelectInclude(13488, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+			MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag'] = true
+		else:
+			MainNpc.SetItemToNpcStockList(0, 1)
+	else:
+		MainNpc.SetItemToNpcStockList(0, 1)
+	MainNpc.AddMemoryEventPlayerForNpc('BirthdayEvent_NNPC')
+	MainNpc.AddMemoryEventPlayerForNpc('Present_ToNNPC')
+	switch SubflowResults@3[1]:
+		case 0:
+			if SubflowResults@2[0] == 0:
+				MainNpc.NpcAddFriendship(8)
+				run Sub_grp_Event137()
+			else:
+				MainNpc.NpcAddFriendship(5)
+				run Sub_grp_Event137()
+		case 1:
+			if SubflowResults@2[0] == 0:
+				MainNpc.NpcAddFriendship(6)
+			else:
+				MainNpc.NpcAddFriendship(4)
+			if MainNpc.CheckNpcFavorLevel() in (0, 1, 2, 3):
+				run Sub_grp_Event137()
+			else:
+				run Reward_Rere()
+		case 2:
+			if SubflowResults@2[0] == 0:
+				MainNpc.NpcAddFriendship(4)
+			else:
+				MainNpc.NpcAddFriendship(3)
+			if MainNpc.CheckNpcFavorLevel() not in (0, 1, 2, 3):
+				run Reward_Normal()
+			elif (not EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect')) and (not EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false)):
+				run Reward_Rere()
+			else:
+				run Reward_Normal()
+
 flow ItemComment():
-    if EventFlowSystemActor.UISelectedItemIsWrapping('cItemSelect'):
-        SubflowResults[0] = 0
-        switch EventFlowSystemActor.RandomChoice3(3):
-            case 0:
-                # Oh, wow. You wrapped it up so nice! I wonder what's inside!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:014', false)
-            case 1:
-                # Ooh, what is it? I'm gonna open it!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:015', false)
-            case 2:
-                # I wonder what it is! A huh huh huh! I'm so excited!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:016', false)
-        MainNpc.NpcDelivery(6, '"Default"')
-        MainNpc.SetDeliveryItemApplySave()
-        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-        if EventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
-            # What?! This is a DIY recipe for [a|an]<125:0:0000>! I dunno, man… Umm… I'm real super thankful and stuff, but I feel kinda bad taking this… Thanks, b…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:031', false)
-            MainNpc.NpcDelivery(10, '"Default"')
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            if EventFlowSystemActor.MultiKindItemSelectInclude('Money', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
-                run Sub_Event53()
-            elif EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TurnipExpired', 'Trash', 'JohnnyQuestDust', 'TreasureQuestDust', 'Weed', '"指定なし"', '"指定なし"', 'cItemSelect'):
-                run Sub_Event54()
-            else:
-                run Sub_grp_Event121()
-    else:
-        EventFlowSystemActor.SetCalcPriceBySolo()
-        SubflowResults[0] = 1
-        EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-        if EventFlowSystemActor.MultiKindItemSelectInclude('Money', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
-            run Sub_Event53()
-        elif EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TurnipExpired', 'Trash', 'JohnnyQuestDust', 'TreasureQuestDust', 'Weed', '"指定なし"', '"指定なし"', 'cItemSelect'):
-            run Sub_Event54()
-        else:
-            EventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
-            run Sub_grp_Event121()
- 
+	if EventFlowSystemActor.UISelectedItemIsWrapping('cItemSelect'):
+		SubflowResults[0] = 0
+		switch EventFlowSystemActor.RandomChoice3(3):
+			case 0:
+				# Oh, wow. You wrapped it up so nice! I wonder what's inside!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:014', false)
+			case 1:
+				# Ooh, what is it? I'm gonna open it!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:015', false)
+			case 2:
+				# I wonder what it is! A huh huh huh! I'm so excited!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:016', false)
+		MainNpc.NpcDelivery(6, '"Default"')
+		MainNpc.SetDeliveryItemApplySave()
+		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+		if EventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
+			# What?! This is a DIY recipe for [a|an]<125:0:0000>! I dunno, man… Umm… I'm real super thankful and stuff, but I feel kinda bad taking this… Thanks, b…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:031', false)
+			MainNpc.NpcDelivery(10, '"Default"')
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			if EventFlowSystemActor.MultiKindItemSelectInclude('Money', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
+				run Sub_Event53()
+			elif EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TurnipExpired', 'Trash', 'JohnnyQuestDust', 'TreasureQuestDust', 'Weed', '"指定なし"', '"指定なし"', 'cItemSelect'):
+				run Sub_Event54()
+			else:
+				run Sub_grp_Event121()
+	else:
+		EventFlowSystemActor.SetCalcPriceBySolo()
+		SubflowResults[0] = 1
+		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+		if EventFlowSystemActor.MultiKindItemSelectInclude('Money', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
+			run Sub_Event53()
+		elif EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TurnipExpired', 'Trash', 'JohnnyQuestDust', 'TreasureQuestDust', 'Weed', '"指定なし"', '"指定なし"', 'cItemSelect'):
+			run Sub_Event54()
+		else:
+			EventFlowSystemActor.SystemDeletePlayerItem('cItemWindowSub', 1)
+			run Sub_grp_Event121()
+
 flow Reward_Normal():
-    MainNpc.NpcDecideGeneralQuestReward(0, 2)
-    MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 1
+	MainNpc.NpcDecideGeneralQuestReward(0, 2)
+	MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 1
 entrypoint Event153:
-    if EventFlowSystemActor.IsMyVillage():
-        MainNpc.NpcMailSendRandom('MAIL_XX_BirthDayN', 4, 6, 'cNone', 'cFastTomorrow', 'cReward', false)
-    elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+	if EventFlowSystemActor.IsMyVillage():
+		MainNpc.NpcMailSendRandom('MAIL_XX_BirthDayN', 4, 6, 'cNone', 'cFastTomorrow', 'cReward', false)
+	elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
 entrypoint Event123:
-        # I never thought I'd get a gift from you since you're visiting from a different island and all. Hey, I wanna give you a thing, but your pockets are al…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:080', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
+		# I never thought I'd get a gift from you since you're visiting from a different island and all. Hey, I wanna give you a thing, but your pockets are al…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:080', false)
+		EventFlowSystemActor.ExitFlowchart()
+	else:
 entrypoint Event175:
-        MainNpc.SetItemName(1, 4, 0)
-        if EventFlowSystemActor.RandomChoice2(2) == 0:
-            # A huh huh huh, thanks for the present, <110:5>! I wanna give you a thing too! A thank-you thing! Here's [a|an] <125:4:0000>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:048', false)
-        else:
-            # I was so surprised to get a present from you, <110:4>! Here, I want ya to have this! It's a thank-you thing! [A|An] <125:4:0000>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:049', false)
-        MainNpc.SetDeliveryItem(1, true)
-        MainNpc.NpcDelivery(1, '"Default"')
-        MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 0
-        MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
- 
+		MainNpc.SetItemName(1, 4, 0)
+		if EventFlowSystemActor.RandomChoice2(2) == 0:
+			# A huh huh huh, thanks for the present, <110:5>! I wanna give you a thing too! A thank-you thing! Here's [a|an] <125:4:0000>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:048', false)
+		else:
+			# I was so surprised to get a present from you, <110:4>! Here, I want ya to have this! It's a thank-you thing! [A|An] <125:4:0000>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:049', false)
+		MainNpc.SetDeliveryItem(1, true)
+		MainNpc.NpcDelivery(1, '"Default"')
+		MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 0
+		MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+
 flow Reward_Rere():
-    MainNpc.NpcDecideGeneralQuestReward(0, 1)
-    MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 2
-    run Event153()
- 
+	MainNpc.NpcDecideGeneralQuestReward(0, 1)
+	MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 2
+	run Event153()
+
 flow Reward_SuperRere():
-    MainNpc.NpcDecideGeneralQuestReward(0, 0)
-    MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 3
-    if EventFlowSystemActor.IsMyVillage():
-        MainNpc.NpcMailSendRandom('MAIL_XX_BirthDayN', 1, 3, 'cNone', 'cFastTomorrow', 'cReward', false)
-    elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        run Event123()
-    else:
-        run Event175()
- 
+	MainNpc.NpcDecideGeneralQuestReward(0, 0)
+	MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 3
+	if EventFlowSystemActor.IsMyVillage():
+		MainNpc.NpcMailSendRandom('MAIL_XX_BirthDayN', 1, 3, 'cNone', 'cFastTomorrow', 'cReward', false)
+	elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		run Event123()
+	else:
+		run Event175()
+
 flow Root():
-    MainNpc.SetNpcName(12, 0)
-    if not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage']:
-        if EventFlowSystemActor.IsMyVillage():
-            if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
-                # Hey, <110:3>! Didja know it's my birthday today? We're in the middle of a party! I guess this is my first time saying hi since I moved here, huh? HI!…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:071', true)
-            else:
-                # Hey? Are you new? I'm <110:10>! It's my birthday party today! Join in! Have some fun!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:010', true)
-        else:
-            if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
-                # Is that you, <110:3>?! I never thought I'd see you here, a huh huh. I live on this island now! And it's my birthday, so come celebrate with me!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:072', true)
-            else:
-                # Welcome to my birthday party! I'm <110:10>! I don't recognize ya. Are you a new friend? Your name's <110:3>? Nice to meet you, a huh huh huh! A new f…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:073', true)
-        MainNpc.EventFlags['cNpcMemory:BirhdayNTalkInFlag'] = true
-        run NNPC_Reaction_First_Root::FirstMeeting_FlagProcessrun NNPC_Reaction_First_Root::FirstMeeting_FlagProcess()
-    elif not MainNpc.EventFlags['cNpcMemory:BirhdayNTalkFlag']:
-        MainNpc.EventFlags['cNpcMemory:BirhdayNTalkFlag'] = true
-        if MainNpc.IsSameBirthdayNpc():
-            if not MainNpc.IsTargetNpcHouse():
-                MainNpc.SetNpcName(11, 0)
-            # Did ya know my birthday's the same day as <115:1:cd00>'s? Nutty, huh? Anyway, that's why we're having a double birthday party! Also, there was a two-…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:100', true)
-            run Sub_grp_Event38()
-        else:
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # It's real cool to have everyone celebrate my birthday like this. <50:3><115:1:cd00> even gave me a present, can ya believe it? Hey, um, did you bring…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:004', false)
-                    run Sub_grp_Event38()
-                case 1:
-                    # Birthday parties are real fun! They're all about cakes and presents! Oh, come on! Don't tease me, <110:4>! Do you have a present for me?
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:005', false)
-                    run Sub_grp_Event38()
-                case 2:
-                    # I've been looking forward to today's birthday party so much! You get to eat cake, you get to get presents… Being the birthday boy is real neat! Did y…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:006', false)
-                    run Sub_grp_Event38()
-    elif not MainNpc.EventFlags['cNpcMemory:BirhdayNPresentFlag']:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # Everyone giving me presents is pretty darn cool! Do you have a present for me too, <110:3>?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:060', false)
-                run Sub_grp_Event38()
-            case 1:
-                # It's my birthday today! I always get real excited about presents. And cake.<10:4> But also presents!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:061', false)
-                run Sub_grp_Event38()
-            case 2:
-                # I'm SO FULL of SUGAR riiiiiiight noooow… I want a present from you! Have you got a present for me? 'Cause I want a present from yoooooou!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:062', false)
-                run Sub_grp_Event38()
-    elif (not EventFlowSystemActor.IsMyVillage()) and (MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] != 0) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1):
-        if MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] != 1:
-            if MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] != 2:
-                MainNpc.NpcDecideGeneralQuestReward(0, 0)
-            else:
-                MainNpc.NpcDecideGeneralQuestReward(0, 1)
-        else:
-            MainNpc.NpcDecideGeneralQuestReward(0, 2)
-        MainNpc.SetItemName(1, 4, 0)
-        # Ya want my thank-you gift, yeah? Here ya go! Your very own personal <125:4:0000>! I hope ya like it!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:081', false)
-        MainNpc.SetDeliveryItem(1, true)
-        MainNpc.NpcDelivery(1, '"Default"')
-        MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 0
-        MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
-        run Sub_grp_Event79()
-    else:
-        run ValentineChk()
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
-            case 0:
-                # Birthdays are the best! Lots of presents, lots of cake, lots of friends having fun… Birthdays need to happen more than once a year, <110:5>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:054', true)
-            case 1:
-                # Do you…think I look…taller? I mean, than I did yesterday? I used to get taller on birthdays. Now I'm usually just wider.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:055', true)
-            case 2:
-                # How do you eat your birthday cake, <110:3>? I've tried cutting it into slices… I've just jabbed my fork into the whole cake… I've grabbed handfuls… O…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:056', true)
-            case 3:
-                # I'm so full of cake. I'm, like, one with the cake now. You can just call me "Birthday Cake <50:3><110:10>."
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:057', true)
-            case 4:
-                # I'm so happy you're here to celebrate with me. Kick back, chill out and enjoy my birthday party!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:058', true)
- 
+	MainNpc.SetNpcName(12, 0)
+	if not MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage']:
+		if EventFlowSystemActor.IsMyVillage():
+			if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
+				# Hey, <110:3>! Didja know it's my birthday today? We're in the middle of a party! I guess this is my first time saying hi since I moved here, huh? HI!…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:071', true)
+			else:
+				# Hey? Are you new? I'm <110:10>! It's my birthday party today! Join in! Have some fun!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:010', true)
+		else:
+			if MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
+				# Is that you, <110:3>?! I never thought I'd see you here, a huh huh. I live on this island now! And it's my birthday, so come celebrate with me!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:072', true)
+			else:
+				# Welcome to my birthday party! I'm <110:10>! I don't recognize ya. Are you a new friend? Your name's <110:3>? Nice to meet you, a huh huh huh! A new f…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:073', true)
+		MainNpc.EventFlags['cNpcMemory:BirhdayNTalkInFlag'] = true
+		run NNPC_Reaction_First_Root::FirstMeeting_FlagProcess()
+	elif not MainNpc.EventFlags['cNpcMemory:BirhdayNTalkFlag']:
+		MainNpc.EventFlags['cNpcMemory:BirhdayNTalkFlag'] = true
+		if MainNpc.IsSameBirthdayNpc():
+			if not MainNpc.IsTargetNpcHouse():
+				MainNpc.SetNpcName(11, 0)
+			# Did ya know my birthday's the same day as <115:1:cd00>'s? Nutty, huh? Anyway, that's why we're having a double birthday party! Also, there was a two-…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:100', true)
+			run Sub_grp_Event38()
+		else:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# It's real cool to have everyone celebrate my birthday like this. <50:3><115:1:cd00> even gave me a present, can ya believe it? Hey, um, did you bring…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:004', false)
+					run Sub_grp_Event38()
+				case 1:
+					# Birthday parties are real fun! They're all about cakes and presents! Oh, come on! Don't tease me, <110:4>! Do you have a present for me?
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:005', false)
+					run Sub_grp_Event38()
+				case 2:
+					# I've been looking forward to today's birthday party so much! You get to eat cake, you get to get presents… Being the birthday boy is real neat! Did y…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:006', false)
+					run Sub_grp_Event38()
+	elif not MainNpc.EventFlags['cNpcMemory:BirhdayNPresentFlag']:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Everyone giving me presents is pretty darn cool! Do you have a present for me too, <110:3>?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:060', false)
+				run Sub_grp_Event38()
+			case 1:
+				# It's my birthday today! I always get real excited about presents. And cake.<10:4> But also presents!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:061', false)
+				run Sub_grp_Event38()
+			case 2:
+				# I'm SO FULL of SUGAR riiiiiiight noooow… I want a present from you! Have you got a present for me? 'Cause I want a present from yoooooou!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:062', false)
+				run Sub_grp_Event38()
+	elif (not EventFlowSystemActor.IsMyVillage()) and (MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] != 0) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1):
+		if MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] != 1:
+			if MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] != 2:
+				MainNpc.NpcDecideGeneralQuestReward(0, 0)
+			else:
+				MainNpc.NpcDecideGeneralQuestReward(0, 1)
+		else:
+			MainNpc.NpcDecideGeneralQuestReward(0, 2)
+		MainNpc.SetItemName(1, 4, 0)
+		# Ya want my thank-you gift, yeah? Here ya go! Your very own personal <125:4:0000>! I hope ya like it!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:081', false)
+		MainNpc.SetDeliveryItem(1, true)
+		MainNpc.NpcDelivery(1, '"Default"')
+		MainNpc.EventFlags['cNpcMemory:DC_NPCBirthdayFlag'] = 0
+		MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+		run Sub_grp_Event79()
+	else:
+		run ValentineChk()
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+			case 0:
+				# Birthdays are the best! Lots of presents, lots of cake, lots of friends having fun… Birthdays need to happen more than once a year, <110:5>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:054', true)
+			case 1:
+				# Do you…think I look…taller? I mean, than I did yesterday? I used to get taller on birthdays. Now I'm usually just wider.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:055', true)
+			case 2:
+				# How do you eat your birthday cake, <110:3>? I've tried cutting it into slices… I've just jabbed my fork into the whole cake… I've grabbed handfuls… O…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:056', true)
+			case 3:
+				# I'm so full of cake. I'm, like, one with the cake now. You can just call me "Birthday Cake <50:3><110:10>."
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:057', true)
+			case 4:
+				# I'm so happy you're here to celebrate with me. Kick back, chill out and enjoy my birthday party!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:058', true)
+
 flow Root_In():
-    MainNpc.SetNpcName(12, 0)
-    if EventFlowSystemActor.NetIsConnected():
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif not ((MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']) and (MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage'])):
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif MainNpc.EventFlags['cNpcMemory:BirhdayNTalkInFlag']:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        MainNpc.EventFlags['cNpcMemory:BirhdayNTalkInFlag'] = true
-        switch EventFlowSystemActor.RandomChoice3(3):
-            case 0:
-                # Yaaay! <50:3><110:4>! Welcome to my, ya know, my birthday party!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:001', true)
-            case 1:
-                # Oh, wow! It's <110:4>! Did you come to celebrate my birthday, <110:6>?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:002', true)
-            case 2:
-                # Like, hey, <110:29>! Thanks for hanging out with me at my real cool birthday celebration!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:003', true)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.SetNpcName(12, 0)
+	if EventFlowSystemActor.NetIsConnected():
+		EventFlowSystemActor.ExitFlowchart()
+	elif not ((MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']) and (MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage'])):
+		EventFlowSystemActor.ExitFlowchart()
+	elif MainNpc.EventFlags['cNpcMemory:BirhdayNTalkInFlag']:
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		MainNpc.EventFlags['cNpcMemory:BirhdayNTalkInFlag'] = true
+		switch EventFlowSystemActor.RandomChoice3(3):
+			case 0:
+				# Yaaay! <50:3><110:4>! Welcome to my, ya know, my birthday party!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:001', true)
+			case 1:
+				# Oh, wow! It's <110:4>! Did you come to celebrate my birthday, <110:6>?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:002', true)
+			case 2:
+				# Like, hey, <110:29>! Thanks for hanging out with me at my real cool birthday celebration!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:003', true)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Root_Out():
-    MainNpc.SetNpcName(12, 0)
-    if EventFlowSystemActor.NetIsConnected():
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif not ((MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']) and (MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage'])):
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif MainNpc.EventFlags['cNpcMemory:BirhdayNTalkOutFlag']:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        MainNpc.EventFlags['cNpcMemory:BirhdayNTalkOutFlag'] = true
-        if MainNpc.EventFlags['cNpcMemory:BirhdayNPresentFlag']:
-            switch EventFlowSystemActor.RandomChoice3(3):
-                case 0:
-                    # Leaving already? Well, thanks for coming over. We did some good celebrating, huh? Oh, and thanks for the present!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:064', true)
-                case 1:
-                    # Hey, hold up, <110:4>. I wanna tell you a thing. Thanks for coming today, buddy. I really dug the present too! Come over and chill any time!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:065', true)
-                case 2:
-                    # You leaving already? Hey, thanks for coming to my birthday party. And thanks for the present too. Best birthday ever, right?
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:066', true)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            switch EventFlowSystemActor.RandomChoice3(3):
-                case 0:
-                    # You headed home already? Thanks for coming to the party. Wouldn't of been the same without ya.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:067', true)
-                case 1:
-                    # Thanks for coming to my party!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:068', true)
-                case 2:
-                    # Hey, <110:29>! You leaving already? That's cool.  That's cool. Listen, thanks for coming to my birthday party and hanging out.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:069', true)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.SetNpcName(12, 0)
+	if EventFlowSystemActor.NetIsConnected():
+		EventFlowSystemActor.ExitFlowchart()
+	elif not ((MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']) and (MainNpc.EventFlags['cNpcMemory:FirstMeetGreetAtThisVillage'])):
+		EventFlowSystemActor.ExitFlowchart()
+	elif MainNpc.EventFlags['cNpcMemory:BirhdayNTalkOutFlag']:
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		MainNpc.EventFlags['cNpcMemory:BirhdayNTalkOutFlag'] = true
+		if MainNpc.EventFlags['cNpcMemory:BirhdayNPresentFlag']:
+			switch EventFlowSystemActor.RandomChoice3(3):
+				case 0:
+					# Leaving already? Well, thanks for coming over. We did some good celebrating, huh? Oh, and thanks for the present!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:064', true)
+				case 1:
+					# Hey, hold up, <110:4>. I wanna tell you a thing. Thanks for coming today, buddy. I really dug the present too! Come over and chill any time!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:065', true)
+				case 2:
+					# You leaving already? Hey, thanks for coming to my birthday party. And thanks for the present too. Best birthday ever, right?
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:066', true)
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			switch EventFlowSystemActor.RandomChoice3(3):
+				case 0:
+					# You headed home already? Thanks for coming to the party. Wouldn't of been the same without ya.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:067', true)
+				case 1:
+					# Thanks for coming to my party!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:068', true)
+				case 2:
+					# Hey, <110:29>! You leaving already? That's cool.  That's cool. Listen, thanks for coming to my birthday party and hanging out.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:069', true)
+			EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event122():
-    SubflowResults[1] = 0
-    if EventFlowSystemActor.RandomChoice2(2) == 0:
-        # Oh wow, like… Whaa?! This is [a|an] <125:0:0000>, right?! I never dreamed I'd get something so darn neat! Wow. Thank you so much, <110:5>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:021', false)
-    else:
-        # Whoa! I— You— What?!<10:4> [A|An]<125:0:0000>?! Are you SURE I can have this?! Wow, <110:4>! This is the best!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:022', false)
- 
+	SubflowResults[1] = 0
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		# Oh wow, like… Whaa?! This is [a|an] <125:0:0000>, right?! I never dreamed I'd get something so darn neat! Wow. Thank you so much, <110:5>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:021', false)
+	else:
+		# Whoa! I— You— What?!<10:4> [A|An]<125:0:0000>?! Are you SURE I can have this?! Wow, <110:4>! This is the best!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:022', false)
+
 local flow Sub_Event128():
-    SubflowResults[1] = 1
-    if EventFlowSystemActor.RandomChoice2(2) == 0:
-        # Wow! You got me [a|an] <125:0:0000>?! How'd ya know I really wanted one?! Thank you so much!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:023', false)
-    else:
-        # Ah, cool! A huh huh huh, it's [a|an]<125:0:0000>! So cool.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:024', false)
- 
+	SubflowResults[1] = 1
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		# Wow! You got me [a|an] <125:0:0000>?! How'd ya know I really wanted one?! Thank you so much!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:023', false)
+	else:
+		# Ah, cool! A huh huh huh, it's [a|an]<125:0:0000>! So cool.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:024', false)
+
 local flow Sub_Event133():
-    SubflowResults[1] = 2
-    if EventFlowSystemActor.RandomChoice2(2) == 0:
-        # [A|An]<125:0:0000>? Thanks, <110:3>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:025', false)
-    else:
-        # [A|An]<125:0:0000>? Thanks. I love it!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:026', false)
- 
+	SubflowResults[1] = 2
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		# [A|An]<125:0:0000>? Thanks, <110:3>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:025', false)
+	else:
+		# [A|An]<125:0:0000>? Thanks. I love it!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:026', false)
+
 local flow Sub_Event53():
-    # Wha?! These are Bells! I hope ya understand that I can't accept these, <110:3>. I REALLY dig the thought and all… but I'm gonna give these back to yo…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:027', false)
-    run Sub_Event55()
- 
+	# Wha?! These are Bells! I hope ya understand that I can't accept these, <110:3>. I REALLY dig the thought and all… but I'm gonna give these back to yo…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:027', false)
+	run Sub_Event55()
+
 local flow Sub_Event54():
-    # Huh? What is this? How do you use one of these? Hang on… Is this…trash? Maaaan, this is just trash! What'd I do to deserve this? So uncool on my birt…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:028', false)
-    MainNpc.NpcAddFriendship(-5)
-    run Sub_Event55()
- 
+	# Huh? What is this? How do you use one of these? Hang on… Is this…trash? Maaaan, this is just trash! What'd I do to deserve this? So uncool on my birt…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:028', false)
+	MainNpc.NpcAddFriendship(-5)
+	run Sub_Event55()
+
 local flow Sub_Event55():
-    MainNpc.NpcDelivery(10, '"Default"')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.NpcDelivery(10, '"Default"')
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_grp_Event121():
-    if EventFlowSystemActor.MultiItemSelectInclude(2779, 3592, 7146, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-        # Oh wow! A birthday cake? You're right! Can't have a birthday with no birthday cake!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:017', false)
-    elif EventFlowSystemActor.KindBitParamItemSelectInclude('食べる', 'cItemSelect'):
-        if EventFlowSystemActor.MultiKindItemSelectInclude('Turnip', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
-            # Oh, nice. Turnips! I never thought I'd get turnips for a present. I buy turnips sometimes. For the investment, ya know? <10:4>Gotta buy turnips to ma…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:029', false)
-        else:
-            # Oooooo, did you bring me something yummy? Could it be…my favorite? [A|An]<125:0:0000>? Thanks, <110:3>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:030', false)
-    elif (EventFlowSystemActor.TermEventNow('Valentine', false)) and (EventFlowSystemActor.MultiItemSelectInclude(13488, 14029, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')):
-        MainNpc.EventFlags['cNpcMemory:IsReceiptWrappingItem'] = true
-        if EventFlowSystemActor.MultiItemSelectInclude(14029, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-            MainNpc.RegistValentinePresentInfo()
-        # Wait! Hang on! Whoa! You got me [a|an]<125:0:0000>?! Wow! You remembered my birthday! I usually get forgotten with all the Valentine's Day stuff goin…
-        MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:036', false)
-    elif EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect'):
-        # Ooh, wow! You got me [a|an]<125:0:0000>! It's funny because I already have [a|an]<125:0:0000>! But it's also awesome that you know what I like, <110:…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:018', false)
-    elif EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false):
-        if EventFlowSystemActor.MultiKindItemSelectInclude('Tops', 'OnePiece', '', '', '', '', '', '', 'cItemSelect'):
-            # [A|An]<125:0:0000>?! I love wearing this stuff! Now, if I drop food on my shirt, I can use this as a backup. I bet I'm gonna wear this a bunch.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:019', false)
-        elif (EventFlowSystemActor.MultiKindItemSelectInclude('Cap', '', '', '', '', '', '', '', 'cItemSelect')) and (not EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect')):
-            # My very favorite head-clothes! [A|An]<125:0:0000>! It's just too bad I don't have extra heads or I would wear all of 'em at once, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:019_01', false)
-        else:
-            # Oh! Oh! Oh! You got me [a|an] <125:0:0000>! Yay! This is great! I was gonna lose mine tomorrow, but that's OK now 'cause I have extra, <110:6>! Thank…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:019_02', false)
-    elif EventFlowSystemActor.UISelectedItemIsEquiped(8, 'cItemSelect', false):
-        if EventFlowSystemActor.MultiKindItemSelectInclude('Tops', 'OnePiece', '', '', '', '', '', '', 'cItemSelect'):
-            # It's the <125:0:0000> that you're wearing! A huh huh huh, we're totally <125:0:0000> twins.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020', false)
-        elif EventFlowSystemActor.MultiKindItemSelectInclude('Cap', '', '', '', '', '', '', '', 'cItemSelect'):
-            if EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect'):
-                # Hey, wait! Don't you have [a|an] <125:0:0000> too? You do! Right there! On your…you! And now mine can be on my…me whenever I want, <110:6>! Yay!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020_02', false)
-            else:
-                # Wow! You got me your head's super- cool <125:0:0000>! Now all you have to do is make a face like [a|an]<110:15:cd00>, and we can be head twins, <110:…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020_01', false)
-        else:
-            if EventFlowSystemActor.MultiKindItemSelectInclude('Accessory', '', '', '', '', '', '', '', 'cItemSelect'):
-                # Hey, wait! Don't you have [a|an] <125:0:0000> too? You do! Right there! On your…you! And now mine can be on my…me whenever I want, <110:6>! Yay!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020_02', false)
-            else:
-                run Sub_grp_Event130()
-    else:
-        run Sub_grp_Event130()
- 
+	if EventFlowSystemActor.MultiItemSelectInclude(2779, 3592, 7146, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+		# Oh wow! A birthday cake? You're right! Can't have a birthday with no birthday cake!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:017', false)
+	elif EventFlowSystemActor.KindBitParamItemSelectInclude('食べる', 'cItemSelect'):
+		if EventFlowSystemActor.MultiKindItemSelectInclude('Turnip', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
+			# Oh, nice. Turnips! I never thought I'd get turnips for a present. I buy turnips sometimes. For the investment, ya know? <10:4>Gotta buy turnips to ma…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:029', false)
+		else:
+			# Oooooo, did you bring me something yummy? Could it be…my favorite? [A|An]<125:0:0000>? Thanks, <110:3>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:030', false)
+	elif (EventFlowSystemActor.TermEventNow('Valentine', false)) and (EventFlowSystemActor.MultiItemSelectInclude(13488, 14029, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect')):
+		MainNpc.EventFlags['cNpcMemory:IsReceiptWrappingItem'] = true
+		if EventFlowSystemActor.MultiItemSelectInclude(14029, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+			MainNpc.RegistValentinePresentInfo()
+		# Wait! Hang on! Whoa! You got me [a|an]<125:0:0000>?! Wow! You remembered my birthday! I usually get forgotten with all the Valentine's Day stuff goin…
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:036', false)
+	elif EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect'):
+		# Ooh, wow! You got me [a|an]<125:0:0000>! It's funny because I already have [a|an]<125:0:0000>! But it's also awesome that you know what I like, <110:…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:018', false)
+	elif EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false):
+		if EventFlowSystemActor.MultiKindItemSelectInclude('Tops', 'OnePiece', '', '', '', '', '', '', 'cItemSelect'):
+			# [A|An]<125:0:0000>?! I love wearing this stuff! Now, if I drop food on my shirt, I can use this as a backup. I bet I'm gonna wear this a bunch.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:019', false)
+		elif (EventFlowSystemActor.MultiKindItemSelectInclude('Cap', '', '', '', '', '', '', '', 'cItemSelect')) and (not EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect')):
+			# My very favorite head-clothes! [A|An]<125:0:0000>! It's just too bad I don't have extra heads or I would wear all of 'em at once, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:019_01', false)
+		else:
+			# Oh! Oh! Oh! You got me [a|an] <125:0:0000>! Yay! This is great! I was gonna lose mine tomorrow, but that's OK now 'cause I have extra, <110:6>! Thank…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:019_02', false)
+	elif EventFlowSystemActor.UISelectedItemIsEquiped(8, 'cItemSelect', false):
+		if EventFlowSystemActor.MultiKindItemSelectInclude('Tops', 'OnePiece', '', '', '', '', '', '', 'cItemSelect'):
+			# It's the <125:0:0000> that you're wearing! A huh huh huh, we're totally <125:0:0000> twins.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020', false)
+		elif EventFlowSystemActor.MultiKindItemSelectInclude('Cap', '', '', '', '', '', '', '', 'cItemSelect'):
+			if EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect'):
+				# Hey, wait! Don't you have [a|an] <125:0:0000> too? You do! Right there! On your…you! And now mine can be on my…me whenever I want, <110:6>! Yay!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020_02', false)
+			else:
+				# Wow! You got me your head's super- cool <125:0:0000>! Now all you have to do is make a face like [a|an]<110:15:cd00>, and we can be head twins, <110:…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020_01', false)
+		else:
+			if EventFlowSystemActor.MultiKindItemSelectInclude('Accessory', '', '', '', '', '', '', '', 'cItemSelect'):
+				# Hey, wait! Don't you have [a|an] <125:0:0000> too? You do! Right there! On your…you! And now mine can be on my…me whenever I want, <110:6>! Yay!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:020_02', false)
+			else:
+				run Sub_grp_Event130()
+	else:
+		run Sub_grp_Event130()
+
 local flow Sub_grp_Event130():
-    if EventFlowSystemActor.MultiKindItemSelectInclude('Honeycomb', 'Fruit', 'Mushroom', 'ShellDrift', 'Insect', 'Fish', 'Fossil', '', 'cItemSelect'):
-        if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 8000:
-            run Sub_Event122()
-        elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 2001:
-            run Sub_Event133()
-        else:
-            run Sub_Event128()
-    else:
-        if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 2000:
-            run Sub_Event122()
-        elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 501:
-            run Sub_Event133()
-        else:
-            run Sub_Event128()
- 
+	if EventFlowSystemActor.MultiKindItemSelectInclude('Honeycomb', 'Fruit', 'Mushroom', 'ShellDrift', 'Insect', 'Fish', 'Fossil', '', 'cItemSelect'):
+		if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 8000:
+			run Sub_Event122()
+		elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 2001:
+			run Sub_Event133()
+		else:
+			run Sub_Event128()
+	else:
+		if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 2000:
+			run Sub_Event122()
+		elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 501:
+			run Sub_Event133()
+		else:
+			run Sub_Event128()
+
 local flow Sub_grp_Event137():
-    if (not EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect')) and (not EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false)):
-        run Reward_SuperRere()
-    else:
-        run Reward_Rere()
- 
+	if (not EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect')) and (not EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false)):
+		run Reward_SuperRere()
+	else:
+		run Reward_Rere()
+
 local flow Sub_grp_Event38():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        EventFlowSystemActor.UIItemSelectWindowHandling('cBirthdayPresent', 65534, '', '', 'cItemSelect', true)
-        if EventFlowSystemActor.UIResultMenuDecide():
-            MainNpc.NpcPlayReport('cNpcBirthdayPresent', 0)
-            MainNpc.SetDeliveryItem(4, false)
-            MainNpc.NpcDelivery(0, 'Keep')
-            run ItemComment()
-            run Add_Coloseness()
-            run Sub_grp_Event79()
-        else:
-            # Huh? Did you forget it at home?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:011', true)
-    else:
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-            case 0:
-                # Oh…that's cool. Having you wish me a happy birthday is the best present of all, <110:5>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:007', true)
-            case 1:
-                # Oh, I see… No worries! It's just cool to have you here, partying with me!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:008', true)
-            case 2:
-                # It's OK, don't worry about it! You can bring me a present later, <110:6>!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:009', true)
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		EventFlowSystemActor.UIItemSelectWindowHandling('cBirthdayPresent', 65534, '', '', 'cItemSelect', true)
+		if EventFlowSystemActor.UIResultMenuDecide():
+			MainNpc.NpcPlayReport('cNpcBirthdayPresent', 0)
+			MainNpc.SetDeliveryItem(4, false)
+			MainNpc.NpcDelivery(0, 'Keep')
+			run ItemComment()
+			run Add_Coloseness()
+			run Sub_grp_Event79()
+		else:
+			# Huh? Did you forget it at home?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:011', true)
+	else:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Oh…that's cool. Having you wish me a happy birthday is the best present of all, <110:5>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:007', true)
+			case 1:
+				# Oh, I see… No worries! It's just cool to have you here, partying with me!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:008', true)
+			case 2:
+				# It's OK, don't worry about it! You can bring me a present later, <110:6>!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:009', true)
+
 local flow Sub_grp_Event79():
-    switch EventFlowSystemActor.RandomChoice3(3):
-        case 0:
-            # Thanks for the gift, <110:5>! What a real great birthday!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:050', true)
-        case 1:
-            # Thanks for today, <110:6>! I wanna be friends forever, <110:4>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:051', true)
-        case 2:
-            # <50:3><110:4>, I gotta tell ya, thanks so much for the present! Today's been just the best, ya know?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:052', true)
- 
+	switch EventFlowSystemActor.RandomChoice3(3):
+		case 0:
+			# Thanks for the gift, <110:5>! What a real great birthday!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:050', true)
+		case 1:
+			# Thanks for today, <110:6>! I wanna be friends forever, <110:4>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:051', true)
+		case 2:
+			# <50:3><110:4>, I gotta tell ya, thanks so much for the present! Today's been just the best, ya know?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_BirthdayN_H:052', true)
+
 flow ValentineChk():
-    if (EventFlowSystemActor.TermEventNow('Valentine', false)) and (EventFlowSystemActor.HaveValentineItem()) and (not MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag']):
-        run NNPC_Talk_General::PresentAvailable_Chkrun NNPC_Talk_General::PresentAvailable_Chk()
-        if (MainNpc.EventFlags['cNpcMemory:ReceivedFirstPresent']) and (MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqH']):
-            switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-                case 0:
-                    # It's so rad everyone came out for my birthday today. Or…maybe they're only here to exchange valentines? Nah, it's gotta be for me. I mean, just LOOK …
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:101', false)
-                case 1:
-                    # I wanna see everyone rockin' out like it's both your best buddy's birthday AND Valentine's Day…'cause it is!
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:102', false)
-                case 2:
-                    # Having my birthday on Valentine's Day kinda rocks, honestly. Double parties are a total blast! Bwa ha ha!
-                    MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:103', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run NNPC_Select_Present::Valentinerun NNPC_Select_Present::Valentine()
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                EventFlowSystemActor.WaitFrame(1)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.TermEventNow('Valentine', false)) and (EventFlowSystemActor.HaveValentineItem()) and (not MainNpc.EventFlags['cNpcMemory:ValentinePresentFlag']):
+		run NNPC_Talk_General::PresentAvailable_Chk()
+		if (MainNpc.EventFlags['cNpcMemory:ReceivedFirstPresent']) and (MainNpc.EventFlags['cNpcMemory:FriendshipBecomeAcqH']):
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					# It's so rad everyone came out for my birthday today. Or…maybe they're only here to exchange valentines? Nah, it's gotta be for me. I mean, just LOOK …
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:101', false)
+				case 1:
+					# I wanna see everyone rockin' out like it's both your best buddy's birthday AND Valentine's Day…'cause it is!
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:102', false)
+				case 2:
+					# Having my birthday on Valentine's Day kinda rocks, honestly. Double parties are a total blast! Bwa ha ha!
+					MainNpc.OpenMessageWindow('TalkNNpc/G4_An/GEvent/AN_GEvent_BirthdayN_H:103', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run NNPC_Select_Present::Valentine()
+				EventFlowSystemActor.ExitFlowchart()
+			else:
+				EventFlowSystemActor.WaitFrame(1)
+				EventFlowSystemActor.ExitFlowchart()

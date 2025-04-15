@@ -1,107 +1,106 @@
 flow OwlDailyGreeting():
-    if System.EventFlags['cPlayer:FutaTalkedInMuseumToday']:
-        run SNPC_owl_22_Museum_RenualQuest::BeforeRenualQuestrun SNPC_owl_22_Museum_RenualQuest::BeforeRenualQuest()
-    else:
-        System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
-        run SNPC_owl_00_Common::Greetrun SNPC_owl_00_Common::Greet()
-        # Thank you for visiting!
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:101', false)
- 
+	if System.EventFlags['cPlayer:FutaTalkedInMuseumToday']:
+		run SNPC_owl_22_Museum_RenualQuest::BeforeRenualQuest()
+	else:
+		System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
+		run SNPC_owl_00_Common::Greet()
+		# Thank you for visiting!
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:101', false)
+
 flow OwlReadyForBuiltMuseum():
-    System.EventFlags['cPlayer:FutaReadyForMuseum'] = true
-    # <50:3>PLAYER! You'll never guess what has transpired! We have collected the donations required for museum approval and construction! Now, I cannot ac…
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:199_01', false)
- 
+	System.EventFlags['cPlayer:FutaReadyForMuseum'] = true
+	# <50:3>PLAYER! You'll never guess what has transpired! We have collected the donations required for museum approval and construction! Now, I cannot ac…
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:199_01', false)
+
 flow OwlTentCommon():
-    if (not System.EventFlags['cPlayer:OwlGotDiyRecipe']) and (System.EventFlags['cPlayer:MainmenuRecipe']):
-        run Owl_GetRecipe_AfterGreeting()
-    elif System.EventFlags['cPlayer:OwlShowFossilMyself']:
-        run OwlDailyGreeting()
-        if not EventFlowSystemActor.MuseumDonationNumCheck(20):
-            run OwlTentDefaultChoice()
-        elif System.EventFlags['cPlayer:FutaReadyForMuseum']:
-            # Museum construction is about to begin, and thus I cannot accept new donations at this time. However, requests for fossil appraisals are still most we…
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:192', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
-            else:
-                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
-        else:
-            run OwlReadyForBuiltMuseum()
-    elif System.EventFlags['cLand:OwlFoundFossil']:
-        System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
-        # <50:3>PLAYER! Splendid news, hootie hoo! Fossils have been found on ISLAND!
-        MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:051', false)
-        if not EventFlowSystemActor.MuseumDonationNumCheck(20):
-            # Henceforth fossil donations and appraisals shall commence in earnest. I await your contributions with anticipation.
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:052_01', false)
-        elif System.EventFlags['cPlayer:FutaReadyForMuseum']:
-            # As I am moving forward with the museum application, I am unable to accept new donations at this time. However, I am more than happy to appraise fossi…
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:052_02', false)
-        else:
-            # Furthermore, we have gathered enough donations to proceed with the museum-building application! As I am currently engaged in this endeavor, I cannot …
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:052_03', false)
-            System.EventFlags['cPlayer:FutaReadyForMuseum'] = true
-    else:
-        run OwlDailyGreeting()
-        if not EventFlowSystemActor.MuseumDonationNumCheck(20):
-            run Sel_NoFoundFossil()
-        elif not System.EventFlags['cPlayer:FutaReadyForMuseum']:
-            run OwlReadyForBuiltMuseum()
-        elif EventFlowSystemActor.HasKindItem('cFilter', '', 'Fossils'):
-            # Museum construction is about to begin, and thus I cannot accept new donations at this time. However, requests for fossil appraisals are still most we…
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:194', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                # Hoo! Is that true?!<10:4> Why, where might this fossil be now?!
-                MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:195', false)
-                EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'Fossils', 'cItemSelect', false)
-                if EventFlowSystemActor.UIResultMenuDecide():
-                    MainNpc.SetDeliveryItem(4, false)
-                    EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-                    MainNpc.NpcDelivery(0, 'Keep')
-                    if EventFlowSystemActor.MultiKindItemSelectInclude('FossilUnknown', '', '', '', '', '', '', '', 'cItemSelect'):
-                        run SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Unknownrun SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Unknown()
-                    else:
-                        run SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Knownrun SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Known()
-                else:
-                    # Wot wot?! Changed your mind, have you? My apologies if I got ahead of myself. Ehh… Do let me know if you happen to have it on you another time.
-                    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:196', false)
-            else:
-                run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
-        else:
-            # I am not accepting new donations at this time due to the museum- construction preparations… That said, I am still quite eager to uncover fossils, so …
-            MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:193', false)
- 
+	if (not System.EventFlags['cPlayer:OwlGotDiyRecipe']) and (System.EventFlags['cPlayer:MainmenuRecipe']):
+		run Owl_GetRecipe_AfterGreeting()
+	elif System.EventFlags['cPlayer:OwlShowFossilMyself']:
+		run OwlDailyGreeting()
+		if not EventFlowSystemActor.MuseumDonationNumCheck(20):
+			run OwlTentDefaultChoice()
+		elif System.EventFlags['cPlayer:FutaReadyForMuseum']:
+			# Museum construction is about to begin, and thus I cannot accept new donations at this time. However, requests for fossil appraisals are still most we…
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:192', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run SNPC_owl_02_Museum_Judgment::Root()
+			else:
+				run SNPC_owl_00_Common::End()
+		else:
+			run OwlReadyForBuiltMuseum()
+	elif System.EventFlags['cLand:OwlFoundFossil']:
+		System.EventFlags['cPlayer:OwlShowFossilMyself'] = true
+		# <50:3>PLAYER! Splendid news, hootie hoo! Fossils have been found on ISLAND!
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:051', false)
+		if not EventFlowSystemActor.MuseumDonationNumCheck(20):
+			# Henceforth fossil donations and appraisals shall commence in earnest. I await your contributions with anticipation.
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:052_01', false)
+		elif System.EventFlags['cPlayer:FutaReadyForMuseum']:
+			# As I am moving forward with the museum application, I am unable to accept new donations at this time. However, I am more than happy to appraise fossi…
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:052_02', false)
+		else:
+			# Furthermore, we have gathered enough donations to proceed with the museum-building application! As I am currently engaged in this endeavor, I cannot …
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:052_03', false)
+			System.EventFlags['cPlayer:FutaReadyForMuseum'] = true
+	else:
+		run OwlDailyGreeting()
+		if not EventFlowSystemActor.MuseumDonationNumCheck(20):
+			run Sel_NoFoundFossil()
+		elif not System.EventFlags['cPlayer:FutaReadyForMuseum']:
+			run OwlReadyForBuiltMuseum()
+		elif EventFlowSystemActor.HasKindItem('cFilter', '', 'Fossils'):
+			# Museum construction is about to begin, and thus I cannot accept new donations at this time. However, requests for fossil appraisals are still most we…
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:194', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# Hoo! Is that true?!<10:4> Why, where might this fossil be now?!
+				MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:195', false)
+				EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'Fossils', 'cItemSelect', false)
+				if EventFlowSystemActor.UIResultMenuDecide():
+					MainNpc.SetDeliveryItem(4, false)
+					EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+					MainNpc.NpcDelivery(0, 'Keep')
+					if EventFlowSystemActor.MultiKindItemSelectInclude('FossilUnknown', '', '', '', '', '', '', '', 'cItemSelect'):
+run SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Unknown()
+					else:
+run SNPC_owl_11_Tent_Entries::owl_DonatedFossil1st_Known()
+				else:
+					# Wot wot?! Changed your mind, have you? My apologies if I got ahead of myself. Ehh… Do let me know if you happen to have it on you another time.
+					MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:196', false)
+			else:
+				run SNPC_owl_00_Common::End()
+		else:
+			# I am not accepting new donations at this time due to the museum- construction preparations… That said, I am still quite eager to uncover fossils, so …
+			MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:193', false)
+
 flow OwlTentDefaultChoice():
-    # Please let me know if you have items to donate or need assistance. I am here to help! Hoo!
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:103', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
-        case 1:
-            run SNPC_owl_02_Museum_Judgment::Rootrun SNPC_owl_02_Museum_Judgment::Root()
-        case 2:
-            run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
- 
+	# Please let me know if you have items to donate or need assistance. I am here to help! Hoo!
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:103', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run SNPC_owl_01_Museum_Donation::Root()
+		case 1:
+			run SNPC_owl_02_Museum_Judgment::Root()
+		case 2:
+			run SNPC_owl_00_Common::End()
+
 flow Owl_GetRecipe_AfterGreeting():
-    System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
-    # Hoo! If it isn't PLAYER! You've come at just the right time! I've just remembered there's something I wanted to give you. Pardon me a moment while I …
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:031', false)
-    run SNPC_owl_12_Tent_FirstTimeTalk::ALL_Cmn_SendReciperun SNPC_owl_12_Tent_FirstTimeTalk::ALL_Cmn_SendRecipe()
-    # There now. I have sent you two DIY recipes. One is for a <item>vaulting pole, best used for leaping over rivers. The other is for a shovel so you may…
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:014', false)
- 
+	System.EventFlags['cPlayer:FutaTalkedInMuseumToday'] = true
+	# Hoo! If it isn't PLAYER! You've come at just the right time! I've just remembered there's something I wanted to give you. Pardon me a moment while I …
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:031', false)
+	run SNPC_owl_12_Tent_FirstTimeTalk::ALL_Cmn_SendRecipe()
+	# There now. I have sent you two DIY recipes. One is for a <item>vaulting pole, best used for leaping over rivers. The other is for a shovel so you may…
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:014', false)
+
 flow Root():
-    if System.EventFlags['cPlayer:OwlFinished1stTalk']:
-        run OwlTentCommon()
-    else:
-        run SNPC_owl_12_Tent_FirstTimeTalk::Rootrun SNPC_owl_12_Tent_FirstTimeTalk::Root()
- 
+	if System.EventFlags['cPlayer:OwlFinished1stTalk']:
+		run OwlTentCommon()
+	else:
+		run SNPC_owl_12_Tent_FirstTimeTalk::Root()
+
 flow Sel_NoFoundFossil():
-    # Please let me know if you have items to donate or need assistance. I am here to help! Hoo!
-    MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:102', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run SNPC_owl_01_Museum_Donation::Rootrun SNPC_owl_01_Museum_Donation::Root()
-    else:
-        run SNPC_owl_00_Common::Endrun SNPC_owl_00_Common::End()
- 
+	# Please let me know if you have items to donate or need assistance. I am here to help! Hoo!
+	MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_01_MuseumTent:102', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run SNPC_owl_01_Museum_Donation::Root()
+	else:
+		run SNPC_owl_00_Common::End()

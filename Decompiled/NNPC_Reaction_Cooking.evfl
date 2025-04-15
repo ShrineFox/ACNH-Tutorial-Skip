@@ -1,107 +1,106 @@
 flow CHK_RecipeAndBag():
-    if not System.EventFlags['cPlayer:MainmenuRecipe_v2']:
-        # Someday, I wanna teach you how to make your own. Then we can be recipe buddies, <110:6>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:003', false)
-        run Sub_Event33()
-    elif not EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
-        # I can give you the recipe if both you AND your pockets want it. But your pockets don't right now, so… Sorry!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:004', false)
-        run Sub_Event33()
- 
+	if not System.EventFlags['cPlayer:MainmenuRecipe_v2']:
+		# Someday, I wanna teach you how to make your own. Then we can be recipe buddies, <110:6>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:003', false)
+		run Sub_Event33()
+	elif not EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
+		# I can give you the recipe if both you AND your pockets want it. But your pockets don't right now, so… Sorry!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:004', false)
+		run Sub_Event33()
+
 flow Cook_AfterItemGet():
-    MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial'] = true
-    System.EventFlags['cPlayerTemp:GotRecipeorMaterial'] = true
-    MainNpc.EventFlags['cNpcMemory:TalkDIY'] = true
-    MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial'] = true
+	System.EventFlags['cPlayerTemp:GotRecipeorMaterial'] = true
+	MainNpc.EventFlags['cNpcMemory:TalkDIY'] = true
+	MainNpc.AddMemoryEventPlayerForNpc('Present_FromNNPC')
+	EventFlowSystemActor.ExitFlowchart()
+
 flow Cook_GetItem():
-    if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 0:
-        if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 1:
-            EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
-        else:
-            EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
-        # You're back! Here ya go, just like I promised, <110:6>.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:031', false)
-        run Event49()
- 
+	if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 0:
+		if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 1:
+			EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
+		else:
+			EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
+		# You're back! Here ya go, just like I promised, <110:6>.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:031', false)
+		run Event49()
+
 flow Cook_PumpkinFtr():
-    # …No foolin'? You already know how to make that one?
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:032', false)
-    if EventFlowSystemActor.PercentChoice(70):
-        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 1
-        EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
-        # Dang! Is there anything you DON'T know? Well, what if I gave you some pumpkins to make it with instead?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:033', false)
-    else:
-        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 2
-        EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
-        # Aw. I was all excited to give you the recipe too. Hmm… What can I give you that's just as good? Oh, duh! How about <item>candy? Halloween is coming u…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:035', false)
+	# …No foolin'? You already know how to make that one?
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:032', false)
+	if EventFlowSystemActor.PercentChoice(70):
+		MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 1
+		EventFlowSystemActor.SelectRewardItemDirect(4525, 5, 'cVillageRemakePattern', 0)
+		# Dang! Is there anything you DON'T know? Well, what if I gave you some pumpkins to make it with instead?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:033', false)
+	else:
+		MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 2
+		EventFlowSystemActor.SelectRewardItemDirect(13197, 1, 'cVillageRemakePattern', 0)
+		# Aw. I was all excited to give you the recipe too. Hmm… What can I give you that's just as good? Oh, duh! How about <item>candy? Halloween is coming u…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:035', false)
 entrypoint Event49:
-    MainNpc.SetDeliveryItem(1, true)
-    if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
-        MainNpc.MessageSuspend()
-        MainNpc.NpcDelivery(1, 'Default')
-        if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 1:
-            # Wouldn't wanna get caught on Halloween without <item>candy, right? I always keep my pockets stuffed!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:036', false)
-        else:
-            # Make something cool with those pumpkins! It's the right season for [a|an]<125:0:0000>.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:034', false)
-        run Cook_AfterItemGet()
-    else:
-        # Oh man! Your pockets are too fulla stuff! Come back later, and I'll set ya up!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:030', false)
-        MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull'] = true
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.SetDeliveryItem(1, true)
+	if EventFlowSystemActor.ShoppingCapacity('cNpcTrade', 65534):
+		MainNpc.MessageSuspend()
+		MainNpc.NpcDelivery(1, 'Default')
+		if MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] != 1:
+			# Wouldn't wanna get caught on Halloween without <item>candy, right? I always keep my pockets stuffed!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:036', false)
+		else:
+			# Make something cool with those pumpkins! It's the right season for [a|an]<125:0:0000>.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:034', false)
+		run Cook_AfterItemGet()
+	else:
+		# Oh man! Your pockets are too fulla stuff! Come back later, and I'll set ya up!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:030', false)
+		MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull'] = true
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Root():
-    if MainNpc.IsCooking():
-        run NNPC_FreeH_Progress::Conceal_NpcHouseBuiltrun NNPC_FreeH_Progress::Conceal_NpcHouseBuilt()
-        MainNpc.SetItemName(16, 0, 0)
-        MainNpc.NpcSetRewardRecipe(65534, true)
-        MainNpc.SetDeliveryItem(1, true)
-        if not MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial']:
-            if MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull']:
-                run Cook_GetItem()
-                # Can't talk. Busy making yum-yums. Smells good. Gonna taste better…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:008', false)
-                run Sub_Event37()
-            else:
-                # RANDOM: Are you here 'cause you smelled somethi… // What're you making? // You look busy. // Guess what? I'm making lunch all by mys… // What're you making? // You look busy. // Doesn't it smell nummy in here? It's 'c… // What're you making? // You look busy.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:001', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    # Guess what I'm making! [A|An]<125:0:0000>! And the best part? You can make all ya want once you know the recipe!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:002', false)
-                    if not MainNpc.IsNpcDIYRecipeCollected():
-                        MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 0
-                        run Sub_Event37()
-                    elif MainNpc.IsDIYHalloweenItem():
-                        run Cook_PumpkinFtr()
-                        run Sub_Event37()
-                    else:
-                        run Sub_Event37()
-                else:
-                    # Yup, I'm making stuff for my belly. This might be the most important thing I've ever done, <110:6>.
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:007', false)
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.IsCooking():
+		run NNPC_FreeH_Progress::Conceal_NpcHouseBuilt()
+		MainNpc.SetItemName(16, 0, 0)
+		MainNpc.NpcSetRewardRecipe(65534, true)
+		MainNpc.SetDeliveryItem(1, true)
+		if not MainNpc.EventFlags['cNpcMemory:GotRecipeorMaterial']:
+			if MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull']:
+				run Cook_GetItem()
+				# Can't talk. Busy making yum-yums. Smells good. Gonna taste better…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:008', false)
+				run Sub_Event37()
+			else:
+				# RANDOM: Are you here 'cause you smelled somethi… // What're you making? // You look busy. // Guess what? I'm making lunch all by mys… // What're you making? // You look busy. // Doesn't it smell nummy in here? It's 'c… // What're you making? // You look busy.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:001', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# Guess what I'm making! [A|An]<125:0:0000>! And the best part? You can make all ya want once you know the recipe!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:002', false)
+					if not MainNpc.IsNpcDIYRecipeCollected():
+MainNpc.EventFlags['cNpcMemory:HalloweenDIYGetItem'] = 0
+	run Sub_Event37()
+					elif MainNpc.IsDIYHalloweenItem():
+ run Cook_PumpkinFtr()
+	run Sub_Event37()
+					else:
+	run Sub_Event37()
+				else:
+					# Yup, I'm making stuff for my belly. This might be the most important thing I've ever done, <110:6>.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:007', false)
+					EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event33():
-    MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull'] = true
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.EventFlags['cNpcMemory:GotMaterialItemFull'] = true
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event37():
-    run CHK_RecipeAndBag()
-    # I know! Take the recipe. Then we'll both be able to fill ourselves fulla deliciousness, <110:6>!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:005', true)
-    MainNpc.NpcDelivery(1, 'Default')
-    if MainNpc.IsNpcDIYRecipeCollected():
-        # Oh! You already know that recipe, huh? Well, that just means you get to give it to someone! Yaaay!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:006_02', false)
-        run Cook_AfterItemGet()
-    else:
-        # Yay! Now I'm super excited to try your <125:0:0000>. I'm just imagining all those flavors you're gonna pack in… Mmm-MMM! So good, <110:6>!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:006_01', false)
-        run Cook_AfterItemGet()
- 
+	run CHK_RecipeAndBag()
+	# I know! Take the recipe. Then we'll both be able to fill ourselves fulla deliciousness, <110:6>!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:005', true)
+	MainNpc.NpcDelivery(1, 'Default')
+	if MainNpc.IsNpcDIYRecipeCollected():
+		# Oh! You already know that recipe, huh? Well, that just means you get to give it to someone! Yaaay!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:006_02', false)
+		run Cook_AfterItemGet()
+	else:
+		# Yay! Now I'm super excited to try your <125:0:0000>. I'm just imagining all those flavors you're gonna pack in… Mmm-MMM! So good, <110:6>!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Cooking:006_01', false)
+		run Cook_AfterItemGet()

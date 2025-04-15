@@ -1,243 +1,242 @@
 flow EndCeremony():
-    fork:
-        branch:
-            EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpeg_Scene', 0, false, 0.0, 0.0, '')
-        branch:
-            # I think it came out lovely, but…
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:309', false)
-    fork:
-        branch:
-            Npc_3.TurnNeck(0, false)
-        branch:
-            EventFlowSystemActor.CeremonyLookAt(false, 'cMainPlayer', false, false, 0.0, 0.0, 0.0)
-    if SubflowResults@2[0] == 0:
-        # What do you think of this photo, PLAYER?
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:310', false)
-    else:
-        # How do you feel about this one?
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:313', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # I agree. I think it's perfect too.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:311', false)
-        EventFlowSystemActor.CeremonyLookAt(false, 'cCamera', false, false, 0.0, -32.0, 0.0)
-        fork:
-            branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-            branch:
-                # That'll do it! Take care, everyone.
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:308', true)
-        run EndReaction()
-        EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
-        System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-        System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoCeremony'] = false
-        EventFlowSystemActor.NextLPFadeOff()
-        EventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 2, 0.0)
-        EventFlowSystemActor.WaitFrame(1)
-        EventFlowSystemActor.BGMPropertyControl(145)
-        if (EventFlowSystemActor.WherearenFacilityTypeOnOrder() not in (0, 1, 2, 3)) and (EventFlowSystemActor.WherearenFacilityOrderType() == 0):
-            EventFlowSystemActor.ReserveSkipSceneStartDemo()
-            System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
-            System.EventFlags['cWherearenPlayer:IsFirstKKFesDay'] = true
-            run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cWherearenOfficeReturn2F', FadeOutKindString='cCircle', FadeInKindString='cNormalFader', FadeInSpeed='cSlow', FadeOutSpeed=0.0)
-        else:
-            EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-    else:
-        fork:
-            branch:
-                EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
-            branch:
-                # OK. We'll do a retake, then!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:312', true)
-        SubflowResults[0] = 1
-        run ReTake()
- 
+	fork:
+		branch:
+			EventFlowSystemActor.UIWherearenIslandsMsgPhotoAppear('cJpeg_Scene', 0, false, 0.0, 0.0, '')
+		branch:
+			# I think it came out lovely, but…
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:309', false)
+	fork:
+		branch:
+			Npc_3.TurnNeck(0, false)
+		branch:
+			EventFlowSystemActor.CeremonyLookAt(false, 'cMainPlayer', false, false, 0.0, 0.0, 0.0)
+	if SubflowResults@2[0] == 0:
+		# What do you think of this photo, PLAYER?
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:310', false)
+	else:
+		# How do you feel about this one?
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:313', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# I agree. I think it's perfect too.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:311', false)
+		EventFlowSystemActor.CeremonyLookAt(false, 'cCamera', false, false, 0.0, -32.0, 0.0)
+		fork:
+			branch:
+				EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+			branch:
+				# That'll do it! Take care, everyone.
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:308', true)
+		run EndReaction()
+		EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+		System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+		System.EventFlags['cPlayerTemp:WHREAREN_IsFacilityEndDemoCeremony'] = false
+		EventFlowSystemActor.NextLPFadeOff()
+		EventFlowSystemActor.SystemBGMVolumeFadeOut(5.0, 2, 0.0)
+		EventFlowSystemActor.WaitFrame(1)
+		EventFlowSystemActor.BGMPropertyControl(145)
+		if (EventFlowSystemActor.WherearenFacilityTypeOnOrder() not in (0, 1, 2, 3)) and (EventFlowSystemActor.WherearenFacilityOrderType() == 0):
+			EventFlowSystemActor.ReserveSkipSceneStartDemo()
+			System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
+			System.EventFlags['cWherearenPlayer:IsFirstKKFesDay'] = true
+			run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cWherearenOfficeReturn2F', FadeOutKindString='cCircle', FadeInKindString='cNormalFader', FadeInSpeed='cSlow', FadeOutSpeed=0.0)
+		else:
+			EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+	else:
+		fork:
+			branch:
+				EventFlowSystemActor.UIWherearenIslandsMsgPhotoDisappear()
+			branch:
+				# OK. We'll do a retake, then!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:312', true)
+		SubflowResults[0] = 1
+		run ReTake()
+
 flow EndReaction():
-    EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', 'Smiling', 'Smiling', 'EmotEnd', 'EmotEnd', 'Smiling', 'Smiling', -1, true)
-    fork:
-        branch:
-            MainNpc.CharacterEmoticonAction('OtgPretty', false, '', 0, false)
-        branch:
-            SubNpc.CharacterEmoticonAction('MncHappy', false, '', 0, false)
-        branch:
-            Npc_2.CharacterEmoticonAction('Smiling', false, '', 0, false)
-        branch:
-            Npc_3.CharacterEmoticonAction('RequestWillingness', false, '', 0, false)
-    EventFlowSystemActor.WaitFrame(30)
- 
+	EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', 'Smiling', 'Smiling', 'EmotEnd', 'EmotEnd', 'Smiling', 'Smiling', -1, true)
+	fork:
+		branch:
+			MainNpc.CharacterEmoticonAction('OtgPretty', false, '', 0, false)
+		branch:
+			SubNpc.CharacterEmoticonAction('MncHappy', false, '', 0, false)
+		branch:
+			Npc_2.CharacterEmoticonAction('Smiling', false, '', 0, false)
+		branch:
+			Npc_3.CharacterEmoticonAction('RequestWillingness', false, '', 0, false)
+	EventFlowSystemActor.WaitFrame(30)
+
 flow ForCafe1st():
-    if (EventFlowSystemActor.WherearenFacilityTypeOnOrder() == 3) and (not System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']):
-        MainNpc.TurnNeck(1, false)
-        Npc_2.TurnNeck(1, false)
-        Npc_4.TurnNeck(1, false)
-        Npc_5.TurnNeck(1, false)
-        Player.TurnNeck(1, false)
-        # Next up, a comment each from Niko and Wardell, who worked on the beachfront dining area.
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_01', true)
-        # Oh, um, I think it'd be nice if the café gets lots of visitors! I'm not used to speaking in public…
-        Npc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_02', true)
-        Npc_1.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-        MainNpc.TurnNeck(2, false)
-        Npc_1.TurnNeck(2, false)
-        Npc_4.TurnNeck(2, false)
-        Npc_5.TurnNeck(2, false)
-        Player.TurnNeck(2, false)
-        # <150:5>Happy to help.
-        Npc_2.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_03', true)
-        Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-        EventFlowSystemActor.CeremonyLookAt(false, 'cFacilitator', true, false, 0.0, 0.0, 0.0)
-        # Thank you both very much!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_04', false)
- 
+	if (EventFlowSystemActor.WherearenFacilityTypeOnOrder() == 3) and (not System.EventFlags['cWherearenPlayer:CompleteAppearanceCafe']):
+		MainNpc.TurnNeck(1, false)
+		Npc_2.TurnNeck(1, false)
+		Npc_4.TurnNeck(1, false)
+		Npc_5.TurnNeck(1, false)
+		Player.TurnNeck(1, false)
+		# Next up, a comment each from Niko and Wardell, who worked on the beachfront dining area.
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_01', true)
+		# Oh, um, I think it'd be nice if the café gets lots of visitors! I'm not used to speaking in public…
+		Npc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_02', true)
+		Npc_1.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+		MainNpc.TurnNeck(2, false)
+		Npc_1.TurnNeck(2, false)
+		Npc_4.TurnNeck(2, false)
+		Npc_5.TurnNeck(2, false)
+		Player.TurnNeck(2, false)
+		# <150:5>Happy to help.
+		Npc_2.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_03', true)
+		Npc_2.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+		EventFlowSystemActor.CeremonyLookAt(false, 'cFacilitator', true, false, 0.0, 0.0, 0.0)
+		# Thank you both very much!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306_04', false)
+
 flow OtgTalk():
-    EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacilityNormal', 0, 'cEditNow')
-    if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
-        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cEditNow')
-    # And now…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:301', false)
-    if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
-        # We're gathered here to take a special celebratory photo of <150:3:cd00>!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:302_01', false)
-    else:
-        # We're here to take a celebratory photo of the <150:1:cd00>!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:302', false)
-    EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.CeremonyEmoticon('Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
-    # Thank you very much!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:303', false)
-    EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', -1, false)
-    EventFlowSystemActor.CeremonyLookAt(false, 'cFacilitator', true, true, 0.0, 0.0, 0.0)
-    Npc_4.SetNpcName(0, 0)
-    if EventFlowSystemActor.WherearenFacilityOrderType() == 0:
-        if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
-            switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
-                case 0:
-                    # The island is a little more beautiful today, thanks to PLAYER. And <150:3:cd00>! I can't wait to see what the future holds for its students and teach…
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_11', false)
-                case 1:
-                    # With the creation of this hospital, our little island is a bit safer today. Yay, <150:3:cd00>! I'm so excited about how everything is coming along!
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_12', false)
-                case 2:
-                    # With our own restaurant, this little island feels bigger than ever! Cheers to <150:3:cd00>! I feel like the sky's the limit for us!
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_13', false)
-                case 3:
-                    # With a new café open and ready for business, our island is on the map! Yay, <150:3:cd00>! I just know we'll keep growing!
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_14', false)
-                case 4:
-                    # We did it! We've finished all work on <150:3:cd00>! And that means we've finished the development plan for the island. It's been so much hard work, b…
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_15', false)
-        else:
-            switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
-                case 0:
-                    # The island is a little more beautiful today, thanks to this school. And thanks to PLAYER! I can't wait to see what the future holds for its students …
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_01', false)
-                case 1:
-                    # With the creation of this hospital, our little island is a bit safer today than it was yesterday. I'm so excited about how everything is coming along!
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_02', false)
-                case 2:
-                    # Now that we have our own restaurant, this little island seems bigger than ever! I feel like the sky's the limit for us!
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_03', false)
-                case 3:
-                    # With a new café open and ready for business, our island is on the map! I just know we'll keep growing!
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_04', false)
-                case 4:
-                    # Now that we have our own apparel shop, our island is sailing the seas of high fashion! I can't wait to see what comes next.
-                    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_05', false)
-    elif EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
-        switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
-            case 0:
-                # You did it! You found a way to make <150:3:cd00> better!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_16', false)
-            case 1:
-                # You did it! You found a way to make <150:3:cd00> better!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_17', false)
-            case 2:
-                # You did it! You found a way to make <150:3:cd00> better!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_18', false)
-            case 3:
-                # You did it! You found a way to make <150:3:cd00> better!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_19', false)
-            case 4:
-                # You did it! You found a way to make <150:3:cd00> better!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_20', false)
-    else:
-        switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
-            case 0:
-                # This school has gotten even better because of the customization we did!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_06', false)
-            case 1:
-                # This hospital has gotten even better because of the customization we did!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_07', false)
-            case 2:
-                # This restaurant has gotten even better because of the customization we did!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_08', false)
-            case 3:
-                # This café has gotten even better because of the customization we did!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_09', false)
-            case 4:
-                # This apparel shop has gotten even better because of the customization we did!
-                MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_10', false)
- 
+	EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacilityNormal', 0, 'cEditNow')
+	if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
+		EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cEditNow')
+	# And now…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:301', false)
+	if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
+		# We're gathered here to take a special celebratory photo of <150:3:cd00>!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:302_01', false)
+	else:
+		# We're here to take a celebratory photo of the <150:1:cd00>!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:302', false)
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.CeremonyEmoticon('Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+	# Thank you very much!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:303', false)
+	EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', -1, false)
+	EventFlowSystemActor.CeremonyLookAt(false, 'cFacilitator', true, true, 0.0, 0.0, 0.0)
+	Npc_4.SetNpcName(0, 0)
+	if EventFlowSystemActor.WherearenFacilityOrderType() == 0:
+		if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
+			switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
+				case 0:
+					# The island is a little more beautiful today, thanks to PLAYER. And <150:3:cd00>! I can't wait to see what the future holds for its students and teach…
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_11', false)
+				case 1:
+					# With the creation of this hospital, our little island is a bit safer today. Yay, <150:3:cd00>! I'm so excited about how everything is coming along!
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_12', false)
+				case 2:
+					# With our own restaurant, this little island feels bigger than ever! Cheers to <150:3:cd00>! I feel like the sky's the limit for us!
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_13', false)
+				case 3:
+					# With a new café open and ready for business, our island is on the map! Yay, <150:3:cd00>! I just know we'll keep growing!
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_14', false)
+				case 4:
+					# We did it! We've finished all work on <150:3:cd00>! And that means we've finished the development plan for the island. It's been so much hard work, b…
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_15', false)
+		else:
+			switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
+				case 0:
+					# The island is a little more beautiful today, thanks to this school. And thanks to PLAYER! I can't wait to see what the future holds for its students …
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_01', false)
+				case 1:
+					# With the creation of this hospital, our little island is a bit safer today than it was yesterday. I'm so excited about how everything is coming along!
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_02', false)
+				case 2:
+					# Now that we have our own restaurant, this little island seems bigger than ever! I feel like the sky's the limit for us!
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_03', false)
+				case 3:
+					# With a new café open and ready for business, our island is on the map! I just know we'll keep growing!
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_04', false)
+				case 4:
+					# Now that we have our own apparel shop, our island is sailing the seas of high fashion! I can't wait to see what comes next.
+					MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_05', false)
+	elif EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
+		switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
+			case 0:
+				# You did it! You found a way to make <150:3:cd00> better!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_16', false)
+			case 1:
+				# You did it! You found a way to make <150:3:cd00> better!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_17', false)
+			case 2:
+				# You did it! You found a way to make <150:3:cd00> better!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_18', false)
+			case 3:
+				# You did it! You found a way to make <150:3:cd00> better!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_19', false)
+			case 4:
+				# You did it! You found a way to make <150:3:cd00> better!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_20', false)
+	else:
+		switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
+			case 0:
+				# This school has gotten even better because of the customization we did!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_06', false)
+			case 1:
+				# This hospital has gotten even better because of the customization we did!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_07', false)
+			case 2:
+				# This restaurant has gotten even better because of the customization we did!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_08', false)
+			case 3:
+				# This café has gotten even better because of the customization we did!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_09', false)
+			case 4:
+				# This apparel shop has gotten even better because of the customization we did!
+				MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:304_10', false)
+
 flow ReTake():
-    EventFlowSystemActor.CeremonyTurn(false, 'cCamera', false, false)
-    EventFlowSystemActor.CeremonyLookAt(false, 'cCamera', false, false, 0.0, -32.0, 0.0)
-    EventFlowSystemActor.UIPhotoCameraHandling('cWherearenFacility')
-    run EndCeremony()
- 
+	EventFlowSystemActor.CeremonyTurn(false, 'cCamera', false, false)
+	EventFlowSystemActor.CeremonyLookAt(false, 'cCamera', false, false, 0.0, -32.0, 0.0)
+	EventFlowSystemActor.UIPhotoCameraHandling('cWherearenFacility')
+	run EndCeremony()
+
 flow RoleNpcTalk():
-    EventFlowSystemActor.CeremonyLookAt(false, 'cMainPlayer', false, false, 0.0, 0.0, 0.0)
-    if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
-        # Alright, we need to hear from the person in charge of decorating <150:3:cd00>. <50:3>PLAYER? A few words?
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:305_01', false)
-    else:
-        # We should also hear some words from the one who was in charge of this <150:1:cd00> project. What have you got to say to us on this great day, PLAYER?
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:305', false)
-    switch EventFlowSystemActor.GeneralTalkChoice3():
-        case 0:
-            Npc_3.CharacterEmoticonAction('RequestOkay', true, '', 0, false)
-            EventFlowSystemActor.WaitFrame(30)
-        case 1:
-            Npc_3.CharacterEmoticonAction('Clapping', true, '', 0, false)
-            EventFlowSystemActor.WaitFrame(40)
-        case 2:
-            Npc_3.CharacterEmoticonAction('Laughing', true, '', 0, false)
-            EventFlowSystemActor.WaitFrame(40)
-    EventFlowSystemActor.CeremonyLookAt(false, 'cFacilitator', true, false, 0.0, 0.0, 0.0)
-    # Thank you!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306', false)
-    run ForCafe1st()
-    # And last but not least, let's take that celebratory photo!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:307', false)
- 
+	EventFlowSystemActor.CeremonyLookAt(false, 'cMainPlayer', false, false, 0.0, 0.0, 0.0)
+	if EventFlowSystemActor.WherearenExistFacilityName('cEditNow'):
+		# Alright, we need to hear from the person in charge of decorating <150:3:cd00>. <50:3>PLAYER? A few words?
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:305_01', false)
+	else:
+		# We should also hear some words from the one who was in charge of this <150:1:cd00> project. What have you got to say to us on this great day, PLAYER?
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:305', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			Npc_3.CharacterEmoticonAction('RequestOkay', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(30)
+		case 1:
+			Npc_3.CharacterEmoticonAction('Clapping', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(40)
+		case 2:
+			Npc_3.CharacterEmoticonAction('Laughing', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(40)
+	EventFlowSystemActor.CeremonyLookAt(false, 'cFacilitator', true, false, 0.0, 0.0, 0.0)
+	# Thank you!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:306', false)
+	run ForCafe1st()
+	# And last but not least, let's take that celebratory photo!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_13_WherearenFacility:307', false)
+
 flow Root():
-    SubflowResults[0] = 0
-    EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
-    EventFlowSystemActor.BGMPropertyControl(146)
-    EventFlowSystemActor.SoundDuckingOn(52)
-    EventFlowSystemActor.SoundDuckingOn(58)
-    run SetCeremonyCamera()
-    EventFlowSystemActor.RequestRecreateFtr()
-    run StartReaction()
-    run OtgTalk()
-    run RoleNpcTalk()
-    run ReTake()
- 
+	SubflowResults[0] = 0
+	EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+	EventFlowSystemActor.BGMPropertyControl(146)
+	EventFlowSystemActor.SoundDuckingOn(52)
+	EventFlowSystemActor.SoundDuckingOn(58)
+	run SetCeremonyCamera()
+	EventFlowSystemActor.RequestRecreateFtr()
+	run StartReaction()
+	run OtgTalk()
+	run RoleNpcTalk()
+	run ReTake()
+
 flow Root_Init():
-    MainNpc.NpcAITalkCastSetting('WherearenFacilityCeremony')
- 
+	MainNpc.NpcAITalkCastSetting('WherearenFacilityCeremony')
+
 flow SetCeremonyCamera():
-    switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
-        case 0:
-            EventFlowSystemActor.CameraSetDemoParam('FacilitySchoolCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
-        case 1:
-            EventFlowSystemActor.CameraSetDemoParam('FacilityHospitalCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
-        case 2:
-            EventFlowSystemActor.CameraSetDemoParam('FacilityRestaurantCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
-        case 3:
-            EventFlowSystemActor.CameraSetDemoParam('FacilityCafeCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
-        case 4:
-            EventFlowSystemActor.CameraSetDemoParam('FacilityTailorCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
- 
+	switch EventFlowSystemActor.WherearenFacilityTypeOnOrder():
+		case 0:
+			EventFlowSystemActor.CameraSetDemoParam('FacilitySchoolCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
+		case 1:
+			EventFlowSystemActor.CameraSetDemoParam('FacilityHospitalCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
+		case 2:
+			EventFlowSystemActor.CameraSetDemoParam('FacilityRestaurantCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
+		case 3:
+			EventFlowSystemActor.CameraSetDemoParam('FacilityCafeCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
+		case 4:
+			EventFlowSystemActor.CameraSetDemoParam('FacilityTailorCeremonyDemo', '', 'Npc:otg', false, false, true, 0)
+
 flow StartReaction():
-    EventFlowSystemActor.WaitFaderSleep()
-    EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', -1, false)
- 
+	EventFlowSystemActor.WaitFaderSleep()
+	EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', -1, false)

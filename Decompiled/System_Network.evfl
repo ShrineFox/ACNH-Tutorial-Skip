@@ -1,48 +1,47 @@
 flow ForcePurgeAttention():
-    if not System.EventFlags['cPlayer:OhirakiRollbackTutorial']:
-        # The session was forcibly ended because a visitor or host didn't end a conversation or close a window within a set amount of time. Your save data will…
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0805', true)
-        System.EventFlags['cPlayer:OhirakiRollbackTutorial'] = true
- 
+	if not System.EventFlags['cPlayer:OhirakiRollbackTutorial']:
+		# The session was forcibly ended because a visitor or host didn't end a conversation or close a window within a set amount of time. Your save data will…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0805', true)
+		System.EventFlags['cPlayer:OhirakiRollbackTutorial'] = true
+
 flow MultiplaySave():
-    switch EventFlowSystemActor.NetDemoType():
-        case 1:
-            if not EventFlowSystemActor.NetIsDemoPlayer():
-                run Sub_Event5()
-        case 2, 3:
-            run Sub_Event5()
-        default:
-            return
- 
+	switch EventFlowSystemActor.NetDemoType():
+		case 1:
+			if not EventFlowSystemActor.NetIsDemoPlayer():
+				run Sub_Event5()
+		case 2, 3:
+			run Sub_Event5()
+		default:
+			return
+
 local flow Sub_Event5():
-    EventFlowSystemActor.NetWaitDemo('cStartSave')
-    EventFlowSystemActor.MessageLockNext(1)
-    # Saving. Do not touch .
-    EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-    if EventFlowSystemActor.NetIsInviteFriend():
-        EventFlowSystemActor.SaveSimpleSave('cNet')
-        if EventFlowSystemActor.CheckErrorType(3):
-            EventFlowSystemActor.NetDemoNextStep('cSaveFailed')
-        else:
-            EventFlowSystemActor.NetDemoNextStep('cSaveSuccess')
-    else:
-        EventFlowSystemActor.NetWaitDemo('cEndSave')
-    EventFlowSystemActor.MessageUnlockNext()
-    EventFlowSystemActor.MessageSuspend()
-    EventFlowSystemActor.NetDemoNextStep('cSaveDone')
- 
+	EventFlowSystemActor.NetWaitDemo('cStartSave')
+	EventFlowSystemActor.MessageLockNext(1)
+	# Saving. Do not touch .
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+	if EventFlowSystemActor.NetIsInviteFriend():
+		EventFlowSystemActor.SaveSimpleSave('cNet')
+		if EventFlowSystemActor.CheckErrorType(3):
+			EventFlowSystemActor.NetDemoNextStep('cSaveFailed')
+		else:
+			EventFlowSystemActor.NetDemoNextStep('cSaveSuccess')
+	else:
+		EventFlowSystemActor.NetWaitDemo('cEndSave')
+	EventFlowSystemActor.MessageUnlockNext()
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.NetDemoNextStep('cSaveDone')
+
 flow VisitEndMileGet():
-    EventFlowSystemActor.WaitFaderSleep()
-    EventFlowSystemActor.WaitSpecialDemoEnter('cTravelReturn')
-    if System.EventFlags['cPlayer:VisitFriendMileageGet']:
-        System.EventFlags['cPlayer:VisitFriendMileageGet'] = false
-        if not System.EventFlags['cPlayer:DodTodayFlightMileGet']:
-            EventFlowSystemActor.UISonkatsuPointAppear()
-            if EventFlowSystemActor.IsDifferentAreaVisit():
-                EventFlowSystemActor.LifeSupportPointCountDown(1200, false)
-            else:
-                EventFlowSystemActor.LifeSupportPointCountDown(800, false)
-            System.EventFlags['cPlayer:DodTodayFlightMileGet'] = true
-            EventFlowSystemActor.UISonkatsuPointDisappear()
-    EventFlowSystemActor.SpecialDemoEnd('cReturnMulti')
- 
+	EventFlowSystemActor.WaitFaderSleep()
+	EventFlowSystemActor.WaitSpecialDemoEnter('cTravelReturn')
+	if System.EventFlags['cPlayer:VisitFriendMileageGet']:
+		System.EventFlags['cPlayer:VisitFriendMileageGet'] = false
+		if not System.EventFlags['cPlayer:DodTodayFlightMileGet']:
+			EventFlowSystemActor.UISonkatsuPointAppear()
+			if EventFlowSystemActor.IsDifferentAreaVisit():
+				EventFlowSystemActor.LifeSupportPointCountDown(1200, false)
+			else:
+				EventFlowSystemActor.LifeSupportPointCountDown(800, false)
+			System.EventFlags['cPlayer:DodTodayFlightMileGet'] = true
+			EventFlowSystemActor.UISonkatsuPointDisappear()
+	EventFlowSystemActor.SpecialDemoEnd('cReturnMulti')

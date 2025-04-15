@@ -1,195 +1,194 @@
 flow RcoDonationReward1():
-    if System.EventFlags['cPlayer:MainmenuEncyclopedia']:
-        # Oh, I know! We'll just call this a little reward for your assistance. I think you'll like it.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:111', true)
-        MainNpc.SetDeliveryItemAtRandom(4549, false, 'cVillageRemakePattern', 0)
-        MainNpc.NpcDelivery(1, 'Keep')
-        # It's some <item>fish bait! Just sprinkle this in a river or the ocean, and fish are sure to appear! I do hope you enjoy that. I'll try to think up so…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:112', false)
-        MainNpc.NpcDelivery(2, 'Default')
-        EventFlowSystemActor.SetItemToPocket(4549, 5)
-    else:
-        # Oh! That reminds me…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_01', false)
-        MainNpc.SmartPhone(0)
-        # This is in no way tied to your generous donation just now, but I have a useful app to show you.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_01_01', true)
-        run Demo_Common_PhoneCall::SendingDataWithPrun Demo_Common_PhoneCall::SendingDataWithP()
-        System.EventFlags['cPlayer:MainmenuEncyclopedia'] = true
-        EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cEncyclopedia')
-        # I sent you the Critterpedia app. It's a terrific resource for an aspiring island researcher such as yourself. With this one app, you'll get all the i…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_02_01', false)
-        run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
-        # I do hope you'll continue to fill it up with your discoveries—and share them with me too! I'm sure I'll be able to come up with some kind of addition…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_03', false)
- 
+	if System.EventFlags['cPlayer:MainmenuEncyclopedia']:
+		# Oh, I know! We'll just call this a little reward for your assistance. I think you'll like it.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:111', true)
+		MainNpc.SetDeliveryItemAtRandom(4549, false, 'cVillageRemakePattern', 0)
+		MainNpc.NpcDelivery(1, 'Keep')
+		# It's some <item>fish bait! Just sprinkle this in a river or the ocean, and fish are sure to appear! I do hope you enjoy that. I'll try to think up so…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:112', false)
+		MainNpc.NpcDelivery(2, 'Default')
+		EventFlowSystemActor.SetItemToPocket(4549, 5)
+	else:
+		# Oh! That reminds me…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_01', false)
+		MainNpc.SmartPhone(0)
+		# This is in no way tied to your generous donation just now, but I have a useful app to show you.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_01_01', true)
+		run Demo_Common_PhoneCall::SendingDataWithP()
+		System.EventFlags['cPlayer:MainmenuEncyclopedia'] = true
+		EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cEncyclopedia')
+		# I sent you the Critterpedia app. It's a terrific resource for an aspiring island researcher such as yourself. With this one app, you'll get all the i…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_02_01', false)
+		run Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+		# I do hope you'll continue to fill it up with your discoveries—and share them with me too! I'm sure I'll be able to come up with some kind of addition…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:011_03', false)
+
 flow RcoDonationReward2():
-    # Oh, by the way… Have you been taking advantage of my DIY workbench lately?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_01', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        if System.EventFlags['cPlayerTemp:RcoDoneDIYmeselfNow']:
-            # That's great!<10:4> Come to think of it, I did see you tinkering around over there just a moment ago.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_03', false)
-        else:
-            if System.EventFlags['cPlayer:RcoDoneDIYmyself']:
-                # That's great! Come to think of it, I have seen you tinkering around a bit over there. Keep up the good work!
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_02', false)
-            else:
-                # Is that so?<10:4> Well, I suppose I haven't been paying much attention.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_04', false)
-        # That reminds me… I've been meaning to share more DIY recipes with you. Mind turning on your phone?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_05', true)
-    else:
-        # Oh, I'm sorry to hear that! You do know that you're welcome to use it at any time, hm? Perhaps you could just use some new DIY ideas. Do you mind tur…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_06', true)
-    MainNpc.SmartPhone(0)
-    run Demo_Common_PhoneCall::SendingDataWithPrun Demo_Common_PhoneCall::SendingDataWithP()
-    EventFlowSystemActor.WaitFrame(5)
-    run Demo_Common_PhoneCall::PuttingMobileAwayWithPrun Demo_Common_PhoneCall::PuttingMobileAwayWithP()
-    if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (EventFlowSystemActor.PlayerHasCraftRecipe('RcoDonationRewardA', 65534)):
-        System.EventFlags['cLand:ShopUnlockAxe'] = true
-        # I have lots of recipes for items made from wood, including an axe which is needed to cut wood from trees! Oh! But perhaps you already know all of the…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:121', false)
-        # Hmm… I'm afraid I don't have any other fancy recipes to give you. But I owe you, so I need to make this right. I know! Allow me to present you with y…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:122', true)
-        MainNpc.SetDeliveryItemAtRandom(3068, true, 'cVillageRemakePattern', 0)
-        MainNpc.NpcDelivery(1, 'Keep')
-        # As you may know, tools such as axes eventually break with use. That's why it's always good to have a spare! Yes, yes! I'm sure that axe will help you…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:123', false)
-        MainNpc.NpcDelivery(2, 'Default')
-    else:
-        EventFlowSystemActor.PlayerSetCraftRecipe('RcoDonationRewardA', 65534)
-        System.EventFlags['cLand:ShopUnlockAxe'] = true
-        # I just sent you a number of DIY recipes that require wood…along with the recipe to craft an axe! Yes, yes…I think an axe would come in quite useful o…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_07', false)
- 
+	# Oh, by the way… Have you been taking advantage of my DIY workbench lately?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_01', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		if System.EventFlags['cPlayerTemp:RcoDoneDIYmeselfNow']:
+			# That's great!<10:4> Come to think of it, I did see you tinkering around over there just a moment ago.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_03', false)
+		else:
+			if System.EventFlags['cPlayer:RcoDoneDIYmyself']:
+				# That's great! Come to think of it, I have seen you tinkering around a bit over there. Keep up the good work!
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_02', false)
+			else:
+				# Is that so?<10:4> Well, I suppose I haven't been paying much attention.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_04', false)
+		# That reminds me… I've been meaning to share more DIY recipes with you. Mind turning on your phone?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_05', true)
+	else:
+		# Oh, I'm sorry to hear that! You do know that you're welcome to use it at any time, hm? Perhaps you could just use some new DIY ideas. Do you mind tur…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_06', true)
+	MainNpc.SmartPhone(0)
+	run Demo_Common_PhoneCall::SendingDataWithP()
+	EventFlowSystemActor.WaitFrame(5)
+	run Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+	if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (EventFlowSystemActor.PlayerHasCraftRecipe('RcoDonationRewardA', 65534)):
+		System.EventFlags['cLand:ShopUnlockAxe'] = true
+		# I have lots of recipes for items made from wood, including an axe which is needed to cut wood from trees! Oh! But perhaps you already know all of the…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:121', false)
+		# Hmm… I'm afraid I don't have any other fancy recipes to give you. But I owe you, so I need to make this right. I know! Allow me to present you with y…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:122', true)
+		MainNpc.SetDeliveryItemAtRandom(3068, true, 'cVillageRemakePattern', 0)
+		MainNpc.NpcDelivery(1, 'Keep')
+		# As you may know, tools such as axes eventually break with use. That's why it's always good to have a spare! Yes, yes! I'm sure that axe will help you…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:123', false)
+		MainNpc.NpcDelivery(2, 'Default')
+	else:
+		EventFlowSystemActor.PlayerSetCraftRecipe('RcoDonationRewardA', 65534)
+		System.EventFlags['cLand:ShopUnlockAxe'] = true
+		# I just sent you a number of DIY recipes that require wood…along with the recipe to craft an axe! Yes, yes…I think an axe would come in quite useful o…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:012_07', false)
+
 flow RcoDonationReward3():
-    # By the way, I have a proper reward for you this time.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:013_01', true)
-    run RcoTent_GiveSeeds()
-    MainNpc.SetItemName(14, 0, 0)
-    MainNpc.NpcDelivery(1, 'Keep')
-    if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
-        # I've given you [a|an] <125:0:0200>—<10:4>just a little sampling of a product we sell. Go ahead and do some planting, and after a few days, you'll hav…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:013_02', false)
-    else:
-        # I've given you [a|an] <125:0:0200>!<10:4> Just a little sampling of a product we sell. Go ahead and do some planting, and after a few days, you'll ha…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:013_03', false)
-    MainNpc.NpcDelivery(2, 'Default')
-    System.EventFlags['cPlayer:RcoGotDonationRewardFlower'] = true
- 
+	# By the way, I have a proper reward for you this time.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:013_01', true)
+	run RcoTent_GiveSeeds()
+	MainNpc.SetItemName(14, 0, 0)
+	MainNpc.NpcDelivery(1, 'Keep')
+	if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+		# I've given you [a|an] <125:0:0200>—<10:4>just a little sampling of a product we sell. Go ahead and do some planting, and after a few days, you'll hav…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:013_02', false)
+	else:
+		# I've given you [a|an] <125:0:0200>!<10:4> Just a little sampling of a product we sell. Go ahead and do some planting, and after a few days, you'll ha…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:013_03', false)
+	MainNpc.NpcDelivery(2, 'Default')
+	System.EventFlags['cPlayer:RcoGotDonationRewardFlower'] = true
+
 flow RcoDonationReward4():
-    if System.EventFlags['cPlayer:RcoGotDonationRewardFlower']:
-        # Oh! Remember the flower samples I gave you? I forgot to mention something…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_01', false)
-    else:
-        # Oh! There's something I forgot to tell you about the flower samples I gave you before…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_02', false)
-    if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (EventFlowSystemActor.PlayerHasCraftRecipe('', 3083)):
-        # The flowers that grow will be very strong. They'll spring up even if you just plant them and forget them. Ah, but if you water them each day… that's …
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:141', false)
-        switch EventFlowSystemActor.GeneralTalkChoice2():
-            case 0, 1:
-                # Oho! I was about to teach you how to make one, but if you already know, then you're good to go! Instead, how about I thank you for the critter by giv…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:142', true)
-                run RcoTent_GiveSeeds_Again()
-                MainNpc.SetItemName(14, 0, 0)
-                MainNpc.NpcDelivery(1, 'Keep')
-                if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
-                    # Yes, yes! I'm going to give you [a|an]<125:0:0200>. These are certain to grow into lovely flowers. And if you enjoy them, you can always come back an…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:143', false)
-                else:
-                    # Yes, yes! I'm going to give you [a|an]<125:0:0200>. These are certain to grow into lovely flowers. And if you enjoy them, you can buy more from the s…
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:143_01', false)
-                MainNpc.NpcDelivery(2, 'Default')
-    else:
-        # The flowers that grow will be very strong. They'll spring up even if you just plant them and forget them. Ah, but if you water them each day… that's …
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_03', true)
-        run Demo_Common_PhoneCall::SendingDataOneWayrun Demo_Common_PhoneCall::SendingDataOneWay()
-        EventFlowSystemActor.PlayerSetCraftRecipe('None', 3083)
-        # And how might you water them, you ask?<10:4> Well, I've just sent you the DIY recipe for a watering can!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_04', false)
-        MainNpc.SmartPhone(1)
-        # My accountant warned me about giving this sort of thing away for free… But you've collected creatures for me, PLAYER, so this is just part of island …
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_05', false)
- 
+	if System.EventFlags['cPlayer:RcoGotDonationRewardFlower']:
+		# Oh! Remember the flower samples I gave you? I forgot to mention something…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_01', false)
+	else:
+		# Oh! There's something I forgot to tell you about the flower samples I gave you before…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_02', false)
+	if (System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']) and (EventFlowSystemActor.PlayerHasCraftRecipe('', 3083)):
+		# The flowers that grow will be very strong. They'll spring up even if you just plant them and forget them. Ah, but if you water them each day… that's …
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:141', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0, 1:
+				# Oho! I was about to teach you how to make one, but if you already know, then you're good to go! Instead, how about I thank you for the critter by giv…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:142', true)
+				run RcoTent_GiveSeeds_Again()
+				MainNpc.SetItemName(14, 0, 0)
+				MainNpc.NpcDelivery(1, 'Keep')
+				if EventFlowSystemActor.ShopLevel() == `InResServiceTent`:
+					# Yes, yes! I'm going to give you [a|an]<125:0:0200>. These are certain to grow into lovely flowers. And if you enjoy them, you can always come back an…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:143', false)
+				else:
+					# Yes, yes! I'm going to give you [a|an]<125:0:0200>. These are certain to grow into lovely flowers. And if you enjoy them, you can buy more from the s…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:143_01', false)
+				MainNpc.NpcDelivery(2, 'Default')
+	else:
+		# The flowers that grow will be very strong. They'll spring up even if you just plant them and forget them. Ah, but if you water them each day… that's …
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_03', true)
+		run Demo_Common_PhoneCall::SendingDataOneWay()
+		EventFlowSystemActor.PlayerSetCraftRecipe('None', 3083)
+		# And how might you water them, you ask?<10:4> Well, I've just sent you the DIY recipe for a watering can!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_04', false)
+		MainNpc.SmartPhone(1)
+		# My accountant warned me about giving this sort of thing away for free… But you've collected creatures for me, PLAYER, so this is just part of island …
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:014_05', false)
+
 flow RcoDonationReward5():
-    run Demo_Common_PhoneCall::CallInrun Demo_Common_PhoneCall::CallIn()
-    # Blathers, is that you?<10:4> Oho, what splendid timing!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_02', false)
-    # Yes, yes… Do you remember the venture we discussed?  Well, it's come to fruition! I am currently stationed on an island that we've decided to call IS…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_03', false)
-    # Mm-hmm…<10:7:003c0000> How many precisely, you ask? Well, there's no way of knowing just yet. But I have received…let's see… five outstanding specime…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_04', true)
-    run Demo_Common_PhoneCall::FinishCallrun Demo_Common_PhoneCall::FinishCall()
-    # I'm so sorry to keep you waiting. That was my friend Blathers, the one who curates a museum.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_05', false)
-    # Believe it or not, he's going to come to our island to help us identify and preserve the local creatures!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_06', false)
-    # Ah, but I could use your help, PLAYER…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_07', false)
-    MainNpc.SetDeliveryItemAtRandom(2755, true, 'cVillageRemakePattern', 0)
-    MainNpc.NpcDelivery(1, 'Keep')
-    System.EventFlags['cPlayer:Prologue4OwlGetTent'] = true
-    # Since you've done so much scouting and collecting already, would you be able to help find a spot for Blathers?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_08', false)
-    # We'll need a good-sized space to really build out a world-class museum…so do keep that in mind.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_09', false)
-    # This is exciting! It's all coming together. Yes, yes!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_10', false)
-    MainNpc.NpcDelivery(2, 'Default')
- 
+	run Demo_Common_PhoneCall::CallIn()
+	# Blathers, is that you?<10:4> Oho, what splendid timing!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_02', false)
+	# Yes, yes… Do you remember the venture we discussed?  Well, it's come to fruition! I am currently stationed on an island that we've decided to call IS…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_03', false)
+	# Mm-hmm…<10:7:003c0000> How many precisely, you ask? Well, there's no way of knowing just yet. But I have received…let's see… five outstanding specime…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_04', true)
+	run Demo_Common_PhoneCall::FinishCall()
+	# I'm so sorry to keep you waiting. That was my friend Blathers, the one who curates a museum.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_05', false)
+	# Believe it or not, he's going to come to our island to help us identify and preserve the local creatures!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_06', false)
+	# Ah, but I could use your help, PLAYER…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_07', false)
+	MainNpc.SetDeliveryItemAtRandom(2755, true, 'cVillageRemakePattern', 0)
+	MainNpc.NpcDelivery(1, 'Keep')
+	System.EventFlags['cPlayer:Prologue4OwlGetTent'] = true
+	# Since you've done so much scouting and collecting already, would you be able to help find a spot for Blathers?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_08', false)
+	# We'll need a good-sized space to really build out a world-class museum…so do keep that in mind.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_09', false)
+	# This is exciting! It's all coming together. Yes, yes!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_04_DonationReward:015_10', false)
+	MainNpc.NpcDelivery(2, 'Default')
+
 flow RcoTent_GiveSeeds():
-    switch EventFlowSystemActor.VillageFlower('cVillageCreate'):
-        case 0:
-            EventFlowSystemActor.SetItemToPocket(3769, 5)
-            MainNpc.SetDeliveryItemAtRandom(3769, false, 'cVillageRemakePattern', 0)
-        case 1:
-            EventFlowSystemActor.SetItemToPocket(2984, 5)
-            MainNpc.SetDeliveryItemAtRandom(2984, false, 'cVillageRemakePattern', 0)
-        case 2:
-            EventFlowSystemActor.SetItemToPocket(2626, 5)
-            MainNpc.SetDeliveryItemAtRandom(2626, false, 'cVillageRemakePattern', 0)
-        case 3:
-            EventFlowSystemActor.SetItemToPocket(3745, 5)
-            MainNpc.SetDeliveryItemAtRandom(3745, false, 'cVillageRemakePattern', 0)
-        case 4:
-            EventFlowSystemActor.SetItemToPocket(2936, 5)
-            MainNpc.SetDeliveryItemAtRandom(2936, false, 'cVillageRemakePattern', 0)
-        case 5:
-            EventFlowSystemActor.SetItemToPocket(3724, 5)
-            MainNpc.SetDeliveryItemAtRandom(3724, false, 'cVillageRemakePattern', 0)
-        case 6:
-            EventFlowSystemActor.SetItemToPocket(2884, 5)
-            MainNpc.SetDeliveryItemAtRandom(2884, false, 'cVillageRemakePattern', 0)
-        case 7:
-            EventFlowSystemActor.SetItemToPocket(2912, 5)
-            MainNpc.SetDeliveryItemAtRandom(2912, false, 'cVillageRemakePattern', 0)
- 
+	switch EventFlowSystemActor.VillageFlower('cVillageCreate'):
+		case 0:
+			EventFlowSystemActor.SetItemToPocket(3769, 5)
+			MainNpc.SetDeliveryItemAtRandom(3769, false, 'cVillageRemakePattern', 0)
+		case 1:
+			EventFlowSystemActor.SetItemToPocket(2984, 5)
+			MainNpc.SetDeliveryItemAtRandom(2984, false, 'cVillageRemakePattern', 0)
+		case 2:
+			EventFlowSystemActor.SetItemToPocket(2626, 5)
+			MainNpc.SetDeliveryItemAtRandom(2626, false, 'cVillageRemakePattern', 0)
+		case 3:
+			EventFlowSystemActor.SetItemToPocket(3745, 5)
+			MainNpc.SetDeliveryItemAtRandom(3745, false, 'cVillageRemakePattern', 0)
+		case 4:
+			EventFlowSystemActor.SetItemToPocket(2936, 5)
+			MainNpc.SetDeliveryItemAtRandom(2936, false, 'cVillageRemakePattern', 0)
+		case 5:
+			EventFlowSystemActor.SetItemToPocket(3724, 5)
+			MainNpc.SetDeliveryItemAtRandom(3724, false, 'cVillageRemakePattern', 0)
+		case 6:
+			EventFlowSystemActor.SetItemToPocket(2884, 5)
+			MainNpc.SetDeliveryItemAtRandom(2884, false, 'cVillageRemakePattern', 0)
+		case 7:
+			EventFlowSystemActor.SetItemToPocket(2912, 5)
+			MainNpc.SetDeliveryItemAtRandom(2912, false, 'cVillageRemakePattern', 0)
+
 flow RcoTent_GiveSeeds_Again():
-    switch EventFlowSystemActor.VillageFlower('cBirthday'):
-        case 0:
-            EventFlowSystemActor.SetItemToPocket(3755, 5)
-            MainNpc.SetDeliveryItemAtRandom(3755, false, 'cVillageRemakePattern', 0)
-        case 1:
-            EventFlowSystemActor.SetItemToPocket(2980, 5)
-            MainNpc.SetDeliveryItemAtRandom(2980, false, 'cVillageRemakePattern', 0)
-        case 2:
-            EventFlowSystemActor.SetItemToPocket(2629, 5)
-            MainNpc.SetDeliveryItemAtRandom(2629, false, 'cVillageRemakePattern', 0)
-        case 3:
-            EventFlowSystemActor.SetItemToPocket(3731, 5)
-            MainNpc.SetDeliveryItemAtRandom(3731, false, 'cVillageRemakePattern', 0)
-        case 4:
-            EventFlowSystemActor.SetItemToPocket(2932, 5)
-            MainNpc.SetDeliveryItemAtRandom(2932, false, 'cVillageRemakePattern', 0)
-        case 5:
-            EventFlowSystemActor.SetItemToPocket(3710, 5)
-            MainNpc.SetDeliveryItemAtRandom(3710, false, 'cVillageRemakePattern', 0)
-        case 6:
-            EventFlowSystemActor.SetItemToPocket(2880, 5)
-            MainNpc.SetDeliveryItemAtRandom(2880, false, 'cVillageRemakePattern', 0)
-        case 7:
-            EventFlowSystemActor.SetItemToPocket(2908, 5)
-            MainNpc.SetDeliveryItemAtRandom(2908, false, 'cVillageRemakePattern', 0)
- 
+	switch EventFlowSystemActor.VillageFlower('cBirthday'):
+		case 0:
+			EventFlowSystemActor.SetItemToPocket(3755, 5)
+			MainNpc.SetDeliveryItemAtRandom(3755, false, 'cVillageRemakePattern', 0)
+		case 1:
+			EventFlowSystemActor.SetItemToPocket(2980, 5)
+			MainNpc.SetDeliveryItemAtRandom(2980, false, 'cVillageRemakePattern', 0)
+		case 2:
+			EventFlowSystemActor.SetItemToPocket(2629, 5)
+			MainNpc.SetDeliveryItemAtRandom(2629, false, 'cVillageRemakePattern', 0)
+		case 3:
+			EventFlowSystemActor.SetItemToPocket(3731, 5)
+			MainNpc.SetDeliveryItemAtRandom(3731, false, 'cVillageRemakePattern', 0)
+		case 4:
+			EventFlowSystemActor.SetItemToPocket(2932, 5)
+			MainNpc.SetDeliveryItemAtRandom(2932, false, 'cVillageRemakePattern', 0)
+		case 5:
+			EventFlowSystemActor.SetItemToPocket(3710, 5)
+			MainNpc.SetDeliveryItemAtRandom(3710, false, 'cVillageRemakePattern', 0)
+		case 6:
+			EventFlowSystemActor.SetItemToPocket(2880, 5)
+			MainNpc.SetDeliveryItemAtRandom(2880, false, 'cVillageRemakePattern', 0)
+		case 7:
+			EventFlowSystemActor.SetItemToPocket(2908, 5)
+			MainNpc.SetDeliveryItemAtRandom(2908, false, 'cVillageRemakePattern', 0)

@@ -1,200 +1,199 @@
 flow AAA():
-    if not MainNpc.EventFlags['cNpcMemory:EasterTalkOutdoorFlag']:
-        # RANDOM: HOORAY AND YAY FOR BUNNY DAAAY! I'm gon… // I love Bunny Day. Someday I'm gonna mee…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:110', false)
-        MainNpc.EventFlags['cNpcMemory:EasterTalkOutdoorFlag'] = true
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif (MainNpc.HaveExchangeEgg()) and (not MainNpc.EventFlags['cNpcMemory:EasterExchangeEggFlag']) and (not ((MainNpc.EventFlags['cNpcMemory:EasterExchangeEggTalkFlag']) and (EventFlowSystemActor.PercentChoice(60)))):
-        MainNpc.EventFlags['cNpcMemory:EasterExchangeEggTalkFlag'] = true
-        run EasterNpc_ExchangeEgg()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        run EasterNpc_Chat()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if not MainNpc.EventFlags['cNpcMemory:EasterTalkOutdoorFlag']:
+		# RANDOM: HOORAY AND YAY FOR BUNNY DAAAY! I'm gon… // I love Bunny Day. Someday I'm gonna mee…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:110', false)
+		MainNpc.EventFlags['cNpcMemory:EasterTalkOutdoorFlag'] = true
+		EventFlowSystemActor.ExitFlowchart()
+	elif (MainNpc.HaveExchangeEgg()) and (not MainNpc.EventFlags['cNpcMemory:EasterExchangeEggFlag']) and (not ((MainNpc.EventFlags['cNpcMemory:EasterExchangeEggTalkFlag']) and (EventFlowSystemActor.PercentChoice(60)))):
+		MainNpc.EventFlags['cNpcMemory:EasterExchangeEggTalkFlag'] = true
+		run EasterNpc_ExchangeEgg()
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		run EasterNpc_Chat()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow EarthEgg():
-    # I heard there's candy eggs buried in the ground. Think they'll sprout into a candy-egg tree? I sure hope so…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:101', false)
-    run Sub_Event6()
- 
+	# I heard there's candy eggs buried in the ground. Think they'll sprout into a candy-egg tree? I sure hope so…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:101', false)
+	run Sub_Event6()
+
 flow EasterNpc_Chat():
-    if MainNpc.CheckNpcTool() not in (0, 1, 2, 4, 5):
-        if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) in (0, 1):
-            run GeneralTalk1()
-        else:
-            run WaterEgg()
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-        run GeneralTalk1()
-    elif EventFlowSystemActor.PercentChoice(10):
-        run WaterEgg()
-    else:
-        switch MainNpc.CheckNpcLook():
-            case 0:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run EarthEgg()
-                else:
-                    run SkyEgg()
-            case 1:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run WoodEgg()
-                else:
-                    run LeafEgg()
-            case 2:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run SkyEgg()
-                else:
-                    run LeafEgg()
-            case 3:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run StoneEgg()
-                else:
-                    run LeafEgg()
-            case 4:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run EarthEgg()
-                else:
-                    run WoodEgg()
-            case 5:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run StoneEgg()
-                else:
-                    run WoodEgg()
-            case 6:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run EarthEgg()
-                else:
-                    run StoneEgg()
-            case 7:
-                if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                    run SkyEgg()
-                else:
-                    run LeafEgg()
- 
+	if MainNpc.CheckNpcTool() not in (0, 1, 2, 4, 5):
+		if EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) in (0, 1):
+			run GeneralTalk1()
+		else:
+			run WaterEgg()
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		run GeneralTalk1()
+	elif EventFlowSystemActor.PercentChoice(10):
+		run WaterEgg()
+	else:
+		switch MainNpc.CheckNpcLook():
+			case 0:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run EarthEgg()
+				else:
+					run SkyEgg()
+			case 1:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run WoodEgg()
+				else:
+					run LeafEgg()
+			case 2:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run SkyEgg()
+				else:
+					run LeafEgg()
+			case 3:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run StoneEgg()
+				else:
+					run LeafEgg()
+			case 4:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run EarthEgg()
+				else:
+					run WoodEgg()
+			case 5:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run StoneEgg()
+				else:
+					run WoodEgg()
+			case 6:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run EarthEgg()
+				else:
+					run StoneEgg()
+			case 7:
+				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+					run SkyEgg()
+				else:
+					run LeafEgg()
+
 flow EasterNpc_ExchangeEgg():
-    MainNpc.SetEasterExchangeEgg()
-    MainNpc.SetItemNameUpdate('cEasterExchangeEgg', 'cItem', 0)
-    if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-        # Oh! Hey, I gotta talk to you about something. It's important. Almost as important as breakfast. Here goes… You've got lotsa different kinds of eggs, …
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:111', false)
-    else:
-        # You gotta help me! I wanted to find eggs, so I found eggs, but now I got too many of the same kind of eggs! Can I trade you for some different eggs? …
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:112', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-            # Whew! That's a relief. I was really getting worried. OK, which eggs do you wanna trade?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:113', false)
-        else:
-            # Whoa, really? REALLY really? YES! I thought I was gonna be stuck with those. Which eggs do I get?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:114', false)
-        EventFlowSystemActor.UIItemSelectWindowHandling('cEasterExchangeEgg', 65534, '', '', 'cItemSelect', false)
-        if EventFlowSystemActor.UIResultMenuDecide():
-            MainNpc.SetItemName(4, 0, 1)
-            # That sounds good! OK, so 3 of my <125:0:0200> for 3 of your <125:0:0201>?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:120', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                if MainNpc.EasterCanExchangeEgg():
-                    # Yesss! C'mon, let's do it!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:121', false)
-                    MainNpc.MessageSuspend()
-                    MainNpc.SetDeliveryItem(4, false)
-                    EventFlowSystemActor.DeleteSelectUIItem(3)
-                    MainNpc.NpcDelivery(0, '"Default"')
-                    MainNpc.NpcSetRewardEasterExchangeEgg()
-                    MainNpc.SetDeliveryItem(1, true)
-                    MainNpc.NpcDelivery(1, '"Default"')
-                    MainNpc.EventFlags['cNpcMemory:EasterExchangeEggFlag'] = true
-                    if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-                        # You saved the day! I really wasn't sure what I was gonna do. You're the best, <110:6>!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:116', false)
-                    else:
-                        # So pretty! And no food stains on 'em or nothin', <110:6>. Oh, uh…try not to look too hard at the ones I gave you, OK? Thanks!
-                        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:117', false)
-                else:
-                    # Yaaay! Alright, let's tra— Hang on. You, uh…don't have enough room in your pockets, <110:6>. Aaaw…
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:122', false)
-            else:
-                run Sub_grp_Event87()
-        else:
-            run Sub_grp_Event87()
-    else:
-        run Sub_grp_Event87()
- 
+	MainNpc.SetEasterExchangeEgg()
+	MainNpc.SetItemNameUpdate('cEasterExchangeEgg', 'cItem', 0)
+	if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		# Oh! Hey, I gotta talk to you about something. It's important. Almost as important as breakfast. Here goes… You've got lotsa different kinds of eggs, …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:111', false)
+	else:
+		# You gotta help me! I wanted to find eggs, so I found eggs, but now I got too many of the same kind of eggs! Can I trade you for some different eggs? …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:112', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			# Whew! That's a relief. I was really getting worried. OK, which eggs do you wanna trade?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:113', false)
+		else:
+			# Whoa, really? REALLY really? YES! I thought I was gonna be stuck with those. Which eggs do I get?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:114', false)
+		EventFlowSystemActor.UIItemSelectWindowHandling('cEasterExchangeEgg', 65534, '', '', 'cItemSelect', false)
+		if EventFlowSystemActor.UIResultMenuDecide():
+			MainNpc.SetItemName(4, 0, 1)
+			# That sounds good! OK, so 3 of my <125:0:0200> for 3 of your <125:0:0201>?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:120', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				if MainNpc.EasterCanExchangeEgg():
+					# Yesss! C'mon, let's do it!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:121', false)
+					MainNpc.MessageSuspend()
+					MainNpc.SetDeliveryItem(4, false)
+					EventFlowSystemActor.DeleteSelectUIItem(3)
+					MainNpc.NpcDelivery(0, '"Default"')
+					MainNpc.NpcSetRewardEasterExchangeEgg()
+					MainNpc.SetDeliveryItem(1, true)
+					MainNpc.NpcDelivery(1, '"Default"')
+					MainNpc.EventFlags['cNpcMemory:EasterExchangeEggFlag'] = true
+					if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+						# You saved the day! I really wasn't sure what I was gonna do. You're the best, <110:6>!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:116', false)
+					else:
+						# So pretty! And no food stains on 'em or nothin', <110:6>. Oh, uh…try not to look too hard at the ones I gave you, OK? Thanks!
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:117', false)
+				else:
+					# Yaaay! Alright, let's tra— Hang on. You, uh…don't have enough room in your pockets, <110:6>. Aaaw…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:122', false)
+			else:
+				run Sub_grp_Event87()
+		else:
+			run Sub_grp_Event87()
+	else:
+		run Sub_grp_Event87()
+
 flow GeneralTalk1():
-    if not EventFlowSystemActor.IsMyVillage():
-        run GeneralTalk2()
-    elif EventFlowSystemActor.NetIsConnected():
-        run GeneralTalk2()
-    elif System.EventFlags['cPlayer:PynGetFinalMissionRecipeFlag']:
-        run GeneralTalk2()
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
-        run GeneralTalk2()
-    else:
-        if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-            # So I've been thinking… Bunny Day is all about candy eggs. And Bunny Day balloons are really colorful…just like candy eggs! AND! Some Bunny Day balloo…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:011', false)
-        else:
-            # I bit into a candy egg I found on the beach and it wasn't a candy egg at all. It was a message bottle! I think maybe there was a DIY recipe inside or…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:012', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if not EventFlowSystemActor.IsMyVillage():
+		run GeneralTalk2()
+	elif EventFlowSystemActor.NetIsConnected():
+		run GeneralTalk2()
+	elif System.EventFlags['cPlayer:PynGetFinalMissionRecipeFlag']:
+		run GeneralTalk2()
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true) == 0:
+		run GeneralTalk2()
+	else:
+		if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			# So I've been thinking… Bunny Day is all about candy eggs. And Bunny Day balloons are really colorful…just like candy eggs! AND! Some Bunny Day balloo…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:011', false)
+		else:
+			# I bit into a candy egg I found on the beach and it wasn't a candy egg at all. It was a message bottle! I think maybe there was a DIY recipe inside or…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:012', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow GeneralTalk2():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-        case 0:
-            # <10:12>BUNNY DAAAAAY! <10:9>That means candy eggs! Everywhere! Too…excited…can't…contain…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:001', false)
-        case 1:
-            # Zipper's always dancing! And it made me wanna dance! And then I danced with him!<10:4> And now I'm not.
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:002', false)
-        case 2:
-            # Have you found any candy eggs yet? Have you tried eating them? Wanna know which color tastes the best? A huh huh! It's a tie! They're all the yummies…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:003', false)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# <10:12>BUNNY DAAAAAY! <10:9>That means candy eggs! Everywhere! Too…excited…can't…contain…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:001', false)
+		case 1:
+			# Zipper's always dancing! And it made me wanna dance! And then I danced with him!<10:4> And now I'm not.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:002', false)
+		case 2:
+			# Have you found any candy eggs yet? Have you tried eating them? Wanna know which color tastes the best? A huh huh! It's a tie! They're all the yummies…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:003', false)
+	EventFlowSystemActor.ExitFlowchart()
+
 flow LeafEgg():
-    # ねぇねぇ、<110:4> フルーツのなってない木を　ゆらしたら、 たまごが　おちてきたんだぁ～ たまごのなる木！ 大発見だねぇ、<110:6>
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:105', false)
-    run Sub_Event6()
- 
+	# ねぇねぇ、<110:4> フルーツのなってない木を　ゆらしたら、 たまごが　おちてきたんだぁ～ たまごのなる木！ 大発見だねぇ、<110:6>
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:105', false)
+	run Sub_Event6()
+
 flow Root():
-    if (EventFlowSystemActor.SystemCheckNowStage('cField')) and (EventFlowSystemActor.EventCheck('Easter') in (1, 2)):
-        run AAA()
- 
+	if (EventFlowSystemActor.SystemCheckNowStage('cField')) and (EventFlowSystemActor.EventCheck('Easter') in (1, 2)):
+		run AAA()
+
 flow SkyEgg():
-    if EventFlowSystemActor.NetIsConnected():
-        run WaterEgg()
-        return
-    else:
-        # イースター… それは　夢と希望にあふれる タマゴの祭典… さっき　たまご型の風船が　飛んでいたよ フフフ、あれも　食べられるのかな？
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:104', false)
-        run Sub_Event6()
- 
+	if EventFlowSystemActor.NetIsConnected():
+		run WaterEgg()
+		return
+	else:
+		# イースター… それは　夢と希望にあふれる タマゴの祭典… さっき　たまご型の風船が　飛んでいたよ フフフ、あれも　食べられるのかな？
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:104', false)
+		run Sub_Event6()
+
 flow StoneEgg():
-    if System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
-        # あのさ、<110:3> いわのたまごってのを　食べてみたけどよぉ 名前のせいか…他のたまごより なんだか　硬かった気がするな いわのたまごといやぁ、どうも最近 たぬきマイルで行ける　無人島だかに ゴロゴロ　転がってるって話だぜ、<110:6>
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:102', false)
-        run Sub_Event6()
-    else:
-        run WaterEgg()
-        return
- 
+	if System.EventFlags['cPlayer:MainmenuRndDailyQuest']:
+		# あのさ、<110:3> いわのたまごってのを　食べてみたけどよぉ 名前のせいか…他のたまごより なんだか　硬かった気がするな いわのたまごといやぁ、どうも最近 たぬきマイルで行ける　無人島だかに ゴロゴロ　転がってるって話だぜ、<110:6>
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:102', false)
+		run Sub_Event6()
+	else:
+		run WaterEgg()
+		return
+
 local flow Sub_Event6():
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_grp_Event87():
-    if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
-        # No? But…b-but I just… Aaaw…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:118', false)
-    else:
-        # Well, if you don't wanna trade, then you don't wanna trade. Except I do wanna trade, so I'll ask around. Bye!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:119', false)
- 
+	if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		# No? But…b-but I just… Aaaw…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:118', false)
+	else:
+		# Well, if you don't wanna trade, then you don't wanna trade. Except I do wanna trade, so I'll ask around. Bye!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:119', false)
+
 flow WaterEgg():
-    # Do fish celebrate Bunny Day? 'Cause I went fishing and caught an egg instead of a fish, <110:5>. Happy Bunny Day, fishies!
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:106', false)
-    run Sub_Event6()
- 
+	# Do fish celebrate Bunny Day? 'Cause I went fishing and caught an egg instead of a fish, <110:5>. Happy Bunny Day, fishies!
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:106', false)
+	run Sub_Event6()
+
 flow WoodEgg():
-    # Ever wondered why eggs fall out of trees if you hit them around Bunny Day?<10:4> Me neither, <110:5>.
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:103', false)
-    run Sub_Event6()
- 
+	# Ever wondered why eggs fall out of trees if you hit them around Bunny Day?<10:4> Me neither, <110:5>.
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_Easter:103', false)
+	run Sub_Event6()

@@ -1,802 +1,801 @@
 flow Alw_Advice_Set_Theme():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
-        case 0:
-            # Not sure how to get started? Press  to begin working on your set design and arranging furniture.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:037_01', false)
-            return
-        case 1:
-            # If you're feeling inspired to use some of your own props, please do so! I think my darling Cy-Guy's stuff is pretty great, but I'd love to see what y…
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:037_02', false)
-            return
-        case 2:
-            if SubflowResults@8[0] in (0, 1, 2, 3, 4, 5):
-                run Alw_Advice_Set_Theme()
-            elif System.EventFlags['cPlayer:EnableDiyRemake']:
-                # Thinking of using some custom pieces? Line up your cursor with the item, and then press .
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:037_03', false)
-                return
-            else:
-                run Alw_Advice_Set_Theme()
-        case 3:
-            run Alw_Advice_Theme()
-            return
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+		case 0:
+			# Not sure how to get started? Press  to begin working on your set design and arranging furniture.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:037_01', false)
+			return
+		case 1:
+			# If you're feeling inspired to use some of your own props, please do so! I think my darling Cy-Guy's stuff is pretty great, but I'd love to see what y…
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:037_02', false)
+			return
+		case 2:
+			if SubflowResults@8[0] in (0, 1, 2, 3, 4, 5):
+				run Alw_Advice_Set_Theme()
+			elif System.EventFlags['cPlayer:EnableDiyRemake']:
+				# Thinking of using some custom pieces? Line up your cursor with the item, and then press .
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:037_03', false)
+				return
+			else:
+				run Alw_Advice_Set_Theme()
+		case 3:
+			run Alw_Advice_Theme()
+			return
+
 flow Alw_Advice_Shoot_Theme():
-    switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
-        case 0:
-            # Remember, when you're ready to start shooting, press  to open the Camera app, and  to take pictures.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:036_01', false)
-        case 1:
-            # If you're having a hard time staying out of the frame, press down  to swap the display.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:036_02', false)
-        case 2:
-            # The lighting and composition are all up to you. Show us your full artistic vision!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:036_03', false)
-        case 3:
-            run Alw_Advice_Theme()
- 
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
+		case 0:
+			# Remember, when you're ready to start shooting, press  to open the Camera app, and  to take pictures.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:036_01', false)
+		case 1:
+			# If you're having a hard time staying out of the frame, press down  to swap the display.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:036_02', false)
+		case 2:
+			# The lighting and composition are all up to you. Show us your full artistic vision!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:036_03', false)
+		case 3:
+			run Alw_Advice_Theme()
+
 flow Alw_Advice_Theme():
-    switch SubflowResults@8[0]:
-        case 0, 2, 4:
-            # Today I'm looking for a photo set that feels like a real ceremony inside a wedding chapel!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_01', false)
-            # We'd be a pack of happy alpacas if you made us a cute set with plenty of white and pink accents!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_04', false)
-        case 1, 3:
-            # Today I'm looking for a photo set that feels like the big, fun reception after a perfect wedding!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_02', false)
-            # We'd be a pack of happy alpacas if you made us a cute set with plenty of white and pink accents!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_04', false)
-        case 5:
-            # If I were planning our wedding reception all over again… I'd find a place with room for all kinds of fancy decorations…and tables piled high with del…
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_03', false)
-        case 6, 7:
-            switch EventFlowSystemActor.CurrentJuneBrideTheme():
-                case 0:
-                    # We'd be a pack of happy alpacas if you made us a cute set with plenty of white and pink accents!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_04', false)
-                case 1:
-                    # I'm thinking of something chic. You know…calm and refined. With brown, beige, white, or black accents.
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_05', false)
-                case 2:
-                    # I want to get a photo in a garden setting…with vibrant natural colors like green, yellow, beige, and brown!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_06', false)
- 
+	switch SubflowResults@8[0]:
+		case 0, 2, 4:
+			# Today I'm looking for a photo set that feels like a real ceremony inside a wedding chapel!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_01', false)
+			# We'd be a pack of happy alpacas if you made us a cute set with plenty of white and pink accents!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_04', false)
+		case 1, 3:
+			# Today I'm looking for a photo set that feels like the big, fun reception after a perfect wedding!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_02', false)
+			# We'd be a pack of happy alpacas if you made us a cute set with plenty of white and pink accents!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_04', false)
+		case 5:
+			# If I were planning our wedding reception all over again… I'd find a place with room for all kinds of fancy decorations…and tables piled high with del…
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_03', false)
+		case 6, 7:
+			switch EventFlowSystemActor.CurrentJuneBrideTheme():
+				case 0:
+					# We'd be a pack of happy alpacas if you made us a cute set with plenty of white and pink accents!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_04', false)
+				case 1:
+					# I'm thinking of something chic. You know…calm and refined. With brown, beige, white, or black accents.
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_05', false)
+				case 2:
+					# I want to get a photo in a garden setting…with vibrant natural colors like green, yellow, beige, and brown!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:038_06', false)
+
 flow Alw_AfterClear_Flag():
-    if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-        System.EventFlags['cPlayer:AlwJuneBrideDayCount'] += 1
-        EventFlowSystemActor.UpdateJuneBrideDayAlreadyCount()
-    EventFlowSystemActor.ReflectFinishedJuneBrideTheme()
-    System.EventFlags['cPlayer:AlwJuneBrideTotalClearCount'] += 1
-    System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = false
-    System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = false
-    System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = false
-    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
-    System.EventFlags['cPlayer:PooTalkAfterJuneBride'] = true
- 
+	if not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+		System.EventFlags['cPlayer:AlwJuneBrideDayCount'] += 1
+		EventFlowSystemActor.UpdateJuneBrideDayAlreadyCount()
+	EventFlowSystemActor.ReflectFinishedJuneBrideTheme()
+	System.EventFlags['cPlayer:AlwJuneBrideTotalClearCount'] += 1
+	System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = false
+	System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = false
+	System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = false
+	System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
+	System.EventFlags['cPlayer:PooTalkAfterJuneBride'] = true
+
 flow Alw_Camera():
-    switch SubflowResults@8[0]:
-        case 0:
-            if System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag']:
-                switch EventFlowSystemActor.CheckJuneBrideStudioTakePicture():
-                    case 0:
-                        run Alw_Advice_Shoot_Theme()
-                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                    case 1:
-                        if EventFlowSystemActor.RandomChoice2(2) == 0:
-                            run Alw_Advice_Shoot_Theme()
-                            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                        else:
-                            run Alw_Advice_Set_Theme()
-                            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                    case 2:
-                        run Alw_Shoot()
-            else:
-                EventFlowSystemActor.CalcJuneBrideScore()
-                if EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
-                    # Ooh, it's coming along… Does this mean you're ready for us to start the photo session?
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:030', false)
-                    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                        # Yay! This is so exciting! Um, but before we get started, I do have another teensy request…<10:4> Will you be our photographer? Don't get me wrong—Har…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:031_01', false)
-                        System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
-                        System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
-                        EventFlowSystemActor.UIGuideBalloonWeddingParty(2)
-                    else:
-                        # No problem. Keep up the good work!
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:032', false)
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                else:
-                    run Alw_Advice_Set_Theme()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        case 1, 2, 3, 4, 6, 7:
-            if EventFlowSystemActor.CheckJuneBrideStudioTakePicture() in (0, 1):
-                EventFlowSystemActor.CalcJuneBrideScore()
-                if not EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
-                    run Alw_Advice_Set_Theme()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                elif (EventFlowSystemActor.CheckCalledNpcNumNormal(1)) and (not System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag']):
-                    # Since we've already got company, should we go ahead and throw another party? Just press  if you think it's a good idea. A party is ALWAYS a good ide…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:073', false)
-                    System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = true
-                    if Player.PlayerIsEquipToolTowel():
-                        # I know you're in the middle of some important work…but please change back before the party starts, OK?
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:120', false)
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                elif System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag']:
-                    if EventFlowSystemActor.RandomChoice2(2) == 0:
-                        run Alw_Advice_Shoot_Theme()
-                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                    else:
-                        run Alw_Advice_Set_Theme()
-                        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                elif EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
-                    # Once everything is ready, would you mind being our photographer again? You did such a nice job before! Just press  to open the Camera app within the…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:031_02', false)
-                    System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                else:
-                    run Alw_Advice_Set_Theme()
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            elif (EventFlowSystemActor.CheckCalledNpcNumNormal(1)) and (not System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag']):
-                # Since we've already got company, should we go ahead and throw another party? Just press  if you think it's a good idea. A party is ALWAYS a good ide…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:073', false)
-                System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = true
-                if Player.PlayerIsEquipToolTowel():
-                    # I know you're in the middle of some important work…but please change back before the party starts, OK?
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:120', false)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                run Alw_Shoot()
-        case 5:
-            EventFlowSystemActor.CalcJuneBrideScore()
-            if not EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
-                run Alw_Advice_Set_Theme()
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            elif not EventFlowSystemActor.CheckCalledNpcNumNormal(1):
-                if (System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag']) and (EventFlowSystemActor.PercentChoice(70)):
-                    run Alw_Advice_Set_Theme()
-                else:
-                    # Hmm, we can't have a party without guests… That would be something else entirely! Why don't you call them up on the Residents tab and help them all g…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:072', false)
-                    System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            elif EventFlowSystemActor.AlwAlpIsOnBedJuneBride():
-                # Would you be a dear and wake my silly sleeping Cy-Guy before we start the party?
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:074', false)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                # Are we ready to get started?
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:070', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    # Yay! Here we go…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:071', false)
-                    run System_JuneBrideParty::PartyStart_Wiperun System_JuneBrideParty::PartyStart_Wipe()
-                else:
-                    # No problem. Keep up the good work!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:032', false)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	switch SubflowResults@8[0]:
+		case 0:
+			if System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag']:
+				switch EventFlowSystemActor.CheckJuneBrideStudioTakePicture():
+					case 0:
+run Alw_Advice_Shoot_Theme()
+EventFlowSystemActor.ExitFlowchart()
+					case 1:
+						if EventFlowSystemActor.RandomChoice2(2) == 0:
+run Alw_Advice_Shoot_Theme()
+EventFlowSystemActor.ExitFlowchart()
+						else:
+run Alw_Advice_Set_Theme()
+EventFlowSystemActor.ExitFlowchart()
+					case 2:
+						run Alw_Shoot()
+			else:
+				EventFlowSystemActor.CalcJuneBrideScore()
+				if EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
+					# Ooh, it's coming along… Does this mean you're ready for us to start the photo session?
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:030', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						# Yay! This is so exciting! Um, but before we get started, I do have another teensy request…<10:4> Will you be our photographer? Don't get me wrong—Har…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:031_01', false)
+System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
+System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
+EventFlowSystemActor.UIGuideBalloonWeddingParty(2)
+					else:
+						# No problem. Keep up the good work!
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:032', false)
+					EventFlowSystemActor.ExitFlowchart()
+				else:
+					run Alw_Advice_Set_Theme()
+					EventFlowSystemActor.ExitFlowchart()
+		case 1, 2, 3, 4, 6, 7:
+			if EventFlowSystemActor.CheckJuneBrideStudioTakePicture() in (0, 1):
+				EventFlowSystemActor.CalcJuneBrideScore()
+				if not EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
+					run Alw_Advice_Set_Theme()
+					EventFlowSystemActor.ExitFlowchart()
+				elif (EventFlowSystemActor.CheckCalledNpcNumNormal(1)) and (not System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag']):
+					# Since we've already got company, should we go ahead and throw another party? Just press  if you think it's a good idea. A party is ALWAYS a good ide…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:073', false)
+					System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = true
+					if Player.PlayerIsEquipToolTowel():
+						# I know you're in the middle of some important work…but please change back before the party starts, OK?
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:120', false)
+					EventFlowSystemActor.ExitFlowchart()
+				elif System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag']:
+					if EventFlowSystemActor.RandomChoice2(2) == 0:
+run Alw_Advice_Shoot_Theme()
+EventFlowSystemActor.ExitFlowchart()
+					else:
+run Alw_Advice_Set_Theme()
+EventFlowSystemActor.ExitFlowchart()
+				elif EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
+					# Once everything is ready, would you mind being our photographer again? You did such a nice job before! Just press  to open the Camera app within the…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:031_02', false)
+					System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
+					EventFlowSystemActor.ExitFlowchart()
+				else:
+					run Alw_Advice_Set_Theme()
+					EventFlowSystemActor.ExitFlowchart()
+			elif (EventFlowSystemActor.CheckCalledNpcNumNormal(1)) and (not System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag']):
+				# Since we've already got company, should we go ahead and throw another party? Just press  if you think it's a good idea. A party is ALWAYS a good ide…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:073', false)
+				System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = true
+				if Player.PlayerIsEquipToolTowel():
+					# I know you're in the middle of some important work…but please change back before the party starts, OK?
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:120', false)
+				EventFlowSystemActor.ExitFlowchart()
+			else:
+				run Alw_Shoot()
+		case 5:
+			EventFlowSystemActor.CalcJuneBrideScore()
+			if not EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 1):
+				run Alw_Advice_Set_Theme()
+				EventFlowSystemActor.ExitFlowchart()
+			elif not EventFlowSystemActor.CheckCalledNpcNumNormal(1):
+				if (System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag']) and (EventFlowSystemActor.PercentChoice(70)):
+					run Alw_Advice_Set_Theme()
+				else:
+					# Hmm, we can't have a party without guests… That would be something else entirely! Why don't you call them up on the Residents tab and help them all g…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:072', false)
+					System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
+				EventFlowSystemActor.ExitFlowchart()
+			elif EventFlowSystemActor.AlwAlpIsOnBedJuneBride():
+				# Would you be a dear and wake my silly sleeping Cy-Guy before we start the party?
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:074', false)
+				EventFlowSystemActor.ExitFlowchart()
+			else:
+				# Are we ready to get started?
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:070', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# Yay! Here we go…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:071', false)
+					run System_JuneBrideParty::PartyStart_Wipe()
+				else:
+					# No problem. Keep up the good work!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:032', false)
+				EventFlowSystemActor.ExitFlowchart()
+
 flow Alw_DayChk():
-    if System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 0:
-        SubflowResults[0] = 0
-    elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 1:
-        SubflowResults[0] = 1
-    elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 2:
-        SubflowResults[0] = 2
-    elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 3:
-        SubflowResults[0] = 3
-    elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 4:
-        SubflowResults[0] = 4
-    elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 5:
-        SubflowResults[0] = 5
-    elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] != 6:
-        SubflowResults[0] = 7
-    else:
-        SubflowResults[0] = 6
- 
+	if System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 0:
+		SubflowResults[0] = 0
+	elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 1:
+		SubflowResults[0] = 1
+	elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 2:
+		SubflowResults[0] = 2
+	elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 3:
+		SubflowResults[0] = 3
+	elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 4:
+		SubflowResults[0] = 4
+	elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] == 5:
+		SubflowResults[0] = 5
+	elif System.EventFlags['cPlayer:AlwJuneBrideDayCount'] != 6:
+		SubflowResults[0] = 7
+	else:
+		SubflowResults[0] = 6
+
 flow Alw_End_day2_5():
-    # When you're all done with the set and we've got a few photos in the can, come talk to me, OK? <10:4>Thanks!
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:013', false)
-    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
-    EventFlowSystemActor.UIGuideBalloonWeddingParty(2)
- 
+	# When you're all done with the set and we've got a few photos in the can, come talk to me, OK? <10:4>Thanks!
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:013', false)
+	System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
+	EventFlowSystemActor.UIGuideBalloonWeddingParty(2)
+
 flow Alw_GetItem():
-    if SubflowResults@8[0] in (0, 1, 2, 3, 4, 5):
-        MainNpc.DecideEventReward('cEventRewardSymbol00')
-        MainNpc.SetItemName(1, 0, 0)
-        # Anyway, I have a little something to show our appreciation. I hope you like it! My Cy-Guy made it just for you… It's [a|an]<125:0:0000>!
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:050', false)
-        if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-            MainNpc.SetDeliveryItem(1, true)
-            if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-                # I've already stashed the reward with your other stuff, so you're all set!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:059', false)
-                MainNpc.SetEventRewardToPlayerBaggage('cFree')
-                System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag'] = true
-            else:
-                MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-                EventFlowSystemActor.WaitFrame(5)
-                EventFlowSystemActor.MessageSuspend()
-                MainNpc.NpcDelivery(1, 'Default')
-                if not System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
-                    System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag'] = true
-            # Aaaand…because I'm just full of surprises, I also have some <item>heart crystals for you!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:052', false)
-            if SubflowResults@8[0] == 0:
-                # They're so cute that I just hate to give them away, but my Cy-Guy likes 'em too. He'll trade you for furniture! Oh, but he'll only do so during the m…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053', false)
-                if not System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag']:
-                    # Oh! There is one small request we have… Please keep it to no more than 8 redemptions per day. My sweetie makes all the furniture by hand. He works fa…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053_01', false)
-                    System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag'] = true
-            run Alw_LoveCrystalNum()
-            if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-                run Sub_Event70()
-            else:
-                # Oh! But you don't have room to carry anything else right now, do you? Well… That's what mail's for!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:051', false)
-                EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-        else:
-            # Oh! But you don't have room to carry anything else right now, do you? Well… That's what mail's for!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:051', false)
-            EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-            # Aaaand…because I'm just full of surprises, I also have some <item>heart crystals for you!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:052', false)
-            if SubflowResults@8[0] == 0:
-                # They're so cute that I just hate to give them away, but my Cy-Guy likes 'em too. He'll trade you for furniture! Oh, but he'll only do so during the m…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053', false)
-                if not System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag']:
-                    # Oh! There is one small request we have… Please keep it to no more than 8 redemptions per day. My sweetie makes all the furniture by hand. He works fa…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053_01', false)
-                    System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag'] = true
-            run Alw_LoveCrystalNum()
-            if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-                run Sub_Event70()
-            else:
-                # Oh! I forgot you don't have any room in your pockets. How frustrating! Well, I'll pack these in with your gift.
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:054', false)
-                EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-    elif not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-        # Now, I can't let you leave without a reward. Treat yourself to something nice with these <item>heart crystals!
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:055', false)
-        run Alw_LoveCrystalNum()
-        if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
-            MainNpc.SetDeliveryItem(1, true)
-            if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-                # I've already stashed the reward with your other stuff, so you're all set!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:059', false)
-                MainNpc.SetEventRewardToPlayerBaggage('cFree')
-                System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag'] = true
-            else:
-                MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-                EventFlowSystemActor.WaitFrame(5)
-                EventFlowSystemActor.MessageSuspend()
-                MainNpc.NpcDelivery(1, 'Default')
-                if not System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
-                    System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag'] = true
-        else:
-            # Oh! But you don't have room to carry anything else right now, do you? Well… That's what mail's for!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:051', false)
-            EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
- 
+	if SubflowResults@8[0] in (0, 1, 2, 3, 4, 5):
+		MainNpc.DecideEventReward('cEventRewardSymbol00')
+		MainNpc.SetItemName(1, 0, 0)
+		# Anyway, I have a little something to show our appreciation. I hope you like it! My Cy-Guy made it just for you… It's [a|an]<125:0:0000>!
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:050', false)
+		if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+			MainNpc.SetDeliveryItem(1, true)
+			if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+				# I've already stashed the reward with your other stuff, so you're all set!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:059', false)
+				MainNpc.SetEventRewardToPlayerBaggage('cFree')
+				System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag'] = true
+			else:
+				MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+				EventFlowSystemActor.WaitFrame(5)
+				EventFlowSystemActor.MessageSuspend()
+				MainNpc.NpcDelivery(1, 'Default')
+				if not System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
+					System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag'] = true
+			# Aaaand…because I'm just full of surprises, I also have some <item>heart crystals for you!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:052', false)
+			if SubflowResults@8[0] == 0:
+				# They're so cute that I just hate to give them away, but my Cy-Guy likes 'em too. He'll trade you for furniture! Oh, but he'll only do so during the m…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053', false)
+				if not System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag']:
+					# Oh! There is one small request we have… Please keep it to no more than 8 redemptions per day. My sweetie makes all the furniture by hand. He works fa…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053_01', false)
+					System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag'] = true
+			run Alw_LoveCrystalNum()
+			if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+				run Sub_Event70()
+			else:
+				# Oh! But you don't have room to carry anything else right now, do you? Well… That's what mail's for!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:051', false)
+				EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+		else:
+			# Oh! But you don't have room to carry anything else right now, do you? Well… That's what mail's for!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:051', false)
+			EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+			# Aaaand…because I'm just full of surprises, I also have some <item>heart crystals for you!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:052', false)
+			if SubflowResults@8[0] == 0:
+				# They're so cute that I just hate to give them away, but my Cy-Guy likes 'em too. He'll trade you for furniture! Oh, but he'll only do so during the m…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053', false)
+				if not System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag']:
+					# Oh! There is one small request we have… Please keep it to no more than 8 redemptions per day. My sweetie makes all the furniture by hand. He works fa…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:053_01', false)
+					System.EventFlags['cPlayer:AlwJuneBrideExchangeTalkFlag'] = true
+			run Alw_LoveCrystalNum()
+			if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+				run Sub_Event70()
+			else:
+				# Oh! I forgot you don't have any room in your pockets. How frustrating! Well, I'll pack these in with your gift.
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:054', false)
+				EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+	elif not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+		# Now, I can't let you leave without a reward. Treat yourself to something nice with these <item>heart crystals!
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:055', false)
+		run Alw_LoveCrystalNum()
+		if EventFlowSystemActor.ShoppingCapacity('cReward', 65534):
+			MainNpc.SetDeliveryItem(1, true)
+			if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+				# I've already stashed the reward with your other stuff, so you're all set!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:059', false)
+				MainNpc.SetEventRewardToPlayerBaggage('cFree')
+				System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag'] = true
+			else:
+				MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+				EventFlowSystemActor.WaitFrame(5)
+				EventFlowSystemActor.MessageSuspend()
+				MainNpc.NpcDelivery(1, 'Default')
+				if not System.EventFlags['cLandTemp:JuneBrideCeremonyDemoAfterNow']:
+					System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag'] = true
+		else:
+			# Oh! But you don't have room to carry anything else right now, do you? Well… That's what mail's for!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:051', false)
+			EventFlowSystemActor.SystemMailSend('cAlw_Alp', 'MAIL_SNpc_alw_JuneBride', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+
 flow Alw_LoveCrystalNum():
-    EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_JuneBride_GetHeartPiece')
-    if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 1:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 2:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 2, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 3:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 3, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 4:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 4, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 5:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 5, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 6:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 6, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 7:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 7, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 8:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 8, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 9:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 9, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 10:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 10, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 11:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 11, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 12:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 12, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 13:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 13, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 14:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 14, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 15:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 15, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 16:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 16, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] != 17:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 18, 'cVillageRemakePattern', 0)
-    else:
-        EventFlowSystemActor.SelectRewardItemDirect(12546, 17, 'cVillageRemakePattern', 0)
- 
+	EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_JuneBride_GetHeartPiece')
+	if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 1:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 2:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 2, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 3:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 3, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 4:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 4, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 5:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 5, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 6:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 6, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 7:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 7, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 8:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 8, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 9:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 9, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 10:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 10, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 11:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 11, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 12:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 12, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 13:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 13, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 14:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 14, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 15:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 15, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] == 16:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 16, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] != 17:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 18, 'cVillageRemakePattern', 0)
+	else:
+		EventFlowSystemActor.SelectRewardItemDirect(12546, 17, 'cVillageRemakePattern', 0)
+
 flow Alw_NewFtr():
-    if SubflowResults@8[0] in (0, 1, 2, 3, 5, 6, 7):
-        # Oh, and by the way, my handy-dandy Cy-Guy made some NEW furniture! Isn't he the best? Anyway, now you have even more to work with. Just take a look a…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:016_pl', false)
-    else:
-        # Oh, and by the way, my handy-dandy Cy-Guy made some NEW furniture! Isn't he the best? Anyway, now you have even more to work with. Just take a look a…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:016', false)
- 
+	if SubflowResults@8[0] in (0, 1, 2, 3, 5, 6, 7):
+		# Oh, and by the way, my handy-dandy Cy-Guy made some NEW furniture! Isn't he the best? Anyway, now you have even more to work with. Just take a look a…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:016_pl', false)
+	else:
+		# Oh, and by the way, my handy-dandy Cy-Guy made some NEW furniture! Isn't he the best? Anyway, now you have even more to work with. Just take a look a…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:016', false)
+
 flow Alw_NotThemeStart():
-    # Hey! So glad to see you again. Are you ready to work on another fun set for us?
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022', false)
-    run Event411()
- 
+	# Hey! So glad to see you again. Are you ready to work on another fun set for us?
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022', false)
+	run Event411()
+
 flow Alw_ScoreCount():
-    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] = 0
-    if SubflowResults@8[0] in (0, 1, 2, 3, 4, 5):
-        if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 17000):
-            if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 23000):
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 4
-            else:
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
-        else:
-            System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
-        if EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 8):
-            SubflowResults[2] = 0
-            if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 70):
-                SubflowResults[3] = 0
-                if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 90):
-                    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 4
-                else:
-                    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
-            else:
-                run Sub_Event372()
-        else:
-            SubflowResults[2] = 1
-            run Sub_Event372()
-        if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 8):
-            SubflowResults[4] = 0
-            if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 12):
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 4
-            else:
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
-        else:
-            SubflowResults[4] = 1
-            System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
-        if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 4:
-            if SubflowResults@8[0] in (0, 1, 2):
-                SubflowResults[1] = 1
-            else:
-                SubflowResults[1] = 2
-        else:
-            if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 10:
-                SubflowResults[1] = 1
-            else:
-                SubflowResults[1] = 0
-        System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 2
-    else:
-        if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 17000):
-            if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 23000):
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 5
-            else:
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
-        else:
-            System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
-        if EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 8):
-            SubflowResults[2] = 0
-            if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 70):
-                SubflowResults[3] = 0
-                if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 90):
-                    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 5
-                else:
-                    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
-            else:
-                run Sub_Event234()
-        else:
-            SubflowResults[2] = 1
-            run Sub_Event234()
-        if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 8):
-            SubflowResults[4] = 0
-            if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 12):
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 5
-            else:
-                System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
-        else:
-            SubflowResults[4] = 1
-            System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 0
-        if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 5:
-            SubflowResults[1] = 2
-        else:
-            if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 11:
-                SubflowResults[1] = 1
-            else:
-                SubflowResults[1] = 0
-        System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
- 
+	System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] = 0
+	if SubflowResults@8[0] in (0, 1, 2, 3, 4, 5):
+		if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 17000):
+			if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 23000):
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 4
+			else:
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+		else:
+			System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
+		if EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 8):
+			SubflowResults[2] = 0
+			if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 70):
+				SubflowResults[3] = 0
+				if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 90):
+					System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 4
+				else:
+					System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+			else:
+				run Sub_Event372()
+		else:
+			SubflowResults[2] = 1
+			run Sub_Event372()
+		if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 8):
+			SubflowResults[4] = 0
+			if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 12):
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 4
+			else:
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+		else:
+			SubflowResults[4] = 1
+			System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
+		if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 4:
+			if SubflowResults@8[0] in (0, 1, 2):
+				SubflowResults[1] = 1
+			else:
+				SubflowResults[1] = 2
+		else:
+			if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 10:
+				SubflowResults[1] = 1
+			else:
+				SubflowResults[1] = 0
+		System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 2
+	else:
+		if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 17000):
+			if EventFlowSystemActor.JuneBrideScoreCheck('cHHAScore', 23000):
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 5
+			else:
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+		else:
+			System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
+		if EventFlowSystemActor.JuneBrideScoreCheck('cFurnitureNum', 8):
+			SubflowResults[2] = 0
+			if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 70):
+				SubflowResults[3] = 0
+				if EventFlowSystemActor.JuneBrideScoreCheck('cThemeColorRatio', 90):
+					System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 5
+				else:
+					System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+			else:
+				run Sub_Event234()
+		else:
+			SubflowResults[2] = 1
+			run Sub_Event234()
+		if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 8):
+			SubflowResults[4] = 0
+			if EventFlowSystemActor.JuneBrideScoreCheck('cThemeSituationRatio', 12):
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 5
+			else:
+				System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+		else:
+			SubflowResults[4] = 1
+			System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 0
+		if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 5:
+			SubflowResults[1] = 2
+		else:
+			if System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] < 11:
+				SubflowResults[1] = 1
+			else:
+				SubflowResults[1] = 0
+		System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 3
+
 flow Alw_Shoot():
-    SubNpc.TurnBody(10, 0.0)
-    # Oh, that last one seemed nice! Mind if I take a quick peek? Did you take more than one? I'll just look at the last one, if that's OK.
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:033', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        # Great! Now, let's see…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:034', false)
-        run Alw_ScoreCount()
-        switch SubflowResults@3[1]:
-            case 0:
-                SubNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-                # Oh. My. Goodness! It's everything I could have wanted! You've somehow captured all the joy and love that my darling and I share in one amazing photo.…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:043', false)
-            case 1:
-                # What a lovely photo! It really captures the feel we were looking for, and it's so sweet of you to help.
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:042', false)
-                run Sub_grp_Event237()
-            case 2:
-                # Hmm… It's good, but it's not quite what I was expecting. But that's OK! Thanks for sharing your artistic vision with us!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:041', false)
-                run Sub_grp_Event237()
-    else:
-        # No problem. Keep up the good work!
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:032', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	SubNpc.TurnBody(10, 0.0)
+	# Oh, that last one seemed nice! Mind if I take a quick peek? Did you take more than one? I'll just look at the last one, if that's OK.
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:033', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# Great! Now, let's see…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:034', false)
+		run Alw_ScoreCount()
+		switch SubflowResults@3[1]:
+			case 0:
+				SubNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+				# Oh. My. Goodness! It's everything I could have wanted! You've somehow captured all the joy and love that my darling and I share in one amazing photo.…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:043', false)
+			case 1:
+				# What a lovely photo! It really captures the feel we were looking for, and it's so sweet of you to help.
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:042', false)
+				run Sub_grp_Event237()
+			case 2:
+				# Hmm… It's good, but it's not quite what I was expecting. But that's OK! Thanks for sharing your artistic vision with us!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:041', false)
+				run Sub_grp_Event237()
+	else:
+		# No problem. Keep up the good work!
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:032', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Alw_Start():
-    System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = true
-    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
-    switch SubflowResults@8[0]:
-        case 0:
-            SubNpc.TurnBody(10, 0.0)
-            run Alw_Start_day1()
-            run Alw_day135_Ceremony()
-            run Alw_day1_6_Cute()
-            # Just let us know when you're ready for us to start posing. I can't wait to see what you come up with!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:012', false)
-        case 1:
-            SubNpc.TurnBody(10, 0.0)
-            run Alw_Start_day2_5()
-            run Alw_day24_Reception()
-            if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 1:
-                run Alw_NewFtr()
-            run Alw_day1_6_Cute()
-            run Alw_End_day2_5()
-        case 2:
-            SubNpc.TurnBody(10, 0.0)
-            run Alw_Start_day2_5()
-            run Alw_day135_Ceremony()
-            if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 2:
-                run Alw_NewFtr()
-            run Alw_day1_6_Cute()
-            run Alw_End_day2_5()
-        case 3:
-            SubNpc.TurnBody(10, 0.0)
-            run Alw_Start_day2_5()
-            run Alw_day24_Reception()
-            if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 3:
-                run Alw_NewFtr()
-            run Alw_day1_6_Cute()
-            run Alw_End_day2_5()
-        case 4:
-            SubNpc.TurnBody(10, 0.0)
-            run Alw_Start_day2_5()
-            run Alw_day135_Ceremony()
-            if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 4:
-                run Alw_NewFtr()
-            run Alw_day1_6_Cute()
-            run Alw_End_day2_5()
-        case 5:
-            SubNpc.TurnBody(10, 0.0)
-            # Oh, PLAYER! I'm so glad to see you're back for another shoot. I've got something fun in mind! Everything has been just lovely so far, but it's also b…
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:017', false)
-            switch EventFlowSystemActor.GeneralTalkChoice2():
-                case 0, 1:
-                    # You'll do it? Oh, that's so fun! What a good sport! <20:2:cd05><20:2:cd07>Isn't this going to be incredible, darling? <20:3:cd06><20:2:cd08>And we ca…
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:018', false)
-                    if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 5:
-                        run Alw_NewFtr()
-                    run Alw_day1_6_Cute()
-                    # When you've got the set just the way you want it, we can get the party started. Just come talk to me, or press  when you're ready.
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:019', false)
-                    if Player.PlayerIsEquipToolTowel():
-                        # I know you're in the middle of some important work…but please change back before the party starts, OK?
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:120', false)
-                    System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = true
-                    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
-                    EventFlowSystemActor.UIGuideBalloonWeddingParty(1)
-        case 6:
-            if System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-                # Oh, that was just wonderful, wasn't it? Thank you, PLAYER!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:100', false)
-                if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
-                    # Oh! Today is the last day of June, which means…our photo sessions have come to an end. <10:4>We'll miss you!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:109_01', false)
-                else:
-                    # Well, that's it for now. Of course, we'll be here all month, so we'd love to have your help again tomorrow!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:108', false)
-                System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = false
-                System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
-            else:
-                # Oh, hello! Wasn't that party just the MOST fun? I can't thank you enough for everything!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020', false)
-                if (EventFlowSystemActor.CurrentJuneBrideTheme() != 0) and (System.EventFlags['cPlayer:EnableDiyRemake']):
-                    if System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag']:
-                        # Noticing that things look a little different in here today? Hee-hee! Well, I thought you did a great job with the cute theme we had going. And now it…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_01', false)
-                        # And as for today's theme…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022_02', false)
-                    else:
-                        System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag'] = true
-                        # Noticing that things look a little different in here today? Hee-hee! Well, I thought you did a great job with the cute theme we had going. And now it…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_01', false)
-                        # I've heard you're already a wiz at customization, but did you know that you can modify wedding items? Even just changing the color can completely cha…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:021', false)
-                    run Alw_ThemeStart()
-                else:
-                    # Well, are you ready for another shoot? We sure are! We've been getting great stuff so far, so just keep doing what you do!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_02', false)
+	System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = true
+	System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
+	switch SubflowResults@8[0]:
+		case 0:
+			SubNpc.TurnBody(10, 0.0)
+			run Alw_Start_day1()
+			run Alw_day135_Ceremony()
+			run Alw_day1_6_Cute()
+			# Just let us know when you're ready for us to start posing. I can't wait to see what you come up with!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:012', false)
+		case 1:
+			SubNpc.TurnBody(10, 0.0)
+			run Alw_Start_day2_5()
+			run Alw_day24_Reception()
+			if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 1:
+				run Alw_NewFtr()
+			run Alw_day1_6_Cute()
+			run Alw_End_day2_5()
+		case 2:
+			SubNpc.TurnBody(10, 0.0)
+			run Alw_Start_day2_5()
+			run Alw_day135_Ceremony()
+			if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 2:
+				run Alw_NewFtr()
+			run Alw_day1_6_Cute()
+			run Alw_End_day2_5()
+		case 3:
+			SubNpc.TurnBody(10, 0.0)
+			run Alw_Start_day2_5()
+			run Alw_day24_Reception()
+			if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 3:
+				run Alw_NewFtr()
+			run Alw_day1_6_Cute()
+			run Alw_End_day2_5()
+		case 4:
+			SubNpc.TurnBody(10, 0.0)
+			run Alw_Start_day2_5()
+			run Alw_day135_Ceremony()
+			if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 4:
+				run Alw_NewFtr()
+			run Alw_day1_6_Cute()
+			run Alw_End_day2_5()
+		case 5:
+			SubNpc.TurnBody(10, 0.0)
+			# Oh, PLAYER! I'm so glad to see you're back for another shoot. I've got something fun in mind! Everything has been just lovely so far, but it's also b…
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:017', false)
+			switch EventFlowSystemActor.GeneralTalkChoice2():
+				case 0, 1:
+					# You'll do it? Oh, that's so fun! What a good sport! <20:2:cd05><20:2:cd07>Isn't this going to be incredible, darling? <20:3:cd06><20:2:cd08>And we ca…
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:018', false)
+					if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] == 5:
+	run Alw_NewFtr()
+					run Alw_day1_6_Cute()
+					# When you've got the set just the way you want it, we can get the party started. Just come talk to me, or press  when you're ready.
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:019', false)
+					if Player.PlayerIsEquipToolTowel():
+						# I know you're in the middle of some important work…but please change back before the party starts, OK?
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:120', false)
+					System.EventFlags['cPlayer:AlwJuneBridePartyTalkFlag'] = true
+					System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
+					EventFlowSystemActor.UIGuideBalloonWeddingParty(1)
+		case 6:
+			if System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+				# Oh, that was just wonderful, wasn't it? Thank you, PLAYER!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:100', false)
+				if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
+					# Oh! Today is the last day of June, which means…our photo sessions have come to an end. <10:4>We'll miss you!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:109_01', false)
+				else:
+					# Well, that's it for now. Of course, we'll be here all month, so we'd love to have your help again tomorrow!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:108', false)
+				System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = false
+				System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
+			else:
+				# Oh, hello! Wasn't that party just the MOST fun? I can't thank you enough for everything!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020', false)
+				if (EventFlowSystemActor.CurrentJuneBrideTheme() != 0) and (System.EventFlags['cPlayer:EnableDiyRemake']):
+					if System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag']:
+						# Noticing that things look a little different in here today? Hee-hee! Well, I thought you did a great job with the cute theme we had going. And now it…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_01', false)
+						# And as for today's theme…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022_02', false)
+					else:
+System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag'] = true
+						# Noticing that things look a little different in here today? Hee-hee! Well, I thought you did a great job with the cute theme we had going. And now it…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_01', false)
+						# I've heard you're already a wiz at customization, but did you know that you can modify wedding items? Even just changing the color can completely cha…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:021', false)
+					run Alw_ThemeStart()
+				else:
+					# Well, are you ready for another shoot? We sure are! We've been getting great stuff so far, so just keep doing what you do!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_02', false)
 entrypoint Event411:
-                    # What we're looking for is a cute set with plenty of pink and white. Preferably using lots of the furniture my Cy-Guy made!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:011', false)
-                    System.EventFlags['cPlayer:AlwJuneBrideNoRemake1stFlag'] = true
-                    run Alw_End_day2_5()
-        case 7:
-            if System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-                # Hey! So glad to see you again. Are you ready to work on another fun set for us? I have to say, I'm afraid I don't have any more special rewards…other…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:023', false)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    if (System.EventFlags['cPlayer:EnableDiyRemake']) and (not System.EventFlags['cPlayer:AlwJuneBrideNoRemake1stFlag']):
-                        # Ooh, I was hoping you'd say that!<10:4> In that case, let's talk themes…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:025', false)
-                        EventFlowSystemActor.DecideNextJuneBrideTheme()
-                        switch EventFlowSystemActor.CurrentJuneBrideTheme():
-                            case 0:
-                                # I want to take a picture in a cute set! Think…the most adorable scene ever, surrounded by pink and white.<10:4> I'd be tickled pink…and white! Hee-he…
-                                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:cute', false)
-                            case 1:
-                                # I want to take a picture in a chic set. You know…big-city sophistication, subtle hues of brown, beige, white, and black… Got it?
-                                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:chic', false)
-                            case 2:
-                                # I want to take a picture in a garden- themed set, surrounded by nature… It should be filled with lots of gentle, natural colors, like green, yellow, …
-                                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:garden', false)
-                        # Got all that? I hope I don't seem too particular…it's just that we want everything to be exactly perfect! Not that our actual wedding wasn't perfect,…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:026', false)
-                    else:
-                        # Ooh, I was hoping you'd say that! So, we're still looking for something really cute, with splashes of pink and white everywhere. Let's talk again aft…
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:025_01', false)
-                    # I'm gonna miss this darling set we've been shooting on, but we'll need to clear it out for the next one.
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:027', false)
-                    System.EventFlags['cPlayer:JuneBridePlacementDataClearFlag'] = true
-                    EventFlowSystemActor.MessageSuspend()
-                    EventFlowSystemActor.SystemRequestChangeStage('cJuneBrideStudio', 'cHeartWipe', 'cHeartWipe', 'cBlack', 1.0, 1.0)
-                    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
-                    EventFlowSystemActor.UIGuideBalloonWeddingParty(2)
-                else:
-                    if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
-                        # Aw, I understand. You've already done so much. We can't thank you enough!
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:024_01', false)
-                    else:
-                        # Aw, I understand. You've already done so much. <10:4>Well, come on back another day if you feel like it!
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:024', false)
-                    System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = false
-                    System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
-            elif not System.EventFlags['cPlayer:EnableDiyRemake']:
-                run Alw_NotThemeStart()
-            elif System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag']:
-                # Hey! So glad to see you again. Are you ready to work on another fun set for us?
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022', false)
-                # And as for today's theme…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022_02', false)
-                run Alw_ThemeStart()
-            elif EventFlowSystemActor.CurrentJuneBrideTheme() == 0:
-                run Alw_NotThemeStart()
-            else:
-                System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag'] = true
-                # Noticing that things look a little different in here today? Hee-hee! Well, I thought you did a great job with the cute theme we had going. And now it…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_01', false)
-                # I've heard you're already a wiz at customization, but did you know that you can modify wedding items? Even just changing the color can completely cha…
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:021', false)
-                run Alw_ThemeStart()
- 
+					# What we're looking for is a cute set with plenty of pink and white. Preferably using lots of the furniture my Cy-Guy made!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:011', false)
+					System.EventFlags['cPlayer:AlwJuneBrideNoRemake1stFlag'] = true
+					run Alw_End_day2_5()
+		case 7:
+			if System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+				# Hey! So glad to see you again. Are you ready to work on another fun set for us? I have to say, I'm afraid I don't have any more special rewards…other…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:023', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					if (System.EventFlags['cPlayer:EnableDiyRemake']) and (not System.EventFlags['cPlayer:AlwJuneBrideNoRemake1stFlag']):
+						# Ooh, I was hoping you'd say that!<10:4> In that case, let's talk themes…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:025', false)
+EventFlowSystemActor.DecideNextJuneBrideTheme()
+						switch EventFlowSystemActor.CurrentJuneBrideTheme():
+							case 0:
+								# I want to take a picture in a cute set! Think…the most adorable scene ever, surrounded by pink and white.<10:4> I'd be tickled pink…and white! Hee-he…
+								MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:cute', false)
+							case 1:
+								# I want to take a picture in a chic set. You know…big-city sophistication, subtle hues of brown, beige, white, and black… Got it?
+								MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:chic', false)
+							case 2:
+								# I want to take a picture in a garden- themed set, surrounded by nature… It should be filled with lots of gentle, natural colors, like green, yellow, …
+								MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:garden', false)
+						# Got all that? I hope I don't seem too particular…it's just that we want everything to be exactly perfect! Not that our actual wedding wasn't perfect,…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:026', false)
+					else:
+						# Ooh, I was hoping you'd say that! So, we're still looking for something really cute, with splashes of pink and white everywhere. Let's talk again aft…
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:025_01', false)
+					# I'm gonna miss this darling set we've been shooting on, but we'll need to clear it out for the next one.
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:027', false)
+					System.EventFlags['cPlayer:JuneBridePlacementDataClearFlag'] = true
+					EventFlowSystemActor.MessageSuspend()
+					EventFlowSystemActor.SystemRequestChangeStage('cJuneBrideStudio', 'cHeartWipe', 'cHeartWipe', 'cBlack', 1.0, 1.0)
+					System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = true
+					EventFlowSystemActor.UIGuideBalloonWeddingParty(2)
+				else:
+					if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
+						# Aw, I understand. You've already done so much. We can't thank you enough!
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:024_01', false)
+					else:
+						# Aw, I understand. You've already done so much. <10:4>Well, come on back another day if you feel like it!
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:024', false)
+					System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag'] = false
+					System.EventFlags['cPlayer:AlwJuneBrideBalloonFlag'] = false
+			elif not System.EventFlags['cPlayer:EnableDiyRemake']:
+				run Alw_NotThemeStart()
+			elif System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag']:
+				# Hey! So glad to see you again. Are you ready to work on another fun set for us?
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022', false)
+				# And as for today's theme…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:022_02', false)
+				run Alw_ThemeStart()
+			elif EventFlowSystemActor.CurrentJuneBrideTheme() == 0:
+				run Alw_NotThemeStart()
+			else:
+				System.EventFlags['cPlayer:AlwJuneBrideRemakeOpenFlag'] = true
+				# Noticing that things look a little different in here today? Hee-hee! Well, I thought you did a great job with the cute theme we had going. And now it…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:020_01', false)
+				# I've heard you're already a wiz at customization, but did you know that you can modify wedding items? Even just changing the color can completely cha…
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:021', false)
+				run Alw_ThemeStart()
+
 flow Alw_Start_day1():
-    if System.EventFlags['cPlayer:AlwJuneBrideTalkBeforeFlag']:
-        EventFlowSystemActor.BGMPropertyControl(95)
-        System.EventFlags['cPlayer:JuneBrideBGMHasUnlocked'] = true
-        fork:
-            branch:
-                SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
-            branch:
-                # I'm just pleased as punch that you'll be helping us with our anniversary photo shoot, PLAYER!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005', false)
-        if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] < 1:
-            run Sub_Event408()
-        else:
-            # Now, don't worry. This'll be just like last time—building sets and taking photos—and you did perfectly then. That said…do you need a refresher on the…
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005_01', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                # No problem!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005_02', false)
-                run Sub_Event408()
-            else:
-                # No problem!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005_02', false)
-                run Alw_day135_Ceremony()
-                run Alw_day1_6_Cute()
-                System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
-                run Alw_End_day2_5()
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        System.EventFlags['cPlayer:AlwJuneBrideTalkBeforeFlag'] = true
-        System.EventFlags['cPlayer:AlpJuneBrideTalkBeforeFlag'] = true
-        EventFlowSystemActor.BGMPropertyControl(95)
-        System.EventFlags['cPlayer:JuneBrideBGMHasUnlocked'] = true
-        # Hello there! It's so nice to meet you. I'm Reese, and I'm just pleased as punch that you're helping us out!
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:001', false)
-        # [target N0>N1]And this is my hubby, my darling…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:002', false)
-        # [target P0>N1]The name's Cyrus! Good to meetcha!
-        SubNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:003', false)
-        fork:
-            branch:
-                SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
-            branch:
-                # [target P0>N0]<20:3:cd00>I just know these photos are going to be SO romantic…and just in time for our anniversary.
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:004', false)
-        run Sub_Event408()
- 
+	if System.EventFlags['cPlayer:AlwJuneBrideTalkBeforeFlag']:
+		EventFlowSystemActor.BGMPropertyControl(95)
+		System.EventFlags['cPlayer:JuneBrideBGMHasUnlocked'] = true
+		fork:
+			branch:
+				SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+			branch:
+				# I'm just pleased as punch that you'll be helping us with our anniversary photo shoot, PLAYER!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005', false)
+		if System.EventFlags['cPlayer:AlwJuneBrideDayAlreadyCount'] < 1:
+			run Sub_Event408()
+		else:
+			# Now, don't worry. This'll be just like last time—building sets and taking photos—and you did perfectly then. That said…do you need a refresher on the…
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005_01', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# No problem!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005_02', false)
+				run Sub_Event408()
+			else:
+				# No problem!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:005_02', false)
+				run Alw_day135_Ceremony()
+				run Alw_day1_6_Cute()
+				System.EventFlags['cPlayer:AlwJuneBridePleaseShootFlag'] = true
+				run Alw_End_day2_5()
+				EventFlowSystemActor.ExitFlowchart()
+	else:
+		System.EventFlags['cPlayer:AlwJuneBrideTalkBeforeFlag'] = true
+		System.EventFlags['cPlayer:AlpJuneBrideTalkBeforeFlag'] = true
+		EventFlowSystemActor.BGMPropertyControl(95)
+		System.EventFlags['cPlayer:JuneBrideBGMHasUnlocked'] = true
+		# Hello there! It's so nice to meet you. I'm Reese, and I'm just pleased as punch that you're helping us out!
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:001', false)
+		# [target N0>N1]And this is my hubby, my darling…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:002', false)
+		# [target P0>N1]The name's Cyrus! Good to meetcha!
+		SubNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:003', false)
+		fork:
+			branch:
+				SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+			branch:
+				# [target P0>N0]<20:3:cd00>I just know these photos are going to be SO romantic…and just in time for our anniversary.
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:004', false)
+		run Sub_Event408()
+
 flow Alw_Start_day2_5():
-    # Aww, thanks so much for coming back to work with us on another set of photos, PLAYER. I can't wait to see how these ones turn out!
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:014', false)
- 
+	# Aww, thanks so much for coming back to work with us on another set of photos, PLAYER. I can't wait to see how these ones turn out!
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:014', false)
+
 flow Alw_ThanksMsg():
-    if (not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']) and (not System.EventFlags['cLandTemp:RemakeJuneBrideTalkTimeAfterNow']):
-        if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
-            # Once again, thank you so much for everything. You helped us make a wonderful new memory!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:056', false)
-            if not System.EventFlags['cPlayer:AlwJuneBrideLastDayTalkFlag']:
-                # Oh! Today is the last day of June, which means…our photo sessions have come to an end. <10:4>We'll miss you!
-                MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:109_01', false)
-                System.EventFlags['cPlayer:AlwJuneBrideLastDayTalkFlag'] = true
-        else:
-            switch SubflowResults@8[0]:
-                case 0:
-                    run Sub_Event83()
-                case 1:
-                    if System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
-                        run Sub_Event83()
-                    else:
-                        # Well, that was so much fun, and we made another great photo. I hope you'll come back tomorrow for another shoot!
-                        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:058', false)
-                case 2, 3, 4, 5, 6, 7:
-                    # Well, that was so much fun, and we made another great photo. I hope you'll come back tomorrow for another shoot!
-                    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:058', false)
-    else:
-        if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
-            # Oh! Today is the last day of June, which means…our photo sessions have come to an end. <10:4>We'll miss you!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:109_01', false)
-            System.EventFlags['cPlayer:AlwJuneBrideLastDayTalkFlag'] = true
-        else:
-            # Well, that's it for now. Of course, we'll be here all month, so we'd love to have your help again tomorrow!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:108', false)
-    System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag'] = true
-    if System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag']:
-        MainNpc.NpcChangeHandTool(12732, 'cNone', false)
-        System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag'] = false
- 
+	if (not System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']) and (not System.EventFlags['cLandTemp:RemakeJuneBrideTalkTimeAfterNow']):
+		if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
+			# Once again, thank you so much for everything. You helped us make a wonderful new memory!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:056', false)
+			if not System.EventFlags['cPlayer:AlwJuneBrideLastDayTalkFlag']:
+				# Oh! Today is the last day of June, which means…our photo sessions have come to an end. <10:4>We'll miss you!
+				MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:109_01', false)
+				System.EventFlags['cPlayer:AlwJuneBrideLastDayTalkFlag'] = true
+		else:
+			switch SubflowResults@8[0]:
+				case 0:
+					run Sub_Event83()
+				case 1:
+					if System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']:
+	run Sub_Event83()
+					else:
+						# Well, that was so much fun, and we made another great photo. I hope you'll come back tomorrow for another shoot!
+						MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:058', false)
+				case 2, 3, 4, 5, 6, 7:
+					# Well, that was so much fun, and we made another great photo. I hope you'll come back tomorrow for another shoot!
+					MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:058', false)
+	else:
+		if EventFlowSystemActor.EnvCheckBetweenDate(6, 30, 6, 30, 'cLastGrowUpTime'):
+			# Oh! Today is the last day of June, which means…our photo sessions have come to an end. <10:4>We'll miss you!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:109_01', false)
+			System.EventFlags['cPlayer:AlwJuneBrideLastDayTalkFlag'] = true
+		else:
+			# Well, that's it for now. Of course, we'll be here all month, so we'd love to have your help again tomorrow!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:108', false)
+	System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag'] = true
+	if System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag']:
+		MainNpc.NpcChangeHandTool(12732, 'cNone', false)
+		System.EventFlags['cPlayerTemp:AlwJuneBrideBouquetFlag'] = false
+
 flow Alw_ThemeStart():
-    switch EventFlowSystemActor.CurrentJuneBrideTheme():
-        case 0:
-            # I want to take a picture in a cute set! Think…the most adorable scene ever, surrounded by pink and white.<10:4> I'd be tickled pink…and white! Hee-he…
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:cute', false)
-        case 1:
-            # I want to take a picture in a chic set. You know…big-city sophistication, subtle hues of brown, beige, white, and black… Got it?
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:chic', false)
-        case 2:
-            # I want to take a picture in a garden- themed set, surrounded by nature… It should be filled with lots of gentle, natural colors, like green, yellow, …
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:garden', false)
-    run Alw_End_day2_5()
- 
+	switch EventFlowSystemActor.CurrentJuneBrideTheme():
+		case 0:
+			# I want to take a picture in a cute set! Think…the most adorable scene ever, surrounded by pink and white.<10:4> I'd be tickled pink…and white! Hee-he…
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:cute', false)
+		case 1:
+			# I want to take a picture in a chic set. You know…big-city sophistication, subtle hues of brown, beige, white, and black… Got it?
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:chic', false)
+		case 2:
+			# I want to take a picture in a garden- themed set, surrounded by nature… It should be filled with lots of gentle, natural colors, like green, yellow, …
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:garden', false)
+	run Alw_End_day2_5()
+
 flow Alw_day135_Ceremony():
-    # So, today I'm thinking we should take a ceremony photo…in a place that looks like a wedding chapel. It'll be just like our real ceremony. Professing …
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:015_01', false)
- 
+	# So, today I'm thinking we should take a ceremony photo…in a place that looks like a wedding chapel. It'll be just like our real ceremony. Professing …
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:015_01', false)
+
 flow Alw_day1_6_Cute():
-    # What we're looking for is a cute set with plenty of pink and white. Preferably using lots of the furniture my Cy-Guy made!
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:011', false)
- 
+	# What we're looking for is a cute set with plenty of pink and white. Preferably using lots of the furniture my Cy-Guy made!
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:011', false)
+
 flow Alw_day24_Reception():
-    # So, we've already done the ceremony photos… I think it would be fun to recreate the reception this time! Oh, we had such a big, fancy party, didn't w…
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:015_02', false)
- 
+	# So, we've already done the ceremony photos… I think it would be fun to recreate the reception this time! Oh, we had such a big, fancy party, didn't w…
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:015_02', false)
+
 flow Root():
-    run Alw_DayChk()
-    if (System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']) and (SubflowResults@8[0] in (0, 1, 2, 3, 4, 5)):
-        run Alw_ThanksMsg()
-    elif System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag']:
-        run Alw_Camera()
-        run Alw_AfterClear_Flag()
-        run Alw_GetItem()
-        run Alw_ThanksMsg()
-        EventFlowSystemActor.UIGuideBalloonWeddingParty(0)
-    else:
-        run Alw_Start()
- 
+	run Alw_DayChk()
+	if (System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']) and (SubflowResults@8[0] in (0, 1, 2, 3, 4, 5)):
+		run Alw_ThanksMsg()
+	elif System.EventFlags['cPlayer:AlwJuneBrideQuestStartFlag']:
+		run Alw_Camera()
+		run Alw_AfterClear_Flag()
+		run Alw_GetItem()
+		run Alw_ThanksMsg()
+		EventFlowSystemActor.UIGuideBalloonWeddingParty(0)
+	else:
+		run Alw_Start()
+
 flow Root_Init():
-    if (EventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']):
-        MainNpc.NpcAITalkSubCastEntry('alp', 1)
- 
+	if (EventFlowSystemActor.TermEventNow('JuneBride', false)) and (System.EventFlags['cPlayer:CommuneIslandAvailable']):
+		MainNpc.NpcAITalkSubCastEntry('alp', 1)
+
 local flow Sub_Event234():
-    SubflowResults[3] = 1
-    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 0
- 
+	SubflowResults[3] = 1
+	System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 0
+
 local flow Sub_Event372():
-    SubflowResults[3] = 1
-    System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
- 
+	SubflowResults[3] = 1
+	System.EventFlags['cPlayerTemp:AlwJuneBrideDayScoreCount'] += 1
+
 local flow Sub_Event408():
-    SubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, true)
-    # Even though we do this every year, it's always so very special. It's just like…a slice of life from that year. [target N0>N1]A delicious slice…almost…
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:006', false)
-    fork:
-        branch:
-            # That's right! Sweeter than the sweetest <135:7:cd00>…
-            SubNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:007', false)
-        branch:
-            MainNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
-    fork:
-        branch:
-            SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
-        branch:
-            # «Oh, you! Such a romantic…» OH! <20:3:cd00>Sorry, I forgot what we were doing for a second there. We just get so lost in our own little world sometim…
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:008', false)
-            # Oh! I almost forgot. My amazing Cy-Guy even built some custom wedding furniture for the shoot.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:010_01', false)
-    fork:
-        branch:
-            SubNpc.CharacterEmoticonAction('SmugFace', true, '', 0, false)
-        branch:
-            # Isn't that so sweet of my shmoopy? He really put his heart into 'em, so I hope you can make them work.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:010_02', false)
-    fork:
-        branch:
-            SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-        branch:
-            # Just open up the Event tab to take a look and grab what you want for the shoot, OK?
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:010_03', false)
- 
+	SubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, true)
+	# Even though we do this every year, it's always so very special. It's just like…a slice of life from that year. [target N0>N1]A delicious slice…almost…
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:006', false)
+	fork:
+		branch:
+			# That's right! Sweeter than the sweetest <135:7:cd00>…
+			SubNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:007', false)
+		branch:
+			MainNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+	fork:
+		branch:
+			SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, true)
+		branch:
+			# «Oh, you! Such a romantic…» OH! <20:3:cd00>Sorry, I forgot what we were doing for a second there. We just get so lost in our own little world sometim…
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:008', false)
+			# Oh! I almost forgot. My amazing Cy-Guy even built some custom wedding furniture for the shoot.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:010_01', false)
+	fork:
+		branch:
+			SubNpc.CharacterEmoticonAction('SmugFace', true, '', 0, false)
+		branch:
+			# Isn't that so sweet of my shmoopy? He really put his heart into 'em, so I hope you can make them work.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:010_02', false)
+	fork:
+		branch:
+			SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+		branch:
+			# Just open up the Event tab to take a look and grab what you want for the shoot, OK?
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:010_03', false)
+
 local flow Sub_Event70():
-    MainNpc.SetDeliveryItem(1, true)
-    if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
-        MainNpc.SetEventRewardToPlayerBaggage('cFree')
-        if System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag']:
-            # I went ahead and snuck your rewards in with your other things. Hee-hee! I've got a few tricks up my sleeve.
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:060', false)
-            System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag'] = true
-        else:
-            # I've already stashed the reward with your other stuff, so you're all set!
-            MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:059', false)
-    else:
-        EventFlowSystemActor.MessageSuspend()
-        if System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag']:
-            MainNpc.NpcDelivery(1, 'Default')
-        else:
-            MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
-            EventFlowSystemActor.WaitFrame(10)
-            MainNpc.NpcDelivery(1, 'Default')
-            EventFlowSystemActor.WaitFrame(10)
- 
+	MainNpc.SetDeliveryItem(1, true)
+	if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
+		MainNpc.SetEventRewardToPlayerBaggage('cFree')
+		if System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag']:
+			# I went ahead and snuck your rewards in with your other things. Hee-hee! I've got a few tricks up my sleeve.
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:060', false)
+			System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag'] = true
+		else:
+			# I've already stashed the reward with your other stuff, so you're all set!
+			MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:059', false)
+	else:
+		EventFlowSystemActor.MessageSuspend()
+		if System.EventFlags['cPlayerTemp:AlwJuneBrideSitDownFlag']:
+			MainNpc.NpcDelivery(1, 'Default')
+		else:
+			MainNpc.NpcChangeHandTool(65534, 'cPutAway', false)
+			EventFlowSystemActor.WaitFrame(10)
+			MainNpc.NpcDelivery(1, 'Default')
+			EventFlowSystemActor.WaitFrame(10)
+
 local flow Sub_Event83():
-    # Once again, thank you so much for everything. You helped us make a wonderful new memory!
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:056', false)
-    # You know, this was so fun… Would you be interested in helping us out again tomorrow? We have the studio space rented for the entire month! Just think…
-    MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:057', false)
- 
+	# Once again, thank you so much for everything. You helped us make a wonderful new memory!
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:056', false)
+	# You know, this was so fun… Would you be interested in helping us out again tomorrow? We have the studio space rented for the entire month! Just think…
+	MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:057', false)
+
 local flow Sub_grp_Event237():
-    if SubflowResults@2[2] != 0:
-        # If I could offer just one tiny bit of constructive criticism…it felt a bit plain for a wedding set. But that's so easy to fix! Just adding more furni…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:044', false)
-    elif (SubflowResults@2[3] != 0) and ((SubflowResults@2[4] == 0) or (EventFlowSystemActor.RandomChoice2(2) != 0)):
-        # If there was one tiny thing I could change about it…I'd try to match up the colors a little better. Just adding a few more splashes of the colors I m…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:045', false)
-    else:
-        # I do have just one helpful note for you… Some of the furniture could have matched the theme a bit better. Or, you might just need a bit MORE furnitur…
-        MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:046', false)
- 
+	if SubflowResults@2[2] != 0:
+		# If I could offer just one tiny bit of constructive criticism…it felt a bit plain for a wedding set. But that's so easy to fix! Just adding more furni…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:044', false)
+	elif (SubflowResults@2[3] != 0) and ((SubflowResults@2[4] == 0) or (EventFlowSystemActor.RandomChoice2(2) != 0)):
+		# If there was one tiny thing I could change about it…I'd try to match up the colors a little better. Just adding a few more splashes of the colors I m…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:045', false)
+	else:
+		# I do have just one helpful note for you… Some of the furniture could have matched the theme a bit better. Or, you might just need a bit MORE furnitur…
+		MainNpc.OpenMessageWindow('TalkSNpc/alw/GEvent/SP_alw_GEvent_JuneBride:046', false)

@@ -1,52 +1,51 @@
 flow Cook():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    MainNpc.WherearenSetTagFacilityNpcName('cRestaurantCook', false, false, 1)
-    run FacilityName_Chk()
-    # RANDOM: I bet once the head chef tries my recip… // <20:2:cd06>When I get a little free tim… // <20:2:cd06>I make the staff meals. I tr… // Alright, alright, this seems good! Look… // <20:2:cd06>When you work in a pro kitch…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:402', false)
-    run KKFes_Chk()
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	MainNpc.WherearenSetTagFacilityNpcName('cRestaurantCook', false, false, 1)
+	run FacilityName_Chk()
+	# RANDOM: I bet once the head chef tries my recip… // <20:2:cd06>When I get a little free tim… // <20:2:cd06>I make the staff meals. I tr… // Alright, alright, this seems good! Look… // <20:2:cd06>When you work in a pro kitch…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:402', false)
+	run KKFes_Chk()
+
 flow FacilityName_Chk():
-    if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
-        EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
-        # <20:2:cd06>Maybe if I get my cooking skills as good as my eating skills, I could be <150:3:cd00>'s chef!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:403', false)
-        run KKFes_Chk()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.WherearenExistFacilityName('cRestaurant')) and (not EventFlowSystemActor.PercentChoice(80)):
+		EventFlowSystemActor.WherearenSetTagRunningOrderTheme('cSelectFacility', 0, 'cRestaurant')
+		# <20:2:cd06>Maybe if I get my cooking skills as good as my eating skills, I could be <150:3:cd00>'s chef!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:403', false)
+		run KKFes_Chk()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow KKFes_Chk():
-    if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
-        MainNpc.TurnNeck(10, true)
-        # RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
-        MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            # That's a great idea! I'm working right now, but there's no problem if we invite the customers, right?!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:107', true)
-            run Demo_Common_Wherearen::ToKKFesDemoLiverun Demo_Common_Wherearen::ToKKFesDemoLive()
-        else:
-            # RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (not EventFlowSystemActor.IsInspectingWherearen()) and (EventFlowSystemActor.WherearenKKFesStatus(false) == 2):
+		MainNpc.TurnNeck(10, true)
+		# RANDOM: The music festival is a big ol' excitin… // Let's go dancing! // Oh, cool. // Have you already gone to the music fest… // Let's go dancing! // Oh, cool. // There's a music festival going on at th… // Let's go dancing! // Oh, cool.
+		MainNpc.NpcKKFesJoinOpenMessage('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:001')
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# That's a great idea! I'm working right now, but there's no problem if we invite the customers, right?!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:107', true)
+			run Demo_Common_Wherearen::ToKKFesDemoLive()
+		else:
+			# RANDOM: I'm gonna go check it out after work. I… // I bet everyone's dancing like wild righ… // I wanna go enjoy the festival too! I'm …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_KKFes:200', false)
+			EventFlowSystemActor.ExitFlowchart()
+
 flow Root():
-    if not EventFlowSystemActor.IsInspectingWherearen():
-        run ShareHouseMate_Chk()
-    MainNpc.WherearenSetTagFacilityNpcName('cRestaurantCook', false, false, 1)
-    run FacilityName_Chk()
-    # RANDOM: <20:2:cd06>Hmm… What should I eat durin… // Ingredients? What's a gredient? Why wou… // <20:2:cd06>Sometimes if I ask nice, or … // I'll go prepare some plates!<20:2:cd06>… // It's so busy! I'M so busy! Busy, busy! …
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:401', false)
-    run KKFes_Chk()
- 
+	if not EventFlowSystemActor.IsInspectingWherearen():
+		run ShareHouseMate_Chk()
+	MainNpc.WherearenSetTagFacilityNpcName('cRestaurantCook', false, false, 1)
+	run FacilityName_Chk()
+	# RANDOM: <20:2:cd06>Hmm… What should I eat durin… // Ingredients? What's a gredient? Why wou… // <20:2:cd06>Sometimes if I ask nice, or … // I'll go prepare some plates!<20:2:cd06>… // It's so busy! I'M so busy! Busy, busy! …
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Facility_Restaurant:401', false)
+	run KKFes_Chk()
+
 flow ShareHouseMate_Chk():
-    if EventFlowSystemActor.WherearenOrderStatus() == 1:
-        MainNpc.TurnNeck(10, false)
-        run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMaterun NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.WherearenOrderStatus() == 1:
+		MainNpc.TurnNeck(10, false)
+		run NNPC_Spot_WherearenMainFieldVisitor::LookforHouseMate()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow StandSleep():
-    run NNPC_RestaurantCustomer::`StandSleep_2.1`()run NNPC_RestaurantCustomer::`StandSleep_2.1`()
- 
+	run NNPC_RestaurantCustomer::`StandSleep_2.1`()
+
 flow Walk():
-    run Root()
- 
+	run Root()

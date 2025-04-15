@@ -1,64 +1,63 @@
 flow Root():
-    if (EventFlowSystemActor.IsMyVillage()) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (not System.EventFlags['cPlayer:PgeItemGetFirstFlag']):
-        MainNpc.SetDefaultWaitAs('cPgeBaseWait')
-        run SetItem()
-        # Coo, PLAYER… You got a minute?
-        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:001', true)
-        Player.PlayerDemoMove('cNextInfoAngle', 3)
-        # I've got something for you… Think of it as my way of saying thanks.
-        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:001_01', false)
-        MainNpc.SetItemName(1, 4, 0)
-        if System.EventFlags['cPlayer:PgeItemGetCount'] != 0:
-            # [A|An]<125:4:0000>… I'll put it in your pockets for you…
-            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:003', true)
-        else:
-            EventFlowSystemActor.NpcSetRewardRecipe(14565, false)
-            # It's the recipe for my <125:4:0000>… I'll put it in your pockets for you…
-            MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:002', true)
-        Player.CharacterEmoticonAction('Nodding', true, '', 0, true)
-        EventFlowSystemActor.WaitFrame(35)
-        MainNpc.SetEventRewardToPlayerBaggage('cFree')
-        System.EventFlags['cPlayer:PgeItemGetCount'] += 1
-        System.EventFlags['cPlayer:PgeItemGetFirstFlag'] = true
-        # Thank you, so much…
-        MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:005', true)
-        EventFlowSystemActor.WaitFrame(7)
-        Player.TurnBody(12, 90.0)
-        Player.PlayerWaitTurn()
-        Player.PlayerDemoMove('cForward', 3)
- 
+	if (EventFlowSystemActor.IsMyVillage()) and (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (not System.EventFlags['cPlayer:PgeItemGetFirstFlag']):
+		MainNpc.SetDefaultWaitAs('cPgeBaseWait')
+		run SetItem()
+		# Coo, PLAYER… You got a minute?
+		MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:001', true)
+		Player.PlayerDemoMove('cNextInfoAngle', 3)
+		# I've got something for you… Think of it as my way of saying thanks.
+		MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:001_01', false)
+		MainNpc.SetItemName(1, 4, 0)
+		if System.EventFlags['cPlayer:PgeItemGetCount'] != 0:
+			# [A|An]<125:4:0000>… I'll put it in your pockets for you…
+			MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:003', true)
+		else:
+			EventFlowSystemActor.NpcSetRewardRecipe(14565, false)
+			# It's the recipe for my <125:4:0000>… I'll put it in your pockets for you…
+			MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:002', true)
+		Player.CharacterEmoticonAction('Nodding', true, '', 0, true)
+		EventFlowSystemActor.WaitFrame(35)
+		MainNpc.SetEventRewardToPlayerBaggage('cFree')
+		System.EventFlags['cPlayer:PgeItemGetCount'] += 1
+		System.EventFlags['cPlayer:PgeItemGetFirstFlag'] = true
+		# Thank you, so much…
+		MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_04_Out:005', true)
+		EventFlowSystemActor.WaitFrame(7)
+		Player.TurnBody(12, 90.0)
+		Player.PlayerWaitTurn()
+		Player.PlayerDemoMove('cForward', 3)
+
 flow Root_Init():
-    run SNPC_pge::SetupSharePlayCamerarun SNPC_pge::SetupSharePlayCamera()
- 
+	run SNPC_pge::SetupSharePlayCamera()
+
 flow SetItem():
-    if System.EventFlags['cPlayer:PgeRegularCount'] < 5:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] == 0:
-        EventFlowSystemActor.SelectRewardItemDirect(14565, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayer:PgeRegularCount'] < 10:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] == 1:
-        EventFlowSystemActor.SelectRewardItemDirect(14574, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayer:PgeRegularCount'] < 15:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] == 2:
-        EventFlowSystemActor.SelectRewardItemDirect(14569, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayer:PgeRegularCount'] < 20:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] == 3:
-        EventFlowSystemActor.SelectRewardItemDirect(14573, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayer:PgeRegularCount'] < 30:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] == 4:
-        EventFlowSystemActor.SelectRewardItemDirect(427, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayer:PgeRegularCount'] < 40:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] == 5:
-        EventFlowSystemActor.SelectRewardItemDirect(429, 1, 'cVillageRemakePattern', 0)
-    elif System.EventFlags['cPlayer:PgeRegularCount'] < 50:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif System.EventFlags['cPlayer:PgeItemGetCount'] != 6:
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        EventFlowSystemActor.SelectRewardItemDirect(14090, 1, 'cVillageRemakePattern', 0)
- 
+	if System.EventFlags['cPlayer:PgeRegularCount'] < 5:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] == 0:
+		EventFlowSystemActor.SelectRewardItemDirect(14565, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayer:PgeRegularCount'] < 10:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] == 1:
+		EventFlowSystemActor.SelectRewardItemDirect(14574, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayer:PgeRegularCount'] < 15:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] == 2:
+		EventFlowSystemActor.SelectRewardItemDirect(14569, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayer:PgeRegularCount'] < 20:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] == 3:
+		EventFlowSystemActor.SelectRewardItemDirect(14573, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayer:PgeRegularCount'] < 30:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] == 4:
+		EventFlowSystemActor.SelectRewardItemDirect(427, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayer:PgeRegularCount'] < 40:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] == 5:
+		EventFlowSystemActor.SelectRewardItemDirect(429, 1, 'cVillageRemakePattern', 0)
+	elif System.EventFlags['cPlayer:PgeRegularCount'] < 50:
+		EventFlowSystemActor.ExitFlowchart()
+	elif System.EventFlags['cPlayer:PgeItemGetCount'] != 6:
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		EventFlowSystemActor.SelectRewardItemDirect(14090, 1, 'cVillageRemakePattern', 0)

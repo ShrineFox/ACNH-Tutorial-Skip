@@ -1,313 +1,312 @@
 flow Bridge():
-    SubflowResults[7] = 6
-    # Right now, we'd like to celebrate the completion of our new bridge. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_07', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 6
+	# Right now, we'd like to celebrate the completion of our new bridge. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_07', false)
+	run Rco_Ceremony_CmnSel()
+
 flow CampSite():
-    SubflowResults[7] = 5
-    # Right now, we'd like to celebrate the grand opening of our campsite. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_06', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 5
+	# Right now, we'd like to celebrate the grand opening of our campsite. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_06', false)
+	run Rco_Ceremony_CmnSel()
+
 flow ChkCeremonyBridge():
-    if (not System.EventFlags['cPlayer:HeldCeremonyBridge']) and (System.EventFlags['cLand:CeremonyBuildBridge']):
-        SubflowResults[9] = 1
-        SubflowResults[15] = 1
-        System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	if (not System.EventFlags['cPlayer:HeldCeremonyBridge']) and (System.EventFlags['cLand:CeremonyBuildBridge']):
+		SubflowResults[9] = 1
+		SubflowResults[15] = 1
+		System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow ChkCeremonyCampsite():
-    if (not System.EventFlags['cPlayer:HeldCeremonyCampSite']) and (System.EventFlags['cLand:CampSiteBuilt']) and (EventFlowSystemActor.FacilityOpenPastDays('cCampSite', 8)):
-        SubflowResults[10] = 1
-        SubflowResults[15] = 1
-        System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	if (not System.EventFlags['cPlayer:HeldCeremonyCampSite']) and (System.EventFlags['cLand:CampSiteBuilt']) and (EventFlowSystemActor.FacilityOpenPastDays('cCampSite', 8)):
+		SubflowResults[10] = 1
+		SubflowResults[15] = 1
+		System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow ChkCeremonyMarket():
-    switch EventFlowSystemActor.ShopLevel():
-        case `NooksCrannyInitial`:
-            if (not System.EventFlags['cPlayer:HeldCeremonyMarket1']) and (EventFlowSystemActor.FacilityOpenPastDays('cMarket1', 8)):
-                SubflowResults[13] = 1
-                run Sub_Event100()
-        case `NooksCrannyUpgraded`:
-            if (not System.EventFlags['cPlayer:HeldCeremonyMarket2']) and (EventFlowSystemActor.FacilityOpenPastDays('cMarket2', 8)):
-                SubflowResults[13] = 2
-                run Sub_Event100()
-        default:
-            return
- 
+	switch EventFlowSystemActor.ShopLevel():
+		case `NooksCrannyInitial`:
+			if (not System.EventFlags['cPlayer:HeldCeremonyMarket1']) and (EventFlowSystemActor.FacilityOpenPastDays('cMarket1', 8)):
+				SubflowResults[13] = 1
+				run Sub_Event100()
+		case `NooksCrannyUpgraded`:
+			if (not System.EventFlags['cPlayer:HeldCeremonyMarket2']) and (EventFlowSystemActor.FacilityOpenPastDays('cMarket2', 8)):
+				SubflowResults[13] = 2
+				run Sub_Event100()
+		default:
+			return
+
 flow ChkCeremonyMuseum():
-    if EventFlowSystemActor.MuseumLevel() in (`BlathersNotMovedIn`, `BlathersTent`, `BlathersMuseumNoArt`, `BlathersMuseumArt`):
-        switch EventFlowSystemActor.MuseumLevel():
-            case `BlathersMuseumNoArt`:
-                if (System.EventFlags['cLand:MuseumConstruction2'] < 1) and (not System.EventFlags['cPlayer:HeldCeremonyMuseum']) and (System.EventFlags['cLand:Museum2Built']) and (EventFlowSystemActor.FacilityOpenPastDays('cMuseum', 8)):
-                    SubflowResults[12] = 1
-                    SubflowResults[15] = 1
-                    System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
-            case `BlathersMuseumArt`:
-                if (not System.EventFlags['cLand:MuseumCafeConstruction_2_ConstructionDay']) and (not System.EventFlags['cPlayer:HeldCeremonyMuseum2']) and (System.EventFlags['cLand:Museum3Built']) and (EventFlowSystemActor.FacilityOpenPastDays('cMuseum2', 8)):
-                    SubflowResults[12] = 2
-                    SubflowResults[15] = 1
-                    System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
-            default:
-                return
-    else:
-        run ChkCeremonyMuseum3()
- 
+	if EventFlowSystemActor.MuseumLevel() in (`BlathersNotMovedIn`, `BlathersTent`, `BlathersMuseumNoArt`, `BlathersMuseumArt`):
+		switch EventFlowSystemActor.MuseumLevel():
+			case `BlathersMuseumNoArt`:
+				if (System.EventFlags['cLand:MuseumConstruction2'] < 1) and (not System.EventFlags['cPlayer:HeldCeremonyMuseum']) and (System.EventFlags['cLand:Museum2Built']) and (EventFlowSystemActor.FacilityOpenPastDays('cMuseum', 8)):
+					SubflowResults[12] = 1
+					SubflowResults[15] = 1
+					System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+			case `BlathersMuseumArt`:
+				if (not System.EventFlags['cLand:MuseumCafeConstruction_2_ConstructionDay']) and (not System.EventFlags['cPlayer:HeldCeremonyMuseum2']) and (System.EventFlags['cLand:Museum3Built']) and (EventFlowSystemActor.FacilityOpenPastDays('cMuseum2', 8)):
+					SubflowResults[12] = 2
+					SubflowResults[15] = 1
+					System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+			default:
+				return
+	else:
+		run ChkCeremonyMuseum3()
+
 flow ChkCeremonyMuseum3():
-    if (not System.EventFlags['cPlayer:HeldCeremonyMuseum3']) and (System.EventFlags['cLand:MuseumCafeConstruction_4_Opened']) and (EventFlowSystemActor.FacilityOpenPastDays('cMuseum3', 8)):
-        SubflowResults[12] = 3
-        SubflowResults[15] = 1
-        System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	if (not System.EventFlags['cPlayer:HeldCeremonyMuseum3']) and (System.EventFlags['cLand:MuseumCafeConstruction_4_Opened']) and (EventFlowSystemActor.FacilityOpenPastDays('cMuseum3', 8)):
+		SubflowResults[12] = 3
+		SubflowResults[15] = 1
+		System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow ChkCeremonyOffice():
-    if (not System.EventFlags['cPlayer:HerdCeremonyOffice']) and (System.EventFlags['cLand:BuiltTownOffice']) and (EventFlowSystemActor.FacilityOpenPastDays('cOffice', 8)):
-        SubflowResults[14] = 1
-        SubflowResults[15] = 1
-        System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	if (not System.EventFlags['cPlayer:HerdCeremonyOffice']) and (System.EventFlags['cLand:BuiltTownOffice']) and (EventFlowSystemActor.FacilityOpenPastDays('cOffice', 8)):
+		SubflowResults[14] = 1
+		SubflowResults[15] = 1
+		System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow ChkCeremonySlope():
-    if (not System.EventFlags['cPlayer:HeldCeremonySlope']) and (System.EventFlags['cLand:CeremonyBuildSlope']):
-        SubflowResults[8] = 1
-        SubflowResults[15] = 1
-        System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	if (not System.EventFlags['cPlayer:HeldCeremonySlope']) and (System.EventFlags['cLand:CeremonyBuildSlope']):
+		SubflowResults[8] = 1
+		SubflowResults[15] = 1
+		System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow ChkCeremonyTailor():
-    if (not System.EventFlags['cPlayer:HeldCeremonyTailor']) and (System.EventFlags['cLand:TailorBuilt']) and (EventFlowSystemActor.FacilityOpenPastDays('cTailor', 8)):
-        SubflowResults[11] = 1
-        SubflowResults[15] = 1
-        System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	if (not System.EventFlags['cPlayer:HeldCeremonyTailor']) and (System.EventFlags['cLand:TailorBuilt']) and (EventFlowSystemActor.FacilityOpenPastDays('cTailor', 8)):
+		SubflowResults[11] = 1
+		SubflowResults[15] = 1
+		System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow Market1():
-    SubflowResults[7] = 1
-    # Right now, we'd like to celebrate the completion of Nook's Cranny. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_02', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 1
+	# Right now, we'd like to celebrate the completion of Nook's Cranny. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_02', false)
+	run Rco_Ceremony_CmnSel()
+
 flow Market2():
-    SubflowResults[7] = 2
-    # Right now, we'd like to celebrate the Nook's Cranny renovations. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_03', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 2
+	# Right now, we'd like to celebrate the Nook's Cranny renovations. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_03', false)
+	run Rco_Ceremony_CmnSel()
+
 flow Museum():
-    SubflowResults[7] = 3
-    run Event158()
- 
+	SubflowResults[7] = 3
+	run Event158()
+
 flow Museum2():
-    SubflowResults[7] = 3
-    if System.EventFlags['cLand:Museum2BuiltSkippedMuseum1']:
+	SubflowResults[7] = 3
+	if System.EventFlags['cLand:Museum2BuiltSkippedMuseum1']:
 entrypoint Event158:
-        # Right now, we'd like to celebrate the grand opening of our museum. Interested?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_04', false)
-    else:
-        # Right now, we can hold a ceremony to celebrate the completion of the museum remodel. Interested?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_09', false)
-    run Rco_Ceremony_CmnSel()
- 
+		# Right now, we'd like to celebrate the grand opening of our museum. Interested?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_04', false)
+	else:
+		# Right now, we can hold a ceremony to celebrate the completion of the museum remodel. Interested?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_09', false)
+	run Rco_Ceremony_CmnSel()
+
 flow Museum3():
-    SubflowResults[7] = 3
-    # Right now, we can hold a ceremony to celebrate the completion of the museum remodel. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_09', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 3
+	# Right now, we can hold a ceremony to celebrate the completion of the museum remodel. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_09', false)
+	run Rco_Ceremony_CmnSel()
+
 flow Office():
-    SubflowResults[7] = 0
-    # Right now, we're looking at holding a ceremony for this Resident Services building. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_01', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 0
+	# Right now, we're looking at holding a ceremony for this Resident Services building. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_01', false)
+	run Rco_Ceremony_CmnSel()
+
 flow RcoAttendCeremony():
-    # Oh! You want to take part in a ceremony, PLAYER?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:101', false)
-    if System.EventFlags['cLandTemp:CountEnableCeremony'] >= 6:
-        # We're celebrating so many different things right now! Truly this a happy time for ISLAND! However, if I could ask a favor, I'd love for you to take p…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:112', false)
-        switch EventFlowSystemActor.GeneralTalkChoice3():
-            case 0:
-                SubflowResults[7] = 0
-                run Rco_Ceremony_Attend()
-            case 1:
-                if SubflowResults@2[9] == 0:
-                    # Ah, a different ceremony would be more your speed right now, hm? A celebration for what, then?
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:114', false)
-                else:
-                    # Ah, a different ceremony would be more your speed right now, hm? A celebration for what, then?
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:113', false)
-                switch EventFlowSystemActor.GeneralTalkChoice6():
-                    case 0:
-                        switch SubflowResults@3[13]:
-                            case 1:
-                                SubflowResults[7] = 1
-                                run Rco_Ceremony_Attend()
-                            case 2:
-                                SubflowResults[7] = 2
-                                run Rco_Ceremony_Attend()
-                            default:
-                                return
-                    case 1:
-                        SubflowResults[7] = 3
-                        run Rco_Ceremony_Attend()
-                    case 2:
-                        SubflowResults[7] = 4
-                        run Rco_Ceremony_Attend()
-                    case 3:
-                        SubflowResults[7] = 5
-                        run Rco_Ceremony_Attend()
-                    case 4:
-                        if SubflowResults@2[9] == 0:
-                            SubflowResults[7] = 7
-                            run Rco_Ceremony_Attend()
-                        else:
-                            SubflowResults[7] = 6
-                            run Rco_Ceremony_Attend()
-                    case 5:
-                        run Rco_Ceremony_Multi_Cancel()
-            case 2:
-                run Rco_Ceremony_Multi_Cancel()
-    elif System.EventFlags['cLandTemp:CountEnableCeremony'] >= 2:
-        MainNpc.SetCeremonyChoice()
-        # We're celebrating so many different things right now! Truly this is a wonderful island moment. What ceremony do you want to take part in?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:111', false)
-        switch EventFlowSystemActor.SelectCeremony():
-            case 0:
-                SubflowResults[7] = 0
-                run Rco_Ceremony_Attend()
-            case 1:
-                switch SubflowResults@3[13]:
-                    case 1:
-                        SubflowResults[7] = 1
-                        run Rco_Ceremony_Attend()
-                    case 2:
-                        SubflowResults[7] = 2
-                        run Rco_Ceremony_Attend()
-                    default:
-                        return
-            case 2:
-                SubflowResults[7] = 3
-                run Rco_Ceremony_Attend()
-            case 3:
-                SubflowResults[7] = 4
-                run Rco_Ceremony_Attend()
-            case 4:
-                SubflowResults[7] = 5
-                run Rco_Ceremony_Attend()
-            case 5:
-                SubflowResults[7] = 6
-                run Rco_Ceremony_Attend()
-            case 6:
-                SubflowResults[7] = 7
-                run Rco_Ceremony_Attend()
-            case 7:
-                run Rco_Ceremony_Multi_Cancel()
-    elif SubflowResults@2[14] == 0:
-        switch SubflowResults@3[13]:
-            case 0:
-                if SubflowResults@4[12] in (0, 1, 2):
-                    switch SubflowResults@3[12]:
-                        case 0:
-                            if SubflowResults@2[11] != 0:
-                                run Tailor()
-                            elif SubflowResults@2[10] != 0:
-                                run CampSite()
-                            elif SubflowResults@2[9] == 0:
-                                run Slope()
-                            else:
-                                run Bridge()
-                        case 1:
-                            run Museum()
-                        case 2:
-                            run Museum2()
-                else:
-                    run Museum3()
-            case 1:
-                run Market1()
-            case 2:
-                run Market2()
-    else:
-        run Office()
- 
+	# Oh! You want to take part in a ceremony, PLAYER?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:101', false)
+	if System.EventFlags['cLandTemp:CountEnableCeremony'] >= 6:
+		# We're celebrating so many different things right now! Truly this a happy time for ISLAND! However, if I could ask a favor, I'd love for you to take p…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:112', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				SubflowResults[7] = 0
+				run Rco_Ceremony_Attend()
+			case 1:
+				if SubflowResults@2[9] == 0:
+					# Ah, a different ceremony would be more your speed right now, hm? A celebration for what, then?
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:114', false)
+				else:
+					# Ah, a different ceremony would be more your speed right now, hm? A celebration for what, then?
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:113', false)
+				switch EventFlowSystemActor.GeneralTalkChoice6():
+					case 0:
+						switch SubflowResults@3[13]:
+							case 1:
+	  SubflowResults[7] = 1
+	run Rco_Ceremony_Attend()
+							case 2:
+	  SubflowResults[7] = 2
+	run Rco_Ceremony_Attend()
+							default:
+								return
+					case 1:
+ SubflowResults[7] = 3
+run Rco_Ceremony_Attend()
+					case 2:
+ SubflowResults[7] = 4
+run Rco_Ceremony_Attend()
+					case 3:
+ SubflowResults[7] = 5
+run Rco_Ceremony_Attend()
+					case 4:
+						if SubflowResults@2[9] == 0:
+	SubflowResults[7] = 7
+ run Rco_Ceremony_Attend()
+						else:
+	SubflowResults[7] = 6
+ run Rco_Ceremony_Attend()
+					case 5:
+run Rco_Ceremony_Multi_Cancel()
+			case 2:
+				run Rco_Ceremony_Multi_Cancel()
+	elif System.EventFlags['cLandTemp:CountEnableCeremony'] >= 2:
+		MainNpc.SetCeremonyChoice()
+		# We're celebrating so many different things right now! Truly this is a wonderful island moment. What ceremony do you want to take part in?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:111', false)
+		switch EventFlowSystemActor.SelectCeremony():
+			case 0:
+				SubflowResults[7] = 0
+				run Rco_Ceremony_Attend()
+			case 1:
+				switch SubflowResults@3[13]:
+					case 1:
+ SubflowResults[7] = 1
+run Rco_Ceremony_Attend()
+					case 2:
+ SubflowResults[7] = 2
+run Rco_Ceremony_Attend()
+					default:
+						return
+			case 2:
+				SubflowResults[7] = 3
+				run Rco_Ceremony_Attend()
+			case 3:
+				SubflowResults[7] = 4
+				run Rco_Ceremony_Attend()
+			case 4:
+				SubflowResults[7] = 5
+				run Rco_Ceremony_Attend()
+			case 5:
+				SubflowResults[7] = 6
+				run Rco_Ceremony_Attend()
+			case 6:
+				SubflowResults[7] = 7
+				run Rco_Ceremony_Attend()
+			case 7:
+				run Rco_Ceremony_Multi_Cancel()
+	elif SubflowResults@2[14] == 0:
+		switch SubflowResults@3[13]:
+			case 0:
+				if SubflowResults@4[12] in (0, 1, 2):
+					switch SubflowResults@3[12]:
+						case 0:
+							if SubflowResults@2[11] != 0:
+		  run Tailor()
+							elif SubflowResults@2[10] != 0:
+		 run CampSite()
+							elif SubflowResults@2[9] == 0:
+		   run Slope()
+							else:
+		  run Bridge()
+						case 1:
+		run Museum()
+						case 2:
+		run Museum2()
+				else:
+					run Museum3()
+			case 1:
+				run Market1()
+			case 2:
+				run Market2()
+	else:
+		run Office()
+
 flow Rco_Ceremony_Attend():
-    # Splendid!<10:4> Let's get started!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:202', true)
-    switch SubflowResults@8[7]:
-        case 0:
-            System.EventFlags['cPlayer:HerdCeremonyOffice'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyOffice', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 1:
-            System.EventFlags['cPlayer:HeldCeremonyMarket1'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMarket', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 2:
-            System.EventFlags['cPlayer:HeldCeremonyMarket2'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMarket', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 3:
-            if SubflowResults@4[12] in (0, 1, 2):
-                switch SubflowResults@3[12]:
-                    case 1:
-                        System.EventFlags['cPlayer:HeldCeremonyMuseum'] = true
-                        EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMuseum', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-                    case 2:
-                        System.EventFlags['cPlayer:HeldCeremonyMuseum2'] = true
-                        EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMuseum', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-                    default:
-                        return
-            else:
-                System.EventFlags['cPlayer:HeldCeremonyMuseum3'] = true
-                EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMuseum', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 4:
-            System.EventFlags['cPlayer:HeldCeremonyTailor'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyTailor', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 5:
-            System.EventFlags['cPlayer:HeldCeremonyCampSite'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyCampSite', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 6:
-            System.EventFlags['cPlayer:HeldCeremonyBridge'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyBridge', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
-        case 7:
-            System.EventFlags['cPlayer:HeldCeremonySlope'] = true
-            EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonySlope', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	# Splendid!<10:4> Let's get started!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:202', true)
+	switch SubflowResults@8[7]:
+		case 0:
+			System.EventFlags['cPlayer:HerdCeremonyOffice'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyOffice', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 1:
+			System.EventFlags['cPlayer:HeldCeremonyMarket1'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMarket', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 2:
+			System.EventFlags['cPlayer:HeldCeremonyMarket2'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMarket', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 3:
+			if SubflowResults@4[12] in (0, 1, 2):
+				switch SubflowResults@3[12]:
+					case 1:
+System.EventFlags['cPlayer:HeldCeremonyMuseum'] = true
+						EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMuseum', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+					case 2:
+System.EventFlags['cPlayer:HeldCeremonyMuseum2'] = true
+						EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMuseum', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+					default:
+						return
+			else:
+				System.EventFlags['cPlayer:HeldCeremonyMuseum3'] = true
+				EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyMuseum', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 4:
+			System.EventFlags['cPlayer:HeldCeremonyTailor'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyTailor', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 5:
+			System.EventFlags['cPlayer:HeldCeremonyCampSite'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyCampSite', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 6:
+			System.EventFlags['cPlayer:HeldCeremonyBridge'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonyBridge', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+		case 7:
+			System.EventFlags['cPlayer:HeldCeremonySlope'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldCeremonySlope', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
 flow Rco_Ceremony_CmnSel():
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run Rco_Ceremony_Attend()
-    else:
-        if SubflowResults@8[7] in (0, 1, 2, 3, 4, 5):
-            # Of course, of course! Facility ceremonies are special. The window of opportunity for them lasts a week. Let me know if you change your mind before th…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:203_01', false)
-        else:
-            # Of course, of course! We can hold our ceremony any time today, so let me know if you change your mind.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:203_02', false)
-        if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
-            run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
- 
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run Rco_Ceremony_Attend()
+	else:
+		if SubflowResults@8[7] in (0, 1, 2, 3, 4, 5):
+			# Of course, of course! Facility ceremonies are special. The window of opportunity for them lasts a week. Let me know if you change your mind before th…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:203_01', false)
+		else:
+			# Of course, of course! We can hold our ceremony any time today, so let me know if you change your mind.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:203_02', false)
+		if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+			run SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+
 flow Rco_Ceremony_Multi_Cancel():
-    # Understood, understood! If you change your mind, just let me know before the celebration period ends.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:203_03', false)
-    if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
-        run SNPC_rco_00_Common::Rco_Office_CmnSelAgainrun SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
- 
+	# Understood, understood! If you change your mind, just let me know before the celebration period ends.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:203_03', false)
+	if EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`:
+		run SNPC_rco_00_Common::Rco_Office_CmnSelAgain()
+
 flow Root():
-    System.EventFlags['cLandTemp:CountEnableCeremony'] = 0
-    run ChkCeremonyOffice()
-    run ChkCeremonyMarket()
-    run ChkCeremonyMuseum()
-    run ChkCeremonyTailor()
-    run ChkCeremonyCampsite()
-    run ChkCeremonyBridge()
-    run ChkCeremonySlope()
- 
+	System.EventFlags['cLandTemp:CountEnableCeremony'] = 0
+	run ChkCeremonyOffice()
+	run ChkCeremonyMarket()
+	run ChkCeremonyMuseum()
+	run ChkCeremonyTailor()
+	run ChkCeremonyCampsite()
+	run ChkCeremonyBridge()
+	run ChkCeremonySlope()
+
 flow Slope():
-    SubflowResults[7] = 7
-    # Right now, we'd like to celebrate the completion of our new incline. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_08', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 7
+	# Right now, we'd like to celebrate the completion of our new incline. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_08', false)
+	run Rco_Ceremony_CmnSel()
+
 local flow Sub_Event100():
-    SubflowResults[15] = 1
-    System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
- 
+	SubflowResults[15] = 1
+	System.EventFlags['cLandTemp:CountEnableCeremony'] += 1
+
 flow Tailor():
-    SubflowResults[7] = 4
-    # Right now, we'd like to celebrate the grand opening of our tailor shop. Interested?
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_05', false)
-    run Rco_Ceremony_CmnSel()
- 
+	SubflowResults[7] = 4
+	# Right now, we'd like to celebrate the grand opening of our tailor shop. Interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:102_05', false)
+	run Rco_Ceremony_CmnSel()

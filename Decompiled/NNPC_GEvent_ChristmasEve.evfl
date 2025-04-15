@@ -1,326 +1,325 @@
 flow GiftExchange():
-    if MainNpc.EventFlags['cNpcMemory:ChristmasWrappingGiftNoGetFlag']:
-        # Here for my wrapping paper? The cinnamon smell is wearing off, so it's yours if you want it, <110:6>.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:115', false)
-        MainNpc.SetDeliveryItemAtRandom(7694, true, 'cVillageRemakePattern', 0)
-        if EventFlowSystemActor.IsReceiveMargeItem(7694, 65534, 65534, 65534, 65534, 3):
-            EventFlowSystemActor.SetItemToPocket(7694, 2)
-            MainNpc.NpcDelivery(1, 'Default')
-            # That wrapping paper can turn nearly anything into a fancy-smelling gift in no time! It's great!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:113', false)
-            System.EventFlags['cPlayer:ChristmasWrappingGiftFlag'] = true
-            MainNpc.EventFlags['cNpcMemory:ChristmasWrappingGiftNoGetFlag'] = false
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            # But…I can't give it to you 'cause your pockets are full. Come find me when you have space, OK?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:114', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']:
-        run SantaCosplayCheck0()
-        if MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag']:
-            # RANDOM: I don't know how this Toy Day could be … // I got so many cool Toy Day presents tod… // I got the best gift from Santa, but you…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:250', false)
-        else:
-            # RANDOM: I'm gonna guard your gift like I guarde… // Did you open your gift yet? I got it sp… // Getting a gift is like eating some supe…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:251', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        # RANDOM: Today's Toy Day! That means we can do a… // Let's exchange gifts! // Not right now. // Hey, so…I got you a present for Toy Day… // Let's exchange gifts! // Right now? Uh... // I wanna exchange Toy Day gifts. Here! N… // Let's exchange gifts! // Not now.
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:100', false)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            EventFlowSystemActor.UIItemSelectWindowHandling('cWrappingPouch', 65534, '', '', '', false)
-            if EventFlowSystemActor.UIResultMenuDecide():
-                MainNpc.SetDeliveryItem(4, false)
-                MainNpc.NpcDelivery(0, 'Keep')
-                run PresentJudge0()
-                MainNpc.NpcDelivery(3, 'Default')
-                MainNpc.SetItemToNpcStockList(0, 1)
-                # RANDOM: OK, now it's my turn. You ready? 'Cause… // And now here's a present from me. Bet y…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:200', false)
-                MainNpc.SetXmasRewardItem(false)
-                MainNpc.SetDeliveryItem(52, true)
-                MainNpc.NpcDelivery(1, '"Default"')
-                # RANDOM: Wow! This has gotta be one of the beste… // Yay! Now I get to cram another great To…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:201', false)
-                MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag'] = true
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            elif (not System.EventFlags['cPlayer:ChristmasWrappingGiftFlag']) and (not System.EventFlags['cPlayer:ChristmasWrappingPresentFlag']):
-                # Huh? Is that a no? Wait, do you need wrapping paper? 'Cause it's not a Toy Day gift without wrapping paper. I'll give you some of mine. I picked it '…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:112', false)
-                MainNpc.SetDeliveryItemAtRandom(7694, true, 'cVillageRemakePattern', 0)
-                if EventFlowSystemActor.IsReceiveMargeItem(7694, 65534, 65534, 65534, 65534, 3):
-                    EventFlowSystemActor.SetItemToPocket(7694, 2)
-                    MainNpc.NpcDelivery(1, 'Default')
-                    # That wrapping paper can turn nearly anything into a fancy-smelling gift in no time! It's great!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:113', false)
-                    System.EventFlags['cPlayer:ChristmasWrappingGiftFlag'] = true
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-                else:
-                    # But…I can't give it to you 'cause your pockets are full. Come find me when you have space, OK?
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:114', false)
-                    MainNpc.EventFlags['cNpcMemory:ChristmasWrappingGiftNoGetFlag'] = true
-                    System.EventFlags['cPlayer:ChristmasWrappingPresentFlag'] = true
-                    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                # Huh? Is…is that a no? Hang on, did you forget your Toy Day present for me? That's OK. I'll be patient. Kinda.
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:111', false)
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            # RANDOM: OK, no problem! Just come find me when … // Oh! I guess I'm just a little excited… …
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:110', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.EventFlags['cNpcMemory:ChristmasWrappingGiftNoGetFlag']:
+		# Here for my wrapping paper? The cinnamon smell is wearing off, so it's yours if you want it, <110:6>.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:115', false)
+		MainNpc.SetDeliveryItemAtRandom(7694, true, 'cVillageRemakePattern', 0)
+		if EventFlowSystemActor.IsReceiveMargeItem(7694, 65534, 65534, 65534, 65534, 3):
+			EventFlowSystemActor.SetItemToPocket(7694, 2)
+			MainNpc.NpcDelivery(1, 'Default')
+			# That wrapping paper can turn nearly anything into a fancy-smelling gift in no time! It's great!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:113', false)
+			System.EventFlags['cPlayer:ChristmasWrappingGiftFlag'] = true
+			MainNpc.EventFlags['cNpcMemory:ChristmasWrappingGiftNoGetFlag'] = false
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			# But…I can't give it to you 'cause your pockets are full. Come find me when you have space, OK?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:114', false)
+			EventFlowSystemActor.ExitFlowchart()
+	elif MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']:
+		run SantaCosplayCheck0()
+		if MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag']:
+			# RANDOM: I don't know how this Toy Day could be … // I got so many cool Toy Day presents tod… // I got the best gift from Santa, but you…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:250', false)
+		else:
+			# RANDOM: I'm gonna guard your gift like I guarde… // Did you open your gift yet? I got it sp… // Getting a gift is like eating some supe…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:251', false)
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		# RANDOM: Today's Toy Day! That means we can do a… // Let's exchange gifts! // Not right now. // Hey, so…I got you a present for Toy Day… // Let's exchange gifts! // Right now? Uh... // I wanna exchange Toy Day gifts. Here! N… // Let's exchange gifts! // Not now.
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:100', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.UIItemSelectWindowHandling('cWrappingPouch', 65534, '', '', '', false)
+			if EventFlowSystemActor.UIResultMenuDecide():
+				MainNpc.SetDeliveryItem(4, false)
+				MainNpc.NpcDelivery(0, 'Keep')
+				run PresentJudge0()
+				MainNpc.NpcDelivery(3, 'Default')
+				MainNpc.SetItemToNpcStockList(0, 1)
+				# RANDOM: OK, now it's my turn. You ready? 'Cause… // And now here's a present from me. Bet y…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:200', false)
+				MainNpc.SetXmasRewardItem(false)
+				MainNpc.SetDeliveryItem(52, true)
+				MainNpc.NpcDelivery(1, '"Default"')
+				# RANDOM: Wow! This has gotta be one of the beste… // Yay! Now I get to cram another great To…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:201', false)
+				MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag'] = true
+				EventFlowSystemActor.ExitFlowchart()
+			elif (not System.EventFlags['cPlayer:ChristmasWrappingGiftFlag']) and (not System.EventFlags['cPlayer:ChristmasWrappingPresentFlag']):
+				# Huh? Is that a no? Wait, do you need wrapping paper? 'Cause it's not a Toy Day gift without wrapping paper. I'll give you some of mine. I picked it '…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:112', false)
+				MainNpc.SetDeliveryItemAtRandom(7694, true, 'cVillageRemakePattern', 0)
+				if EventFlowSystemActor.IsReceiveMargeItem(7694, 65534, 65534, 65534, 65534, 3):
+					EventFlowSystemActor.SetItemToPocket(7694, 2)
+					MainNpc.NpcDelivery(1, 'Default')
+					# That wrapping paper can turn nearly anything into a fancy-smelling gift in no time! It's great!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:113', false)
+					System.EventFlags['cPlayer:ChristmasWrappingGiftFlag'] = true
+					EventFlowSystemActor.ExitFlowchart()
+				else:
+					# But…I can't give it to you 'cause your pockets are full. Come find me when you have space, OK?
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:114', false)
+					MainNpc.EventFlags['cNpcMemory:ChristmasWrappingGiftNoGetFlag'] = true
+					System.EventFlags['cPlayer:ChristmasWrappingPresentFlag'] = true
+					EventFlowSystemActor.ExitFlowchart()
+			else:
+				# Huh? Is…is that a no? Hang on, did you forget your Toy Day present for me? That's OK. I'll be patient. Kinda.
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:111', false)
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			# RANDOM: OK, no problem! Just come find me when … // Oh! I guess I'm just a little excited… …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:110', false)
+			EventFlowSystemActor.ExitFlowchart()
+
 flow OtherChristmas():
-    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-        if EventFlowSystemActor.SystemCheckNowStage('cField'):
-            # RANDOM: I can't think of anything better than T… // I know it's cold, but just think about … // I love how merry and happy everyone get…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:300', false)
-        else:
-            # RANDOM: You oughta feel good for Toy Day. And t… // Happy Toy Day! That's so much fun to sa… // It's warm like fresh-baked bread in her…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:301', false)
-    else:
-        if EventFlowSystemActor.SystemCheckNowStage('cField'):
-            # RANDOM: I can't think of anything better than T… // I know it's hot, but just think about T… // I love how merry and happy everyone get…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:302', false)
-        else:
-            # RANDOM: You oughta feel good for Toy Day. And t… // Happy Toy Day! That's so much fun to sa… // It's cool like ice-cream cake in here, …
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:303', false)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+		if EventFlowSystemActor.SystemCheckNowStage('cField'):
+			# RANDOM: I can't think of anything better than T… // I know it's cold, but just think about … // I love how merry and happy everyone get…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:300', false)
+		else:
+			# RANDOM: You oughta feel good for Toy Day. And t… // Happy Toy Day! That's so much fun to sa… // It's warm like fresh-baked bread in her…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:301', false)
+	else:
+		if EventFlowSystemActor.SystemCheckNowStage('cField'):
+			# RANDOM: I can't think of anything better than T… // I know it's hot, but just think about T… // I love how merry and happy everyone get…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:302', false)
+		else:
+			# RANDOM: You oughta feel good for Toy Day. And t… // Happy Toy Day! That's so much fun to sa… // It's cool like ice-cream cake in here, …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:303', false)
+	EventFlowSystemActor.ExitFlowchart()
+
 flow PresentJudge0():
-    # RANDOM: Ooo! What's inside, what's inside, what… // What is it? Is it OK if I open it now? … // Whoa! You're the best! What'd you get m…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:150', false)
-    MainNpc.NpcDelivery(6, '"Default"')
-    MainNpc.SetDeliveryItemApplySave()
-    EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
-    if EventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:160', false)
-        run Sub_Event64()
-    elif EventFlowSystemActor.MultiKindItemSelectInclude('Money', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
-        # Huh? Bells? But Bells aren't fun. And I don't think I should take stuff that's not fun on Toy Day. Sorry… Hey, we should try the gift exchange again …
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:158', false)
-        run Sub_Event64()
-    elif EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TurnipExpired', 'Trash', 'JohnnyQuestDust', 'TreasureQuestDust', 'Weed', '"指定なし"', '"指定なし"', 'cItemSelect'):
-        # Wow! You got me…trash? Uh, hey… that's uncool.<10:4> Ah huh huh…I mean, it's a little funny, but it's still uncool. Here, take this back and let's tr…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:159', false)
-        MainNpc.NpcAddFriendship(-5)
-        run Sub_Event64()
-    elif EventFlowSystemActor.MultiFromItemSelectInclude('Christmas_ShopLv2', '', '', '', '', '', '', '', 'cItemSelect'):
-        if MainNpc.IsSantaMissionReward():
-            # [A|An]<125:0:0000>! Is this déjà vu or am I just hungry? Gotta be hungry 'cause I don't know what déjà vu means… Yay! Thanks!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:162', false)
-            MainNpc.NpcAddFriendship(3)
-        else:
-            # RANDOM: [A|An]<125:0:0000>! How did you know wh… // But…I asked Santa to bring me [a|an]<12…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:161', false)
-            MainNpc.NpcAddFriendship(5)
-    elif EventFlowSystemActor.MultiItemSelectInclude(13245, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
-        # Yay! It's a <item>Yule log! This takes the Toy Day cake…'cause it IS Toy Day cake! So yummy!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:151', false)
-        MainNpc.NpcAddFriendship(4)
-    elif EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect'):
-        # [A|An]<125:0:0000>! How'd you know I like these? This is fantastic! Now I have extra for when I have my next <110:7:cd00> juice disaster!
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:152', false)
-        MainNpc.NpcAddFriendship(3)
-    elif EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false):
-        switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='Tops', ItemKindTypeB='OnePiece', ItemKindTypeC='Cap', ItemKindTypeD='Accessory', JudgeTarget='cItemSelect'):
-            case 4, 0:
-                # [A|An]<125:0:0000>! This is awesome! I already loved mine, but now I can love even MORE of mine!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153_02', false)
-            case 1, 2:
-                # [A|An]<125:0:0000>! This is so great. I was real worried I might have to wash these clothes someday, but now I won't. Yay!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153', false)
-            case 3:
-                if EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect'):
-                    # [A|An]<125:0:0000>! This is awesome! I already loved mine, but now I can love even MORE of mine!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153_02', false)
-                else:
-                    # [A|An]<125:0:0000>? How'd you know what kind of stuff I like on my head? Oh…you looked at my head, didn't you? So clever!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153_01', false)
-        MainNpc.NpcAddFriendship(3)
-    elif EventFlowSystemActor.UISelectedItemIsEquiped(8, 'cItemSelect', false):
-        switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='Tops', ItemKindTypeB='OnePiece', ItemKindTypeC='Cap', ItemKindTypeD='Accessory', JudgeTarget='cItemSelect'):
-            case 4, 0:
-                # [A|An]<125:0:0000>? How'd you know? I love yours sooo much… This is really great!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154_02', false)
-            case 1, 2:
-                # Wow! Did you really get me [a|an]<125:0:0000>? Yay! Now we can dress like each other! That's exactly what I wanted for Toy Day!
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154', false)
-            case 3:
-                if EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect'):
-                    # [A|An]<125:0:0000>? How'd you know? I love yours sooo much… This is really great!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154_02', false)
-                else:
-                    # [A|An]<125:0:0000>! This is amazing! I've always said you have the best-dressed head on ISLAND. Now I will too!
-                    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154_01', false)
-        MainNpc.NpcAddFriendship(4)
-    elif EventFlowSystemActor.MultiKindItemSelectInclude('Honeycomb', 'Fruit', 'Mushroom', 'ShellDrift', 'Fossil', 'None', 'None', '', 'cItemSelect'):
-        if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 8000:
-            run Sub_Event81()
-        elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 2001:
-            run Sub_Event83()
-        else:
-            run Sub_Event82()
-    else:
-        if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 2000:
-            run Sub_Event81()
-        elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 501:
-            run Sub_Event83()
-        else:
-            run Sub_Event82()
- 
+	# RANDOM: Ooo! What's inside, what's inside, what… // What is it? Is it OK if I open it now? … // Whoa! You're the best! What'd you get m…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:150', false)
+	MainNpc.NpcDelivery(6, '"Default"')
+	MainNpc.SetDeliveryItemApplySave()
+	EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+	if EventFlowSystemActor.MultiKindItemSelectInclude('DIYRecipe', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:160', false)
+		run Sub_Event64()
+	elif EventFlowSystemActor.MultiKindItemSelectInclude('Money', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', '"指定なし"', 'cItemSelect'):
+		# Huh? Bells? But Bells aren't fun. And I don't think I should take stuff that's not fun on Toy Day. Sorry… Hey, we should try the gift exchange again …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:158', false)
+		run Sub_Event64()
+	elif EventFlowSystemActor.MultiKindItemSelectInclude('LostQuestDust', 'TurnipExpired', 'Trash', 'JohnnyQuestDust', 'TreasureQuestDust', 'Weed', '"指定なし"', '"指定なし"', 'cItemSelect'):
+		# Wow! You got me…trash? Uh, hey… that's uncool.<10:4> Ah huh huh…I mean, it's a little funny, but it's still uncool. Here, take this back and let's tr…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:159', false)
+		MainNpc.NpcAddFriendship(-5)
+		run Sub_Event64()
+	elif EventFlowSystemActor.MultiFromItemSelectInclude('Christmas_ShopLv2', '', '', '', '', '', '', '', 'cItemSelect'):
+		if MainNpc.IsSantaMissionReward():
+			# [A|An]<125:0:0000>! Is this déjà vu or am I just hungry? Gotta be hungry 'cause I don't know what déjà vu means… Yay! Thanks!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:162', false)
+			MainNpc.NpcAddFriendship(3)
+		else:
+			# RANDOM: [A|An]<125:0:0000>! How did you know wh… // But…I asked Santa to bring me [a|an]<12…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:161', false)
+			MainNpc.NpcAddFriendship(5)
+	elif EventFlowSystemActor.MultiItemSelectInclude(13245, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+		# Yay! It's a <item>Yule log! This takes the Toy Day cake…'cause it IS Toy Day cake! So yummy!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:151', false)
+		MainNpc.NpcAddFriendship(4)
+	elif EventFlowSystemActor.ItemIsDecoratedAtTalkNpcHouse('cItemSelect'):
+		# [A|An]<125:0:0000>! How'd you know I like these? This is fantastic! Now I have extra for when I have my next <110:7:cd00> juice disaster!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:152', false)
+		MainNpc.NpcAddFriendship(3)
+	elif EventFlowSystemActor.UISelectedItemIsEquiped(0, 'cItemSelect', false):
+		switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='Tops', ItemKindTypeB='OnePiece', ItemKindTypeC='Cap', ItemKindTypeD='Accessory', JudgeTarget='cItemSelect'):
+			case 4, 0:
+				# [A|An]<125:0:0000>! This is awesome! I already loved mine, but now I can love even MORE of mine!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153_02', false)
+			case 1, 2:
+				# [A|An]<125:0:0000>! This is so great. I was real worried I might have to wash these clothes someday, but now I won't. Yay!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153', false)
+			case 3:
+				if EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect'):
+					# [A|An]<125:0:0000>! This is awesome! I already loved mine, but now I can love even MORE of mine!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153_02', false)
+				else:
+					# [A|An]<125:0:0000>? How'd you know what kind of stuff I like on my head? Oh…you looked at my head, didn't you? So clever!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:153_01', false)
+		MainNpc.NpcAddFriendship(3)
+	elif EventFlowSystemActor.UISelectedItemIsEquiped(8, 'cItemSelect', false):
+		switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='Tops', ItemKindTypeB='OnePiece', ItemKindTypeC='Cap', ItemKindTypeD='Accessory', JudgeTarget='cItemSelect'):
+			case 4, 0:
+				# [A|An]<125:0:0000>? How'd you know? I love yours sooo much… This is really great!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154_02', false)
+			case 1, 2:
+				# Wow! Did you really get me [a|an]<125:0:0000>? Yay! Now we can dress like each other! That's exactly what I wanted for Toy Day!
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154', false)
+			case 3:
+				if EventFlowSystemActor.MultiMessageCategoryItemSelectInclude('HeadHairAcce', '', '', '', '', '', '', '', 'cItemSelect'):
+					# [A|An]<125:0:0000>? How'd you know? I love yours sooo much… This is really great!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154_02', false)
+				else:
+					# [A|An]<125:0:0000>! This is amazing! I've always said you have the best-dressed head on ISLAND. Now I will too!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:154_01', false)
+		MainNpc.NpcAddFriendship(4)
+	elif EventFlowSystemActor.MultiKindItemSelectInclude('Honeycomb', 'Fruit', 'Mushroom', 'ShellDrift', 'Fossil', 'None', 'None', '', 'cItemSelect'):
+		if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 8000:
+			run Sub_Event81()
+		elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 2001:
+			run Sub_Event83()
+		else:
+			run Sub_Event82()
+	else:
+		if EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') >= 2000:
+			run Sub_Event81()
+		elif EventFlowSystemActor.UICheckSelectedItemPrice('cItemSelect') < 501:
+			run Sub_Event83()
+		else:
+			run Sub_Event82()
+
 flow PresentLottery0():
-    MainNpc.SetXmasRewardItem(false)
-    MainNpc.SetDeliveryItem(52, true)
-    MainNpc.NpcDelivery(1, '"Default"')
- 
+	MainNpc.SetXmasRewardItem(false)
+	MainNpc.SetDeliveryItem(52, true)
+	MainNpc.NpcDelivery(1, '"Default"')
+
 flow Root():
-    if EventFlowSystemActor.EventCheck('XmasEve') == 1:
-        if not EventFlowSystemActor.IsMyVillage():
-            run OtherChristmas()
-        elif not System.EventFlags['cPlayer:ReiTalkFirst']:
-            run SantaPresentNoBag()
-        elif System.EventFlags['cPlayer:ReiStartQuest2']:
-            if System.EventFlags['cPlayer:ReiGetReward3']:
-                run Sub_Event129()
-            else:
-                run SantaPresentsNoGet()
-                run SantaMission0()
-        else:
-            if EventFlowSystemActor.CheckChristmasSantaPresentsProgress(true, 0):
-                run Sub_Event129()
-            else:
-                run SantaPresentNoBag()
- 
+	if EventFlowSystemActor.EventCheck('XmasEve') == 1:
+		if not EventFlowSystemActor.IsMyVillage():
+			run OtherChristmas()
+		elif not System.EventFlags['cPlayer:ReiTalkFirst']:
+			run SantaPresentNoBag()
+		elif System.EventFlags['cPlayer:ReiStartQuest2']:
+			if System.EventFlags['cPlayer:ReiGetReward3']:
+				run Sub_Event129()
+			else:
+				run SantaPresentsNoGet()
+				run SantaMission0()
+		else:
+			if EventFlowSystemActor.CheckChristmasSantaPresentsProgress(true, 0):
+				run Sub_Event129()
+			else:
+				run SantaPresentNoBag()
+
 flow SantaCosplayCheck0():
-    if (EventFlowSystemActor.IsEquipSantaCostume()) and (not MainNpc.EventFlags['cNpcMemory:ChristmasCosJudgeFlag']):
-        # RANDOM: I didn't think I could get any more exc… // Is that a Santa outfit? Wow! Even your … // Why are you dressed up like Santa? Wait…
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:003', false)
-        MainNpc.EventFlags['cNpcMemory:ChristmasCosJudgeFlag'] = true
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (EventFlowSystemActor.IsEquipSantaCostume()) and (not MainNpc.EventFlags['cNpcMemory:ChristmasCosJudgeFlag']):
+		# RANDOM: I didn't think I could get any more exc… // Is that a Santa outfit? Wow! Even your … // Why are you dressed up like Santa? Wait…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:003', false)
+		MainNpc.EventFlags['cNpcMemory:ChristmasCosJudgeFlag'] = true
+		EventFlowSystemActor.ExitFlowchart()
+
 flow SantaMission0():
-    if MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag']:
-        run SantaCosplayCheck0()
-        # RANDOM: I'm so excited I got a present from San… // Hey, are you gonna be done being Santa'… // What's it like to deliver presents for …
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:050', false)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.PlayerIsEquipItem(13836, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
-        if EventFlowSystemActor.IsEquipSantaCostume():
-            # RANDOM: SANTA! Wait… <50:3><110:3>? Wow! With t… // I have a gift for you! // Happy Toy Day! // Those clothes! That bag! And in the bag… // I have a gift for you! // Happy Toy Day! // Oh, wow! You've got the bag and the cos… // I have a gift for you! // Happy Toy Day!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:051', false)
-            MainNpc.EventFlags['cNpcMemory:ChristmasCosJudgeFlag'] = true
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Sub_Event162()
-            else:
-                run Sub_Event163()
-        else:
-            # RANDOM: No way! Is that…that bag isn't Santa's … // I have a gift for you! // Happy Toy Day! // So what's in the bag? Is it a whole bun… // I have a gift for you! // Happy Toy Day! // Hey, I don't know if you know this, but… // I have a gift for you! // Happy Toy Day!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:052', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                run Sub_Event162()
-            else:
-                run Sub_Event163()
-        MainNpc.NpcAddFriendship(3)
-        MainNpc.NpcDelivery(3, 'Default')
-        MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag'] = true
-        if (MainNpc.IsSantaMissionNpc()) and (not MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsReturnFlag']):
-            # RANDOM: Man, helping out Santa is a BIG DEAL. I… // Hey, I've got something here I was plan…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:055', false)
-            if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-                # Aww… But it's gonna have to wait, 'cause there's no more room in your pockets. Come back later for it, OK?
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:057', false)
-                MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag'] = true
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-            else:
-                MainNpc.MessageSuspend()
-                MainNpc.SetXmasRewardItem(true)
-                MainNpc.SetDeliveryItem(52, true)
-                MainNpc.NpcDelivery(1, '"Default"')
-                # RANDOM: Thank you for helping Santa. And thank … // You've made this the best Toy Day ever!…
-                MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:056', false)
-                MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsReturnFlag'] = true
-                EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    else:
-        run SantaPresentNoBag()
- 
+	if MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag']:
+		run SantaCosplayCheck0()
+		# RANDOM: I'm so excited I got a present from San… // Hey, are you gonna be done being Santa'… // What's it like to deliver presents for …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:050', false)
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.PlayerIsEquipItem(13836, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cAll', true, false):
+		if EventFlowSystemActor.IsEquipSantaCostume():
+			# RANDOM: SANTA! Wait… <50:3><110:3>? Wow! With t… // I have a gift for you! // Happy Toy Day! // Those clothes! That bag! And in the bag… // I have a gift for you! // Happy Toy Day! // Oh, wow! You've got the bag and the cos… // I have a gift for you! // Happy Toy Day!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:051', false)
+			MainNpc.EventFlags['cNpcMemory:ChristmasCosJudgeFlag'] = true
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Sub_Event162()
+			else:
+				run Sub_Event163()
+		else:
+			# RANDOM: No way! Is that…that bag isn't Santa's … // I have a gift for you! // Happy Toy Day! // So what's in the bag? Is it a whole bun… // I have a gift for you! // Happy Toy Day! // Hey, I don't know if you know this, but… // I have a gift for you! // Happy Toy Day!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:052', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Sub_Event162()
+			else:
+				run Sub_Event163()
+		MainNpc.NpcAddFriendship(3)
+		MainNpc.NpcDelivery(3, 'Default')
+		MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag'] = true
+		if (MainNpc.IsSantaMissionNpc()) and (not MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsReturnFlag']):
+			# RANDOM: Man, helping out Santa is a BIG DEAL. I… // Hey, I've got something here I was plan…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:055', false)
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Aww… But it's gonna have to wait, 'cause there's no more room in your pockets. Come back later for it, OK?
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:057', false)
+				MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag'] = true
+				EventFlowSystemActor.ExitFlowchart()
+			else:
+				MainNpc.MessageSuspend()
+				MainNpc.SetXmasRewardItem(true)
+				MainNpc.SetDeliveryItem(52, true)
+				MainNpc.NpcDelivery(1, '"Default"')
+				# RANDOM: Thank you for helping Santa. And thank … // You've made this the best Toy Day ever!…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:056', false)
+				MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsReturnFlag'] = true
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			EventFlowSystemActor.ExitFlowchart()
+	else:
+		run SantaPresentNoBag()
+
 flow SantaPresentNoBag():
-    run SantaCosplayCheck0()
-    if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
-        if EventFlowSystemActor.SystemCheckNowStage('cField'):
-            # RANDOM: Every time I remember that it's Toy Day… // Do you think the sky gets presents for … // Have you seen the super-cool reindeer w…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:002', false)
-        else:
-            # RANDOM: I'm real worried. Today's Toy Day, but … // It's cold out…and I don't want Santa to… // It's Toy Day and Santa's coming and I'v…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:001', false)
-    else:
-        if EventFlowSystemActor.SystemCheckNowStage('cField'):
-            # RANDOM: Have you met Jingle yet? He's the reind… // I wonder what I'm gonna get from Santa.… // I haven't been this excited for Toy Day…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:005', false)
-        else:
-            # RANDOM: It's sooo hot today. I really hope Sant… // Whenever I wanna smile, I just think ab… // Look around! I cleaned my room so Santa…
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:004', false)
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	run SantaCosplayCheck0()
+	if EventFlowSystemActor.EnvWeatherArea() == `cWeatherArea_North`:
+		if EventFlowSystemActor.SystemCheckNowStage('cField'):
+			# RANDOM: Every time I remember that it's Toy Day… // Do you think the sky gets presents for … // Have you seen the super-cool reindeer w…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:002', false)
+		else:
+			# RANDOM: I'm real worried. Today's Toy Day, but … // It's cold out…and I don't want Santa to… // It's Toy Day and Santa's coming and I'v…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:001', false)
+	else:
+		if EventFlowSystemActor.SystemCheckNowStage('cField'):
+			# RANDOM: Have you met Jingle yet? He's the reind… // I wonder what I'm gonna get from Santa.… // I haven't been this excited for Toy Day…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:005', false)
+		else:
+			# RANDOM: It's sooo hot today. I really hope Sant… // Whenever I wanna smile, I just think ab… // Look around! I cleaned my room so Santa…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:004', false)
+	EventFlowSystemActor.ExitFlowchart()
+
 flow SantaPresentsNoGet():
-    if MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag']:
-        # I still have your helping-out-Santa present, <110:6>. Want it?
-        MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:058', false)
-        if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-            # Aww… But it's gonna have to wait, 'cause there's no more room in your pockets. Come back later for it, OK?
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:057', false)
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        else:
-            MainNpc.SetXmasRewardItem(true)
-            MainNpc.SetDeliveryItem(52, true)
-            MainNpc.NpcDelivery(1, '"Default"')
-            # Thank you a lot! You really made Toy Day the best, <110:6>!
-            MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:059', false)
-            MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag'] = false
-            MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsReturnFlag'] = true
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag']:
+		# I still have your helping-out-Santa present, <110:6>. Want it?
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:058', false)
+		if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+			# Aww… But it's gonna have to wait, 'cause there's no more room in your pockets. Come back later for it, OK?
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:057', false)
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			MainNpc.SetXmasRewardItem(true)
+			MainNpc.SetDeliveryItem(52, true)
+			MainNpc.NpcDelivery(1, '"Default"')
+			# Thank you a lot! You really made Toy Day the best, <110:6>!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:059', false)
+			MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag'] = false
+			MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsReturnFlag'] = true
+			EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event129():
-    run SantaPresentsNoGet()
-    run GiftExchange()
- 
+	run SantaPresentsNoGet()
+	run GiftExchange()
+
 local flow Sub_Event162():
-    MainNpc.MessageSuspend()
-    MainNpc.SetDeliveryItemAtRandom(2213, false, 'cVillageRemakePattern', 0)
-    MainNpc.WrapDeliveryItem('cWrappingPouchOrnament')
-    MainNpc.NpcDelivery(0, 'Keep')
-    # RANDOM: For who? For me? A gift? From Santa? Wo… // Oh! This is neat. Wait, this is from… I…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:053', false)
- 
+	MainNpc.MessageSuspend()
+	MainNpc.SetDeliveryItemAtRandom(2213, false, 'cVillageRemakePattern', 0)
+	MainNpc.WrapDeliveryItem('cWrappingPouchOrnament')
+	MainNpc.NpcDelivery(0, 'Keep')
+	# RANDOM: For who? For me? A gift? From Santa? Wo… // Oh! This is neat. Wait, this is from… I…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:053', false)
+
 local flow Sub_Event163():
-    MainNpc.MessageSuspend()
-    MainNpc.SetDeliveryItemAtRandom(2213, false, 'cVillageRemakePattern', 0)
-    MainNpc.WrapDeliveryItem('cWrappingPouchOrnament')
-    MainNpc.NpcDelivery(0, 'Keep')
-    # RANDOM: Ah huh huh! Happy Toy Day to you too! W… // It is a happy Toy Day, isn't it? The on…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:054', false)
- 
+	MainNpc.MessageSuspend()
+	MainNpc.SetDeliveryItemAtRandom(2213, false, 'cVillageRemakePattern', 0)
+	MainNpc.WrapDeliveryItem('cWrappingPouchOrnament')
+	MainNpc.NpcDelivery(0, 'Keep')
+	# RANDOM: Ah huh huh! Happy Toy Day to you too! W… // It is a happy Toy Day, isn't it? The on…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:054', false)
+
 local flow Sub_Event64():
-    MainNpc.NpcDelivery(10, '"Default"')
-    EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	MainNpc.NpcDelivery(10, '"Default"')
+	EventFlowSystemActor.ExitFlowchart()
+
 local flow Sub_Event81():
-    SubflowResults[1] = 0
-    # RANDOM: You got me exactly what I wanted! [A|An… // Wow! For me? Really? Seriously? [A|An]<…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:155', false)
-    MainNpc.NpcAddFriendship(3)
- 
+	SubflowResults[1] = 0
+	# RANDOM: You got me exactly what I wanted! [A|An… // Wow! For me? Really? Seriously? [A|An]<…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:155', false)
+	MainNpc.NpcAddFriendship(3)
+
 local flow Sub_Event82():
-    SubflowResults[1] = 1
-    # RANDOM: Oh that's cool! You actually got me [a|… // Whoa! Did you really, REALLY get me [a|…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:156', false)
-    MainNpc.NpcAddFriendship(2)
- 
+	SubflowResults[1] = 1
+	# RANDOM: Oh that's cool! You actually got me [a|… // Whoa! Did you really, REALLY get me [a|…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:156', false)
+	MainNpc.NpcAddFriendship(2)
+
 local flow Sub_Event83():
-    SubflowResults[1] = 2
-    # RANDOM: Oh cool! You got me my very own <125:0:… // Did you really pick out [a|an] <125:0:0…
-    MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:157', false)
-    MainNpc.NpcAddFriendship(3)
- 
+	SubflowResults[1] = 2
+	# RANDOM: Oh cool! You got me my very own <125:0:… // Did you really pick out [a|an] <125:0:0…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/GEvent/BO_GEvent_ChristmasEve:157', false)
+	MainNpc.NpcAddFriendship(3)

@@ -1,292 +1,291 @@
 flow AddFollow():
-    EventFlowSystemActor.SetTagFromSystem('cWherearenFollowNameD', 'cDegit', 0, -2, '')
-    # Follow <115:0:cd00>?
-    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1206', true)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        SubflowResults[0] = 2
-    else:
-        EventFlowSystemActor.MessageLockNext(1)
-        # Following...
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1211', false)
-        EventFlowSystemActor.NetWherearenAddFollowList('cUI')
-        EventFlowSystemActor.MessageSuspend()
-        EventFlowSystemActor.MessageUnlockNext()
-        if EventFlowSystemActor.CheckErrorType(2):
-            switch EventFlowSystemActor.NetWherearenAddFollowFailReason():
-                case 0:
-                    # Your follow list is full. Please make room on your list, then try following them again.
-                    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1210', true)
-                    SubflowResults[0] = 1
-                case 1:
-                    run Sub_Event119()
-                case 2:
-                    # Unable to follow the designer you selected. If this error persists, reopen the Happy Home Network app and try again.
-                    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1216', true)
-                    SubflowResults[0] = 1
-        else:
-            run Sub_Event119()
- 
+	EventFlowSystemActor.SetTagFromSystem('cWherearenFollowNameD', 'cDegit', 0, -2, '')
+	# Follow <115:0:cd00>?
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1206', true)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		SubflowResults[0] = 2
+	else:
+		EventFlowSystemActor.MessageLockNext(1)
+		# Following...
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1211', false)
+		EventFlowSystemActor.NetWherearenAddFollowList('cUI')
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.MessageUnlockNext()
+		if EventFlowSystemActor.CheckErrorType(2):
+			switch EventFlowSystemActor.NetWherearenAddFollowFailReason():
+				case 0:
+					# Your follow list is full. Please make room on your list, then try following them again.
+					EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1210', true)
+					SubflowResults[0] = 1
+				case 1:
+					run Sub_Event119()
+				case 2:
+					# Unable to follow the designer you selected. If this error persists, reopen the Happy Home Network app and try again.
+					EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1216', true)
+					SubflowResults[0] = 1
+		else:
+			run Sub_Event119()
+
 flow DownloadOpusData():
-    if EventFlowSystemActor.UIWherearenInspectBeforeList() in (0, 1, 2, 3, 4):
-        # Preparing to head out...
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1212', false)
-    else:
-        EventFlowSystemActor.UINetConnectWaitAppear()
-    EventFlowSystemActor.NetWherearenDownloadOpusData()
-    if EventFlowSystemActor.UIWherearenInspectBeforeList() in (0, 1, 2, 3, 4):
-        EventFlowSystemActor.MessageSuspend()
-    else:
-        EventFlowSystemActor.UINetConnectWaitDisappear()
-    if EventFlowSystemActor.CheckErrorType(2):
-        # Unable to tour at this time. If you continue to get this error, please reopen the Happy Home Network app and try again.
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1208', true)
-        SubflowResults[0] = 1
-    else:
-        SubflowResults[0] = 0
- 
+	if EventFlowSystemActor.UIWherearenInspectBeforeList() in (0, 1, 2, 3, 4):
+		# Preparing to head out...
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1212', false)
+	else:
+		EventFlowSystemActor.UINetConnectWaitAppear()
+	EventFlowSystemActor.NetWherearenDownloadOpusData()
+	if EventFlowSystemActor.UIWherearenInspectBeforeList() in (0, 1, 2, 3, 4):
+		EventFlowSystemActor.MessageSuspend()
+	else:
+		EventFlowSystemActor.UINetConnectWaitDisappear()
+	if EventFlowSystemActor.CheckErrorType(2):
+		# Unable to tour at this time. If you continue to get this error, please reopen the Happy Home Network app and try again.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1208', true)
+		SubflowResults[0] = 1
+	else:
+		SubflowResults[0] = 0
+
 flow FollowList():
-    EventFlowSystemActor.UINetConnectWaitAppear()
-    EventFlowSystemActor.NetWherearenGetFollowList()
-    EventFlowSystemActor.UINetConnectWaitDisappear()
-    if EventFlowSystemActor.CheckErrorType(2):
-        EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
-        run FollowList_NotGetList()
-    else:
-        EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
-        run FollowList_NotGetList()
- 
+	EventFlowSystemActor.UINetConnectWaitAppear()
+	EventFlowSystemActor.NetWherearenGetFollowList()
+	EventFlowSystemActor.UINetConnectWaitDisappear()
+	if EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
+		run FollowList_NotGetList()
+	else:
+		EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
+		run FollowList_NotGetList()
+
 flow FollowList_NotGetList():
-    EventFlowSystemActor.UIWherearenInspectFollowListHandling()
-    switch EventFlowSystemActor.UIWherearenInspectFollowListResult():
-        case 0:
-            run WherearenInspectList()
-        case 1:
-            run GetUserOpusList()
-            if SubflowResults@2[0] == 0:
-                run WherearenInspectUserPage()
-            else:
-                run FollowList()
-        case 2:
-            run StopFollow()
-            run FollowList_NotGetList()
- 
+	EventFlowSystemActor.UIWherearenInspectFollowListHandling()
+	switch EventFlowSystemActor.UIWherearenInspectFollowListResult():
+		case 0:
+			run WherearenInspectList()
+		case 1:
+			run GetUserOpusList()
+			if SubflowResults@2[0] == 0:
+				run WherearenInspectUserPage()
+			else:
+				run FollowList()
+		case 2:
+			run StopFollow()
+			run FollowList_NotGetList()
+
 flow GetOpusList():
-    EventFlowSystemActor.NetWherearenGetFollowList()
-    if EventFlowSystemActor.CheckErrorType(2):
-        SubflowResults[0] = 1
-    else:
-        EventFlowSystemActor.NetWherearenSearchOpusList('cPickUp')
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[0] = 1
-        else:
-            EventFlowSystemActor.NetWherearenSearchOpusList('cTimeline')
-            if EventFlowSystemActor.CheckErrorType(2):
-                SubflowResults[0] = 1
-            else:
-                SubflowResults[0] = 0
- 
+	EventFlowSystemActor.NetWherearenGetFollowList()
+	if EventFlowSystemActor.CheckErrorType(2):
+		SubflowResults[0] = 1
+	else:
+		EventFlowSystemActor.NetWherearenSearchOpusList('cPickUp')
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+		else:
+			EventFlowSystemActor.NetWherearenSearchOpusList('cTimeline')
+			if EventFlowSystemActor.CheckErrorType(2):
+				SubflowResults[0] = 1
+			else:
+				SubflowResults[0] = 0
+
 flow GetUserOpusList():
-    EventFlowSystemActor.UINetConnectWaitAppear()
-    EventFlowSystemActor.NetWherearenSearchOpusList('cUser')
-    EventFlowSystemActor.UINetConnectWaitDisappear()
-    if EventFlowSystemActor.CheckErrorType(2):
-        SubflowResults[0] = 1
-    else:
-        SubflowResults[0] = 0
- 
+	EventFlowSystemActor.UINetConnectWaitAppear()
+	EventFlowSystemActor.NetWherearenSearchOpusList('cUser')
+	EventFlowSystemActor.UINetConnectWaitDisappear()
+	if EventFlowSystemActor.CheckErrorType(2):
+		SubflowResults[0] = 1
+	else:
+		SubflowResults[0] = 0
+
 flow InspectHouse():
-    System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_InspectHouse'] = true
-    System.EventFlags['cPlayerTemp:WHEREAREN_ManTalkReserve_Inspect'] = true
-    EventFlowSystemActor.MiniGameSilentCancel()
-    System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromSmartphone'] = false
-    System.EventFlags['cPlayer:EquipLicenseHelmet'] = false
-    System.EventFlags['cPlayerTemp:WHEREAREN_NeedsInspectReply'] = false
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenInspect', 'cWherearenInspectGo', 'cWherearenInspectGo', 'cBlack', 1.0, 1.0)
- 
+	System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_InspectHouse'] = true
+	System.EventFlags['cPlayerTemp:WHEREAREN_ManTalkReserve_Inspect'] = true
+	EventFlowSystemActor.MiniGameSilentCancel()
+	System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlannerFromSmartphone'] = false
+	System.EventFlags['cPlayer:EquipLicenseHelmet'] = false
+	System.EventFlags['cPlayerTemp:WHEREAREN_NeedsInspectReply'] = false
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenInspect', 'cWherearenInspectGo', 'cWherearenInspectGo', 'cBlack', 1.0, 1.0)
+
 flow ReSelectionWherearenInspectList():
-    EventFlowSystemActor.UIWherearenInspectListReSelection()
-    run Event3()
- 
+	EventFlowSystemActor.UIWherearenInspectListReSelection()
+	run Event3()
+
 flow ReSelectionWherearenInspectUserPage():
-    EventFlowSystemActor.UIWherearenInspectUserReSelection()
-    run Event51()
- 
+	EventFlowSystemActor.UIWherearenInspectUserReSelection()
+	run Event51()
+
 flow Root():
-    if not EventFlowSystemActor.IsWherearenAocAvailable():
-        EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
-        # To play the content past this point, you must have a paid membership to Nintendo Switch Online, as well as the paid downloadable content for this sof…
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4006', true)
-        EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
-        run System_WherearenResortPlanner::ConstructionPortfolioApprun System_WherearenResortPlanner::ConstructionPortfolioApp()
-    elif (EventFlowSystemActor.IsWherearenOrderStaySequence()) or (System.EventFlags['cWherearenPlayer:IsParty']) or (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
-        # You can't do that right now.
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4009', true)
-        run System_WherearenResortPlanner::ConstructionPortfolioApprun System_WherearenResortPlanner::ConstructionPortfolioApp()
-    elif (System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_GetPickUp']) and (EventFlowSystemActor.NetMode() not in (0, 1)):
-        run WherearenInspectList()
-    else:
-        run System_WherearenResortPlanner_Net::SignIn_ResortPlannerRootrun System_WherearenResortPlanner_Net::SignIn_ResortPlannerRoot(GetRAID=false)
-        if SubflowResults@2[0] == 0:
-            EventFlowSystemActor.UIPortfolioInspectLoadAppear()
-            if System.EventFlags['cPlayerTemp:WHEREAREN_NeedSaveAfterUserRegist']:
-                EventFlowSystemActor.UISaveIconAppear()
-                EventFlowSystemActor.SaveSimpleSave('cAll')
-                EventFlowSystemActor.UISaveIconDisappear()
-                System.EventFlags['cPlayerTemp:WHEREAREN_NeedSaveAfterUserRegist'] = false
-            run GetOpusList()
-            EventFlowSystemActor.UIPortfolioInspectLoadDisappear()
-            if SubflowResults@2[0] == 0:
-                System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_GetPickUp'] = true
-                run WherearenInspectList()
-            else:
-                run System_WherearenResortPlanner::ConstructionPortfolioApprun System_WherearenResortPlanner::ConstructionPortfolioApp()
-        else:
-            run System_WherearenResortPlanner::ConstructionPortfolioApprun System_WherearenResortPlanner::ConstructionPortfolioApp()
- 
+	if not EventFlowSystemActor.IsWherearenAocAvailable():
+		EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+		# To play the content past this point, you must have a paid membership to Nintendo Switch Online, as well as the paid downloadable content for this sof…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4006', true)
+		EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+		run System_WherearenResortPlanner::ConstructionPortfolioApp()
+	elif (EventFlowSystemActor.IsWherearenOrderStaySequence()) or (System.EventFlags['cWherearenPlayer:IsParty']) or (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
+		# You can't do that right now.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4009', true)
+		run System_WherearenResortPlanner::ConstructionPortfolioApp()
+	elif (System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_GetPickUp']) and (EventFlowSystemActor.NetMode() not in (0, 1)):
+		run WherearenInspectList()
+	else:
+		run System_WherearenResortPlanner_Net::SignIn_ResortPlannerRoot(GetRAID=false)
+		if SubflowResults@2[0] == 0:
+			EventFlowSystemActor.UIPortfolioInspectLoadAppear()
+			if System.EventFlags['cPlayerTemp:WHEREAREN_NeedSaveAfterUserRegist']:
+				EventFlowSystemActor.UISaveIconAppear()
+				EventFlowSystemActor.SaveSimpleSave('cAll')
+				EventFlowSystemActor.UISaveIconDisappear()
+				System.EventFlags['cPlayerTemp:WHEREAREN_NeedSaveAfterUserRegist'] = false
+			run GetOpusList()
+			EventFlowSystemActor.UIPortfolioInspectLoadDisappear()
+			if SubflowResults@2[0] == 0:
+				System.EventFlags['cPlayerTemp:WHREAREN_ResrotPlanner_GetPickUp'] = true
+				run WherearenInspectList()
+			else:
+				run System_WherearenResortPlanner::ConstructionPortfolioApp()
+		else:
+			run System_WherearenResortPlanner::ConstructionPortfolioApp()
+
 flow StopFollow():
-    EventFlowSystemActor.SetTagFromSystem('cWherearenRemoveFollowNameD', 'cDegit', 0, -2, '')
-    # Do you want to stop following them?
-    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1204', true)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        SubflowResults[0] = 2
-    else:
-        EventFlowSystemActor.UINetConnectWaitAppear()
-        EventFlowSystemActor.NetWherearenRemoveFollowList('cUI')
-        EventFlowSystemActor.UINetConnectWaitDisappear()
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[0] = 1
-        else:
-            System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = true
-            SubflowResults[0] = 0
- 
+	EventFlowSystemActor.SetTagFromSystem('cWherearenRemoveFollowNameD', 'cDegit', 0, -2, '')
+	# Do you want to stop following them?
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1204', true)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		SubflowResults[0] = 2
+	else:
+		EventFlowSystemActor.UINetConnectWaitAppear()
+		EventFlowSystemActor.NetWherearenRemoveFollowList('cUI')
+		EventFlowSystemActor.UINetConnectWaitDisappear()
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+		else:
+			System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = true
+			SubflowResults[0] = 0
+
 local flow Sub_Event119():
-    System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = true
-    SubflowResults[0] = 0
- 
+	System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = true
+	SubflowResults[0] = 0
+
 local flow Sub_Event30():
-    EventFlowSystemActor.SetTagFromUIResult('cWherearenSwkbdPlannerID', 0)
-    # There is no profile page with an HHN ID of <140:17:cd00>. Would you like to try again?
-    EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1203', true)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        run WherearenInspectList()
-    else:
-        run WherearenInspectSearchID()
- 
+	EventFlowSystemActor.SetTagFromUIResult('cWherearenSwkbdPlannerID', 0)
+	# There is no profile page with an HHN ID of <140:17:cd00>. Would you like to try again?
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1203', true)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run WherearenInspectList()
+	else:
+		run WherearenInspectSearchID()
+
 flow UpdateTimeLine():
-    if System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated']:
-        EventFlowSystemActor.NetWherearenSearchOpusList('cTimeline')
-        if EventFlowSystemActor.CheckErrorType(2):
-            SubflowResults[0] = 1
-        else:
-            System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = false
-            SubflowResults[0] = 0
-    else:
-        SubflowResults[0] = 0
- 
+	if System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated']:
+		EventFlowSystemActor.NetWherearenSearchOpusList('cTimeline')
+		if EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[0] = 1
+		else:
+			System.EventFlags['cPlayerTemp:WHEREAREN_ResortPlanner_IsFollowUpdated'] = false
+			SubflowResults[0] = 0
+	else:
+		SubflowResults[0] = 0
+
 flow WherearenInspectList():
-    run UpdateTimeLine()
-    if SubflowResults@2[0] == 0:
-        EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
-    else:
-        EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
-    EventFlowSystemActor.UIWherearenInspectListAppear()
-    EventFlowSystemActor.SystemFaderRelease()
-    EventFlowSystemActor.UIWherearenInspectListWaitManipulate()
+	run UpdateTimeLine()
+	if SubflowResults@2[0] == 0:
+		EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
+	else:
+		EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
+	EventFlowSystemActor.UIWherearenInspectListAppear()
+	EventFlowSystemActor.SystemFaderRelease()
+	EventFlowSystemActor.UIWherearenInspectListWaitManipulate()
 entrypoint Event3:
-    switch EventFlowSystemActor.UIWherearenInspectListResult():
-        case 0:
-            EventFlowSystemActor.UIWherearenInspectListDisappear()
-            run System_WherearenResortPlanner::SequenceEndApprun System_WherearenResortPlanner::SequenceEndApp()
-        case 1:
-            run DownloadOpusData()
-            if SubflowResults@2[0] == 0:
-                run InspectHouse()
-            else:
-                run ReSelectionWherearenInspectList()
-        case 2:
-            EventFlowSystemActor.UIWherearenInspectListDisappear()
-            run System_WherearenResortPlanner::ConstructionPortfolioApprun System_WherearenResortPlanner::ConstructionPortfolioApp()
-        case 3:
-            EventFlowSystemActor.UIWherearenInspectListDisappear()
-            run GetUserOpusList()
-            if SubflowResults@2[0] == 0:
-                run WherearenInspectUserPage()
-            else:
-                run WherearenInspectList()
-        case 4:
-            EventFlowSystemActor.UIWherearenInspectListDisappear()
-            run WherearenInspectSearchID()
-        case 5:
-            EventFlowSystemActor.UIWherearenInspectListDisappear()
-            run FollowList()
-        case 6:
-            run AddFollow()
-            run ReSelectionWherearenInspectList()
-        case 7:
-            EventFlowSystemActor.NetWherearenSearchOpusList('cTimeline')
-            switch EventFlowSystemActor.CheckErrorType(2):
-                case 0, 1:
-                    run UpdateTimeLine()
-                    if SubflowResults@2[0] == 0:
-                        EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
-                    else:
-                        EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
-                    run ReSelectionWherearenInspectList()
-        case 8:
-            EventFlowSystemActor.UIWherearenInspectListDisappear()
-            run System_WherearenResortPlannerMyPage::MyPromotionrun System_WherearenResortPlannerMyPage::MyPromotion()
- 
+	switch EventFlowSystemActor.UIWherearenInspectListResult():
+		case 0:
+			EventFlowSystemActor.UIWherearenInspectListDisappear()
+			run System_WherearenResortPlanner::SequenceEndApp()
+		case 1:
+			run DownloadOpusData()
+			if SubflowResults@2[0] == 0:
+				run InspectHouse()
+			else:
+				run ReSelectionWherearenInspectList()
+		case 2:
+			EventFlowSystemActor.UIWherearenInspectListDisappear()
+			run System_WherearenResortPlanner::ConstructionPortfolioApp()
+		case 3:
+			EventFlowSystemActor.UIWherearenInspectListDisappear()
+			run GetUserOpusList()
+			if SubflowResults@2[0] == 0:
+				run WherearenInspectUserPage()
+			else:
+				run WherearenInspectList()
+		case 4:
+			EventFlowSystemActor.UIWherearenInspectListDisappear()
+			run WherearenInspectSearchID()
+		case 5:
+			EventFlowSystemActor.UIWherearenInspectListDisappear()
+			run FollowList()
+		case 6:
+			run AddFollow()
+			run ReSelectionWherearenInspectList()
+		case 7:
+			EventFlowSystemActor.NetWherearenSearchOpusList('cTimeline')
+			switch EventFlowSystemActor.CheckErrorType(2):
+				case 0, 1:
+					run UpdateTimeLine()
+					if SubflowResults@2[0] == 0:
+EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
+					else:
+EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
+					run ReSelectionWherearenInspectList()
+		case 8:
+			EventFlowSystemActor.UIWherearenInspectListDisappear()
+			run System_WherearenResortPlannerMyPage::MyPromotion()
+
 flow WherearenInspectSearchID():
-    EventFlowSystemActor.UISoftwareKeyboardHandling('cWherearenInspect', true)
-    if EventFlowSystemActor.UIResultMenuDecide():
-        # Searching for profile page...
-        EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1201', false)
-        if EventFlowSystemActor.NetIsValidID('cPlannerID'):
-            EventFlowSystemActor.NetWherearenSearchOpusList('cAuthorID')
-            EventFlowSystemActor.MessageSuspend()
-            if EventFlowSystemActor.CheckErrorType(2):
-                run Sub_Event30()
-            else:
-                EventFlowSystemActor.SetTagFromSystem('cWherearenUserPageNameD', 'cDegit', 0, 0, '')
-                # View <115:0:cd00>'s profile page?
-                EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1202', true)
-                if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                    run WherearenInspectSearchID()
-                else:
-                    EventFlowSystemActor.UIWherearenInspectFootPrintMake('cIDSearch')
-                    run WherearenInspectUserPage()
-        else:
-            EventFlowSystemActor.WaitFrame(20)
-            EventFlowSystemActor.MessageSuspend()
-            run Sub_Event30()
-    else:
-        run WherearenInspectList()
- 
+	EventFlowSystemActor.UISoftwareKeyboardHandling('cWherearenInspect', true)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		# Searching for profile page...
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1201', false)
+		if EventFlowSystemActor.NetIsValidID('cPlannerID'):
+			EventFlowSystemActor.NetWherearenSearchOpusList('cAuthorID')
+			EventFlowSystemActor.MessageSuspend()
+			if EventFlowSystemActor.CheckErrorType(2):
+				run Sub_Event30()
+			else:
+				EventFlowSystemActor.SetTagFromSystem('cWherearenUserPageNameD', 'cDegit', 0, 0, '')
+				# View <115:0:cd00>'s profile page?
+				EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1202', true)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run WherearenInspectSearchID()
+				else:
+					EventFlowSystemActor.UIWherearenInspectFootPrintMake('cIDSearch')
+					run WherearenInspectUserPage()
+		else:
+			EventFlowSystemActor.WaitFrame(20)
+			EventFlowSystemActor.MessageSuspend()
+			run Sub_Event30()
+	else:
+		run WherearenInspectList()
+
 flow WherearenInspectUserPage():
-    EventFlowSystemActor.UIWherearenInspectUserAppear()
-    EventFlowSystemActor.SystemFaderRelease()
-    EventFlowSystemActor.UIWherearenInspectUserWaitManipulate()
+	EventFlowSystemActor.UIWherearenInspectUserAppear()
+	EventFlowSystemActor.SystemFaderRelease()
+	EventFlowSystemActor.UIWherearenInspectUserWaitManipulate()
 entrypoint Event51:
-    switch EventFlowSystemActor.UIWherearenInspectUserPageResult():
-        case 0:
-            EventFlowSystemActor.UIWherearenInspectUserDisappear()
-            switch EventFlowSystemActor.UIWherearenInspectBeforeList():
-                case 0, 1, 4, 5:
-                    run WherearenInspectList()
-                case 2:
-                    run FollowList()
-                case 3:
-                    run WherearenInspectSearchID()
-        case 1:
-            run DownloadOpusData()
-            if SubflowResults@2[0] == 0:
-                run InspectHouse()
-            else:
-                run ReSelectionWherearenInspectUserPage()
-        case 2:
-            run AddFollow()
-            run ReSelectionWherearenInspectUserPage()
-        case 3:
-            run StopFollow()
-            run ReSelectionWherearenInspectUserPage()
- 
+	switch EventFlowSystemActor.UIWherearenInspectUserPageResult():
+		case 0:
+			EventFlowSystemActor.UIWherearenInspectUserDisappear()
+			switch EventFlowSystemActor.UIWherearenInspectBeforeList():
+				case 0, 1, 4, 5:
+					run WherearenInspectList()
+				case 2:
+					run FollowList()
+				case 3:
+					run WherearenInspectSearchID()
+		case 1:
+			run DownloadOpusData()
+			if SubflowResults@2[0] == 0:
+				run InspectHouse()
+			else:
+				run ReSelectionWherearenInspectUserPage()
+		case 2:
+			run AddFollow()
+			run ReSelectionWherearenInspectUserPage()
+		case 3:
+			run StopFollow()
+			run ReSelectionWherearenInspectUserPage()

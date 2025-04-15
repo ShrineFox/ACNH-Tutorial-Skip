@@ -1,387 +1,386 @@
 flow ChkClearNum(ClearNum: int = 0):
-    if System.EventFlags['cLand:ImmQ_A_Complete']:
-        ClearNum += 1
-        System.EventFlags['cPlayer:ImmQHeardClearInfoA'] = true
-    if System.EventFlags['cLand:ImmQ_B_Complete']:
-        ClearNum += 1
-        System.EventFlags['cPlayer:ImmQHeardClearInfoB'] = true
-    if System.EventFlags['cLand:ImmQ_C_Complete']:
-        ClearNum += 1
-        System.EventFlags['cPlayer:ImmQHeardClearInfoC'] = true
-    if ClearNum == 1:
-        SubflowResults[0] = 1
-    elif ClearNum == 2:
-        SubflowResults[0] = 2
-    elif ClearNum == 3:
-        SubflowResults[0] = 3
- 
+	if System.EventFlags['cLand:ImmQ_A_Complete']:
+		ClearNum += 1
+		System.EventFlags['cPlayer:ImmQHeardClearInfoA'] = true
+	if System.EventFlags['cLand:ImmQ_B_Complete']:
+		ClearNum += 1
+		System.EventFlags['cPlayer:ImmQHeardClearInfoB'] = true
+	if System.EventFlags['cLand:ImmQ_C_Complete']:
+		ClearNum += 1
+		System.EventFlags['cPlayer:ImmQHeardClearInfoC'] = true
+	if ClearNum == 1:
+		SubflowResults[0] = 1
+	elif ClearNum == 2:
+		SubflowResults[0] = 2
+	elif ClearNum == 3:
+		SubflowResults[0] = 3
+
 flow Ending():
-    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
-    # Hello, hello, PLAYER!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201', false)
-    switch EventFlowSystemActor.EnvTimeZone():
-        case `05:00-07:59`:
-            # Sorry to bother you so early in the morning, hm?<10:4> I came to thank you for your help with the prep work!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_01', false)
-        case `08:00-11:59`, `12:00-15:59`, `16:00-18:59`:
-            # Sorry to bother you out of the blue, hm?<10:4> I came to thank you for your help with the recent prep work!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_02', false)
-        case `19:00-23:59`:
-            # Sorry to bother you like this in the evening, hm?<10:4> I came to thank you for your help with the recent prep work!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_03', false)
-        case `00:00-04:59`:
-            # Sorry to bother you so late at night, hm?<10:4> I came to thank you for your help with the recent prep work!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_04', false)
-    if EventFlowSystemActor.NpcHouseNum('cConstructed') < 5:
-        if EventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
-            # Thanks to you, the plots are ready and we can move on to construction and welcoming new residents!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:202_01', false)
-        else:
-            # Thanks to you, the plots are ready and we can start welcoming the folks who want to move here!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:202_02', false)
-    else:
-        # Thanks to you, the homes are ready and all the new residents are moved in, safe and sound!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:202_03', false)
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # So, I came by to give you a token of my appreciation, but… it seems my timing is off, because by the looks of things, you can't hold anything more ri…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:203_01', false)
-        EventFlowSystemActor.SelectRewardItemDirect(11711, 50, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-    else:
-        # I've stopped by to deliver a token of my appreciation, as promised.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:203_02', true)
-        run Ending2()
-    if not System.EventFlags['cPlayer:PAnnouceHeardRemakeWsNewsToday']:
-        run UnlockRemake_byPlayerMoving()
-    elif System.EventFlags['cPlayer:EnableDiyRemake']:
-        run UnlockRemake_byPlayerMoving()
-    else:
-        # Well, that's all I needed to say, so if you'll excuse… OHH! That's right! I mentioned it in today's broadcast, but I'm starting a new customization w…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:206', false)
-        System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial'] = false
-        run UnlockRemake_byPlayerMoving()
- 
+	System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+	# Hello, hello, PLAYER!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201', false)
+	switch EventFlowSystemActor.EnvTimeZone():
+		case `05:00-07:59`:
+			# Sorry to bother you so early in the morning, hm?<10:4> I came to thank you for your help with the prep work!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_01', false)
+		case `08:00-11:59`, `12:00-15:59`, `16:00-18:59`:
+			# Sorry to bother you out of the blue, hm?<10:4> I came to thank you for your help with the recent prep work!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_02', false)
+		case `19:00-23:59`:
+			# Sorry to bother you like this in the evening, hm?<10:4> I came to thank you for your help with the recent prep work!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_03', false)
+		case `00:00-04:59`:
+			# Sorry to bother you so late at night, hm?<10:4> I came to thank you for your help with the recent prep work!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:201_04', false)
+	if EventFlowSystemActor.NpcHouseNum('cConstructed') < 5:
+		if EventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
+			# Thanks to you, the plots are ready and we can move on to construction and welcoming new residents!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:202_01', false)
+		else:
+			# Thanks to you, the plots are ready and we can start welcoming the folks who want to move here!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:202_02', false)
+	else:
+		# Thanks to you, the homes are ready and all the new residents are moved in, safe and sound!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:202_03', false)
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# So, I came by to give you a token of my appreciation, but… it seems my timing is off, because by the looks of things, you can't hold anything more ri…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:203_01', false)
+		EventFlowSystemActor.SelectRewardItemDirect(11711, 50, 'cVillageRemakePattern', 0)
+		EventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+	else:
+		# I've stopped by to deliver a token of my appreciation, as promised.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:203_02', true)
+		run Ending2()
+	if not System.EventFlags['cPlayer:PAnnouceHeardRemakeWsNewsToday']:
+		run UnlockRemake_byPlayerMoving()
+	elif System.EventFlags['cPlayer:EnableDiyRemake']:
+		run UnlockRemake_byPlayerMoving()
+	else:
+		# Well, that's all I needed to say, so if you'll excuse… OHH! That's right! I mentioned it in today's broadcast, but I'm starting a new customization w…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:206', false)
+		System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial'] = false
+		run UnlockRemake_byPlayerMoving()
+
 flow Ending2(ItemPrice: int = 0):
-    EventFlowSystemActor.NpcEventItemSet(11711, 'cTalk', 0, ItemPrice)
-    MainNpc.SetDeliveryItemAtRandom(11711, false, 'cVillageRemakePattern', 0)
-    MainNpc.NpcDelivery(1, 'Keep')
-    # It's some fencing! You could surround your home to create a yard or surround some flowers to make a garden… Fencing should make it easier for you to …
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:204', false)
-    # I'm thinking 50 pieces of <item>simple wooden fencing should give you an excellent start. In the future, I'll offer DIY fencing recipes you can get b…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:205', false)
-    System.EventFlags['cPlayer:ImmQGetQuestPrize'] = true
-    MainNpc.NpcDelivery(2, 'Default')
-    EventFlowSystemActor.SetItemToPocket(11711, 50)
- 
+	EventFlowSystemActor.NpcEventItemSet(11711, 'cTalk', 0, ItemPrice)
+	MainNpc.SetDeliveryItemAtRandom(11711, false, 'cVillageRemakePattern', 0)
+	MainNpc.NpcDelivery(1, 'Keep')
+	# It's some fencing! You could surround your home to create a yard or surround some flowers to make a garden… Fencing should make it easier for you to …
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:204', false)
+	# I'm thinking 50 pieces of <item>simple wooden fencing should give you an excellent start. In the future, I'll offer DIY fencing recipes you can get b…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:205', false)
+	System.EventFlags['cPlayer:ImmQGetQuestPrize'] = true
+	MainNpc.NpcDelivery(2, 'Default')
+	EventFlowSystemActor.SetItemToPocket(11711, 50)
+
 flow FinishBridge():
-    System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet'] = false
-    # Ah, PLAYER! Hello, hello!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
-    if EventFlowSystemActor.BridgeNum('cNoReserve') < 1:
-        # Soooo…did you find a good place to deploy your <item>bridge construction kit?
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:017', false)
-        switch EventFlowSystemActor.GeneralTalkChoice2():
-            case 0, 1:
-                # Splendid! Excellent work! Thank you! Then tomorrow we'll have a new bridge up and it'll be even easier to get around the island. Now that that's out …
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:017_01', false)
-    else:
-        run SNPC_rco_05_ChkCeremony::ChkCeremonyBridgerun SNPC_rco_05_ChkCeremony::ChkCeremonyBridge()
-        # Thanks to you, ISLAND has its very own bridge! Our little island has come so far! Yes, yes! This should make it easier to prepare homes for the new g…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:018', false)
-        if SubflowResults@2[9] == 1:
-            # Oh! One more thing…<10:4> I'd like to hold a ceremony to commemorate our new bridge today! Let me know if you want to take part.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:018_01', false)
- 
+	System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet'] = false
+	# Ah, PLAYER! Hello, hello!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+	if EventFlowSystemActor.BridgeNum('cNoReserve') < 1:
+		# Soooo…did you find a good place to deploy your <item>bridge construction kit?
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:017', false)
+		switch EventFlowSystemActor.GeneralTalkChoice2():
+			case 0, 1:
+				# Splendid! Excellent work! Thank you! Then tomorrow we'll have a new bridge up and it'll be even easier to get around the island. Now that that's out …
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:017_01', false)
+	else:
+		run SNPC_rco_05_ChkCeremony::ChkCeremonyBridge()
+		# Thanks to you, ISLAND has its very own bridge! Our little island has come so far! Yes, yes! This should make it easier to prepare homes for the new g…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:018', false)
+		if SubflowResults@2[9] == 1:
+			# Oh! One more thing…<10:4> I'd like to hold a ceremony to commemorate our new bridge today! Let me know if you want to take part.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:018_01', false)
+
 flow FinishBridge_Force():
-    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
-    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
-    run FinishBridge()
- 
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+	System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+	run FinishBridge()
+
 flow FinishBridge_Force_Init():
-    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
- 
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+
 flow FirstIntroduction():
-    if System.EventFlags['cPlayer:NotStartImmQByDIYDisable']:
-        if System.EventFlags['cPlayer:MainmenuRecipe']:
-            # You've learned how to DIY, so now I can get your help with that task I mentioned before.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:903', false)
-            run Sub_Event648()
-        else:
-            # I absolutely, without a doubt, require a DIY master for the tasks at hand! If you say, "About that workshop..." you can take part in the workshop for…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:902', false)
-    else:
-        if System.EventFlags['cPlayer:RcoImmQClear1QuestToday']:
-            # Oh! So you're already ready to help me prepare!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:011_01', false)
-        else:
-            # Oh! So you're ready to help me prepare!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:011_02', false)
-        if System.EventFlags['cPlayer:MainmenuRecipe']:
-            run Sub_Event648()
-        else:
-            # But hold on… <50:3>PLAYER, you've yet to take part in my DIY workshop, correct? I absolutely, without a doubt, require a DIY master for the tasks at …
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:901', false)
-            System.EventFlags['cPlayer:NotStartImmQByDIYDisable'] = true
- 
+	if System.EventFlags['cPlayer:NotStartImmQByDIYDisable']:
+		if System.EventFlags['cPlayer:MainmenuRecipe']:
+			# You've learned how to DIY, so now I can get your help with that task I mentioned before.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:903', false)
+			run Sub_Event648()
+		else:
+			# I absolutely, without a doubt, require a DIY master for the tasks at hand! If you say, "About that workshop..." you can take part in the workshop for…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:902', false)
+	else:
+		if System.EventFlags['cPlayer:RcoImmQClear1QuestToday']:
+			# Oh! So you're already ready to help me prepare!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:011_01', false)
+		else:
+			# Oh! So you're ready to help me prepare!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:011_02', false)
+		if System.EventFlags['cPlayer:MainmenuRecipe']:
+			run Sub_Event648()
+		else:
+			# But hold on… <50:3>PLAYER, you've yet to take part in my DIY workshop, correct? I absolutely, without a doubt, require a DIY master for the tasks at …
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:901', false)
+			System.EventFlags['cPlayer:NotStartImmQByDIYDisable'] = true
+
 flow GetHousingKit():
-    if System.EventFlags['cPlayer:ImmQGetHousingFullItem']:
-        if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
-            # I need to hand you some things for the next part, so please come back when you can carry 3 items.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:032_02', false)
-        else:
-            # You're ready, PLAYER! It looks like you have room to carry what you'll need for your next task.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:032_03', false)
-            run Sub_Event73()
-    else:
-        if System.EventFlags['cPlayer:RcoImmQClear1QuestToday']:
-            # <50:3>PLAYER, the bridge won't be ready until tomorrow, but you want to start on the homes now?
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:031_01', false)
-        else:
-            # Well, then… Our bridge is up, so let's get to work on building some homes!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:031_02', false)
-        if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
-            # Now, I need to hand you some things for this next part, so come back when you can carry 3 items.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:032_01', false)
-            System.EventFlags['cPlayer:ImmQGetHousingFullItem'] = true
-        else:
-            run Sub_Event73()
- 
+	if System.EventFlags['cPlayer:ImmQGetHousingFullItem']:
+		if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
+			# I need to hand you some things for the next part, so please come back when you can carry 3 items.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:032_02', false)
+		else:
+			# You're ready, PLAYER! It looks like you have room to carry what you'll need for your next task.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:032_03', false)
+			run Sub_Event73()
+	else:
+		if System.EventFlags['cPlayer:RcoImmQClear1QuestToday']:
+			# <50:3>PLAYER, the bridge won't be ready until tomorrow, but you want to start on the homes now?
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:031_01', false)
+		else:
+			# Well, then… Our bridge is up, so let's get to work on building some homes!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:031_02', false)
+		if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 3:
+			# Now, I need to hand you some things for this next part, so come back when you can carry 3 items.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:032_01', false)
+			System.EventFlags['cPlayer:ImmQGetHousingFullItem'] = true
+		else:
+			run Sub_Event73()
+
 flow OnlyReservePlace():
-    # Please don't forget: I'm waiting on you to find plots for 3 homes using the <item>housing kits I gave you.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:041', false)
-    if EventFlowSystemActor.NpcHouseNum('cExist') < 3:
-        # After you set up a <item>housing kit for a plot, be sure to check the list of furniture needed for that plot too.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_01', false)
-    else:
-        # Check the box next to each plot marker to find out what furniture we'll need for each home.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_02', false)
- 
+	# Please don't forget: I'm waiting on you to find plots for 3 homes using the <item>housing kits I gave you.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:041', false)
+	if EventFlowSystemActor.NpcHouseNum('cExist') < 3:
+		# After you set up a <item>housing kit for a plot, be sure to check the list of furniture needed for that plot too.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_01', false)
+	else:
+		# Check the box next to each plot marker to find out what furniture we'll need for each home.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_02', false)
+
 flow Rco_FinishMigrantEvent_Reward():
-    # And that's that, my friend! You have finished everything I asked of you.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:107', false)
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # As promised, I will give you a token of my appreciation. However… It looks like you don't have any room to hold it, PLAYER. I'll have to mail it to y…
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:108_01', false)
-        # Well, I couldn't have done this without you, PLAYER. That's for certain.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:109', false)
-        EventFlowSystemActor.SelectRewardItemDirect(11711, 50, 'cVillageRemakePattern', 0)
-        EventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-    else:
-        # Ah! Let me give you a token of my appreciation as promised.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:108_02', false)
-        if System.EventFlags['cPlayerTemp:RcoForceTalk']:
-            MainNpc.NpcMoveToPlayer()
-        # Yes, yes! This is for you!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:108_04', true)
-        run Ending2()
-        # Well, I couldn't have done this without you, PLAYER. That's for certain.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:109', true)
-        if System.EventFlags['cPlayerTemp:RcoForceTalk']:
-            EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-            MainNpc.NpcRailMove(1, true, false, -1, -1, 0)
-            EventFlowSystemActor.WaitFrame(45)
-            EventFlowSystemActor.FadeIn(true)
-    System.EventFlags['cPlayer:ImmQTalkAboutPrize'] = true
-    System.EventFlags['cLand:RcmImmQuestComplete'] = true
-    System.EventFlags['cLand:RcmImmQuestRunning'] = false
- 
+	# And that's that, my friend! You have finished everything I asked of you.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:107', false)
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# As promised, I will give you a token of my appreciation. However… It looks like you don't have any room to hold it, PLAYER. I'll have to mail it to y…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:108_01', false)
+		# Well, I couldn't have done this without you, PLAYER. That's for certain.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:109', false)
+		EventFlowSystemActor.SelectRewardItemDirect(11711, 50, 'cVillageRemakePattern', 0)
+		EventFlowSystemActor.SystemMailSend('cRco', 'MAIL_SNpc_rco', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+	else:
+		# Ah! Let me give you a token of my appreciation as promised.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:108_02', false)
+		if System.EventFlags['cPlayerTemp:RcoForceTalk']:
+			MainNpc.NpcMoveToPlayer()
+		# Yes, yes! This is for you!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:108_04', true)
+		run Ending2()
+		# Well, I couldn't have done this without you, PLAYER. That's for certain.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:109', true)
+		if System.EventFlags['cPlayerTemp:RcoForceTalk']:
+			EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+			MainNpc.NpcRailMove(1, true, false, -1, -1, 0)
+			EventFlowSystemActor.WaitFrame(45)
+			EventFlowSystemActor.FadeIn(true)
+	System.EventFlags['cPlayer:ImmQTalkAboutPrize'] = true
+	System.EventFlags['cLand:RcmImmQuestComplete'] = true
+	System.EventFlags['cLand:RcmImmQuestRunning'] = false
+
 flow Rco_ImmQ_ClearTalk_Force():
-    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
-    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+	System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
 entrypoint Event595:
-    run ChkClearNum()
-    System.EventFlags['cPlayer:ImmQHeardNoticeRemoveFtr'] = false
-    # Ah, PLAYER! Hello, hello!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
-    switch SubflowResults@4[0]:
-        case 1, 2:
-            # So, how goes it? Progressing nicely with the plots and the homes and the furnishings and whatnot?
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:101', false)
-            switch EventFlowSystemActor.GeneralTalkChoice2():
-                case 0, 1:
-                    # Wonderful! That's what I like to hear!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:103_01', false)
-                    run Sub_grp_Event104()
-        case 3:
-            # How have things been going since we last spoke? Are you close to finishing the plots and furniture?
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:102', false)
-            switch EventFlowSystemActor.GeneralTalkChoice2():
-                case 0, 1:
-                    # Goodness! Really?! Thank you so much for all your hard work!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:103_02', false)
-                    run Sub_grp_Event104()
-        default:
-            return
- 
+	run ChkClearNum()
+	System.EventFlags['cPlayer:ImmQHeardNoticeRemoveFtr'] = false
+	# Ah, PLAYER! Hello, hello!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+	switch SubflowResults@4[0]:
+		case 1, 2:
+			# So, how goes it? Progressing nicely with the plots and the homes and the furnishings and whatnot?
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:101', false)
+			switch EventFlowSystemActor.GeneralTalkChoice2():
+				case 0, 1:
+					# Wonderful! That's what I like to hear!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:103_01', false)
+					run Sub_grp_Event104()
+		case 3:
+			# How have things been going since we last spoke? Are you close to finishing the plots and furniture?
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:102', false)
+			switch EventFlowSystemActor.GeneralTalkChoice2():
+				case 0, 1:
+					# Goodness! Really?! Thank you so much for all your hard work!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:103_02', false)
+					run Sub_grp_Event104()
+		default:
+			return
+
 flow Rco_ImmQ_ClearTalk_Force_Init():
-    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
- 
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+
 flow Rco_ImmQ_ClearTalk_NotForce():
-    run Event595()
- 
+	run Event595()
+
 flow Rco_ImmQ_ForceTalkEntry():
-    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPosrun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
-    System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
-    run Rco_ImmQ_ReactTalkEntry()
- 
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+	System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+	run Rco_ImmQ_ReactTalkEntry()
+
 flow Rco_ImmQ_ForceTalkEntry_Init():
-    run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamerarun SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
- 
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_DisableTalkCamera()
+
 flow Rco_ImmQ_ReactTalkEntry():
-    if (System.EventFlags['cLand:RcmImmQuestOpen']) and (not System.EventFlags['cLand:RcmImmQuestComplete']):
-        if not System.EventFlags['cLand:RcmImmQuestRunning']:
-            run SNPC_rco_01_Tent_1_Entries::RcoTentImmQuestIntroNotForcerun SNPC_rco_01_Tent_1_Entries::RcoTentImmQuestIntroNotForce()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        elif not System.EventFlags['cPlayer:ImmQRunningForPlayer']:
-            run SNPC_rco_01_Tent_1_Entries::RcoTentImmQuestIntroNotForcerun SNPC_rco_01_Tent_1_Entries::RcoTentImmQuestIntroNotForce()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        elif System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet']:
-            run FinishBridge()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-        elif (System.EventFlags['cLand:ImmQ_SetBridge']) and (System.EventFlags['cPlayer:ImmQSetBridgeKitMySelf']) and (System.EventFlags['cLand:ImmQ_A_GetHousing']) and (System.EventFlags['cPlayer:ImmQHeardNoticeRemoveFtr']):
-            run Rco_ImmQ_ClearTalk_NotForce()
-            EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if (System.EventFlags['cLand:RcmImmQuestOpen']) and (not System.EventFlags['cLand:RcmImmQuestComplete']):
+		if not System.EventFlags['cLand:RcmImmQuestRunning']:
+			run SNPC_rco_01_Tent_1_Entries::RcoTentImmQuestIntroNotForce()
+			EventFlowSystemActor.ExitFlowchart()
+		elif not System.EventFlags['cPlayer:ImmQRunningForPlayer']:
+			run SNPC_rco_01_Tent_1_Entries::RcoTentImmQuestIntroNotForce()
+			EventFlowSystemActor.ExitFlowchart()
+		elif System.EventFlags['cPlayer:ImmQTalkRcoBridgeKitSet']:
+			run FinishBridge()
+			EventFlowSystemActor.ExitFlowchart()
+		elif (System.EventFlags['cLand:ImmQ_SetBridge']) and (System.EventFlags['cPlayer:ImmQSetBridgeKitMySelf']) and (System.EventFlags['cLand:ImmQ_A_GetHousing']) and (System.EventFlags['cPlayer:ImmQHeardNoticeRemoveFtr']):
+			run Rco_ImmQ_ClearTalk_NotForce()
+			EventFlowSystemActor.ExitFlowchart()
+
 flow Root():
-    if not System.EventFlags['cPlayer:ImmQFirstExplain']:
-        run FirstIntroduction()
-    elif not System.EventFlags['cLand:ImmQ_SetBridge']:
-        # I'm so glad to have your help in building a bridge for our island!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:014', false)
-        if EventFlowSystemActor.HasTargetItem(7211, 1):
-            # With your <item>bridge construction kit on hand, go to the spot where you'll set the bridge, and then…set the bridge! Since you're here, would you li…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_02', false)
-            if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-                # Of course!<10:4> Allow me to begin with the basics of bridge placement…
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_04_01', false)
-                # Now, your <item>bridge construction kit will require the same amount of space it takes to set up a tent.
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_04_02', false)
-                # However, we're spanning water here, so pick a spot on a river—some ideal place for a crossing. Now, if the river is too wide or too narrow or has an …
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_04_03', false)
-            else:
-                # Yes, yes, as I would expect.<10:4> We're all counting on you!
-                MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_03', false)
-        else:
-            # For your first step, you should use the DIY recipe I sent you to assemble a <item>bridge construction kit… Once that's done, take the kit to the spot…
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_01', false)
-    elif System.EventFlags['cLand:ImmQ_A_GetHousing']:
-        # Please don't forget: I'm waiting on you to find plots for 3 homes using the <item>housing kits I gave you.
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:041', false)
-        if EventFlowSystemActor.NpcHouseNum('cExist') < 3:
-            # After you set up a <item>housing kit for a plot, be sure to check the list of furniture needed for that plot too.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_01', false)
-        else:
-            # Check the box next to each plot marker to find out what furniture we'll need for each home.
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_02', false)
-    else:
-        run GetHousingKit()
- 
+	if not System.EventFlags['cPlayer:ImmQFirstExplain']:
+		run FirstIntroduction()
+	elif not System.EventFlags['cLand:ImmQ_SetBridge']:
+		# I'm so glad to have your help in building a bridge for our island!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:014', false)
+		if EventFlowSystemActor.HasTargetItem(7211, 1):
+			# With your <item>bridge construction kit on hand, go to the spot where you'll set the bridge, and then…set the bridge! Since you're here, would you li…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_02', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# Of course!<10:4> Allow me to begin with the basics of bridge placement…
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_04_01', false)
+				# Now, your <item>bridge construction kit will require the same amount of space it takes to set up a tent.
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_04_02', false)
+				# However, we're spanning water here, so pick a spot on a river—some ideal place for a crossing. Now, if the river is too wide or too narrow or has an …
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_04_03', false)
+			else:
+				# Yes, yes, as I would expect.<10:4> We're all counting on you!
+				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_03', false)
+		else:
+			# For your first step, you should use the DIY recipe I sent you to assemble a <item>bridge construction kit… Once that's done, take the kit to the spot…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:015_01', false)
+	elif System.EventFlags['cLand:ImmQ_A_GetHousing']:
+		# Please don't forget: I'm waiting on you to find plots for 3 homes using the <item>housing kits I gave you.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:041', false)
+		if EventFlowSystemActor.NpcHouseNum('cExist') < 3:
+			# After you set up a <item>housing kit for a plot, be sure to check the list of furniture needed for that plot too.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_01', false)
+		else:
+			# Check the box next to each plot marker to find out what furniture we'll need for each home.
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:042_02', false)
+	else:
+		run GetHousingKit()
+
 local flow Sub_Event648():
-    # Here's what I'm thinking… We really should start by building a bridge across a river somewhere… With three homes to build, I worry that we'll run out…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:012_01', true)
-    run Demo_Common_PhoneCall::SendingDataOneWayrun Demo_Common_PhoneCall::SendingDataOneWay()
-    EventFlowSystemActor.PlayerSetCraftRecipe('', 7211)
-    EventFlowSystemActor.PlayerSetCraftRecipe('', 5973)
-    # And done! I've just sent you a recipe for a <item>bridge construction kit. You can find it on your NookPhone.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:012_02', false)
-    MainNpc.SmartPhone(1)
-    # Once you've assembled your <item>bridge construction kit, find a good spot for a bridge and then check in with me. It can be a little tricky to place…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:012_03', false)
-    System.EventFlags['cPlayer:ImmQFirstExplain'] = true
-    System.EventFlags['cLand:QuestReserveStart'] = true
- 
+	# Here's what I'm thinking… We really should start by building a bridge across a river somewhere… With three homes to build, I worry that we'll run out…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:012_01', true)
+	run Demo_Common_PhoneCall::SendingDataOneWay()
+	EventFlowSystemActor.PlayerSetCraftRecipe('', 7211)
+	EventFlowSystemActor.PlayerSetCraftRecipe('', 5973)
+	# And done! I've just sent you a recipe for a <item>bridge construction kit. You can find it on your NookPhone.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:012_02', false)
+	MainNpc.SmartPhone(1)
+	# Once you've assembled your <item>bridge construction kit, find a good spot for a bridge and then check in with me. It can be a little tricky to place…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:012_03', false)
+	System.EventFlags['cPlayer:ImmQFirstExplain'] = true
+	System.EventFlags['cLand:QuestReserveStart'] = true
+
 local flow Sub_Event73():
-    # Please take these 3 <item>housing kits.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:033', true)
-    MainNpc.SetDeliveryItemAtRandom(5827, false, 'cVillageRemakePattern', 0)
-    MainNpc.NpcDelivery(1, 'Default')
-    # With the <item>housing kits I just gave you, you'll pick out plots for 3 homes… Then, of course, these homes will need furniture and such. Each <item…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:034', true)
-    run Demo_Common_PhoneCall::SendingDataOneWayrun Demo_Common_PhoneCall::SendingDataOneWay()
-    EventFlowSystemActor.WaitFrame(5)
-    MainNpc.SmartPhone(1)
-    # I think that's all from me. Thanks for all your help!
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:035', false)
-    EventFlowSystemActor.SetItemToPocket(5827, 1)
-    EventFlowSystemActor.SetItemToPocket(5828, 1)
-    EventFlowSystemActor.SetItemToPocket(5829, 1)
-    System.EventFlags['cLand:ImmQ_A_GetHousing'] = true
-    System.EventFlags['cLand:ImmQ_B_GetHousing'] = true
-    System.EventFlags['cLand:ImmQ_C_GetHousing'] = true
-    EventFlowSystemActor.PlayerSetCraftRecipe('None', 2615)
-    System.EventFlags['cLand:VillageExtensionLevel3'] = true
-    run Player_Demo_HousingFinish::RecipeGetArun Player_Demo_HousingFinish::RecipeGetA()
-    run Player_Demo_HousingFinish::RecipeGetBrun Player_Demo_HousingFinish::RecipeGetB()
-    run Player_Demo_HousingFinish::RecipeGetCrun Player_Demo_HousingFinish::RecipeGetC()
- 
+	# Please take these 3 <item>housing kits.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:033', true)
+	MainNpc.SetDeliveryItemAtRandom(5827, false, 'cVillageRemakePattern', 0)
+	MainNpc.NpcDelivery(1, 'Default')
+	# With the <item>housing kits I just gave you, you'll pick out plots for 3 homes… Then, of course, these homes will need furniture and such. Each <item…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:034', true)
+	run Demo_Common_PhoneCall::SendingDataOneWay()
+	EventFlowSystemActor.WaitFrame(5)
+	MainNpc.SmartPhone(1)
+	# I think that's all from me. Thanks for all your help!
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:035', false)
+	EventFlowSystemActor.SetItemToPocket(5827, 1)
+	EventFlowSystemActor.SetItemToPocket(5828, 1)
+	EventFlowSystemActor.SetItemToPocket(5829, 1)
+	System.EventFlags['cLand:ImmQ_A_GetHousing'] = true
+	System.EventFlags['cLand:ImmQ_B_GetHousing'] = true
+	System.EventFlags['cLand:ImmQ_C_GetHousing'] = true
+	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2615)
+	System.EventFlags['cLand:VillageExtensionLevel3'] = true
+	run Player_Demo_HousingFinish::RecipeGetA()
+	run Player_Demo_HousingFinish::RecipeGetB()
+	run Player_Demo_HousingFinish::RecipeGetC()
+
 local flow Sub_grp_Event104():
-    if System.EventFlags['cPlayer:RcoMigrantProgressTalk1st']:
-        if EventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
-            # Now to hurry with the rest of the construction and welcome residents to their homes!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:111_02', false)
-        else:
-            # Now to hurry with the rest of the construction and welcome any of the residents who have homes!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:111_01', false)
-        run Rco_FinishMigrantEvent_Reward()
-    else:
-        System.EventFlags['cPlayer:RcoMigrantProgressTalk1st'] = true
-        if EventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
-            switch SubflowResults@4[0]:
-                case 1, 2:
-                    # As you finish your part, I'll get started on home construction and welcoming our new residents!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_01', false)
-                    run Sub_grp_Event816()
-                case 3:
-                    # That means the rest is up to me! I'll get started on home construction right away so we can welcome our new island residents.
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_02', false)
-                    run Sub_grp_Event816()
-                default:
-                    return
-        else:
-            switch SubflowResults@4[0]:
-                case 2:
-                    # Now I can get to work on home construction and welcoming new residents!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_03', false)
-                    # Anyhoo, keep up the good work!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:110', false)
-                case 3:
-                    # Because of you, I'm in construction mode AND welcome-to-the-island mode!
-                    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_04', false)
-                    run Rco_FinishMigrantEvent_Reward()
-                default:
-                    return
- 
+	if System.EventFlags['cPlayer:RcoMigrantProgressTalk1st']:
+		if EventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
+			# Now to hurry with the rest of the construction and welcome residents to their homes!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:111_02', false)
+		else:
+			# Now to hurry with the rest of the construction and welcome any of the residents who have homes!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:111_01', false)
+		run Rco_FinishMigrantEvent_Reward()
+	else:
+		System.EventFlags['cPlayer:RcoMigrantProgressTalk1st'] = true
+		if EventFlowSystemActor.NpcHouseNum('cConstructed') < 3:
+			switch SubflowResults@4[0]:
+				case 1, 2:
+					# As you finish your part, I'll get started on home construction and welcoming our new residents!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_01', false)
+					run Sub_grp_Event816()
+				case 3:
+					# That means the rest is up to me! I'll get started on home construction right away so we can welcome our new island residents.
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_02', false)
+					run Sub_grp_Event816()
+				default:
+					return
+		else:
+			switch SubflowResults@4[0]:
+				case 2:
+					# Now I can get to work on home construction and welcoming new residents!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_03', false)
+					# Anyhoo, keep up the good work!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:110', false)
+				case 3:
+					# Because of you, I'm in construction mode AND welcome-to-the-island mode!
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:104_04', false)
+					run Rco_FinishMigrantEvent_Reward()
+				default:
+					return
+
 local flow Sub_grp_Event816():
-    if EventFlowSystemActor.IsFirstNpcLiveInTent():
-        # I vow to get this done quickly and get it done right!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:105_01', false)
-    else:
-        # I vow to get this done quickly and to get it done right! Why, if all goes well, we could have someone in a new home as soon as tomorrow!
-        MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:105_02', false)
-    # By the way, I plan on letting the island know about folks moving in or out during my island broadcasts. However, once I know who will move into a cer…
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:106', false)
-    switch SubflowResults@4[0]:
-        case 1, 2:
-            # Anyhoo, keep up the good work!
-            MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:110', false)
-        case 3:
-            run Rco_FinishMigrantEvent_Reward()
-        default:
-            return
- 
+	if EventFlowSystemActor.IsFirstNpcLiveInTent():
+		# I vow to get this done quickly and get it done right!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:105_01', false)
+	else:
+		# I vow to get this done quickly and to get it done right! Why, if all goes well, we could have someone in a new home as soon as tomorrow!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:105_02', false)
+	# By the way, I plan on letting the island know about folks moving in or out during my island broadcasts. However, once I know who will move into a cer…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:106', false)
+	switch SubflowResults@4[0]:
+		case 1, 2:
+			# Anyhoo, keep up the good work!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:110', false)
+		case 3:
+			run Rco_FinishMigrantEvent_Reward()
+		default:
+			return
+
 flow UnlockRemake_byPlayerMoving():
-    # Well, I couldn't have done this without you, PLAYER. That's for certain.
-    MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:109', true)
-    System.EventFlags['cPlayer:ImmQTalkAboutPrize'] = true
-    System.EventFlags['cPlayer:RcoStayMyHouseImmQClear'] = false
-    if EventFlowSystemActor.EventBranch(false, 0) in (`None`, `FishingConvention`, `InsectConvention`, `Easter`, `Fireworks`, `Halloween`, `HarvestFestival`, `XmasEve`, `Unknown9`):
-        EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
-        EventFlowSystemActor.WaitFrame(30)
-        EventFlowSystemActor.CameraSetDemoParam('cNormal', '', 'Player', false, false, false, 0)
-        MainNpc.NpcAISetting(12, false)
-        Player.TurnBody(11, 0.0)
-        EventFlowSystemActor.SetHideObjectVisible()
-        EventFlowSystemActor.FadeIn(true)
-    else:
-        EventFlowSystemActor.SystemReenterStage(0, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	# Well, I couldn't have done this without you, PLAYER. That's for certain.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_05_MigrantsQuest:109', true)
+	System.EventFlags['cPlayer:ImmQTalkAboutPrize'] = true
+	System.EventFlags['cPlayer:RcoStayMyHouseImmQClear'] = false
+	if EventFlowSystemActor.EventBranch(false, 0) in (`None`, `FishingConvention`, `InsectConvention`, `Easter`, `Fireworks`, `Halloween`, `HarvestFestival`, `XmasEve`, `Unknown9`):
+		EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+		EventFlowSystemActor.WaitFrame(30)
+		EventFlowSystemActor.CameraSetDemoParam('cNormal', '', 'Player', false, false, false, 0)
+		MainNpc.NpcAISetting(12, false)
+		Player.TurnBody(11, 0.0)
+		EventFlowSystemActor.SetHideObjectVisible()
+		EventFlowSystemActor.FadeIn(true)
+	else:
+		EventFlowSystemActor.SystemReenterStage(0, 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)

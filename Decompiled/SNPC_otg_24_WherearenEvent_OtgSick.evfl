@@ -1,298 +1,297 @@
 flow Bridge():
-    EventFlowSystemActor.CameraSetDemoParam('OtgSickBridge', 'cDefault', 'CameraTag:Root', false, false, false, 0)
-    MainNpc.TurnNeck(1, false)
-    fork:
-        branch:
-            # Sorry, everyone. I'll be fine. But you'll just handle…everything… while I'm away, won't you?
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:757', false)
-        branch:
-            Npc_1.TurnNeck(0, true)
-            Npc_2.TurnNeck(0, false)
-        branch:
-            Player.TurnNeck(0, false)
-            Npc_3.TurnNeck(0, false)
-    switch EventFlowSystemActor.GeneralTalkChoice2():
-        case 0, 1:
-            # Urgh…
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:758', false)
-            fork:
-                branch:
-                    # This way, Miss Lottie…
-                    Npc_3.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:759', false)
-                branch:
-                    Npc_1.TurnNeck(3, false)
-                    Npc_2.TurnNeck(3, false)
-                branch:
-                    EventFlowSystemActor.WaitFrame(60)
-                    Player.TurnNeck(3, false)
-            fork:
-                branch:
-                    # Take good care of her, Wilbur! No turbulence, OK?
-                    Npc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:760', false)
-                branch:
-                    Npc_3.TurnNeck(1, false)
-            # Roger! We'll get this walker to the walker doc at mach speed!
-            Npc_3.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:761', true)
-            EventFlowSystemActor.SelectWherearenOtgSickCustomer()
-            EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OverlookRight', 'CameraTag:RoomCenter', false)
-            EventFlowSystemActor.BGMPropertyControl(191)
-            EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.CameraSetDemoParam('OtgSickBridge', 'cDefault', 'CameraTag:Root', false, false, false, 0)
+	MainNpc.TurnNeck(1, false)
+	fork:
+		branch:
+			# Sorry, everyone. I'll be fine. But you'll just handle…everything… while I'm away, won't you?
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:757', false)
+		branch:
+			Npc_1.TurnNeck(0, true)
+			Npc_2.TurnNeck(0, false)
+		branch:
+			Player.TurnNeck(0, false)
+			Npc_3.TurnNeck(0, false)
+	switch EventFlowSystemActor.GeneralTalkChoice2():
+		case 0, 1:
+			# Urgh…
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:758', false)
+			fork:
+				branch:
+					# This way, Miss Lottie…
+					Npc_3.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:759', false)
+				branch:
+					Npc_1.TurnNeck(3, false)
+					Npc_2.TurnNeck(3, false)
+				branch:
+					EventFlowSystemActor.WaitFrame(60)
+					Player.TurnNeck(3, false)
+			fork:
+				branch:
+					# Take good care of her, Wilbur! No turbulence, OK?
+					Npc_1.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:760', false)
+				branch:
+					Npc_3.TurnNeck(1, false)
+			# Roger! We'll get this walker to the walker doc at mach speed!
+			Npc_3.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:761', true)
+			EventFlowSystemActor.SelectWherearenOtgSickCustomer()
+			EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OverlookRight', 'CameraTag:RoomCenter', false)
+			EventFlowSystemActor.BGMPropertyControl(191)
+			EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturn', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
 flow Bridge_Init():
-    MainNpc.NpcAISetting(4, false)
-    MainNpc.NpcAITalkSubCastEntry('mnc', 1)
-    MainNpc.NpcAITalkSubCastEntry('man', 2)
-    MainNpc.NpcAITalkSubCastEntry('doc', 3)
- 
+	MainNpc.NpcAISetting(4, false)
+	MainNpc.NpcAITalkSubCastEntry('mnc', 1)
+	MainNpc.NpcAITalkSubCastEntry('man', 2)
+	MainNpc.NpcAITalkSubCastEntry('doc', 3)
+
 flow EnterCustomerNpc():
-    fork:
-        branch:
-            EventFlowSystemActor@Sound.EmitDoorSound('cDoorEnter')
-            EventFlowSystemActor.BGMPropertyControl(192)
-        branch:
-            EventFlowSystemActor@Sub.WaitFrame(60)
-            Npc_2.NpcEnter('Entrance', 1, 0.0)
-    EventFlowSystemActor.WaitFrame(30)
- 
+	fork:
+		branch:
+			EventFlowSystemActor@Sound.EmitDoorSound('cDoorEnter')
+			EventFlowSystemActor.BGMPropertyControl(192)
+		branch:
+			EventFlowSystemActor@Sub.WaitFrame(60)
+			Npc_2.NpcEnter('Entrance', 1, 0.0)
+	EventFlowSystemActor.WaitFrame(30)
+
 flow Finish():
-    # Welcome back!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:780', false)
-    SubNpc.TurnNeck(0, true)
-    fork:
-        branch:
-            # Oh, Lottie! You must be feeling better, huh?
-            SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:781', false)
-        branch:
-            MainNpc.TurnNeck(1, true)
-            Npc_2.TurnNeck(1, false)
-        branch:
-            Player.TurnNeck(0, false)
-    fork:
-        branch:
-            # I feel much better, thank you! I guess I ate something at the celebration party that disagreed with me…
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:782', false)
-        branch:
-            EventFlowSystemActor.WaitFrame(20)
-            Npc_2.TurnNeck(0, false)
-    # Well, I'm just glad you're OK…
-    SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:783', false)
-    # Sorry I made you all worry… But you can breathe easy, because I'm feeling better now. More importantly…Niko, you really amazed me! I heard about ever…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:784', false)
-    fork:
-        branch:
-            # Well…I don't know about all that. I realized something while you were out, Lottie. I think I was getting a little bit overconfident, feeling like I c…
-            SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:785', false)
-        branch:
-            EventFlowSystemActor.WaitFrame(20)
-            Npc_2.TurnNeck(1, false)
-        branch:
-            EventFlowSystemActor@sub.WaitFrame(15)
-            Player.TurnNeck(1, false)
-    fork:
-        branch:
-            # I feel the same way, Niko! Things just wouldn't work the same way around here without you all. I'm so proud of the way the team rallied. Keep it up, …
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:786', false)
-        branch:
-            EventFlowSystemActor.WaitFrame(20)
-            Npc_2.TurnNeck(0, false)
-        branch:
-            EventFlowSystemActor@sub.WaitFrame(15)
-            Player.TurnNeck(0, false)
-    fork:
-        branch:
-            # You got it, Lottie!
-            SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:787', true)
-        branch:
-            EventFlowSystemActor.WaitFrame(30)
-            Npc_2.TurnNeck(1, false)
-    EventFlowSystemActor.WaitFrame(10)
-    Npc_2.CharacterEmoticonAction('Nodding', true, '', 0, false)
-    MainNpc.CharacterEmoticonAction('Nodding', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(30)
-    MainNpc.TurnNeck(10, false)
-    fork:
-        branch:
-            # Oh! I almost forgot…
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:788', true)
-        branch:
-            EventFlowSystemActor.WaitFrame(40)
-            Npc_2.TurnNeck(0, false)
-    run SNPC_otg_01_WherearenOffice::HouseCompleteActingrun SNPC_otg_01_WherearenOffice::HouseCompleteActing()
-    run SNPC_otg_01_WherearenOffice::SetSalaryForEventrun SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
-    # I haven't paid you yet! You've more than earned this <90:44:0000>.
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:789', true)
-    run SNPC_otg_01_WherearenOffice::GetSalaryForEventrun SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
-    if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
-        # Anyway, let's keep this thing rolling!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:790', true)
-    else:
-        run Foreign_Souvenirs()
-    System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing'] = false
-    System.EventFlags['cWherearenPlayer:Prohibit_SuspendEdit'] = false
-    System.EventFlags['cWherearenPlayer:SeqOtgSickFinish'] = true
-    System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
-    run Demo_Common_Wherearen::Demo_SetNormalPositionInOfficerun Demo_Common_Wherearen::Demo_SetNormalPositionInOffice()
-    SubflowResults[3] = 2
-    run SNPC_otg_01_WherearenOffice::OrderClose_Completerun SNPC_otg_01_WherearenOffice::OrderClose_Complete()
- 
+	# Welcome back!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:780', false)
+	SubNpc.TurnNeck(0, true)
+	fork:
+		branch:
+			# Oh, Lottie! You must be feeling better, huh?
+			SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:781', false)
+		branch:
+			MainNpc.TurnNeck(1, true)
+			Npc_2.TurnNeck(1, false)
+		branch:
+			Player.TurnNeck(0, false)
+	fork:
+		branch:
+			# I feel much better, thank you! I guess I ate something at the celebration party that disagreed with me…
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:782', false)
+		branch:
+			EventFlowSystemActor.WaitFrame(20)
+			Npc_2.TurnNeck(0, false)
+	# Well, I'm just glad you're OK…
+	SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:783', false)
+	# Sorry I made you all worry… But you can breathe easy, because I'm feeling better now. More importantly…Niko, you really amazed me! I heard about ever…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:784', false)
+	fork:
+		branch:
+			# Well…I don't know about all that. I realized something while you were out, Lottie. I think I was getting a little bit overconfident, feeling like I c…
+			SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:785', false)
+		branch:
+			EventFlowSystemActor.WaitFrame(20)
+			Npc_2.TurnNeck(1, false)
+		branch:
+			EventFlowSystemActor@sub.WaitFrame(15)
+			Player.TurnNeck(1, false)
+	fork:
+		branch:
+			# I feel the same way, Niko! Things just wouldn't work the same way around here without you all. I'm so proud of the way the team rallied. Keep it up, …
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:786', false)
+		branch:
+			EventFlowSystemActor.WaitFrame(20)
+			Npc_2.TurnNeck(0, false)
+		branch:
+			EventFlowSystemActor@sub.WaitFrame(15)
+			Player.TurnNeck(0, false)
+	fork:
+		branch:
+			# You got it, Lottie!
+			SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:787', true)
+		branch:
+			EventFlowSystemActor.WaitFrame(30)
+			Npc_2.TurnNeck(1, false)
+	EventFlowSystemActor.WaitFrame(10)
+	Npc_2.CharacterEmoticonAction('Nodding', true, '', 0, false)
+	MainNpc.CharacterEmoticonAction('Nodding', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.TurnNeck(10, false)
+	fork:
+		branch:
+			# Oh! I almost forgot…
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:788', true)
+		branch:
+			EventFlowSystemActor.WaitFrame(40)
+			Npc_2.TurnNeck(0, false)
+	run SNPC_otg_01_WherearenOffice::HouseCompleteActing()
+	run SNPC_otg_01_WherearenOffice::SetSalaryForEvent()
+	# I haven't paid you yet! You've more than earned this <90:44:0000>.
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:789', true)
+	run SNPC_otg_01_WherearenOffice::GetSalaryForEvent()
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Anyway, let's keep this thing rolling!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:790', true)
+	else:
+		run Foreign_Souvenirs()
+	System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing'] = false
+	System.EventFlags['cWherearenPlayer:Prohibit_SuspendEdit'] = false
+	System.EventFlags['cWherearenPlayer:SeqOtgSickFinish'] = true
+	System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp'] = false
+	run Demo_Common_Wherearen::Demo_SetNormalPositionInOffice()
+	SubflowResults[3] = 2
+	run SNPC_otg_01_WherearenOffice::OrderClose_Complete()
+
 flow Finish_Init():
-    MainNpc.NpcAITalkCastSetting('WherearenPrologue')
- 
+	MainNpc.NpcAITalkCastSetting('WherearenPrologue')
+
 flow Foreign_Souvenirs():
-    MainNpc.SetDeliveryItemAtRandom(12816, true, 'cVillageRemakePattern', 0)
-    # And I have a little something extra for you too. Some <item>nigirizushi!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:791', false)
-    MainNpc.WrapDeliveryItem('cPresentBox')
-    MainNpc.NpcDelivery(1, 'Default')
-    # Just a little extra thank-you for covering while I was out. It looked so good, I couldn't resist!
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:792', false)
-    # I guess your tummy must be feeling a lot better! You've got your appetite back and everything.
-    SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:793', true)
-    fork:
-        branch:
-            MainNpc.CharacterEmoticonAction('Blushing', true, '', 0, false)
-        branch:
-            Npc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-        branch:
-            Player.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(60)
- 
+	MainNpc.SetDeliveryItemAtRandom(12816, true, 'cVillageRemakePattern', 0)
+	# And I have a little something extra for you too. Some <item>nigirizushi!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:791', false)
+	MainNpc.WrapDeliveryItem('cPresentBox')
+	MainNpc.NpcDelivery(1, 'Default')
+	# Just a little extra thank-you for covering while I was out. It looked so good, I couldn't resist!
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:792', false)
+	# I guess your tummy must be feeling a lot better! You've got your appetite back and everything.
+	SubNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:793', true)
+	fork:
+		branch:
+			MainNpc.CharacterEmoticonAction('Blushing', true, '', 0, false)
+		branch:
+			Npc_2.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+		branch:
+			Player.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(60)
+
 flow MncEnter():
-    DynamicCast_mnc.TurnNeck(11, false)
-    DynamicCast_mnc.NpcAISetting(12, true)
-    fork:
-        branch:
-            EventFlowSystemActor@Sound.EmitDoorSound('cDoorEnter')
-        branch:
-            EventFlowSystemActor@Sub.WaitFrame(60)
-            DynamicCast_mnc.NpcRailMove(3, true, false, -1, -1, 1)
-        branch:
-            EventFlowSystemActor.WaitFrame(20)
-            MainNpc.CharacterEmoticonAction('Eh', true, '', 0, false)
-            EventFlowSystemActor.WaitFrame(40)
-            MainNpc.TurnBody(1, 0.0)
-            EventFlowSystemActor.WaitFrame(10)
-            Player.TurnBody(1, 0.0)
-            EventFlowSystemActor.WaitFrame(15)
-            DynamicCast_man.TurnNeck(1, false)
- 
+	DynamicCast_mnc.TurnNeck(11, false)
+	DynamicCast_mnc.NpcAISetting(12, true)
+	fork:
+		branch:
+			EventFlowSystemActor@Sound.EmitDoorSound('cDoorEnter')
+		branch:
+			EventFlowSystemActor@Sub.WaitFrame(60)
+			DynamicCast_mnc.NpcRailMove(3, true, false, -1, -1, 1)
+		branch:
+			EventFlowSystemActor.WaitFrame(20)
+			MainNpc.CharacterEmoticonAction('Eh', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(40)
+			MainNpc.TurnBody(1, 0.0)
+			EventFlowSystemActor.WaitFrame(10)
+			Player.TurnBody(1, 0.0)
+			EventFlowSystemActor.WaitFrame(15)
+			DynamicCast_man.TurnNeck(1, false)
+
 flow Office():
-    EventFlowSystemActor.BGMPropertyControl(165)
-    MainNpc.TurnNeck(11, false)
-    # I'm sure she'll be OK, but we might need to put a few things on hold while she's away…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:769', false)
-    if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-        MainNpc.TurnNeck(10, false)
-        Player.TurnBody(0, 0.0)
-        # Right! So I think we should put up a sign that lets everyone know we're temporarily closed. That'll do it!
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:770_01', true)
-    else:
-        MainNpc.TurnNeck(10, false)
-        Player.TurnBody(0, 0.0)
-        # No? I mean, I'm sure we can handle things. But I'll just be worrying about Lottie the whole time. And you know we'll get a zillion clients while she'…
-        MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:770_02', true)
-    Npc_1.TurnNeck(0, false)
-    run EnterCustomerNpc()
-    Npc_2.TurnNeck(0, true)
-    fork:
-        branch:
-            EventFlowSystemActor.SystemBGMVolumeChange(-10.0, 0.30000001192092896, 0, 0.0)
-            # Howdy! I heard somebody here can help me build a vacation house?
-            Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:070', false)
-        branch:
-            MainNpc.TurnBody(2, 0.0)
-            Npc_1.TurnBody(2, 0.0)
-            Player.TurnBody(2, 0.0)
-    # I knew it. A new client! Here we go… Um, yes… Hello! We are accepting vacation-home requests here.
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:773', false)
-    # Yay! Then I would like to make one request, please!
-    Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:071', false)
-    fork:
-        branch:
-            # Umm, <20:4:000a004e0030003e004e0032>just let us know the details of your order, and we'll be happy to have <20:4:000a004e0030003e00500030>PLAYER hand…
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:775', false)
-        branch:
-            Npc_2.TurnNeck(10, true)
-            EventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeck(0, true)
-    fork:
-        branch:
-            # And what do I say after that again? Oh! Um… Let me show you to our meeting table.
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:776', false)
-        branch:
-            Npc_2.TurnNeck(0, true)
-            EventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeck(2, true)
-    # Yay! I'm so happy I finished my snack challenge early so I could come here!
-    Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:072', true)
-    EventFlowSystemActor.SystemBGMVolumeFadeOut(0.5, 0, 0.0)
-    EventFlowSystemActor.WaitFrame(15)
-    Npc_2.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', '')
-    EventFlowSystemActor.WherearenOrderCallback('cStart')
-    EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OrderCut0', '', true)
-    EventFlowSystemActor.RequestWaterFallDucking(3)
-    EventFlowSystemActor.BGMPropertyControl(190)
-    EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
-    EventFlowSystemActor.WaitFrame(6)
-    EventFlowSystemActor.SystemBGMVolumeReset(2.0, 0, 0.0)
-    EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
-    EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
-    System.EventFlags['cWherearenPlayer:SeqOtgSickDone'] = true
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
- 
+	EventFlowSystemActor.BGMPropertyControl(165)
+	MainNpc.TurnNeck(11, false)
+	# I'm sure she'll be OK, but we might need to put a few things on hold while she's away…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:769', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		MainNpc.TurnNeck(10, false)
+		Player.TurnBody(0, 0.0)
+		# Right! So I think we should put up a sign that lets everyone know we're temporarily closed. That'll do it!
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:770_01', true)
+	else:
+		MainNpc.TurnNeck(10, false)
+		Player.TurnBody(0, 0.0)
+		# No? I mean, I'm sure we can handle things. But I'll just be worrying about Lottie the whole time. And you know we'll get a zillion clients while she'…
+		MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:770_02', true)
+	Npc_1.TurnNeck(0, false)
+	run EnterCustomerNpc()
+	Npc_2.TurnNeck(0, true)
+	fork:
+		branch:
+			EventFlowSystemActor.SystemBGMVolumeChange(-10.0, 0.30000001192092896, 0, 0.0)
+			# Howdy! I heard somebody here can help me build a vacation house?
+			Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:070', false)
+		branch:
+			MainNpc.TurnBody(2, 0.0)
+			Npc_1.TurnBody(2, 0.0)
+			Player.TurnBody(2, 0.0)
+	# I knew it. A new client! Here we go… Um, yes… Hello! We are accepting vacation-home requests here.
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:773', false)
+	# Yay! Then I would like to make one request, please!
+	Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:071', false)
+	fork:
+		branch:
+			# Umm, <20:4:000a004e0030003e004e0032>just let us know the details of your order, and we'll be happy to have <20:4:000a004e0030003e00500030>PLAYER hand…
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:775', false)
+		branch:
+			Npc_2.TurnNeck(10, true)
+			EventFlowSystemActor.WaitFrame(15)
+			Player.TurnNeck(0, true)
+	fork:
+		branch:
+			# And what do I say after that again? Oh! Um… Let me show you to our meeting table.
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:776', false)
+		branch:
+			Npc_2.TurnNeck(0, true)
+			EventFlowSystemActor.WaitFrame(15)
+			Player.TurnNeck(2, true)
+	# Yay! I'm so happy I finished my snack challenge early so I could come here!
+	Npc_2.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_WherearenEvent_Once:072', true)
+	EventFlowSystemActor.SystemBGMVolumeFadeOut(0.5, 0, 0.0)
+	EventFlowSystemActor.WaitFrame(15)
+	Npc_2.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', '')
+	EventFlowSystemActor.WherearenOrderCallback('cStart')
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:OrderCut0', '', true)
+	EventFlowSystemActor.RequestWaterFallDucking(3)
+	EventFlowSystemActor.BGMPropertyControl(190)
+	EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
+	EventFlowSystemActor.WaitFrame(6)
+	EventFlowSystemActor.SystemBGMVolumeReset(2.0, 0, 0.0)
+	EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+	EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+	System.EventFlags['cWherearenPlayer:SeqOtgSickDone'] = true
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
+
 flow Office_Init():
-    MainNpc.NpcAITalkCastSetting('WherearenOtgSickOffice')
-    MainNpc.NpcAISetting(4, false)
- 
+	MainNpc.NpcAITalkCastSetting('WherearenOtgSickOffice')
+	MainNpc.NpcAISetting(4, false)
+
 flow Root():
-    MainNpc.MessageSuspend()
-    run Demo_Common_Wherearen::Demo_OfficeOverlookRightCamerarun Demo_Common_Wherearen::Demo_OfficeOverlookRightCamera()
-    EventFlowSystemActor.WaitFrame(15)
-    run MncEnter()
-    DynamicCast_mnc.TurnBody(0, 0.0)
-    # Hey, PLAYER! Hey, Lottie! You'll be happy to hear that all of the event-venue setup is going super smoothly.
-    DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:750', true)
-    EventFlowSystemActor.AcceptFlowSwitchTag()
-    fork:
-        branch:
-            # That's great to hear!<10:4> I'm so glad you've got it under contro— Ow!<20:4:001600500030003e004e0030002c004e0032003e004e0030><10:19:cd00> Ow, ow, ow…
-            MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:751', false)
-        branch:
-            EventFlowSystemActor.WaitFlowSwitchTag()
-            EventFlowSystemActor.BGMPropertyControl(166)
-    fork:
-        branch:
-            # Lottie, what's wrong?
-            DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:752', false)
-        branch:
-            Player.TurnBody(0, 0.0)
-            EventFlowSystemActor.WaitFrame(15)
-            DynamicCast_man.TurnNeck(0, false)
-    EventFlowSystemActor.BGMPropertyControl(193)
-    # Urgh… My tummy…feels baaad…
-    MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:753', false)
-    fork:
-        branch:
-            # Oh no… Feeling baaad is not good! We should get you to a doctor!
-            DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:754', false)
-        branch:
-            EventFlowSystemActor.WaitFrame(15)
-            Player.TurnNeck(1, false)
-    EventFlowSystemActor.WaitFrame(15)
-    DynamicCast_mnc.TurnNeck(2, false)
-    fork:
-        branch:
-            # Wardell, can you help Lottie get to Wilbur right away? Carry her if you need to!
-            DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:755', false)
-        branch:
-            EventFlowSystemActor.WaitFrame(15)
-            DynamicCast_man.TurnNeck(1, false)
-    # You got it<150:5>
-    DynamicCast_man.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:756', true)
-    System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing'] = true
-    System.EventFlags['cWherearenPlayer:Prohibit_SuspendEdit'] = true
-    System.EventFlags['cWherearenPlayer:MncEntryOfficeReserve'] = false
-    EventFlowSystemActor.ReserveNpcCommand('WherearenOtgSickBridge')
-    EventFlowSystemActor.NextLPFadeOff()
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandBridgeOtgSick', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
- 
+	MainNpc.MessageSuspend()
+	run Demo_Common_Wherearen::Demo_OfficeOverlookRightCamera()
+	EventFlowSystemActor.WaitFrame(15)
+	run MncEnter()
+	DynamicCast_mnc.TurnBody(0, 0.0)
+	# Hey, PLAYER! Hey, Lottie! You'll be happy to hear that all of the event-venue setup is going super smoothly.
+	DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:750', true)
+	EventFlowSystemActor.AcceptFlowSwitchTag()
+	fork:
+		branch:
+			# That's great to hear!<10:4> I'm so glad you've got it under contro— Ow!<20:4:001600500030003e004e0030002c004e0032003e004e0030><10:19:cd00> Ow, ow, ow…
+			MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:751', false)
+		branch:
+			EventFlowSystemActor.WaitFlowSwitchTag()
+			EventFlowSystemActor.BGMPropertyControl(166)
+	fork:
+		branch:
+			# Lottie, what's wrong?
+			DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:752', false)
+		branch:
+			Player.TurnBody(0, 0.0)
+			EventFlowSystemActor.WaitFrame(15)
+			DynamicCast_man.TurnNeck(0, false)
+	EventFlowSystemActor.BGMPropertyControl(193)
+	# Urgh… My tummy…feels baaad…
+	MainNpc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:753', false)
+	fork:
+		branch:
+			# Oh no… Feeling baaad is not good! We should get you to a doctor!
+			DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:754', false)
+		branch:
+			EventFlowSystemActor.WaitFrame(15)
+			Player.TurnNeck(1, false)
+	EventFlowSystemActor.WaitFrame(15)
+	DynamicCast_mnc.TurnNeck(2, false)
+	fork:
+		branch:
+			# Wardell, can you help Lottie get to Wilbur right away? Carry her if you need to!
+			DynamicCast_mnc.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:755', false)
+		branch:
+			EventFlowSystemActor.WaitFrame(15)
+			DynamicCast_man.TurnNeck(1, false)
+	# You got it<150:5>
+	DynamicCast_man.OpenMessageWindow('TalkSNpc/otg/SP_otg_04_WherearenEvent:756', true)
+	System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing'] = true
+	System.EventFlags['cWherearenPlayer:Prohibit_SuspendEdit'] = true
+	System.EventFlags['cWherearenPlayer:MncEntryOfficeReserve'] = false
+	EventFlowSystemActor.ReserveNpcCommand('WherearenOtgSickBridge')
+	EventFlowSystemActor.NextLPFadeOff()
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenMainIslandBridgeOtgSick', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)

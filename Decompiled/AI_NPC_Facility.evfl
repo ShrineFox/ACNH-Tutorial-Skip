@@ -1,75 +1,74 @@
 flow Init():
-    run AI_NPC_Indoor::BBRegistrun AI_NPC_Indoor::BBRegist()
- 
+	run AI_NPC_Indoor::BBRegist()
+
 flow Museum():
-    MainNpc.NpcAIDefaultSetting(1)
-    switch MainNpc.FacilityNpcState():
-        case 0:
-            if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
-                MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Museum', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
-                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
-            else:
-                MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_Spot_Museum', '', true, true)
-        case 1:
-            MainNpc.NpcAISetting(2, false)
-            MainNpc.NpcAISetting(3, false)
-            MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_Reaction_Watching', 'React_Watcing', true, true)
-        case 2:
-            if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
-                MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Museum', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
-                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
-            else:
-                MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_Spot_Museum', '', true, true)
- 
+	MainNpc.NpcAIDefaultSetting(1)
+	switch MainNpc.FacilityNpcState():
+		case 0:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Museum', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+			else:
+				MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_Spot_Museum', '', true, true)
+		case 1:
+			MainNpc.NpcAISetting(2, false)
+			MainNpc.NpcAISetting(3, false)
+			MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_Reaction_Watching', 'React_Watcing', true, true)
+		case 2:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Museum', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+			else:
+				MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_Spot_Museum', '', true, true)
+
 flow Root():
-    if MainNpc.IsTargetNpcHouse():
-        run AI_NPC_Indoor::Rootrun AI_NPC_Indoor::Root()
-    else:
-        MainNpc.SetIsStartNeedActivity('cOff')
-        if EventFlowSystemActor.SystemCheckNowStage('cMametubu'):
-            run Store()
-        elif EventFlowSystemActor.SystemCheckNowStage('cTailor'):
-            run Tailor()
-        else:
-            run Museum()
- 
+	if MainNpc.IsTargetNpcHouse():
+		run AI_NPC_Indoor::Root()
+	else:
+		MainNpc.SetIsStartNeedActivity('cOff')
+		if EventFlowSystemActor.SystemCheckNowStage('cMametubu'):
+			run Store()
+		elif EventFlowSystemActor.SystemCheckNowStage('cTailor'):
+			run Tailor()
+		else:
+			run Museum()
+
 flow Store():
-    MainNpc.NpcAIDefaultSetting(1)
-    switch MainNpc.FacilityNpcState():
-        case 0:
-            if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
-                MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Store', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
-                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
-            else:
-                MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_Spot_Store', '', true, true)
-        case 1:
-            MainNpc.NpcAISetting(2, false)
-            MainNpc.NpcAISetting(3, false)
-            MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_Reaction_Shopping', 'React_Shopping', true, true)
-        case 2:
-            if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
-                MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Store', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
-                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
-            else:
-                MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_Spot_Store', '', true, true)
- 
+	MainNpc.NpcAIDefaultSetting(1)
+	switch MainNpc.FacilityNpcState():
+		case 0:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Store', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+			else:
+				MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_Spot_Store', '', true, true)
+		case 1:
+			MainNpc.NpcAISetting(2, false)
+			MainNpc.NpcAISetting(3, false)
+			MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_Reaction_Shopping', 'React_Shopping', true, true)
+		case 2:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Store', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+			else:
+				MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_Spot_Store', '', true, true)
+
 flow Tailor():
-    MainNpc.NpcAIDefaultSetting(1)
-    switch MainNpc.FacilityNpcState():
-        case 0:
-            if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
-                MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Tailor', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
-                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
-            else:
-                MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_Spot_Tailor', '', true, true)
-        case 1:
-            MainNpc.NpcAISetting(2, false)
-            MainNpc.NpcAISetting(3, false)
-            MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_Reaction_Shopping', 'React_Shopping', true, true)
-        case 2:
-            if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
-                MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Tailor', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
-                MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
-            else:
-                MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_Spot_Tailor', '', true, true)
- 
+	MainNpc.NpcAIDefaultSetting(1)
+	switch MainNpc.FacilityNpcState():
+		case 0:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Tailor', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+			else:
+				MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_Spot_Tailor', '', true, true)
+		case 1:
+			MainNpc.NpcAISetting(2, false)
+			MainNpc.NpcAISetting(3, false)
+			MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_Reaction_Shopping', 'React_Shopping', true, true)
+		case 2:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.EventFlags['cNpcTemp:TalkEndWait']):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Spot_Tailor', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
+			else:
+				MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_Spot_Tailor', '', true, true)

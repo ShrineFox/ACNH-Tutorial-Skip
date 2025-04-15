@@ -1,25 +1,24 @@
 flow DemoCheck():
-    if MainNpc.NpcBlackBoard('ReqCompDemo', 1):
-        MainNpc.NpcSetAIBlackBoard('ReqCompDemo', 0)
-        MainNpc.NpcAISetting(4, false)
-        MainNpc.NpcAISetting(12, false)
-        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='NNPC_Spot_WherearenCompleteDemo', EntryName='CameraDemoDirect')
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
-    elif EventFlowSystemActor.FlagSystemIntValue3(3, 'cWherearenPlayer:RequestEndShareHouseDemo') in (1, 2):
-        MainNpc.NpcChangeAIState('cPSInvisible', '', '', '', false, true)
-        EventFlowSystemActor.ExitFlowchartEventFlowSystemActor.ExitFlowchart()
- 
+	if MainNpc.NpcBlackBoard('ReqCompDemo', 1):
+		MainNpc.NpcSetAIBlackBoard('ReqCompDemo', 0)
+		MainNpc.NpcAISetting(4, false)
+		MainNpc.NpcAISetting(12, false)
+		run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='NNPC_Spot_WherearenCompleteDemo', EntryName='CameraDemoDirect')
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.FlagSystemIntValue3(3, 'cWherearenPlayer:RequestEndShareHouseDemo') in (1, 2):
+		MainNpc.NpcChangeAIState('cPSInvisible', '', '', '', false, true)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow Init():
-    MainNpc.NpcRegistAIBlackBoard('ReqCompDemo', 0)
-    MainNpc.NpcAISetting(9, false)
- 
+	MainNpc.NpcRegistAIBlackBoard('ReqCompDemo', 0)
+	MainNpc.NpcAISetting(9, false)
+
 flow Root():
-    MainNpc.NpcAIDefaultSetting(1)
-    run DemoCheck()
-    if (not System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden']) and (System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoReserve']):
-        MainNpc.NpcAISetting(4, false)
-        MainNpc.NpcAISetting(12, false)
-        run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='CameraDemo', FlowName='NNPC_Spot_WherearenCompleteDemo')
-    else:
-        MainNpc.NpcChangeAIState('cPSInvisible', '', '', '', false, true)
- 
+	MainNpc.NpcAIDefaultSetting(1)
+	run DemoCheck()
+	if (not System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_Garden']) and (System.EventFlags['cPlayerTemp:WHEREAREN_CameraDemoReserve']):
+		MainNpc.NpcAISetting(4, false)
+		MainNpc.NpcAISetting(12, false)
+		run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='CameraDemo', FlowName='NNPC_Spot_WherearenCompleteDemo')
+	else:
+		MainNpc.NpcChangeAIState('cPSInvisible', '', '', '', false, true)

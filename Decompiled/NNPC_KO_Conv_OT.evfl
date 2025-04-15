@@ -1,119 +1,118 @@
 flow Root():
-    if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
-        fork:
-            branch:
-                Player.TurnBody(0, 0.0)
-            branch:
-                MainNpc.TurnBody(1, 0.0)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        # I'm fed up with TV ads! I saw one wantin' me to subscribe to some magazine on <135:8:cd00>… Like I need more clutter in my place.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:201', false)
-        MainNpc.NpcCopyPhrase()
-        Player.TurnNeck(1, false)
-        # It's true that all the commercials are obnoxious. Sometimes one of their slogans will stick in my head all day.
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:202', false)
-        Player.TurnNeck(0, false)
-        # Gahaha! Those advertisin' types do tend to come up with some real earworms, <110:5>! 
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:203', false)
-        Player.TurnNeck(1, false)
-        # Earworms, what an awful image. But that thing you say, "<110:5>"… That manages to be catchy, without being so corny or irritating.
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:204', false)
-        Player.TurnNeck(0, false)
-        # Thank you kindly, <110:31:cd01>! Feel free to use it yourself.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:205', false)
-        Player.TurnNeck(1, false)
-        # Hmmm…should I give it a whirl? I may just try that out, <110:5>. Thank you, <110:31:cd00>!
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:206', false)
-    elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
-        fork:
-            branch:
-                Player.TurnBody(0, 0.0)
-            branch:
-                MainNpc.TurnBody(1, 0.0)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        # Hey, <110:31:cd01>, I've meant to tell you somethin'!
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:001', false)
-        # Oh, really? <20:2:cd08>Are you sure you want to tell me in front of <110:3>?<20:2:cd07>
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:002', false)
-        SubNpc.CharacterEmoticonAction('Worried', true, '', 0, false)
-        # Huh? Ah, never mind the kiddo. Somethin' I need to tell you…
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:003', false)
-        Player.TurnNeck(1, false)
-        # Well, out with it, then. Don't hold back! <20:2:cd08>Cover your ears, <110:3><20:2:cd07>.
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:004', false)
-        Player.TurnNeck(0, false)
-        switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
-            case 0:
-                # You got somethin' white on your nose–right…there.
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:005', false)
-                Player.TurnNeck(1, false)
-                # Really? It's probably just soap, <110:5>, but I wish you'd pointed it out earlier!
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:006', false)
-                run Sub_grp_Event31()
-            case 1:
-                # Did you know you got a splotch of blue there on your cheek?
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:008', false)
-                Player.TurnNeck(1, false)
-                # Blue? Oh…I was painting earlier. I wish you hadn't let me walk around with paint on my face all this time.
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:009', false)
-                run Sub_grp_Event31()
-            case 2:
-                # Well, uh, you got somethin' stuck on your face right…there!
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:010', false)
-                Player.TurnNeck(1, false)
-                # Oh no! I ate some <135:7:cd00> earlier… Why did you wait so long to say something, <110:31:cd00>?
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:011', false)
-                run Sub_grp_Event31()
-            case 3:
-                # You got some kinda shiny stuff stuck in your eyelashes…
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:012', false)
-                Player.TurnNeck(1, false)
-                # Shiny stuff? Oh, <110:31:cd00>,  that's just my mascara. Well, it appears that my cosmetic efforts are wasted on you!
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:013', false)
-                fork:
-                    branch:
-                        Player.TurnNeck(0, false)
-                    branch:
-                        SubNpc.CharacterEmoticonAction('Angry', true, '', 0, false)
-                # Shoulda kept that to myself, I guess. Oh, well. Live and learn! Gahaha!
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:014', false)
-            case 4:
-                # Actually, on second thought… Forget it, it's not important.
-                MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:015', false)
-                Player.TurnNeck(1, false)
-                # Oh, <110:5>… Now I'll be wondering about it all day.
-                SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:016', false)
-    else:
-        fork:
-            branch:
-                Player.TurnBody(0, 0.0)
-            branch:
-                MainNpc.TurnBody(1, 0.0)
-            branch:
-                SubNpc.TurnBody(0, 0.0)
-        # Sometimes it seems like too much effort to fix myself a meal, what with all the plannin' and shoppin'! Do you like to cook, <110:31:cd01>? 
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:101', false)
-        Player.TurnNeck(1, false)
-        # I'd much rather be waited on, but I can make myself a passable  <135:3:cd00>, when I want to.
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:102', false)
-        Player.TurnNeck(0, false)
-        # I'm impressed! Most of my cookin' is just boilin' stuff from packages.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:103', false)
-        Player.TurnNeck(1, false)
-        # I could teach you an easy recipe for <135:3:cd00>, if you'd like. It's really just a matter of following simple directions, <110:5>.
-        SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:104', false)
-        Player.TurnNeck(0, false)
-        # Sorry, I think you already lost me. This <110:15:cd00> is a mite too old to be learnin' any new tricks.
-        MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:105', false)
- 
+	if (MainNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not SubNpc.EventFlags['cNpcSave:PlayerNamePhrase']) and (not MainNpc.IsSamePhrase()):
+		fork:
+			branch:
+				Player.TurnBody(0, 0.0)
+			branch:
+				MainNpc.TurnBody(1, 0.0)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		# I'm fed up with TV ads! I saw one wantin' me to subscribe to some magazine on <135:8:cd00>… Like I need more clutter in my place.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:201', false)
+		MainNpc.NpcCopyPhrase()
+		Player.TurnNeck(1, false)
+		# It's true that all the commercials are obnoxious. Sometimes one of their slogans will stick in my head all day.
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:202', false)
+		Player.TurnNeck(0, false)
+		# Gahaha! Those advertisin' types do tend to come up with some real earworms, <110:5>! 
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:203', false)
+		Player.TurnNeck(1, false)
+		# Earworms, what an awful image. But that thing you say, "<110:5>"… That manages to be catchy, without being so corny or irritating.
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:204', false)
+		Player.TurnNeck(0, false)
+		# Thank you kindly, <110:31:cd01>! Feel free to use it yourself.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:205', false)
+		Player.TurnNeck(1, false)
+		# Hmmm…should I give it a whirl? I may just try that out, <110:5>. Thank you, <110:31:cd00>!
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:206', false)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, false) == 0:
+		fork:
+			branch:
+				Player.TurnBody(0, 0.0)
+			branch:
+				MainNpc.TurnBody(1, 0.0)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		# Hey, <110:31:cd01>, I've meant to tell you somethin'!
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:001', false)
+		# Oh, really? <20:2:cd08>Are you sure you want to tell me in front of <110:3>?<20:2:cd07>
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:002', false)
+		SubNpc.CharacterEmoticonAction('Worried', true, '', 0, false)
+		# Huh? Ah, never mind the kiddo. Somethin' I need to tell you…
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:003', false)
+		Player.TurnNeck(1, false)
+		# Well, out with it, then. Don't hold back! <20:2:cd08>Cover your ears, <110:3><20:2:cd07>.
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:004', false)
+		Player.TurnNeck(0, false)
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+			case 0:
+				# You got somethin' white on your nose–right…there.
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:005', false)
+				Player.TurnNeck(1, false)
+				# Really? It's probably just soap, <110:5>, but I wish you'd pointed it out earlier!
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:006', false)
+				run Sub_grp_Event31()
+			case 1:
+				# Did you know you got a splotch of blue there on your cheek?
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:008', false)
+				Player.TurnNeck(1, false)
+				# Blue? Oh…I was painting earlier. I wish you hadn't let me walk around with paint on my face all this time.
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:009', false)
+				run Sub_grp_Event31()
+			case 2:
+				# Well, uh, you got somethin' stuck on your face right…there!
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:010', false)
+				Player.TurnNeck(1, false)
+				# Oh no! I ate some <135:7:cd00> earlier… Why did you wait so long to say something, <110:31:cd00>?
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:011', false)
+				run Sub_grp_Event31()
+			case 3:
+				# You got some kinda shiny stuff stuck in your eyelashes…
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:012', false)
+				Player.TurnNeck(1, false)
+				# Shiny stuff? Oh, <110:31:cd00>,  that's just my mascara. Well, it appears that my cosmetic efforts are wasted on you!
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:013', false)
+				fork:
+					branch:
+						Player.TurnNeck(0, false)
+					branch:
+						SubNpc.CharacterEmoticonAction('Angry', true, '', 0, false)
+				# Shoulda kept that to myself, I guess. Oh, well. Live and learn! Gahaha!
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:014', false)
+			case 4:
+				# Actually, on second thought… Forget it, it's not important.
+				MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:015', false)
+				Player.TurnNeck(1, false)
+				# Oh, <110:5>… Now I'll be wondering about it all day.
+				SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:016', false)
+	else:
+		fork:
+			branch:
+				Player.TurnBody(0, 0.0)
+			branch:
+				MainNpc.TurnBody(1, 0.0)
+			branch:
+				SubNpc.TurnBody(0, 0.0)
+		# Sometimes it seems like too much effort to fix myself a meal, what with all the plannin' and shoppin'! Do you like to cook, <110:31:cd01>? 
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:101', false)
+		Player.TurnNeck(1, false)
+		# I'd much rather be waited on, but I can make myself a passable  <135:3:cd00>, when I want to.
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:102', false)
+		Player.TurnNeck(0, false)
+		# I'm impressed! Most of my cookin' is just boilin' stuff from packages.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:103', false)
+		Player.TurnNeck(1, false)
+		# I could teach you an easy recipe for <135:3:cd00>, if you'd like. It's really just a matter of following simple directions, <110:5>.
+		SubNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:104', false)
+		Player.TurnNeck(0, false)
+		# Sorry, I think you already lost me. This <110:15:cd00> is a mite too old to be learnin' any new tricks.
+		MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:105', false)
+
 local flow Sub_grp_Event31():
-    fork:
-        branch:
-            Player.TurnNeck(0, false)
-        branch:
-            SubNpc.CharacterEmoticonAction('Angry', true, '', 0, false)
-    # Guess I wasn't sure if you'd put it there as a kinda, whatchamacallit… fashion statement, or somethin'.
-    MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:007', false)
- 
+	fork:
+		branch:
+			Player.TurnNeck(0, false)
+		branch:
+			SubNpc.CharacterEmoticonAction('Angry', true, '', 0, false)
+	# Guess I wasn't sure if you'd put it there as a kinda, whatchamacallit… fashion statement, or somethin'.
+	MainNpc.OpenMessageWindow('TalkNNpc/B3_Ko/Conv/KO_Conv_OT:007', false)

@@ -1,36 +1,35 @@
 flow Get_DiveFish():
-    if EventFlowSystemActor.NetIsDreaming():
-        EventFlowSystemActor.SetTagFromSystem('cChachSeafood', 'cDegit', 0, 0, '')
-        # I got [a|an]<125:9:cd00>! Oh, but it's all a dream...
-        Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:004', false)
-    else:
-        if Player.PlayerGetDemoCollectStatus('cFirstGet'):
-            # Yes!
-            Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:001', false)
-        Player.PlayerOpenDiveFishGetMessage()
-        if Player.PlayerGetDemoCollectStatus('cCompleteThisTime'):
-            # Wait. This means...
-            Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:002', false)
-            Player.PlayerPlayCompleteAnimation()
-            # WAHOOOO! I've completed my diving collection! That's deep. Real deep.
-            Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:003', false)
-    if not Player.PlayerCheckAI('cGetDemo_DiveFishFullItem'):
-        run Player_GetDemo_Recipe_DIY::ChumDIY_Chkrun Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
-    elif not Player.PlayerHasExchaneableItem(false, true, false, false):
-        # ...But I don't have any room for it! Oh well. I guess I'll let it go, then.
-        Player.OpenMessageWindow('TalkSys/SYS_Player:008', false)
-    elif Player.PlayerGetDemoCheckItem('cDiveFish_Creature'):
-        # ...But I can't carry anything else! Should I swap it with something?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Sub_Event17()
-    else:
-        # ...But I can't carry anything else! Should I swap it with something?
-        Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
-        if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-            run Sub_Event17()
- 
+	if EventFlowSystemActor.NetIsDreaming():
+		EventFlowSystemActor.SetTagFromSystem('cChachSeafood', 'cDegit', 0, 0, '')
+		# I got [a|an]<125:9:cd00>! Oh, but it's all a dream...
+		Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:004', false)
+	else:
+		if Player.PlayerGetDemoCollectStatus('cFirstGet'):
+			# Yes!
+			Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:001', false)
+		Player.PlayerOpenDiveFishGetMessage()
+		if Player.PlayerGetDemoCollectStatus('cCompleteThisTime'):
+			# Wait. This means...
+			Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:002', false)
+			Player.PlayerPlayCompleteAnimation()
+			# WAHOOOO! I've completed my diving collection! That's deep. Real deep.
+			Player.OpenMessageWindow('TalkSys/SYS_Get_DiveFish:003', false)
+	if not Player.PlayerCheckAI('cGetDemo_DiveFishFullItem'):
+		run Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
+	elif not Player.PlayerHasExchaneableItem(false, true, false, false):
+		# ...But I don't have any room for it! Oh well. I guess I'll let it go, then.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:008', false)
+	elif Player.PlayerGetDemoCheckItem('cDiveFish_Creature'):
+		# ...But I can't carry anything else! Should I swap it with something?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:004', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Sub_Event17()
+	else:
+		# ...But I can't carry anything else! Should I swap it with something?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:006', true)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Sub_Event17()
+
 local flow Sub_Event17():
-    Player.PlayerPlayPutawayWaitAnimation()
-    EventFlowSystemActor.UIItemSelectWindowHandling('cDiveFishGetFull', 65534, '', '', 'cExchangeByHarvest', false)
- 
+	Player.PlayerPlayPutawayWaitAnimation()
+	EventFlowSystemActor.UIItemSelectWindowHandling('cDiveFishGetFull', 65534, '', '', 'cExchangeByHarvest', false)

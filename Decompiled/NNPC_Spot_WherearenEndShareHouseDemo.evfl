@@ -1,102 +1,101 @@
 flow Demo():
-    EventFlowSystemActor.NextLPFadeOff()
-    EventFlowSystemActor.CollisionWherearenAirWall(false)
-    MainNpc.CharacterEmoticonAction('Explain', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(60)
-    SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(30)
-    SubNpc.CharacterEmoticonAction('Explain', true, '', 0, false)
-    EventFlowSystemActor.WaitFrame(60)
-    EventFlowSystemActor.SetLookAtTargetObject('cWherearenNpcHouse')
-    fork:
-        branch:
-            MainNpc.TurnNeck(13, false)
-            MainNpc.TurnBody(12, 180.0)
-            MainNpc.NpcWaitTurn()
-        branch:
-            SubNpc.TurnNeck(13, false)
-            SubNpc.TurnBody(12, 180.0)
-            SubNpc.NpcWaitTurn()
-    EventFlowSystemActor.WaitFrame(125)
-    MainNpc.TurnNeck(1, false)
-    SubNpc.TurnNeck(0, false)
-    EventFlowSystemActor.WaitFrame(1)
-    fork:
-        branch:
-            MainNpc.TurnBody(12, 135.0)
-            MainNpc.NpcWaitTurn()
-        branch:
-            SubNpc.TurnBody(12, 315.0)
-            SubNpc.NpcWaitTurn()
-    EventFlowSystemActor.WaitFrame(20)
-    MainNpc.NpcStartAS('NpcGreeting', false, true)
-    EventFlowSystemActor.WaitFrame(60)
-    SubNpc.NpcStartAS('NpcGreeting', false, true)
-    EventFlowSystemActor.WaitFrame(60)
-    MainNpc.TurnNeck(11, false)
-    MainNpc.NpcMoveDirection(0.0, 50.0, 0, false, false)
- 
+	EventFlowSystemActor.NextLPFadeOff()
+	EventFlowSystemActor.CollisionWherearenAirWall(false)
+	MainNpc.CharacterEmoticonAction('Explain', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(60)
+	SubNpc.CharacterEmoticonAction('FaintSmile', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(30)
+	SubNpc.CharacterEmoticonAction('Explain', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(60)
+	EventFlowSystemActor.SetLookAtTargetObject('cWherearenNpcHouse')
+	fork:
+		branch:
+			MainNpc.TurnNeck(13, false)
+			MainNpc.TurnBody(12, 180.0)
+			MainNpc.NpcWaitTurn()
+		branch:
+			SubNpc.TurnNeck(13, false)
+			SubNpc.TurnBody(12, 180.0)
+			SubNpc.NpcWaitTurn()
+	EventFlowSystemActor.WaitFrame(125)
+	MainNpc.TurnNeck(1, false)
+	SubNpc.TurnNeck(0, false)
+	EventFlowSystemActor.WaitFrame(1)
+	fork:
+		branch:
+			MainNpc.TurnBody(12, 135.0)
+			MainNpc.NpcWaitTurn()
+		branch:
+			SubNpc.TurnBody(12, 315.0)
+			SubNpc.NpcWaitTurn()
+	EventFlowSystemActor.WaitFrame(20)
+	MainNpc.NpcStartAS('NpcGreeting', false, true)
+	EventFlowSystemActor.WaitFrame(60)
+	SubNpc.NpcStartAS('NpcGreeting', false, true)
+	EventFlowSystemActor.WaitFrame(60)
+	MainNpc.TurnNeck(11, false)
+	MainNpc.NpcMoveDirection(0.0, 50.0, 0, false, false)
+
 flow Demo_Enter():
-    EventFlowSystemActor.SoundDuckingOn(64)
-    EventFlowSystemActor.BGMPropertyControl(195)
-    Player.PlayerSetAllVisible('cOff')
-    MainNpc.NpcSetPosWherearenEndShareHouseDemo()
-    MainNpc.TurnNeck(11, false)
-    SubNpc.TurnNeck(11, false)
-    EventFlowSystemActor.SnpcSetAllVisible('mnc', false)
-    run SetCamera()
-    MainNpc.MessageSuspend()
-    MainNpc.NpcChangeHandTool(7125, 'cNone', true)
-    SubNpc.NpcChangeHandTool(7125, 'cPutAway', true)
-    EventFlowSystemActor.WaitFrame(30)
-    MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-    run `00_Demo_Fade`::FadeIn_Cmnrun `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
- 
+	EventFlowSystemActor.SoundDuckingOn(64)
+	EventFlowSystemActor.BGMPropertyControl(195)
+	Player.PlayerSetAllVisible('cOff')
+	MainNpc.NpcSetPosWherearenEndShareHouseDemo()
+	MainNpc.TurnNeck(11, false)
+	SubNpc.TurnNeck(11, false)
+	EventFlowSystemActor.SnpcSetAllVisible('mnc', false)
+	run SetCamera()
+	MainNpc.MessageSuspend()
+	MainNpc.NpcChangeHandTool(7125, 'cNone', true)
+	SubNpc.NpcChangeHandTool(7125, 'cPutAway', true)
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+
 flow Demo_Enter_FromHouse():
-    MainNpc.TurnNeck(1, false)
-    SubNpc.TurnNeck(0, false)
- 
+	MainNpc.TurnNeck(1, false)
+	SubNpc.TurnNeck(0, false)
+
 flow Demo_Exit():
-    System.EventFlags['cWherearenPlayer:RequestEndShareHouseDemo'] = 0
-    EventFlowSystemActor.WherearenResetVisitInfo()
-    MainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', 'cShareHouseEnd')
-    EventFlowSystemActor.WherearenOrderCallback('cStart')
-    run NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamerarun NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamera()
-    if not EventFlowSystemActor.IsWherearenWorkMode():
-        EventFlowSystemActor.ChangeWherearenWorkMode(false, false)
-    EventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cNormalFader', 'cCircle', 'cBlack', 0.10000000149011612, 1.0)
- 
+	System.EventFlags['cWherearenPlayer:RequestEndShareHouseDemo'] = 0
+	EventFlowSystemActor.WherearenResetVisitInfo()
+	MainNpc.WherearenTakeOnNpcOrder('cNewHouse', '', '', '', 'cShareHouseEnd')
+	EventFlowSystemActor.WherearenOrderCallback('cStart')
+	run NNPC_Spot_WherearenMainFieldVisitor::SetOrderCamera()
+	if not EventFlowSystemActor.IsWherearenWorkMode():
+		EventFlowSystemActor.ChangeWherearenWorkMode(false, false)
+	EventFlowSystemActor.SystemRequestChangeStage('cWherearenOrderDemo', 'cNormalFader', 'cCircle', 'cBlack', 0.10000000149011612, 1.0)
+
 flow FromHouse():
-    run Demo_Enter_FromHouse()
-    run Event1()
- 
+	run Demo_Enter_FromHouse()
+	run Event1()
+
 flow FromHouse_Init():
-    run Root_Init()
- 
+	run Root_Init()
+
 flow KeepFaderOff_FromHouse():
-    run SetCamera()
-    EventFlowSystemActor.SetupWherearenEndShareHouseDemoFromHouse()
-    Player.PlayerSetAllVisible('cOff')
-    EventFlowSystemActor.WaitFrame(30)
-    EventFlowSystemActor.SoundDuckingOn(64)
-    EventFlowSystemActor.BGMPropertyControl(196)
-    EventFlowSystemActor.SystemFaderRelease()
- 
+	run SetCamera()
+	EventFlowSystemActor.SetupWherearenEndShareHouseDemoFromHouse()
+	Player.PlayerSetAllVisible('cOff')
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.SoundDuckingOn(64)
+	EventFlowSystemActor.BGMPropertyControl(196)
+	EventFlowSystemActor.SystemFaderRelease()
+
 flow Root():
-    run Demo_Enter()
+	run Demo_Enter()
 entrypoint Event1:
-    run Demo()
-    run Demo_Exit()
- 
+	run Demo()
+	run Demo_Exit()
+
 flow Root_Init():
-    MainNpc.NpcAITalkCastSetting('WherearenEndShareHouse')
- 
+	MainNpc.NpcAITalkCastSetting('WherearenEndShareHouse')
+
 flow SetCamera():
-    switch EventFlowSystemActor.GardenSafeRangeType():
-        case 0:
-            EventFlowSystemActor.CameraSetDemoParam('EndShareHouseDemoLeft', 'cDefault', 'Place:SafeArea', false, false, true, 0)
-        case 1:
-            EventFlowSystemActor.CameraSetDemoParam('EndShareHouseDemoCenter', 'cDefault', 'Place:SafeArea', false, false, true, 0)
-        case 2:
-            EventFlowSystemActor.CameraSetDemoParam('EndShareHouseDemoRight', 'cDefault', 'Place:SafeArea', false, false, true, 0)
- 
+	switch EventFlowSystemActor.GardenSafeRangeType():
+		case 0:
+			EventFlowSystemActor.CameraSetDemoParam('EndShareHouseDemoLeft', 'cDefault', 'Place:SafeArea', false, false, true, 0)
+		case 1:
+			EventFlowSystemActor.CameraSetDemoParam('EndShareHouseDemoCenter', 'cDefault', 'Place:SafeArea', false, false, true, 0)
+		case 2:
+			EventFlowSystemActor.CameraSetDemoParam('EndShareHouseDemoRight', 'cDefault', 'Place:SafeArea', false, false, true, 0)
