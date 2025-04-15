@@ -1,0 +1,45 @@
+# System_BootSequence
+# loop while waiting for user input
+
+entrypoint Event64:
+        if EventFlowSystemActor.SaveRestoreSeqStartCheck():
+            BackupInputWait += -1
+            if BackupInputWait <= 0:
+                return
+            else:
+                EventFlowSystemActor.WaitFrame(0)
+                run Event64()
+				
+				
+#System_GrowUp_GameProcess
+# number of npc houses constructed?
+if EventFlowSystemActor.NpcHouseNum('cConstructed') >= 8
+
+#System_GrowUp_WeatherControl
+# check if weather event date is the same day as last time you played
+elif EventFlowSystemActor.EnvSameDate('cWeatherEventDay', 'cLastGrowUpTime'):
+
+# System_GrowUp
+# update town stuff to next day?
+System.EventFlags['cLand:TodayGrowUp'] = 0
+System.EventFlags['cLand:TodayMainGrowUp'] = 0
+EventFlowSystemActor.TimeLock('cLock')
+# run CallGrowUpGameWeatherProcess()
+if EventFlowSystemActor.PassDaysSincePreviousGrowUp():
+	run System_GrowUp_GameProcess::Rootrun System_GrowUp_GameProcess::Root()
+	run System_GrowUp_WeatherControl::FirstLiverun System_GrowUp_WeatherControl::FirstLive()
+run System_GrowUp_WeatherControl::Alwaysrun System_GrowUp_WeatherControl::Always()
+EventFlowSystemActor.SaveGrowUp('cInGame')
+run System_WherearenGrowUp::WherearenProcessrun System_WherearenGrowUp::WherearenProcess()
+EventFlowSystemActor.TimeLock('cUnlock')
+EventFlowSystemActor.UISaveIconAppear()
+EventFlowSystemActor.SaveSimpleSave('cAll')
+EventFlowSystemActor.UISaveIconDisappear()
+EventFlowSystemActor.SaveAfterGrowUp()
+
+
+#System_GameClose
+#Check if connected to network on your own island and hosting a visitor
+if EventFlowSystemActor.NetIsConnected():
+	if EventFlowSystemActor.IsMyVillage():
+		if EventFlowSystemActor.NetHasVisitor():
