@@ -1,1097 +1,3 @@
-flow MemoryShortageRco():
-	# **Hello, ISLAND! The time is now HH:MM AM/PM.**
-	MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:000_01', false)
-	# **I trust you've all found excellent ways to spend your day? You'll wear yourself out if you try to pack too much activity in all at once. So be sure…
-	MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_00_Rco:000_02', true)
-	System.EventFlags['cLandTemp:ReserveMemErrorReenter'] = false
-
-flow MemoryShortageSza():
-	# Hello, ISLAND! It's currently HH:MM AM/PM.
-	MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:000_01', false)
-	# I hope you're all taking full advantage of your island time! Just remember, if you push yourself too hard, you'll wind up exhausted. So, please take …
-	MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:000_02', true)
-	System.EventFlags['cLandTemp:ReserveMemErrorReenter'] = false
-
-flow OutdoorDemoStart():
-	EventFlowSystemActor.SetupActorPosition(10)
-	if EventFlowSystemActor.SystemCheckNowStage('cTitle'):
-		EventFlowSystemActor.CameraSetDemoParam('GrowupDemoTalkBefore', '', 'CameraTag:PublicAnnouncement', false, false, true, 0)
-		EventFlowSystemActor.FadeIn(false)
-		EventFlowSystemActor.WaitFrame(30)
-	else:
-		EventFlowSystemActor.CameraSetDemoParam('GrowupDemoTalkBefore', '', 'CameraTag:PublicAnnouncement', false, false, true, 0)
-		EventFlowSystemActor.WaitFrame(30)
-	EventFlowSystemActor.UIDemoClock(60)
-	EventFlowSystemActor.BGMPropertyControl(52)
-	EventFlowSystemActor.CameraSetDemoParam('GrowupDemoTalk', 'GrowupDemoTalk', 'CameraTag:PublicAnnouncement', false, false, true, 0)
-	EventFlowSystemActor.WaitFrame(180)
-
-flow PAnnounceRco():
-	if not System.EventFlags['cLand:BuiltTownOffice']:
-		System.EventFlags['cPlayer:WatchedRcoAnnouceAfter200ver'] = true
-	run Demo_PublicAnnouncement_21_CmnEvChk::Root()
-	EventFlowSystemActor.BGMPropertyControl(77)
-	run OutdoorDemoStart()
-	EventFlowSystemActor.SoundDuckingOn(21)
-	EventFlowSystemActor.SoundDuckingOn(38)
-	if System.EventFlags['cLandTemp:ReserveMemErrorReenter']:
-		run MemoryShortageRco()
-		EventFlowSystemActor.MessageSuspend()
-	else:
-		if System.EventFlags['cPlayer:TownNewsHeard1st']:
-			run Demo_PublicAnnouncement_00_Cmn::Root()
-		else:
-			System.EventFlags['cPlayer:TownNewsHeard1st'] = true
-			if System.EventFlags['cLand:VillageDaysCount'] != 1:
-				run Demo_PublicAnnouncement_03_Rco_Once::TownNews_Heard1stTime()
-			else:
-				run Demo_PublicAnnouncement_03_Rco_Once::TownNews_OnThe2ndDay()
-		EventFlowSystemActor.MessageSuspend()
-		System.EventFlags['cLand:PAnnounceToday'] = true
-	EventFlowSystemActor.BGMPropertyControl(51)
-	EventFlowSystemActor.SoundDuckingOff(38)
-	EventFlowSystemActor.SoundDuckingOff(21)
-	if EventFlowSystemActor.SystemCheckNowStage('cTitle'):
-		EventFlowSystemActor.SystemRequestChangeStage('cGrowUp', 'cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929)
-	else:
-		EventFlowSystemActor.SystemRequestChangeStage('cMainFieldPlayerHouse', 'cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929)
-
-flow PAnnounceSza():
-	SubflowResults[0] = 1
-	run Demo_PublicAnnouncement_21_CmnEvChk::Root()
-	EventFlowSystemActor.SoundDuckingOn(21)
-	EventFlowSystemActor.CameraSetDemoParam('CutSza', '', 'Npc:sza', false, false, false, 0)
-	run SzaPrepareAction()
-	if System.EventFlags['cLandTemp:ReserveMemErrorReenter']:
-		run MemoryShortageSza()
-		EventFlowSystemActor.MessageSuspend()
-		run Skip_TkkFirstLive()
-	else:
-		System.EventFlags['cLand:PAnnounceCeremony1st'] = true
-		if (EventFlowSystemActor.EventCheck('Countdown') not in (0, 2, 3)) and (EventFlowSystemActor.EnvHourCompare(23, 55, false, false) != 0):
-			run Demo_PublicAnnouncement_25_CmnNewsGreet::NewYearEveHurry()
-		else:
-			if System.EventFlags['cPlayer:TownNewsHeard1st']:
-				run Demo_PublicAnnouncement_00_Cmn::Root()
-			else:
-				run Demo_PublicAnnouncement_13_Sza_Once::TownNews_Heard1stTime()
-				System.EventFlags['cPlayer:TownNewsHeard1st'] = true
-		EventFlowSystemActor.MessageSuspend()
-		System.EventFlags['cLand:PAnnounceToday'] = true
-		if not System.EventFlags['cLand:TkkFirstLiveReserved']:
-			run Skip_TkkFirstLive()
-		elif System.EventFlags['cPlayer:TkkFirstLiveJoined']:
-			run Skip_TkkFirstLive()
-		else:
-			EventFlowSystemActor.WaitFrame(10)
-			EventFlowSystemActor.BGMPropertyControl(51)
-			EventFlowSystemActor.SoundDuckingOff(21)
-			EventFlowSystemActor.SystemRequestChangeStage('cMainFieldFirstLive', 'cNormalFader', 'cNormalFader', 'cBlack', 0.5, 0.5)
-
-flow Root():
-	if not System.EventFlags['cLandTemp:ReserveMemErrorReenter']:
-		System.EventFlags['cPlayer:AmountHeardPublicAnnouncement'] += 1
-		System.EventFlags['cPlayer:TownNewsReserve'] = false
-		System.EventFlags['cLandTemp:ReserveAfterHookPublicAnouncement'] = true
-		# run Demo_PublicAnnouncement_Process::Root()
-		run UnlockCraftingRecipes()
-		run UnlockCatalogItems_0()
-		run UnlockCatalogItems_1()
-		run UnlockCatalogItems_2()
-		run UnlockCatalogItems_3()
-		run UnlockCatalogItems_4()
-		run UnlockCatalogItems_5()
-		run UnlockCatalogItems_6()
-		run UnlockCatalogItems_7()
-		run UnlockCatalogItems_8()
-		run UnlockCatalogItems_9()
-		run UnlockCatalogItems_10()
-		run UnlockCatalogItems_11()
-		run UnlockCatalogItems_12()
-		run UnlockCatalogItems_13()
-		run Demo_PublicAnnouncement_Process::Root()
-	if not System.EventFlags['cLand:BuiltTownOffice']:
-		run PAnnounceRco()
-	elif System.EventFlags['cLand:BuiltTownOfficeToday']:
-		run PAnnounceRco()
-	else:
-		run PAnnounceSza()
-
-flow Root_Init():
-	if (System.EventFlags['cLand:BuiltTownOffice']) and (System.EventFlags['cLand:BuiltTownOfficeToday']):
-		MainNpc.NpcAITalkSubCastEntry('sza', 1)
-	if (System.EventFlags['cPlayer:MakeVillagePlayerFlag']) and (System.EventFlags['cLand:TkkFirstLiveEnable']) and (EventFlowSystemActor.EventBranch(false, 0) == `None`):
-		System.EventFlags['cLand:TkkFirstLiveReserved'] = true
-		System.EventFlags['cLand:TkkFirstLiveSubPlayer'] = true
-		MainNpc.CancelTodayVisitorNpc()
-
-flow Skip_TkkFirstLive():
-	run SzaPostAction()
-	EventFlowSystemActor.BGMPropertyControl(51)
-	EventFlowSystemActor.SoundDuckingOff(21)
-	EventFlowSystemActor.SystemRequestChangeStage('cMainFieldPlayerHouse', 'cCircle', 'cCircle', 'cBlack', 0.800000011920929, 0.800000011920929)
-
-flow SzaPostAction():
-	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
-		case 0:
-			MainNpc.RequestSimple('SzaNewsSmile', false)
-		case 1:
-			pass
-		case 2:
-			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-	EventFlowSystemActor.WaitFrame(20)
-
-flow SzaPrepareAction():
-	if EventFlowSystemActor.EventCheck('Countdown') in (0, 1, 2):
-		run Sza_NormalPreAction()
-	else:
-		if (System.EventFlags['cPlayer:SzaPAAccidentCounter'] < 7) and (EventFlowSystemActor.RandomChoice7(7) != 0):
-entrypoint Event56:
-			EventFlowSystemActor.UIDemoClock(60)
-			EventFlowSystemActor.WaitFrame(30)
-			EventFlowSystemActor.BGMPropertyControl(53)
-			EventFlowSystemActor.WaitFrame(35)
-			System.EventFlags['cPlayer:SzaPAAccidentCounter'] += 1
-		else:
-			MainNpc.RequestSimple('SzaNewsPrepare', false)
-			EventFlowSystemActor.WaitFaderSleep()
-			EventFlowSystemActor.UIDemoClock(60)
-			EventFlowSystemActor.BGMPropertyControl(53)
-			EventFlowSystemActor.WaitFrame(60)
-			MainNpc.RequestSimple('SzaNewsNotice', true)
-			System.EventFlags['cPlayer:SzaPAAccidentCounter'] = 0
-		MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
-
-flow Sza_NormalPreAction():
-	run Event56()
-
-local flow UnlockCraftingRecipes():
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 80) # clackercart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 83) # rocking horse
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 88) # ringtoss
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 132) # succulent plant
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 144) # manhole cover
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 331) # birdbath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 333) # birdhouse
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 343) # tiki torch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 383) # acoustic guitar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 530) # grass standee
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 531) # hedge standee
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 532) # mountain standee
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 533) # tree standee
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 665) # wave breaker
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 669) # ukulele
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 676) # tall lantern
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 677) # deer scare
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 682) # boomerang
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 710) # bamboo bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 722) # hearth
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 729) # garden rock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 730) # tall garden rock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 739) # tea table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 743) # frozen mini snowperson
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 805) # mush lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 808) # mush table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 865) # birdcage
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 880) # wooden bucket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 891) # holiday candle
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 922) # stacked bottle crates
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 975) # fruit basket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1023) # pile of leaves
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1032) # magazine rack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1054) # moon
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1058) # music stand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1103) # rocking chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1111) # outdoor bath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1120) # scarecrow
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1157) # brick oven
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1170) # swinging bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1189) # tire stack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1241) # DIY workbench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1263) # pear wardrobe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1266) # barrel
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1429) # campfire
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1430) # bonfire
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1439) # asteroid
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1440) # lunar lander
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1441) # rocket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1442) # lunar rover
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1443) # satellite
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1444) # space shuttle
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1445) # astronaut suit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1447) # flying saucer
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1504) # giant teddy bear
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1509) # robot hero
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1557) # wooden-block bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1558) # wooden-block bookshelf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1559) # wooden-block bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1561) # wooden-block chest
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1565) # wooden-block table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1573) # dharma
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1625) # iron garden bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1626) # iron garden chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1627) # iron garden table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1652) # matryoshka
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1750) # document stack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1753) # aroma pot
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1759) # stack of books
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1797) # decoy duck
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1799) # doghouse
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1823) # trash bags
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1861) # stacked magazines
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 1913) # wooden chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2319) # drinking fountain
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2326) # water pump
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2329) # tire toy
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2553) # iron frame
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2558) # wooden-block chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2559) # pot
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2560) # wooden chest
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2586) # natural garden chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2596) # juicy-apple TV
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2605) # wooden simple bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2754) # simple well
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3065) # gold bars
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3122) # mini DIY workbench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3191) # ironwood table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3193) # ironwood chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3194) # ironwood low table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3195) # ironwood cart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3196) # ironwood dresser
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3200) # ironwood bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3205) # wooden-block stereo
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3206) # wooden-block toy
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3208) # wooden-block wall clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3229) # clothesline
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3270) # ironwood kitchenette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3271) # ironwood cupboard
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3275) # ironwood clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3340) # deer decoration
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3344) # steamer-basket set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3396) # natural garden table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3397) # stone table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3398) # stone stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3406) # beekeeper's hive
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3410) # small cardboard boxes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3411) # medium cardboard boxes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3412) # large cardboard boxes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3436) # wooden wardrobe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3438) # wooden end table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3439) # wooden table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3445) # standard umbrella stand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3446) # western-style stone
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3449) # wooden stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3472) # golden toilet
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3473) # golden seat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3490) # wooden waste bin
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3497) # frozen table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3498) # frozen partition
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3499) # frozen arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3500) # frozen pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3501) # frozen sculpture
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3502) # frozen bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3503) # frozen chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3504) # frozen tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3505) # frozen counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3509) # garden bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3551) # bamboo shelf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3553) # bamboo partition
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3554) # bamboo candleholder
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3555) # bamboo doll
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3556) # bamboo stopblock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3557) # bamboo floor lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3558) # bamboo wall decoration
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3559) # iron wall lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3560) # iron worktable
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3561) # iron hanger stand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3562) # iron wall rack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3563) # iron shelf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3580) # bonsai shelf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3588) # signpost
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3617) # stall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3618) # cutting board
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3658) # bamboo basket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3675) # hay bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3683) # plain sink
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3684) # coconut juice
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3689) # sauna heater
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3692) # plain wooden shop sign
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3772) # golden candlestick
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3773) # terrarium
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3774) # Libra scale
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3775) # hanging terrarium
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3776) # brick well
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3785) # potted ivy
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3802) # pine bonsai tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3805) # mush parasol
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3806) # mush partition
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3808) # mush log
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3810) # golden dishes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3819) # oil-barrel bathtub
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3943) # ironwood DIY workbench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3966) # big festive tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3975) # orange end table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3976) # orange wall-mounted clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3977) # shell arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3978) # shell partition
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3979) # shell stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3980) # shell table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3982) # shell fountain
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3983) # shell bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3984) # shell lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3991) # festive tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3992) # key holder
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4008) # kettle bathtub
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4011) # cherry speakers
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4012) # cherry lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4025) # unglazed dish set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4027) # floral swag
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4034) # scattered papers
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4035) # log garden lounge
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4036) # log decorative shelves
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4037) # log wall-mounted clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4038) # log stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4039) # log chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4040) # log dining table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4041) # log bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4042) # log bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4043) # log round table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4044) # log extra-long sofa
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4066) # illuminated tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4067) # tabletop festive tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4073) # classic pitcher
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4074) # illuminated reindeer
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4075) # gong
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4078) # barbell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4083) # spooky arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4084) # spooky scarecrow
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4086) # spooky tower
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4087) # spooky carriage
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4088) # spooky lantern
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4089) # spooky chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4090) # spooky table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4092) # spooky lantern set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4093) # bamboo drum
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4104) # frying pan
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4107) # infused-water dispenser
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4108) # illuminated present
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4124) # wooden fish
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4125) # wooden bookshelf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4127) # peach chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4128) # peach surprise box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4130) # coconut wall planter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4131) # illuminated snowflakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4134) # apple chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4269) # green-leaf pile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4270) # yellow-leaf pile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4271) # red-leaf pile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4279) # frozen-treat set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4309) # destinations signpost
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4393) # old-fashioned washtub
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4546) # pear bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4708) # mush low stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5150) # shell speaker
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5337) # three-tiered snowperson
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5543) # wooden-block stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5635) # tiny library
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5636) # wooden-plank sign
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5676) # crewed spaceship
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5931) # jail bars
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5941) # golden dung beetle
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5954) # Aries rocking chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5955) # Virgo harp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5956) # Aquarius urn
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5957) # Capricorn ornament
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5958) # Sagittarius arrow
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5959) # Cancer table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5960) # Gemini closet
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5961) # Taurus bathtub
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5962) # Scorpio lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5963) # Pisces lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5964) # Leo sculpture
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5970) # firewood
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5972) # wild log bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5973) # log stakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5975) # traditional balancing toy
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5976) # bamboo sphere
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5977) # bamboo-shoot lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5978) # bamboo lunch box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5979) # bamboo noodle slide
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6030) # cherry-blossom bonsai
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6031) # cherry-blossom branches
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6032) # cherry-blossom-petal pile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6033) # outdoor picnic set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6075) # tree's bounty mobile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6078) # tree's bounty lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6079) # tree's bounty little tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6080) # tree's bounty big tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6081) # tree's bounty arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6818) # ornament mobile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6826) # nova light
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6827) # starry garland
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6829) # crescent-moon chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6830) # shell music box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6831) # blossom-viewing lantern
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6832) # cherry-blossom clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7045) # recycled-can thumb piano
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7048) # pile of zen cushions
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7132) # wooden double bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7133) # wooden mini table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7134) # wooden low table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7137) # wooden full-length mirror
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7142) # simple DIY workbench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7154) # wooden box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7159) # cardboard sofa
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7160) # cardboard table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7161) # cardboard bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7163) # cardboard chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7230) # cosmos shower
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7231) # tulip surprise box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7232) # mum cushion
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7233) # windflower fan
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7234) # hyacinth lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7235) # rose bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7236) # lily record player
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7237) # pansy table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7247) # silo
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7253) # star clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7258) # modeling clay
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7259) # palm-tree lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7261) # trophy case
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7281) # sleigh
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7317) # zen-style stone
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7390) # leaf stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7393) # pond stone
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7408) # maple-leaf pond stone
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7409) # cherry-blossom pond stone
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7452) # raccoon figurine
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7454) # wooden toolbox
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7527) # flower stand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7535) # kettlebell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7788) # leaf campfire
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7795) # stone lion-dog
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7805) # butter churn
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7867) # angled signpost
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8031) # fountain
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8419) # garden wagon
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8825) # golden casket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8826) # wooden table mirror
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9642) # iron closet
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9814) # lucky gold cat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 10742) # bamboo stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 10743) # bamboo speaker
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11260) # golden arowana model
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11261) # golden gears
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11941) # stone arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11942) # street piano
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11943) # stone tablet
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12206) # flat garden rock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12208) # mossy garden rock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12230) # festive top set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12332) # natural square table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12349) # project table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12350) # box-shaped seat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12398) # Bunny Day arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12412) # wobbling Zipper toy
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12413) # Bunny Day lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12414) # Bunny Day bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12415) # Bunny Day stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12417) # Bunny Day glowy garland
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12418) # Bunny Day wall clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12419) # Bunny Day merry balloons
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12420) # Bunny Day vanity
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12421) # Bunny Day festive balloons
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12436) # Bunny Day table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12437) # Bunny Day wardrobe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12552) # mermaid table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12553) # mermaid shelf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12554) # mermaid vanity
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12555) # mermaid screen
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12556) # mermaid lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12557) # mermaid wall clock
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12558) # mermaid bed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12559) # mermaid closet
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12560) # mermaid sofa
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12561) # mermaid dresser
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12562) # mermaid chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12611) # plate armor
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12681) # partition wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12706) # imperial pot
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12709) # carp on a cutting board
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12949) # spooky standing lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12951) # spooky candy set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13161) # wooden field sign
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13210) # stacked shopping baskets
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13220) # festival-lantern set
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13222) # spooky garland
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13223) # spooky table setting
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13244) # gift pile
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13447) # Turkey Day garden stand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13448) # Turkey Day hearth
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13449) # Turkey Day decorations
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13450) # Turkey Day chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13453) # Turkey Day table
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13496) # stonework kitchen
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13509) # gear tower
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13511) # gear apparatus
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13520) # forbidden altar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13573) # medium wooden partition
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13574) # small wooden partition
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13580) # skateboard wall rack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13588) # tension-pole rack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13606) # stacked fish containers
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13608) # veggie basket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13662) # ruined decorated pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13666) # pile of cash
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13696) # pile of cardboard boxes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13751) # open wooden shelves
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13818) # Turkey Day casserole
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13819) # Turkey Day wheat decor
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13820) # Turkey Day table setting
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13895) # tall concrete island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13897) # tall brick island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13898) # low concrete island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13901) # low brick island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13902) # tall wooden island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14017) # cave
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14018) # ruined arch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14019) # vine hanging chair
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14187) # stacked senmaizuke barrels
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14188) # senmaizuke barrel
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14192) # giant vine
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14193) # vine bench
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14205) # vine lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14206) # vine garland
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14207) # glowing-moss stool
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14208) # glowing-moss balloon
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14209) # glowing-moss boulder
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14210) # hanging glowing moss
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14212) # glowing-moss pond
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14213) # glowing-moss statue
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14214) # glowing-moss-jar shelves
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14215) # glow-in-the-dark stickers
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14216) # suspicious cauldron
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14308) # low simple island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14310) # tall simple island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14313) # low wooden island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14322) # tall steel island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14324) # low steel island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14330) # tall golden island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14332) # tall marble island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14333) # low golden island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14337) # low marble island counter
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14478) # golden plate armor
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14479) # golden piggy bank
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14480) # gold-nugget mining car
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14481) # golden vase
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14482) # golden altar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14483) # golden bathtub
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14484) # golden meter and pipes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14485) # golden gear apparatus
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14486) # golden gear tower
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14487) # golden dharma
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14488) # golden garden bunny
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14489) # mini golden dharma
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14490) # golden urn
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14491) # golden wristwatch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14492) # golden decorative plate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14533) # golden samurai suit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14549) # decayed tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14550) # spooky tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14551) # spooky trick lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14591) # ornament table lamp
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14592) # wooden music box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14593) # ornament garland
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14594) # giant ornament
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14596) # brick pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14597) # marble pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14598) # simple pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14599) # steel pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14600) # golden pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14601) # wooden pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14602) # concrete pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14604) # glowing-moss jar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14714) # donation box
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14728) # ornament tree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14831) # wooden storage shed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14882) # ruined seat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14887) # ruined broken pillar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12813) # savory bread
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12822) # bread
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12823) # organic bread
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12824) # snack bread
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12835) # squid-ink spaghetti
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12838) # spaghetti marinara
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12840) # spaghetti napolitan
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13327) # gratin
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13328) # clam chowder
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13329) # pumpkin pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13330) # olive-flounder meunière
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13931) # carrot potage
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13932) # potato potage
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13933) # bread gratin
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13934) # orange pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13935) # peach pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13936) # pear pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13937) # cherry pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13938) # gnocchi di zucca
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13939) # gnocchi di patate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13940) # gnocchi di carote
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13941) # pumpkin soup
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13942) # minestrone soup
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13943) # bamboo-shoot soup
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13944) # apple pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13945) # seaweed soup
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13946) # carrot cake
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13947) # apple tart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13948) # veggie quiche
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13949) # orange tart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13950) # mixed-fruits tart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13951) # peach tart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13952) # cherry tart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13953) # pear tart
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13957) # mixed-fruits pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13959) # mixed-fruits sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13960) # coconut pudding
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13961) # pear jelly
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13962) # cherry jelly
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13963) # peach jelly
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13964) # mushroom crepe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13965) # seafood salad
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13966) # fruit salad
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13967) # orange jelly
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13968) # salade de carottes râpées
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13969) # poke
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13970) # turnip salad
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13971) # apple jelly
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13972) # mushroom salad
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13973) # veggie crepe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13974) # veggie sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13975) # mixed-fruits crepe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13976) # salmon sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13977) # sugar crepe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13978) # cookies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13979) # orange pound cake
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13980) # pound cake
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13981) # pumpkin pound cake
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13982) # tomato juice
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13983) # kabu ankake
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13984) # carrot juice
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13985) # coconut milk
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13986) # pretzels
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13987) # frosted pretzels
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13988) # salad-stuffed tomato
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13989) # coconut cookies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13990) # veggie cookies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13991) # cherry smoothie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13992) # thumbprint jam cookies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13993) # frosted cookies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13995) # pear smoothie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13999) # peach smoothie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14000) # apple smoothie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14001) # orange smoothie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14002) # brown-sugar pound cake
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14003) # sea-bass pie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14010) # salad
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14048) # mushroom potage
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14104) # fish-and-chips
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14105) # french fries
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14109) # plain scones
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14110) # veggie cupcakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14111) # tomato bagel sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14112) # brown-sugar cupcakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14113) # carrot scones
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14114) # pumpkin cupcakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14115) # fruit scones
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14116) # fruit cupcakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14117) # pumpkin scones
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14118) # plain cupcakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14119) # salmon bagel sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14120) # squid-ink curry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14121) # pumpkin curry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14122) # carrot-tops curry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14123) # mixed-fruits bagel sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14124) # tomato curry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14125) # pumpkin bagel sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14126) # carrot bagel sandwich
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14127) # potato curry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14128) # mushroom curry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14129) # pancakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14130) # coconut pancakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14131) # potato galette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14132) # fruit-topped pancakes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14161) # pesce all'acqua pazza
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14162) # karei no nitsuke
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14163) # aji fry
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14164) # sautéed olive flounder
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14165) # grilled sea bass with herbs
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14166) # carpaccio di salmone
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14167) # carpaccio di marlin blu
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14168) # barred-knifejaw carpaccio
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14169) # orange marmalade
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14170) # peach jam
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14171) # pear jam
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14172) # carpaccio di capesante
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14173) # cherry jam
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14174) # pickled veggies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14175) # tomato puree
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14176) # apple jam
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14177) # coconut oil
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14178) # anchoas al ajillo
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14179) # tomates al ajillo
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14180) # champiñones al ajillo
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14181) # sardines in oil
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14182) # pull-apart bread
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14183) # seafood ajillo
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14185) # jarred mushrooms
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14186) # jarred bamboo shoots
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14465) # baked potatoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14466) # pizza margherita
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14552) # spooky cookies
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14565) # Roost sablé cookie
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14696) # seafood pizza
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14697) # fruit pizza
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14698) # mushroom pizza
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14716) # cake salé
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6840) # leaf umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 6912) # orange umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7169) # maple-leaf umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7174) # mush umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9945) # cherry-blossom umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9947) # peach umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9948) # apple umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9949) # cherry umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9950) # pear umbrella
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2099) # shovel
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2100) # axe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2376) # flimsy net
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2377) # fishing rod
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2379) # watering can
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2544) # star wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2615) # ladder
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2822) # slingshot
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3068) # flimsy axe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3082) # flimsy shovel
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3083) # flimsy watering can
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3084) # flimsy fishing rod
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4703) # vaulting pole
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5083) # hyacinth wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5084) # windflower wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5085) # tulip wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5091) # pansy wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5092) # cosmos wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5093) # rose wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5094) # lily wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5095) # mums wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5784) # net
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5856) # stone axe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7584) # wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7585) # ice wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7586) # shell wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7587) # tree-branch wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7588) # mushroom wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7589) # cherry-blossom wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7590) # bamboo wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7591) # golden wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7592) # iron wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8179) # golden net
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8533) # golden watering can
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8574) # golden shovel
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8578) # golden slingshot
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8660) # golden rod
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9617) # golden axe
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12578) # Bunny Day wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12695) # wedding wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13237) # spooky wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14239) # shamrock wand
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4801) # steel-frame wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4804) # brown herringbone wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4805) # chocolate herringbone wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4813) # rustic-stone wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4820) # gold-screen wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4833) # bamboo wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4837) # classic-library wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4838) # manga-library wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4840) # cabin wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4844) # stacked-wood wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4853) # bamboo-grove wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4855) # snowflake wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4858) # wild-wood wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4859) # wooden-mosaic wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4860) # dark wooden-mosaic wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4865) # honeycomb wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4894) # golden wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4904) # modern wood wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4905) # autumn wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4911) # wooden-knot wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4915) # orange wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4916) # apple wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4917) # pear wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4918) # peach wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4919) # cherry wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4947) # sakura-wood wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5164) # mush wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5216) # stone wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5223) # woodland wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5229) # garbage-heap wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5230) # Jingle wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5231) # Bunny Day wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5457) # jungle wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5498) # ski-slope wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5500) # starry-sky wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5505) # ice wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5508) # underwater wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5510) # sci-fi wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5528) # starry wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5661) # tropical vista
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5662) # iceberg wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7187) # forest wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7205) # cherry-blossom-trees wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12566) # mermaid wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13019) # glowing-moss forest wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13603) # falling-snow wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13874) # glowing-moss ruins wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13875) # rope-net wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13881) # glowing-moss cave wall
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4797) # basement flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4960) # steel flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4964) # bamboo flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4968) # lunar surface
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4970) # sandy-beach flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4979) # backyard lawn
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4986) # money flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4989) # ski-slope flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4990) # colored-leaves flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4999) # honeycomb flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5021) # golden flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5030) # water flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5056) # sakura-wood flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5236) # garbage-heap flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5253) # iceberg flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5268) # underwater flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5269) # galaxy flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5270) # sci-fi flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5515) # jungle flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5516) # ice flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7186) # forest flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7204) # cherry-blossom flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7239) # starry-sands flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12423) # Bunny Day flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12568) # mermaid flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13879) # glowing-moss flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13880) # rope-net flooring
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7327) # apple rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7328) # cherry rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7330) # orange rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7331) # peach rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7332) # pear rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7362) # shell rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7544) # festive rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7546) # Bunny Day rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11113) # light bamboo rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11114) # dark bamboo rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12217) # summer-shell rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12222) # yellow star rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12329) # green bamboo mat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12330) # yellow bamboo mat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12335) # acorn rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12351) # cherry-blossom rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12379) # tree-stump rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12390) # maple-leaf rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12399) # light bamboo bath mat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12400) # dark bamboo bath mat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12521) # starry-skies rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12563) # mermaid rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13572) # frozen floor tiles
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13877) # glowing-moss rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13878) # round glowing-moss rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13906) # round vine rug
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4293) # cosmos wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4375) # snowflake wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4376) # shell wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4377) # ornament wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4378) # fruit wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4726) # mushroom wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4727) # tree branch wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4751) # bone doorplate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4752) # iron doorplate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5436) # windflower wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5437) # rose wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5466) # pansy wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5467) # mum wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5468) # hyacinth wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5641) # lily wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5670) # tulip wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5677) # fancy lily wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5716) # paw-print doorplate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5717) # crest doorplate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5718) # timber doorplate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5719) # fossil doorplate
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5745) # pretty cosmos wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5746) # cool windflower wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5747) # fancy rose wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5748) # snazzy pansy wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5749) # fancy mum wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5750) # cool hyacinth wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5751) # pretty tulip wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5764) # chic cosmos wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5765) # chic windflower wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5766) # dark rose wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5767) # cool pansy wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5768) # natural mum wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5769) # purple hyacinth wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5770) # dark lily wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5771) # dark tulip wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5772) # blue rose wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5820) # gold rose wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12517) # Bunny Day wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14211) # glowing-moss wreath
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2578) # pitfall seed
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 2777) # medicine
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4549) # fish bait
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5166) # campsite construction kit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5320) # ocarina
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5517) # pan flute
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7211) # bridge construction kit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13526) # vine ladder set-up kit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13530) # wooden ladder set-up kit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13534) # iron ladder set-up kit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13792) # festive wrapping paper
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13994) # flour
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13996) # whole-wheat flour
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13997) # sugar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13998) # brown sugar
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14470) # golden ladder set-up kit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14542) # spooky treats basket
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14644) # nice branch
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14645) # foxtail
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3548) # rainbow feather
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3080) # brick fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3402) # vertical-board fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3403) # bamboo lattice fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4349) # corral fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4350) # country fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4351) # log fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4352) # rope fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4354) # imperial fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4355) # block fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4356) # straw fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4357) # iron fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4358) # spiky fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5206) # iron-and-stone fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5207) # zen fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5208) # large lattice fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5210) # log-wall fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5212) # stone fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5213) # barbed-wire fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11711) # simple wooden fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 11712) # lattice fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12630) # Bunny Day fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12758) # hedge
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12894) # wedding fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 13275) # spooky fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14278) # mermaid fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14755) # green bamboo fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14756) # frozen fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14757) # bamboo-slats fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14758) # corrugated iron fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14759) # park fence
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4682) # leaf
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7492) # acorn pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7506) # basket pack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12447) # Bunny Day bag
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7490) # cherry-blossom pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7511) # knitted-grass backpack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7498) # log pack
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7491) # maple-leaf pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7494) # shellfish pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7493) # snowflake pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7489) # star pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14249) # woven-vine pochette
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4333) # grass skirt
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8907) # green grass skirt
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9871) # apple hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5143) # bamboo hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7377) # blue rose crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12445) # Bunny Day crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9873) # cherry hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5118) # chic mum crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5113) # chic rose crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5103) # chic tulip crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5097) # cool hyacinth crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5106) # cool pansy crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5100) # cool windflower crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5108) # cosmos crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5115) # cute lily crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5112) # cute rose crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5110) # dark cosmos crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5116) # dark lily crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5104) # dark tulip crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12439) # earth-egg shell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12446) # egg party hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14201) # glowing-moss headband
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14198) # glowing-moss pointed cap
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7378) # gold rose crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5096) # hyacinth crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12441) # leaf-egg shell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5114) # lily crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5109) # lovely cosmos crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5117) # mum crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5275) # orange hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14613) # ornament crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5105) # pansy crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9874) # peach hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9872) # pear hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5098) # purple hyacinth crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5107) # purple pansy crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5101) # purple windflower crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5111) # rose crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5119) # simple mum crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12443) # sky-egg shell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12440) # stone-egg shell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7254) # straw umbrella hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5102) # tulip crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14202) # vine crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12444) # water-egg shell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5099) # windflower crown
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12442) # wood-egg shell
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14197) # woven-vines hat
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14199) # glowing-moss hood
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5346) # gold helmet (Gold)
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5607) # King Tut mask (Gold)
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5334) # knight's helmet (Gray)
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 7291) # leaf mask (Green)
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 8609) # snowperson head
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9862) # star head
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9836) # apple dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9838) # cherry dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12449) # earth-egg outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12448) # egg party dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14257) # full-body glowing-moss suit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14259) # glowing-moss dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4590) # gold armor
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 4588) # iron armor
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12451) # leaf-egg outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 3288) # orange dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9839) # peach dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 9837) # pear dress
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12453) # sky-egg outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12450) # stone-egg outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 14248) # vine outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12454) # water-egg outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12452) # wood-egg outfit
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5472) # armor shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12455) # earth-egg shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5524) # gold-armor shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12457) # leaf-egg shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12326) # recycled boots
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12459) # sky-egg shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12456) # stone-egg shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12460) # water-egg shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 12458) # wood-egg shoes
-	EventFlowSystemActor.PlayerSetCraftRecipe('None', 5291) # traditional straw coat
-
-local flow UnlockCatalogItems_0():
 	EventFlowSystemActor.SetItemToPocket(79, 1) # baby bed
 	MainNpc.SetDeliveryItemAtRandom(79, false, 'cVillageRemakePattern', 0)
 	EventFlowSystemActor.DeleteTargetItem(79, 1, false)
@@ -2492,8 +1398,6 @@ local flow UnlockCatalogItems_0():
 	EventFlowSystemActor.DeleteTargetItem(3805, 1, false)
 	EventFlowSystemActor.SetItemToPocket(3806, 1) # mush partition
 	MainNpc.SetDeliveryItemAtRandom(3806, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_1():
 	EventFlowSystemActor.DeleteTargetItem(3806, 1, false)
 	EventFlowSystemActor.SetItemToPocket(3808, 1) # mush log
 	MainNpc.SetDeliveryItemAtRandom(3808, false, 'cVillageRemakePattern', 0)
@@ -3895,8 +2799,6 @@ local flow UnlockCatalogItems_1():
 	EventFlowSystemActor.DeleteTargetItem(12371, 1, false)
 	EventFlowSystemActor.SetItemToPocket(12372, 1) # Pocket modern camper
 	MainNpc.SetDeliveryItemAtRandom(12372, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_2():
 	EventFlowSystemActor.DeleteTargetItem(12372, 1, false)
 	EventFlowSystemActor.SetItemToPocket(12373, 1) # Pocket vintage camper
 	MainNpc.SetDeliveryItemAtRandom(12373, false, 'cVillageRemakePattern', 0)
@@ -5298,8 +4200,6 @@ local flow UnlockCatalogItems_2():
 	EventFlowSystemActor.DeleteTargetItem(13823, 1, false)
 	EventFlowSystemActor.SetItemToPocket(13824, 1) # Goal Pole
 	MainNpc.SetDeliveryItemAtRandom(13824, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_3():
 	EventFlowSystemActor.DeleteTargetItem(13824, 1, false)
 	EventFlowSystemActor.SetItemToPocket(13825, 1) # Super Star
 	MainNpc.SetDeliveryItemAtRandom(13825, false, 'cVillageRemakePattern', 0)
@@ -6701,8 +5601,6 @@ local flow UnlockCatalogItems_3():
 	EventFlowSystemActor.DeleteTargetItem(3083, 1, false)
 	EventFlowSystemActor.SetItemToPocket(3084, 1) # flimsy fishing rod
 	MainNpc.SetDeliveryItemAtRandom(3084, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_4():
 	EventFlowSystemActor.DeleteTargetItem(3084, 1, false)
 	EventFlowSystemActor.SetItemToPocket(3247, 1) # waterscaping permit
 	MainNpc.SetDeliveryItemAtRandom(3247, false, 'cVillageRemakePattern', 0)
@@ -8104,8 +7002,6 @@ local flow UnlockCatalogItems_4():
 	EventFlowSystemActor.DeleteTargetItem(6945, 1, false)
 	EventFlowSystemActor.SetItemToPocket(6946, 1) # freshwater goby model
 	MainNpc.SetDeliveryItemAtRandom(6946, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_5():
 	EventFlowSystemActor.DeleteTargetItem(6946, 1, false)
 	EventFlowSystemActor.SetItemToPocket(6949, 1) # ray model
 	MainNpc.SetDeliveryItemAtRandom(6949, false, 'cVillageRemakePattern', 0)
@@ -9507,8 +8403,6 @@ local flow UnlockCatalogItems_5():
 	EventFlowSystemActor.DeleteTargetItem(12491, 1, false)
 	EventFlowSystemActor.SetItemToPocket(12492, 1) # pink-camellia bush
 	MainNpc.SetDeliveryItemAtRandom(12492, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_6():
 	EventFlowSystemActor.DeleteTargetItem(12492, 1, false)
 	EventFlowSystemActor.SetItemToPocket(12550, 1) # glowing moss
 	MainNpc.SetDeliveryItemAtRandom(12550, false, 'cVillageRemakePattern', 0)
@@ -10910,8 +9804,6 @@ local flow UnlockCatalogItems_6():
 	EventFlowSystemActor.DeleteTargetItem(5070, 1, false)
 	EventFlowSystemActor.SetItemToPocket(5071, 1) # cool-paint flooring
 	MainNpc.SetDeliveryItemAtRandom(5071, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_7():
 	EventFlowSystemActor.DeleteTargetItem(5071, 1, false)
 	EventFlowSystemActor.SetItemToPocket(5072, 1) # robo-flooring
 	MainNpc.SetDeliveryItemAtRandom(5072, false, 'cVillageRemakePattern', 0)
@@ -12313,8 +11205,6 @@ local flow UnlockCatalogItems_7():
 	EventFlowSystemActor.DeleteTargetItem(5604, 1, false)
 	EventFlowSystemActor.SetItemToPocket(5605, 1) # Wildest Dreams DIY
 	MainNpc.SetDeliveryItemAtRandom(5605, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_8():
 	EventFlowSystemActor.DeleteTargetItem(5605, 1, false)
 	EventFlowSystemActor.SetItemToPocket(5741, 1) # light stick
 	MainNpc.SetDeliveryItemAtRandom(5741, false, 'cVillageRemakePattern', 0)
@@ -13716,8 +12606,6 @@ local flow UnlockCatalogItems_8():
 	EventFlowSystemActor.DeleteTargetItem(6495, 1, false)
 	EventFlowSystemActor.SetItemToPocket(6496, 1) # Prince's photo
 	MainNpc.SetDeliveryItemAtRandom(6496, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_9():
 	EventFlowSystemActor.DeleteTargetItem(6496, 1, false)
 	EventFlowSystemActor.SetItemToPocket(6497, 1) # Jambette's photo
 	MainNpc.SetDeliveryItemAtRandom(6497, false, 'cVillageRemakePattern', 0)
@@ -15119,8 +14007,6 @@ local flow UnlockCatalogItems_9():
 	EventFlowSystemActor.DeleteTargetItem(10413, 1, false)
 	EventFlowSystemActor.SetItemToPocket(10414, 1) # Chops's poster
 	MainNpc.SetDeliveryItemAtRandom(10414, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_10():
 	EventFlowSystemActor.DeleteTargetItem(10414, 1, false)
 	EventFlowSystemActor.SetItemToPocket(10415, 1) # Vic's poster
 	MainNpc.SetDeliveryItemAtRandom(10415, false, 'cVillageRemakePattern', 0)
@@ -16522,8 +15408,6 @@ local flow UnlockCatalogItems_10():
 	EventFlowSystemActor.DeleteTargetItem(2190, 1, false)
 	EventFlowSystemActor.SetItemToPocket(2191, 1) # 78,000 Bells
 	MainNpc.SetDeliveryItemAtRandom(2191, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_11():
 	EventFlowSystemActor.DeleteTargetItem(2191, 1, false)
 	EventFlowSystemActor.SetItemToPocket(2192, 1) # 79,000 Bells
 	MainNpc.SetDeliveryItemAtRandom(2192, false, 'cVillageRemakePattern', 0)
@@ -17925,8 +16809,6 @@ local flow UnlockCatalogItems_11():
 	EventFlowSystemActor.DeleteTargetItem(6947, 1, false)
 	EventFlowSystemActor.SetItemToPocket(12424, 1) # OK Motors cap
 	MainNpc.SetDeliveryItemAtRandom(12424, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_12():
 	EventFlowSystemActor.DeleteTargetItem(12424, 1, false)
 	EventFlowSystemActor.SetItemToPocket(5275, 1) # orange hat
 	MainNpc.SetDeliveryItemAtRandom(5275, false, 'cVillageRemakePattern', 0)
@@ -19328,8 +18210,6 @@ local flow UnlockCatalogItems_12():
 	EventFlowSystemActor.DeleteTargetItem(3336, 1, false)
 	EventFlowSystemActor.SetItemToPocket(12497, 1) # wedding tuxedo
 	MainNpc.SetDeliveryItemAtRandom(12497, false, 'cVillageRemakePattern', 0)
-
-local flow UnlockCatalogItems_13():
 	EventFlowSystemActor.DeleteTargetItem(12497, 1, false)
 	EventFlowSystemActor.SetItemToPocket(14281, 1) # white hakama with crest
 	MainNpc.SetDeliveryItemAtRandom(14281, false, 'cVillageRemakePattern', 0)
@@ -20731,3 +19611,169 @@ local flow UnlockCatalogItems_13():
 	EventFlowSystemActor.DeleteTargetItem(9535, 1, false)
 	EventFlowSystemActor.SetItemToPocket(2655, 1) # striped shirt
 	MainNpc.SetDeliveryItemAtRandom(2655, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(2655, 1, false)
+	EventFlowSystemActor.SetItemToPocket(7762, 1) # striped tank
+	MainNpc.SetDeliveryItemAtRandom(7762, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(7762, 1, false)
+	EventFlowSystemActor.SetItemToPocket(7760, 1) # striped tee
+	MainNpc.SetDeliveryItemAtRandom(7760, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(7760, 1, false)
+	EventFlowSystemActor.SetItemToPocket(9204, 1) # sushi chef's outfit
+	MainNpc.SetDeliveryItemAtRandom(9204, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(9204, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8494, 1) # sweater on shirt
+	MainNpc.SetDeliveryItemAtRandom(8494, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8494, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8116, 1) # sweater-vest
+	MainNpc.SetDeliveryItemAtRandom(8116, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8116, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3671, 1) # sweatshirt
+	MainNpc.SetDeliveryItemAtRandom(3671, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3671, 1, false)
+	EventFlowSystemActor.SetItemToPocket(4578, 1) # sweetheart tank and shirt
+	MainNpc.SetDeliveryItemAtRandom(4578, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(4578, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8284, 1) # tailcoat
+	MainNpc.SetDeliveryItemAtRandom(8284, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8284, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8272, 1) # tailored jacket
+	MainNpc.SetDeliveryItemAtRandom(8272, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8272, 1, false)
+	EventFlowSystemActor.SetItemToPocket(230, 1) # tee and towel
+	MainNpc.SetDeliveryItemAtRandom(230, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(230, 1, false)
+	EventFlowSystemActor.SetItemToPocket(14427, 1) # tee with silicone bib
+	MainNpc.SetDeliveryItemAtRandom(14427, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(14427, 1, false)
+	EventFlowSystemActor.SetItemToPocket(7984, 1) # tee-parka combo
+	MainNpc.SetDeliveryItemAtRandom(7984, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(7984, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3599, 1) # tennis sweater
+	MainNpc.SetDeliveryItemAtRandom(3599, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3599, 1, false)
+	EventFlowSystemActor.SetItemToPocket(11927, 1) # terry-cloth nightgown
+	MainNpc.SetDeliveryItemAtRandom(11927, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(11927, 1, false)
+	EventFlowSystemActor.SetItemToPocket(4340, 1) # text shirt
+	MainNpc.SetDeliveryItemAtRandom(4340, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(4340, 1, false)
+	EventFlowSystemActor.SetItemToPocket(14646, 1) # thank-you Dad apron
+	MainNpc.SetDeliveryItemAtRandom(14646, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(14646, 1, false)
+	EventFlowSystemActor.SetItemToPocket(7622, 1) # thick-stripes shirt
+	MainNpc.SetDeliveryItemAtRandom(7622, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(7622, 1, false)
+	EventFlowSystemActor.SetItemToPocket(5134, 1) # thief's costume
+	MainNpc.SetDeliveryItemAtRandom(5134, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(5134, 1, false)
+	EventFlowSystemActor.SetItemToPocket(5126, 1) # thread-worn sweater
+	MainNpc.SetDeliveryItemAtRandom(5126, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(5126, 1, false)
+	EventFlowSystemActor.SetItemToPocket(2498, 1) # three-ball tee
+	MainNpc.SetDeliveryItemAtRandom(2498, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(2498, 1, false)
+	EventFlowSystemActor.SetItemToPocket(4211, 1) # tie-dye shirt
+	MainNpc.SetDeliveryItemAtRandom(4211, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(4211, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3253, 1) # tiger jacket
+	MainNpc.SetDeliveryItemAtRandom(3253, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3253, 1, false)
+	EventFlowSystemActor.SetItemToPocket(4302, 1) # tight-knit sweater
+	MainNpc.SetDeliveryItemAtRandom(4302, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(4302, 1, false)
+	EventFlowSystemActor.SetItemToPocket(12796, 1) # Tomato Festival tee
+	MainNpc.SetDeliveryItemAtRandom(12796, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(12796, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8455, 1) # top coat
+	MainNpc.SetDeliveryItemAtRandom(8455, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8455, 1, false)
+	EventFlowSystemActor.SetItemToPocket(7611, 1) # track jacket
+	MainNpc.SetDeliveryItemAtRandom(7611, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(7611, 1, false)
+	EventFlowSystemActor.SetItemToPocket(5291, 1) # traditional straw coat
+	MainNpc.SetDeliveryItemAtRandom(5291, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(5291, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8194, 1) # tree sweater
+	MainNpc.SetDeliveryItemAtRandom(8194, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8194, 1, false)
+	EventFlowSystemActor.SetItemToPocket(9284, 1) # trench coat
+	MainNpc.SetDeliveryItemAtRandom(9284, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(9284, 1, false)
+	EventFlowSystemActor.SetItemToPocket(14687, 1) # tropical cut-and-sew tank
+	MainNpc.SetDeliveryItemAtRandom(14687, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(14687, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8082, 1) # tube top
+	MainNpc.SetDeliveryItemAtRandom(8082, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8082, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8390, 1) # tunic tank
+	MainNpc.SetDeliveryItemAtRandom(8390, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8390, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8270, 1) # tuxedo jacket
+	MainNpc.SetDeliveryItemAtRandom(8270, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8270, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8121, 1) # tweed jacket
+	MainNpc.SetDeliveryItemAtRandom(8121, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8121, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8502, 1) # tweed vest
+	MainNpc.SetDeliveryItemAtRandom(8502, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8502, 1, false)
+	EventFlowSystemActor.SetItemToPocket(2541, 1) # two-ball tee
+	MainNpc.SetDeliveryItemAtRandom(2541, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(2541, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3700, 1) # V-neck sweater
+	MainNpc.SetDeliveryItemAtRandom(3700, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3700, 1, false)
+	EventFlowSystemActor.SetItemToPocket(4395, 1) # vampire costume
+	MainNpc.SetDeliveryItemAtRandom(4395, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(4395, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3677, 1) # vertical-stripes shirt
+	MainNpc.SetDeliveryItemAtRandom(3677, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3677, 1, false)
+	EventFlowSystemActor.SetItemToPocket(5433, 1) # vest with binoculars
+	MainNpc.SetDeliveryItemAtRandom(5433, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(5433, 1, false)
+	EventFlowSystemActor.SetItemToPocket(11950, 1) # viking top
+	MainNpc.SetDeliveryItemAtRandom(11950, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(11950, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8266, 1) # waistcoat
+	MainNpc.SetDeliveryItemAtRandom(8266, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8266, 1, false)
+	EventFlowSystemActor.SetItemToPocket(535, 1) # warrior armor
+	MainNpc.SetDeliveryItemAtRandom(535, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(535, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3245, 1) # western shirt
+	MainNpc.SetDeliveryItemAtRandom(3245, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3245, 1, false)
+	EventFlowSystemActor.SetItemToPocket(248, 1) # windbreaker
+	MainNpc.SetDeliveryItemAtRandom(248, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(248, 1, false)
+	EventFlowSystemActor.SetItemToPocket(11955, 1) # work apron
+	MainNpc.SetDeliveryItemAtRandom(11955, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(11955, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3266, 1) # work shirt
+	MainNpc.SetDeliveryItemAtRandom(3266, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3266, 1, false)
+	EventFlowSystemActor.SetItemToPocket(4765, 1) # worker's jacket
+	MainNpc.SetDeliveryItemAtRandom(4765, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(4765, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8060, 1) # workout top
+	MainNpc.SetDeliveryItemAtRandom(8060, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8060, 1, false)
+	EventFlowSystemActor.SetItemToPocket(7715, 1) # yodel cardigan
+	MainNpc.SetDeliveryItemAtRandom(7715, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(7715, 1, false)
+	EventFlowSystemActor.SetItemToPocket(3630, 1) # yodel sweater
+	MainNpc.SetDeliveryItemAtRandom(3630, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(3630, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8498, 1) # young-royal shirt
+	MainNpc.SetDeliveryItemAtRandom(8498, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8498, 1, false)
+	EventFlowSystemActor.SetItemToPocket(14953, 1) # zen uniform
+	MainNpc.SetDeliveryItemAtRandom(14953, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(14953, 1, false)
+	EventFlowSystemActor.SetItemToPocket(8204, 1) # zigzag shirt
+	MainNpc.SetDeliveryItemAtRandom(8204, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(8204, 1, false)
+	EventFlowSystemActor.SetItemToPocket(12859, 1) # 
+	MainNpc.SetDeliveryItemAtRandom(12859, false, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.DeleteTargetItem(12859, 1, false)
