@@ -1,0 +1,1 @@
+C:\Python39\python.exe -m eventeditor
