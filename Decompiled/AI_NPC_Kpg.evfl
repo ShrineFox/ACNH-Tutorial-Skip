@@ -1,0 +1,15 @@
+flow Check_kpg():
+	if MainNpc.NpcBlackBoard('CheckItemIndex', 0):
+		MainNpc.NpcAISetting(9, false)
+		MainNpc.NpcAISetting(5, false)
+		MainNpc.SetNpcSpeakFlow('SNPC_kpg', 'Check_Display')
+
+flow Init():
+	MainNpc.NpcRegistAIBlackBoard('CheckItemIndex', -1)
+	MainNpc.NpcAISetRequestSpeakFunc('cItemCheck', true)
+
+flow Root():
+	if MainNpc.NpcCheckStateSelectTiming('cInit'):
+		MainNpc.NpcChangeAIState('cWait', '', 'SNPC_kpg', 'Root', true, false)
+	else:
+		MainNpc.NpcChangeAIState('cWherearenOfficerWait', '', 'SNPC_kpg', 'Root', false, true)

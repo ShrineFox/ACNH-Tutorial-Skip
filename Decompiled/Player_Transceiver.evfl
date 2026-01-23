@@ -1,0 +1,41 @@
+flow Root():
+	if not ((EventFlowSystemActor.SystemCheckNowStage('cField')) and (EventFlowSystemActor.IsMyVillage())):
+		# You can't call Resetti now!
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2104', false)
+	elif EventFlowSystemActor.NetHasVisitor():
+		# I've got company, so I'll ask him to do a reset later.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2101', false)
+	elif EventFlowSystemActor.IsVillageGateOpened():
+		# I don't know when someone might visit, so I'll have him do a reset later!
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2102', false)
+	else:
+		switch EventFlowSystemActor.CanCallNpcTidy():
+			case 0:
+				Player.PlayerDemoTurn('cNorth')
+				EventFlowSystemActor.StartTidyingSelectRangePreviewGuide()
+				EventFlowSystemActor.WaitFrame(60)
+				# Should I contact Resetti to reset this area?
+				Player.OpenMessageWindow('TalkSys/SYS_Player:2100', true)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					EventFlowSystemActor.CameraSetDemoParam('TidyTransceiver', 'TidyTransceiver', 'Player', false, false, true, 0)
+					Player.PlayerDemoTurn('cSouth')
+					EventFlowSystemActor.WaitFrame(14)
+					Player.PlayerTransceiver(0)
+					EventFlowSystemActor.WaitFrame(30)
+					EventFlowSystemActor.RequestDuckingNextWiping()
+					EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+					EventFlowSystemActor.DeleteTidyingSelectRangePreviewGuide()
+					Player.PlayerTransceiver(1)
+					EventFlowSystemActor.RequestRunAwayBeeFotTidying()
+					EventFlowSystemActor.WaitFrame(30)
+					EventFlowSystemActor.EscapeNpcForTidyingWarpMol(true)
+					Player.PlayerChangeDemoState('cSharePlaySubHideUntilDemoEnd')
+					EventFlowSystemActor.SetNpcAIBlackBoardByLabel('mol', 'UserSelectCallSpeak', 1, 1)
+				else:
+					EventFlowSystemActor.DeleteTidyingSelectRangePreviewGuide()
+			case 1:
+				# There's no space around here for Resetti!
+				Player.OpenMessageWindow('TalkSys/SYS_Player:2103', false)
+			case 2:
+				# You can't call Resetti here!
+				Player.OpenMessageWindow('TalkSys/SYS_Player:2105', false)

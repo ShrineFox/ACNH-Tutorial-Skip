@@ -26,10 +26,36 @@ flow Root():
 	elif EventFlowSystemActor.IsSharePlay(0):
 		# The Custom Designs Portal can't be used during Party Play.
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:344', false)
-	elif (EventFlowSystemActor.IsWherearenOrderStaySequence()) or (System.EventFlags['cWherearenPlayer:IsParty']) or ((EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate'])) or ((EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (not System.EventFlags['cWherearenPlayer:OtgGetStartingSalary'])):
+	elif (EventFlowSystemActor.IsWherearenOrderStaySequence()) or (System.EventFlags['cWherearenPlayer:IsParty']) or ((EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate'])):
 		# You can't do that right now.
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:349', false)
-	elif (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')):
+	else:
+		if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
+			if System.EventFlags['cWherearenPlayer:OtgGetStartingSalary']:
+				run Sub_grp_Event25()
+			else:
+				# You can't do that right now.
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:349', false)
+		else:
+			if EventFlowSystemActor.HotelOrderProgress():
+				run Sub_grp_Event25()
+			else:
+				# You can't do that right now.
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:349', false)
+
+flow SignIn():
+	if not System.EventFlags['cPlayer:MyDesignExchangeFirstAccess']:
+		System.EventFlags['cPlayer:MyDesignExchangeExp_v1_4'] = true
+	EventFlowSystemActor.CheckFreeCommunication(true)
+	if EventFlowSystemActor.IsApprovedFreeCommunication():
+		run System_ServerRegistration::UserRegist(WithLogin=false, Terminate=true, WithSave=true)
+		EventFlowSystemActor.BGMPropertyControl(59)
+		EventFlowSystemActor.SystemRequestChangeStage('cMyDesignExchange', 'cMyDesignGo', 'cMyDesignGo', 'cBlack', 1.0, 1.0)
+	else:
+		run Parental()
+
+local flow Sub_grp_Event25():
+	if (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')):
 		switch EventFlowSystemActor.UICheckSceneChangable(0):
 			case 0:
 				# Would you like to access the Custom Designs Portal online?
@@ -48,14 +74,3 @@ flow Root():
 	else:
 		# You can't use this app while you're on a tour. Try again once you get back to your island.
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:346', false)
-
-flow SignIn():
-	if not System.EventFlags['cPlayer:MyDesignExchangeFirstAccess']:
-		System.EventFlags['cPlayer:MyDesignExchangeExp_v1_4'] = true
-	EventFlowSystemActor.CheckFreeCommunication(true)
-	if EventFlowSystemActor.IsApprovedFreeCommunication():
-		run System_ServerRegistration::UserRegistrun System_ServerRegistration::UserRegist(WithLogin=false, Terminate=true, WithSave=true)
-		EventFlowSystemActor.BGMPropertyControl(59)
-		EventFlowSystemActor.SystemRequestChangeStage('cMyDesignExchange', 'cMyDesignGo', 'cMyDesignGo', 'cBlack', 1.0, 1.0)
-	else:
-		run Parental()

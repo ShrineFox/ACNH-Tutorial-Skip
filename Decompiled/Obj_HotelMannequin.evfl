@@ -1,0 +1,128 @@
+flow FlowEnd():
+	EventFlowSystemActor.StoreNormalCamera(false, 'cDefault')
+
+flow MannequinExplain():
+	Player.SetPlayerHotelMannequinLookAtSignboard(true)
+	# Borrowing Hotel Outfits Anyone can borrow these outfits!
+	EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Hotel_Mannequin:001', false)
+	# Return borrowed hotel outfits here or by using  in your pockets.
+	EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Hotel_Mannequin:002', false)
+	# For Island Residents The hotel invites you to share outfits that match the vibe of the island.
+	EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Hotel_Mannequin:003', false)
+	# Please consider exchanging the clothes on the mannequin with an outfit you want to recommend.
+	EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Hotel_Mannequin:004', false)
+	Player.SetPlayerHotelMannequinLookAtSignboard(false)
+
+flow MannequinExplainShortVer():
+	Player.SetPlayerHotelMannequinLookAtSignboard(true)
+	# Borrowing Hotel Outfits Anyone can borrow these outfits!
+	EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Hotel_Mannequin:001', false)
+	# Return borrowed hotel outfits here or by using  in your pockets.
+	EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Hotel_Mannequin:002', false)
+	Player.SetPlayerHotelMannequinLookAtSignboard(false)
+
+flow OnlyRental():
+	if Player.HotelMannequinIsRental():
+		# What should I do?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1904', true)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run RentalOff()
+			case 1:
+				run MannequinExplainShortVer()
+				run ReSelect()
+			case 2:
+				run FlowEnd()
+	else:
+		# What should I do?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1905', true)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run RentalOn()
+			case 1:
+				run MannequinExplainShortVer()
+				run ReSelect()
+			case 2:
+				run FlowEnd()
+
+flow ReSelect():
+	if not EventFlowSystemActor.IsMyVillage():
+		run OnlyRental()
+	elif EventFlowSystemActor.NetIsConnected():
+		run OnlyRental()
+	elif not System.EventFlags['cPlayer:SeqHotelMannequinTutorialDone']:
+		run OnlyRental()
+	elif Player.HotelMannequinIsRental():
+		# What should I do?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1901', true)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				# I think I need to return the hotel outfit before I can change what's on the mannequin…
+				Player.OpenMessageWindow('TalkSys/SYS_Player:1903', true)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					Player.HotelMannequinRental(false, false, true, false)
+					Player.PlayerWaitTurn()
+					EventFlowSystemActor.UIHotelCordeMannequineHandling()
+				run FlowEnd()
+			case 1:
+				run RentalOff()
+			case 2:
+				run MannequinExplain()
+				run ReSelect()
+			case 3:
+				run FlowEnd()
+	else:
+		# What should I do?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1902', true)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				EventFlowSystemActor.UIHotelCordeMannequineHandling()
+				run FlowEnd()
+			case 1:
+				run RentalOn()
+			case 2:
+				run MannequinExplain()
+				run ReSelect()
+			case 3:
+				run FlowEnd()
+
+flow RentalOff():
+	Player.HotelMannequinRental(false, false, true, false)
+	Player.PlayerStopDemoTalkTurn(true)
+	run FlowEnd()
+
+flow RentalOn():
+	if Player.PlayerIsUseCoordinate():
+		# I guess I can't borrow an outfit while I'm transformed…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1902_01', false)
+	else:
+		if Player.PlayerOutfitMarinesuit():
+			# I guess I can't borrow an outfit while I'm wearing a wet suit…
+			Player.OpenMessageWindow('TalkSys/SYS_Player:1902_02', false)
+		else:
+			Player.HotelMannequinRental(true, false, true, false)
+			Player.PlayerStopDemoTalkTurn(true)
+	run FlowEnd()
+
+flow Root():
+	if System.EventFlags['cLand:HotelMannequinOpen']:
+		EventFlowSystemActor.UIHotelCordeMannequinCreate()
+		EventFlowSystemActor.UIShopMoneyDisappear()
+		if EventFlowSystemActor.NetIsDreaming():
+			# The box cannot be used at this time.
+			EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_TradeBox:001', true)
+		else:
+			if not System.EventFlags['cPlayer:IsAccessHotelMannequin']:
+				System.EventFlags['cPlayer:IsAccessHotelMannequin'] = true
+			if GeneralObject.HotelMannequinIndex():
+				EventFlowSystemActor.CameraSetDemoParam('Mannequin0', 'cTalk', 'CameraTag:Mannequin0', false, false, false, 0)
+				run ReSelect()
+			else:
+				EventFlowSystemActor.CameraSetDemoParam('Mannequin1', 'cTalk', 'CameraTag:Mannequin1', false, false, false, 0)
+				run ReSelect()
+	elif System.EventFlags['cPlayer:SeqHotelMannequinTutorialDone']:
+		# It doesn't look like I can borrow an outfit…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1702', true)
+	else:
+		# I wonder what this mannequin is for…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1701', true)

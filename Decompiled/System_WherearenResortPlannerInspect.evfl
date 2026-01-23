@@ -118,7 +118,7 @@ flow Root():
 		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4006', true)
 		EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
 		run System_WherearenResortPlanner::ConstructionPortfolioApp()
-	elif (EventFlowSystemActor.IsWherearenOrderStaySequence()) or (System.EventFlags['cWherearenPlayer:IsParty']) or (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
+	elif (EventFlowSystemActor.IsWherearenOrderStaySequence()) or (System.EventFlags['cWherearenPlayer:IsParty']) or (System.EventFlags['cLandTemp:NpcInteriorCoordinate']) or (not EventFlowSystemActor.HotelOrderProgress()):
 		# You can't do that right now.
 		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:4009', true)
 		run System_WherearenResortPlanner::ConstructionPortfolioApp()
@@ -228,9 +228,9 @@ entrypoint Event3:
 				case 0, 1:
 					run UpdateTimeLine()
 					if SubflowResults@2[0] == 0:
-EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
+						EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(true)
 					else:
-EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
+						EventFlowSystemActor.UIWherearenInspectCommunicateResultSet(false)
 					run ReSelectionWherearenInspectList()
 		case 8:
 			EventFlowSystemActor.UIWherearenInspectListDisappear()

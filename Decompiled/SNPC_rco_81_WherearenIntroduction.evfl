@@ -38,7 +38,7 @@ flow OtgLeave():
 	EventFlowSystemActor@Leave.WaitFrame(45)
 	SubNpc.TurnNeck(11, false)
 	SubNpc.TurnBody(12, 180.0)
-	SubNpc.NpcWaitTurn()
+	SubNpc.NpcWaitTurn(false)
 	EventFlowSystemActor@Leave.WaitFrame(5)
 	EventFlowSystemActor@Leave.OpenVillageGate(true)
 	SubNpc.NpcRailMove(2, false, false, -1, -1, 1)
@@ -70,8 +70,12 @@ flow Root():
 			MainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
 		branch:
 			Player.TurnNeck(1, false)
-			# Oh, hello! I'm Lottie!
-			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:003', false)
+			if System.EventFlags['cPlayer:HotelInvitedOtg']:
+				# I know you had me at your hotel before, but…just in case, I'd like to introduce myself again. I'm Lottie!
+				SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:003_01', false)
+			else:
+				# Oh, hello! I'm Lottie!
+				SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:003', false)
 			SubNpc.TurnNeck(10, false)
 			# I used to work with Mr. Nook a long time ago. Before this big island venture he started!
 			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_81_WherearenIntroduction:004', true)
@@ -141,7 +145,7 @@ flow Root():
 	System.EventFlags['cPlayer:UnlockWherearen'] = true
 	System.EventFlags['cPlayer:RcoTalkWithOtg'] = true
 	System.EventFlags['cPlayer:WHEREAREN_OtgVisitThisIsland'] = true
-	run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 	EventFlowSystemActor.WaitFrame(20)
 	MainNpc.NpcRequestAction(3)
 	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)

@@ -1,8 +1,69 @@
+flow CloseMenu_LiveFace(MessageID: str, LiveFace_ON: bool):
+	EventFlowSystemActor.OpenMessageWindow(MessageID, true)
+	switch EventFlowSystemActor.GeneralTalkChoice5():
+		case 0:
+			if EventFlowSystemActor.NetIsInviteFriend():
+				run Close_CloudIsland_Host()
+			else:
+				run EntryPoint_OkaeriVisitor()
+		case 1:
+			EventFlowSystemActor.LiveFaceChangeDispStatus(LiveFace_ON)
+		case 2:
+			EventFlowSystemActor.UIShopMoneyDisappear()
+			EventFlowSystemActor.UIMenuProfileOthersHandling()
+		case 3:
+			run SubmitReport()
+		default:
+			return
+
+flow CloseMenu_Normal(MessageID: str):
+	EventFlowSystemActor.OpenMessageWindow(MessageID, true)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			if EventFlowSystemActor.NetIsInviteFriend():
+				run Close_CloudIsland_Host()
+			else:
+				run EntryPoint_OkaeriVisitor()
+		case 1:
+			EventFlowSystemActor.UIShopMoneyDisappear()
+			EventFlowSystemActor.UIMenuProfileOthersHandling()
+		case 2:
+			run SubmitReport()
+		default:
+			return
+
+flow Close_CloudIsland_Host():
+	if SubflowResults@5[0] in (0, 1, 2, 4):
+		run EntryPoint_OhiakiHost()
+	else:
+		# Wake up with the others? (All changes to this Slumber Island will be saved.)
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:062_01', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run EntryPoint_OhiakiHost_DirectReturn(DirectRetrun=true, ActionResultSlot=-1)
+			case 1:
+				run EntryPoint_OhiakiHost_DirectReturn(ActionResultSlot=-1, DirectRetrun=false)
+			default:
+				return
+
+flow CloudIsland_PreLeaveVisitor():
+	if EventFlowSystemActor.NetCloudIslandPlaying():
+		EventFlowSystemActor.BGMPropertyControl(103)
+		EventFlowSystemActor.SoundDuckingOn(42)
+		EventFlowSystemActor.SoundTriggerEmit('WipeDreamingToHome', -1)
+		EventFlowSystemActor.NextLPFadeTime(3.5)
+		EventFlowSystemActor.SoundSceneChangeFadeOutDucking(0)
+
 flow EntryPoint_OhiakiHost():
+	run EntryPoint_OhiakiHost_DirectReturn(DirectRetrun=false, ActionResultSlot=-1)
+
+flow EntryPoint_OhiakiHost_DirectReturn(DirectRetrun: bool, ActionResultSlot: int):
+	run EntryPoint_OhiakiHost_DirectReturn_SetSlot(ActionResultSlot=ActionResultSlot, SetValue=0)
 	if EventFlowSystemActor.NetCanRequestLeave():
 		EventFlowSystemActor.MessageLockNext(1)
 		# Ending the session...
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:006', false)
+		EventFlowSystemActor.NetCloudIslandSetDirectReturnIsland(DirectRetrun)
 		EventFlowSystemActor.NetDemoLock(2)
 		EventFlowSystemActor.MessageUnlockNext()
 		if EventFlowSystemActor.CheckErrorType(2):
@@ -12,33 +73,34 @@ flow EntryPoint_OhiakiHost():
 			EventFlowSystemActor.NetForceQuitSession()
 			EventFlowSystemActor.MessageUnlockNext()
 			EventFlowSystemActor.MessageSuspend()
-			if not EventFlowSystemActor.MessageUseBCancel():
-				EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+			if EventFlowSystemActor.MessageUseBCancel():
+				run EntryPoint_OhiakiHost_DirectReturn_SetSlot(ActionResultSlot=ActionResultSlot, SetValue=1)
+			else:
+				run EntryPoint_OhiakiHost_DirectReturn_Close(ActionResultSlot=ActionResultSlot)
 		else:
 			EventFlowSystemActor.MessageSuspend()
-			EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
+			run EntryPoint_OhiakiHost_DirectReturn_Close(ActionResultSlot=ActionResultSlot)
 	else:
 		# I should wait until the performance is over.
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
+		run EntryPoint_OhiakiHost_DirectReturn_SetSlot(ActionResultSlot=ActionResultSlot, SetValue=1)
+
+flow EntryPoint_OhiakiHost_DirectReturn_Close(ActionResultSlot: int):
+	if (EventFlowSystemActor.NetCloudIslandPlaying()) and (ActionResultSlot >= 0):
+		run EntryPoint_OhiakiHost_DirectReturn_SetSlot(SetValue=0, ActionResultSlot=ActionResultSlot)
+	else:
+		EventFlowSystemActor.NetCloudIslandSetLeaveType('cSystemMenu')
+		EventFlowSystemActor.NetCloudIslandHostPurgeCommon('cCloudIslandHostPurgeCommon', false)
+		run SNPC_tap_03_InCloudIsland::WakeupProcess_CloseMenu()
+		EventFlowSystemActor.NetCloudIslandHostPurgeAfter('cCloudIslandHostPurgeAfter', false)
+
+flow EntryPoint_OhiakiHost_DirectReturn_SetSlot(ActionResultSlot: int, SetValue: int):
+	if (EventFlowSystemActor.NetCloudIslandPlaying()) and (ActionResultSlot >= 0):
+		SubflowResults[ActionResultSlot] = SetValue
 
 flow EntryPoint_OkaeriVisitor():
 	if EventFlowSystemActor.NetCanRequestLeave():
-		EventFlowSystemActor.MessageLockNext(1)
-		# Getting ready to return home...
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
-		EventFlowSystemActor.NetDemoLock(1)
-		EventFlowSystemActor.MessageUnlockNext()
-		if EventFlowSystemActor.CheckErrorType(2):
-			EventFlowSystemActor.MessageLockNext(2)
-			# Getting ready to return home... (Press  to cancel.)
-			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
-			EventFlowSystemActor.NetForceQuitSession()
-			if not EventFlowSystemActor.MessageUseBCancel():
-				EventFlowSystemActor.MessageSuspend()
-				EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
-		else:
-			EventFlowSystemActor.MessageSuspend()
-			EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+		run OkaeriVisitor_Core(CallLeaveVisitor=true)
 	else:
 		# I should wait until the performance is over.
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:007', false)
@@ -46,31 +108,9 @@ flow EntryPoint_OkaeriVisitor():
 flow InetClose():
 	EventFlowSystemActor.NetCaptureScreenshot()
 	if not EventFlowSystemActor.NetIsInviteFriend():
-		# What would you like to do?
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:005', true)
-		switch EventFlowSystemActor.GeneralTalkChoice4():
-			case 0:
-				run EntryPoint_OkaeriVisitor()
-			case 1:
-				EventFlowSystemActor.UIShopMoneyDisappear()
-				EventFlowSystemActor.UIMenuProfileOthersHandling()
-			case 2:
-				run Report_Visitor()
-			default:
-				return
+		run Select_Menu_Visitor()
 	elif EventFlowSystemActor.NetHasVisitor():
-		# What would you like to do?
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:002', true)
-		switch EventFlowSystemActor.GeneralTalkChoice4():
-			case 0:
-				run EntryPoint_OhiakiHost()
-			case 1:
-				EventFlowSystemActor.UIShopMoneyDisappear()
-				EventFlowSystemActor.UIMenuProfileOthersHandling()
-			case 2:
-				run Report_Host()
-			default:
-				return
+		run Select_Menu_Host()
 	else:
 		# What would you like to do?
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:001', true)
@@ -83,42 +123,78 @@ flow InetClose():
 			default:
 				return
 
-flow Report_Host():
-	EventFlowSystemActor.UIShopMoneyDisappear()
-	EventFlowSystemActor.UIIllegalReportHandling(5)
-	run RevertWalletUI()
-	if EventFlowSystemActor.UIIllegalReportResult():
-		# Would you like to end this session?
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:006', true)
-		switch EventFlowSystemActor.GeneralTalkChoice4():
-			case 0:
-				run EntryPoint_OhiakiHost()
-			case 1:
-				EventFlowSystemActor.UIShopMoneyDisappear()
-				EventFlowSystemActor.UIMenuProfileOthersHandling()
-			case 2:
-				run Report_Host()
-			default:
-				return
+flow LeaveVisitor():
+	if SubflowResults@5[0] in (0, 1, 2, 3):
+		EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+	else:
+		run SNPC_tap_03_InCloudIsland::WakeupProcess_CloseMenu()
+		EventFlowSystemActor.NetCloudIslandSetLeaveType('cSystemMenu')
+		EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
 
-flow Report_Visitor():
-	EventFlowSystemActor.UIShopMoneyDisappear()
-	EventFlowSystemActor.UIIllegalReportHandling(5)
-	run RevertWalletUI()
-	if EventFlowSystemActor.UIIllegalReportResult():
-		# What would you like to do?
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:005', true)
-		switch EventFlowSystemActor.GeneralTalkChoice4():
-			case 0:
-				run EntryPoint_OkaeriVisitor()
-			case 1:
-				EventFlowSystemActor.UIShopMoneyDisappear()
-				EventFlowSystemActor.UIMenuProfileOthersHandling()
-			case 2:
-				run Report_Visitor()
-			default:
-				return
+flow OkaeriVisitor_Core(CallLeaveVisitor: bool):
+	if not CallLeaveVisitor:
+		SubflowResults[1] = 0
+	EventFlowSystemActor.MessageLockNext(1)
+	# Getting ready to return home...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:005', false)
+	EventFlowSystemActor.NetDemoLock(1)
+	EventFlowSystemActor.MessageUnlockNext()
+	if EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.MessageLockNext(2)
+		# Getting ready to return home... (Press  to cancel.)
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:007', false)
+		EventFlowSystemActor.NetForceQuitSession()
+		if not EventFlowSystemActor.MessageUseBCancel():
+			EventFlowSystemActor.MessageSuspend()
+			if CallLeaveVisitor:
+				run LeaveVisitor()
+		elif not CallLeaveVisitor:
+			SubflowResults[1] = 1
+	else:
+		EventFlowSystemActor.MessageSuspend()
+		if CallLeaveVisitor:
+			run LeaveVisitor()
 
 flow RevertWalletUI():
 	if (EventFlowSystemActor.SystemCheckNowStage('cMametubu')) or (EventFlowSystemActor.SystemCheckNowStage('cTailor')):
 		EventFlowSystemActor.UIMoneyAppear()
+
+flow Select_Menu_Host():
+	if SubflowResults@5[0] in (0, 1, 2, 4):
+		if not EventFlowSystemActor.IsLiveFaceActive():
+			run CloseMenu_Normal(MessageID='TalkSys/SYS_CloseMenu:002')
+		elif EventFlowSystemActor.IsLiveFaceDispEnable():
+			run CloseMenu_LiveFace(LiveFace_ON=false, MessageID='TalkSys/SYS_CloseMenu:075')
+		else:
+			run CloseMenu_LiveFace(MessageID='TalkSys/SYS_CloseMenu:076', LiveFace_ON=true)
+	elif not EventFlowSystemActor.IsLiveFaceActive():
+		run CloseMenu_Normal(MessageID='TalkSys/SYS_CloseMenu:062')
+	elif EventFlowSystemActor.IsLiveFaceDispEnable():
+		run CloseMenu_LiveFace(LiveFace_ON=false, MessageID='TalkSys/SYS_CloseMenu:077')
+	else:
+		run CloseMenu_LiveFace(LiveFace_ON=true, MessageID='TalkSys/SYS_CloseMenu:078')
+
+flow Select_Menu_Visitor():
+	if SubflowResults@5[0] in (0, 1, 2, 3):
+		if not EventFlowSystemActor.IsLiveFaceActive():
+			run CloseMenu_Normal(MessageID='TalkSys/SYS_CloseMenu:005')
+		elif EventFlowSystemActor.IsLiveFaceDispEnable():
+			run CloseMenu_LiveFace(MessageID='TalkSys/SYS_CloseMenu:071', LiveFace_ON=false)
+		else:
+			run CloseMenu_LiveFace(LiveFace_ON=true, MessageID='TalkSys/SYS_CloseMenu:072')
+	elif not EventFlowSystemActor.IsLiveFaceActive():
+		run CloseMenu_Normal(MessageID='TalkSys/SYS_CloseMenu:063')
+	elif EventFlowSystemActor.IsLiveFaceDispEnable():
+		run CloseMenu_LiveFace(LiveFace_ON=false, MessageID='TalkSys/SYS_CloseMenu:073')
+	else:
+		run CloseMenu_LiveFace(LiveFace_ON=true, MessageID='TalkSys/SYS_CloseMenu:074')
+
+flow SubmitReport():
+	EventFlowSystemActor.UIShopMoneyDisappear()
+	EventFlowSystemActor.UIIllegalReportHandling(5)
+	run RevertWalletUI()
+	if EventFlowSystemActor.UIIllegalReportResult():
+		if EventFlowSystemActor.NetIsInviteFriend():
+			run Select_Menu_Host()
+		else:
+			run Select_Menu_Visitor()

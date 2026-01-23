@@ -1,0 +1,42 @@
+flow NoticeAboutLiveFace():
+	if not EventFlowSystemActor.IsLiveFaceDialogFlagOn(1):
+		EventFlowSystemActor.UILiveFaceDialogHandling(0)
+		# If you don't want to show the feed, press  to hide it.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11001', true)
+		EventFlowSystemActor.LiveFaceDialogFlagOn(1)
+		if EventFlowSystemActor.LiveFaceIsLocalCameraOn():
+			run NoticeAboutLiveFaceCameraOff()
+		else:
+			EventFlowSystemActor.LiveFaceDialogFlagOn(2)
+
+flow NoticeAboutLiveFaceCameraOff():
+	if EventFlowSystemActor.LiveFaceIsOnlyFace():
+		# If you don't want to share your feed, turn the camera off.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11004', true)
+	else:
+		# You can change the camera view by pressing  and adjusting it in GameChat. If you don't want to share your feed, turn the camera off.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11003', true)
+	EventFlowSystemActor.LiveFaceDialogFlagOn(0)
+	EventFlowSystemActor.LiveFaceDialogFlagOn(2)
+
+flow NoticeAboutLiveFaceGuideLine():
+	if not EventFlowSystemActor.IsLiveFaceDialogFlagOn(0):
+		# From here, your camera feed will be displayed on the game screen.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11002', false)
+		run NoticeAboutLiveFaceCameraOff()
+
+flow NoticeAboutLiveFaceIntroduce():
+	if not EventFlowSystemActor.IsLiveFaceDialogFlagOn(2):
+		EventFlowSystemActor.UILiveFaceDialogHandling(2)
+		# Press  to start GameChat.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11005', true)
+		EventFlowSystemActor.LiveFaceDialogFlagOn(2)
+		if (EventFlowSystemActor.LiveFaceIsLocalCameraOn()) or (EventFlowSystemActor.LiveFaceIsSomeoneCameraOn()):
+			run NoticeAboutLiveFace()
+
+flow NoticeAboutLiveFaceWithoutAoc():
+	if not EventFlowSystemActor.IsLiveFaceDialogFlagOn(0):
+		EventFlowSystemActor.UILiveFaceDialogHandling(1)
+		# If you don't want to share your feed, turn the camera off.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11004', true)
+		EventFlowSystemActor.LiveFaceDialogFlagOn(0)

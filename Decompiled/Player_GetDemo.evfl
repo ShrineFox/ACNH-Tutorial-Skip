@@ -41,7 +41,7 @@ flow Get_Fish():
 		run Player_GetDemo_20_Fishing::Fishing_Get_Trash()
 	elif Player.PlayerGetDemoCheckItem('cFishEgg'):
 		run Player_GetDemo_Easter::GetWaterEgg()
-	elif EventFlowSystemActor.NetIsDreaming():
+	elif (EventFlowSystemActor.NetIsDreaming()) or (EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll')):
 		EventFlowSystemActor.SetTagFromSystem('cChachFish', 'cDegit', 0, 0, '')
 		# <10:12>I caught [a|an]<125:3:cd00>! ...But I'm still dreaming.
 		Player.OpenMessageWindow('TalkSys/SYS_Get_Fish:021', false)
@@ -90,16 +90,16 @@ flow Get_Insect():
 	elif Player.PlayerGetDemoCheckItem('cYutaroWisp'):
 		run Get_YutaroWisp()
 	else:
-		if EventFlowSystemActor.NetIsDreaming():
-			EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
-			# <10:12>I caught [a|an]<125:2:cd00>! ...But I'm still dreaming.
-			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:301', false)
-		else:
+		if (not EventFlowSystemActor.NetIsDreaming()) and (not EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll')):
 			if Player.PlayerGetDemoCollectStatus('cFirstGet'):
 				# <10:12>Yes!
 				Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:001', false)
 			Player.PlayerOpenInsectGetMessage()
 			run Get_CatchInsectCompleteDemo()
+		else:
+			EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
+			# <10:12>I caught [a|an]<125:2:cd00>! ...But I'm still dreaming.
+			Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:301', false)
 		if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
 			if Player.PlayerGetDemoCheckItem('cSeminonukegara'):
 				run Get_Insect_Nukegara()
@@ -198,20 +198,20 @@ entrypoint Event59:
 					EventFlowSystemActor.UIItemSelectWindowHandling('cScoopDigFull', 65534, '', '', 'cExchangeByScoop', false)
 					if Player.PlayerGetDemoCheckItem('cGatheringShellfish'):
 						if EventFlowSystemActor.UIResultMenuDecide():
-run Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
+							run Player_GetDemo_Recipe_DIY::ChumDIY_Chk()
 					elif Player.PlayerGetDemoCheckItem('cTreasure'):
 						if EventFlowSystemActor.UIResultMenuDecide():
- run TreasureHunt_Finish()
+							run TreasureHunt_Finish()
 					elif (Player.PlayerGetDemoCheckItem('cPitfallSeed')) and (EventFlowSystemActor.UIResultMenuDecide()):
-run Player_GetDemo_Recipe_DIY::PitFallDIY_Chk_AfterReplace()
+						run Player_GetDemo_Recipe_DIY::PitFallDIY_Chk_AfterReplace()
 
 flow Get_SnowCrystal():
-	if EventFlowSystemActor.NetIsDreaming():
+	if (not EventFlowSystemActor.NetIsDreaming()) and (not EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll')):
+		Player.PlayerOpenInsectGetMessage()
+	else:
 		EventFlowSystemActor.SetTagFromSystem('cChachInsect', 'cDegit', 0, 0, '')
 		# <10:12>I got [a|an]<125:2:cd00>! ...But I'm still dreaming.
 		Player.OpenMessageWindow('TalkSys/SYS_Get_Insect:302', false)
-	else:
-		Player.PlayerOpenInsectGetMessage()
 	if Player.PlayerCheckAI('cGetDemo_InsectFullItem'):
 		if Player.PlayerHasExchaneableItem(true, false, true, false):
 			# ...But I can't carry anything else! Should I swap it with something?

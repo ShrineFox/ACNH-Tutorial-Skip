@@ -2,6 +2,10 @@ flow HGS_FriendshipChk():
 	if (MainNpc.NpcLabel('hgs')) and (System.EventFlags['cPlayer:HgsCloseness'] < 3):
 		SubflowResults[0] = 1
 
+flow KppFamily_HotelBuiltChk():
+	if ((MainNpc.NpcLabel('kppB')) or (MainNpc.NpcLabel('kpmB')) or (MainNpc.NpcLabel('kpgB')) or (MainNpc.NpcLabel('kpsB'))) and (System.EventFlags['cLand:HotelBuilt']):
+		SubflowResults[0] = 3
+
 flow Man_Emot():
 	switch EventFlowSystemActor.RandomChoice3(3):
 		case 0:
@@ -13,6 +17,7 @@ flow Man_Emot():
 	EventFlowSystemActor.WaitFrame(45)
 
 flow Root():
+	run KppFamily_HotelBuiltChk()
 	run Takumi_FriendshipChk()
 	run HGS_FriendshipChk()
 	run Twins_SetInvitationChk()

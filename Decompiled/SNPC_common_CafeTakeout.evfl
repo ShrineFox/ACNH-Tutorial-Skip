@@ -2,7 +2,7 @@ flow CafeTakeoutGreeting():
 	MainNpc.SetDefaultWaitAs('cPgeBaseWait')
 	MainNpc.TurnNeck(11, true)
 	MainNpc.TurnBody(12, 270.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	fork:
 		branch:
 			DynamicCast_CafeTakeout.CharacterEmoticonAction('Greeting', true, '', 0, false)
@@ -10,12 +10,12 @@ flow CafeTakeoutGreeting():
 			EventFlowSystemActor.WaitFrame(30)
 			MainNpc.TurnNeck(1, false)
 			MainNpc.TurnBody(12, 0.0)
-			MainNpc.NpcWaitTurn()
+			MainNpc.NpcWaitTurn(false)
 	EventFlowSystemActor.WaitFrame(30)
 
 flow CafeTakeoutGreeting2():
 	DynamicCast_CafeTakeout.TurnBody(0, 0.0)
-	DynamicCast_CafeTakeout.NpcWaitTurn()
+	DynamicCast_CafeTakeout.NpcWaitTurn(false)
 	EventFlowSystemActor.WaitFrame(15)
 	DynamicCast_CafeTakeout.CharacterEmoticonAction('Greeting', true, '', 0, false)
 	EventFlowSystemActor.WaitFrame(45)
@@ -34,7 +34,7 @@ flow Root():
 			EventFlowSystemActor.WaitFrame(45)
 			EventFlowSystemActor.CameraSetDemoParam('CafeNpcTakeoutFar', 'cTalk', 'CameraTag:CafeCenter', false, false, false, 0)
 	DynamicCast_CafeTakeout.TurnBody(0, 0.0)
-	DynamicCast_CafeTakeout.NpcWaitTurn()
+	DynamicCast_CafeTakeout.NpcWaitTurn(false)
 	run CafeTakeoutGreeting()
 	EventFlowSystemActor.CameraSetDemoParam('CafeNpcTakeout', 'cTalk', 'CameraTag:CafeCenter', false, false, false, 0)
 	System.EventFlags['cPlayerTemp:CafeNpcTakeoutPrepare'] = true
@@ -70,7 +70,7 @@ flow Root():
 			Player.TurnNeck(0, false)
 			System.EventFlags['cPlayerTemp:CafeNpcTakeoutPrepare'] = false
 	MainNpc.TurnBody(12, 0.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.PgeCafeReaction('cPutOnTable', true)
 	MainNpc.SetDefaultWaitAs('cDefault')
 	DynamicCast_CafeTakeout.PgeCafeReaction('cReceiveTakeout', true)
@@ -87,7 +87,7 @@ flow Root():
 	DynamicCast_CafeTakeout.NpcSetVisibleAction(false)
 	MainNpc.TurnBody(10, 0.0)
 	Player.TurnNeck(0, false)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.NpcAISetting(4, true)
 	System.EventFlags['cPlayer:SawMuseumCafeTakeoutNpc'] = true
 	EventFlowSystemActor.CameraSetDemoParam('cTalkRoom', 'cTalk', 'Player', false, false, false, 0)

@@ -1,5 +1,5 @@
 flow Chk_FishCookingRecipe():
-	if (not EventFlowSystemActor.NetIsDreaming()) and (System.EventFlags['cPlayer:MainmenuRecipe_v2']):
+	if (not EventFlowSystemActor.NetIsDreaming()) and (not EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll')) and (System.EventFlags['cPlayer:MainmenuRecipe_v2']):
 		run SetFishType()
 		switch SubflowResults@9[1]:
 			case 1:
@@ -42,7 +42,7 @@ flow Chk_FishCookingRecipe():
 							EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Recipe_Cooking', 'GetCookingRecipe_Only1Dish', 'cNextDemoEnd_Simple', true)
 						elif not EventFlowSystemActor.PlayerHasCookingRecipe('CookingSalmon', 65534):
 							if System.EventFlags['cPlayer:SalmonCookingRecipeCount'] != 2:
-System.EventFlags['cPlayer:SalmonCookingRecipeCount'] += 1
+								System.EventFlags['cPlayer:SalmonCookingRecipeCount'] += 1
 							else:
 								EventFlowSystemActor.PlayerSetCookingRecipe('CookingSalmon', 65534)
 								EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Recipe_Cooking', 'GetCookingRecipe_MultiSalmon', 'cNextDemoEnd_Simple', true)

@@ -46,7 +46,7 @@ entrypoint Event72:
 					# You don't wanna change it? I was getting all excited for the new name but…OK, the old name's good too.
 					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:026', false)
 					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-	run Sub_Event70()
+						run Sub_Event70()
 					else:
 						# Oh, you DO want a new name! Well, hurry up and tell it to me 'cause I'm getting kinda dizzy.
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:027', false)
@@ -187,19 +187,19 @@ flow RequestReaction():
 			EventFlowSystemActor.RequestHouseMateEditDoneAction('AddExcited')
 			if MainNpc.NpcNowPosture() == 0:
 				MainNpc.TurnBody(14, 0.0)
-				MainNpc.NpcWaitTurn()
+				MainNpc.NpcWaitTurn(false)
 			MainNpc.CharacterEmoticonAction('AddExcited', true, '', 0, false)
 		case 1:
 			EventFlowSystemActor.RequestHouseMateEditDoneAction('ExistHappyDance')
 			if MainNpc.NpcNowPosture() == 0:
 				MainNpc.TurnBody(14, 0.0)
-				MainNpc.NpcWaitTurn()
+				MainNpc.NpcWaitTurn(false)
 			MainNpc.CharacterEmoticonAction('ExistHappyDance', true, '', 0, false)
 		case 2:
 			EventFlowSystemActor.RequestHouseMateEditDoneAction('ExistLove')
 			if MainNpc.NpcNowPosture() == 0:
 				MainNpc.TurnBody(14, 0.0)
-				MainNpc.NpcWaitTurn()
+				MainNpc.NpcWaitTurn(false)
 			MainNpc.CharacterEmoticonAction('ExistLove', true, '', 0, false)
 
 flow SkipFtrCheck(PreCheck: bool):
@@ -296,21 +296,21 @@ flow UnderOrder():
 				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:002_01', false)
 				switch EventFlowSystemActor.GeneralTalkChoice3():
 					case 0:
-  run Sub_Event229()
+						run Sub_Event229()
 					case 1:
 						# Add a second story? Like…a sequel?
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:006', false)
 						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 							# OK! I'll let you do it, <110:6>!
 							MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:007', false)
-MainNpc.WherearenExpandNpcHouse()
-run NNPC_Spot_WherearenGarden::Omakase()
-EventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcRoomNo1')
-System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_House'] = true
+							MainNpc.WherearenExpandNpcHouse()
+							run NNPC_Spot_WherearenGarden::Omakase()
+							EventFlowSystemActor.WherearenSetNpcOrderStartStage('cNpcRoomNo1')
+							System.EventFlags['cPlayerTemp:WHEREAREN_CustomerTalkReserve_House'] = true
 							EventFlowSystemActor.SoundTriggerEmit('Demo_Oshigoto_Wipe', -1)
-EventFlowSystemActor.WaitFrame(6)
-EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
-EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
+							EventFlowSystemActor.WaitFrame(6)
+							EventFlowSystemActor.NextLPFadeTime(0.7300000190734863)
+							EventFlowSystemActor.SoundSceneChangeFadeOutDucking(10)
 							EventFlowSystemActor.SystemRequestChangeStage('cWherearenNpcStageSelected', 'cOrderWherearen', 'cOrderWherearen', 'cBlack', 1.0, 1.0)
 						else:
 							# Oh? Didja change your mind? No worries! See ya around!

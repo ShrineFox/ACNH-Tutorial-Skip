@@ -14,13 +14,19 @@ flow MultiplaySave():
 		default:
 			return
 
+flow MultiplaySave_HostSave():
+	if EventFlowSystemActor.NetCloudIslandPlaying():
+		EventFlowSystemActor.SaveSimpleSave('cCloudIsland')
+	else:
+		EventFlowSystemActor.SaveSimpleSave('cNet')
+
 local flow Sub_Event5():
 	EventFlowSystemActor.NetWaitDemo('cStartSave')
 	EventFlowSystemActor.MessageLockNext(1)
 	# Saving. Do not touch .
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
 	if EventFlowSystemActor.NetIsInviteFriend():
-		EventFlowSystemActor.SaveSimpleSave('cNet')
+		run MultiplaySave_HostSave()
 		if EventFlowSystemActor.CheckErrorType(3):
 			EventFlowSystemActor.NetDemoNextStep('cSaveFailed')
 		else:

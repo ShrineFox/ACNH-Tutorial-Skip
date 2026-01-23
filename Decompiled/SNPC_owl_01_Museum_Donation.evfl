@@ -187,7 +187,7 @@ flow OwlTentDonationAgain(MultiComplete: bool = false, CompleteRoomType: int = 0
 						EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_4', 'cItemSelect', false)
 						run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
 					else:
-run OwlNoDonationItems()
+						run OwlNoDonationItems()
 				elif EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation'):
 					# Marvelous! What would you like to donate?
 					MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
@@ -203,7 +203,7 @@ run OwlNoDonationItems()
 						EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'OwlDonation1_3', 'cItemSelect', false)
 						run owl_Donation_AfterItemSel(MultiComplete=MultiComplete, CompleteRoomType=CompleteRoomType)
 					else:
-run OwlNoDonationItems()
+						run OwlNoDonationItems()
 				elif EventFlowSystemActor.HasKindItem('cFilter', '', 'OwlDonation1_2'):
 					# Marvelous! What would you like to donate?
 					MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:104', true)
@@ -294,7 +294,9 @@ local flow Sub_Event62(MultiComplete: bool, CompleteRoomType: int):
 local flow Sub_grp_Event1():
 	if EventFlowSystemActor.HasKindItem('cKind', 'FossilUnknown', ''):
 		# That is, fossils must first be appraised by yours truly. So if you have a relic of unknown origin, please allow me to give it a look.
-		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:144', true)
+		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:144_01', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run SNPC_owl_02_Museum_Judgment::From_NoDonationItem()
 	else:
 		# If you acquire any of these items, please do consider donating them.
 		MainNpc.OpenMessageWindow('TalkSNpc/owl/SP_owl_00_Common:145', true)

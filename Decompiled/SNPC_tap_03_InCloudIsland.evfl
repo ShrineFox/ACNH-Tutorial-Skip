@@ -1,0 +1,247 @@
+flow ChkConnectStatus():
+	SubflowResults[1] = 0
+	SubflowResults[2] = 0
+	SubflowResults[3] = 0
+	if EventFlowSystemActor.NetCloudIslandPlaying():
+		if EventFlowSystemActor.NetCloudIslandIsOpenSession():
+			SubflowResults[3] = 2
+		else:
+			SubflowResults[3] = 1
+		switch EventFlowSystemActor.NetCheckSessionType():
+			case 7:
+				SubflowResults[1] = 0
+				run Sub_grp_Event10()
+			case 8:
+				SubflowResults[1] = 1
+				run Sub_grp_Event10()
+			case 9:
+				SubflowResults[1] = 4
+				run Sub_grp_Event10()
+			case 10:
+				SubflowResults[1] = 2
+				run Sub_grp_Event10()
+			case 11:
+				SubflowResults[1] = 3
+				run Sub_grp_Event10()
+			default:
+				return
+	else:
+		SubflowResults[3] = 0
+
+flow Force_Entry():
+	EventFlowSystemActor.CameraSetDemoParam('InDreamZoomIn', '', 'Player', false, false, true, 0)
+	EventFlowSystemActor.CameraSetDemoParam('InDreamZoomOut', 'InDreamZoomInOut', 'Player', false, false, true, 0)
+	fork:
+		branch:
+			EventFlowSystemActor.WaitFrame(180)
+		branch:
+			EventFlowSystemActor@BGM.WaitFrame(100)
+			EventFlowSystemActor.BGMPropertyControl(198)
+	System.EventFlags['cPlayerTemp:TapCloudIslandFirstTalkDone'] = true
+	System.EventFlags['cPlayer:FirstVisitCloudIsland'] = true
+	if System.EventFlags['cPlayer:FirstForceTalkCloudIsland']:
+		# And here we are.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:902', true)
+		EventFlowSystemActor.WaitFrame(10)
+		Player.PlayerStartAnimeBedWaitOpenEyes()
+		EventFlowSystemActor.WaitFrame(30)
+		# May your imagination run free. Please enjoy yourself.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:902_01', false)
+	else:
+		System.EventFlags['cPlayer:FirstForceTalkCloudIsland'] = true
+		# And thus we have arrived at your Slumber Island. Welcome.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:901', true)
+		EventFlowSystemActor.WaitFrame(10)
+		Player.PlayerStartAnimeBedWaitOpenEyes()
+		EventFlowSystemActor.WaitFrame(30)
+		# Of course, it is worth reiterating that Slumber Islands work differently from what you may be used to. Once you are out of bed, I will be happy to ex…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:901_01', false)
+		System.EventFlags['cPlayerTemp:ReserveTapFirstTalkCloudIsland'] = true
+	EventFlowSystemActor.SetEnableDofFadeForDream()
+
+flow GoodBye():
+	if EventFlowSystemActor.NetHasVisitor():
+		# Certainly. Well, you have guests, so I will not keep you from them. Enjoy!
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1102', false)
+	else:
+entrypoint Event50:
+		# Remember that whenever you are ready to wake, you need only make yourself cozy in bed.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1101', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow GoodBye_AfterCancel():
+	# I will be here should I be needed.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1100', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow GoodBye_Guest():
+	run Event50()
+
+flow Name():
+	if EventFlowSystemActor.IsCloudIslandIdOverwrited():
+		# A new name? Of course. What shall its name become?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:2001_01', true)
+		EventFlowSystemActor.UISwkbdCloudIslandNameHandling(false, true)
+	else:
+		# A name! Naturally—a thing cannot have meaning if it lacks a name. What shall it be called?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:2001', true)
+		EventFlowSystemActor.UISoftwareKeyboardHandling('cCloudIslandName', true)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cLandNameFromSwkbd', 0)
+		switch EventFlowSystemActor.CurrentRegionLanguage('cCurrentMachine'):
+			case 0:
+				# なるほど ちなみに… 島の読み方は、<115:2:cd00>島、 <115:2:cd00>島、 <115:2:cd00>島の　どれになさるの？
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:2051', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						EventFlowSystemActor.SetCloudIslandName('ShimaSeom')
+						run NamingCompleted()
+					case 1:
+						EventFlowSystemActor.SetCloudIslandName('JimaSeom')
+						run NamingCompleted()
+					case 2:
+						EventFlowSystemActor.SetCloudIslandName('TouSeom')
+						run NamingCompleted()
+			case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13:
+				EventFlowSystemActor.SetCloudIslandName('TouSeom')
+				run NamingCompleted()
+			case 11:
+				# ちなみにですが、 島の字は、<115:2:cd00>섬、 <115:2:cd00>도、どっちになさいます？
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:2052', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					EventFlowSystemActor.SetCloudIslandName('TouSeom')
+					run NamingCompleted()
+				else:
+					EventFlowSystemActor.SetCloudIslandName('TouDo')
+					run NamingCompleted()
+	else:
+		# Oh. Perhaps another time, then.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:2003', false)
+		run ReturnSel_Root()
+
+flow NamingCompleted():
+	# Excellent. From now on, it will be known as <110:33>. With that done, I hope you enjoy your time on <110:33>.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:2002', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow ReturnSel_Root():
+	# Hm…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1999', false)
+entrypoint Event59:
+	run ChkConnectStatus()
+	if System.EventFlags['cPlayerTemp:ReserveTapFirstTalkCloudIsland']:
+		run SNPC_tap_04_InCloudIsland_Explain::FirstExplain()
+	elif EventFlowSystemActor.NetCloudIslandInOwner():
+		if SubflowResults@3[3] == 0:
+			if EventFlowSystemActor.IsCloudIslandIdOverwrited():
+				# How may I assist you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1003', false)
+			else:
+				# How may I assist you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1001', false)
+		else:
+			if EventFlowSystemActor.IsCloudIslandIdOverwrited():
+				# How may I assist you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1004', false)
+			else:
+				# How may I assist you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1002', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				if SubflowResults@3[3] == 0:
+					run SNPC_tap_05_InCloudIsland_P2PHost::GateOpenSeq()
+				else:
+					run SNPC_tap_06_InCloudIsland_P2PHost2::ChkP2PStatus()
+			case 1:
+				run Name()
+			case 2:
+				run SNPC_tap_04_InCloudIsland_Explain::Root()
+			case 3:
+				run GoodBye()
+	else:
+		if System.EventFlags['cPlayerVisit:TapTalkCloudIsland']:
+			run SNPC_tap_04_InCloudIsland_Explain::ForGuest_ExplainAboutIsland()
+		else:
+			# And here we are. If you need advice about how these islands differ from those you may be used to, please let me know. With that, I shall cease bother…
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:1011', false)
+			System.EventFlags['cPlayerVisit:TapTalkCloudIsland'] = true
+
+flow Root():
+	run Event59()
+
+local flow Sub_grp_Event10():
+	if EventFlowSystemActor.IsSwitch2Edition():
+		if EventFlowSystemActor.NetIsSwitch2EditionSession():
+			SubflowResults[2] = 1
+		else:
+			SubflowResults[2] = 0
+
+flow Wakeup():
+	run WakeupProcess1()
+	if EventFlowSystemActor.NetCloudIslandIsOpenSession():
+		SubflowResults[11] = 1
+		# Oh! You still have an invitation open for this Slumber Island. I must close it before I wake you. Shall I?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:952', false)
+	else:
+		SubflowResults[11] = 0
+		# Mm! Are you ready to wake?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:951', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run WakeupProcess2()
+		# Excellent. All is ready, then. You need only close your eyes…and relax…<10:8:00280000>
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:955', false)
+		# Thus we part ways for now. I am sure we will see each other again soon…<10:8:003c0000>
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:956', true)
+		if EventFlowSystemActor.NetCloudIslandPlaying():
+			EventFlowSystemActor.NetDestroySessionVillage('cDestroyVillage', true)
+		run Wakeup_SaveCloudIsland()
+		run WakeupProcess3()
+		run WakeupProcess4()
+		EventFlowSystemActor.NetCloudIslandSetLeaveType('cBed')
+		EventFlowSystemActor.NetCloudIslandHostReturnFromCloudIsland()
+	else:
+		# Of course. Please enjoy yourself.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:961', false)
+		EventFlowSystemActor.StoreNormalCamera(false, '')
+
+flow WakeupProcess1():
+	Player.PlayerStartAnimeBedWaitOpenEyes()
+	EventFlowSystemActor.CameraSetDemoParam('InDreamZoomOut', 'cDefault', 'Player', false, false, true, 0)
+
+flow WakeupProcess2():
+	EventFlowSystemActor.SoundDuckingOn(42)
+
+flow WakeupProcess3():
+	EventFlowSystemActor.SystemBGMVolumeFadeOut(2.5, 0, 0.0)
+	Player.PlayerStartAnimeBedWaitWithHandsClasped()
+	EventFlowSystemActor.WaitFrame(50)
+	EventFlowSystemActor.CameraSetDemoParam('InDreamZoomIn', 'InDreamZoomInOut', 'Player', false, false, true, 0)
+
+flow WakeupProcess4():
+	EventFlowSystemActor.TapSmoke('cMainFieldSmokeCloudIsland')
+	EventFlowSystemActor.SoundTriggerEmit('WipeDreamingToHome', -1)
+	EventFlowSystemActor.SoundSceneChangeFadeOutDucking(0)
+	EventFlowSystemActor.BGMPropertyControl(197)
+
+flow WakeupProcess_CloseMenu():
+	EventFlowSystemActor.SoundDuckingOn(42)
+	EventFlowSystemActor.SystemBGMVolumeFadeOut(2.0, 0, 0.0)
+	EventFlowSystemActor.SoundTriggerEmit('WipeDreamingToHome', -1)
+	EventFlowSystemActor.NextLPFadeTime(3.5)
+	EventFlowSystemActor.SoundSceneChangeFadeOutDucking(0)
+
+flow Wakeup_CloseMenu():
+	if SubflowResults@5[0] not in (0, 1, 3, 4):
+		EventFlowSystemActor.NetDestroySessionVillage('cDestroyVillage', false)
+	run Wakeup_SaveCloudIsland()
+	run WakeupProcess_CloseMenu()
+	EventFlowSystemActor.NetCloudIslandSetLeaveType('cSystemMenu')
+	EventFlowSystemActor.NetCloudIslandHostReturnFromCloudIsland()
+
+flow Wakeup_SaveCloudIsland():
+	EventFlowSystemActor.MessageLockNext(1)
+	# Saving. Do not touch .
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+	EventFlowSystemActor.SaveSimpleSave('cCloudIsland')
+	EventFlowSystemActor.MessageUnlockNext()
+	EventFlowSystemActor.MessageSuspend()

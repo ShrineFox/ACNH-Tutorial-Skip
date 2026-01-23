@@ -1,0 +1,96 @@
+flow CheckCountdown():
+	if (EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)) and (MainNpc.DevideCountDownState() in (3, 4, 5, 6, 7, 8)):
+		if MainNpc.NpcNowPosture() == 0:
+			switch MainNpc.DevideCountDownState():
+				case 3:
+					run Sub_grp_Event27()
+				case 4:
+					if MainNpc.NpcIsEquipedHandTool(1):
+						run Sub_grp_Event27()
+					else:
+						MainNpc.NpcChangeChangeHandToolState('cChangeHandToolSimple', '', 'NNPC_HotelGuest', '', false, false, HandToolItem=5741)
+						EventFlowSystemActor.ExitFlowchart()
+				case 5, 6:
+					MainNpc.NpcChangeAIState('cHotelCountdownWait', '', 'NNPC_HotelGuest', '', true, false)
+					EventFlowSystemActor.ExitFlowchart()
+				case 7:
+					MainNpc.SetNpcFeel('cHappy', -1, true)
+					if MainNpc.NpcIsEquipedHandTool(1):
+						if not MainNpc.IsAroundEventPlazaArea(2):
+							MainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', 'NNPC_HotelGuest', '', false, false, ArgInt0=5, ArgInt1=-1, ArgInt2=-1)
+						elif MainNpc.CheckCurrentNpcAIState('cCountdownWander') != 0:
+							MainNpc.NpcChangeAIState('cCountdownWander', '', 'NNPC_HotelGuest', '', false, false)
+					else:
+						MainNpc.NpcChangeChangeHandToolState('cChangeHandToolSimple', '', 'NNPC_HotelGuest', '', false, false, HandToolItem=5741)
+					EventFlowSystemActor.ExitFlowchart()
+				case 8:
+					MainNpc.SetNpcFeel('cNormal', -1, true)
+					MainNpc.NpcChangeBlockWanderState('cBlockWander', '', 'NNPC_HotelGuest', '', false, true, ArgFlag0=false, ArgInt0=0, ArgInt1=1, ArgInt2=0, ArgInt3=0)
+					EventFlowSystemActor.ExitFlowchart()
+				default:
+					return
+		else:
+			MainNpc.NpcChangeAIState('cCountdownReady', '', 'NNPC_HotelGuest', '', false, true)
+			EventFlowSystemActor.ExitFlowchart()
+
+flow CheckFireworks():
+	if EventFlowSystemActor.GlobalEventNow('Fireworks', 'cMainOnly', false):
+		switch MainNpc.DevideFireWorksEventState():
+			case 3:
+				MainNpc.NpcChangeAIState('cFireworksStartWait', '', 'NNPC_HotelGuest', '', false, true)
+				EventFlowSystemActor.ExitFlowchart()
+			case 4:
+				MainNpc.NpcChangeAIState('cFireworksStartReaction', '', 'NNPC_HotelGuest', '', false, true)
+				EventFlowSystemActor.ExitFlowchart()
+			case 5:
+				if MainNpc.NpcBlackBoard('LookFireworks', 1):
+					MainNpc.NpcSetAIBlackBoard('LookFireworks', 0)
+					MainNpc.NpcChangeAIState('cLookFireworks', '', 'NNPC_HotelGuest', '', false, true)
+					EventFlowSystemActor.ExitFlowchart()
+				else:
+					MainNpc.NpcChangeAIState('cFireworksWander', '', 'NNPC_HotelGuest', '', false, true)
+					EventFlowSystemActor.ExitFlowchart()
+			default:
+				return
+
+flow FallPit():
+	MainNpc.NpcAISetting(2, false)
+	MainNpc.NpcAISetting(3, false)
+	MainNpc.NpcAISetting(8, true)
+	MainNpc.NpcChangeAIState('cFallPitHotel', '', 'NNPC_HotelGuest_Reaction', 'FallPit', false, false)
+
+flow Hit():
+	MainNpc.NpcChangeAIState('cHit', '', '', '', false, false)
+
+flow Init():
+	MainNpc.NpcRegistAIBlackBoard('LookFireworks', 0)
+
+flow Root():
+	MainNpc.NpcAIDefaultSetting(1)
+	MainNpc.SetIsStartHoteActivity('cOff')
+	if MainNpc.EventFlags['cHotelNpcTemp:FallPit']:
+		run FallPit()
+	else:
+		switch MainNpc.IsWarningInsect():
+			case 0:
+				MainNpc.NpcAISetting(2, false)
+				MainNpc.NpcAISetting(3, false)
+				MainNpc.NpcChangeAIState('cWarningInsect', '', 'NNPC_HotelGuest_Reaction', 'Poison', false, false)
+			case 1:
+				MainNpc.NpcChangeAIState('cWarningInsect', '', 'NNPC_HotelGuest', '', false, false)
+			case 2:
+				run CheckFireworks()
+				run CheckCountdown()
+				if MainNpc.LookToSky():
+					MainNpc.NpcChangeAIState('cLookToSky', '', 'NNPC_HotelGuest', '', true, false)
+				else:
+					MainNpc.NpcChangeHeadCtrlMode('cNormal', true)
+					MainNpc.SetIsStartHoteActivity('cOn')
+
+local flow Sub_grp_Event27():
+	if MainNpc.IsAroundEventPlazaArea(2):
+		if MainNpc.CheckCurrentNpcAIState('cCountdownWander') != 0:
+			MainNpc.NpcChangeAIState('cCountdownWander', '', 'NNPC_HotelGuest', '', false, false)
+	else:
+		MainNpc.NpcChangeGoToDestinationState('cGoToDestination', '', 'NNPC_HotelGuest', '', false, false, ArgInt0=5, ArgInt1=-1, ArgInt2=-1)
+	EventFlowSystemActor.ExitFlowchart()

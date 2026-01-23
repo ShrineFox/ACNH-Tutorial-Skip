@@ -181,7 +181,7 @@ flow ForceTalk_Return():
 		run Cancel_ReturnMoney()
 
 flow PreProposalCoordinateHouse(Type: int):
-	run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 	EventFlowSystemActor.SoundDuckingOn(71)
 	Player.PlayerChangeDemoState('cSharePlaySubHideUntilDemoEnd')
 	EventFlowSystemActor.SetupActorPosition(Type)
@@ -215,7 +215,7 @@ flow ProposalCoordinateHouse():
 		branch:
 			EventFlowSystemActor@Sub2.WaitFrame(10)
 			DynamicCast_LandReadjustNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
-	run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 	EventFlowSystemActor.SoundDuckingOff(71)
 	DynamicCast_LandReadjustNpc.NpcReservrForErase()
 	MainNpc.NpcAISetting(4, true)
@@ -335,11 +335,11 @@ entrypoint Event35:
 					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 						# That's too bad. But they were your designs, so it's your decision.
 						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:037', false)
-EventFlowSystemActor.SetNpcExteriorReserveFlag(false)
-EventFlowSystemActor.SetNpcInteriorReserveFlag(false)
-System.EventFlags['cPlayer:NpcHouseCoordinateTodayCount'] += -1
-EventFlowSystemActor.CancelNpcHouseEditReserve()
-run Cancel_ReturnMoney()
+						EventFlowSystemActor.SetNpcExteriorReserveFlag(false)
+						EventFlowSystemActor.SetNpcInteriorReserveFlag(false)
+						System.EventFlags['cPlayer:NpcHouseCoordinateTodayCount'] += -1
+						EventFlowSystemActor.CancelNpcHouseEditReserve()
+						run Cancel_ReturnMoney()
 					else:
 						# Understood! Then we'll start on the redesign for <115:1:cd00>'s home tomorrow. This is exciting! I think it's going to look great when it's done.
 						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:038', false)
@@ -354,11 +354,11 @@ run Cancel_ReturnMoney()
 				MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:041_03', false)
 				switch EventFlowSystemActor.GeneralTalkChoice4():
 					case 0:
-run Sel_Retake_Exterior()
+						run Sel_Retake_Exterior()
 					case 1:
-run Sel_Retake_Interior()
+						run Sel_Retake_Interior()
 					case 2:
-run Sel_Retake_Cancel()
+						run Sel_Retake_Cancel()
 					case 3:
 						# Understood! Then we'll start on the redesign for <115:1:cd00>'s home tomorrow. This is exciting! I think it's going to look great when it's done.
 						MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:038', false)

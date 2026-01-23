@@ -1,7 +1,13 @@
 flow DepartureWherearen():
 	EventFlowSystemActor.MiniGameSilentCancel()
 	if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-		run SNPC_dod_AirPort::LandMakingRemove_Soloplay()
+		if Player.HotelMannequinIsRentalAny():
+			run SNPC_dod_AirPort::LandMakingRemove_Soloplay()
+		else:
+			run SNPC_dod_AirPort::LandMakingRemove_Soloplay()
+	else:
+		if Player.HotelMannequinIsRentalAny():
+			run SNPC_dod_AirPort::RentalMannequinCodeRemove()
 	# <10:12><100:3:cd01>Dodo One, this is Dodo Tower—Wilbur, you copy? Got a walker who needs wings, over. Roger! Ready when you are!<100:3:cd02><10:8:002…
 	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
 	run Dod_GoToWherearen()

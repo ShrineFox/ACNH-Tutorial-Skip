@@ -1,0 +1,144 @@
+flow Cancel():
+	# Ah, of course. If you need anything, please let me know.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5114', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+
+flow ChkP2PStatus():
+	EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+	switch SubflowResults@3[3]:
+		case 1:
+			if EventFlowSystemActor.NetHasVisitor():
+				if SubflowResults@5[1] in (0, 1):
+					# You currently have guests visiting, though no more visitors are being admitted. How may I help you?
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5031', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						run GateOpen()
+					else:
+						run Cancel()
+				else:
+					# You currently have guests visiting, though no more visitors are being admitted. How may I help you?
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5032', false)
+					switch EventFlowSystemActor.GeneralTalkChoice3():
+						case 0:
+							run GateOpen()
+						case 1:
+							run ChkPassword()
+						case 2:
+							run Cancel()
+			elif SubflowResults@5[1] in (0, 1):
+				# You no longer have any guests visiting, and your invitation is closed. How might I assist you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5021', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run GateOpen()
+					case 1:
+						run EndConnection_WithGateClose()
+					case 2:
+						run Cancel()
+			else:
+				# You no longer have any guests visiting, and your invitation is closed. How might I assist you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5022', false)
+				switch EventFlowSystemActor.GeneralTalkChoice4():
+					case 0:
+						run GateOpen()
+					case 1:
+						run EndConnection_WithGateClose()
+					case 2:
+						run ChkPassword()
+					case 3:
+						run Cancel()
+		case 2:
+			if not EventFlowSystemActor.NetHasVisitor():
+				switch SubflowResults@5[1]:
+					case 0:
+						# The invitation for your friends to join you here is ongoing. Would you like to cancel it?
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5001', false)
+						run Sub_grp_Event13()
+					case 1:
+						# You have an ongoing invitation out to your Best Friends to join you here. Would you like to cancel it?
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5002', false)
+						run Sub_grp_Event13()
+					case 2:
+						# You have an active Doze Code for bringing your friends here. Would you like assistance with it?
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5004', false)
+						run Sub_grp_Event12()
+					case 3:
+						# You have an active Doze Code for bringing your Best Friends here. Would you like assistance with it?
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5005', false)
+						run Sub_grp_Event12()
+					case 4:
+						# You have an active Doze Code that allows anyone to find their way here. Would you like assistance with it?
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5003', false)
+						run Sub_grp_Event12()
+			elif SubflowResults@5[1] in (0, 1):
+				# You have company visiting, and you have an active invitation. May I help you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5011', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run GateClose()
+				else:
+					run Cancel()
+			else:
+				# You have company visiting, and you have an active invitation. May I help you?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5012', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run GateClose()
+					case 1:
+						run ChkPassword()
+					case 2:
+						run Cancel()
+		default:
+			return
+
+flow ChkPassword():
+	# The Doze Code for this session is <110:25>. Your invitees may visit by asking to visit another island.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5113', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+
+flow EndConnection():
+	# Certainly. No one else will be invited.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5101', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+	run SNPC_tap_05_InCloudIsland_P2PHost::FocusGateClose(NotSetCameraTalk=false)
+	run Sub_Event59()
+
+flow EndConnection_WithGateClose():
+	# Certainly. No one else will be invited.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5101', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+	run Sub_Event59()
+
+flow GateClose():
+	# Very well. No more guests will arrive. However, those who are already here are free to stay.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5111', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	EventFlowSystemActor.NetCloseSession('cCloseSession', false)
+	run SNPC_tap_05_InCloudIsland_P2PHost::FocusGateClose(NotSetCameraTalk=true)
+
+flow GateOpen():
+	# Of course! I will reopen the invitation immediately.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5112', true)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	EventFlowSystemActor.NetOpenSession('cOpenSession', false)
+	run SNPC_tap_05_InCloudIsland_P2PHost::FocusGateOpen(NotSetCameraTalk=true)
+
+local flow Sub_Event59():
+	# If you wish to resume inviting guests, please let me know!
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:5102', true)
+
+local flow Sub_grp_Event12():
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run EndConnection()
+		case 1:
+			run ChkPassword()
+		case 2:
+			run Cancel()
+
+local flow Sub_grp_Event13():
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run EndConnection()
+	else:
+		run Cancel()

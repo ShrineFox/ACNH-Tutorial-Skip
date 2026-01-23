@@ -5,12 +5,14 @@ flow Boc_Buy_After_Process():
 		System.EventFlags['cPlayer:KaburibaBuyKabuTodayFlag'] = true
 		System.EventFlags['cPlayer:BocAllowAddBuyCount'] = true
 		if not ((System.EventFlags['cPlayer:BocBuyCount'] < 2) or (System.EventFlags['cPlayer:BocBuyNumCount'] < 100)):
-			if (not EventFlowSystemActor.PlayerHasCookingRecipe('Boc', 65534)) and (System.EventFlags['cPlayer:MainmenuRecipe_v2']):
+			if (not System.EventFlags['cPlayer:BocSendBambooShoots']) and (not EventFlowSystemActor.CatalogItem(2295)):
+				System.EventFlags['cPlayer:BocSendBambooShoots'] = true
+				run Sub_Event77()
+			elif (not EventFlowSystemActor.PlayerHasCookingRecipe('Boc', 65534)) and (System.EventFlags['cPlayer:MainmenuRecipe_v2']):
 				run Boc_Recipe()
 				EventFlowSystemActor.SystemMailSend('cBoc', 'MAIL_SNpc_boc', 3, 'cNone', 'cFastTomorrow', 'cReward', false, false)
 			else:
-				EventFlowSystemActor.SelectRewardItemDirect(2295, 3, 'cVillageRemakePattern', 0)
-				EventFlowSystemActor.SystemMailSend('cBoc', 'MAIL_SNpc_boc', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+				run Sub_Event77()
 		System.EventFlags['cLifeSupportAchievement:BuyKabu'] += 1
 		System.EventFlags['cLand:FirstKabuBuy'] = true
 
@@ -112,6 +114,10 @@ flow Root():
 		run Boc_DC_Buy_Again()
 	else:
 		run Boc_DC_Buy()
+
+local flow Sub_Event77():
+	EventFlowSystemActor.SelectRewardItemDirect(2295, 3, 'cVillageRemakePattern', 0)
+	EventFlowSystemActor.SystemMailSend('cBoc', 'MAIL_SNpc_boc', 2, 'cNone', 'cFastTomorrow', 'cReward', false, false)
 
 flow boc_Buy():
 	EventFlowSystemActor.UITenKeyHandling('cKabu')

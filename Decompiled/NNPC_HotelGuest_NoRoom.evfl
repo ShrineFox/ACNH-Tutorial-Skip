@@ -1,0 +1,164 @@
+flow `2ndTalk_Host`():
+	if System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']:
+		if SubflowResults@2[0] == 0:
+			switch EventFlowSystemActor.RandomChoice3(3):
+				case 0:
+					# I figured there'd be lotsa sights to see here, but whew. This island's just chock-full of 'em! I'll have to make my next trip here an overnight one s…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:051_01', false)
+				case 1:
+					# My eyeballs are nearin' their seeing- stuff limit, but there's still so many sights to see before I gotta go! Next time, I'm gonna book a room for su…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:051_02', false)
+				case 2:
+					# I love taking vacations! Just being in a new place and getting to smell new smells is such a mood booster. Buuut it woulda been nice to get in some l…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:051_03', false)
+		else:
+			switch EventFlowSystemActor.RandomChoice3(3):
+				case 0:
+					# Chatting like this makes me feel like it's the old days! Gotta remind myself not to go lookin' for my old house. Wish we had more time to catch up, b…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:052_01', false)
+				case 1:
+					# Being here brings back so many fun memories! Feels like stepping back in time, <110:6>. But I wish I could stay here longer! A day trip is barely eno…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:052_02', false)
+				case 2:
+					# I liked this place when I lived here, but coming back as a visitor has shown me how awesome it truly is! Now, how am I gonna fit exploring and gettin…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:052_03', false)
+		run SelectGuide()
+	else:
+		if SubflowResults@2[0] == 0:
+			switch EventFlowSystemActor.RandomChoice3(3):
+				case 0:
+					# I figured there'd be lotsa sights to see here, but whew. This island's just chock-full of 'em! I'll have to make my next trip here an overnight one s…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1051_01', false)
+				case 1:
+					# My eyeballs are nearin' their seeing- stuff limit, but there's still so many sights to see before I gotta go! Next time, I'm gonna book a room for su…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1051_02', false)
+				case 2:
+					# I love taking vacations! Just being in a new place and getting to smell new smells is such a mood booster. Buuut it woulda been nice to get in some l…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1051_03', false)
+		else:
+			switch EventFlowSystemActor.RandomChoice3(3):
+				case 0:
+					# Chatting like this makes me feel like it's the old days! Gotta remind myself not to go lookin' for my old house. Wish we had more time to catch up, b…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1052_01', false)
+				case 1:
+					# Being here brings back so many fun memories! Feels like stepping back in time, <110:6>. But I wish I could stay here longer! A day trip is barely eno…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1052_02', false)
+				case 2:
+					# I liked this place when I lived here, but coming back as a visitor has shown me how awesome it truly is! Now, how am I gonna fit exploring and gettin…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1052_03', false)
+
+flow ChkAcquaintance():
+	if MainNpc.IsLivedSameNpc() == 0:
+		SubflowResults[0] = 0
+	elif MainNpc.IsAcquaintedWithSameNpc():
+		SubflowResults[0] = 1
+	else:
+		SubflowResults[0] = 0
+
+flow ChkHideNameTag():
+	if (EventFlowSystemActor.IsMyVillage()) and (not MainNpc.IsHotelNpcAcquaintedWith()) and (SubflowResults@2[0] == 0):
+		MainNpc.NpcChangeNameStatus(4)
+
+flow OpeningAct():
+	# RANDOM: Wish I could wander around longer, but … // It'd be so nice to relax and stay the n… // There's just not enough time in a day t…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:001', true)
+	MainNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.TurnBody(10, 0.0)
+
+flow Root():
+	run ChkAcquaintance()
+	if not MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc']:
+		run ChkHideNameTag()
+		if (not EventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.IsSharePlay(0)):
+			run OpeningAct()
+		MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc'] = true
+		if EventFlowSystemActor.IsMyVillage():
+			if MainNpc.IsHotelNpcAcquaintedWith():
+				if SubflowResults@2[0] == 0:
+					# Hey, I remember you! We met during my last visit! I had so much fun last time I knew I had to come back! This place is the best vacation spot in my b…
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:013', false)
+				else:
+					# Good to see ya, PLAYER! I've been nostalgic for this place, so I knew it was time for a visit. Just walking around and seeing some familiar faces is …
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:014', false)
+			else:
+				if SubflowResults@2[0] == 0:
+					# Oh, hi! Do you live here? I've heard a lot about this place, so I came for a little visit!
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:011', true)
+					MainNpc.NpcChangeNameStatus(0)
+				else:
+					# Wait a sec…PLAYER? It's me, <110:10>! I used to live here, remember? Seeing you is such a blast from the past! Glad I decided to visit today.
+					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:012', false)
+			if EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:ReasonForNoRoomNpc') == 0:
+				run SetReasonNoRoom()
+			if System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']:
+				switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:ReasonForNoRoomNpc'):
+					case 0, 1:
+						# Thing is, I didn't really spend time planning out pesky vacation stuff. Like finding a place to stay. Nothin' for it now, I guess. I'll just cram in …
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:021_01', false)
+						run SelectGuide()
+					case 2:
+						# But I kiiinda forgot to get a place to stay… The excitement took over my whole brain, I guess, a huh huh huh. That's just how the cookie crumbles. I'…
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:021_02', false)
+						run SelectGuide()
+					case 3:
+						# I wanted to stay the night, but I planned things so last-minute that I couldn't snag a hotel room. Guess I could sleep outside, but that sounds uncom…
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:021_03', false)
+						run SelectGuide()
+			else:
+				switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:ReasonForNoRoomNpc'):
+					case 0, 1:
+						# Thing is, I didn't really spend time planning out pesky vacation stuff. Like finding a place to stay. Nothin' for it now, I guess. I'll just cram in …
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1021_01', false)
+					case 2:
+						# But I kiiinda forgot to get a place to stay… The excitement took over my whole brain, I guess, a huh huh huh. That's just how the cookie crumbles. I'…
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1021_02', false)
+					case 3:
+						# I wanted to stay the night, but I planned things so last-minute that I couldn't snag a hotel room. Guess I could sleep outside, but that sounds uncom…
+						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:1021_03', false)
+		else:
+			# Are you a visitor here too? Lemme know if you need any pro travel tips! Nice to meet another fan of ISLAND.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:015', false)
+	elif EventFlowSystemActor.IsMyVillage():
+		run `2ndTalk_Host`()
+	else:
+		# RANDOM: Isn't ISLAND great? The folks here are … // I've heard this place is what travelin'… // Y'know, this trip has made me realize s…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:053', false)
+
+flow Root_Init():
+	if (not MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc']) and (not EventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.IsSharePlay(0)):
+		MainNpc.NpcAISetting(2, false)
+		MainNpc.NpcAISetting(3, false)
+
+flow SelectGuide():
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.WaitFrame(1)
+		run NNPC_Talk_General::End_Bye()
+	elif (EventFlowSystemActor.NetHasVisitor()) or (EventFlowSystemActor.IsSharePlay(0)):
+		# Hm? The hotel? You mean you're gonna help me find a place to stay?!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:041', false)
+		# Appreciate the offer, but looks like you're hanging out with someone else, <110:6>. Hope you have a fun time! I'll be A-OK, so no worries. See ya lat…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:042', false)
+	elif EventFlowSystemActor.IsVillageGateOpened():
+		# Hm? The hotel? You mean you're gonna help me find a place to stay?!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:041', false)
+		# Oh, hold on…aren't you waiting on someone else to hang out with? That's no problemo! Don't wanna derail your plans. We can catch up later if ya find …
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:042_01', false)
+	else:
+		# Hm? The hotel? You mean you're gonna help me find a place to stay?! That's so nice of you—thanks! Being able to stay the night here will make this tr…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest_NoRoom:031', true)
+		EventFlowSystemActor.ChangeWanderingNpcCloth('cDefault')
+		if EventFlowSystemActor.NetIsConnected():
+			EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+		System.EventFlags['cPlayerTemp:HotelReserveInviteDemo'] = true
+		EventFlowSystemActor.SystemRequestChangeStage('cHotelEntrance', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+
+flow SetReasonNoRoom():
+	switch EventFlowSystemActor.RandomChoice3(3):
+		case 0:
+			System.EventFlags['cLand:ReasonForNoRoomNpc'] = 1
+		case 1:
+			System.EventFlags['cLand:ReasonForNoRoomNpc'] = 2
+		case 2:
+			System.EventFlags['cLand:ReasonForNoRoomNpc'] = 3

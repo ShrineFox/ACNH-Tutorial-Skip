@@ -1,3 +1,16 @@
+flow Back_ManualSubSel():
+	# What should I read up on?
+	MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:253', false)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			run Manual_Ground(FromSubSel=true)
+		case 1:
+			run Manual_River(FromSubSel=true)
+		case 2:
+			run Manual_Cliff(FromSubSel=true)
+		case 3:
+			run Construction_Manual_PlusFixedWalk()
+
 flow CheckCliffNotice():
 	run Event35()
 
@@ -83,62 +96,128 @@ flow CleanService():
 
 flow Construction_Manual():
 	run CheckManualList()
+	if (System.EventFlags['cPlayer:ReadFixedWalkTecnique']) and (EventFlowSystemActor.IsSoloPlayController()):
+		run Construction_Manual_PlusFixedWalk()
+	else:
+		switch SubflowResults@4[0]:
+			case 0:
+				# What should I read up on?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251', false)
+				switch EventFlowSystemActor.GeneralTalkChoice4():
+					case 0:
+						run Manual_Basic()
+					case 1:
+						run Manual_Ground(FromSubSel=false)
+					case 2:
+						run Manual_CleanService()
+					case 3:
+						run Restart()
+			case 1:
+				# What should I read up on?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251_01', false)
+				switch EventFlowSystemActor.GeneralTalkChoice5():
+					case 0:
+						run Manual_Basic()
+					case 1:
+						run Manual_Ground(FromSubSel=false)
+					case 2:
+						run Manual_River(FromSubSel=false)
+					case 3:
+						run Manual_CleanService()
+					case 4:
+						run Restart()
+			case 2:
+				# What should I read up on?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251_02', false)
+				switch EventFlowSystemActor.GeneralTalkChoice5():
+					case 0:
+						run Manual_Basic()
+					case 1:
+						run Manual_Ground(FromSubSel=false)
+					case 2:
+						run Manual_Cliff(FromSubSel=false)
+					case 3:
+						run Manual_CleanService()
+					case 4:
+						run Restart()
+			case 3:
+				# What should I read up on?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251_03', false)
+				switch EventFlowSystemActor.GeneralTalkChoice6():
+					case 0:
+						run Manual_Basic()
+					case 1:
+						run Manual_Ground(FromSubSel=false)
+					case 2:
+						run Manual_River(FromSubSel=false)
+					case 3:
+						run Manual_Cliff(FromSubSel=false)
+					case 4:
+						run Manual_CleanService()
+					case 5:
+						run Restart()
+
+flow Construction_Manual_PlusFixedWalk():
 	switch SubflowResults@4[0]:
 		case 0:
 			# What should I read up on?
-			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251', false)
-			switch EventFlowSystemActor.GeneralTalkChoice4():
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:252', false)
+			switch EventFlowSystemActor.GeneralTalkChoice5():
 				case 0:
 					run Manual_Basic()
 				case 1:
-					run Manual_Ground()
+					run Manual_Ground(FromSubSel=false)
 				case 2:
-					run Manual_CleanService()
+					run Manual_FixedWalkTecnique()
 				case 3:
+					run Manual_CleanService()
+				case 4:
 					run Restart()
 		case 1:
 			# What should I read up on?
-			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251_01', false)
-			switch EventFlowSystemActor.GeneralTalkChoice5():
-				case 0:
-					run Manual_Basic()
-				case 1:
-					run Manual_Ground()
-				case 2:
-					run Manual_River()
-				case 3:
-					run Manual_CleanService()
-				case 4:
-					run Restart()
-		case 2:
-			# What should I read up on?
-			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251_02', false)
-			switch EventFlowSystemActor.GeneralTalkChoice5():
-				case 0:
-					run Manual_Basic()
-				case 1:
-					run Manual_Ground()
-				case 2:
-					run Manual_Cliff()
-				case 3:
-					run Manual_CleanService()
-				case 4:
-					run Restart()
-		case 3:
-			# What should I read up on?
-			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:251_03', false)
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:252_01', false)
 			switch EventFlowSystemActor.GeneralTalkChoice6():
 				case 0:
 					run Manual_Basic()
 				case 1:
-					run Manual_Ground()
+					run Manual_Ground(FromSubSel=false)
 				case 2:
-					run Manual_River()
+					run Manual_River(FromSubSel=false)
 				case 3:
-					run Manual_Cliff()
+					run Manual_FixedWalkTecnique()
 				case 4:
 					run Manual_CleanService()
 				case 5:
+					run Restart()
+		case 2:
+			# What should I read up on?
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:252_02', false)
+			switch EventFlowSystemActor.GeneralTalkChoice6():
+				case 0:
+					run Manual_Basic()
+				case 1:
+					run Manual_Ground(FromSubSel=false)
+				case 2:
+					run Manual_Cliff(FromSubSel=false)
+				case 3:
+					run Manual_FixedWalkTecnique()
+				case 4:
+					run Manual_CleanService()
+				case 5:
+					run Restart()
+		case 3:
+			# What should I read up on?
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:252_03', false)
+			switch EventFlowSystemActor.GeneralTalkChoice5():
+				case 0:
+					run Manual_Basic()
+				case 1:
+					run Back_ManualSubSel()
+				case 2:
+					run Manual_FixedWalkTecnique()
+				case 3:
+					run Manual_CleanService()
+				case 4:
 					run Restart()
 
 flow End_Construction():
@@ -160,6 +239,51 @@ flow EquipLicense():
 	else:
 		Player.PlayerOutfitFieldMakeToolKit('cRiver')
 
+flow ForCloudIsland():
+	if Player.PlayerCheckWaitType('cStand'):
+		# When outdoors on a Slumber Island, I can use the Island Designer app by pressing .
+		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220', false)
+		if EventFlowSystemActor.NetHasVisitor():
+			# Only the cleanup service is available from this app right now. It cannot be used while playing with others.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_06', false)
+		else:
+			# Only the cleanup service is available from this app right now. It cannot be used while playing with others.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_01', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				if EventFlowSystemActor.SystemCheckNowStage('cCloudIslandIndoor'):
+					# The cleanup service is only available while outdoors.
+					MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_07', false)
+				else:
+					# If you are stuck due to an item, or an object is out of reach on a cliff, this can clear the area next to you.
+					MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_02', false)
+					# On Slumber Islands, the cleanup service removes any trees, furniture, fences, and rocks next to you. Do you wish to remove the things next to you?
+					MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_03', false)
+					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+						# Understood! Please wait as we clean up the items around you.
+						MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:263', true)
+						EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.2000000476837158, 1.2000000476837158, true)
+						EventFlowSystemActor.ItemRemove()
+						EventFlowSystemActor.WaitFrame(20)
+						if EventFlowSystemActor.ItemRemove():
+							EventFlowSystemActor.SoundTriggerEmit('CleanFinish', -1)
+						EventFlowSystemActor.FadeIn(true)
+						if EventFlowSystemActor.ItemRemove():
+							# Cleanup complete!
+							MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_04', false)
+						else:
+							# There were no items to remove. Only items that are right next to you—like furniture, fences, trees, and rocks—will be removed.
+							MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:220_05', false)
+						Player.SmartPhone(1)
+	else:
+		# …Connection error!<10:8:001e0000>
+		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:206', false)
+		if Player.PlayerCheckWaitType('cSwim'):
+			# Is the reception bad, or what? Maybe I should try again when I'm back on land.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:207_01', false)
+		else:
+			# Is the reception bad or what? Maybe I should stand up and try again.
+			Player.OpenMessageWindow('TalkSys/SYS_PhoneApp:207', false)
+
 flow Manual_Basic():
 	# About the Island Designer App Starting and Stopping Construction Please use the app to properly begin and end construction.
 	MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:241', false)
@@ -178,16 +302,23 @@ flow Manual_CleanService():
 	MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:245', false)
 	run Construction_Manual()
 
-flow Manual_Cliff():
+flow Manual_Cliff(FromSubSel: bool):
 	if EventFlowSystemActor.IsSoloPlayController():
 		# Cliff Construction Guide Press  to create cliffs, round the edges of existing cliffs, or destroy existing cliffs. Building Cliffs on Top of Cliffs Y…
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:244', false)
+		run Event255()
 	else:
 		# Cliff Construction Guide Press  to create cliffs, round the edges of existing cliffs, or destroy existing cliffs. Building Cliffs on Top of Cliffs Y…
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:244_01', false)
+		run Event255()
+
+flow Manual_FixedWalkTecnique():
+	EventFlowSystemActor.MessageSuspend()
+	# Handy Construction Skills Facing Cardinal Directions Outside, press  to face the nearest direction—up, down, left, or right. Walking without Turning…
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11201', false)
 	run Construction_Manual()
 
-flow Manual_Ground():
+flow Manual_Ground(FromSubSel: bool):
 	if EventFlowSystemActor.IsSoloPlayController():
 		# Path Construction Guide Press  while on grassy areas to create or remove paths.
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:242', false)
@@ -198,19 +329,25 @@ flow Manual_Ground():
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:242_00_01', false)
 		# Selecting Path Designs When using a horizontal Joy-Con, press  or  to select from path designs you've obtained.
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:242_01_01', false)
-	run Construction_Manual()
+entrypoint Event255:
+	if FromSubSel:
+		run Back_ManualSubSel()
+		return
+	else:
+		run Construction_Manual()
 
-flow Manual_River():
+flow Manual_River(FromSubSel: bool):
 	if EventFlowSystemActor.IsSoloPlayController():
 		# Waterscaping Construction Guide Press  to dig into the ground and create new rivers, ponds, etc. You can also fill them in. Creating Waterfalls Try …
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:243', false)
+		run Event255()
 	else:
 		# Waterscaping Construction Guide Press  to dig into the ground and create new rivers, ponds, etc. You can also fill them in. Creating Waterfalls Try …
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:243_01', false)
-	run Construction_Manual()
+		run Event255()
 
 flow NotServiceArea():
-	# You're outside of the valid service area. You can only use this app while outdoors on ISLAND.
+	# You're outside of the valid service area. You can't use this app here.
 	MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:209', false)
 
 flow OnlyRiverNotice():
@@ -244,7 +381,9 @@ flow Restart():
 				return
 
 flow Root():
-	if EventFlowSystemActor.IsMyVillage():
+	if EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll'):
+		run ForCloudIsland()
+	elif EventFlowSystemActor.IsMyVillage():
 		run CheckWhere()
 		switch SubflowResults@3[1]:
 			case 0:
@@ -295,10 +434,14 @@ flow Start_Construction():
 		Player.SmartPhone(1)
 		System.EventFlags['cPlayer:EquipLicenseHelmet'] = true
 		run EquipLicense()
+		if (not System.EventFlags['cPlayer:ReadFixedWalkTecnique']) and (EventFlowSystemActor.IsSoloPlayController()):
+			# Handy Construction Skills Facing Cardinal Directions Outside, press  to face the nearest direction—up, down, left, or right. Walking without Turning…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:11201', false)
+			System.EventFlags['cPlayer:ReadFixedWalkTecnique'] = true
 	else:
 		# …Connection error!<10:8:001e0000>
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:206', false)
-		# You're outside of the valid service area. You can only use this app while outdoors on ISLAND.
+		# You're outside of the valid service area. You can't use this app here.
 		MainNpc.OpenMessageWindow('TalkSys/SYS_PhoneApp:209', false)
 
 local flow Sub_grp_Event114():

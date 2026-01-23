@@ -1,3 +1,10 @@
+flow Chest_CloudIsland():
+	EventFlowSystemActor.UIClosetCreate()
+	EventFlowSystemActor.SetTagFromSystem('cStartFtrName', 'cDegit', 0, 0, '')
+	# [A|An]<125:0:0000>… Should I change? (You'll change back when you wake.)
+	Player.OpenMessageWindow('TalkFtr/FTR_Chest:011', true)
+	run Event31()
+
 flow Chest_NPC():
 	run Chest_OtherCheck1st()
 	EventFlowSystemActor.UIClosetLotteryHandling()
@@ -66,6 +73,9 @@ flow Chest_OneRoom_Coordinate():
 	elif Player.PlayerOutfitMarinesuit():
 		# I can't edit outfits while I'm wearing a wet suit.
 		EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_Chest:020', false)
+	elif Player.HotelMannequinIsRentalAny():
+		# I can't edit outfits while wearing a borrowed hotel outfit.
+		EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_Chest:101', true)
 	else:
 		EventFlowSystemActor.UICoordinateEditHandling()
 
@@ -105,6 +115,7 @@ flow Chest_PC_Current():
 		EventFlowSystemActor.SetTagFromSystem('cStartFtrName', 'cDegit', 0, 0, '')
 		# [A|An]<125:0:0000>… Should I change?
 		Player.OpenMessageWindow('TalkFtr/FTR_Chest:008', true)
+entrypoint Event31:
 		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 			run ClosetUI()
 
@@ -148,6 +159,9 @@ flow ClosetUI():
 	elif Player.PlayerOutfitMarinesuit():
 		# I can't get changed while I'm wearing a wet suit.
 		EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_Chest:019', false)
+	elif Player.HotelMannequinIsRentalAny():
+		# I can't get changed while wearing a borrowed hotel outfit.
+		EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_Chest:100', false)
 	else:
 		EventFlowSystemActor.UIClosetHandling()
 
@@ -166,5 +180,7 @@ flow Root():
 			run Chest_NPC()
 		elif EventFlowSystemActor.SystemCheckNowStage('cOtherPlayerHouse'):
 			run Chest_PC_Other()
+		elif EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll'):
+			run Chest_CloudIsland()
 		else:
 			run Chest_Naruhodo()

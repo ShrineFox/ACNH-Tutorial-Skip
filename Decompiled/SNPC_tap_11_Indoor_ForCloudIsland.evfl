@@ -1,0 +1,272 @@
+flow CheckPMoving():
+	if System.EventFlags['cPlayer:NoticeAboutPMovinghTapDream']:
+		# Oh! Something seems different since our last meeting… Have you moved? Even if you find yourself living on a new island, I will always be here to help…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:004', false)
+		System.EventFlags['cPlayer:NoticeAboutPMovinghTapDream'] = false
+
+flow ClosePlayerEyes():
+	EventFlowSystemActor@ForEyes.WaitFrame(20)
+	Player.PlayerStartAnimeBedWait()
+	EventFlowSystemActor@ForEyes.WaitFrame(35)
+
+flow CloudIsland_NetErrorOccur(ErrorType: int):
+	EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(false)
+	run OpenPlayerEyes()
+	# Mmm… It appears the connection has failed.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:401', false)
+	if ErrorType <= 0:
+		run Return_SelectionRoot()
+	else:
+		# Shall I try it again?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:402', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run GoToIsland_Step1_Check()
+		else:
+			run Return_SelectionRoot()
+
+flow Exit_ThisScene():
+	# I understand. Know that you are always welcome here. Farewell…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:161', true)
+	EventFlowSystemActor.NetCloudIslandCleanupStatus()
+	run SNPC_tap::Exit_ThisScene_ForCloud()
+
+flow FirstVisit():
+	# Welcome, welcome! I trust that you feel rested.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:002', false)
+	run CheckPMoving()
+	# If I am not mistaken, this is your first trip to this region of dream space, yes? Allow me to orient you.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:003', false)
+	# It is here that Slumber Islands are made. And what are they? Blank canvases, brimming with potential. Mmm… If I may ask, has the waking world ever he…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:003_01', false)
+	# Alas, you seem confused…or perhaps it is eagerness I sense. Both? I would love to demonstrate Slumber Islands—or assist you otherwise— provided we ha…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:004', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run GoToIsland_Step1_Check()
+		case 1:
+			run SNPC_tap_12_Indoor_ForCloudIsland_Guest::Guest_Root()
+		case 2:
+			run Exit_ThisScene()
+
+flow GoToIsland_ChkSaveExist():
+	run System_ServerRegistration::UserRegist_CloudIsland_InDreamScene(WithLogin=true, WithSave=true, Terminate=false)
+	run SNPC_tap::ConnectionMsg_End()
+	if SubflowResults@2[0] == 0:
+		EventFlowSystemActor.NetCloudIslandGetMetaList()
+		if EventFlowSystemActor.CheckErrorType(2):
+			run CloudIsland_NetErrorOccur(ErrorType=2)
+	else:
+		run CloudIsland_NetErrorOccur(ErrorType=1)
+
+flow GoToIsland_Continue():
+	# We are now awash in bits and bytes. Which of your Slumber Islands would you like to dream of?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:211', false)
+	if not System.EventFlags['cPlayer:IsExplainedLoadCloudIsland']:
+		# Oh! Before I forget… You may save up to three Slumber Islands. Then if you wish to revisit one of your islands, you need only select it. Or if you wi…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:212', false)
+		System.EventFlags['cPlayer:IsExplainedLoadCloudIsland'] = true
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.UICloudIslandSaveHandling(0)
+	if not EventFlowSystemActor.UIResultMenuDecide():
+		run Return_SelectionRoot()
+	elif not EventFlowSystemActor.NetCloudIslandIsKeepNexLogIn():
+		run CloudIsland_NetErrorOccur(ErrorType=3)
+	elif EventFlowSystemActor.NetCloudIslandSelectedIsNew():
+		SubflowResults[0] = 0
+		run GoToIsland_New()
+	else:
+		SubflowResults[0] = 1
+		run GoToIsland_Continue_Demo()
+
+flow GoToIsland_Continue_Demo():
+	fork:
+		branch:
+			EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(true)
+			# A true beauty… Now you need only to close your eyes. And remember— no peeking.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:237', true)
+			EventFlowSystemActor.WaitFrame(25)
+			Player.PlayerStartAnimeBedWait()
+			EventFlowSystemActor.WaitFrame(40)
+			# Together, we will now dream of your Slumber Island…
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:237_01', true)
+			EventFlowSystemActor.MessageLockNext(1)
+			# Preparing to visit a Slumber Island...
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:044', false)
+			EventFlowSystemActor.WaitFrame(30)
+		branch:
+			EventFlowSystemActor@sub.NetCloudIslandDownloadContinueSaveData()
+entrypoint Event96:
+	EventFlowSystemActor.MessageUnlockNext()
+	EventFlowSystemActor.MessageSuspend()
+	run GoToIsland_EntryDemo()
+
+flow GoToIsland_EntryDemo():
+	if EventFlowSystemActor.CheckErrorType(2):
+		run CloudIsland_NetErrorOccur(ErrorType=4)
+	else:
+		EventFlowSystemActor.NetCloudIslandCreateSaveBuffer()
+		if EventFlowSystemActor.CheckErrorType(2):
+			run CloudIsland_NetErrorOccur(ErrorType=4)
+		else:
+			if EventFlowSystemActor.NetCloudIslandIsKeepNexLogIn():
+				EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:InDreamZoomIn', '', false)
+				EventFlowSystemActor.CameraSetDemoParam('InIdrDreamZoomIn', 'InIdrDreamZoomInOut', 'Player', false, false, false, 0)
+				EventFlowSystemActor.TapSmoke('cIdrDreamSmokeCloudIsland')
+				EventFlowSystemActor.WaitFrame(90)
+				EventFlowSystemActor.NextLPFadeOff()
+				EventFlowSystemActor.SystemBGMVolumeFadeOut(10.0, 2, 0.0)
+				EventFlowSystemActor.SoundSceneChangeFadeOutDucking(0)
+				EventFlowSystemActor.SystemRequestChangeStage('cCloudIslandDemo', 'cNormalFader', 'cNormalFader', 'cWhite', 0.10000000149011612, 1.0)
+			else:
+				run CloudIsland_NetErrorOccur(ErrorType=4)
+
+flow GoToIsland_New():
+	# A new Slumber Island? Perfect. Please close your eyes and imagine an island…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:231', true)
+	run ClosePlayerEyes()
+	run Event33()
+
+flow GoToIsland_New_Demo():
+	fork:
+		branch:
+			EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(true)
+			# I sense such potential… Now we need only whisk ourselves away to your new Slumber Island. If you would, please close your eyes. And no peeking—the co…
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:238', true)
+			EventFlowSystemActor.MessageLockNext(1)
+			# Preparing to visit a Slumber Island...
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:044', false)
+			EventFlowSystemActor.WaitFrame(30)
+		branch:
+			EventFlowSystemActor@sub.NetCloudIslandDownloadContinueSaveData()
+	run Event96()
+
+flow GoToIsland_New_First():
+	EventFlowSystemActor.NetCloudIslandFistVisit(0)
+	# Ah, the bytes flow ever so gently. Next, if you would be so kind, please imagine an island…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:005', true)
+	run ClosePlayerEyes()
+	# I will now ask you a few questions. None of your answers are permanent. Just relax and be honest.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:006', true)
+	EventFlowSystemActor.WaitFrame(20)
+entrypoint Event33:
+	# Gaze through your mind's eye… How large is the island you see?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:232', false)
+entrypoint Event34:
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			EventFlowSystemActor.UIRequestCreateCloudIslandMap(0)
+			SubflowResults[4] = 0
+			# Ah. A small island… Cozy, compact, similar in size to those found on Mystery Tours. Is this correct?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:233', false)
+			run Sub_grp_Event165()
+		case 1:
+			EventFlowSystemActor.UIRequestCreateCloudIslandMap(1)
+			SubflowResults[4] = 1
+			# A medium island… Larger than a Mystery Tour island, yet smaller than the one you call home. Correct?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:234', false)
+			run Sub_grp_Event165()
+		case 2:
+			EventFlowSystemActor.UIRequestCreateCloudIslandMap(2)
+			SubflowResults[4] = 2
+			# You see a large island… So it is similar in size to the one on which you live. Is that correct?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:235', false)
+			run Sub_grp_Event165()
+		case 3:
+			run OpenPlayerEyes()
+			# How sad! All seemed to be going so well. Intuition can be such a fickle thing. If you prefer, we can stop.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:251', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run ClosePlayerEyes()
+				run ReSel_Size()
+			else:
+				run Return_SelectionRoot()
+
+flow GoToIsland_Step1_Check():
+	SubflowResults[5] = 0
+	# Excellent. One moment whilst I connect us to the internet…
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:200', false)
+	run GoToIsland_ChkSaveExist()
+	if System.EventFlags['cPlayer:FirstForceTalkCloudIsland']:
+		run GoToIsland_Continue()
+	elif EventFlowSystemActor.NetCloudIslandExistSaveData(0):
+		run GoToIsland_New_First()
+	else:
+		run GoToIsland_Continue()
+
+flow OpenPlayerEyes():
+	EventFlowSystemActor.WaitFrame(25)
+	Player.PlayerStartAnimeBedWaitWithHandsClaspedOpenEyes()
+	EventFlowSystemActor.WaitFrame(35)
+
+flow ReSel_MAP():
+	# Splendid. Now to compile your vision into a digital dream. Which of these islands calls clearest to you?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:236', true)
+	EventFlowSystemActor.UICloudIslandMapHandling()
+	if EventFlowSystemActor.UIResultMenuDecide():
+		switch SubflowResults@3[4]:
+			case 0:
+				EventFlowSystemActor.NetCloudIslandSetNewFieldSize('cSmall')
+			case 1:
+				EventFlowSystemActor.NetCloudIslandSetNewFieldSize('cMedium')
+			case 2:
+				EventFlowSystemActor.NetCloudIslandSetNewFieldSize('cLarge')
+		run GoToIsland_New_Demo()
+	else:
+		run OpenPlayerEyes()
+		# How sad! All seemed to be going so well. Intuition can be such a fickle thing. If you prefer, we can stop.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:252', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run ClosePlayerEyes()
+				run ReSel_MAP()
+			case 1:
+				run ClosePlayerEyes()
+				run ReSel_Size()
+			case 2:
+				run Return_SelectionRoot()
+
+flow ReSel_Size():
+	# Very well. Please take a breath and… exhale. Gaze once more through your mind's eye. How large is the island you see?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:232_01', false)
+	run Event34()
+
+flow Return_SelectionRoot():
+	EventFlowSystemActor.NetCloudIslandClearPermanentParam()
+	run Event23()
+
+flow Root():
+	EventFlowSystemActor.OnPreEnterCloudIsland()
+	if System.EventFlags['cPlayer:IsFirstExplainedCloudIsland']:
+		SubflowResults[3] = 0
+		# Slumber's irresistible call beckons once more, I see. Welcome back.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:100', false)
+		run CheckPMoving()
+		if System.EventFlags['cPlayer:TodayVisitTapCloudIndoor']:
+entrypoint Event23:
+			# So… Where may I guide your dream?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:102', false)
+		else:
+			System.EventFlags['cPlayer:TodayVisitTapCloudIndoor'] = true
+			# What would you like to dream about?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:101', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run GoToIsland_Step1_Check()
+			case 1:
+				run SNPC_tap_12_Indoor_ForCloudIsland_Guest::Guest_Root()
+			case 2:
+				# Oh! You are in a special dream space where one may use the internet to visit special Slumber Islands. These islands differ from reality in that irrit…
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:151', false)
+				run Return_SelectionRoot()
+			case 3:
+				run Exit_ThisScene()
+	else:
+		System.EventFlags['cPlayer:IsFirstExplainedCloudIsland'] = true
+		SubflowResults[3] = 1
+		run FirstVisit()
+
+local flow Sub_grp_Event165():
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run ReSel_MAP()
+	else:
+		run ReSel_Size()

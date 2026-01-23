@@ -42,6 +42,7 @@ flow Get_MainGame():
 	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
 		EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue', 'cNextDemoEnd_Simple', false)
 	else:
+		run SkipMegaphoneMail()
 		run Demo_PublicAnnouncement_Process::Root()
 		EventFlowSystemActor.ReservePlayerMutterDemo('Player_GetDemo_Once', 'Get_MainGame_Continue2P', 'cNextDemoEnd_Simple', false)
 
@@ -147,6 +148,10 @@ flow MovingPBitSet_AboutHousing():
 		if System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']:
 			System.EventFlags['cPlayer:RcoPMovingUnlockNpcEditWithPhoneCall'] = true
 	System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true
+	if EventFlowSystemActor.HasHotelTicketCount(1):
+		System.EventFlags['cPlayer:PlayerMovingWithHotelCoupon'] = true
+	if System.EventFlags['cPlayer:TapDreamFirstTalk']:
+		System.EventFlags['cPlayer:NoticeAboutPMovinghTapDream'] = true
 	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
 		System.EventFlags['cPlayer:BuiltMyHome'] = true
 		System.EventFlags['cPlayer:PlayerMovingEnable'] = true
@@ -182,6 +187,10 @@ flow SetLocalFruitFlag():
 			System.EventFlags['cLand:IslandLocalFruitPeach'] = true
 		case 4:
 			System.EventFlags['cLand:IslandLocalFruitApple'] = true
+
+flow SkipMegaphoneMail():
+	if EventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`):
+		System.EventFlags['cPlayer:PlayOnceAfterUpdateAOC'] = true
 
 flow SkipNoticePriceDownBuildMoving():
 	System.EventFlags['cPlayer:SendLetterBuildMovingPricedown'] = true

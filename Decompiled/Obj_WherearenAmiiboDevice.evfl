@@ -1,27 +1,21 @@
 flow AskConnect():
-	if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
-		if EventFlowSystemActor.RandomChoice2(2) == 0:
-			EventFlowSystemActor.ChangeAmiiboNPC('cRcm')
-		else:
-			EventFlowSystemActor.ChangeAmiiboNPC('cRct')
-		# Would you like to be connected with a representative from this pair?
-		Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:404', false)
-	else:
-		# Would you like to connect with this client?
-		EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:401', false)
-	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-		run UsingAmiibo_AskRetry()
-	elif (EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3)) or (not EventFlowSystemActor.CheckAmiiboNPC('cTkk')):
-		if EventFlowSystemActor.CheckAmiiboNPC('cRco'):
-			run Demo_Common_Wherearen::StoryEventChk_AfterNewBuild()
-			if SubflowResults@10[12] in (0, 1, 2, 3, 4, 5, 6, 8, 9):
-				run GoToAmiiboPhone()
+	if SubflowResults@2[20] == 0:
+		if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+			if EventFlowSystemActor.RandomChoice2(2) == 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cRcm')
 			else:
-				run Sub_Event65()
+				EventFlowSystemActor.ChangeAmiiboNPC('cRct')
+			# Would you like to be connected with a representative from this pair?
+			Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:404', false)
 		else:
-			run GoToAmiiboPhone()
+			# Would you like to connect with this client?
+			EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:401', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run SkipAsk_Mantaro()
+		else:
+			run UsingAmiibo_AskRetry()
 	else:
-		run Sub_Event65()
+		run SkipAsk_Mantaro()
 
 flow Check_Abailability():
 	EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 1)
@@ -41,6 +35,21 @@ flow Check_Abailability():
 				# I'll look for a new client some other time. I'm in the middle of working on <115:1:cd01>'s home.
 				Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:001_01', false)
 			EventFlowSystemActor.ExitFlowchart()
+
+flow Chk_Mantaro():
+	SubflowResults[20] = 0
+	if EventFlowSystemActor.CheckAmiiboNPC('cSpltMantaro'):
+		SubflowResults[20] = 1
+		# Which one of the pair would you like to connect with?
+		Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:405', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu19')
+			case 1:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu20')
+				EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcName', 'cDegit', 0, 0, '')
+			case 2:
+				run UsingAmiibo_AskRetry()
 
 flow DeletePhotoUI():
 	fork:
@@ -87,7 +96,7 @@ flow NFC_CheckResidentNNPC():
 					if (EventFlowSystemActor.AmiiboNpcIsBirthday()) and (EventFlowSystemActor.IsHoldNpcBirthday()):
 						# Thank you for waiting. <115:1:cd00> cannot meet with you right now since [he|she] is having a birthday party today. [He|She] did ask that you please …
 						Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:603', false)
-run UsingAmiibo_AskRetry()
+						run UsingAmiibo_AskRetry()
 				case 1:
 					# Thank you for waiting. <115:1:cd00> is moving today and is very busy with packing. [He|She] said [he|she] will be happy to meet with you if you conta…
 					Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:605', false)
@@ -152,8 +161,22 @@ flow Root(NpadId: int = 0, ReadPadId: int = 0):
 		Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:202', false)
 		run StartAmiiboReading()
 
+flow SkipAsk_Mantaro():
+	if (EventFlowSystemActor.WherearenKKFesStatus(false) in (0, 1, 3)) or (not EventFlowSystemActor.CheckAmiiboNPC('cTkk')):
+		if EventFlowSystemActor.CheckAmiiboNPC('cRco'):
+			run Demo_Common_Wherearen::StoryEventChk_AfterNewBuild()
+			if SubflowResults@10[12] in (0, 1, 2, 3, 4, 5, 6, 8, 9):
+				run GoToAmiiboPhone()
+			else:
+				run Sub_Event65()
+		else:
+			run GoToAmiiboPhone()
+	else:
+		run Sub_Event65()
+
 flow StartAmiiboReading(NpadId: int = 0, ReadPadId: int = 0):
 	run Obj_Common_AmiiboProcess::NFC_ReadProcess()
+	run Chk_Mantaro()
 	if SubflowResults@2[18] == 0:
 		if EventFlowSystemActor.WherearenIsBuiltNpcForAmiibo():
 			# The client you want to reach already has a vacation home. Please speak to them directly if you want to suggest remodeling their home.

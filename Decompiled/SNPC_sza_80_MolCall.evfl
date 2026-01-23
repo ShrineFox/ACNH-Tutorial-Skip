@@ -1,0 +1,54 @@
+flow CallMain():
+	if EventFlowSystemActor.IsVillageGateOpened():
+		# I'm not supposed to call Resetti while the gate at the airport is open for visitors. Let's talk again after the airport gate is closed.
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:104', false)
+	elif SubflowResults@2[0] != 0:
+		# Oh, the Reset Service isn't available today, because there's an event going on. We can come back to this on another day, but today should be all abou…
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:102', false)
+	elif (not System.EventFlags['cLand:IsVisitNpcTidyToday']) and (not System.EventFlags['cLand:IsCallNpcTidy']):
+		# You want to reset part of the island? OK! Should we contact Resetti?
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:100', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# OK! I'll reach out now.
+			MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:105', false)
+			EventFlowSystemActor.MessageSuspend()
+			run Start_PhoneCall()
+			System.EventFlags['cLand:IsCallNpcTidy'] = true
+			System.EventFlags['cPlayer:NpcTidyCall'] = true
+			EventFlowSystemActor.ResetNpcTidyVisitDay()
+			EventFlowSystemActor.ReturnMolMobFromCafe(true)
+			# I got in touch with Resetti! He should be here on the island now, so please go and find him.
+			MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:106', false)
+		else:
+			run SNPC_sza_00_Common::Sza_Cmn_Cancel()
+			EventFlowSystemActor.ExitFlowchart()
+	else:
+		# You want to reset part of the island? Great! Resetti should be here now. I'm sure he's wandering around somewhere. You should find him.
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:101', false)
+
+flow Root():
+	run Subflow_EventDayChk()
+	run CallMain()
+	run SNPC_sza_00_Common::Sza_CmnSel_Again()
+
+flow Start_PhoneCall():
+	EventFlowSystemActor.WaitFrame(5)
+	MainNpc.SmartPhone(0)
+	MainNpc.SmartPhone(4)
+	MainNpc.SmartPhoneSE(2, 'Phone_Control')
+	EventFlowSystemActor.WaitFrame(20)
+	fork:
+		branch:
+			EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+		branch:
+			MainNpc.SmartPhone(2)
+	EventFlowSystemActor.WaitFrame(90)
+	MainNpc.SmartPhone(3)
+	MainNpc.SmartPhone(1)
+	EventFlowSystemActor.FadeIn(true)
+
+flow Subflow_EventDayChk():
+	if (not EventFlowSystemActor.GlobalEventNow('Carnival', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('Easter', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('Fireworks', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('Halloween', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('HarvestFestival', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('FishingConvention', 'cMainOnly', false)) and (not EventFlowSystemActor.GlobalEventNow('InsectConvention', 'cMainOnly', false)):
+		SubflowResults[0] = 0
+	else:
+		SubflowResults[0] = 1

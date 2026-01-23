@@ -390,7 +390,7 @@ flow GradeUp():
 
 flow GradeUpD_Finish():
 	if (EventFlowSystemActor.WherearenIsGradeUp()) and (EventFlowSystemActor.FlagSystemIntValue7(7, 'cWherearenPlayer:CoordinatorGrade') == 3):
-		run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+		run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 		SubNpc.NpcSetVisibleAction(false)
 		EventFlowSystemActor.WaitFrame(20)
 		run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
@@ -490,7 +490,7 @@ flow HouseCompleteActing():
 	if (System.EventFlags['cWherearenPlayer:MncMovetoBridge']) and ((not System.EventFlags['cWherearenPlayer:MncGenerateInOfficeTemp']) or (System.EventFlags['cWherearenPlayer:MncEntryOfficeReserve']) or (System.EventFlags['cWherearenPlayer:NpcGeneratePreDustClothTemp'])):
 		MainNpc.NpcMoveDirection(270.0, 10.0, 0, false, true)
 		MainNpc.TurnBody(10, 0.0)
-		MainNpc.NpcWaitTurn()
+		MainNpc.NpcWaitTurn(false)
 	else:
 		MainNpc.NpcMoveDirection(270.0, 5.0, 0, false, true)
 
@@ -547,15 +547,15 @@ flow OrderClose_Complete():
 			switch EventFlowSystemActor.WherearenNpcOrderType():
 				case 0:
 					if (EventFlowSystemActor.WherearenIsCustomerBuildNewHouse()) and (EventFlowSystemActor.IsBuiltNewHouseForEndShareHouse()):
-  run Sub_Event161()
+						run Sub_Event161()
 					else:
-System.EventFlags['cWherearenPlayer:NewBuildCount'] += 1
-run KKFesPrePareCheck()
+						System.EventFlags['cWherearenPlayer:NewBuildCount'] += 1
+						run KKFesPrePareCheck()
 						if System.EventFlags['cWherearenPlayer:SeqKKRave1stDone']:
-System.EventFlags['cWherearenPlayer:AfterFirstKKFesCount'] += 1
-	 run Sub_Event161()
+							System.EventFlags['cWherearenPlayer:AfterFirstKKFesCount'] += 1
+							run Sub_Event161()
 						else:
-	 run Sub_Event161()
+							run Sub_Event161()
 				case 1:
 					System.EventFlags['cWherearenPlayer:ShareHouseDoneCount'] += 1
 					run Sub_Event161()

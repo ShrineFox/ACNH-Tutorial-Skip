@@ -1,3 +1,176 @@
+flow BonusTalk():
+	if EventFlowSystemActor.IsKppTradeBonusTalk('All', true):
+		if EventFlowSystemActor.IsKppTradeBonusTalk('OnlyHighPrice', false):
+			# Yar, PLAYER!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:142', false)
+			run HighPriceBonusTalk(KppAlreadyTakingOutPhone=false)
+			run SendCoupon_End()
+		else:
+			EventFlowSystemActor.SetDIYTradeMessageTag('cAchiveRemakeBonusTicketNum', 0)
+			switch EventFlowSystemActor.CheckKppTradeBonusFlag('cMultiPlay'):
+				case 0:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+					# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+					run Sub_Event159()
+				case 1:
+					# Yar, ye donated some customized work, didn't ye? Yar har har! Ye're a sly one, aren't ye?
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:113', false)
+					# This be just a little somethin', but I want ye to have <90:46:cd00>. They're fer use at the hotel.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:114', false)
+					run Sub_Event159()
+				case 2:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+					# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+					# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+					run Sub_Event159()
+				default:
+					return
+
+flow BonusTalk_TradeBox():
+	EventFlowSystemActor.SetDIYTradeMessageTag('cAchiveRemakeBonusTicketNum', 0)
+	switch EventFlowSystemActor.CheckKppTradeBonusFlag('cMultiPlay'):
+		case 0:
+			switch EventFlowSystemActor.CheckKppTradeBonusFlag('cCheckTradeBox'):
+				case 0, 3:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+				case 1:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+					# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:115', false)
+				case 2:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+					# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+			# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+		case 1:
+			if EventFlowSystemActor.CheckKppTradeBonusFlag('cCheckTradeBox') in (0, 2):
+				# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+				# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+				# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+			else:
+				# Yar, ye donated some customized work, didn't ye? Yar har har! Ye're a sly one, aren't ye?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:113', false)
+				# This be just a little somethin', but I want ye to have <90:46:cd00>. They're fer use at the hotel.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:114', false)
+		case 2:
+			# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+			# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+			# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+		case 3:
+			switch EventFlowSystemActor.CheckKppTradeBonusFlag('cCheckTradeBox'):
+				case 0:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+					# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+				case 1:
+					# What ye just put in the box, it's customized, yar? Ar har har! Now that be a classy move!
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:112', false)
+					# This be just a little somethin', but I want ye to have <90:46:cd00>. They're fer use at the hotel.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:114', false)
+				case 2:
+					# Looks like ye've brought tons o' DIY stuff, yar? Now that makes me delivery trips even more worthwhile.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:110', false)
+					# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+					# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+				case 3:
+					# Yar, PLAYER!
+					MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:142', false)
+					run HighPriceBonusTalk(KppAlreadyTakingOutPhone=false)
+					run SendCoupon_End()
+
+flow Check_TradeBox():
+	if System.EventFlags['cPlayer:ReserveFirstTradeBonus']:
+		run FirstTimeBonus()
+	else:
+		run BonusTalk_TradeBox()
+	run SendCoupon_Before()
+	EventFlowSystemActor.KppReflectTradeBonus('AchiveRemake')
+	run SendCoupon_After()
+	if EventFlowSystemActor.IsKppTradeBonusTalk('OnlyHighPrice', false):
+		# Yar har! Speaking o' which, I got some good news fer ye!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:141', false)
+		run HighPriceBonusTalk(KppAlreadyTakingOutPhone=true)
+	run SendCoupon_End()
+
+flow FirstTimeBonus():
+	System.EventFlags['cPlayer:IsAchivedTradeOrderBonusOnce'] = true
+	System.EventFlags['cPlayer:ReserveFirstTradeBonus'] = false
+	# Ye made what I'm gonna deliver, eh? Thank ye!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:100', false)
+	# I'll make sure yer handiwork gets delivered safe and sound. Just keep makin' more like this.<10:4> I'll be sure to tell ye all about the ISLAND buzz …
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:102', false)
+	if EventFlowSystemActor.IsKppTradeBonusTalk('All', false):
+		EventFlowSystemActor.SetDIYTradeMessageTag('cAchiveRemakeBonusTicketNum', 0)
+		switch EventFlowSystemActor.CheckKppTradeBonusFlag('cCheckTradeBox'):
+			case 0:
+				# Also, looks like ye brought tons o' DIY stuff! That makes me delivery job feel even more worthwhile. Yar!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:117', false)
+				# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+			case 1:
+				# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+				# This be just a little somethin', but I want ye to have <90:46:cd00>. They're fer use at the hotel.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:114', false)
+			case 2:
+				# Also, looks like ye brought tons o' DIY stuff! That makes me delivery job feel even more worthwhile. Yar!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:117', false)
+				# Plus, ye put some customized work in the box, yar? Ar har har har! Ye're a sneaky one, ain't ye?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:116', false)
+				# Here's a little gift from yours truly, PLAYER. I'm givin' ye <90:46:cd00> ye can use at the hotel!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:111', false)
+			case 3:
+				EventFlowSystemActor.ExitFlowchart()
+	else:
+		EventFlowSystemActor.ExitFlowchart()
+
+flow HighPriceBonusTalk(KppAlreadyTakingOutPhone: bool):
+	EventFlowSystemActor.SetDIYTradeMessageTag('cHighPriceBonusItemName', 0)
+	EventFlowSystemActor.SetDIYTradeMessageTag('cHighPriceBonusTicketNum', 0)
+	# Yer <125:0:0000>, that ye made before? Big hit! Ye're puttin' ISLAND on all the good charts 'n' maps! I gotta thank ye fer all yer hard work. Here's …
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:140', false)
+	run SendCoupon_Before()
+	EventFlowSystemActor.KppReflectTradeBonus('HighPrice')
+	run SendCoupon_After()
+
+flow Kpp_Select():
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		# Well, shiver me timbers through and through. Talk to me later if ye change yer mind.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:005', false)
+	elif EventFlowSystemActor.IsSharePlay(0):
+		# Avast! How can ye be ready when ye be playin' with others? Me boat's only seaworthy fer a single passenger. Any more swabbies, an' she's likely to si…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:008', false)
+	elif EventFlowSystemActor.NetHasVisitor():
+		# Aye, but now that I think on it… There's other folks on the island right now. It'd be an awful shame fer anyone to be left by their lonesome while ye…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:007', false)
+	elif EventFlowSystemActor.NetIsConnected():
+		if EventFlowSystemActor.IsVillageGateOpened():
+			# Aye, but…the winds seem ta favor some company, don't they? What with yer airport gates open and all? It'd be an awful shame fer any visitors to be le…
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:006', false)
+		else:
+			EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+			run Sub_grp_Event207()
+	else:
+		run Sub_grp_Event207()
+
 flow Root():
 	if not EventFlowSystemActor.IsMyVillage():
 		if not System.EventFlags['cPlayerVisit:KppTalkFlag']:
@@ -14,73 +187,150 @@ flow Root():
 		# Now, what have we here? Yours be a face I've not seen before. Name's Kapp'n. What's yours? …<50:3>PLAYER, is it? Yar, that be a nice, fancy name, tha…
 		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:010', false)
 		if System.EventFlags['cPlayer:MakePlayerAfterStartingKppTour']:
-			# Well, I be a bit of a tour guide, see. I ferry folks to various wee islands in exchange fer miles.
-			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:010_01_02', false)
+			run Sub_Event47()
 		else:
 			# Well, I came here to ferry folks on tours to various wee islands in exchange fer miles.
 			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:010_01_01', false)
-		# Might even take ye where thar be rare treasures. Me tours go to places ye can only reach with me boat. I can take ye almost anytime. Let me know when…
-		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:010_02', false)
-		System.EventFlags['cPlayer:KppFirstTalk'] = true
-		if not System.EventFlags['cLand:KppTourStart']:
-			System.EventFlags['cLand:KppTourStartToday'] = true
-			System.EventFlags['cLand:KppTourStart'] = true
-		if not System.EventFlags['cPlayer:DocMysterytourExplain1st']:
-			# Wait one nautical minute… I get the distinct feelin' ye've never been on a tour before. So I can't take ya. Yet.
-			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:012', false)
-			# Me tours is fer veterans 'cause we be ridin' some wild waves. Can't have an untested swabbie aboard! At the very least, ye'll need to get yer feet we…
-			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:013', false)
-	elif System.EventFlags['cPlayer:KppTakeTourTodayFlag']:
-		# Alas, thar be a limit on me boat tours. Ye get one per day. Come back 'round another time, matey.
-		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:009', false)
-	elif System.EventFlags['cPlayer:DocMysterytourExplain1st']:
-		EventFlowSystemActor.UISonkatsuPointAppear()
-		EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 1000, '')
-		# Hm? Ye ready to take a tour?<10:4> Round- trip fare'll cost ye <90:4:0000> miles.
-		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:001', false)
-		if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-			# Well, shiver me timbers through and through. Talk to me later if ye change yer mind.
-			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:005', false)
-		elif EventFlowSystemActor.IsSharePlay(0):
-			# Avast! How can ye be ready when ye be playin' with others? Me boat's only seaworthy fer a single passenger. Any more swabbies, an' she's likely to si…
-			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:008', false)
-		elif EventFlowSystemActor.NetHasVisitor():
-			# Aye, but now that I think on it… There's other folks on the island right now. It'd be an awful shame fer anyone to be left by their lonesome while ye…
-			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:007', false)
-		elif EventFlowSystemActor.NetIsConnected():
-			if EventFlowSystemActor.IsVillageGateOpened():
-				# Aye, but…the winds seem ta favor some company, don't they? What with yer airport gates open and all? It'd be an awful shame fer any visitors to be le…
-				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:006', false)
-			else:
-				EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-				run Sub_grp_Event9()
-		else:
-			run Sub_grp_Event9()
+			run Sub_Event54()
+	elif (System.EventFlags['cPlayer:KppFirstTalkHotel']) and (not System.EventFlags['cPlayer:KppFirstTalkHotel_BoatTalk']):
+		# Yar, thanks fer all yer help with the hotel, PLAYER.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:030', false)
+		System.EventFlags['cPlayer:KppFirstTalkHotel_BoatTalk'] = true
+		run Sub_Event47()
 	else:
+		run BonusTalk()
+		if not System.EventFlags['cPlayer:KppTakeTourTodayFlag']:
+			if System.EventFlags['cPlayer:DocMysterytourExplain1st']:
+				EventFlowSystemActor.UISonkatsuPointAppear()
+				EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 1000, '')
+				# Hm? Ye ready to take a tour?<10:4> Round- trip fare'll cost ye <90:4:0000> miles.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:001', false)
+				run Kpp_Select()
+			else:
+				# Me tours is fer veterans 'cause we be ridin' some wild waves. Can't have an untested swabbie aboard! At the very least, ye'll need to get yer feet we…
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:013', false)
+		elif not System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']:
+			# Alas, thar be a limit on me boat tours. Ye get one per day. Come back 'round another time, matey.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:009', false)
+		elif System.EventFlags['cPlayer:KppTakeTour2TodayFlag']:
+			# No more boat tours fer today, matey. Come back round another day.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:009_01', false)
+		else:
+			EventFlowSystemActor.SetTagFromSystem('cFlow', 'cDegit', 0, 100, '')
+			if System.EventFlags['cPlayer:KppTakeTour2ExplainFlag']:
+				EventFlowSystemActor.UIHotelTicketAppear()
+				# Oh? Ye want to go on a tour again? I'll take ye fer <90:46:cd00>.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:001_02', false)
+			else:
+				System.EventFlags['cPlayer:KppTakeTour2ExplainFlag'] = true
+				# What? It's ye again? Hmm. Do ye wanna take another tour?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:001_00', false)
+				# Well now… Guess I don't have much choice. Ye've done a lot for the hotel.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:001_00_01', false)
+				EventFlowSystemActor.UIHotelTicketAppear()
+				# I'll make an exception and take ye on another tour fer <90:46:cd00>!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:001_01', false)
+			run Kpp_Select()
+
+flow SendCoupon_After():
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.SmartPhone(1)
+	Player.SmartPhone(1)
+	Player.SmartPhone(5)
+	EventFlowSystemActor.WaitFrame(10)
+
+flow SendCoupon_Before():
+	MainNpc.DisableMeasureChattering()
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.UIHotelTicketAppear()
+	fork:
+		branch:
+			MainNpc.SmartPhone(0)
+		branch:
+			EventFlowSystemActor.WaitFrame(20)
+			Player.SmartPhone(0)
+	Player.SmartPhone(4)
+	EventFlowSystemActor.WaitFrame(5)
+	MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(20)
+	MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 30, false)
+	MainNpc.SmartPhone(4)
+	EventFlowSystemActor.WaitFrame(10)
+	MainNpc.SmartPhoneSE(2, 'Phone_Control')
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.SmartPhoneSE(2, 'Phone_Sending')
+	EventFlowSystemActor.WaitFrame(30)
+	Player.SmartPhoneSE(2, 'Phone_Recieving')
+	EventFlowSystemActor.WaitFrame(15)
+
+flow SendCoupon_End():
+	MainNpc.PostProcKppBonusTalk()
+	EventFlowSystemActor.UIHotelTicketDisappear()
+	# Lookin' forward to continuin' our work.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:120', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+local flow Sub_Event159():
+	run SendCoupon_Before()
+	EventFlowSystemActor.KppReflectTradeBonus('AchiveRemake')
+	run SendCoupon_After()
+	run SendCoupon_End()
+
+local flow Sub_Event38():
+	run kpp_PayMile()
+	run kpp_PreProcess()
+	MainNpc.SetKappeiIslandReturnPos()
+	# Time to set sail! Watch yer step as ye hop on board.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:003', true)
+	EventFlowSystemActor.SelectMysteryTour(2)
+	MainNpc.NpcStartAS('NpcStandUpGround', true, true)
+	fork:
+		branch:
+			run `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cKppSeaDeparture', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeOutSpeed=0.0, FadeInSpeed='cNormal')
+		branch:
+			MainNpc.NpcStartAS('KppStandby', true, true)
+		branch:
+			Player.PlayerMoveToKppBoat()
+			Player.TurnBody(12, 180.0)
+		branch:
+			EventFlowSystemActor@BgmActor.SoundTriggerEmit('Boat_Start', -1)
+
+local flow Sub_Event47():
+	# Well, I be a bit of a tour guide, see. I ferry folks to various wee islands in exchange fer miles.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:010_01_02', false)
+	run Sub_Event54()
+
+local flow Sub_Event54():
+	# Might even take ye where thar be rare treasures. Me tours go to places ye can only reach with me boat. I can take ye almost anytime. Let me know when…
+	MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:010_02', false)
+	System.EventFlags['cPlayer:KppFirstTalk'] = true
+	if not System.EventFlags['cLand:KppTourStart']:
+		System.EventFlags['cLand:KppTourStartToday'] = true
+		System.EventFlags['cLand:KppTourStart'] = true
+	if not System.EventFlags['cPlayer:DocMysterytourExplain1st']:
+		# Wait one nautical minute… I get the distinct feelin' ye've never been on a tour before. So I can't take ya. Yet.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:012', false)
 		# Me tours is fer veterans 'cause we be ridin' some wild waves. Can't have an untested swabbie aboard! At the very least, ye'll need to get yer feet we…
 		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:013', false)
+	if EventFlowSystemActor.IsKppTradeBonusTalk('OnlyHighPrice', false):
+		# Yar har! Speaking o' which, I got some good news fer ye!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:141', false)
+		run HighPriceBonusTalk(KppAlreadyTakingOutPhone=true)
+		run SendCoupon_End()
 
-local flow Sub_grp_Event9():
-	if EventFlowSystemActor.HasLifeSupportPoint(1000, 'Now'):
+local flow Sub_grp_Event207():
+	if System.EventFlags['cPlayer:KppTakeTourTodayFlag']:
+		if EventFlowSystemActor.HasHotelTicketCount(100):
+			# Alright. I'll take <90:46:cd00>.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:002_01', true)
+			run Sub_Event38()
+		else:
+			# I'm afraid ye don't have enough hotel tickets, matey! Can't take ye…
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:004_01', false)
+	elif EventFlowSystemActor.HasLifeSupportPoint(1000, 'Now'):
 		# Yar, that's <90:4:0000> miles, then.
 		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:002', true)
-		run kpp_PayMile()
-		run kpp_PreProcess()
-		MainNpc.SetKappeiIslandReturnPos()
-		# Time to set sail! Watch yer step as ye hop on board.
-		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:003', true)
-		EventFlowSystemActor.SelectMysteryTour(2)
-		MainNpc.NpcStartAS('NpcStandUpGround', true, true)
-		fork:
-			branch:
-				run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cKppSeaDeparture', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeOutSpeed=0.0, FadeInSpeed='cNormal')
-			branch:
-				MainNpc.NpcStartAS('KppStandby', true, true)
-			branch:
-				Player.PlayerMoveToKppBoat()
-				Player.TurnBody(12, 180.0)
-			branch:
-				EventFlowSystemActor@BgmActor.SoundTriggerEmit('Boat_Start', -1)
+		run Sub_Event38()
 	else:
 		# Avast! Ye don't got the miles! No miles, no tour…
 		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:004', false)
@@ -94,15 +344,27 @@ flow kpp_PayMile():
 	EventFlowSystemActor.WaitFrame(30)
 	Player.SmartPhoneSE(2, 'Phone_Sending')
 	EventFlowSystemActor.WaitFrame(30)
-	EventFlowSystemActor.LifeSupportPointCountDown(-1000, false)
+	if System.EventFlags['cPlayer:KppTakeTourTodayFlag']:
+		EventFlowSystemActor.AddHotelTicket('cFlow', -100)
+	else:
+		EventFlowSystemActor.LifeSupportPointCountDown(-1000, false)
 	Player.SmartPhone(5)
 	Player.SmartPhone(1)
 	EventFlowSystemActor.WaitFrame(5)
 
 flow kpp_PreProcess():
 	EventFlowSystemActor.MiniGameSilentCancel()
-	if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-		# Hold on tharrr. Are ye in the midst of usin' yer Island Designer gizmo? I can't have ye runnin' into trouble with it durin' the tour, so go ahead and…
-		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:011', true)
-		System.EventFlags['cPlayer:EquipLicenseHelmet'] = false
-		Player.PlayerOutfitFieldMakeToolKit('cOff')
+	if not Player.HotelMannequinIsRentalAny():
+		if System.EventFlags['cPlayer:EquipLicenseHelmet']:
+			# Hold on tharrr. Are ye in the midst of usin' yer Island Designer gizmo? I can't have ye runnin' into trouble with it durin' the tour, so go ahead and…
+			MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:011', true)
+			System.EventFlags['cPlayer:EquipLicenseHelmet'] = false
+			Player.PlayerOutfitFieldMakeToolKit('cOff')
+	elif System.EventFlags['cPlayer:EquipLicenseHelmet']:
+		# Yar har! Are ye in the midst o' usin' that Island Designer thingamabobber? Aaand…ye're wearin' a borrowed getup from the hotel. Ye're just invitin' t…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:011_02', true)
+		Player.HotelMannequinRental(false, true, true, false)
+	else:
+		# Har har! That getup ye'er wearin'… Ye borrowed it from the hotel, yar? It'd be a real shipwreck if it were ta get dirty durin' the tour. Best return …
+		MainNpc.OpenMessageWindow('TalkSNpc/kpp/SP_kpp:011_01', true)
+		Player.HotelMannequinRental(false, false, true, false)

@@ -1,0 +1,79 @@
+flow LeaveRoom():
+	if EventFlowSystemActor.CheckHotelRoomCreated('cRoom2'):
+		EventFlowSystemActor.CameraSetDemoParam('LeaveRoom', 'LeaveRoom', 'Player', true, false, false, 0)
+		# Where should I go?
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2300', true)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				Player.PlayerHotelRoomSetFlagIgnoreFlow()
+				EventFlowSystemActor.UIHotelDeleteTemporaryCapture()
+			case 1:
+				EventFlowSystemActor.UIHotelRoomSelectEditVisitListHandling(1)
+				if EventFlowSystemActor.UIResultMenuDecide():
+					EventFlowSystemActor.UIHotelDeleteTemporaryCapture()
+					EventFlowSystemActor.HotelRoomVisitSceneChange(1)
+				else:
+					run Sub_Event26()
+			case 2:
+				run Sub_Event26()
+	else:
+		Player.PlayerHotelRoomSetFlagIgnoreFlow()
+		EventFlowSystemActor.UIHotelDeleteTemporaryCapture()
+
+flow ProhibitEnter():
+	if not EventFlowSystemActor.IsMyVillage():
+		# I should be socializing, so I think I'll spend my time elsewhere.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2203', false)
+		run Sub_Event27()
+	elif System.EventFlags['cLand:HotelOpend']:
+		run Sub_grp_Event7()
+	else:
+		if System.EventFlags['cPlayer:SeqHotelIntroductionDone']:
+			if System.EventFlags['cPlayer:SeqHotelEditTutorialDone']:
+				run Sub_grp_Event7()
+			else:
+				# I should talk with Leilani first…
+				Player.OpenMessageWindow('TalkSys/SYS_Player:2200', false)
+				run Sub_Event27()
+		else:
+			# I shouldn't enter without permission.
+			Player.OpenMessageWindow('TalkSys/SYS_Player:2200_01', false)
+			run Sub_Event27()
+
+flow Root():
+	EventFlowSystemActor.UIShopHotelTicketDisappear()
+	EventFlowSystemActor.UIHotelRoomVisit()
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+		EventFlowSystemActor.HotelRoomVisitSceneChange(0)
+	else:
+		fork:
+			branch:
+				Player.PlayerHotelStairsDown()
+			branch:
+				EventFlowSystemActor.UICloseHotelRoomVisit()
+
+local flow Sub_Event26():
+	EventFlowSystemActor.StoreNormalCamera(false, '')
+	Player.PlayerDemoTurn('cNorth')
+	EventFlowSystemActor.WaitFrame(2)
+	Player.PlayerWaitTurn()
+	Player.PlayerDemoMove('cForward', 2)
+
+local flow Sub_Event27():
+	EventFlowSystemActor.MessageSuspend()
+	Player.PlayerDemoTurn('cWest')
+	EventFlowSystemActor.WaitFrame(20)
+	Player.PlayerDemoMove('cForward', 2)
+
+local flow Sub_grp_Event7():
+	if EventFlowSystemActor.NetHasVisitor():
+		# I have company right now, so I can visit guest rooms later.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2201', false)
+		run Sub_Event27()
+	elif EventFlowSystemActor.IsVillageGateOpened():
+		# I might have company coming over, so I can visit guest rooms later.
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2202', false)
+		run Sub_Event27()
+	else:
+		run Root()

@@ -1,0 +1,37 @@
+flow CloudIsland_Failure_Simple():
+	if EventFlowSystemActor.NetCloudIslandPlaying():
+		EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+		run CloudIsland_ReturnVillage()
+	else:
+		run CloudIsland_ReturnVillage()
+
+flow CloudIsland_NetErrorPlayable():
+	# Unable to connect to the internet. An internet connection is required to keep playing on a Slumber Island. Would you like to try connecting to the in…
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:051', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run System_ServerRegistration::UserRegist_CloudIsland_InDreamScene(WithLogin=true, WithSave=true, Terminate=false)
+		run SNPC_tap::ConnectionMsg_End()
+		if SubflowResults@2[0] == 1:
+			run CloudIsland_NetErrorPlayable_Retry()
+	else:
+		run SNPC_tap::ConnectionMsg_End()
+		run SNPC_tap_03_InCloudIsland::WakeupProcess_CloseMenu()
+		EventFlowSystemActor.NetCloudIslandSetLeaveType('cError')
+		EventFlowSystemActor.NetCloudIslandHostReturnFromCloudIsland()
+
+flow CloudIsland_NetErrorPlayable_Retry():
+	run CloudIsland_NetErrorPlayable()
+
+flow CloudIsland_ReturnVillage():
+	EventFlowSystemActor.NetCloudIslandRevertSaveData()
+	EventFlowSystemActor.NetReturnFromDream()
+
+flow Root():
+	switch EventFlowSystemActor.NetDemoType():
+		case 0, 1, 2, 3, 4, 5, 6:
+			run System_Network::MultiplaySave()
+		case 7:
+			EventFlowSystemActor.NetCloudIslandSetupSaveData()
+			EventFlowSystemActor.NetCloudIslandDoAutoSave()
+			EventFlowSystemActor.CloudIslandHostStartPlayReport()
+			EventFlowSystemActor.NetEnterCloudIsland()

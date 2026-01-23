@@ -31,7 +31,7 @@ flow ClothesN2_Chk():
 
 flow ClothesP_Chk():
 	run SpecialMake()
-	if (not System.EventFlags['cPlayerTemp:TalkClothesPNow']) and (not System.EventFlags['cPlayerTemp:TalkPresentNow']) and (not Player.PlayerIsUseCoordinate()) and (not System.EventFlags['cPlayer:EquipLicenseHelmet']) and (MainNpc.NpcHasFreeMessage('cFreeAClothesP')):
+	if (not System.EventFlags['cPlayerTemp:TalkClothesPNow']) and (not System.EventFlags['cPlayerTemp:TalkPresentNow']) and (not Player.PlayerIsUseCoordinate()) and (not System.EventFlags['cPlayer:EquipLicenseHelmet']) and (not Player.HotelMannequinIsRentalAny()) and (MainNpc.NpcHasFreeMessage('cFreeAClothesP')):
 		MainNpc.SetClothesXItemsTag(1)
 		MainNpc.NpcOpenFreeMessage('cFreeAClothesP')
 		System.EventFlags['cPlayerTemp:TalkClothesPNow'] = true
@@ -126,10 +126,10 @@ local flow Sub_grp_Event26():
 flow TentFirst_Chk():
 	if (MainNpc.IsNnpcTent()) and (MainNpc.EventFlags['cNpcMemory:TalkCountToday'] < 1):
 		switch MainNpc.CheckNpcLook():
-			case 3:
+			case `SisterlyAN`:
 				if EventFlowSystemActor.EnvHourCompare(9, 30, true, true) in (0, 1):
 					run Sub_grp_Event26()
-			case 5:
+			case `JockHA`:
 				if EventFlowSystemActor.EnvHourCompare(6, 30, true, true) in (0, 1):
 					run Sub_grp_Event26()
 			default:
@@ -187,19 +187,19 @@ entrypoint Event116:
 					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 						# Nice. Thanks!
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeA_Want:003', false)
-EventFlowSystemActor.UIMoneyAppear()
+						EventFlowSystemActor.UIMoneyAppear()
 						MainNpc.SetDeliveryItem(12, true)
 						MainNpc.NpcDelivery(7, '"Default"')
-EventFlowSystemActor.UIMoneyDisappear()
+						EventFlowSystemActor.UIMoneyDisappear()
 						# RANDOM: A huh huh… I've been looking for [a|an]… // You know what would be SO cool?<10:4> A… // [A|An]<125:0:0000>! I've wanted one of …
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeA_Want:005', false)
-MainNpc.NpcAddFriendship(1)
-  run Sub_Event130()
+						MainNpc.NpcAddFriendship(1)
+						run Sub_Event130()
 					else:
 						# No worries… I totally get it. Maybe another time, <110:6>!
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeA_Want:004', false)
-MainNpc.EventFlags['cNpcMemory:TalkWantToday'] = true
-EventFlowSystemActor.ExitFlowchart()
+						MainNpc.EventFlags['cNpcMemory:TalkWantToday'] = true
+						EventFlowSystemActor.ExitFlowchart()
 				else:
 entrypoint Event117:
 					MainNpc.NpcDecideSelectSellBuyPrice('cSuperHigh')
@@ -208,19 +208,19 @@ entrypoint Event117:
 					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 						# Cool… I'm so glad I asked. Here you go, then…
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeA_Want:103', false)
-EventFlowSystemActor.UIMoneyAppear()
+						EventFlowSystemActor.UIMoneyAppear()
 						MainNpc.SetDeliveryItem(12, true)
 						MainNpc.NpcDelivery(7, '"Default"')
-EventFlowSystemActor.UIMoneyDisappear()
+						EventFlowSystemActor.UIMoneyDisappear()
 						# RANDOM: A huh huh huh, I've been wanting [a|an]… // The first time I saw [a|an] <125:0:0000… // A huh huh huh! I finally got one! My <1…
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeA_Want:105', false)
-MainNpc.NpcAddFriendship(1)
-  run Sub_Event130()
+						MainNpc.NpcAddFriendship(1)
+						run Sub_Event130()
 					else:
 						# No worries, my friend. You seem to really care about that thing. I'll find one of my own.
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Free/BO_FreeA_Want:104', false)
-MainNpc.EventFlags['cNpcMemory:TalkWantToday'] = true
-EventFlowSystemActor.ExitFlowchart()
+						MainNpc.EventFlags['cNpcMemory:TalkWantToday'] = true
+						EventFlowSystemActor.ExitFlowchart()
 			case 2, 3:
 				if EventFlowSystemActor.PercentChoice(80):
 					MainNpc.NpcDecideSelectSellBuyPrice('cSpecialHigh')

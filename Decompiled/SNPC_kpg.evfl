@@ -1,0 +1,598 @@
+flow BuyItem():
+	System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	# Yarrr… Ye do be eyein' [a|an] <125:0:0000>…
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:151', false)
+	# Yer tally'll be <90:46:cd00>… Whaddaya say?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:152', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+		# Alrighty then… Lemme know if ye change yer mind.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:153', true)
+	elif not EventFlowSystemActor.ShoppingCapacity('cHotelItem', 65534):
+		# Ye got no room in yer pockets! Sort yerself out, and then come back.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:154', true)
+	elif MainNpc.ShopHasBellCount(1.0):
+		MainNpc.ShopBuyDone(false, false, false, false, false)
+		if (not System.EventFlags['cPlayer:HotelStoreFirstBuyItem']) and (EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:UnlockHotelItemFromLevel') in (0, 1, 2)):
+			run FirstBuyItemNews_fromDisplay()
+		else:
+			MainNpc.TurnNeck(10, false)
+			# Thank ye! Come back anytime!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:156', true)
+	else:
+		# Seems ye're short on tickets. Go on and earn some, and then come back.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:155', true)
+
+flow ChangeTalkCamera():
+	EventFlowSystemActor.StoreNormalCamera(false, '')
+	MainNpc.NpcSetEnableShopItemCamera(false)
+	MainNpc.TalkCamera(true, 'cTalk', 0)
+
+flow CheckDisplay_DoNotTutorial():
+	if not EventFlowSystemActor.NetIsConnected():
+		run MustGetHotelCoupon()
+	elif not EventFlowSystemActor.NetHasVisitor():
+		run MustGetHotelCoupon()
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		run MustGetHotelCoupon()
+	else:
+		run HotelShopOpen_Visitor()
+
+flow CheckDisplay_TutorialDone():
+	if not ((EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor())):
+		run ShoppingOrTutorial()
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		run ShoppingOrTutorial()
+	else:
+		run HotelShopOpen_Visitor()
+
+flow Check_Display():
+	System.EventFlags['cPlayer:NpcKpgFirstTalk'] = true
+	if (System.EventFlags['cPlayer:SeqHotelIntroductionDone']) and (EventFlowSystemActor.CheckHotelRoomCreated('cRoom1')):
+		if System.EventFlags['cLand:HotelShopOpen']:
+			if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+				run CheckDisplay_DoNotTutorial()
+			else:
+				run CheckDisplay_TutorialDone()
+		else:
+			if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+				run CheckDisplay_DoNotTutorial()
+			else:
+				run CloseHotelShopCheckDisplay_TutorialDone()
+		run TodayKpgTalk()
+	else:
+		run GettingReady()
+		run TodayKpgTalk()
+
+flow CloseHotelShopCheckDisplay_TutorialDone():
+	if not EventFlowSystemActor.NetIsConnected():
+		run ShoppingOrTutorial()
+	elif not EventFlowSystemActor.NetHasVisitor():
+		if System.EventFlags['cPlayer:NpcKpgFirstTalkToday']:
+			# Ye got visitors headin' over to say ahoy, don't ye?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_02', false)
+			EventFlowSystemActor.MessageSuspend()
+			run ChangeTalkCamera()
+			EventFlowSystemActor.WaitFrame(20)
+			Player.TurnBody(0, 0.0)
+		else:
+			# That there souvenir catch yer eye?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:051', false)
+			EventFlowSystemActor.MessageSuspend()
+			run ChangeTalkCamera()
+			EventFlowSystemActor.WaitFrame(20)
+			Player.TurnBody(0, 0.0)
+			# Ye're waitin' on visitors, yar?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_01', false)
+		# Yar, come back to chat with me when ye got the time.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_03', false)
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		if not System.EventFlags['cPlayer:NpcKpgFirstTalkToday']:
+			# That there souvenir catch yer eye?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:051', false)
+			EventFlowSystemActor.MessageSuspend()
+			run ChangeTalkCamera()
+			EventFlowSystemActor.WaitFrame(20)
+			Player.TurnBody(0, 0.0)
+		# After yer island be empty o' visitors, ye should come an' talk to me again!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109', false)
+	elif (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+		# Ye're visitin' from beyond the island's shores, aren't ye?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:106', false)
+		EventFlowSystemActor.MessageSuspend()
+		run ChangeTalkCamera()
+		EventFlowSystemActor.WaitFrame(20)
+		Player.TurnBody(0, 0.0)
+		# Yarrr, sorry. We're still settin' things up here.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:054', false)
+	else:
+		run GettingReady()
+
+flow CloseHotelShop_DoNotTutorial():
+	run OpenHotelShop_DoNotTutorial()
+
+flow CloseHotelShop_TutorialDone():
+	if not EventFlowSystemActor.NetIsConnected():
+		run ForHost()
+	elif EventFlowSystemActor.NetHasVisitor():
+		if EventFlowSystemActor.NetIsInviteFriend():
+			if not System.EventFlags['cPlayer:KpgTalkToHotelCoupon']:
+				# Oho! How about them hotel tickets?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001', false)
+				System.EventFlags['cPlayer:KpgTalkToHotelCoupon'] = true
+				if not EventFlowSystemActor.HasHotelTicketCount(1):
+					# Ye got no tickets? Arr…
+					MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:111_01', false)
+			# After yer island be empty o' visitors, ye should come an' talk to me again!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109', false)
+		else:
+			run ForVisitor()
+	else:
+		if System.EventFlags['cPlayer:KpgTalkToHotelCoupon']:
+			# Ye got visitors headin' over to say ahoy, don't ye?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_02', false)
+		else:
+			# Oho! How about them hotel tickets?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001', false)
+			System.EventFlags['cPlayer:KpgTalkToHotelCoupon'] = true
+			if EventFlowSystemActor.HasHotelTicketCount(1):
+				# Ye're waitin' on visitors, yar?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_01', false)
+			else:
+				# Ye got no tickets? Arr…
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:111_01', false)
+				# Ye got visitors headin' over to say ahoy, don't ye?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_02', false)
+		# Yar, come back to chat with me when ye got the time.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:109_03', false)
+
+flow CommonText():
+	# Well, because of our popularity, I've expanded our souvenir offerin's.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:301', false)
+	EventFlowSystemActor.MessageSuspend()
+	run StoreShopCamera()
+	# So, that there caught yer eye?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:003', false)
+
+flow CommonTextTalkKpg():
+	# Well, because of our popularity, I've expanded our souvenir offerin's.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:301', false)
+
+flow FirstBuyItemNews():
+	MainNpc.TurnNeck(10, false)
+	# Thank ye!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:199', false)
+	run Event73()
+
+flow FirstBuyItemNews_fromDisplay():
+	MainNpc.TurnNeck(10, false)
+	# Thank ye!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:199', false)
+	EventFlowSystemActor.MessageSuspend()
+	run ChangeTalkCamera()
+	EventFlowSystemActor.WaitFrame(5)
+	Player.TurnBody(0, 0.0)
+entrypoint Event73:
+	# Say, about them souvenirs ye can get with yer tickets… More hotel guests, more goods bein' shipped out to promote the island… That'd be a good busine…
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:200', false)
+	if not System.EventFlags['cPlayer:HotelUnlockDIYTrade']:
+		# And by "goods," I mean…them… whatchacallits… That do-it-yerself stuff. Along them lines, Tom Nook and me boy would like a word with ye.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:200_01', false)
+	# Anyharrr… Always good to see ye! Stop by again!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:201', true)
+	System.EventFlags['cPlayer:HotelStoreFirstBuyItem'] = true
+	System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+
+flow ForHost():
+	if System.EventFlags['cPlayer:SeqHotelFurnitureIntroductionDone']:
+		run OpenNewFurnitureNewsTalkKpg()
+		if System.EventFlags['cPlayerTemp:OpenNewFurnitureNewsTalk']:
+			System.EventFlags['cPlayerTemp:OpenNewFurnitureNewsTalk'] = false
+			# On that note, wanna peep at the catalog?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:101_03', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run LookCatalog()
+			else:
+				run NotLookCatalog()
+		elif System.EventFlags['cPlayer:NpcKpgFirstTalkToday']:
+			# Oho! Wanna peep at the catalog?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:101_02', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run LookCatalog()
+			else:
+				run NotLookCatalog()
+		else:
+			# Good seein' ye. Wanna peep at the catalog?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:101', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run LookCatalog()
+			else:
+				run NotLookCatalog()
+	else:
+		run StoreTutorial_KpgTalk_1()
+		run StoreTutorial_2()
+		# All that said, it's good to be workin' with ye!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:002_01', true)
+
+flow ForVisitor():
+	if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+		# Visitin' the island, are ye? Welcome! Ye'll not find a nicer one around. Enjoy yer stay!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:060', false)
+	else:
+		# Ye're visitin' from beyond the island's shores, aren't ye?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:106', false)
+		# Sorry, we're still gettin' things shipshape. Come back another time.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:110', false)
+
+flow ForVisitor0():
+	return
+
+flow GettingReady():
+	if System.EventFlags['cLand:HotelShopOpen']:
+		run MustGetHotelCoupon()
+	elif System.EventFlags['cPlayer:HotelStoreKpgTalkItem']:
+		# Yarrr, sorry. We're still settin' things up here.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:054', false)
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	else:
+		# That there souvenir catch yer eye?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:051', false)
+		EventFlowSystemActor.MessageSuspend()
+		run ChangeTalkCamera()
+		EventFlowSystemActor.WaitFrame(20)
+		Player.TurnBody(0, 0.0)
+		# We're still gettin' set up here, so ye'll hafta come back later.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:053', false)
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+		System.EventFlags['cPlayer:HotelStoreKpgTalkItem'] = true
+
+flow HotelShopOpenForVisitor():
+	if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+		# Visitin' the island, are ye? Welcome! Ye'll not find a nicer one around. Enjoy yer stay!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:060', false)
+	else:
+		# Ye're visitin' from beyond the island's shores, aren't ye?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:106', false)
+		if EventFlowSystemActor.IsSoldOutShopHotel():
+			# Yar, usually we have items ye can buy with hotel tickets, but we're sold out of our day's stock. Ye should come visit another time!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:108', false)
+		else:
+			# Yar, have a look around. All that ye see here can be yers if ye trade me some hotel tickets.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:107', false)
+
+flow HotelShopOpen_Visitor():
+	if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+		# Visitin' the island, are ye? Welcome! Ye'll not find a nicer one around. Enjoy yer stay!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:060', false)
+	else:
+		run JumpBuyItem()
+
+flow JumpBuyItem():
+	MainNpc.ShopCheckItemSet('CheckItemIndex', 'cHotelEntrance')
+	EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+	EventFlowSystemActor.SetTagFromUIResult('cHotelShopItemPrice', 0)
+	MainNpc.TurnNeck(13, false)
+	Player.TurnNeck(13, false)
+	run BuyItem()
+
+flow LookCatalog():
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.UIShopBuyHandling('cHotelEntrance')
+	if System.EventFlags['cPlayer:HasBoughtFromHotelCatalog']:
+		if System.EventFlags['cPlayer:HotelStoreFirstBuyItem']:
+			switch EventFlowSystemActor.UIHotelCatalogOrderItemNum():
+				case 0:
+					# See ye around.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:102', true)
+				case 1:
+					# Thanks! Give it a day or so, and yer souvenir'll find its way to yer home.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:104', true)
+				case 2:
+					# Thanks fer the whopper of an order, PLAYER! Give it a day or so, and yer souvenirs will find their way to yer home.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:105', true)
+			System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+		else:
+			if EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:UnlockHotelItemFromLevel') in (0, 1, 2):
+				run FirstBuyItemNews()
+			else:
+				# See ye around.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:102', true)
+				System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	else:
+		# See ye around.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:102', true)
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+
+flow MustGetHotelCoupon():
+	if not System.EventFlags['cPlayer:NpcKpgFirstTalkToday']:
+		# That there souvenir catch yer eye?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:051', false)
+		EventFlowSystemActor.MessageSuspend()
+		run ChangeTalkCamera()
+		EventFlowSystemActor.WaitFrame(20)
+		Player.TurnBody(0, 0.0)
+	# Ye can exchange hotel tickets for these souvenirs. Be sure ye come back after ye get some tickets!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:110_01', false)
+
+flow NotHotelFirstTutorial():
+	if (EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)) or (EventFlowSystemActor.GlobalEventNow('Fireworks', 'cMainOnly', false)):
+		if not ((EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor())):
+			run smalltalk()
+		elif EventFlowSystemActor.NetIsInviteFriend():
+			run smalltalk()
+		else:
+			# Visitin' the island, are ye? Welcome! Ye'll not find a nicer one around. Enjoy yer stay!
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:060', false)
+	elif not ((EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor())):
+		# Yer from this island? A good place ye got here. Nice an' relaxin'.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:063', false)
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		# Yer from this island? A good place ye got here. Nice an' relaxin'.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:063', false)
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	else:
+		run ForVisitor()
+
+flow NotLookCatalog():
+	# Alrighty then… Lemme know if ye change yer mind.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:153', true)
+	System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+
+flow NotOpenHotelStore():
+	if EventFlowSystemActor.NetIsConnected():
+		if EventFlowSystemActor.NetHasVisitor():
+			if not EventFlowSystemActor.NetIsInviteFriend():
+				run ForVisitor()
+			elif System.EventFlags['cPlayer:HotelStoreKpgTalkEdit']:
+				# After yer island be empty o' visitors, I think Leilani'd appreciate a chat with ye.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:055_02', false)
+			else:
+				# Oh! Are ye…here to help out with the hotel?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:054_01', false)
+				# Me daughter-in-lar's havin' a tough ol' time, bein' new to the whole interior whatchamacallit game an' all.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:055', false)
+				# After yer island be empty o' visitors, I think Leilani'd appreciate a chat with ye.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:055_02', false)
+				System.EventFlags['cPlayer:HotelStoreKpgTalkEdit'] = true
+		else:
+			# Give her a hand if ye have time.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:064', false)
+	else:
+		if EventFlowSystemActor.IsSharePlay(0):
+			# Give her a hand if ye have time.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:064', false)
+		else:
+			if System.EventFlags['cPlayer:HotelStoreKpgTalkEdit']:
+				# Be a good swabbie, an' go chat with me daughter-in-lar. We be countin' on ye.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:056', false)
+			else:
+				# Oh! Are ye…here to help out with the hotel?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:054_01', false)
+				# Me daughter-in-lar's havin' a tough ol' time, bein' new to the whole interior whatchamacallit game an' all.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:055', false)
+				# Be a good swabbie and lend her a hand, yar?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:055_01', false)
+				System.EventFlags['cPlayer:HotelStoreKpgTalkEdit'] = true
+
+flow OpenHotelShop_DoNotTutorial():
+	if (EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor()) and (not EventFlowSystemActor.NetIsInviteFriend()):
+		run HotelShopOpenForVisitor()
+	else:
+		# Yar, this is the hotel's souvenir shop. Ye should come back when ye get some hotel tickets.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:111', false)
+
+flow OpenHotelShop_TutorialDone():
+	if not ((EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor())):
+		run ForHost()
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		run ForHost()
+	else:
+		run HotelShopOpenForVisitor()
+
+flow OpenNewFurnitureNews():
+	switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:UnlockHotelItemFromLevel'):
+		case 1:
+			if System.EventFlags['cPlayer:OpenNewFurnitureNews'] < 1:
+				EventFlowSystemActor.MessageSuspend()
+				run ChangeTalkCamera()
+				EventFlowSystemActor.WaitFrame(20)
+				Player.TurnBody(0, 0.0)
+				# I feel like, little by little, we've been gettin' more guests at the hotel. Do we have ye to thank fer that?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:300', false)
+				run CommonText()
+				System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 1
+				run Sub_Event94()
+		case 2:
+			if System.EventFlags['cPlayer:OpenNewFurnitureNews'] < 2:
+				EventFlowSystemActor.MessageSuspend()
+				run ChangeTalkCamera()
+				EventFlowSystemActor.WaitFrame(20)
+				Player.TurnBody(0, 0.0)
+				# The island's up and got real lively, wouldn't ye agree? Hotel business be boomin', thanks to yer kind help… I'm proud o' the hard work me boy an' his…
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:305', false)
+				run CommonText()
+				System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 2
+				run Sub_Event94()
+		case 3:
+			if System.EventFlags['cPlayer:OpenNewFurnitureNews'] < 3:
+				EventFlowSystemActor.MessageSuspend()
+				run ChangeTalkCamera()
+				EventFlowSystemActor.WaitFrame(20)
+				Player.TurnBody(0, 0.0)
+				# So I'll let ye in on a li'l secret, a secret about treasure… Me boy got ahold o' some very rare finds.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:306', false)
+				# 'Cause of all that, I've expanded the souvenir offerin's as far as I possibly can.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:305_01', false)
+				EventFlowSystemActor.MessageSuspend()
+				run StoreShopCamera()
+				# So, that there caught yer eye?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:003', false)
+				System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 3
+				run Sub_Event94()
+		default:
+			return
+
+flow OpenNewFurnitureNewsTalkKpg():
+	switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:UnlockHotelItemFromLevel'):
+		case 1:
+			if System.EventFlags['cPlayer:OpenNewFurnitureNews'] < 1:
+				# I feel like, little by little, we've been gettin' more guests at the hotel. Do we have ye to thank fer that?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:300', false)
+				run CommonTextTalkKpg()
+				System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 1
+				run Sub_Event338()
+		case 2:
+			if System.EventFlags['cPlayer:OpenNewFurnitureNews'] < 2:
+				# The island's up and got real lively, wouldn't ye agree? Hotel business be boomin', thanks to yer kind help… I'm proud o' the hard work me boy an' his…
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:305', false)
+				run CommonTextTalkKpg()
+				System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 2
+				run Sub_Event338()
+		case 3:
+			if System.EventFlags['cPlayer:OpenNewFurnitureNews'] < 3:
+				# So I'll let ye in on a li'l secret, a secret about treasure… Me boy got ahold o' some very rare finds.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:306', false)
+				# 'Cause of all that, I've expanded the souvenir offerin's as far as I possibly can.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:305_01', false)
+				System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 3
+				run Sub_Event338()
+		default:
+			return
+
+flow Root():
+	System.EventFlags['cPlayer:NpcKpgFirstTalk'] = true
+	if not System.EventFlags['cPlayer:SeqHotelIntroductionDone']:
+		run NotHotelFirstTutorial()
+		run TodayKpgTalk()
+	elif EventFlowSystemActor.CheckHotelRoomCreated('cRoom1'):
+		if System.EventFlags['cLand:HotelShopOpen']:
+			if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+				run OpenHotelShop_DoNotTutorial()
+			else:
+				run OpenHotelShop_TutorialDone()
+		else:
+			if (not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']) and (System.EventFlags['cPlayer:HotelDiyTradeAchieveOrderNumNowIsland'] < 1):
+				run CloseHotelShop_DoNotTutorial()
+			else:
+				run CloseHotelShop_TutorialDone()
+		run TodayKpgTalk()
+	else:
+		run NotOpenHotelStore()
+		run TodayKpgTalk()
+
+flow ShoppingOrTutorial():
+	if System.EventFlags['cPlayer:SeqHotelFurnitureIntroductionDone']:
+		run OpenNewFurnitureNews()
+		run JumpBuyItem()
+	else:
+		run StoreTutorial_1()
+		run StoreTutorial_2()
+		if EventFlowSystemActor.HasHotelTicketCount(1):
+			run StoreTutorial_CheckItem()
+			EventFlowSystemActor.MessageSuspend()
+			run StoreShopCamera()
+			# So, that there caught yer eye?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:003', false)
+			run JumpBuyItem()
+		else:
+			EventFlowSystemActor.ExitFlowchart()
+
+flow StoreShopCamera():
+	EventFlowSystemActor.StoreNormalCamera(false, '')
+	MainNpc.NpcSetEnableShopItemCamera(true)
+	MainNpc.TalkCamera(true, 'cTalk', 0)
+
+flow StoreTutorial_1():
+	System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	System.EventFlags['cLand:HotelFurnitureIntroductionDoneAnyone'] = true
+	if System.EventFlags['cPlayer:KpgTalkToHotelCoupon']:
+		# Thank ye for comin' to visit! I been waitin' for ye.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001_01', false)
+		run Sub_Event322()
+	else:
+		# Oho! How about them hotel tickets?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001', false)
+		if EventFlowSystemActor.HasHotelTicketCount(1):
+			run Sub_Event322()
+		else:
+			EventFlowSystemActor.MessageSuspend()
+			run ChangeTalkCamera()
+			EventFlowSystemActor.WaitFrame(20)
+			Player.TurnBody(0, 0.0)
+			# Ye got no tickets? Arr…
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:111_01', false)
+
+flow StoreTutorial_2():
+	Player.TurnBody(0, 0.0)
+	# Arrr! I didn't introduce meself. They call me Grams! I be runnin' the hotel souvenir shop. Ye can exchange yer hard-earned tickets fer souvenirs here.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001_02', false)
+	if (System.EventFlags['cPlayer:PlayerMovingWithHotelCoupon']) and (EventFlowSystemActor.HasHotelTicketCount(1)):
+		# Oh, and it seems ye got tickets left over from a life on another island. They'll spend just as well here!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001_02_01', false)
+	if EventFlowSystemActor.IsSoldOutShopHotel():
+		# Arr, I fear we're all sold-out… Ye see, our treasures are limited to the stock we got on hand. We get new items daily, an' we price 'em cheap as we c…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001_05', false)
+	else:
+		# What ye see here is the stock we got on hand. It be changin' every day, so ye ought to come by fer a look.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001_04', false)
+	# What else can I tell ye… We got a catalog from which ye can order all manner o' goods… They'll take some time to get to ye, and they'll cost ye more …
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:002', false)
+	System.EventFlags['cPlayer:SeqHotelFurnitureIntroductionDone'] = true
+	System.EventFlags['cLand:HotelShopOpen'] = true
+	switch EventFlowSystemActor.FlagSystemIntValue4(4, 'cLand:UnlockHotelItemFromLevel'):
+		case 1:
+			System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 1
+		case 2:
+			System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 2
+		case 3:
+			System.EventFlags['cPlayer:OpenNewFurnitureNews'] = 3
+		default:
+			return
+
+flow StoreTutorial_CheckItem():
+	EventFlowSystemActor.SetLookAtTargetObject('cHotelShopCheckItem')
+	MainNpc.TurnNeck(13, false)
+	Player.TurnNeck(13, false)
+
+flow StoreTutorial_KpgTalk_1():
+	System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	System.EventFlags['cLand:HotelFurnitureIntroductionDoneAnyone'] = true
+	if System.EventFlags['cPlayer:KpgTalkToHotelCoupon']:
+		# Thank ye for comin' to visit! I been waitin' for ye.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001_01', false)
+	else:
+		# Oho! How about them hotel tickets?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:001', false)
+		if not EventFlowSystemActor.HasHotelTicketCount(1):
+			# Ye got no tickets? Arr…
+			MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:111_01', false)
+
+flow StoreTutorial_LookItem0():
+	EventFlowSystemActor.SetLookAtTargetObject('cHotelShopItem0')
+	MainNpc.TurnNeck(13, false)
+	Player.TurnNeck(13, false)
+
+local flow Sub_Event322():
+	EventFlowSystemActor.MessageSuspend()
+	run ChangeTalkCamera()
+	EventFlowSystemActor.WaitFrame(20)
+	Player.TurnBody(0, 0.0)
+
+local flow Sub_Event338():
+	System.EventFlags['cPlayerTemp:OpenNewFurnitureNewsTalk'] = true
+	System.EventFlags['cPlayer:HotelStoreFirstBuyItem'] = true
+
+local flow Sub_Event94():
+	System.EventFlags['cPlayerTemp:OpenNewFurnitureNewsTalk'] = true
+	System.EventFlags['cPlayer:HotelStoreFirstBuyItem'] = true
+
+flow TodayKpgTalk():
+	if not ((EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor())):
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+
+flow smalltalk():
+	System.EventFlags['cPlayer:NpcKpgFirstTalkToday'] = true
+	# Yer from this island? A good place ye got here. Nice an' relaxin'.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpg/SP_kpg:063', false)

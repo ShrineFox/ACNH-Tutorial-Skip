@@ -6,6 +6,53 @@ flow DisableLadder():
 	# It's dangerous to climb any higher!
 	Player.OpenMessageWindow('TalkSys/SYS_Telepathy:151', false)
 
+flow Megaphone_Gst():
+	# No response…
+	Player.OpenMessageWindow('TalkSys/SYS_Player:2002', false)
+
+flow Megaphone_Ignore():
+	# No response…
+	Player.OpenMessageWindow('TalkSys/SYS_Player:2002', false)
+
+flow Megaphone_NotInField():
+	# No reply… Maybe they aren't nearby?
+	Player.OpenMessageWindow('TalkSys/SYS_Player:2001', false)
+
+flow Megaphone_Prohibited():
+	# Seems like the megaphone is getting feedback…
+	Player.OpenMessageWindow('TalkSys/SYS_Player:2003', false)
+
+flow Megaphone_ProhibitedByNet():
+	if EventFlowSystemActor.IsSharePlay(0):
+		# Seems I can't use the megaphone when I'm playing with others…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2004', false)
+	elif EventFlowSystemActor.NetIsConnected():
+		if EventFlowSystemActor.NetHasVisitor():
+			# Seems I can't use the megaphone when I'm connected with others…
+			Player.OpenMessageWindow('TalkSys/SYS_Player:2005', false)
+		else:
+			# I'll hold off on using the megaphone, because company might come over…
+			Player.OpenMessageWindow('TalkSys/SYS_Player:2006', false)
+
+flow Megaphone_Sleeping():
+	# No response…
+	Player.OpenMessageWindow('TalkSys/SYS_Player:2002', false)
+
+flow Megaphone_Snowman():
+	if EventFlowSystemActor.EnvSeason() in (`Spring`, `Summer`, `Autumn`):
+		# I guess there aren't any snowfolk around this time of year…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2007', false)
+	elif EventFlowSystemActor.GetSnowmanExistNum() == 0:
+		# No response…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2002', false)
+	else:
+		# Maybe snowfolk can't answer…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:2009', false)
+
+flow RentalMannequinCode():
+	# You can't transform while wearing a borrowed hotel outfit!
+	Player.OpenMessageWindow('TalkSys/SYS_Telepathy:153', false)
+
 flow Towel_ExistVisitor():
 	# You can't do that when you have company visiting!
 	Player.OpenMessageWindow('TalkSys/SYS_Telepathy:041', false)

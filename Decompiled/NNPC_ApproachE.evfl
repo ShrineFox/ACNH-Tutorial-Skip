@@ -3,10 +3,11 @@ flow AN_Got_Shovel():
 
 flow ForMarketBuilding():
 	MainNpc.EventFlags['cNpcSave:MarketBuildingSupport'] = true
+	MainNpc.EventFlags['cNpcSave:MarketBuildingSupportToday'] = true
 	switch MainNpc.CheckNpcLook():
-		case 3:
+		case `SisterlyAN`:
 			run ForMarketBuilding_AN()
-		case 5:
+		case `JockHA`:
 			run ForMarketBuilding_HA()
 		default:
 			return
@@ -34,6 +35,16 @@ flow ForMarketBuilding_HA():
 		# Yo, <110:3>! I heard that you've been helping build us a shop. You're gonna be ISLAND's MVP in no time, <110:5>!
 		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:011', false)
 		run FromFreeH_HA1()
+
+flow ForMileTourTicketSupport():
+	MainNpc.EventFlags['cNpcSave:MileTourTicketSupport'] = true
+	switch MainNpc.CheckNpcLook():
+		case `SisterlyAN`:
+			run MileTourTicketSupport_AN()
+		case `JockHA`:
+			run MileTourTicketSupport_HA()
+		default:
+			return
 
 flow FromFreeH_AN1():
 	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
@@ -82,6 +93,28 @@ flow FromFreeH_AN2():
 		else:
 			run AN_Got_Shovel()
 
+flow FromFreeH_AN_MileTicket():
+	# Bwa ha ha! I knew it! And that's why you've been running around—to get everything ready for 'em. Awesome!
+	MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:052', false)
+	if System.EventFlags['cPlayer:HeardMileTourHintFromHAAN']:
+		if (EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1) and (System.EventFlags['cPlayer:DodUseFirstFreeTour']):
+			run Sub_Event106()
+	else:
+		# In that case, I've got a little tip that might help you out.
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:053', false)
+		# Ever been doing the DIY thing and run out of <item>iron nuggets or <item>clay? Word is the rocks on Mystery Tour islands are stuffed with the, uh… st…
+		MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:054', false)
+		System.EventFlags['cPlayer:HeardMileTourHintFromHAAN'] = true
+		if System.EventFlags['cPlayer:DodUseFirstFreeTour']:
+			if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+				# Next time you do one of those tours, start wailing on rocks and see what happens. You might hit the jackpot!
+				MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:055', false)
+			else:
+				run Sub_Event106()
+		else:
+			# Hey! Didn't Tom Nook give you a <item>Nook Miles Ticket when you built your house, <110:5>? Why not use that next time you do one of those Mystery To…
+			MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:058', false)
+
 flow FromFreeH_HA1():
 	if EventFlowSystemActor.ShoppingCapacity('cItemName', 2511):
 		MainNpc.SetDeliveryItemAtRandom(2511, false, 'cVillageRemakePattern', 0)
@@ -95,7 +128,7 @@ flow FromFreeH_HA1():
 		else:
 			# I was gonna make those <item>iron nuggets into some free weights, but having a shop sounds way cooler. The faster we get a shop, the faster I can jus…
 			MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:003_01', true)
-			EventFlowSystemActor.SetItemToPocket(2511, 5)
+			EventFlowSystemActor.SetItemToPocket(2511, 8)
 		MainNpc.NpcDelivery(2, 'Default')
 	else:
 		# Let me know if there's anything heavy I can lift, <110:5>!
@@ -114,8 +147,51 @@ flow FromFreeH_HA2():
 		else:
 			# I was gonna make those <item>iron nuggets into free weights…but if we've got a shop, I can just BUY free weights! Anyway, they mean a lot to me 'caus…
 			MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:014_01', true)
-			EventFlowSystemActor.SetItemToPocket(2511, 5)
+			EventFlowSystemActor.SetItemToPocket(2511, 8)
 		MainNpc.NpcDelivery(2, 'Default')
 	else:
 		# Anyway, I just wanted to shout my thanks at you, <110:5>. So… <10:10><10:12>THANK YOU!
 		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:013_01', false)
+
+flow FromFreeH_HA_MileTicket():
+	# So, you know rocks, right? And how you get stuff for hitting one with a shovel or an axe? You know that, right? It turns out that the faster you hit …
+	MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:052', false)
+	# So you work your lats by swinging stuff around, then work endurance by carrying whatever comes out! And if you wanna max out, the rocks on Mystery To…
+	MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:053', false)
+	System.EventFlags['cPlayer:HeardMileTourHintFromHAAN'] = true
+	if not System.EventFlags['cPlayer:DodUseFirstFreeTour']:
+		# Hold up a rep! Didn't Tom Nook give you a <item>Nook Miles Ticket? Why are you still here?
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:056', false)
+		# You'll see! The extra stuff from those rocks means you get more workout for your workout. Go get huge!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:055', false)
+	elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') >= 1:
+		MainNpc.SetDeliveryItemAtRandom(5851, false, 'cVillageRemakePattern', 0)
+		# Oh yeah! I messed up and got an extra <item>Nook Miles Ticket. You should take it, <110:5>.
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:054', true)
+		MainNpc.NpcDelivery(1, 'Keep')
+		# You'll see! The extra stuff from those rocks means you get more workout for your workout. Go get huge!
+		MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:055', true)
+		EventFlowSystemActor.SetItemToPocket(5851, 1)
+		MainNpc.NpcDelivery(2, 'Default')
+
+flow MileTourTicketSupport_AN():
+	# Hey, so… Is it just me, or are things getting real new-neighbor-y around here? What's the deal?
+	MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:051', false)
+	switch EventFlowSystemActor.GeneralTalkChoice2():
+		case 0, 1:
+			run FromFreeH_AN_MileTicket()
+
+flow MileTourTicketSupport_HA():
+	# I did it! I've invented a perfect island workout routine. And you can do it on ANY island! Check it out…
+	MainNpc.OpenMessageWindow('TalkNNpc/B2_Ha/Approach/HA_ApproachE_MainSeq:051', false)
+	run FromFreeH_HA_MileTicket()
+
+local flow Sub_Event106():
+	MainNpc.SetDeliveryItemAtRandom(5851, false, 'cVillageRemakePattern', 0)
+	# And guess what? I just happen to have a <item>Nook Miles Ticket for you! Yep, I totally planned this.
+	MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:056', true)
+	MainNpc.NpcDelivery(1, 'Keep')
+	# You've been doing so much for this place it makes my head spin. Call it my way of chipping in. Have fun!
+	MainNpc.OpenMessageWindow('TalkNNpc/G4_An/Approach/AN_ApproachE_MainSeq:057', true)
+	EventFlowSystemActor.SetItemToPocket(5851, 1)
+	MainNpc.NpcDelivery(2, 'Default')

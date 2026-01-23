@@ -71,7 +71,7 @@ flow MoveOut():
 				EventFlowSystemActor.ExitFlowchart()
 			elif MainNpc.NpcMoveOutState() not in (0, 1, 2, 3):
 				run MoveOut_Acquaintance()
-			elif MainNpc.IsSanrioNpc():
+			elif MainNpc.IsCollaboNpc('cAny'):
 				run Free_Moveout()
 			elif not System.EventFlags['cPlayer:EnableInviteMoveoutNPC']:
 				run Free_Moveout()
@@ -105,22 +105,22 @@ flow MoveOut():
 					case 0:
 						# <50:3><110:4>! Hey. I've been waiting for ya! I wanted to say goodbye… And thanks for the advice when I couldn't decide if I wanted to move or not. I…
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:001', false)
-	run Sub_Event29()
+						run Sub_Event29()
 					case 1:
 						# Thanks for listening to me talk about moving! I'm all packed up and ready to go! But I've been waiting for you. On TV, nobody says "goodbye."<10:4> W…
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:002', false)
-	run Sub_Event29()
+						run Sub_Event29()
 					case 2:
 						# Hey, <110:4>. Look! I'm all ready to move out now! Are you here to see me off? Aw, <110:3>! I'm gonna miss ya!
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:003', false)
-	run Sub_Event29()
+						run Sub_Event29()
 			else:
 				# Hey, <110:3>! Sorry everything is so messy! I'm packing up to move! Oh, right, I didn't tell you yet. I'm moving out tomorrow! I dunno where I'm goin…
 				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:004', false)
 				run Sub_Event29()
 		elif MainNpc.NpcMoveOutState() in (0, 1, 2, 3):
 			if not MainNpc.EventFlags['cNpcMemory:HasAcquaintanceship']:
-				if MainNpc.IsSanrioNpc():
+				if MainNpc.IsCollaboNpc('cAny'):
 					# Uhhh… Have we met before? I'm <110:10>! Well, this is kinda awkward. See, I'm heading home tomorrow. I just REALLY miss home cooking… Nobody ever get…
 					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:007_02', false)
 				else:
@@ -128,7 +128,7 @@ flow MoveOut():
 					MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:007', false)
 				run HaveAcquaintance()
 				run Sub_Event29()
-			elif (System.EventFlags['cPlayer:EnableInviteMoveoutNPC']) and (not MainNpc.NpcInviteCheck(0)) and (not MainNpc.IsSanrioNpc()):
+			elif (System.EventFlags['cPlayer:EnableInviteMoveoutNPC']) and (not MainNpc.NpcInviteCheck(0)) and (not MainNpc.IsCollaboNpc('cAny')):
 				# Hey, it's <110:4>! You came to visit ISLAND again! I can't play right now, though! I'm getting ready to move! I dunno where I'm going yet. I'm just g…
 				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MoveOut:006', false)
 				if EventFlowSystemActor.GeneralTalkChoice2() == 0:

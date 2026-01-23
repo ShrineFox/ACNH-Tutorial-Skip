@@ -37,6 +37,14 @@ flow AdviceAboutNatural_AfterHalf():
 			case 2:
 				# Let's get more greenery on this island by planting fruit and saplings. When it comes to tree varieties, we really should branch out. I'm sorry, I'm s…
 				MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:025_02', false)
+	if SubflowResults@2[7] == 1:
+		if System.EventFlags['cPlayer:SzaTalkAboutFutureNature']:
+			# Oh! As I said before, I've seen a few flower buds around our island that have yet to bloom. We want every flower to look its best. Some extra time sh…
+			MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:028', false)
+		else:
+			# Oh yeah! I've noticed a few flower buds around our island that have yet to bloom. We'll want every flower looking its best if we want our island to i…
+			MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:027', false)
+			System.EventFlags['cPlayer:SzaTalkAboutFutureNature'] = true
 
 flow AdviceForLife():
 	if not System.EventFlags['cPlayer:SzaIslandEvaluationHeardToday']:
@@ -147,7 +155,7 @@ flow ClearTkkFirstLiveScore():
 	DynamicCast_rco.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:507', true)
 	DynamicCast_rco.RcoStandUpChair()
 	DynamicCast_rco.TurnBody(10, 0.0)
-	DynamicCast_rco.NpcWaitTurn()
+	DynamicCast_rco.NpcWaitTurn(false)
 	DynamicCast_rco.TurnNeck(11, false)
 	run Demo_Common_PhoneCall::MakingPhoneCall()
 	# Ah, hello! Do I have the pleasure of speaking with a Mr. K.K. Slider? Yes, yes! I'm with Nook Inc., located on ISLAND… Mmm-hmm… Yes! Indeed, we did! …
@@ -315,8 +323,8 @@ local flow Sub_Event183():
 	# You know, a lot of people will judge an island based on the types and number of shops it has. What screams "development" more than a wide range of st…
 	MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:026_02', false)
 
-local flow Sub_grp_Event11():
-	if SubflowResults@4[4] in (1, 2, 3):
+local flow Sub_grp_Event210():
+	if (System.EventFlags['cLand:IslandDevQuestComplete']) and (SubflowResults@4[4] in (1, 2, 3)):
 		# There's just one more thing I'd like to mention…
 		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:031', false)
 		run AdviceForMinusPoint()
@@ -400,10 +408,10 @@ flow Sza_Evaluation_NmlSeq():
 				run RecommendSearchLand()
 		case 1:
 			run AdviceForLife()
-			run Sub_grp_Event11()
+			run Sub_grp_Event210()
 		case 2:
 			run AdviceForNatural()
-			run Sub_grp_Event11()
+			run Sub_grp_Event210()
 		case 3:
 			switch SubflowResults@5[0]:
 				case 3:
@@ -415,7 +423,7 @@ flow Sza_Evaluation_NmlSeq():
 						# We got a perfect score! Again!<10:4> So let's keep doing whatever it is that we're doing!
 						MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:011', false)
 					else:
-System.EventFlags['cPlayer:SzaIslandEvaluation5star1st'] = true
+						System.EventFlags['cPlayer:SzaIslandEvaluation5star1st'] = true
 						if System.EventFlags['cPlayer:Experienced3starEvaluation']:
 							# Yes! We finally did it! <50:3>ISLAND, once a deserted island, untouched by civilization… earned the best possible ranking! Thank you for all your har…
 							MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:012', false)
@@ -423,6 +431,6 @@ System.EventFlags['cPlayer:SzaIslandEvaluation5star1st'] = true
 							# We got a perfect score! Again!<10:4> So let's keep doing whatever it is that we're doing!
 							MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_50_IslandEvaluation:011', false)
 					if (System.EventFlags['cPlayer:MainmenuRecipe']) and (not EventFlowSystemActor.PlayerHasCraftRecipe('', 8533)):
-run Get_GoldenWateringRecipe()
+						run Get_GoldenWateringRecipe()
 				default:
 					return

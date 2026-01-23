@@ -1,3 +1,8 @@
+flow NoticeAboutInteriorModeMouseDialog():
+	if (EventFlowSystemActor.IsSwitch2Edition()) and (not System.EventFlags['cPlayer:NoticeAboutMouseInteriorMode']):
+		EventFlowSystemActor.UIInteriorModeMouseDialog()
+		System.EventFlags['cPlayer:NoticeAboutMouseInteriorMode'] = true
+
 flow NoticeAboutInteriorModePlus_playerHouse():
 	if (System.EventFlags['cPlayer:NoticeAboutInteriorModePlus_RoomSize']) and (not System.EventFlags['cPlayer:NoticeAboutInteriorModePlus_playerHouse']):
 		if System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']:
@@ -20,6 +25,7 @@ flow TipsChat():
 	# Chat with other players! Press  to send messages to everyone you are playing with. You can also use the Chat Log app on your NookPhone to see past m…
 	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5203', false)
 	System.EventFlags['cPlayer:MainmenuChatLog'] = true
+	System.EventFlags['cPlayer:TipsChatFlag'] = true
 
 flow TipsEffectCloth():
 	if (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudio')) and (not System.EventFlags['cPlayer:SpnPhotoStudioGuideDone']):
@@ -35,5 +41,13 @@ flow TipsMyHouse():
 	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5202', false)
 
 flow ToPostOpenNfp():
-	if (EventFlowSystemActor.SystemCheckNowStage('cPhotoStudio')) and (not ((System.EventFlags['cPlayerTemp:InJuneBrideStudio']) and ((System.EventFlags['cPlayer:AlwJuneBrideDayCount'] < 6) or ((System.EventFlags['cPlayer:AlwJuneBrideDayCount'] != 7) and (System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag']))))):
-		run System_PhotoStudio_Call::PostOpenNFP()
+	if EventFlowSystemActor.SystemCheckNowStage('cPhotoStudio'):
+		if System.EventFlags['cPlayerTemp:InJuneBrideStudio']:
+			if System.EventFlags['cPlayer:AlwJuneBrideDayCount'] < 6:
+				run NoticeAboutInteriorModeMouseDialog()
+			elif not ((System.EventFlags['cPlayer:AlwJuneBrideDayCount'] != 7) and (System.EventFlags['cPlayer:AlwJuneBrideQuestClearFlag'])):
+				run System_PhotoStudio_Call::PostOpenNFP()
+		else:
+			run System_PhotoStudio_Call::PostOpenNFP()
+	else:
+		run NoticeAboutInteriorModeMouseDialog()

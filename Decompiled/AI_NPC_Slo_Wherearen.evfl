@@ -11,13 +11,19 @@ flow Init():
 		MainNpc.NpcAISetting(4, false)
 
 flow Root():
-	if EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
-		if (not EventFlowSystemActor.IsWherearenResumeFirstShareHouse()) and (EventFlowSystemActor.WherearenLookForHousemateState() != 0):
+	if not EventFlowSystemActor.SystemCheckNowStage('cWherearenMainIsland'):
+		if MainNpc.NpcCheckStateSelectTiming('cInit'):
+			MainNpc.SetNpcSpeakFlow('Demo_SchoolEvent', 'slo_Lesson')
+			MainNpc.NpcChangeAIState('cSchoolEvent', '', '', '', false, true)
+		else:
+			MainNpc.NpcReservrForErase()
+	elif (EventFlowSystemActor.IsWherearenResumeFirstShareHouse()) or (EventFlowSystemActor.WherearenLookForHousemateState() == 0):
+		run AI_NPC_Chm_Wherearen::Disappear()
+	else:
+		if EventFlowSystemActor.WherearenOrderStatus() in (0, 2, 3, 4, 5, 6, 7):
 			run Appear()
 		else:
-			run AI_NPC_Chm_Wherearen::Disappear()
-	elif MainNpc.NpcCheckStateSelectTiming('cInit'):
-		MainNpc.SetNpcSpeakFlow('Demo_SchoolEvent', 'slo_Lesson')
-		MainNpc.NpcChangeAIState('cSchoolEvent', '', '', '', false, true)
-	else:
-		MainNpc.NpcReservrForErase()
+			if EventFlowSystemActor.WherearenNpcOrderType() in (0, 2, 3):
+				run Appear()
+			else:
+				run AI_NPC_Chm_Wherearen::Disappear()

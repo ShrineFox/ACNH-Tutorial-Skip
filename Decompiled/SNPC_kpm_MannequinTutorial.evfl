@@ -1,0 +1,42 @@
+flow Root():
+	MainNpc.TurnNeck(11, false)
+	Player.PlayerMoveToTarget(false, 156.0, 208.0, 145.0, 205.0, false, '')
+	Player.TurnBody(0, 0.0)
+	EventFlowSystemActor.WaitFrame(15)
+	MainNpc.CharacterEmoticonAction('Eh', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(20)
+	MainNpc.TurnNeck(10, false)
+	MainNpc.TurnBody(10, 0.0)
+	MainNpc.SetDefaultWaitAs('cDefault')
+	EventFlowSystemActor.WaitFrame(20)
+	EventFlowSystemActor.SetLookAtTargetObject('cHotelMannequin')
+	EventFlowSystemActor.CameraSetDemoParam('MannequinTutorialDemo', 'cDefault', 'CameraTag:Mannequin0', false, false, false, 0)
+	# Good to see ya, PLAYER! Yer timin's spot on.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1001', false)
+	# Did ye know that hotel guests can borrow entire outfits from the mannequins here?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1002', false)
+	# See…our guests come from far away to enjoy their vacations. We thought it'd be nice if we could provide 'em with comfy outfits to wear while they're …
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1003', false)
+	# But after knockin' the idea about in me noodle fer a bit… I started thinkin' ye'd be the best captain fer this type o' thing. Ye're one who knows abo…
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1003_01', false)
+	# So…er…if ye got any outfits ye'd like to recommend, could ye place 'em on the mannequins?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1003_02', false)
+	# Do that, and we'll be lettin' our guests borrow the outfits!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1006', false)
+	# I'd be pleased as a porpoise to get yer help with this!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1006_01', false)
+	# Arr! One more thing. Thar be some helpful info next to the mannequins. Look it over if ye have any questions.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1007', false)
+	# I'm countin' on ye!
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:1008', true)
+	System.EventFlags['cPlayer:ReserveHotelMannequinTutorial'] = false
+	System.EventFlags['cPlayer:SeqHotelMannequinTutorialDone'] = true
+	run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	MainNpc.NpcWarpCreatePos()
+	MainNpc.TurnNeck(11, false)
+	EventFlowSystemActor.StoreNormalCamera(true, '')
+	EventFlowSystemActor.WaitFrame(20)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+	System.EventFlags['cPlayerTemp:HotelKpmTalkTodayGreeting'] = true
+	System.EventFlags['cPlayer:HotelSpeakTokpm'] = true
+	System.EventFlags['cLand:HotelMannequinOpen'] = true

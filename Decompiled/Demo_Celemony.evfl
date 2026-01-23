@@ -7,7 +7,7 @@ flow Ceremony_Bridge():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	if System.EventFlags['cPlayer:ContributedTodaysCeremonyBridgeorSlope']:
 		MainNpc.OpenMessageWindow('TalkSNPC/Event/SP_Ceremony:262', false)
 		run Event265()
@@ -20,7 +20,7 @@ flow Ceremony_Campsite():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
 		MainNpc.OpenMessageWindow('TalkSNPC/Event/SP_Ceremony:252', false)
 entrypoint Event265:
@@ -42,7 +42,7 @@ entrypoint Event265:
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -68,10 +68,10 @@ flow Ceremony_Ending():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'HappyFlower', 'Smiling', 'HappyFlower', 'HappyDance', 'Smiling', 'Clapping', 'Clapping', 'HappyDance', -1, false)
+			EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'HappyFlower', 'Smiling', 'HappyFlower', 'HappyDance', 'Smiling', 'Clapping', 'Clapping', 'HappyDance', -1, false, false)
 	EventFlowSystemActor.WaitFrame(105)
 	EventFlowSystemActor.CameraSetDemoExtraParam('', 'cDefault')
-	EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'Smiling', 'EmotEnd', 'Smiling', 'Smiling', 'EmotEnd', 'EmotEnd', 'Smiling', 'Smiling', -1, false)
+	EventFlowSystemActor.CeremonyEmoticon('Smiling', 'EmotEnd', 'Smiling', 'Smiling', 'EmotEnd', 'Smiling', 'Smiling', 'EmotEnd', 'EmotEnd', 'Smiling', 'Smiling', -1, false, false)
 	# Thank you all!
 	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:004_01', false)
 	# This concludes our ceremony!<10:4> Please do take care on your way home!
@@ -82,6 +82,86 @@ flow Ceremony_Ending():
 	EventFlowSystemActor.ReturnStage('', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
 	EventFlowSystemActor.SoundDuckingOff(38)
 	EventFlowSystemActor.SleepInsect('cAwake')
+
+flow Ceremony_Hotel():
+	# Let's get a few words about the hotel from Leilani on behalf of Kapp'n and her other diligent family members. The floor is yours, Leilani!
+	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:301', false)
+	MainNpc.TurnNeck(2, false)
+	MainNpc.TurnBody(12, -10.0)
+	EventFlowSystemActor.CeremonyLookAt(true, 'cGuest2', true, false, 0.0, 0.0, 0.0)
+	fork:
+		branch:
+			Npc_2.TurnNeck(11, false)
+			Npc_2.TurnBody(12, 0.0)
+		branch:
+			Npc_1.TurnNeck(2, false)
+	# Yarrr! A big thank-ye to all who put in the hard work openin' such a fine hotel on this here island. Yer support helps all of us make <110:34> better…
+	Npc_2.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:302', false)
+	fork:
+		branch:
+			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+		branch:
+			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'Blushing', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
+	EventFlowSystemActor.CeremonyLookAt(true, 'cRco', true, false, 0.0, 0.0, 0.0)
+	# Thank you, Leilani!
+	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:303', false)
+	if System.EventFlags['cLand:HotelOpenDay']:
+		# Next, we'd like to ask our very first hotel guest to say a few words!
+		MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:304', false)
+	else:
+		# Next, we'll be hearing from a guest who is staying at the hotel today!
+		MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:305', false)
+	EventFlowSystemActor.CeremonyLookAt(true, 'cGuest1', true, false, 0.0, 0.0, 0.0)
+	fork:
+		branch:
+			Npc_1.TurnNeck(11, false)
+			Npc_1.TurnBody(12, 0.0)
+		branch:
+			Npc_2.TurnNeck(1, false)
+	# Happy hotel-openin' day! I'm real honored to get to celebrate with you, <110:6>.
+	Npc_1.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest:10000', false)
+	Npc_1.EventFlags['cHotelNpcMemory:SkipNamedTraveler'] = true
+	fork:
+		branch:
+			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+		branch:
+			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, true)
+	MainNpc.TurnNeck(11, false)
+	MainNpc.TurnBody(12, 0.0)
+	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
+	EventFlowSystemActor.CeremonyTurn(false, 'cDefault', true, false)
+	# Thank you so much! Yes, yes! A big "thank you" to you indeed.
+	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:306', false)
+	if System.EventFlags['cPlayer:HotelMakingRoom1']:
+		# And finally, let's hear from someone whose hotel work was indispensable. Take it away, PLAYER!
+		MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:307', false)
+		EventFlowSystemActor.CeremonyLookAt(false, 'cMainPlayer', false, false, 0.0, 0.0, 0.0)
+		Npc_3.TurnNeck(11, false)
+		Npc_3.TurnBody(12, 0.0)
+		MainNpc.OpenMessageWindow('TalkSNPC/Event/SP_Ceremony:005', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				Npc_3.CharacterEmoticonAction('BigSmile', true, '', 0, false)
+				EventFlowSystemActor.WaitFrame(30)
+			case 1:
+				Npc_3.CharacterEmoticonAction('Laughing', true, '', 0, false)
+				EventFlowSystemActor.WaitFrame(40)
+			case 2:
+				Npc_3.CharacterEmoticonAction('SmugFace', true, '', 0, false)
+				EventFlowSystemActor.WaitFrame(40)
+		fork:
+			branch:
+				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+			branch:
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
+		MainNpc.TurnNeck(11, false)
+		MainNpc.TurnBody(12, 0.0)
+		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
+		EventFlowSystemActor.CeremonyTurn(false, 'cDefault', true, false)
+		MainNpc.OpenMessageWindow('TalkSNPC/Event/SP_Ceremony:006', false)
+		run Ceremony_Ending()
+	else:
+		run Ceremony_Ending()
 
 flow Ceremony_Market_Large():
 	MainNpc.OpenMessageWindow('TalkSNPC/Event/SP_Ceremony:211', false)
@@ -110,7 +190,7 @@ flow Ceremony_Market_Large():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, 0.0)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -136,7 +216,7 @@ flow Ceremony_Market_Large():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -176,7 +256,7 @@ flow Ceremony_Market_Small():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, 0.0)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -202,7 +282,7 @@ flow Ceremony_Market_Small():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -224,7 +304,7 @@ flow Ceremony_Museum():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, 0.0)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -250,7 +330,7 @@ flow Ceremony_Museum():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -290,7 +370,7 @@ flow Ceremony_Museum_Cafe():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'Smiling', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'Smiling', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, 0.0)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -318,7 +398,7 @@ flow Ceremony_Museum_Cafe():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -351,7 +431,7 @@ flow Ceremony_Museum_Large():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+				EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -377,7 +457,7 @@ flow Ceremony_Museum_Large():
 				branch:
 					MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 				branch:
-					EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+					EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 			MainNpc.TurnNeck(11, false)
 			MainNpc.TurnBody(12, 0.0)
 			EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -402,7 +482,7 @@ flow Ceremony_Office():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, 0.0)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -428,7 +508,7 @@ flow Ceremony_Office():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -444,7 +524,7 @@ flow Ceremony_Slope():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	if System.EventFlags['cPlayer:ContributedTodaysCeremonyBridgeorSlope']:
 		MainNpc.OpenMessageWindow('TalkSNPC/Event/SP_Ceremony:272', false)
 		run Event265()
@@ -478,7 +558,7 @@ flow Ceremony_Tailor():
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
+			EventFlowSystemActor.CeremonyEmoticon('Blushing', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, 0.0)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -504,7 +584,7 @@ flow Ceremony_Tailor():
 			branch:
 				MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 			branch:
-				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true)
+				EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, true, false)
 		MainNpc.TurnNeck(11, false)
 		MainNpc.TurnBody(12, 0.0)
 		EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
@@ -521,7 +601,7 @@ flow Root():
 	EventFlowSystemActor.WaitFaderSleep()
 	EventFlowSystemActor.WaitFrame(60)
 	EventFlowSystemActor.SetTagStructureName('cCeremony', 0)
-	EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', -1, false)
+	EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'Smiling', 'EmotEnd', -1, false, false)
 	if EventFlowSystemActor.IsBadSightCeremony():
 		# Oof… A little cramped here… But…
 		MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:007', false)
@@ -532,35 +612,50 @@ flow Root():
 		case 0:
 			# Welcome to our dedication ceremony honoring ISLAND's brand- new <115:7:cd00>!
 			MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_01', true)
+			run Sub_Event134()
 		case 1:
 			# I'd like to begin our special ceremony celebrating the grand opening of our fancy new <115:7:cd00>!
 			MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_02', true)
+			run Sub_Event134()
 		case 2:
 			if EventFlowSystemActor.IsCafeCeremony():
 				# I'd like to begin our special ceremony celebrating the grand opening of our fancy new <115:7:cd00>!
 				MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_02', true)
+				run Sub_Event134()
 			elif EventFlowSystemActor.MuseumCeremonyType() == 0:
-				# Welcome to our dedication ceremony honoring ISLAND's brand- new <115:7:cd00>!
-				MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_01', true)
+				run Sub_Event104()
 			elif System.EventFlags['cLand:Museum2BuiltSkippedMuseum1']:
 				# Welcome to our dedication ceremony honoring ISLAND's brand- new <115:7:cd00>!
 				MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_01', true)
+				run Sub_Event134()
 			else:
 				# I'd like to begin our special ceremony celebrating the grand opening of our fancy new <115:7:cd00>!
 				MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_02', true)
-		case 3, 4, 5, 6, 7:
-			# Welcome to our dedication ceremony honoring ISLAND's brand- new <115:7:cd00>!
-			MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_01', true)
+				run Sub_Event134()
+		case 3, 4, 5, 6, 7, 8:
+			run Sub_Event104()
+
+local flow Sub_Event104():
+	# Welcome to our dedication ceremony honoring ISLAND's brand- new <115:7:cd00>!
+	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:001_01', true)
+	run Sub_Event134()
+
+local flow Sub_Event105():
+	# Thanks to everyone's tireless efforts, ISLAND is developing wonderfully! Yes, yes!
+	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:002_02', false)
+	run Sub_grp_Event1()
+
+local flow Sub_Event134():
 	MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 	fork:
 		branch:
 			MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
 		branch:
-			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false)
-			EventFlowSystemActor.CeremonyEmoticon('FaintSmile', 'EmotEnd', 'FaintSmile', 'EmotEnd', 'EmotEnd', 'Smiling', 'FaintSmile', 'EmotEnd', 'EmotEnd', 'Smiling', 'FaintSmile', -1, false)
+			EventFlowSystemActor.CeremonyEmoticon('Clapping', 'EmotEnd', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 'Clapping', 75, false, false)
+			EventFlowSystemActor.CeremonyEmoticon('FaintSmile', 'EmotEnd', 'FaintSmile', 'EmotEnd', 'EmotEnd', 'Smiling', 'FaintSmile', 'EmotEnd', 'EmotEnd', 'Smiling', 'FaintSmile', -1, false, false)
 	# Thank you!
 	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:002', false)
-	EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', -1, false)
+	EventFlowSystemActor.CeremonyEmoticon('EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', 'EmotEnd', -1, false, false)
 	EventFlowSystemActor.CeremonyLookAt(false, 'cRco', true, false, 0.0, 0.0, 0.0)
 	switch EventFlowSystemActor.CeremonyType():
 		case 0:
@@ -580,11 +675,11 @@ entrypoint Event14:
 					run Event14()
 				else:
 					if System.EventFlags['cLand:Museum2BuiltSkippedMuseum1']:
-run BuiltMuseumSkipMuseum1()
+						run BuiltMuseumSkipMuseum1()
 					else:
 						# As I'm sure you've all noticed, ISLAND has gone through marvelous, wondrous changes! It's all thanks to the fine residents of this island who work to…
 						MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:008', false)
- run Sub_grp_Event1()
+						run Sub_grp_Event1()
 		case 6:
 			if EventFlowSystemActor.BridgeNum('cNoReserve') < 2:
 				# I feel like this new bridge is a turning point for the development of our once-deserted island.
@@ -592,15 +687,10 @@ run BuiltMuseumSkipMuseum1()
 				run Sub_grp_Event1()
 			else:
 				run Sub_Event105()
-		case 7:
+		case 7, 8:
 			# Thanks to everyone's tireless efforts, ISLAND is developing wonderfully! Yes, yes!
 			MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:002_02', false)
 			run Sub_grp_Event1()
-
-local flow Sub_Event105():
-	# Thanks to everyone's tireless efforts, ISLAND is developing wonderfully! Yes, yes!
-	MainNpc.OpenMessageWindow('TalkSNpc/Event/SP_Ceremony:002_02', false)
-	run Sub_grp_Event1()
 
 local flow Sub_grp_Event1():
 	switch EventFlowSystemActor.CeremonyType():
@@ -625,3 +715,5 @@ local flow Sub_grp_Event1():
 			run Ceremony_Bridge()
 		case 7:
 			run Ceremony_Slope()
+		case 8:
+			run Ceremony_Hotel()

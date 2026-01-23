@@ -62,8 +62,12 @@ flow NewsCampsite():
 
 flow NewsCampsiteGuest():
 	run NewsConnect()
-	# Today, we have a visitor staying at the campsite!
-	MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:301', false)
+	if (System.EventFlags['cPlayer:PAnnounceHotelOpend']) and (not System.EventFlags['cPlayerTemp:NoticeHotelOpenThisPAnnounce']):
+		# The hotel isn't the only place for guests today. We have a visitor staying at our campsite too!
+		MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:303', false)
+	else:
+		# Today, we have a visitor staying at the campsite!
+		MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:301', false)
 	# RANDOM: I hope the entire island joins me in gi… // I hope our guest is able to see what it… // Go meet our guest in person and find ou…
 	MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:302', false)
 	SubflowResults[9] = 0
@@ -102,6 +106,94 @@ flow NewsConnect():
 		else:
 			# RANDOM: Also! // And… // Moving on!
 			MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_01_Sza:031', false)
+
+flow NewsHotel():
+	if SubflowResults@7[24] in (1, 2, 3, 4, 5, 6):
+		run NewsConnect()
+		switch SubflowResults@7[24]:
+			case 1:
+				# I'm happy to announce we'll soon welcome a hotel to our very own ISLAND shores! This type of attraction is sure to make the island busier than ever. …
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1401', false)
+				System.EventFlags['cLand:HeardAnnounceHotelConstruction'] = true
+				SubflowResults[14] = 1
+			case 2:
+				if System.EventFlags['cLand:HeardAnnounceHotelConstruction']:
+					# Today, work wrapped up on the hotel down at the island's pier!
+					MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1412_01', false)
+					# We hope the hotel and the island's natural beauty will draw lots of visitors!
+					MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1413', false)
+					if EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+						# The end of a year is a busy time for all, so I hear it'll be just a little while longer until the hotel opens. But the staff are continuing their pre…
+						MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1414_01', false)
+						SubflowResults[14] = 1
+					else:
+						# The hotel will open as soon as the hotel staff finish their preparations. Residents hoping for a peek inside should head to the island's pier!
+						MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1414', false)
+						SubflowResults[14] = 1
+				else:
+					# I have a surprise announcement! A hotel has been built on the island's pier!
+					MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1411', false)
+					# We hope the hotel and the island's natural beauty will draw lots of visitors!
+					MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1413', false)
+					if EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+						# The end of a year is a busy time for all, so I hear it'll be just a little while longer until the hotel opens. But the staff are continuing their pre…
+						MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1414_01', false)
+						SubflowResults[14] = 1
+					else:
+						# The hotel will open as soon as the hotel staff finish their preparations. Residents hoping for a peek inside should head to the island's pier!
+						MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1414', false)
+						SubflowResults[14] = 1
+			case 3:
+				# Have you heard yet that a hotel was built down at the island's pier?
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1412_02', false)
+				# We hope the hotel and the island's natural beauty will draw lots of visitors!
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1413', false)
+				if EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false):
+					# The end of a year is a busy time for all, so I hear it'll be just a little while longer until the hotel opens. But the staff are continuing their pre…
+					MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1414_01', false)
+					SubflowResults[14] = 1
+				else:
+					# The hotel will open as soon as the hotel staff finish their preparations. Residents hoping for a peek inside should head to the island's pier!
+					MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1414', false)
+					SubflowResults[14] = 1
+			case 4:
+				# The hotel opened today on our island's pier!
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1421', false)
+				# I've heard the staff are grateful to the island's residents for helping to make the hotel's opening possible.
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1422', false)
+				# The staff sent a message saying they hope they can count on residents to help with guest rooms. I'd love for anyone interested in designing hotel roo…
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1423', false)
+				if (System.EventFlags['cLand:HotelOpenDaysCount'] <= 7) and (not System.EventFlags['cPlayer:HeldCeremonyHotel']):
+					SubflowResults[12] = 1
+					SubflowResults[14] = 1
+				else:
+					SubflowResults[14] = 1
+			case 5:
+				# Yesterday, the hotel officially opened on the island's pier!
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1421_01', false)
+				# I've heard the staff are grateful to the island's residents for helping to make the hotel's opening possible.
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1422', false)
+				# The staff sent a message saying they hope they can count on residents to help with guest rooms. I'd love for anyone interested in designing hotel roo…
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1423', false)
+				if (System.EventFlags['cLand:HotelOpenDaysCount'] <= 7) and (not System.EventFlags['cPlayer:HeldCeremonyHotel']):
+					SubflowResults[12] = 1
+					SubflowResults[14] = 1
+				else:
+					SubflowResults[14] = 1
+			case 6:
+				# Have you heard yet that a hotel opened down at the island's pier?
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1421_02', false)
+				# I've heard the staff are grateful to the island's residents for helping to make the hotel's opening possible.
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1422', false)
+				# The staff sent a message saying they hope they can count on residents to help with guest rooms. I'd love for anyone interested in designing hotel roo…
+				MainNpc.OpenMessageWindow('TalkSNpc/PublicAnnouncement/SP_PublicAnnouncement_11_Sza_Once:1423', false)
+				if (System.EventFlags['cLand:HotelOpenDaysCount'] <= 7) and (not System.EventFlags['cPlayer:HeldCeremonyHotel']):
+					SubflowResults[12] = 1
+					SubflowResults[14] = 1
+				else:
+					SubflowResults[14] = 1
+			default:
+				return
 
 flow NewsMarket():
 	if SubflowResults@2[0] == 0:
@@ -476,6 +568,7 @@ flow Root():
 	run NewsMuseum()
 	run NewsMarket()
 	run NewsTailor()
+	run NewsHotel()
 	if SubflowResults@2[0] == 0:
 		if (SubflowResults@2[12] == 1) and (not System.EventFlags['cLand:OfficeConstruction1']):
 			run NewsCeremony()

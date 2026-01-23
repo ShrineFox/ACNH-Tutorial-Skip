@@ -1,0 +1,248 @@
+flow ChkExistFriend():
+	if not EventFlowSystemActor.NetHasFriend():
+		# Oh… Your Nintendo Switch system's friend list appears to be empty. Well, once you have registered your friends, I am sure you will have a lovely time.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4501', false)
+		EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+		SubflowResults[1] = 0
+		EventFlowSystemActor.ExitFlowchart()
+
+flow ChkProfileNG():
+	if (System.EventFlags['cPlayer:UploadPlayerProfileIllegal']) and (not System.EventFlags['cPlayer:ImprovePlayerProfile']):
+		EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+		# Oh dear… How do I put this delicately… It seems that the contents of your passport may be in violation of Nintendo's Community Guidelines. This means…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4531', false)
+		EventFlowSystemActor.ExitFlowchart()
+
+flow ChkSwitch2EditionMode():
+	if EventFlowSystemActor.IsSwitch2Edition():
+		if not System.EventFlags['cPlayer:IsExplainedSwitch2EditionMode']:
+			System.EventFlags['cPlayer:IsExplainedSwitch2EditionMode'] = true
+			# Interesting! Somehow, I only just noticed that you are playing the Nintendo Switch 2 Edition. In that case, you should know what makes the Nintendo S…
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4551', true)
+entrypoint Event100:
+			# 12-Player Sessions on the Nintendo Switch 2 Edition On the Nintendo Switch 2 Edition, you can participate in a 12-player session. You can look for ot…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10701', true)
+		# Should this be a regular session or a 12-player session?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4011', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				SubflowResults[2] = 0
+				# Understood. A regular session.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4011_01', false)
+			case 1:
+				SubflowResults[2] = 1
+				# Understood. A 12-player session. I will only invite those playing the Nintendo Switch 2 Edition.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4011_02', false)
+			case 2:
+				run ExplainSwitch2EditionMode()
+			case 3:
+				EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+				run SNPC_tap_03_InCloudIsland::GoodBye_AfterCancel()
+
+flow CloudIsland_NetErrorOccur(ErrorType: int):
+	# Mmm… It appears the connection has failed.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:401', false)
+	if ErrorType > 0:
+		# Shall I try it again?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:402', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Retry_NetworkConnect()
+		else:
+			run SNPC_tap_03_InCloudIsland::GoodBye_AfterCancel()
+
+flow ExplainPassword():
+	if not System.EventFlags['cPlayer:OdekakeTutorialKeyword']:
+		# Unless I am mistaken, this is your first time inviting guests to a Slumber Island using a Doze Code. It is very simple. Once the invitation is prepar…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4014', false)
+		System.EventFlags['cPlayer:OdekakeTutorialKeyword'] = true
+
+flow ExplainSwitch2EditionMode():
+	# There are some things that make the Nintendo Switch 2 Edition different. Take a look.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4552', true)
+	run Event100()
+
+flow FocusGateClose(NotSetCameraTalk: bool):
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.CameraSetDemoParam('LookAtGate', 'LookAtGate', 'CameraTag:Gate', false, false, false, 0)
+	EventFlowSystemActor.WaitFrame(40)
+	EventFlowSystemActor.SoundTriggerEmit('GateClose', -1)
+	EventFlowSystemActor.ChangeSwitchCloudIslandGate(false)
+	EventFlowSystemActor.WaitFrame(70)
+	if not NotSetCameraTalk:
+		MainNpc.TalkCamera(true, 'LookAtGate', 0)
+		EventFlowSystemActor.WaitFrame(45)
+
+flow FocusGateOpen(NotSetCameraTalk: bool):
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.CameraSetDemoParam('LookAtGate', 'LookAtGate', 'CameraTag:Gate', false, false, false, 0)
+	EventFlowSystemActor.WaitFrame(40)
+	EventFlowSystemActor.SoundTriggerEmit('GateOpen', -1)
+	EventFlowSystemActor.ChangeSwitchCloudIslandGate(true)
+	EventFlowSystemActor.WaitFrame(70)
+	if not NotSetCameraTalk:
+		MainNpc.TalkCamera(true, 'LookAtGate', 0)
+		EventFlowSystemActor.WaitFrame(45)
+
+flow GateOpenSeq():
+	EventFlowSystemActor.CheckFreeCommunication(true)
+	if EventFlowSystemActor.IsApprovedFreeCommunication():
+		run Retry_NetworkConnect()
+	else:
+		# The parent or guardian who set up your system's Parental Controls must enable "Communicating with Others." Once this setting is enabled, I will be mo…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4521', false)
+		EventFlowSystemActor.ExitFlowchart()
+
+flow NoticeMultiplay():
+	# Oh! Before we get to that, there are some instructions I am obligated to share. Please read them over.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4511', true)
+	# Be considerate! Please do not share illegal content, personal information, content that infringes on the rights of others, or content that irritates …
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0804', true)
+	System.EventFlags['cPlayer:OdekakeFirstInternet'] = true
+	# Thank you for reading that. Shall I set up the invite now?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4512', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 1:
+		run SNPC_tap_03_InCloudIsland::GoodBye_AfterCancel()
+
+flow OpenSession_Friend():
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	if SubflowResults@2[2] == 0:
+		switch SubflowResults@5[1]:
+			case 0:
+				run ChkExistFriend()
+				run SendAppFriendList()
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandFriend', false)
+			case 1:
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandBestFriend', false)
+			case 2:
+				run ChkExistFriend()
+				run SendAppFriendList()
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandPasswordFriend', false)
+			case 3:
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandPasswordBestFriend', false)
+			case 4:
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandPassword', false)
+	else:
+		switch SubflowResults@5[1]:
+			case 0:
+				run ChkExistFriend()
+				run SendAppFriendList()
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandFriend', true)
+			case 1:
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandBestFriend', true)
+			case 2:
+				run ChkExistFriend()
+				run SendAppFriendList()
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandPasswordFriend', true)
+			case 3:
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandPasswordBestFriend', true)
+			case 4:
+				EventFlowSystemActor.NetCreateSessionVillage('cCloudIslandPassword', true)
+	if EventFlowSystemActor.CheckErrorType(2):
+		run CloudIsland_NetErrorOccur(ErrorType=2)
+	else:
+		run FocusGateOpen(NotSetCameraTalk=false)
+		# Excellent. In that case, all is ready.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4021', false)
+		if SubflowResults@5[1] in (2, 3, 4):
+			# The Doze Code for this session is <110:25>. Invitees may use it to visit by asking to visit another's island.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4022', false)
+
+flow OpenSession_Password():
+	run ExplainPassword()
+	if EventFlowSystemActor.NetHasAddressData('cBestFriend'):
+		# Would you like to limit who can use this Doze Code?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4015', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run Sub_Event75()
+			case 1:
+				SubflowResults[1] = 3
+				run OpenSession_Friend()
+			case 2:
+				run Sub_Event70()
+	else:
+		# Would you like to limit who can use this Doze Code?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4016', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Sub_Event75()
+		else:
+			run Sub_Event70()
+
+flow Retry_NetworkConnect():
+	EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+	if System.EventFlags['cPlayer:OdekakeFirstInternet']:
+		# Of course. It will be just a moment…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4006', true)
+	else:
+		run NoticeMultiplay()
+	SubflowResults[29] = 1
+	run System_ServerRegistration::UserRegist_CloudIslandSession(WithLogin=true, WithSave=true, Terminate=false)
+	if SubflowResults@2[0] == 0:
+		run ChkProfileNG()
+		run ChkSwitch2EditionMode()
+		SubflowResults[1] = 0
+		if EventFlowSystemActor.NetHasAddressData('cBestFriend'):
+			# And how would you like your guests to join you?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4012', false)
+			switch EventFlowSystemActor.GeneralTalkChoice4():
+				case 0:
+					SubflowResults[1] = 0
+					run OpenSession_Friend()
+				case 1:
+					SubflowResults[1] = 1
+					run OpenSession_Friend()
+				case 2:
+					run OpenSession_Password()
+				case 3:
+					run Sub_Event54()
+		else:
+			# And how would you like your guests to join you?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4013', false)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					SubflowResults[1] = 0
+					run OpenSession_Friend()
+				case 1:
+					run OpenSession_Password()
+				case 2:
+					run Sub_Event54()
+	else:
+		run SNPC_tap::ConnectionMsg_End()
+		run CloudIsland_NetErrorOccur(ErrorType=1)
+
+flow SendAppFriendList():
+	if not System.EventFlags['cPlayer:MainmenuFriendList']:
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.WaitFrame(5)
+		# Aha! How special! It seems this is your first time playing with a friend. May I present the "Best Friends List" NookPhone app. It works whether you a…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4541', false)
+		# Would you take out your NookPhone so I can install it for you?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4541_01', true)
+		run Demo_Common_PhoneCall::SendingDataWithP_TapHost()
+		System.EventFlags['cPlayer:MainmenuFriendList'] = true
+		EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cFriendList')
+		# There. The app itself should be able to tell you everything you need to know. And tell your friends!
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4542', true)
+		run Demo_Common_PhoneCall::PuttingMobileAwayWithP()
+
+local flow Sub_Event54():
+	EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+	run SNPC_tap_03_InCloudIsland::GoodBye_AfterCancel()
+
+local flow Sub_Event70():
+	# That choice may result in strangers visiting your island. Are you sure?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4017', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			SubflowResults[1] = 4
+			run OpenSession_Friend()
+		case 1:
+			SubflowResults[1] = 2
+			run OpenSession_Friend()
+		case 2:
+			EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+			run SNPC_tap_03_InCloudIsland::GoodBye_AfterCancel()
+
+local flow Sub_Event75():
+	SubflowResults[1] = 2
+	run OpenSession_Friend()

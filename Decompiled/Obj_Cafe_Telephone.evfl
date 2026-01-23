@@ -1,3 +1,18 @@
+flow Chk_Mantaro():
+	SubflowResults[20] = 0
+	if EventFlowSystemActor.CheckAmiiboNPC('cSpltMantaro'):
+		SubflowResults[20] = 1
+		# Should we contact Cece or Viché?
+		Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:203_03', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu19')
+			case 1:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu20')
+				EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcName', 'cDegit', 0, 0, '')
+			case 2:
+				run SummonAmiiboNpc_Retry()
+
 flow Finish_UsingTelephone():
 	# Thank you for your patronage. We'll be here when you need us.
 	Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:110', false)
@@ -24,6 +39,12 @@ entrypoint Event75:
 			Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:215_01', false)
 			run SummonAmiiboNpc_Retry()
 
+flow NFC_CheckHotelNNPC():
+	if (EventFlowSystemActor.CheckAmiiboNPC('cNNPC')) and ((EventFlowSystemActor.CheckHotelAmiiboNpc('cWandering')) or (EventFlowSystemActor.CheckHotelAmiiboNpc('cStayHotel'))):
+		# Thank you for waiting. <115:1:cd00> wants to explore <110:34> right now and isn't interested in the café. However, [he|she] also mentioned [he|she] w…
+		Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:217', false)
+		run SummonAmiiboNpc_Retry()
+
 flow NFC_CheckResidentNNPC():
 	if EventFlowSystemActor.IsAmiiboNpcLiving():
 		switch EventFlowSystemActor.AmiiboNpcGetUpTime():
@@ -46,17 +67,17 @@ flow NFC_CheckResidentNNPC():
 							if (EventFlowSystemActor.AmiiboNpcIsBirthday()) and (EventFlowSystemActor.IsHoldNpcBirthday()):
 								# Thank you for waiting. <115:1:cd00> is having a birthday party today, so [he|she] cannot go out. [He|She] did ask that you please invite [him|her] ag…
 								Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:211', false)
-  run SummonAmiiboNpc_Retry()
+								run SummonAmiiboNpc_Retry()
 							else:
-	 run SuccessSummonNPC()
+								run SuccessSummonNPC()
 						case 1:
 							# Thank you for waiting. <115:1:cd00> is moving away today and is very busy with packing. [He|She] said [he|she] will be happy to visit if you call aga…
 							Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:213', false)
-run SummonAmiiboNpc_Retry()
+							run SummonAmiiboNpc_Retry()
 						case 2:
 							# Thank you for waiting. <115:1:cd00> left the island today and is currently in the middle of moving. [He|She] said [he|she] will be happy to visit if …
 							Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:214', false)
-run SummonAmiiboNpc_Retry()
+							run SummonAmiiboNpc_Retry()
 			case 1:
 				# Thank you for waiting. Unfortunately, <115:1:cd00> cannot come to the phone. It is possible that [he|she] is asleep, so please try again later.
 				Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:207', false)
@@ -97,6 +118,21 @@ flow Root():
 	else:
 		run Finish_UsingTelephone()
 
+local flow Sub_Event85(NpadId: int, ReadPadId: int):
+	EventFlowSystemActor.MessageSuspend()
+	run Telephone_Waiting()
+	if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+		System.EventFlags['cPlayerTemp:CafeInvitingTwins'] = true
+		# Thank you for waiting. We've contacted Timmy and Tommy. They will be here shortly. Please wait inside for their arrival.
+		Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:205_03', true)
+		run SummonAmiiboNpc()
+	else:
+		run NFC_CheckGul()
+		run NFC_CheckGst()
+		run NFC_CheckResidentNNPC()
+		run NFC_CheckHotelNNPC()
+		run SuccessSummonNPC()
+
 flow SuccessSummonNPC():
 	if EventFlowSystemActor.AmiiboNameWithTitle() == 0:
 		# Thank you for waiting. We've contacted <115:1:cd00>.
@@ -122,7 +158,7 @@ flow SummonAmiiboNpc():
 		branch:
 			Player.PlayerMuseumCafe(5, false)
 		branch:
-			run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+			run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 		branch:
 			EventFlowSystemActor.BGMPropertyControl(179)
 	fork:
@@ -154,6 +190,7 @@ flow Telephone_StartUsing(NpadId: int = 0, ReadPadId: int = 0):
 	# Please ready the amiibo for the customer you want to contact.
 	Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:111', false)
 	run Obj_Common_AmiiboProcess::NFC_ReadProcess()
+	run Chk_Mantaro()
 	if EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cCafe'):
 		if EventFlowSystemActor.CheckAmiiboNPC('cMaster'):
 			# Brewster is working at the Roost. Please speak with him directly.
@@ -175,7 +212,11 @@ flow Telephone_StartUsing(NpadId: int = 0, ReadPadId: int = 0):
 				# The customer you want to contact is currently inside the Roost. Please speak with them directly.
 				Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:201_01', false)
 			run SummonAmiiboNpc_Retry()
-	else:
+	elif (EventFlowSystemActor.CheckAmiiboNPC('cSNPC')) and (EventFlowSystemActor.CheckAmiiboCafeInfoNpcStayHotel('cStayHotel')):
+		# Due to unforeseen circumstances, access is restricted today. Please try again tomorrow!
+		Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:202_06', false)
+		run SummonAmiiboNpc_Retry()
+	elif SubflowResults@2[20] == 0:
 		if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
 			# Are you sure you'd like to contact these customers?
 			Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:203_02', false)
@@ -183,20 +224,11 @@ flow Telephone_StartUsing(NpadId: int = 0, ReadPadId: int = 0):
 			# Are you sure you'd like to contact this customer?
 			Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:203_01', false)
 		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-			EventFlowSystemActor.MessageSuspend()
-			run Telephone_Waiting()
-			if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
-				System.EventFlags['cPlayerTemp:CafeInvitingTwins'] = true
-				# Thank you for waiting. We've contacted Timmy and Tommy. They will be here shortly. Please wait inside for their arrival.
-				Player.OpenMessageWindow('TalkObj/OBJ_Cafe_Telephone:205_03', true)
-				run SummonAmiiboNpc()
-			else:
-				run NFC_CheckGul()
-				run NFC_CheckGst()
-				run NFC_CheckResidentNNPC()
-				run SuccessSummonNPC()
+			run Sub_Event85(NpadId=NpadId, ReadPadId=ReadPadId)
 		else:
 			run SummonAmiiboNpc_Retry()
+	else:
+		run Sub_Event85(NpadId=NpadId, ReadPadId=ReadPadId)
 
 flow Telephone_Waiting():
 	EventFlowSystemActor.WaitFrame(5)

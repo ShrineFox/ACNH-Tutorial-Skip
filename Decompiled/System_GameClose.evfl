@@ -1,3 +1,22 @@
+flow ChkCloudIslandStatus():
+	SubflowResults[0] = 0
+	if not EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll'):
+		SubflowResults[0] = 0
+	elif not EventFlowSystemActor.NetCloudIslandPlaying():
+		SubflowResults[0] = 1
+	elif not EventFlowSystemActor.NetIsInviteFriend():
+		SubflowResults[0] = 4
+	elif EventFlowSystemActor.NetHasVisitor():
+		SubflowResults[0] = 3
+	else:
+		SubflowResults[0] = 2
+
+flow CloudIsland_PreLeaveVisitor():
+	run System_InetClose::CloudIsland_PreLeaveVisitor()
+
+flow CloudIsland_WakeupProcess():
+	run SNPC_tap_03_InCloudIsland::WakeupProcess_CloseMenu()
+
 flow DreamClose():
 	# What would you like to do?
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:028', false)
@@ -96,21 +115,33 @@ flow RetryLock():
 		EventFlowSystemActor.NetBreakUpSessionVillage('cBreakUpSession', false)
 
 flow Root():
-	if EventFlowSystemActor.NetIsConnected():
-		if EventFlowSystemActor.IsMyVillage():
-			if EventFlowSystemActor.NetHasVisitor():
-				run NetClose()
+	run ChkCloudIslandStatus()
+	switch SubflowResults@5[0]:
+		case 0:
+			if EventFlowSystemActor.NetIsConnected():
+				if EventFlowSystemActor.IsMyVillage():
+					if EventFlowSystemActor.NetHasVisitor():
+						run NetClose()
+					else:
+						run Sub_grp_Event24()
+				else:
+					run NetClose()
 			else:
 				run Sub_grp_Event24()
-		else:
+		case 1, 2:
+			# Wake up and return home? (All changes to this Slumber Island will be saved.)
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:061', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run SNPC_tap_03_InCloudIsland::Wakeup_CloseMenu()
+		case 3, 4:
 			run NetClose()
-	else:
-		run Sub_grp_Event24()
 
 local flow Sub_grp_Event24():
 	if not System.EventFlags['cPlayer:ValidatePlayerSaveFlag']:
 		# You can't save right now.
 		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:013', false)
+	elif (EventFlowSystemActor.SystemCheckNowStage('cHotelRoom')) and (not EventFlowSystemActor.HotelOrderProgress()):
+		run System_HotelClose::HotelClose()
 	elif EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
 		run System_WherearenClose::WherearenClose()
 	elif EventFlowSystemActor.NetIsDreaming():

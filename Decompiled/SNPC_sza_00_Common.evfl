@@ -40,14 +40,18 @@ flow Sza_CmnSel_Again():
 		# Can I help you with anything else?
 		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_05', false)
 		run szaSel4B()
-	elif System.EventFlags['cPlayer:ExplainIslandRegulation']:
-		# Can I help you with anything else?
-		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_03', false)
-		run Sza_CmnSel_v2()
-	else:
+	elif not System.EventFlags['cPlayer:ExplainIslandRegulation']:
 		# Can I help you with anything else?
 		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_06', false)
 		run szaSel5B()
+	elif (System.EventFlags['cLand:UnlockCallNpcTidy']) and (not System.EventFlags['cLand:UnlockCallNpcTidyToday']):
+		# Can I help you with anything else?
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:002_03', false)
+		run Sza_CmnSel_v3()
+	else:
+		# Can I help you with anything else?
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_03', false)
+		run Sza_CmnSel_v2()
 
 flow Sza_CmnSel_v2():
 	switch EventFlowSystemActor.GeneralTalkChoice4():
@@ -60,12 +64,30 @@ flow Sza_CmnSel_v2():
 		case 3:
 			run Sza_Cmn_Cancel()
 
+flow Sza_CmnSel_v3():
+	switch EventFlowSystemActor.GeneralTalkChoice5():
+		case 0:
+			run SNPC_sza_50_IslandEvaluation::Root()
+		case 1:
+			run SNPC_sza_60_aboutIsland::Root()
+		case 2:
+			run SNPC_sza_70_AboutVillager::Root()
+		case 3:
+			run SNPC_sza_80_MolCall::Root()
+		case 4:
+			run Sza_Cmn_Cancel()
+
 flow Sza_Cmn_Cancel():
 	# Alright then. If there is anything I can assist you with in the future, please don't hesitate to ask.
-	MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003', true)
+	MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003', false)
 	if System.EventFlags['cPlayer:RcoAwaitingExplanation']:
+		EventFlowSystemActor.MessageSuspend()
 		# …Oh! I almost forgot that there's something Mr. Nook would like to discuss with you. When you have a moment, please find him and ask, "What should I …
 		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003_01', false)
+	elif (EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction')) and (not System.EventFlags['cPlayerTemp:SzaTalkInsideOffice_rcoAbsence']):
+		# Oh, did I hear that you needed to speak with Mr. Nook? He's over at the island's hotel right now. If it's something important, it might be best to go…
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:003_02', false)
+		System.EventFlags['cPlayerTemp:SzaTalkInsideOffice_rcoAbsence'] = true
 
 flow Sza_Cmn_Christmas():
 	if (EventFlowSystemActor.GlobalEventNow('XmasEve', 'cMainOnly', false)) and (System.EventFlags['cPlayer:ReiStartQuest1']) and (not System.EventFlags['cPlayer:ReiFinishQuest1']) and (not System.EventFlags['cPlayer:SzaChristmasOrnament']):
@@ -127,14 +149,18 @@ flow Sza_Common_Select():
 			# Please don't hesitate to let me know if I can help with something!
 			MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_03', false)
 			run szaSel4B()
-		elif System.EventFlags['cPlayer:ExplainIslandRegulation']:
-			# Please don't hesitate to let me know if I can help with something!
-			MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_02', false)
-			run Sza_CmnSel_v2()
-		else:
+		elif not System.EventFlags['cPlayer:ExplainIslandRegulation']:
 			# Please don't hesitate to let me know if I can help with something!
 			MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_04', false)
 			run szaSel5B()
+		elif (System.EventFlags['cLand:UnlockCallNpcTidy']) and (not System.EventFlags['cLand:UnlockCallNpcTidyToday']):
+			# Please don't hesitate to let me know if I can help with something!
+			MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:002_02', false)
+			run Sza_CmnSel_v3()
+		else:
+			# Please don't hesitate to let me know if I can help with something!
+			MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_02', false)
+			run Sza_CmnSel_v2()
 	else:
 		run Sza_Common_Greet()
 		run Sza_Cmn_Christmas()
@@ -150,14 +176,18 @@ flow szaNormalSeq():
 		# How can I help you today?
 		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_01', false)
 		run szaSel4B()
-	elif System.EventFlags['cPlayer:ExplainIslandRegulation']:
-		# How can I help you today?
-		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_01', false)
-		run Sza_CmnSel_v2()
-	else:
+	elif not System.EventFlags['cPlayer:ExplainIslandRegulation']:
 		# How can I help you today?
 		MainNpc.OpenMessageWindow('TalkSNpc/sza/SP_sza_0_common:002_02', false)
 		run szaSel5B()
+	elif (System.EventFlags['cLand:UnlockCallNpcTidy']) and (not System.EventFlags['cLand:UnlockCallNpcTidyToday']):
+		# How can I help you today?
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:002_01', false)
+		run Sza_CmnSel_v3()
+	else:
+		# How can I help you today?
+		MainNpc.OpenMessageWindow('TalkSNpc/sza/v2_0_0/SP_sza_0_common_v2:001_01', false)
+		run Sza_CmnSel_v2()
 
 flow szaSel4B():
 	switch EventFlowSystemActor.GeneralTalkChoice4():

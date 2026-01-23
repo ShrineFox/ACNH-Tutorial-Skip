@@ -1,0 +1,43 @@
+flow Root():
+	if System.EventFlags['cPlayer:ExplainMegaphone']:
+		# That's a <item>megaphone! Get one of those if you want to get someone's attention from far away!__ ...away!__
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4301', false)
+		run purchaseLoop(alreadyExplain=false)
+	else:
+		# That's a <item>megaphone!
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4306', false)
+		# Ever wanted to talk to someone but couldn't find them? The <item>megaphone is exactly what you need!
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4304', false)
+		# You take out the <item>megaphone, hold , then call out someone's name. If they're around, they'll hear it! Oh, and this only works on the Nintendo S…
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4305', false)
+		System.EventFlags['cPlayer:ExplainMegaphone'] = true
+		run purchaseLoop(alreadyExplain=true)
+
+local flow Sub_Event19():
+	# Ever wanted to talk to someone but couldn't find them? The <item>megaphone is exactly what you need!
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4304', false)
+	# You take out the <item>megaphone, hold , then call out someone's name. If they're around, they'll hear it! Oh, and this only works on the Nintendo S…
+	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4305', false)
+	run purchaseLoop(alreadyExplain=true)
+
+flow purchaseLoop(alreadyExplain: bool):
+	if alreadyExplain:
+		# Let's see… That's <90:24:0000>. What do you think?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4303', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 1:
+				run Sub_Event19()
+			case 2:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
+	else:
+		# Let's see… That's <90:24:0000>. What do you think?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:4302', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 1:
+				run Sub_Event19()
+			case 2:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()

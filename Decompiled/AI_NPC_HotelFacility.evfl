@@ -1,0 +1,68 @@
+flow Init():
+	MainNpc.NpcRegistAIBlackBoard('TalkEndWait', 0)
+
+flow Museum():
+	switch MainNpc.FacilityNpcState():
+		case 0:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.NpcBlackBoard('TalkEndWait', 1)):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_HotelGuest', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.NpcSetAIBlackBoard('TalkEndWait', 0)
+			else:
+				MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_HotelGuest', '', true, true)
+		case 1:
+			MainNpc.NpcAISetting(2, false)
+			MainNpc.NpcAISetting(3, false)
+			MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_HotelGuest', 'React_Watcing', true, true)
+		case 2:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.NpcBlackBoard('TalkEndWait', 1)):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_HotelGuest', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.NpcSetAIBlackBoard('TalkEndWait', 0)
+			else:
+				MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_HotelGuest', '', true, true)
+
+flow Root():
+	MainNpc.NpcAIDefaultSetting(1)
+	if EventFlowSystemActor.SystemCheckNowStage('cMametubu'):
+		run Store()
+	elif EventFlowSystemActor.SystemCheckNowStage('cTailor'):
+		run Tailor()
+	else:
+		run Museum()
+
+flow Store():
+	switch MainNpc.FacilityNpcState():
+		case 0:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.NpcBlackBoard('TalkEndWait', 1)):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_HotelGuest', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.NpcSetAIBlackBoard('TalkEndWait', 0)
+			else:
+				MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_HotelGuest', '', true, true)
+		case 1:
+			MainNpc.NpcAISetting(2, false)
+			MainNpc.NpcAISetting(3, false)
+			MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_HotelGuest', 'React_Shopping', true, true)
+		case 2:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.NpcBlackBoard('TalkEndWait', 1)):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_HotelGuest', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.NpcSetAIBlackBoard('TalkEndWait', 0)
+			else:
+				MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_HotelGuest', '', true, true)
+
+flow Tailor():
+	switch MainNpc.FacilityNpcState():
+		case 0:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.NpcBlackBoard('TalkEndWait', 1)):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_HotelGuest', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.NpcSetAIBlackBoard('TalkEndWait', 0)
+			else:
+				MainNpc.NpcChangeAIState('cMoveToWatchPoint', '', 'NNPC_HotelGuest', '', true, true)
+		case 1:
+			MainNpc.NpcAISetting(2, false)
+			MainNpc.NpcAISetting(3, false)
+			MainNpc.NpcChangeAIState('cWatch', '', 'NNPC_HotelGuest', 'React_Shopping', true, true)
+		case 2:
+			if (MainNpc.NpcCheckStateSelectTiming('cTalkEnd')) and (MainNpc.NpcBlackBoard('TalkEndWait', 1)):
+				MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_HotelGuest', '', true, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
+				MainNpc.NpcSetAIBlackBoard('TalkEndWait', 0)
+			else:
+				MainNpc.NpcChangeAIState('cFacilityWander', '', 'NNPC_HotelGuest', '', true, true)

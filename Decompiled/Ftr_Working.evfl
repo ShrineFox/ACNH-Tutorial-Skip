@@ -13,6 +13,13 @@ flow ChkCraftWoodBridge():
 		if EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
 			System.EventFlags['cPlayer:ImmQBridgeMadeinRcoTent'] = true
 
+flow ChkNoticeStorageRemakeKit():
+	if not System.EventFlags['cPlayer:NoticeUsingStorageForRemake']:
+		EventFlowSystemActor.MessageSuspend()
+		# DIY benches can now use <item>customization kits directly from your home storage. However, <item>customization kits can't be used from afar when you'…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10103', false)
+		System.EventFlags['cPlayer:NoticeUsingStorageForRemake'] = true
+
 flow Chk_RemakeWithRcoWorkBench():
 	if EventFlowSystemActor.IsMyVillage():
 		if EventFlowSystemActor.SystemCheckNowStage('cIdrTanukichi'):
@@ -86,11 +93,16 @@ flow DIY_DisableCancel():
 	else:
 		run DIY_DisableCancel()
 
+flow MissingRco():
+	# Tom Nook isn't around, so I'll have to do the workshop later.
+	Player.OpenMessageWindow('TalkFtr/FTR_WorkingTable:053', false)
+	run Sub_Event201()
+
 flow RcoDIYtrialOngoing():
 	if not EventFlowSystemActor.HasTargetItem(2500, 5):
 		DynamicCast_rco.RcoStandUpChair()
 		DynamicCast_rco.TurnBody(10, 0.0)
-		DynamicCast_rco.NpcWaitTurn()
+		DynamicCast_rco.NpcWaitTurn(false)
 		MainNpc.TalkCamera(true, 'cTalk', 0)
 		# Remember, to craft the fishing rod you'll need 5 <item>tree branches. If you don't see enough of them lying on the ground, try shaking a few trees. E…
 		DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:911', false)
@@ -98,7 +110,7 @@ flow RcoDIYtrialOngoing():
 	elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
 		DynamicCast_rco.RcoStandUpChair()
 		DynamicCast_rco.TurnBody(10, 0.0)
-		DynamicCast_rco.NpcWaitTurn()
+		DynamicCast_rco.NpcWaitTurn(false)
 		MainNpc.TalkCamera(true, 'cTalk', 0)
 		# For this DIY workshop, you'll need 5 <item>tree branches…and some space to put your fishing rod! After all, you can't take your craft project home if…
 		DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_03_PcHouseTent:912', false)
@@ -106,7 +118,7 @@ flow RcoDIYtrialOngoing():
 	else:
 		DynamicCast_rco.RcoStandUpChair()
 		DynamicCast_rco.TurnBody(10, 0.0)
-		DynamicCast_rco.NpcWaitTurn()
+		DynamicCast_rco.NpcWaitTurn(false)
 		MainNpc.TalkCamera(true, 'cTalk', 0)
 		if not System.EventFlags['cPlayer:RcoDIYtrialGetMaterial']:
 			# Ah, PLAYER. Found the necessary materials, hm? Well then! Let's get started on crafting that fishing rod. Yes, yes! To begin, just select a project f…
@@ -117,14 +129,12 @@ flow RcoDIYtrialOngoing():
 flow RcoRemakeTrialOngoing(ItemPrice: int = 0):
 	if not EventFlowSystemActor.HasTargetItem(3436, 1):
 		run RcoWorkingTableRemakeWorkshop()
-	elif EventFlowSystemActor.NetHasVisitor():
-		run RcoWorkingTableRemakeWorkshop()
-	else:
+	elif (not EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction')) and (not EventFlowSystemActor.NetHasVisitor()):
 		System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
 		DynamicCast_rco.RcoStandUpChair()
 		DynamicCast_rco.NpcWaitTalkPrepare()
 		DynamicCast_rco.TurnBody(10, 0.0)
-		DynamicCast_rco.NpcWaitTurn()
+		DynamicCast_rco.NpcWaitTurn(false)
 		Player.PlayerChangeStateDemoTalk()
 		Player.TurnBody(0, 0.0)
 		EventFlowSystemActor.NpcEventItemSet(3436, 'cTalk', 0, ItemPrice)
@@ -153,6 +163,8 @@ flow RcoRemakeTrialOngoing(ItemPrice: int = 0):
 			# I think that means it's time for you to customize it.
 			DynamicCast_rco.OpenMessageWindow('TalkSNpc/rco/SP_rco_09_RemakeWorkShop:302', false)
 			run Sub_grp_Event158(ItemPrice=ItemPrice)
+	else:
+		run RcoWorkingTableRemakeWorkshop()
 
 flow RcoWorkingTableNormal():
 	Player.PlayerWorkbenchThinking()
@@ -182,7 +194,9 @@ flow RcoWorkingTableRemakeWorkshop():
 		case 0:
 			run DIY()
 		case 1:
-			if EventFlowSystemActor.NetHasVisitor():
+			if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+				run MissingRco()
+			elif EventFlowSystemActor.NetHasVisitor():
 				run VisitorOnMyIsland()
 			else:
 				EventFlowSystemActor.SoundDuckingOff(18)
@@ -198,6 +212,8 @@ flow RecipeUIDisable():
 	run Sub_Event201()
 
 flow Remake():
+	if EventFlowSystemActor.CanUseStorageMaterial():
+		run ChkNoticeStorageRemakeKit()
 	EventFlowSystemActor.UIItemSelectWindowHandling('cWorkBenchRemake', 65534, '', '', 'cItemSelectRemake', false)
 	if not EventFlowSystemActor.UIResultMenuDecide():
 		EventFlowSystemActor.SoundDuckingOff(18)
@@ -251,13 +267,13 @@ flow Root():
 	elif not System.EventFlags['cPlayer:RcoTalked1stAfterPrologue']:
 		run RecipeUIDisable()
 	elif System.EventFlags['cPlayer:RcoHeardDetailDIYtrial']:
-		if EventFlowSystemActor.NetHasVisitor():
+		if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+			run MissingRco()
+		elif EventFlowSystemActor.NetHasVisitor():
 			run VisitorOnMyIsland()
 		else:
 			run RcoDIYtrialOngoing()
-	elif EventFlowSystemActor.NetHasVisitor():
-		run RecipeUIDisable()
-	else:
+	elif (not EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction')) and (not EventFlowSystemActor.NetHasVisitor()):
 		if MainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5):
 			MainNpc.TalkCamera(true, 'cTalk', 0)
 		# Ah, I see you've discovered my DIY workbench.
@@ -267,6 +283,8 @@ flow Root():
 			MainNpc.TalkCamera(true, 'cTalk', 0)
 		EventFlowSystemActor.SoundDuckingOff(18)
 		run SNPC_rco_01_Tent_1_Entries::RcoTentAskDIYtrial()
+	else:
+		run RecipeUIDisable()
 
 flow Root_Tutorial():
 	run Root()
@@ -361,8 +379,17 @@ flow Workbench_Cmn_DIYdemo():
 		EventFlowSystemActor.BGMPropertyControl(20)
 		if SubflowResults@2[1] == 0:
 			Player.PlayerWorkbenchGetDemo(false, false, false)
-			# I made [a|an] <125:0:0000>!
-			Player.OpenMessageWindow('TalkFtr/FTR_WorkingTable:031', true)
+			if EventFlowSystemActor.IsDIYMultiCreation('cCraft'):
+				EventFlowSystemActor.SetTagFromUIResult('cDIYCreatedNum', 1)
+				if EventFlowSystemActor.IsCreateItemFence():
+					# I made <90:1:0001> <50:8:0100000c0073007400610063006b0073000a0073007400610063006b000c0073007400610063006b0073> of <125:0:0000>!
+					Player.OpenMessageWindow('TalkFtr/FTR_WorkingTable:031_03', true)
+				else:
+					# I made <125:0:0000> × <90:1:0001>!
+					Player.OpenMessageWindow('TalkFtr/FTR_WorkingTable:031_02', true)
+			else:
+				# I made [a|an] <125:0:0000>!
+				Player.OpenMessageWindow('TalkFtr/FTR_WorkingTable:031', true)
 		else:
 			fork:
 				branch:
@@ -422,7 +449,7 @@ flow WorkingTable_Borrow():
 					if not System.EventFlags['cPlayerVisit:VisitorRemakeWorkingTable']:
 						# You cannot customize with custom designs while on someone else's island.
 						EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_WorkingTable:022', false)
-System.EventFlags['cPlayerVisit:VisitorRemakeWorkingTable'] = true
+						System.EventFlags['cPlayerVisit:VisitorRemakeWorkingTable'] = true
 					run Remake()
 			case 2:
 				run Cancel()

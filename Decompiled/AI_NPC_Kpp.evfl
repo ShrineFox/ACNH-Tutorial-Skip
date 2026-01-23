@@ -1,12 +1,26 @@
 flow Init():
 	MainNpc.NpcAISetting(8, true)
 	MainNpc.NpcAISetting(17, false)
+	MainNpc.NpcRegistAIBlackBoard('TradeBoxSpeak', 0)
 
 flow Root():
 	switch MainNpc.NpcCheckStateSelectTiming('cInit'):
 		case 0, 1:
 			if EventFlowSystemActor.SystemCheckNowStage('cField'):
-				run SetWaitState(FlowName='SNPC_kpp', EntryName='Root')
+				if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+					MainNpc.NpcChangeAIState('cInvisible', '', '', 'Root', false, false)
+				elif MainNpc.NpcBlackBoard('TradeBoxSpeak', 1):
+					MainNpc.NpcSetAIBlackBoard('TradeBoxSpeak', 0)
+					run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpp', EntryName='Check_TradeBox')
+				else:
+					run SetWaitState(FlowName='SNPC_kpp', EntryName='Root')
+			elif EventFlowSystemActor.SystemCheckNowStage('cHotelEntrance'):
+				if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+					MainNpc.NpcAISetting(2, false)
+					MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+					MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_kpp', 'Root', false, true, ArgInt0=0, ArgStr0='rco')
+				else:
+					MainNpc.NpcChangeAIState('cInvisible', '', '', 'Root', false, false)
 			elif EventFlowSystemActor.DuringTransitionByUIStage():
 				System.EventFlags['cPlayerTemp:KppTalkSceneFlag'] = true
 				run SetWaitState(FlowName='SNPC_kpp_02_TourIsland', EntryName='Root')
@@ -15,9 +29,9 @@ flow Root():
 					run SetWaitState(FlowName='SNPC_kpp_02_TourIsland', EntryName='Root')
 				else:
 					if EventFlowSystemActor.CheckFirstEnterPlayerCreateParam('cFaintStandupDemo'):
-						run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpp_02_TourIsland', EntryName='FaintEntry')
+						run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpp_02_TourIsland', EntryName='FaintEntry')
 					else:
-						run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_kpp_02_TourIsland')
+						run AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_kpp_02_TourIsland')
 					MainNpc.NpcAISetting(2, false)
 
 flow SetWaitState(FlowName: str, EntryName: str):

@@ -1,0 +1,184 @@
+flow Check_AfterRead():
+	run Check_tkk()
+	if EventFlowSystemActor.CheckHotelAmiiboNpc('cStayHotel'):
+		# The individual you wish to reach is already staying at the hotel.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:301', false)
+		run UsingAmiibo_AskRetry()
+	elif EventFlowSystemActor.IsAmiiboNpcLiving():
+		# This individual is a resident of ISLAND and cannot be invited as a hotel guest.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:302', false)
+		run UsingAmiibo_AskRetry()
+	elif (EventFlowSystemActor.IsAmiiboNpcVisitCampSite()) or (EventFlowSystemActor.CheckHotelAmiiboNpc('cWandering')):
+		# This individual is already on ISLAND and can't be invited this way.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:305', false)
+		run UsingAmiibo_AskRetry()
+	elif EventFlowSystemActor.IsAmiiboNpcMoveInIncompletion():
+		# This individual is moving to ISLAND and cannot be invited as a hotel guest.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:303', false)
+		run UsingAmiibo_AskRetry()
+	elif EventFlowSystemActor.CheckHotelAmiiboNpc('cWorkData'):
+		# This individual was already invited by someone else and is waiting for a room and can't accept an invite now.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:304', false)
+		run UsingAmiibo_AskRetry()
+
+flow Check_AfterReadSNPC():
+	run Check_gul()
+	run Check_gst()
+	run Check_pge()
+	run Check_hgs_hgh()
+	run Check_otg()
+
+flow Check_gst():
+	if (EventFlowSystemActor.CheckAmiiboNPC('cYutaro')) and (System.EventFlags['cPlayer:GstQuestStartFlag']):
+		# <115:1:cd00> is currently dealing with a messy situation and cannot be invited at this time.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:312', false)
+		run UsingAmiibo_AskRetry()
+
+flow Check_gul():
+	if (EventFlowSystemActor.CheckAmiiboNPC('cJohnny')) and (EventFlowSystemActor.NowVisitSpNpc() in (7, 13)):
+		if not System.EventFlags['cLand:JohnnySitUpFlag']:
+			run gul_NoReaction()
+		elif System.EventFlags['cLandTemp:JohnnyTalkShareplay']:
+			run gul_NoReaction()
+		elif System.EventFlags['cLandTemp:GulBTalkShareplay']:
+			run gul_NoReaction()
+		elif EventFlowSystemActor.NowVisitSpNpc() == 13:
+			# Another character answered when you were inviting <115:1:cd00>. Please try again some other day.
+			Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:311', false)
+			run UsingAmiibo_AskRetry()
+
+flow Check_hgs_hgh():
+	if ((EventFlowSystemActor.CheckAmiiboNPC('cHgs')) or (EventFlowSystemActor.CheckAmiiboNPC('cHgh'))) and (not System.EventFlags['cLand:TailorBuilt']):
+entrypoint Event101:
+		# The individual you're trying to reach cannot be invited.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:313', false)
+		run UsingAmiibo_AskRetry()
+
+flow Check_otg():
+	if (EventFlowSystemActor.CheckAmiiboNPC('cOtg')) and (System.EventFlags['cWherearenPlayer:SeqOtgSickOngoing']):
+		# The individual you're trying to reach cannot be invited.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:313', false)
+		run UsingAmiibo_AskRetry()
+
+flow Check_pge():
+	if (EventFlowSystemActor.CheckAmiiboNPC('cMaster')) and (not System.EventFlags['cLand:MuseumCafeConstruction_4_Opened']):
+		run Event101()
+
+flow Check_tkk():
+	if EventFlowSystemActor.CheckAmiiboNPC('cDJKK'):
+		if EventFlowSystemActor.HotelNpcCheck('cIsStayOrWorkDataTkkA'):
+			run Sub_Event110()
+	else:
+		if (EventFlowSystemActor.CheckAmiiboNPC('cTkk')) and (EventFlowSystemActor.HotelNpcCheck('cIsStayOrWorkDataTkkB')):
+			run Sub_Event110()
+
+flow ChkSituation():
+	if not EventFlowSystemActor.IsMyVillage():
+		# I should go back to my own island if I want to invite someone…
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:003', false)
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.IsSharePlay(0):
+		# I'm using Party Play right now, so I'll invite someone later.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:004', false)
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.NetHasVisitor():
+		# I have company on the island right now, so I'll invite someone later.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:006', false)
+		EventFlowSystemActor.ExitFlowchart()
+	elif (EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.IsVillageGateOpened()):
+		# I might get company, so I'll invite someone some other time.
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:005', false)
+		EventFlowSystemActor.ExitFlowchart()
+
+flow Chk_Mantaro():
+	SubflowResults[20] = 0
+	if EventFlowSystemActor.CheckAmiiboNPC('cSpltMantaro'):
+		SubflowResults[20] = 1
+		# Would you like to invite someone to a VIP room?
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:203', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu19')
+			case 1:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu20')
+				EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcName', 'cDegit', 0, 0, '')
+			case 2:
+				run UsingAmiibo_AskRetry()
+
+flow FinishUsingAmiiboReader():
+	# Thank you for using this service.
+	Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:103', false)
+	EventFlowSystemActor.WaitFrame(10)
+	GeneralObject.StartAnimation('Off', 'cTrigger')
+	EventFlowSystemActor.ExitFlowchart()
+
+flow RetryReading(NpadId: int = 0, ReadPadId: int = 0):
+	SubflowResults[19] = 4
+	run Obj_Common_AmiiboProcess::NFC_SettingChk()
+	# Please ready the amiibo of the character you want to invite to the hotel.
+	Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:102', false)
+	run StartAmiiboReading()
+
+flow Root(NpadId: int = 0, ReadPadId: int = 0):
+	if System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']:
+		run ChkSituation()
+		# Should I invite someone to the hotel using amiibo?
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:100', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.WaitFrame(5)
+			GeneralObject.StartAnimation('On', 'cHold')
+			EventFlowSystemActor.WaitFrame(5)
+			# Contacting the amiibo Connection Service…
+			Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:101', false)
+			run RetryReading(NpadId=NpadId, ReadPadId=ReadPadId)
+	else:
+		# It's a device for the hotel…
+		Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:001', false)
+
+flow StartAmiiboReading(NpadId: int = 0, ReadPadId: int = 0):
+	run Obj_Common_AmiiboProcess::NFC_ReadProcess()
+	run Chk_Mantaro()
+	run Check_AfterRead()
+	run Check_AfterReadSNPC()
+	if SubflowResults@2[20] == 0:
+		if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+			if EventFlowSystemActor.RandomChoice2(2) == 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cRcm')
+			else:
+				EventFlowSystemActor.ChangeAmiiboNPC('cRct')
+			# Would you like to be connected with a representative from this pair and invite them to stay at the hotel?
+			Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:202', false)
+		else:
+			# Would you like to connect with this character and invite them to stay in a VIP room?
+			Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:201', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Sub_Event26(NpadId=NpadId, ReadPadId=ReadPadId)
+		else:
+			run UsingAmiibo_AskRetry()
+	else:
+		run Sub_Event26(NpadId=NpadId, ReadPadId=ReadPadId)
+
+local flow Sub_Event110():
+	# <115:1:cd00> is busy and could not be reached. Please try again some other day.
+	Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:314', false)
+	run UsingAmiibo_AskRetry()
+
+local flow Sub_Event26(NpadId: int, ReadPadId: int):
+	EventFlowSystemActor.MessageSuspend()
+	if EventFlowSystemActor.NetIsConnected():
+		EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+	EventFlowSystemActor.SoundTriggerEmit('GotoAmiiboPhone', -1)
+	EventFlowSystemActor.StartAmiiboPhone('cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.5, 'Obj_HotelAmiiboDevice_Call')
+
+flow UsingAmiibo_AskRetry():
+	# Would you like to invite someone else?
+	Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:399', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run RetryReading()
+	else:
+		run FinishUsingAmiiboReader()
+
+flow gul_NoReaction():
+	# <115:1:cd00> is currently dealing with a messy situation and cannot be invited at this time.
+	Player.OpenMessageWindow('TalkObj/OBJ_HotelAmiiboDevice:312', false)
+	run UsingAmiibo_AskRetry()

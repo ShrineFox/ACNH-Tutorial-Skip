@@ -1,8 +1,38 @@
+flow ChkSwitch2EditionMode():
+	if EventFlowSystemActor.IsSwitch2Edition():
+		if not System.EventFlags['cPlayer:IsExplainedSwitch2EditionMode']:
+			System.EventFlags['cPlayer:IsExplainedSwitch2EditionMode'] = true
+			# Oh! It looks like you're playing on the Nintendo Switch 2 Edition. I'll give you a preflight briefing for a play mode you can only choose on the Nint…
+			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:800', true)
+entrypoint Event40:
+			# 12-Player Sessions on the Nintendo Switch 2 Edition On the Nintendo Switch 2 Edition, you can participate in a 12-player session. You can look for ot…
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10701', true)
+		# Do you want to play online in a 12-player session this time?
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:802', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				SubflowResults[25] = 0
+				# Understood! I'll fire up the regular play mode, then.
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:802_1', false)
+			case 1:
+				SubflowResults[25] = 1
+				# Understood! I'll invite players on the Nintendo Switch 2 Edition.
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:802_2', false)
+			case 2:
+				run ExplainSwitch2EditionMode()
+			case 3:
+				EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+				run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+				EventFlowSystemActor.ExitFlowchart()
+
 flow EntryPoint_BestFriend():
 	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
-	EventFlowSystemActor.NetCreateSessionVillage('cBestFriend')
+	if SubflowResults@2[25] == 0:
+		EventFlowSystemActor.NetCreateSessionVillage('cBestFriend', false)
+	else:
+		EventFlowSystemActor.NetCreateSessionVillage('cBestFriend', true)
 	if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-		run SNPC_dod_AirPort::LandMakingRemove_Host()
+		run SNPC_dod_AirPort::OnlyLandMakingRemove_Host()
 		# Openin' the gate now!
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:122', false)
 	else:
@@ -15,9 +45,12 @@ flow EntryPoint_Friend():
 	if EventFlowSystemActor.NetHasFriend():
 		if not System.EventFlags['cPlayer:MainmenuFriendList']:
 			run SNPC_dod_22_Airport_InstallFriendList::Root()
-		EventFlowSystemActor.NetCreateSessionVillage('cFriend')
+		if SubflowResults@2[25] == 0:
+			EventFlowSystemActor.NetCreateSessionVillage('cFriend', false)
+		else:
+			EventFlowSystemActor.NetCreateSessionVillage('cFriend', true)
 		if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-			run SNPC_dod_AirPort::LandMakingRemove_Host()
+			run SNPC_dod_AirPort::OnlyLandMakingRemove_Host()
 			# Openin' the gate now!
 			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:122', false)
 		else:
@@ -41,36 +74,46 @@ flow EntryPoint_InetHost():
 	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 		EventFlowSystemActor.MessageSuspend()
 		run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=true)
-		run System_ServerRegistration::UserRegistrun System_ServerRegistration::UserRegist(WithLogin=true, Terminate=true, WithSave=true)
+		run System_ServerRegistration::UserRegist(WithLogin=true, Terminate=true, WithSave=true)
 		run SNPC_dod_AirPort::EntryPoint_PostProcedure()
 		if (System.EventFlags['cPlayer:UploadPlayerProfileIllegal']) and (not System.EventFlags['cPlayer:ImprovePlayerProfile']):
 			EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
 			# Oof. Look, there's no easy way to talk about this, so I'm just gonna come out and say it… Apparently your Passport's got something on it that violate…
 			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:700', true)
-		elif EventFlowSystemActor.NetHasAddressData('cBestFriend'):
-			# So who all do you wanna invite?
-			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:301', false)
-			switch EventFlowSystemActor.GeneralTalkChoice4():
-				case 0:
-					run EntryPoint_Friend()
-				case 1:
-					run EntryPoint_BestFriend()
-				case 2:
-					run EntryPoint_Keyword()
-				case 3:
-					EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-					run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
 		else:
-			# So who all do you wanna invite?
-			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:300', false)
-			switch EventFlowSystemActor.GeneralTalkChoice3():
-				case 0:
-					run EntryPoint_Friend()
-				case 1:
-					run EntryPoint_Keyword()
-				case 2:
-					EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-					run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+			run ChkSwitch2EditionMode()
+			if EventFlowSystemActor.NetHasAddressData('cBestFriend'):
+				if EventFlowSystemActor.IsSwitch2Edition():
+					# Now, how do you wanna invite folks over this time?
+					MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:303', false)
+				else:
+					# So who all do you wanna invite?
+					MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:301', false)
+				switch EventFlowSystemActor.GeneralTalkChoice4():
+					case 0:
+						run EntryPoint_Friend()
+					case 1:
+						run EntryPoint_BestFriend()
+					case 2:
+						run EntryPoint_Keyword()
+					case 3:
+						EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+						run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+			else:
+				if EventFlowSystemActor.IsSwitch2Edition():
+					# Now, how do you wanna invite folks over this time?
+					MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:302', false)
+				else:
+					# So who all do you wanna invite?
+					MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:300', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run EntryPoint_Friend()
+					case 1:
+						run EntryPoint_Keyword()
+					case 2:
+						EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+						run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
 	else:
 		run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
 
@@ -102,10 +145,13 @@ flow EntryPoint_KeywordAnybody():
 	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:403', false)
 	switch EventFlowSystemActor.GeneralTalkChoice3():
 		case 0:
-			EventFlowSystemActor.NetCreateSessionVillage('cPassword')
+			if SubflowResults@2[25] == 0:
+				EventFlowSystemActor.NetCreateSessionVillage('cPassword', false)
+			else:
+				EventFlowSystemActor.NetCreateSessionVillage('cPassword', true)
 			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
 			if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-				run SNPC_dod_AirPort::LandMakingRemove_Host()
+				run SNPC_dod_AirPort::OnlyLandMakingRemove_Host()
 				# Openin' the gate now!
 				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:122', false)
 			else:
@@ -123,19 +169,26 @@ flow EntryPoint_KeywordAnybody():
 
 flow EntryPoint_KeywordOnlyBestFriend():
 	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
-	EventFlowSystemActor.NetCreateSessionVillage('cPwBestFriend')
-	run Event112()
+	if SubflowResults@2[25] == 0:
+		EventFlowSystemActor.NetCreateSessionVillage('cPwBestFriend', false)
+		run Event112()
+	else:
+		EventFlowSystemActor.NetCreateSessionVillage('cPwBestFriend', true)
+		run Event112()
 
 flow EntryPoint_KeywordOnlyFriend():
 	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
 	if EventFlowSystemActor.NetHasFriend():
 		if not System.EventFlags['cPlayer:MainmenuFriendList']:
 			run SNPC_dod_22_Airport_InstallFriendList::Root()
-		EventFlowSystemActor.NetCreateSessionVillage('cLimited')
+		if SubflowResults@2[25] == 0:
+			EventFlowSystemActor.NetCreateSessionVillage('cLimited', false)
+		else:
+			EventFlowSystemActor.NetCreateSessionVillage('cLimited', true)
 entrypoint Event112:
 		EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
 		if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-			run SNPC_dod_AirPort::LandMakingRemove_Host()
+			run SNPC_dod_AirPort::OnlyLandMakingRemove_Host()
 			# Openin' the gate now!
 			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:122', false)
 		else:
@@ -148,3 +201,8 @@ entrypoint Event112:
 		EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
 		# Oh, hang on! Looks like you don't have anybody on your friend list on this Nintendo Switch system. You're gonna need to add some friends if you want …
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:220', true)
+
+flow ExplainSwitch2EditionMode():
+	# Here, have a look at this!
+	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_41_MultiPlayInet:801', true)
+	run Event40()

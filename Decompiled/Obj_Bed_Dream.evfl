@@ -1,4 +1,21 @@
 flow Bed_CancelDream():
+	EventFlowSystemActor.SetCullingCeillingFtrForDreamBedWait(false)
+	EventFlowSystemActor.StoreNormalCamera(false, '')
+
+flow Bed_EntryCloudIsland_Visitor():
+	EventFlowSystemActor.CameraSetDemoParam('InDreamZoomIn', '', 'Player', false, false, true, 0)
+	EventFlowSystemActor.CameraSetDemoParam('InDreamZoomOut', 'InDreamZoomInOut', 'Player', false, false, true, 0)
+	fork:
+		branch:
+			EventFlowSystemActor.WaitFrame(180)
+		branch:
+			EventFlowSystemActor@BGM.WaitFrame(100)
+			EventFlowSystemActor.BGMPropertyControl(198)
+	System.EventFlags['cPlayerTemp:TapCloudIslandFirstTalkDone'] = true
+	EventFlowSystemActor.WaitFrame(10)
+	Player.PlayerStartAnimeBedWaitOpenEyes()
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.SetEnableDofFadeForDream()
 	EventFlowSystemActor.StoreNormalCamera(false, '')
 
 flow Bed_MyHome():
@@ -6,11 +23,73 @@ flow Bed_MyHome():
 		EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomOutLow', 'cDefault', 'Player', true, false, false, 0)
 	else:
 		EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomOut', 'cDefault', 'Player', true, false, false, 0)
-	# Should I get some sleep?
-	Player.OpenMessageWindow('TalkObj/OBJ_Bed:001', false)
-	if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-		run Bed_CancelDream()
-	elif EventFlowSystemActor.IsSharePlay(0):
+		EventFlowSystemActor.SetCullingCeillingFtrForDreamBedWait(true)
+	if System.EventFlags['cPlayer:UnlockCloudIsland']:
+		if System.EventFlags['cPlayer:SelCloudIslandOnBed']:
+			# Should I get some sleep?
+			Player.OpenMessageWindow('TalkObj/OBJ_Bed:012', false)
+		else:
+			# Should I get some sleep?
+			Player.OpenMessageWindow('TalkObj/OBJ_Bed:011', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				SubflowResults[0] = 0
+				run Sub_grp_Event3()
+			case 1:
+				SubflowResults[0] = 1
+				run Sub_grp_Event3()
+			case 2:
+				run Bed_CancelDream()
+	else:
+		# Should I get some sleep?
+		Player.OpenMessageWindow('TalkObj/OBJ_Bed:001', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Sub_grp_Event3()
+		else:
+			run Bed_CancelDream()
+
+flow Bed_Wakeup():
+	run SNPC_tap_02_InDreaming::Wakeup()
+
+flow Bed_Wakeup_Cloud():
+	run SNPC_tap_03_InCloudIsland::WakeupProcess1()
+	if EventFlowSystemActor.NetIsInviteFriend():
+		# Is it time for me to wake up? (This will end the online session and return you to your home.)
+		Player.OpenMessageWindow('TalkObj/OBJ_Bed:023', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run System_InetClose::EntryPoint_OhiakiHost_DirectReturn(DirectRetrun=true, ActionResultSlot=1)
+			if SubflowResults@2[1] == 0:
+				run SNPC_tap_03_InCloudIsland::WakeupProcess2()
+				run SNPC_tap_03_InCloudIsland::WakeupProcess3()
+				EventFlowSystemActor.NetCloudIslandSetLeaveType('cBed')
+				EventFlowSystemActor.NetCloudIslandHostPurgeFromBed('cCloudIslandHostPurgeFromBed', false)
+				run SNPC_tap_03_InCloudIsland::WakeupProcess4()
+				EventFlowSystemActor.NetCloudIslandHostPurgeAfter('cCloudIslandHostPurgeAfter', false)
+			else:
+				EventFlowSystemActor.StoreNormalCamera(false, '')
+		else:
+			EventFlowSystemActor.StoreNormalCamera(false, '')
+	else:
+		# Is it time for me to wake up?
+		Player.OpenMessageWindow('TalkObj/OBJ_Bed:021', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run System_InetClose::OkaeriVisitor_Core(CallLeaveVisitor=false)
+			if SubflowResults@2[1] == 0:
+				run SNPC_tap_03_InCloudIsland::WakeupProcess2()
+				run SNPC_tap_03_InCloudIsland::WakeupProcess3()
+				run SNPC_tap_03_InCloudIsland::WakeupProcess4()
+				EventFlowSystemActor.NetCloudIslandSetLeaveType('cBed')
+				EventFlowSystemActor.NetLeaveSessionVillage('cLeaveSession', false)
+			else:
+				EventFlowSystemActor.StoreNormalCamera(false, '')
+		else:
+			EventFlowSystemActor.StoreNormalCamera(false, '')
+
+flow Bed_Wakeup_Cloud_ForTap():
+	run SNPC_tap_03_InCloudIsland::Wakeup()
+
+local flow Sub_grp_Event3():
+	if EventFlowSystemActor.IsSharePlay(0):
 		# You're playing with friends right now! Save the sleeping for later.
 		MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:006', false)
 		run Bed_CancelDream()
@@ -38,11 +117,18 @@ flow Bed_MyHome():
 		# You look very cool, but you'll have to undo your transformation before drifting off to sleep.
 		MainNpc.OpenMessageWindow('TalkObj/OBJ_Bed:007', false)
 		run Bed_CancelDream()
+	elif Player.HotelMannequinIsRentalAny():
+		# Before you can sleep, you'll need to return the outfit you borrowed from the hotel.
+		Player.OpenMessageWindow('TalkObj/OBJ_Bed:009', false)
+		run Bed_CancelDream()
 	else:
 		if System.EventFlags['cPlayer:TapDreamFirstTalk']:
 			System.EventFlags['cLandTemp:TapIndoorPos'] = true
 		else:
-			System.EventFlags['cLandTemp:TapIndoorPos'] = false
+			if SubflowResults@2[0] == 0:
+				System.EventFlags['cLandTemp:TapIndoorPos'] = false
+			else:
+				System.EventFlags['cLandTemp:TapIndoorPos'] = true
 		EventFlowSystemActor.MiniGameSilentCancel()
 		EventFlowSystemActor.SoundDuckingOn(43)
 		Player.PlayerClearFoodPowerup()
@@ -56,7 +142,10 @@ flow Bed_MyHome():
 			EventFlowSystemActor.CameraSetDemoParam('ToDreamZoomIn', 'ToDreamZoomInOut', 'Player', true, false, false, 0)
 		EventFlowSystemActor.SoundTriggerEmit('WipeToIdrDream', -1)
 		EventFlowSystemActor.NextLPFadeTime(3.5)
-		EventFlowSystemActor.SystemRequestChangeStage('cDreamHouse', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
-
-flow Bed_Wakeup():
-	run SNPC_tap_02_InDreaming::Wakeup()
+		if SubflowResults@2[0] == 0:
+			System.EventFlags['cLandTemp:TapIndoorSelectCloudIsland'] = false
+			EventFlowSystemActor.SystemRequestChangeStage('cDreamHouse', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
+		else:
+			System.EventFlags['cLandTemp:TapIndoorSelectCloudIsland'] = true
+			System.EventFlags['cPlayer:SelCloudIslandOnBed'] = true
+			EventFlowSystemActor.SystemRequestChangeStage('cDreamHouse', 'cCloudIslandDream', 'cCloudIslandDream', 'cBlack', 1.0, 1.0)

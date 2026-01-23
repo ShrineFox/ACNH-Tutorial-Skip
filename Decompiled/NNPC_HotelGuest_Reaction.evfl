@@ -1,0 +1,165 @@
+flow ChangeNamePlate():
+	if (EventFlowSystemActor.IsMyVillage()) and (not MainNpc.IsHotelNpcAcquaintedWith()) and ((MainNpc.IsLivedSameNpc() == 0) or (not MainNpc.IsAcquaintedWithSameNpc())) and (not MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc']) and (not MainNpc.EventFlags['cHotelNpcMemory:SkipNamedTraveler']):
+		MainNpc.NpcChangeNameStatus(4)
+
+flow FallPit():
+	run ChangeNamePlate()
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Aaahhhh!!! What's going on?! The ground is eating me!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Fall:001', false)
+		case 1:
+			# AHH! Bugs! I feel bugs! On my toes! It's kinda neat!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Fall:002', false)
+		case 2:
+			# WHAAA!!! I don't wanna live in a hole forever! HELP!
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Fall:003', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow HotelGuest_Contrail_OT():
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		# I wonder where the plane that left that vapor trail went to? What island did it visit?
+		MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/React/OT_React_LookingUp:005_01', false)
+	else:
+		# A sharp vapor trail drawn across a blue expanse… The sky looks like a piece of modern art, yes?
+		MainNpc.OpenMessageWindow('TalkNNpc/G3_Ot/React/OT_React_LookingUp:005_02', false)
+
+flow HotelGuest_SingleRainbow_GE():
+	if EventFlowSystemActor.RandomChoice2(2) == 0:
+		# I looked up at the sky and…nothing. Looked up again and BAM! Rainbow! They can sneak up on you so quick!
+		MainNpc.OpenMessageWindow('TalkNNpc/G2_Ge/React/GE_React_LookingUp:002_03', false)
+	else:
+		# When I was a kid, I got lost looking for the end of a rainbow.<10:4> But I found it eventually! Those things are très bright up close, B-T-dubs. If y…
+		MainNpc.OpenMessageWindow('TalkNNpc/G2_Ge/React/GE_React_LookingUp:002_01', false)
+
+flow LookingUp():
+	MainNpc.NpcSetReactionType('cLookingUp')
+	switch MainNpc.SkyVariation():
+		case 0:
+			# RANDOM: I'm gonna stare up at the sky with my m… // Man, shooting stars are real pretty! Bu… // My wish? I wanna know my friends are ha…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_LookingUp:001', false)
+		case 1:
+			if MainNpc.CheckNpcLook() in (`NormalFU`, `SnootyOT`, `SisterlyAN`, `LazyBO`, `JockHA`, `CrankyKO`, `SmugZK`):
+				# RANDOM: Do rainbows taste like sno-cones? Red's… // Man, the rainbows I make with my wateri… // Didja know that rainbows show up after …
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_LookingUp:002', false)
+			else:
+				run HotelGuest_SingleRainbow_GE()
+		case 2:
+			# RANDOM: Whoa, two rainbows? I didn't know you c… // When I see a double rainbow, I always w… // I wanna take a picture of the rainbow! …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_LookingUp:003', false)
+		case 3:
+			# RANDOM: Ooh, the rainbow curtain is swaying! It… // A big curtain of light across the sky… … // I want a curtain made of lights in my h…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_LookingUp:004', false)
+		case 4:
+			if MainNpc.CheckNpcLook() in (`NormalFU`, `PeppyGE`, `SisterlyAN`, `LazyBO`, `JockHA`, `CrankyKO`, `SmugZK`):
+				# RANDOM: Ooh, a vapor trail! Who's on the plane? // Vapor trails are so funny! They're like… // Do you think maybe vapor trails are rea…
+				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_LookingUp:005', false)
+			else:
+				run HotelGuest_Contrail_OT()
+		case 5:
+			# RANDOM: Doesn't the moon remind you of somethin… // Is it true the moon is made of cheese? … // The moon is round like a pizza, and I l…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_LookingUp:006', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow MobilleFireworks():
+	MainNpc.NpcSetReactionType('cMobileFireWorks')
+	switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+		case 0:
+			# Fireworks are pretty, <110:5>. I wish they could just go on and on forever and ever…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MobileFireworks:001', false)
+		case 1:
+			# Don't fret, little one. Teeny-tiny fireworks are just as beautiful as the ones in the sky. You're spectacular.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MobileFireworks:002', false)
+		case 2:
+			# If I stare at the sparkly bits long enough, my eyes start to feel all kinds of funny, <110:5>. But if I close my eyes after, I can see my own bonus f…
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_MobileFireworks:003', false)
+
+flow Napping():
+	run ChangeNamePlate()
+	# RANDOM: Oh man…so yummy… C'mere… I wanna fit yo… // Zzz… Zzz… <10:10>Pppphhhpppllt!<10:9> H… // Hi, Grandma! I thought you were… Hraaar…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Napping:001', false)
+	MainNpc.TurnNeck(10, false)
+	# RANDOM: Huh?! Am I outside? <50:3><110:6>, did … // «Huh?!» «Where am I?» «Why's my lasagna…
+	MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Napping:012', false)
+	MainNpc.SetDefaultWaitAs('cDefault')
+	MainNpc.CharacterEmoticonAction('EmotEnd', false, '', 0, false)
+
+flow Poison():
+	run ChangeNamePlate()
+	MainNpc.NpcSetReactionType('cPoison')
+	if MainNpc.EventFlags['cHotelNpcTemp:ContinuousReactionTalkCount'] <= 1:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] = 0
+			case 1:
+				MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] = 1
+			case 2:
+				MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] = 2
+	MainNpc.SetItemName(15, 2, 0)
+	if MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] != 0:
+		if MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] != 1:
+			# [A|An]<125:2:cd00>! Don't move a muscle. It can't smell us if we don't move.
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Poison:003', false)
+		else:
+			# AH-AAAAH! Watch out! Right by you! [A|An]<125:2:cd00>! We gotta get away without it seeing us! I know! TURN INVISIBLE! <10:10>TURN INVISIBLE!<10:9>
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Poison:002', false)
+	else:
+		# Don't move! It's [a|an]<125:2:cd00>! Let's not get too close. I don't wanna get…um, whatever it is that they do to you!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Poison:001', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow Run():
+	run ChangeNamePlate()
+	if (EventFlowSystemActor.IsInsectChasingPlayer(0)) or (EventFlowSystemActor.IsInsectChasingPlayer(1)) or (EventFlowSystemActor.IsInsectChasingPlayer(2)):
+		MainNpc.NpcSetReactionType('cRun')
+		if MainNpc.EventFlags['cHotelNpcTemp:ContinuousReactionTalkCount'] <= 1:
+			switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+				case 0:
+					MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] = 0
+				case 1:
+					MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] = 1
+				case 2:
+					MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] = 2
+		MainNpc.SetItemName(15, 2, 0)
+		if MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] != 0:
+			if MainNpc.EventFlags['cHotelNpcTemp:ReactionTalkLabel'] != 1:
+				run Run_03()
+			else:
+				run Run_02()
+		else:
+			run Run_01()
+		MainNpc.EventFlags['cHotelNpcTemp:ReserveWarningBee'] = true
+		EventFlowSystemActor.ExitFlowchart()
+
+flow Run_01():
+	if EventFlowSystemActor.IsInsectChasingPlayer(0):
+		# Nooooo!!! Stay awaaaayyy!!! I don't like running!!!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:001', false)
+	elif EventFlowSystemActor.IsInsectChasingPlayer(1):
+		# Nooooo!!! Stay awaaaayyy!!! I don't like running!!!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:004', false)
+	elif EventFlowSystemActor.IsInsectChasingPlayer(2):
+		# Nooooo!!! Stay awaaaayyy!!! I don't like running!!!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:007', false)
+
+flow Run_02():
+	if EventFlowSystemActor.IsInsectChasingPlayer(0):
+		# What are you doing?! Those are pokey bugs! They're gonna pokey you! RUN!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:002', false)
+	elif EventFlowSystemActor.IsInsectChasingPlayer(1):
+		# What are ya doing?! This is no time for chit-chat!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:005', false)
+	elif EventFlowSystemActor.IsInsectChasingPlayer(2):
+		# What are ya doing?! This is no time for chit-chat!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:008', false)
+
+flow Run_03():
+	if EventFlowSystemActor.IsInsectChasingPlayer(0):
+		# What did you do to make the <item>wasps so angry?! They're yelling a lotta bad stuff at you!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:003', false)
+	elif EventFlowSystemActor.IsInsectChasingPlayer(1):
+		# What did you do to Mr. <item>Scorpion?! He looks real angry at you!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:006', false)
+	elif EventFlowSystemActor.IsInsectChasingPlayer(2):
+		# What'd you do to Mr. <item>Tarantula?! He looks suuuuper angry!
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/React/BO_React_Run:009', false)

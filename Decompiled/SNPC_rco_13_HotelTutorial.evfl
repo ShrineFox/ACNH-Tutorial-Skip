@@ -1,0 +1,117 @@
+flow Conv_Prepare():
+	Player.PlayerMoveToTarget(false, 135.0, 185.0, 0.0, 0.0, false, '')
+	Player.TurnBody(12, 160.0)
+	EventFlowSystemActor.SetNpcAIBlackBoardByLabel('rco', 'DemoSpeak', 1, 1)
+
+flow Entry():
+	MainNpc.CharacterEmoticonAction('Shocked', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(20)
+	EventFlowSystemActor.CameraSetDemoParam('TutorialDemo', 'cDefault', 'CameraTag:StairEntrance', false, false, false, 0)
+	MainNpc.TurnBody(10, 0.0)
+	EventFlowSystemActor.WaitFrame(20)
+
+flow Root():
+	System.EventFlags['cPlayer:HotelSpeakTokpm'] = true
+	System.EventFlags['cPlayer:NpcKpmFirstTalk'] = true
+	run Entry()
+	if System.EventFlags['cLand:HotelIsCompletedEditTutorialAnyone']:
+		# Oh! <50:3>PLAYER! So good of you to stop by! What do you think? The hotel is simply stunning, isn't it? We built it so that more folks can visit! Let…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:001_01', false)
+	else:
+		# Oh! <50:3>PLAYER! So good of you to stop by! What do you think? The hotel is simply stunning, isn't it? Our island has become quite famous, if I do s…
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:001', false)
+	if System.EventFlags['cPlayer:KppFirstTalk']:
+		# [target N2>P0]Ahoy there!<20:4:000a00500030003e004e0032> Ye already know me! I'm Kapp'n!
+		Npc_2.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:002', false)
+	else:
+		System.EventFlags['cPlayer:KppFirstTalk'] = true
+		System.EventFlags['cPlayer:KppFirstTalkHotel'] = true
+		# [target N2>P0]Ahoy there![target P0>N2] I'm Kapp'n!
+		Npc_2.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:002_01', false)
+	# [target N2>N1]And this here's the wind in me sails,[target P0>N1] me wife…
+	Npc_2.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:002_02', false)
+	# Ahoy! [target N0>N1]I'm Leilani.
+	SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003', false)
+	# Soon as I heard a hotel was goin' up, I had to come and see it. And this island! So lovely and bustlin'.
+	SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_01', false)
+	if System.EventFlags['cLand:HotelIsCompletedEditTutorialAnyone']:
+		if EventFlowSystemActor.CheckHotelRoomCreated('cRoom8'):
+			# The hotel's worked out just how Mr. Nook said it would—lots o' visitors, and lots o' business.
+			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_07', false)
+			# We wanna keep things bustlin'! We want visitors of every stripe comin' through those doors!
+			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_08', false)
+		else:
+			# I'm sure it'll be just as Mr. Nook says. More and more folks're bound to visit a smoothly runnin' hotel.
+			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_03', false)
+			# But just between you an' me… the rooms aren't ready yet.
+			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_03_01', false)
+			# After all, I've never been good at designin' hotel rooms…
+			SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_01_03', false)
+	else:
+		# I'm sure it'll be just as Mr. Nook says. More and more folks're bound to come visit once the hotel's open.
+		SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_01_01', false)
+		# Just between us though…we're not quite finished preppin' the rooms.
+		SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_01_02', false)
+		# After all, I've never been good at designin' hotel rooms…
+		SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_01_03', false)
+		# At this rate, we're leagues away from openin' fer business.
+		SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:003_02', false)
+		System.EventFlags['cPlayer:HotelNotOpenIntroductionDone'] = true
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.CharacterEmoticonAction('IdeaBulb', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(15)
+	# <20:4:000a004e0030003e00500030><50:3>PLAYER…[target N1>N0,N2>N0,P0>N0] [target N0>P0]Do you think I could talk you into preparing the guest rooms?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:004', false)
+	# It can be as simple as arranging furniture just the way you want it in the rooms.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:004_01', false)
+	if System.EventFlags['cPlayer:WHEREAREN_Is1stKKFesDone']:
+		# <20:2:cd00>You perfected your decorating skills working with Lottie, so I'm sure we can entrust you with this task.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:004_02', false)
+	else:
+		# It's no different from how you'd decorate your own home. Yes, yes!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:004_03', false)
+	# Now, of course, we wouldn't dream of asking you to work for free. You'll be compensated for your assistance.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:005', false)
+	# What do you say? Will you help?[target N1>P0,N2>P0]
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:005_01', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# That's our PLAYER! Ever so reliable! Yes, yes![target N1>P0,N2>P0]
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:006', false)
+	else:
+		# I had a feeling you'd lend a hand, PLAYER.[target N1>P0,N2>P0]
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:006_01', false)
+	# Ye're one o' the good ones.<20:4:000a00500030003e004e0032>
+	Npc_2.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:007', false)
+	# Thank ye so much![target P0>N1] Ye'll be a huge help to us! Come chat with me when ye have the time to pitch in.
+	SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:008', false)
+	# With support from you and Kapp'n's entire family, this hotel is sure to succeed! Yes, yes! Well, I should get going now. I feel good leaving all of t…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_15_HotelTutorial:009', true)
+	fork:
+		branch:
+			SubNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+		branch:
+			Player.CharacterEmoticonAction('Smiling', true, '', 0, false)
+		branch:
+			Npc_2.CharacterEmoticonAction('Nodding', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(20)
+	System.EventFlags['cPlayer:SeqHotelIntroductionDone'] = true
+	run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	EventFlowSystemActor.WaitFrame(30)
+	MainNpc.NpcRequestAction(3)
+	Npc_2.NpcRequestAction(3)
+	SubNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+	Player.PlayerChangeStateDemoTalk()
+	SubNpc.NpcWarpCreatePos()
+	EventFlowSystemActor.WaitFrame(5)
+	Player.TurnNeck(11, false)
+	Player.TurnBody(11, 0.0)
+	SubNpc.TurnNeck(11, false)
+	SubNpc.TurnBody(11, 0.0)
+	EventFlowSystemActor.StoreNormalCamera(true, '')
+	EventFlowSystemActor.WaitFrame(10)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+	System.EventFlags['cPlayerTemp:HotelKpmTalkTodayGreeting'] = true
+
+flow Root_Init():
+	MainNpc.NpcAITalkSubCastEntry('kpm', 1)
+	MainNpc.NpcAITalkSubCastEntry('kpp', 2)

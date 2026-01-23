@@ -84,11 +84,11 @@ local flow Sub_Event1():
 					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 						# Got it. I'll let the client know. Let's head back, then, OK?
 						MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:004', true)
-System.EventFlags['cPlayerTemp:WHEREAREN_GetDrink'] = false
-EventFlowSystemActor.WherearenOrderCallback('cCancel')
-EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
-System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
-run Demo_Common_Wherearen::CheckReturnWithTakumi()
+						System.EventFlags['cPlayerTemp:WHEREAREN_GetDrink'] = false
+						EventFlowSystemActor.WherearenOrderCallback('cCancel')
+						EventFlowSystemActor.WherearenOrderCallback('cReturnToMainIsland')
+						System.EventFlags['cPlayerTemp:WHEREAREN_OtgTalkReserve_Office'] = true
+						run Demo_Common_Wherearen::CheckReturnWithTakumi()
 						if SubflowResults@2[0] == 0:
 							EventFlowSystemActor.SoundTriggerEmit('WherearenFade_Boat', -1)
 							EventFlowSystemActor.SystemRequestChangeStage('cWherearenOfficeReturnEntrance', 'cWherearen', 'cWherearen', 'cBlack', 1.0, 1.0)
@@ -128,14 +128,14 @@ flow VisitTalk():
 	elif System.EventFlags['cWherearenPlayer:SeqFirstVistCustomerOngoing']:
 		run SNPC_mnc_14_WherearenEvent_FirstVisitCustomer::VisitTalk_FristVisitCustomer()
 	elif EventFlowSystemActor.IsResumeWherearenOrder():
-		run NNPC_Spot_WherearenGarden::EnterGardenrun NNPC_Spot_WherearenGarden::EnterGarden(Main=SubNpc, Sub=MainNpc)
+		run NNPC_Spot_WherearenGarden::EnterGarden(Main=SubNpc, Sub=MainNpc)
 		# Here we are! OK, let's go show folks how work gets done!
 		MainNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_02_WherearenGarden:102', true)
 		EventFlowSystemActor.WherearenOrderCallback('cEditStart')
 		EventFlowSystemActor.UIThemeAppear('')
 	else:
 		if EventFlowSystemActor.WherearenNpcFreeQuery2('mnc', 'cCustomer'):
-			run NNPC_Spot_WherearenGarden::EnterGardenrun NNPC_Spot_WherearenGarden::EnterGarden(Main=SubNpc, Sub=MainNpc)
+			run NNPC_Spot_WherearenGarden::EnterGarden(Main=SubNpc, Sub=MainNpc)
 		else:
 			run NNPC_Spot_WherearenGarden::EnterGardenWithoutCustomer()
 		EventFlowSystemActor.WherearenSetTagCustomerNpcName(false, 0)

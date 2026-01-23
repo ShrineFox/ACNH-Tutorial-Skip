@@ -71,7 +71,7 @@ flow HousingKitCommon(StructureType: str, StructureBuildPosType: str, BuildTimin
 			EventFlowSystemActor.WaitFrame(15)
 			Player.CharacterEmoticonAction('AbsentMindedness', true, '', 0, false)
 			EventFlowSystemActor.WaitFrame(20)
-			run System_Structure_Common::PreviewStructurerun System_Structure_Common::PreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+			run System_Structure_Common::PreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
 			Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
 			EventFlowSystemActor.WaitFrame(10)
 			if EventFlowSystemActor.HasObstacle(StructureType, StructureBuildPosType, BuildTiming):
@@ -82,14 +82,14 @@ flow HousingKitCommon(StructureType: str, StructureBuildPosType: str, BuildTimin
 				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:932', true)
 			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
 				EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
-				run System_Structure_Common::DeletePreviewAndBuildStructurerun System_Structure_Common::DeletePreviewAndBuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+				run System_Structure_Common::DeletePreviewAndBuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
 				EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
 			else:
-				run System_Structure_Common::DeletePreviewStructurerun System_Structure_Common::DeletePreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType)
+				run System_Structure_Common::DeletePreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType)
 				EventFlowSystemActor.ExitFlowchart()
 		case 1:
 			EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
-			run System_Structure_Common::BuildStructurerun System_Structure_Common::BuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+			run System_Structure_Common::BuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
 			EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
 		case 2:
 			EventFlowSystemActor.StructureDeletePreviewGuide(false)
@@ -203,7 +203,9 @@ flow MovingKit_Tailor(BuildTiming: str):
 
 flow Moving_root():
 	Player.PlayerDemoTurn('cNorth')
-	if EventFlowSystemActor.UIPocketMenuItemSelected(5358, 1, true):
+	if EventFlowSystemActor.UIPocketMenuItemSelected(906, 1, true):
+		run Player_HousingKit_CloudIsland::MovingKit_Cloud(BuildTiming='cMoving')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(5358, 1, true):
 		run MovingKit_Player(BuildTiming='cMoving')
 	elif EventFlowSystemActor.UIPocketMenuItemSelected(5357, 1, true):
 		run MovingKit_NNPC(BuildTiming='cMoving')
@@ -252,6 +254,10 @@ flow Root():
 	if EventFlowSystemActor.IsRunningMiniGame('cTreasure'):
 		# I'm searching for treasure right now, so I'll look for a good place for this some other time.
 		Player.OpenMessageWindow('TalkSys/SYS_Player:990', false)
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(909, 1, true):
+		run Player_HousingKit_CloudIsland::BridgeBuildKit_Cloud(BuildTiming='cNew')
+	elif EventFlowSystemActor.UIPocketMenuItemSelected(910, 1, true):
+		run Player_HousingKit_CloudIsland::SlopeBuildKit_Cloud(BuildTiming='cNew')
 	elif (EventFlowSystemActor.UIPocketMenuItemSelected(4310, 1, true)) or (EventFlowSystemActor.UIPocketMenuItemSelected(7211, 1, true)):
 		run BridgeReserveKit(BuildTiming='cNew')
 	elif EventFlowSystemActor.UIPocketMenuItemSelected(4311, 1, true):

@@ -27,7 +27,9 @@ flow AvailableOnConnect():
 		run SequenceStart()
 
 flow ChangeOperatorChk():
-	if not ((System.EventFlags['cPlayer:AppUrgentEscapeCallToday']) or (System.EventFlags['cPlayer:AppUrgentEscapeMobCounter'] < 5)):
+	if EventFlowSystemActor.NpcTidyVisitType() != 0:
+		run ProcessOperatorChange()
+	elif not ((System.EventFlags['cPlayer:AppUrgentEscapeCallToday']) or (System.EventFlags['cPlayer:AppUrgentEscapeMobCounter'] < 5)):
 		if System.EventFlags['cPlayer:AppUrgentEscapeMobCounter'] < 6:
 			if EventFlowSystemActor.PercentChoice(5):
 				run ProcessOperatorChange()
@@ -73,9 +75,13 @@ flow ChkEscapeTo():
 				SubflowResults[0] = 2
 
 flow ChkRacketIntro():
-	if (not EventFlowSystemActor.IsSpeakerResetOrRacket()) and (not System.EventFlags['cPlayer:AppUrgentEscapeCallToday']):
-		# ‹Heh. Somethin' seem different? I figured you'd notice. Yeah, you're one sharp cookie, PLAYER. Here's the skinny. Rese…the, uh, service operator is s…
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp2:2001', false)
+	if not ((EventFlowSystemActor.IsSpeakerResetOrRacket()) or (System.EventFlags['cPlayer:AppUrgentEscapeCallToday'])):
+		if EventFlowSystemActor.NpcTidyVisitType() == 0:
+			# ‹Heh. Somethin' seem different? I figured you'd notice. Yeah, you're one sharp cookie, PLAYER. Here's the skinny. Rese…the, uh, service operator is s…
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp2:2001', false)
+		else:
+			# ‹Heh. Somethin' seem different? I figured you'd notice. Yeah, you're one sharp cookie, PLAYER. Here's the skinny. Rese… The, uh, service operator is …
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp2:2002', false)
 
 flow EscapeSelCansel():
 	run Event18()
@@ -138,11 +144,11 @@ flow GotoEscapeSelect():
 				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:045', false)
 				switch EventFlowSystemActor.GeneralTalkChoice3():
 					case 0:
-  run EscapeToPlaza()
+						run EscapeToPlaza()
 					case 1:
- run EscapeToAirport()
+						run EscapeToAirport()
 					case 2:
- run EscapeSelCansel()
+						run EscapeSelCansel()
 			case 1:
 				# ‹Now that that's settled, where can I send ya?›
 				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:044_02', false)
@@ -156,13 +162,13 @@ flow GotoEscapeSelect():
 				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:046', false)
 				switch EventFlowSystemActor.GeneralTalkChoice4():
 					case 0:
-  run EscapeToPlaza()
+						run EscapeToPlaza()
 					case 1:
- run EscapeToMarket()
+						run EscapeToMarket()
 					case 2:
- run EscapeToAirport()
+						run EscapeToAirport()
 					case 3:
- run EscapeSelCansel()
+						run EscapeSelCansel()
 			case 4:
 				# ‹Now that that's settled, where can I send ya?›
 				EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:047', false)
@@ -198,7 +204,7 @@ flow PlayerWarpTo(WarpType: int):
 	EventFlowSystemActor.SoundTriggerEmit('レンジャー！', -1)
 	# <10:12>　	   <100:2>RANGERS, GO!</100:2><10:8:001e0000>
 	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_PhoneApp:053', true)
-	EventFlowSystemActor.ReturnMolMobFromCafe()
+	EventFlowSystemActor.ReturnMolMobFromCafe(false)
 	if EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol01'):
 		EventFlowSystemActor.PlayerBaggageOperationForEvent('cRemove')
 		System.EventFlags['cPlayer:UseNavigationMayDayTour'] = true
@@ -277,7 +283,7 @@ flow ReEntry():
 			run AppUrgentEscapeEnd()
 
 flow Root():
-	if (not EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
+	if (not EventFlowSystemActor.SystemCheckNowStage('cCloudIslandAll')) and (not EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
 		if not System.EventFlags['cPlayer:Mobile1stBoot_SOS']:
 			# Rescue Service Use this service for an emergency situation on the island when your path is blocked and you're stuck! You'll be sent to a place such a…
 			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:5091', false)
@@ -426,13 +432,13 @@ entrypoint Event18:
 					run PlayerWarpTo(WarpType=1)
 				case 1:
 					if EventFlowSystemActor.PlayerHouseLevel() == `Homeless`:
-run PlayerWarpTo(WarpType=1)
+						run PlayerWarpTo(WarpType=1)
 					else:
-run PlayerWarpTo(WarpType=0)
+						run PlayerWarpTo(WarpType=0)
 				case 2:
 					if (EventFlowSystemActor.ShopLevel() != `InResServiceTent`) and (not System.EventFlags['cLand:MarketConstruction2']):
-run PlayerWarpTo(WarpType=2)
+						run PlayerWarpTo(WarpType=2)
 					else:
-run PlayerWarpTo(WarpType=1)
+						run PlayerWarpTo(WarpType=1)
 				case 3:
 					run PlayerWarpTo(WarpType=3)

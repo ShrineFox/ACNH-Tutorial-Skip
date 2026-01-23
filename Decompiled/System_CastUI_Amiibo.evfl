@@ -10,9 +10,23 @@ flow Root(NpadId: int = 0, ReadPadId: int = 0):
 		elif not EventFlowSystemActor.IsAcceptableAmiibo():
 			# This amiibo is not supported. Please use an Animal Crossing character's amiibo.
 			Player.OpenMessageWindow('TalkSys/SYS_Common_AmiiboError:101', false)
-		elif not EventFlowSystemActor.CheckAmiiboNPC('cNNPC'):
-			# You can't invite that client to a facility!
-			EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
-		elif EventFlowSystemActor.CheckAmiiboNPC('cWherearenCustomer'):
-			# You can't invite that client to a facility!
-			EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
+		elif EventFlowSystemActor.CheckAmiiboNPC('cSpltMantaro'):
+			# You can contact Cece or Viché with this amiibo. Who would you like to contact?
+			Player.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:308', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu19')
+				run Sub_grp_Event16(NpadId=NpadId, ReadPadId=ReadPadId)
+			else:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu20')
+				run Sub_grp_Event16(NpadId=NpadId, ReadPadId=ReadPadId)
+		else:
+			if EventFlowSystemActor.CheckAmiiboNPC('cNNPC'):
+				run Sub_grp_Event16(NpadId=NpadId, ReadPadId=ReadPadId)
+			else:
+				# You can't invite that client to a facility!
+				EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)
+
+local flow Sub_grp_Event16(NpadId: int, ReadPadId: int):
+	if EventFlowSystemActor.CheckAmiiboNPC('cWherearenCustomer'):
+		# You can't invite that client to a facility!
+		EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_WherearenAmiiboDevice:307', false)

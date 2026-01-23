@@ -17,45 +17,9 @@ flow Root():
 		MainNpc.SeoReaction('cDive')
 		EventFlowSystemActor.WaitFrame(20)
 		EventFlowSystemActor.DeleteTargetItem(2839, 1, false)
-		MainNpc.DecideEventReward('cSeoReward')
-		EventFlowSystemActor.SetMemoryEventPlayerReward('cBlancoEventPlayer:PE_Seo_GetItem')
-		MainNpc.SetEventRewardToPlayerBaggage('cFree')
 		MainNpc.SeoReaction('cSurface')
-		if System.EventFlags['cPlayer:SeoFirstFlag']:
-			# Since you were cool, I left you something you'll dig. While I'm at it, let me lay some truth on you…the deep kind.
-			MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:006', false)
-		else:
-			# Since you were cool about the scallop, I left you a cool recipe in return. The pearls you need for that recipe are rare, but you can sometimes find t…
-			MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:007', false)
-			System.EventFlags['cPlayer:SeoFirstFlag'] = true
-		System.EventFlags['cPlayer:SeoExchangeItemToday'] = true
-		System.EventFlags['cLifeSupportAchievement:GiveScallopsToSeo'] += 1
-		MainNpc.NpcSetAIBlackBoard('GiveScallop', 1)
-		# Feel this…
-		MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:008', false)
-		MainNpc.NpcVoiceEchoOn()
-		MainNpc.NpcSelectMessage('cWildCard', '', '', '', 'TalkSNpc/seo/SP_seo_word', '', '', '')
-		MainNpc.NpcVoiceEchoOff()
-		switch EventFlowSystemActor.RandomChoice3(3):
-			case 0:
-				# Wrap your noodle around that.
-				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:020', false)
-			case 1:
-				# Stick that in your skillet and let it simmer.
-				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:021', false)
-			case 2:
-				# Consider yourself truthed.
-				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:022', false)
-		# Yep. Today is a gooood day.
-		MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:009', true)
-		if MainNpc.SeoCanReturnSwim():
-			MainNpc.NpcChangeHeadCtrlMode('cNoLook', true)
-			MainNpc.SeoMoveCameraOut()
-		else:
-			MainNpc.SeoReaction('cDive')
-		MainNpc.MessageSuspend()
-		MainNpc.SeoWarpBuoyOut()
-		MainNpc.NpcChangeHeadCtrlMode('cNormal', true)
+		run seo_ItemGet()
+		run Seo_Exit()
 		run SeoEnd()
 	else:
 		# It's cool, maaan. Scallops come and scallops go, but the sea will always be there.
@@ -66,3 +30,73 @@ flow Root():
 
 flow SeoEnd():
 	EventFlowSystemActor.BGMPropertyControl(8)
+
+flow Seo_Exit():
+	if MainNpc.SeoCanReturnSwim():
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', true)
+		MainNpc.SeoMoveCameraOut()
+	else:
+		MainNpc.SeoReaction('cDive')
+	MainNpc.MessageSuspend()
+	MainNpc.SeoWarpBuoyOut()
+	MainNpc.NpcChangeHeadCtrlMode('cNormal', true)
+
+flow seo_ItemGet():
+	if System.EventFlags['cPlayer:SeoNotGetPearlFlag']:
+		EventFlowSystemActor.SetItemToPocket(12968, 1)
+		# I swapped it for the pearl I couldn't hand over earlier… You made me reeeal happy today.
+		MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:006_02', false)
+		MainNpc.NpcSetAIBlackBoard('GiveScallop', 1)
+		System.EventFlags['cPlayer:SeoNotGetPearlFlag'] = false
+	else:
+		MainNpc.DecideEventReward('cSeoReward')
+		EventFlowSystemActor.SetMemoryEventPlayerReward('cBlancoEventPlayer:PE_Seo_GetItem')
+		MainNpc.SetEventRewardToPlayerBaggage('cFree')
+		if EventFlowSystemActor.ShoppingCapacity('cItemName', 12968):
+			EventFlowSystemActor.SetItemToPocket(12968, 1)
+		else:
+			System.EventFlags['cPlayer:SeoNotGetPearlFlag'] = true
+		if System.EventFlags['cPlayer:SeoFirstFlag']:
+			if MainNpc.EventRewardItem(12968):
+				# Since you were cool, I slipped you a pair of pearls. Hey, while I'm at it, let me lay some truth on you…the deep kind.
+				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:006_03', false)
+			elif System.EventFlags['cPlayer:SeoNotGetPearlFlag']:
+				# I slipped you somethin' cool in exchange… I was gonna slip you a pearl too, but your pockets are full, maaan… Anyway, let me lay some truth on you…th…
+				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:006_01', false)
+			else:
+				# Since you were cool, I left you something you'll dig. And I put a pearl in there too. While I'm at it, let me lay some truth on you…the deep kind.
+				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:006', false)
+		else:
+			if System.EventFlags['cPlayer:SeoNotGetPearlFlag']:
+				# Since you were cool about the scallop, I left you a cool recipe in return. The pearls you need for that recipe are rare, but you can sometimes find t…
+				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:007_01', false)
+			else:
+				# Since you were cool about the scallop, I left you a cool recipe in return. The pearls you need for that recipe are rare, but you can sometimes find t…
+				MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:007', false)
+			System.EventFlags['cPlayer:SeoFirstFlag'] = true
+		System.EventFlags['cPlayer:SeoExchangeItemToday'] = true
+		System.EventFlags['cLifeSupportAchievement:GiveScallopsToSeo'] += 1
+		if System.EventFlags['cPlayer:SeoNotGetPearlFlag']:
+			System.EventFlags['cPlayer:SeoRejectFlag'] = false
+		else:
+			MainNpc.NpcSetAIBlackBoard('GiveScallop', 1)
+		run seo_Philosophy()
+
+flow seo_Philosophy():
+	# Feel this…
+	MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:008', false)
+	MainNpc.NpcVoiceEchoOn()
+	MainNpc.NpcSelectMessage('cWildCard', '', '', '', 'TalkSNpc/seo/SP_seo_word', '', '', '')
+	MainNpc.NpcVoiceEchoOff()
+	switch EventFlowSystemActor.RandomChoice3(3):
+		case 0:
+			# Wrap your noodle around that.
+			MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:020', false)
+		case 1:
+			# Stick that in your skillet and let it simmer.
+			MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:021', false)
+		case 2:
+			# Consider yourself truthed.
+			MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:022', false)
+	# Yep. Today is a gooood day.
+	MainNpc.OpenMessageWindow('TalkSNpc/seo/SP_seo:009', true)

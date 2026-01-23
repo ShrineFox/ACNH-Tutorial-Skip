@@ -475,19 +475,19 @@ flow Result_Bonus_DC():
 flow Result_CatchP():
 	run Event292()
 
-flow Result_CatchP-Bonus_C():
+flow `Result_CatchP-Bonus_C`():
 	run Event309()
 
-flow Result_CatchP-Bonus_DC():
+flow `Result_CatchP-Bonus_DC`():
 	run Event310()
 
-flow Result_CatchP-Bonus_DC-C():
+flow `Result_CatchP-Bonus_DC-C`():
 	run Event311()
 
-flow Result_CatchPOver-Bonus_C():
+flow `Result_CatchPOver-Bonus_C`():
 	run Event467()
 
-flow Result_CatchPOver-Bonus_DC-C():
+flow `Result_CatchPOver-Bonus_DC-C`():
 	run Event428()
 
 flow Result_NoPoint():
@@ -617,17 +617,17 @@ flow SellBOX(SellTotal: int = 0):
 				EventFlowSystemActor.UIMoneyAppear()
 				switch EventFlowSystemActor.MoneyCapacity(SellTotal, 'cFishInsectFes'):
 					case 0:
-MainNpc.InsectFishBoxSellDone(1.5)
+						MainNpc.InsectFishBoxSellDone(1.5)
 						# What a haul! Thanks!
 						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:125', false)
 					case 1:
-MainNpc.InsectFishBoxSellDone(1.5)
+						MainNpc.InsectFishBoxSellDone(1.5)
 						# You got it! Uh, hang on…you been chasin' treasure maps or something? Your hold's too full for more Bells. No big. I got a few pouches here. I'll just…
 						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:126', false)
 					case 2:
 						# You got it! Eh, wait. Hang on…you been lootin' galleons or something? Your hold's too full for more Bells. No big. I'll just wire it to your account.
 						MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:124', false)
-MainNpc.InsectFishBoxSellDone(1.5)
+						MainNpc.InsectFishBoxSellDone(1.5)
 				switch EventFlowSystemActor.EventCheck('FishingConvention'):
 					case 0, 1:
 						# Also, I'll make sure the cooler's clear if you wanna surf the tourney again. Nyuk nyuk!
@@ -640,7 +640,7 @@ MainNpc.InsectFishBoxSellDone(1.5)
 							# Oh yeah! The next Fishing Tourney embarks in <90:35:cd00> of next year. Hope I catch you there! Nyuk!
 							MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:129', false)
 					case 3:
- run TalkAfterEvent()
+						run TalkAfterEvent()
 			else:
 				run SellBoxCancel()
 		case 1:
@@ -664,7 +664,7 @@ entrypoint Event114:
 							# Sure. I'll be cleanin' out the cooler at <90:37:cd03> <110:21:cd03> tomorrow, so fish out your fish before then. Nyuk!
 							MainNpc.OpenMessageWindow('TalkSNpc/bey/SP_bey_event:133', true)
 						else:
-	run AfterEv_Always()
+							run AfterEv_Always()
 				case 3:
 					run AfterEv_Always()
 
@@ -893,15 +893,15 @@ entrypoint Event467:
 	else:
 		if not System.EventFlags['cPlayerVisit:DC_CatchFishFes_CooperativeBonus']:
 			if System.EventFlags['cPlayerVisit:DC_CatchFishFes_Bonus']:
-				run Result_CatchP-Bonus_C()
+				run `Result_CatchP-Bonus_C`()
 			else:
 				run Result_CatchP()
 		elif not System.EventFlags['cPlayerVisit:DC_CatchFishFes_Bonus']:
-			run Result_CatchP-Bonus_DC()
+			run `Result_CatchP-Bonus_DC`()
 		elif System.EventFlags['cPlayerTemp:CatchFishFesGetNum'] < 21:
-			run Result_CatchP-Bonus_DC-C()
+			run `Result_CatchP-Bonus_DC-C`()
 		else:
-			run Result_CatchPOver-Bonus_DC-C()
+			run `Result_CatchPOver-Bonus_DC-C`()
 
 local flow Sub_grp_Event437():
 	if EventFlowSystemActor.GeneralTalkChoice2() == 0:

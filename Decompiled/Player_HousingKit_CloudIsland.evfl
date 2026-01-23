@@ -1,0 +1,124 @@
+flow BridgeBuildKit_Cloud(BuildTiming: str):
+	EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
+	EventFlowSystemActor.StructureStartPreviewGuide('cBridge', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cBridge', 'cPlayer', BuildTiming):
+		EventFlowSystemActor.CloudIslandStructureRequestLock('cBuildRange', 'cBridgeSlopeBuild', 'cBridge')
+		if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cBuildRange', 'cBridgeSlopeBuild'):
+			EventFlowSystemActor.CloudIslandStructureLockEffect()
+			# Should I pick this spot for [a|an]<125:0:0000>?
+			MainNpc.OpenMessageWindow('TalkSys/SYS_Player:906_01', true)
+			run HousingKitCommon_CloudIsland(StructureType='cBridge', StructureBuildPosType='cPlayer', BuildTiming=BuildTiming, BuildType='cBridgeSlopeBuild')
+			EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Cloud_Bridge', 'cNowDemoEnd', false)
+		else:
+			EventFlowSystemActor.CloudIslandStructureCancelLock()
+			# You can't use kits when others are nearby, so first have everyone move away from where you'll be building.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_Player:920_02', true)
+			EventFlowSystemActor.StructureDeletePreviewGuide(false)
+	else:
+		run Player_HousingKit::HousingKitCommonError(StructureType='cBridge', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+
+flow DeletePreviewAndBuildStructureCloudIsland(StructureType: str, StructurePosType: str, BuildTiming: str):
+	EventFlowSystemActor.FadeOut('cNormalFader', 'cCircle', 'cBlack', 1.0, 1.0, true)
+	EventFlowSystemActor.DeletePreviewStructure(StructureType, StructurePosType)
+	EventFlowSystemActor.StructureSetIsDuringPreview(true, StructureType)
+	EventFlowSystemActor.BuildStructure(StructureType, StructurePosType, BuildTiming)
+	EventFlowSystemActor.StructureSetIsDuringPreview(false, StructureType)
+	EventFlowSystemActor.FadeIn(true)
+
+flow HousingKitCommon_CloudIsland(StructureType: str, StructureBuildPosType: str, BuildTiming: str, BuildType: str):
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			EventFlowSystemActor.WaitFrame(15)
+			Player.CharacterEmoticonAction('AbsentMindedness', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(20)
+			run System_Structure_Common::PreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+			Player.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(10)
+			if EventFlowSystemActor.HasObstacle(StructureType, StructureBuildPosType, BuildTiming):
+				# <10:12>We'll have to do a little landscaping, but we can make this work. Should we go ahead?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:931', true)
+			else:
+				# <10:12>Is this a good spot?
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:932', true)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.CloudIslandStructureRequestLock('cSafeRange', BuildType, StructureType)
+				if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cSafeRange', BuildType):
+					EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
+					EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+					run DeletePreviewAndBuildStructureCloudIsland(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+					EventFlowSystemActor.CloudIslandStructureWaitBuild()
+				else:
+					# On second thought, I'll wait on this. It's too dangerous, since someone is too close to the site right now.
+					MainNpc.OpenMessageWindow('TalkSys/SYS_Player:933', true)
+					run Sub_Event15(StructureType=StructureType, StructureBuildPosType=StructureBuildPosType)
+			else:
+				run Sub_Event15(StructureType=StructureType, StructureBuildPosType=StructureBuildPosType)
+		case 1:
+			EventFlowSystemActor.CloudIslandStructureRequestLock('cSafeRange', BuildType, StructureType)
+			if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cSafeRange', BuildType):
+				EventFlowSystemActor.BuildStructurePlayReport(StructureType, StructureBuildPosType, BuildTiming)
+				EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+				run System_Structure_Common::BuildStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType, BuildTiming=BuildTiming)
+				EventFlowSystemActor.CloudIslandStructureWaitBuild()
+			else:
+				# On second thought, I'll wait on this. It's too dangerous, since someone is too close to the site right now.
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:933', true)
+				run Sub_Event21()
+		case 2:
+			run Sub_Event21()
+
+flow MovingKit_Cloud(BuildTiming: str):
+	EventFlowSystemActor.StructureStartPreviewGuide('cCloudIslandPlayerHouse', 'cPlayer', BuildTiming)
+	if not EventFlowSystemActor.CanBuildHere('cCloudIslandPlayerHouse', 'cPlayer', BuildTiming):
+		run Player_HousingKit::HousingKitCommonError(StructureType='cPlayerHouse', StructureBuildPosType='cPlayer', StructureBuildTiming=BuildTiming)
+	elif EventFlowSystemActor.CloudIslandStructureIsExistPlayerInHouse():
+		# You can't move a house when someone's inside it!
+		MainNpc.OpenMessageWindow('TalkSys/SYS_Player:920_01', true)
+		EventFlowSystemActor.StructureDeletePreviewGuide(false)
+	else:
+		EventFlowSystemActor.CloudIslandStructureRequestLock('cBuildRange', 'cHouseMove', 'cCloudIslandPlayerHouse')
+		if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cBuildRange', 'cHouseMove'):
+			EventFlowSystemActor.CloudIslandStructureLockEffect()
+			# Should I move the house here?
+			MainNpc.OpenMessageWindow('TalkSys/SYS_Player:941_01', true)
+			run HousingKitCommon_CloudIsland(BuildTiming=BuildTiming, StructureBuildPosType='cPlayer', StructureType='APP_ENABLE_CLOUD_ISLAND_SCOPE', BuildType='cHouseMove')
+			EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Cloud_PcHouseMove', 'cNowDemoEnd', true)
+		else:
+			if EventFlowSystemActor.CloudIslandStructureIsHouseRemoveLockFailure():
+				EventFlowSystemActor.CloudIslandStructureCancelLock()
+				# You can't move a house when someone's inside it!
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:920_01', true)
+			else:
+				EventFlowSystemActor.CloudIslandStructureCancelLock()
+				# You can't use kits when others are nearby, so first have everyone move away from where you'll be building.
+				MainNpc.OpenMessageWindow('TalkSys/SYS_Player:920_02', true)
+			EventFlowSystemActor.StructureDeletePreviewGuide(false)
+
+flow SlopeBuildKit_Cloud(BuildTiming: str):
+	EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeKitName', 0)
+	EventFlowSystemActor.StructureStartPreviewGuide('cSlope', 'cPlayer', BuildTiming)
+	if EventFlowSystemActor.CanBuildHere('cSlope', 'cPlayer', BuildTiming):
+		EventFlowSystemActor.CloudIslandStructureRequestLock('cBuildRange', 'cBridgeSlopeBuild', 'cSlope')
+		if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cBuildRange', 'cBridgeSlopeBuild'):
+			EventFlowSystemActor.CloudIslandStructureLockEffect()
+			# Should I pick this spot for [a|an]<125:0:0000>?
+			MainNpc.OpenMessageWindow('TalkSys/SYS_Player:907_01', true)
+			run HousingKitCommon_CloudIsland(StructureBuildPosType='cPlayer', StructureType='cSlope', BuildTiming=BuildTiming, BuildType='cBridgeSlopeBuild')
+			EventFlowSystemActor.ReservePlayerMutterDemo('Player_Demo_HousingFinish', 'HousingFinish_Cloud_Slope', 'cNowDemoEnd', false)
+		else:
+			EventFlowSystemActor.CloudIslandStructureCancelLock()
+			# You can't use kits when others are nearby, so first have everyone move away from where you'll be building.
+			MainNpc.OpenMessageWindow('TalkSys/SYS_Player:920_02', true)
+			EventFlowSystemActor.StructureDeletePreviewGuide(false)
+	else:
+		run Player_HousingKit::HousingKitCommonError(StructureBuildPosType='cPlayer', StructureType='cSlope', StructureBuildTiming=BuildTiming)
+
+local flow Sub_Event15(StructureType: str, StructureBuildPosType: str):
+	run System_Structure_Common::DeletePreviewStructure(StructureType=StructureType, StructurePosType=StructureBuildPosType)
+	EventFlowSystemActor.CloudIslandStructureCancelLock()
+	EventFlowSystemActor.ExitFlowchart()
+
+local flow Sub_Event21():
+	EventFlowSystemActor.StructureDeletePreviewGuide(false)
+	EventFlowSystemActor.CloudIslandStructureCancelLock()
+	EventFlowSystemActor.ExitFlowchart()

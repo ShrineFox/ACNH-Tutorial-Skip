@@ -1,0 +1,77 @@
+flow Root():
+	# <50:3>PLAYER! Could I please see you for a moment?
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:001', false)
+	EventFlowSystemActor.MessageSuspend()
+	run WarpTradeBox()
+	# Apologies for the interruption.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:002', false)
+	# There's one other thing I'd like to get your help with, PLAYER.
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:003', false)
+	# With the hotel here now, we want even more people to learn about this wonderful island. Don't you agree? That means, well…highlighting the goods ISLA…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:004', false)
+	switch EventFlowSystemActor.GeneralTalkChoice2():
+		case 0, 1:
+			# Oh, PLAYER! You kidder! I mean DIY of course!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:005', false)
+			# We developed this island together through DIY… I believe if more folks knew about our DIY, our brand recognition would skyrocket!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:006', false)
+			# That brings me back to my request… We'll decide which items we want to share with the outside world, and I'd like your help crafting them!
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:007', false)
+			# You'll need to procure the materials to fulfill the requests yourself, but there is a bonus in it for you. In return for your efforts, you'll get hot…
+			MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:008', false)
+			switch EventFlowSystemActor.GeneralTalkChoice2():
+				case 0, 1:
+					# Thank you! Yes, yes! I knew I could rely on you, PLAYER! So allow me to briefly explain how this works.
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:009', false)
+					MainNpc.CharacterEmoticonAction('EmotEnd', true, '', 0, false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.TurnNeck(19, false)
+					Player.TurnNeck(19, false)
+					MainNpc.NpcWaitTurn(false)
+					# In this box, you'll find a list of requests for the DIY items we'd like you to craft, and how many we need.
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:010', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.TurnNeck(10, false)
+					Player.TurnNeck(0, false)
+					EventFlowSystemActor.WaitFrame(15)
+					# Simply craft the requested items and deposit them into the box. Once you're done, you'll immediately receive your hotel tickets.
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:011', false)
+					fork:
+						branch:
+							MainNpc.TurnNeck(1, false)
+						branch:
+							Player.TurnNeck(1, false)
+					EventFlowSystemActor.WaitFrame(15)
+					# After that, Kapp'n, our courageous advertising "sails" man, as it were… will distribute the goods, promoting to the outside world the wonders of <110…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:012', false)
+					MainNpc.CharacterEmoticonAction('Smiling', true, '', 0, false)
+					# Yarrr, we got this! Just leave all the transportin' to me, ye landlubbers!
+					SubNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:013', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.TurnBody(10, 0.0)
+					Player.TurnNeck(0, false)
+					MainNpc.NpcWaitTurn(false)
+					# What I've just explained to you, plus some additional details, is written on the sign next to the box. Have a look if you forget any of the details, …
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:014', false)
+					# For your first step, you should check the box to see which items we're requesting. Oh! You can also check the requests using the DIY Recipes app on y…
+					MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_16_TradeBoxTutorial:015', false)
+					EventFlowSystemActor.MessageSuspend()
+					System.EventFlags['cPlayer:HotelUnlockDIYTrade'] = true
+					EventFlowSystemActor.UnlockDIYTrade()
+					run `00_System_StageChange`::ReEnterStage(FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeColorString='cBlack', FadeOutSpeed=0.0, FadeInSpeed='cNormal', Type=9)
+
+flow Root_Init():
+	MainNpc.NpcAITalkSubCastEntry('kpp', 1)
+
+flow WarpTradeBox():
+	run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+	Player.PlayerWarp(10)
+	MainNpc.TurnBody(10, 0.0)
+	SubNpc.TurnBody(10, 0.0)
+	EventFlowSystemActor.WaitFrame(10)
+	run `00_Demo_Fade`::FadeIn_Cmn(IsWait=true)
+	if System.EventFlags['cPlayerTemp:DIYTradeTutorialPlayerWarpPosType']:
+		EventFlowSystemActor.CameraSetDemoParam('DIYTradeTutorialWest', 'cDefault', 'Player', false, false, false, 0)
+	else:
+		EventFlowSystemActor.CameraSetDemoParam('DIYTradeTutorialEast', 'cDefault', 'Player', false, false, false, 0)
+	EventFlowSystemActor.WaitFrame(10)

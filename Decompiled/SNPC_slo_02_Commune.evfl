@@ -124,18 +124,18 @@ flow Slo_Purchase_Processing():
 					if not EventFlowSystemActor.EnvCheckBetweenDate(10, 1, 10, 31, 'cLastGrowUpTime'):
 						# I sell <125:0:0200> individually or in bulk. What do you think?
 						MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo:203', false)
-  run Sub_Event186()
+						run Sub_Event186()
 					elif System.EventFlags['cPlayer:SloExplainPumpkinSeedingFlag']:
 						# I sell <125:0:0200> individually or in bulk. What do you think?
 						MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo:203', false)
-  run Sub_Event186()
+						run Sub_Event186()
 					else:
 						# In October, a special price is given to <125:0:0200>. They go on sale for <90:21:0000> each!
 						MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo:202', false)
-System.EventFlags['cPlayer:SloExplainPumpkinSeedingFlag'] = true
+						System.EventFlags['cPlayer:SloExplainPumpkinSeedingFlag'] = true
 						# I can sell them to you individually or in bulk. So, would you like to care for [a|an]<125:0:0200>?
 						MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo:106', false)
-  run Sub_Event186()
+						run Sub_Event186()
 			else:
 				run Sub_Event71()
 		else:
@@ -154,9 +154,9 @@ local flow Sub_Event103():
 	MainNpc.SetDeliveryItemAtRandom(2114, false, 'cVillageRemakePattern', 0)
 	MainNpc.NpcDelivery(0, 'Default')
 	if SubflowResults@2[0] == 0:
-		MainNpc.ShopBuyDone(false, false, false, false)
+		MainNpc.ShopBuyDone(false, false, false, false, false)
 	else:
-		MainNpc.ShopBuyDone(false, true, false, false)
+		MainNpc.ShopBuyDone(false, true, false, false, false)
 		EventFlowSystemActor.SetTagFromUIResult('cSloItem5Price', 0)
 	MainNpc.SetDeliveryItem(4, false)
 	EventFlowSystemActor.WaitFrame(15)
@@ -185,11 +185,6 @@ local flow Sub_Event186():
 			run Sub_Event57()
 		case 2:
 			run Sub_Event70()
-
-local flow Sub_Event214():
-	# You gotta do what makes you happy. I'll be here if you need me.
-	MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:016', false)
-	EventFlowSystemActor.UIMoneyDisappear()
 
 local flow Sub_Event242():
 	EventFlowSystemActor.SetTagFromSystem('cSloWeatherBushName', 'cDegit', 0, 0, '')
@@ -303,20 +298,6 @@ local flow Sub_grp_Event18(EachWeedPrice: int, TotalWeedPrice: int, WeedNum: int
 		# Huh… I think your weeds must've sprouted off to another garden, PLAYER. I don't see 'em. And I can't buy what you don't have.
 		MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:021', false)
 		run slo_Again()
-
-local flow Sub_grp_Event232():
-	if EventFlowSystemActor.HasBellCount(100000):
-		EventFlowSystemActor.BellCountDown(-100000, false)
-		EventFlowSystemActor.PlayReport('cSloWeedingService', 100000)
-		# You got it! You have a very neat and tidy island in your future, friend.
-		MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:077', false)
-		System.EventFlags['cLand:SloWeedingFlag'] = true
-		MainNpc.SloDecideReward(0)
-		EventFlowSystemActor.SystemMailSend('cSlo', 'MAIL_SNpc_slo', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
-	else:
-		# Thank you! Oh my… You don't have enough money right now. But I'm sure you will have spare Bells to spend soon. And I look forward to seeing you then.
-		MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:076', false)
-	EventFlowSystemActor.UIMoneyDisappear()
 
 local flow Sub_grp_Event60():
 	if SubflowResults@2[0] == 0:
@@ -461,23 +442,8 @@ flow slo_SellWeed(EachWeedPrice: int = 0, TotalWeedPrice: int = 0, WeedNum: int 
 			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:025', false)
 
 flow slo_WeedingService():
-	if System.EventFlags['cPlayer:SloExplainWeeding']:
-		if System.EventFlags['cLand:SloWeedingFlag']:
-			# Wait—what? My service has already been requested today. It'll be nice and tidy tomorrow!
-			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:080', false)
-		elif EventFlowSystemActor.SloMainFieldWeedNum(300):
-			EventFlowSystemActor.UIMoneyAppear()
-			EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 100000, '')
-			# Got a request for my weeding service? Looks like it'll run you <90:23:0000> this time.
-			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:078', false)
-			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-				run Sub_grp_Event232()
-			else:
-				run Sub_Event214()
-		else:
-			# Hold on… I didn't see many weeds growing at all the last time I was there on ISLAND. Ask again when you have some more weeds that need taking care of…
-			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:075', false)
-	else:
+	if not System.EventFlags['cPlayer:SloExplainWeeding']:
+		System.EventFlags['cPlayer:SloExplainWeeding_After3'] = true
 		if System.EventFlags['cPlayer:SloTalkedWeedFirst']:
 			# I've been buying weeds from folks up until now, but pulling them in the first place can be pretty tiring work.
 			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:068', false)
@@ -501,16 +467,72 @@ flow slo_WeedingService():
 		# But when you consider that it'll be cleaning up your island in one fell swoop, it's really worth the cost! Plus, every weed I pull goes right into th…
 		MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:084', false)
 		System.EventFlags['cPlayer:SloExplainWeeding'] = true
-		if EventFlowSystemActor.SloMainFieldWeedNum(300):
+		if EventFlowSystemActor.SloMainFieldWeedNum(30):
 			EventFlowSystemActor.UIMoneyAppear()
-			EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 100000, '')
+			EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 60000, '')
 			# So, what do you say? I can get rid of the weeds for <90:23:0000>!
 			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:072', false)
 			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-				run Sub_grp_Event232()
+				if EventFlowSystemActor.HasBellCount(60000):
+					EventFlowSystemActor.BellCountDown(-60000, false)
+					EventFlowSystemActor.PlayReport('cSloWeedingService', 60000)
+					# You got it! You have a very neat and tidy island in your future, friend.
+					MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:077', false)
+					System.EventFlags['cLand:SloWeedingFlag'] = true
+					MainNpc.SloDecideReward(0)
+					EventFlowSystemActor.SystemMailSend('cSlo', 'MAIL_SNpc_slo', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+				else:
+					# Thank you! Oh my… You don't have enough money right now. But I'm sure you will have spare Bells to spend soon. And I look forward to seeing you then.
+					MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:076', false)
+				EventFlowSystemActor.UIMoneyDisappear()
+				run slo_Again()
 			else:
-				run Sub_Event214()
+				# You gotta do what makes you happy. I'll be here if you need me.
+				MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:016', false)
+				EventFlowSystemActor.UIMoneyDisappear()
+				run slo_Again()
 		else:
 			# Your island doesn't seem all that full of weeds yet. I recommend waiting until there's more work for me. But if they get out of control, I'll pull th…
 			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:088', false)
-		run slo_Again()
+			run slo_Again()
+	elif (not System.EventFlags['cPlayer:SloExplainWeeding_After3']) and (not System.EventFlags['cPlayer:SloExplainWeedingPriceDown']):
+		if System.EventFlags['cLand:SloWeedingFlag']:
+			# Wait—what? My service has already been requested today. It'll be nice and tidy tomorrow!
+			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:080', false)
+		else:
+			# Ah, right, right. About my weeding service… I lowered the price to make it more accessible for everyone. I can take care of the weeds even if there a…
+			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo:400', false)
+			System.EventFlags['cPlayer:SloExplainWeedingPriceDown'] = true
+			EventFlowSystemActor.ExitFlowchart()
+	else:
+		if System.EventFlags['cLand:SloWeedingFlag']:
+			# Wait—what? My service has already been requested today. It'll be nice and tidy tomorrow!
+			MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:080', false)
+		else:
+			if EventFlowSystemActor.SloMainFieldWeedNum(30):
+				EventFlowSystemActor.UIMoneyAppear()
+				EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 60000, '')
+				# Got a request for my weeding service? Looks like it'll run you <90:23:0000> this time.
+				MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:078', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					if EventFlowSystemActor.HasBellCount(60000):
+						EventFlowSystemActor.BellCountDown(-60000, false)
+						EventFlowSystemActor.PlayReport('cSloWeedingService', 60000)
+						# You got it! You have a very neat and tidy island in your future, friend.
+						MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:077', false)
+						System.EventFlags['cLand:SloWeedingFlag'] = true
+						MainNpc.SloDecideReward(0)
+						EventFlowSystemActor.SystemMailSend('cSlo', 'MAIL_SNpc_slo', 1, 'cNone', 'cFastTomorrow', 'cReward', false, false)
+					else:
+						# Thank you! Oh my… You don't have enough money right now. But I'm sure you will have spare Bells to spend soon. And I look forward to seeing you then.
+						MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:076', false)
+					EventFlowSystemActor.UIMoneyDisappear()
+					run slo_Again()
+				else:
+					# You gotta do what makes you happy. I'll be here if you need me.
+					MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:016', false)
+					EventFlowSystemActor.UIMoneyDisappear()
+					run slo_Again()
+			else:
+				# Hold on… I didn't see many weeds growing at all the last time I was there on ISLAND. Ask again when you have some more weeds that need taking care of…
+				MainNpc.OpenMessageWindow('TalkSNpc/slo/SP_slo_02_Commune:075', false)

@@ -7,18 +7,7 @@ flow ButtonModeStart():
 	SubflowResults[0] = 0
 	EventFlowSystemActor.MessageSuspend()
 	EventFlowSystemActor.RadioGymnasticsSetButtonActive()
-entrypoint Event42:
-	if (EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor()):
-		EventFlowSystemActor.MessageLockNext(1)
-		# Almost ready to start...
-		EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:018', false)
-		EventFlowSystemActor.NetWaitDemo('cStartGym')
-		EventFlowSystemActor.MessageUnlockNext()
-	EventFlowSystemActor.RadioExerciseBGMStart()
-	if SubflowResults@2[0] == 0:
-		EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(0)
-	else:
-		EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(1)
+	run Event42()
 
 flow ChkRewardEmoticon():
 	if ((not EventFlowSystemActor.NetIsConnected()) or (EventFlowSystemActor.NetIsInviteFriend())) and (System.EventFlags['cPlayer:EnableEmoticonUI']) and (System.EventFlags['cPlayer:RadioGymnasticsGetReward'] == 4) and (System.EventFlags['cPlayer:RadioGymnasticsCount'] >= 49):
@@ -37,10 +26,24 @@ flow GetEmoticonProccess():
 
 flow JoyConModeStart():
 	SubflowResults[0] = 1
-	EventFlowSystemActor.UIRadioGymnasticStrapGuideHandling()
+	if EventFlowSystemActor.IsPlayingOn():
+		EventFlowSystemActor.UIRadioGymnasticStrapGuideHandling()
+	else:
+		EventFlowSystemActor.UIRadioGymnasticStrapGuide2Handling()
 	# Please make sure you have enough room to move your body and that there aren't any people or objects in the way before you begin. Keep your activity w…
 	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:3104', true)
-	run Event42()
+entrypoint Event42:
+	if (EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor()):
+		EventFlowSystemActor.MessageLockNext(1)
+		# Almost ready to start...
+		EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_Radio_RadioGymnastics:018', false)
+		EventFlowSystemActor.NetWaitDemo('cStartGym')
+		EventFlowSystemActor.MessageUnlockNext()
+	EventFlowSystemActor.RadioExerciseBGMStart()
+	if SubflowResults@2[0] == 0:
+		EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(0)
+	else:
+		EventFlowSystemActor.UIRadioGymnasticsOperationGuideAppear(1)
 
 flow NotChangedToJoyCon():
 	# Please connect your Joy-Con with a wireless connection, then hold Joy-Con (R) in your right hand and select Next.
@@ -62,7 +65,7 @@ flow RGJoinFlagOn():
 		run ChkRewardEmoticon()
 
 flow RGSceneAbort():
-	run `00_System_StageChange`::ReturnPreStagerun `00_System_StageChange`::ReturnPreStage(FadeColorString='cBlack', NextInfoKey='', FadeOutKindString='cNormalFader', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=0.0)
+	run `00_System_StageChange`::ReturnPreStage(FadeColorString='cBlack', NextInfoKey='', FadeOutKindString='cNormalFader', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=0.0)
 
 flow RadioGymnastics():
 	if EventFlowSystemActor.NetIsDreaming():
@@ -89,7 +92,7 @@ flow RadioGymnastics():
 
 flow RadioGymnasticsEnd():
 	EventFlowSystemActor.NpcPlayerActivity('cActivityType_RadioExerciseCount')
-	run `00_System_StageChange`::ReturnPreStagerun `00_System_StageChange`::ReturnPreStage(FadeColorString='cBlack', NextInfoKey='', FadeOutKindString='cNormalFader', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=-2.0)
+	run `00_System_StageChange`::ReturnPreStage(FadeColorString='cBlack', NextInfoKey='', FadeOutKindString='cNormalFader', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=-2.0)
 
 flow Restart():
 	run RadioGymnastics()
@@ -193,7 +196,7 @@ flow StartAgain():
 flow StartNow():
 	EventFlowSystemActor.MessageSuspend()
 	Player.PlayerChangeStateDemoTalk()
-	run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cRadioGymnastics', FadeOutSpeed=-1.0, FadeInSpeed='cFast', FadeOutKindString='cNormalFader', FadeInKindString='cNormalFader')
+	run `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cRadioGymnastics', FadeOutSpeed=-1.0, FadeInSpeed='cFast', FadeOutKindString='cNormalFader', FadeInKindString='cNormalFader')
 
 local flow Sub_Event206():
 	EventFlowSystemActor.SystemMailSend('cNookInc', 'MAIL_SNpc_rco', 15, 'cRadioGymnastics', 'cFastToday', 'cReward', false, true)

@@ -46,21 +46,23 @@ flow RcoEntrieChk():
 					run SNPC_rco_01_Tent_1_Entries::RcoTentAboutBuildMuseumTent()
 				else:
 					if System.EventFlags['cPlayer:MakeVillagePlayerFlag']:
-run SNPC_rco_53_MigrantsQuest::Rco_ImmQ_ReactTalkEntry()
+						run SNPC_rco_53_MigrantsQuest::Rco_ImmQ_ReactTalkEntry()
 					if System.EventFlags['cPlayer:RcoStandbyNoticeStorageExpansion']:
-run SNPC_rco_10_Common_ExpandHouseStorage::NoticeExpandStorage_Normal()
+						run SNPC_rco_10_Common_ExpandHouseStorage::NoticeExpandStorage_Normal()
 					elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AddStorage']:
-run SNPC_rco_10_Common_ExpandHouseStorage::v200_AddNoticeExpandStorage_Normal()
+						run SNPC_rco_10_Common_ExpandHouseStorage::v200_AddNoticeExpandStorage_Normal()
+					elif System.EventFlags['cPlayer:RcoStandbyNotice_v300_AddStorage']:
+						run SNPC_rco_10_Common_ExpandHouseStorage::v200_AddNoticeExpandStorage_Normal()
 					elif System.EventFlags['cPlayer:RcoStandbyNotice_v200_AfterStorageExpansion']:
-run SNPC_rco_10_Common_ExpandHouseStorage::v200_AfterExpandStorage_Normal()
+						run SNPC_rco_10_Common_ExpandHouseStorage::v200_AfterExpandStorage_Normal()
 					elif EventFlowSystemActor.OfficeLevel() in (`ResServiceTent0`, `ResServiceTent1`):
- run Sub_grp_Event13()
+						run Sub_grp_Event13()
 					else:
 						if System.EventFlags['cPlayer:RcoTalkAboutOfficeWork']:
- run CheckInfoMoveMyhome()
-	run Sub_grp_Event13()
+							run CheckInfoMoveMyhome()
+							run Sub_grp_Event13()
 						else:
-run SNPC_rco_01_Office_1_Entries::IslandDevelopmentIntro()
+							run SNPC_rco_01_Office_1_Entries::IslandDevelopmentIntro()
 	else:
 		run RcoFirstVisit()
 
@@ -132,6 +134,8 @@ flow Skip_ChkNpcCoordeUnlockEv():
 local flow Sub_grp_Event13():
 	if System.EventFlags['cPlayer:RcoTalkAboutRemakeTrial']:
 		run SNPC_rco_01_Tent_1_Entries::RcoRemakeTrialIntro()
+	elif (System.EventFlags['cLand:HotelOpenDay']) and (System.EventFlags['cPlayer:EditTutorialFirstCustomer']) and (not System.EventFlags['cPlayer:RcoNoticeHotelCeremony']) and (not System.EventFlags['cPlayer:HeldCeremonyHotel']):
+		run SNPC_rco_01_Office_1_Entries::NoticeHotelCeremony()
 	elif (System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild']) and (EventFlowSystemActor.OfficeLevel() not in (`ResServiceTent0`, `ResServiceTent1`)):
 		run SNPC_rco_01_Office_1_Entries::NpcHouseCoordeRestartPMoving()
 	elif not System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']:

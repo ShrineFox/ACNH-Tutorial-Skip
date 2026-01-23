@@ -1,0 +1,72 @@
+flow KpsTalk():
+	if not System.EventFlags['cPlayer:NpcKpsFirstTalk']:
+		System.EventFlags['cPlayer:NpcKpsFirstTalk'] = true
+		# Hi! I'm Leila! My whole family works here!
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:001', false)
+		if System.EventFlags['cPlayer:SeqHotelEditTutorialDone']:
+			# So, PLAYER, ye're helpin' Mom wiff the room?
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:003', false)
+		else:
+			# So, PLAYER, ye're helpin' Mom wiff the room?
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:002', false)
+		# Ye're nice. I wish I could help out too!
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:004', false)
+	elif not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']:
+		# Huh? Are ye gonna help out with making the room? Well, I don't know nothin' about that, so ye better ask my mom!
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:005', false)
+	elif System.EventFlags['cPlayer:HotelUnlockDIYTrade']:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# Dad ships things fwom this island to other islands. And you're the one who's makin' the things, aren't ye? That's sooo coool! You're good at evewythi…
+				MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:011', false)
+			case 1:
+				# Mom's in charge of the hotel's gweetin' area. And Gwams runs the souvenir shop!
+				MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:010', false)
+			case 2:
+				# At Gwams's souvenir shop, you can trade hotel tickets for other stuff. She even gots some hotel stuff!
+				MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:012', false)
+	else:
+		if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			# Mom's in charge of the hotel's gweetin' area. And Gwams runs the souvenir shop!
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:010', false)
+		else:
+			# At Gwams's souvenir shop, you can trade hotel tickets for other stuff. She even gots some hotel stuff!
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:012', false)
+
+flow NotClearHotelTutorial():
+	if not ((EventFlowSystemActor.NetIsConnected()) and (EventFlowSystemActor.NetHasVisitor())):
+		# I came to this island with my family. Let's be fwiends!
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:150', false)
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		# I came to this island with my family. Let's be fwiends!
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:150', false)
+	else:
+		# Evewyone is welcome at our hotel! I was pretendin' to be my mom. She works at the fwont desk.
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:151', false)
+
+flow Root():
+	if not System.EventFlags['cPlayer:SeqHotelIntroductionDone']:
+		run NotClearHotelTutorial()
+	elif not EventFlowSystemActor.NetIsConnected():
+		if EventFlowSystemActor.IsSharePlay(0):
+			# We're busy today! It's pwetty cool! I'm gonna dwaw some pictures.
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:200', false)
+		else:
+			run KpsTalk()
+	elif EventFlowSystemActor.NetHasVisitor():
+		if EventFlowSystemActor.NetIsInviteFriend():
+			# You got a fwiend visitin' fwom another island, huh? Mom always says the best way to welcome someone is with a smile!
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:201', false)
+		else:
+			# Evewyone is welcome at our hotel! I was pretendin' to be my mom. She works at the fwont desk.
+			MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:151', false)
+	elif EventFlowSystemActor.IsVillageGateOpened():
+		# You got a fwiend comin' over soon? That's excitin'!
+		MainNpc.OpenMessageWindow('TalkSNpc/kps/SP_kps:202', false)
+	else:
+		run KpsTalk()
+
+flow Root_Sit():
+	if not EventFlowSystemActor.IsSharePlay(0):
+		EventFlowSystemActor.CameraSetDemoParam('KpsSitDownTalk', 'cDefault', 'Player', false, false, false, 0)
+	run Root()

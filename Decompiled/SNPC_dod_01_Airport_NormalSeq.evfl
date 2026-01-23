@@ -40,13 +40,13 @@ entrypoint Event200:
 entrypoint Event322:
 					switch EventFlowSystemActor.GeneralTalkChoice4():
 						case 0:
-	 run SelectIsland()
+							run SelectIsland()
 						case 1:
-	run Sub_grp_Event48()
+							run Sub_grp_Event48()
 						case 2:
-run SNPC_dod_40_Airport_Wherearen::GoToWherearen()
+							run SNPC_dod_40_Airport_Wherearen::GoToWherearen()
 						case 3:
-run SNPC_dod_AirPort::EntryPoint_Cancel()
+							run SNPC_dod_AirPort::EntryPoint_Cancel()
 			else:
 				run ExplainAboutWorking()
 	elif System.EventFlags['cPlayer:UnlockWherearen']:
@@ -102,6 +102,10 @@ flow ChkEmphasizeWherearen():
 	else:
 		SubflowResults[4] = 0
 
+flow ChkPMovingPFlag1554On():
+	if System.EventFlags['cPlayer:PlayerProducedByPlayerMoving']:
+		System.EventFlags['cPlayer:PlayerMovingWithPFlag555'] = true
+
 flow ChkTourTicket():
 	if System.EventFlags['cPlayer:DodUseFirstFreeTour']:
 		run Sub_grp_Event144()
@@ -126,6 +130,7 @@ flow Dod_GoToCommune():
 	Player.PlayerChangeDemoState('cReserveNextSceneStartToolOff')
 	run v200_ChkCommuneExpand()
 	run v200_ChkCommuneDonguri()
+	run ChkPMovingPFlag1554On()
 	EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_Goto_CommuneIsland')
 	System.EventFlags['cPlayer:PlayerPocketUIEnableInCommuneIsland'] = true
 	System.EventFlags['cPlayer:SpnExpandEventAfterJuneBride'] = false
@@ -277,6 +282,9 @@ flow GoToCommune():
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
 		if System.EventFlags['cPlayer:EquipLicenseHelmet']:
 			run SNPC_dod_AirPort::LandMakingRemove_Soloplay()
+		else:
+			if Player.HotelMannequinIsRentalAny():
+				run SNPC_dod_AirPort::RentalMannequinCodeRemove()
 		# <10:12><100:3:cd01>Dodo One, this is Dodo Tower—Wilbur, you copy? Got a walker who needs wings, over. Roger! Ready when you are!<100:3:cd02><10:8:002…
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037_01', true)
 		run Dod_GoToCommune()
@@ -308,6 +316,8 @@ flow MayDayTour():
 			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
 			if System.EventFlags['cPlayer:EquipLicenseHelmet']:
 				run SNPC_dod_AirPort::LandMakingRemove_Soloplay()
+			if Player.HotelMannequinIsRentalAny():
+				run SNPC_dod_AirPort::RentalMannequinCodeRemove()
 			EventFlowSystemActor.MessageSuspend()
 			run SNPC_dod_AirPort::EntryPoint_PreProcedure(ContinueAS=false)
 			EventFlowSystemActor.MessageLockNext(1)
@@ -377,6 +387,9 @@ flow Mysterytour_Confirm():
 	MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:037', false)
 	if System.EventFlags['cPlayer:EquipLicenseHelmet']:
 		run SNPC_dod_AirPort::LandMakingRemove_Soloplay()
+	else:
+		if Player.HotelMannequinIsRentalAny():
+			run SNPC_dod_AirPort::RentalMannequinCodeRemove()
 	System.EventFlags['cPlayer:DodSingleFlightToday'] = true
 	System.EventFlags['cPlayer:GotoMysteryTour'] += 1
 	if System.EventFlags['cPlayer:GotoMysteryTour'] >= 5:

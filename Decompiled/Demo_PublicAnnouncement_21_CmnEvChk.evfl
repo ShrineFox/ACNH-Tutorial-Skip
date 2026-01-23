@@ -25,6 +25,33 @@ flow ChkCampsite():
 			run CmnEvCount()
 			System.EventFlags['cPlayer:PAnnounceCampsite'] = true
 
+flow ChkHotel():
+	if not System.EventFlags['cPlayer:PAnnounceHotelOpend']:
+		if System.EventFlags['cLand:HotelOpend']:
+			if System.EventFlags['cLand:HotelOpenDaysCount'] < 3:
+				if System.EventFlags['cLand:HotelOpenDay']:
+					SubflowResults[24] = 4
+				else:
+					SubflowResults[24] = 5
+			else:
+				SubflowResults[24] = 6
+			System.EventFlags['cPlayer:PAnnounceHotelOpend'] = true
+			System.EventFlags['cPlayerTemp:NoticeHotelOpenThisPAnnounce'] = true
+			run Sub_Event178()
+		elif not System.EventFlags['cPlayer:PAnnounceHotelBuint']:
+			if System.EventFlags['cLand:HotelBuilt']:
+				if System.EventFlags['cLand:HotelBuiltDay']:
+					SubflowResults[24] = 2
+					run Sub_Event178()
+				else:
+					SubflowResults[24] = 3
+					run Sub_Event178()
+			else:
+				if (not System.EventFlags['cPlayer:PAnnounceHotelConstruct']) and (System.EventFlags['cLand:HotelConstruction']):
+					SubflowResults[24] = 1
+					System.EventFlags['cPlayer:PAnnounceHotelConstruct'] = true
+					run Sub_Event231()
+
 flow ChkMarket():
 	switch EventFlowSystemActor.ShopLevel():
 		case `NooksCrannyInitial`:
@@ -39,9 +66,9 @@ flow ChkMarket():
 					run CmnPhoneCallImmQ()
 				else:
 					if System.EventFlags['cLand:MarketOpen1stDay1']:
- SubflowResults[7] = 1
+						SubflowResults[7] = 1
 					else:
- SubflowResults[7] = 2
+						SubflowResults[7] = 2
 					System.EventFlags['cPlayer:TownNewsHeardShopOpen1Flag'] = true
 					run CmnPhoneCallImmQ()
 					SubflowResults[4] = 1
@@ -51,9 +78,9 @@ flow ChkMarket():
 			if EventFlowSystemActor.FacilityOpenPastDays('cMarket2', 8):
 				if not System.EventFlags['cPlayer:TownNewsHeardShopOpen2Flag']:
 					if System.EventFlags['cLand:MarketOpen1stDay2']:
- SubflowResults[7] = 5
+						SubflowResults[7] = 5
 					else:
- SubflowResults[7] = 6
+						SubflowResults[7] = 6
 					SubflowResults[4] = 1
 					run CmnEvCount()
 					System.EventFlags['cPlayer:TownNewsHeardShopOpen2Flag'] = true
@@ -78,9 +105,9 @@ flow ChkMuseum():
 			case `BlathersTent`:
 				if (SubflowResults@2[0] == 0) and (not System.EventFlags['cPlayer:AnnouncementOwlMovedIn']):
 					if System.EventFlags['cLand:MuseumTentBuiltToday']:
- SubflowResults[6] = 1
+						SubflowResults[6] = 1
 					else:
- SubflowResults[6] = 2
+						SubflowResults[6] = 2
 					SubflowResults[4] = 1
 					run CmnEvCount()
 					System.EventFlags['cPlayer:AnnouncementOwlMovedIn'] = true
@@ -88,37 +115,37 @@ flow ChkMuseum():
 				if EventFlowSystemActor.FacilityOpenPastDays('cMuseum', 8):
 					if not System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag']:
 						if System.EventFlags['cLand:Museum2BuiltToday']:
-	SubflowResults[6] = 4
+							SubflowResults[6] = 4
 						else:
-	SubflowResults[6] = 5
- SubflowResults[4] = 1
-	run CmnEvCount()
-System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag'] = true
+							SubflowResults[6] = 5
+						SubflowResults[4] = 1
+						run CmnEvCount()
+						System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag'] = true
 				else:
 					System.EventFlags['cPlayer:TownNewsHeardMuseumOpenFlag'] = true
 			case `BlathersMuseumArt`:
 				if EventFlowSystemActor.FacilityOpenPastDays('cMuseum2', 8):
 					if not System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag']:
 						if System.EventFlags['cLand:Museum3BuiltToday']:
-	SubflowResults[6] = 7
+							SubflowResults[6] = 7
 						else:
-	SubflowResults[6] = 8
- SubflowResults[4] = 1
-	run CmnEvCount()
-System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag'] = true
+							SubflowResults[6] = 8
+						SubflowResults[4] = 1
+						run CmnEvCount()
+						System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag'] = true
 				else:
 					System.EventFlags['cPlayer:TownNewsHeardMuseum2OpenFlag'] = true
 			case `BlathersCafe`:
 				if EventFlowSystemActor.FacilityOpenPastDays('cMuseum3', 8):
 					if not System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag']:
 						if System.EventFlags['cLand:MuseumCafeConstruction_3_OpenDay']:
-  SubflowResults[19] = 2
+							SubflowResults[19] = 2
 						else:
-  SubflowResults[19] = 3
- SubflowResults[6] = 9
- SubflowResults[4] = 1
-	run CmnEvCount()
-System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag'] = true
+							SubflowResults[19] = 3
+						SubflowResults[6] = 9
+						SubflowResults[4] = 1
+						run CmnEvCount()
+						System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag'] = true
 				else:
 					System.EventFlags['cPlayer:TownNewsHeardMuseumCafeOpenFlag'] = true
 			default:
@@ -150,6 +177,12 @@ flow ChkTailor():
 	else:
 		System.EventFlags['cPlayer:PAnnounceTailorBuilt'] = true
 
+flow CmnDanComeChk():
+	if (System.EventFlags['cLand:IsVisitNpcTidyToday']) and (System.EventFlags['cLand:UnlockCallNpcTidy']) and (not System.EventFlags['cLand:UnlockCallNpcTidyToday']):
+		run CmnEvCount()
+		SubflowResults[25] = 1
+		SubflowResults[4] = 1
+
 flow CmnEvCount():
 	switch SubflowResults@3[18]:
 		case 0:
@@ -164,6 +197,7 @@ flow CmnFacilitiesChk():
 	run ChkMarket()
 	run ChkTailor()
 	run ChkCampsite()
+	run ChkHotel()
 
 flow CmnKppTourStartChk():
 	if (System.EventFlags['cLand:TkkFirstLive']) and (not System.EventFlags['cPlayer:PAnnounceAboutKppTourCompleted']):
@@ -304,6 +338,7 @@ flow Root():
 	if not System.EventFlags['cLandTemp:ReserveMemErrorReenter']:
 		run CmnRegulationChk()
 		run CmnKppTourStartChk()
+		run CmnDanComeChk()
 		run CmnMoveInChk()
 		run CmnFacilitiesChk()
 		run EvNoticeChk_Museum()
@@ -317,6 +352,14 @@ flow Root():
 			run EvNoticeChk_Carnival()
 			run EvNoticeChk_ThanksGiving()
 		run CmnMoveOutChk()
+
+local flow Sub_Event178():
+	System.EventFlags['cPlayer:PAnnounceHotelBuint'] = true
+	run Sub_Event231()
+
+local flow Sub_Event231():
+	SubflowResults[4] = 1
+	run CmnEvCount()
 
 local flow Sub_Event57():
 	SubflowResults[4] = 1

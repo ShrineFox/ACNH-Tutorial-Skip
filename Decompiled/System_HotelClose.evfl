@@ -1,0 +1,13 @@
+flow HotelClose():
+	if (not System.EventFlags['cPlayerTemp:IsHotelEditTutorial']) and (not System.EventFlags['cPlayerTemp:IsStopSaveForHotel']):
+		# Ready to wrap things up for now? (Your design will be saved so you can continue to work on it later.)
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:102', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.HotelOrderCallback('cSuspendOrder')
+			EventFlowSystemActor.HotelOrderCallback('cFinish')
+			EventFlowSystemActor.MessageSuspend()
+			EventFlowSystemActor.ReserveSystemFlowDemo('System_SaveGameClose', 'Root', false, false, false)
+			EventFlowSystemActor.SystemRequestChangeStage('cSaveGameClose', 'cCircle', 'cCircle', 'cBlack', 1.0, 1.0)
+	else:
+		# You can't save right now.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_CloseMenu:019', false)

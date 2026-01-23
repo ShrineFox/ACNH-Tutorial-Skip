@@ -16,6 +16,14 @@ flow BlackFriday():
 flow BuyCancelNoAsk():
 	run Event43()
 
+flow BuyCheckUI_50():
+	if not MainNpc.ShopHasBellCount(50.0):
+		run Event33()
+	elif EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		run Event1()
+	else:
+		run DecideBuy_50()
+
 flow CmnCloseShoppingUI():
 	fork:
 		branch:
@@ -23,6 +31,12 @@ flow CmnCloseShoppingUI():
 		branch:
 			EventFlowSystemActor@Sub.UIShopBuyDisappear()
 	EventFlowSystemActor.WaitFrame(5)
+
+flow DecideBuy_50():
+	MainNpc.ShopBuyDone(false, false, false, false, true)
+	System.EventFlags['cLifeSupportAchievement:BuyItemRcm'] += 50
+	EventFlowSystemActor.SetTagFromUIResult('cRcShopItem50Price', 0)
+	run Event98()
 
 flow End_Shopping():
 	run CmnCloseShoppingUI()
@@ -85,6 +99,7 @@ entrypoint Event39:
 		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
 		EventFlowSystemActor.SetTagFromUIResult('cRcShopItemPrice', 0)
 		EventFlowSystemActor.SetTagFromUIResult('cRcShopItem5Price', 1)
+		EventFlowSystemActor.SetTagFromUIResult('cRcShopItem50Price', 2)
 		if EventFlowSystemActor.MultiKindItemSelectInclude('FishingRod', '', '', '', '', '', '', '', 'cItemSelect'):
 			if System.EventFlags['cPlayer:MainmenuRecipe']:
 				run Sub_Event22()
@@ -98,32 +113,37 @@ entrypoint Event39:
 			run SNPC_rcm_16_BuyHowToBook::Root()
 		elif EventFlowSystemActor.MultiKindItemSelectInclude('Candy', '', '', '', '', '', '', '', 'cItemSelect'):
 			run SNPC_rcm_15_BuyCandy::Root()
-		elif (not EventFlowSystemActor.MultiKindItemSelectInclude('VegeSeedling', 'BlowBubble', 'FierworkHand', '', '', '', '', '', 'cItemSelect')) and (not EventFlowSystemActor.MultiKindItemSelectInclude('FlowerSeed', 'TreeSeedling', 'Fruit', 'Medicine', 'WrappingPaper', 'PartyPopper', 'CraftRemake', '', 'cItemSelect')):
+		elif (EventFlowSystemActor.MultiKindItemSelectInclude('VegeSeedling', 'BlowBubble', 'FierworkHand', '', '', '', '', '', 'cItemSelect')) or (EventFlowSystemActor.MultiKindItemSelectInclude('FlowerSeed', 'TreeSeedling', 'Fruit', 'Medicine', 'WrappingPaper', 'PartyPopper', 'CraftRemake', '', 'cItemSelect')):
+			run SNPC_rcm_13_BuyMultipleItems::Root()
+		elif EventFlowSystemActor.MultiKindItemSelectInclude('SpeakerMegaphone', '', '', '', '', '', '', '', 'cItemSelect'):
+			run SNPC_rcm_17_BuyMegaphone::Root()
+		else:
 			if (EventFlowSystemActor.MultiKindItemSelectInclude('MarineSuit', '', '', '', '', '', '', '', 'cItemSelect')) and (not System.EventFlags['cPlayer:RcmTalkAboutMarinesuitFlag']):
 				run SNPC_rcm_14_BuyMarinesuit::Root()
 			else:
 				run Sub_Event22()
-		else:
-			run SNPC_rcm_13_BuyMultipleItems::Root()
 	else:
 		run End_Shopping()
 
 flow Rcm_Common_BuyCheck():
 	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-entrypoint Event71:
-		if SubflowResults@2[0] == 0:
-			if MainNpc.ShopHasBellCount(1.0):
-				run Sub_grp_Event84()
-			else:
-				run NotEnoughMoneySolo()
-		else:
-			if MainNpc.ShopHasBellCount(5.0):
-				run Sub_grp_Event84()
-			else:
+entrypoint Event199:
+		switch SubflowResults@3[0]:
+			case 0:
+				if MainNpc.ShopHasBellCount(1.0):
+					run Sub_grp_Event84()
+				else:
+					run NotEnoughMoneySolo()
+			case 1:
+				if MainNpc.ShopHasBellCount(5.0):
+					run Sub_grp_Event84()
+				else:
 entrypoint Event33:
-				# Thank you for your purcha—<10:7:00140000> Oh! You, ah, don't have enough money in your pockets. Our shop doesn't offer a line of credit, so please co…
-				MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:111', false)
-				run Sub_grp_Event82()
+					# Thank you for your purcha—<10:7:00140000> Oh! You, ah, don't have enough money in your pockets. Our shop doesn't offer a line of credit, so please co…
+					MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:111', false)
+					run Sub_grp_Event82()
+			case 2:
+				run BuyCheckUI_50()
 	else:
 entrypoint Event21:
 		# Understood! Please let me know if you need anything else.__ ...else!__
@@ -131,7 +151,7 @@ entrypoint Event21:
 		run Sub_grp_Event82()
 
 flow Rcm_Common_BuyCheckUI():
-	run Event71()
+	run Event199()
 
 flow Rcm_Common_TurnipChk():
 	if EventFlowSystemActor.EnvDayOfWeek() == `Sunday`:
@@ -278,12 +298,13 @@ entrypoint Event6:
 
 local flow Sub_grp_Event76():
 	if SubflowResults@2[0] == 0:
-		MainNpc.ShopBuyDone(false, false, false, false)
+		MainNpc.ShopBuyDone(false, false, false, false, false)
 		System.EventFlags['cLifeSupportAchievement:BuyItemRcm'] += 1
 	else:
-		MainNpc.ShopBuyDone(false, true, false, false)
+		MainNpc.ShopBuyDone(false, true, false, false, false)
 		System.EventFlags['cLifeSupportAchievement:BuyItemRcm'] += 5
 		EventFlowSystemActor.SetTagFromUIResult('cItem5Price', 0)
+entrypoint Event98:
 	if not System.EventFlags['cPlayerTemp:RcmShopshelfCheck']:
 		# Excellent purchase!__ ...purchase!__
 		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:113', false)

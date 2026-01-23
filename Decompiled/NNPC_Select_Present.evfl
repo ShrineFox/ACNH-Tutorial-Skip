@@ -15,25 +15,25 @@ flow AocChocolate():
 				switch EventFlowSystemActor.MultiKindItemSelectIncludeChoice5(ChoiceNumber=5, ItemKindTypeA='LoveCrystal', ItemKindTypeB='BlowBubble', ItemKindTypeC='EasterEgg', ItemKindTypeD='FierworkHand', JudgeTarget='cItemSelect'):
 					case 0:
 						if EventFlowSystemActor.MultiKindItemSelectInclude('SouvenirChocolate', '', '', '', '', '', '', '', 'cItemSelect'):
-run NNPC_Select_Chocolate::Chocolate()
-run Select_Finish_Disappear()
+							run NNPC_Select_Chocolate::Chocolate()
+							run Select_Finish_Disappear()
 						elif EventFlowSystemActor.MultiKindItemSelectInclude('Vine', 'CookingMaterial', '', '', '', '', '', '', 'cItemSelect'):
-run NNPC_Select_Etc::Etc_Plural()
-run Select_Finish_Disappear()
+							run NNPC_Select_Etc::Etc_Plural()
+							run Select_Finish_Disappear()
 						else:
-run SelectPresent_Part4_Single()
+							run SelectPresent_Part4_Single()
 					case 1:
-run NNPC_Select_Etc::Love()
-run Select_Finish_Disappear()
+						run NNPC_Select_Etc::Love()
+						run Select_Finish_Disappear()
 					case 2:
-run NNPC_Select_Tool::Nouse_Plural()
-run Select_Finish_Disappear()
+						run NNPC_Select_Tool::Nouse_Plural()
+						run Select_Finish_Disappear()
 					case 3:
-run NNPC_Select_Etc::Etc_Plural()
-run Select_Finish_Disappear()
+						run NNPC_Select_Etc::Etc_Plural()
+						run Select_Finish_Disappear()
 					case 4:
-run NNPC_Select_Tool::MobileFireWorks()
-  run Select_Finish()
+						run NNPC_Select_Tool::MobileFireWorks()
+						run Select_Finish()
 			case 1:
 				run NNPC_Select_Etc::Etc_Plural()
 				run Select_Finish_Disappear()
@@ -245,5 +245,11 @@ flow Valentine():
 	run Event25()
 
 flow v200_BirthDayCupCake():
-	if (EventFlowSystemActor.MultiKindItemSelectInclude('BdayCupcake', '', '', '', '', '', '', '', 'cItemSelect')) and (not MainNpc.EventFlags['cNpcMemory:BirhdayPCupcakeFlag']) and (((EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime')) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0)) or ((EventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0))):
-		run NNPC_GEvent_BirthdayP::Give_Capcake_fromGeneral()
+	if (EventFlowSystemActor.MultiKindItemSelectInclude('BdayCupcake', '', '', '', '', '', '', '', 'cItemSelect')) and (not MainNpc.EventFlags['cNpcMemory:BirhdayPCupcakeFlag']):
+		if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
+			switch EventFlowSystemActor.EnvHourCompare(0, -1, true, false):
+				case 0, 1, 2:
+					run NNPC_GEvent_BirthdayP::Give_Capcake_fromGeneral()
+		else:
+			if (EventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
+				run NNPC_GEvent_BirthdayP::Give_Capcake_fromGeneral()

@@ -1,0 +1,82 @@
+flow ChkExist_bey():
+	switch EventFlowSystemActor.NowVisitSpNpc():
+		case 0, 1, 2, 4, 5, 6, 7, 13, 8, 9, 10, 11, 12:
+			if EventFlowSystemActor.GlobalEventNow('FishingConvention', 'cMainOnly', false):
+				SubflowResults[0] = 1
+		case 3:
+			SubflowResults[0] = 1
+
+flow ChkExist_chy():
+	switch EventFlowSystemActor.NowVisitSpNpc():
+		case 0, 1, 2, 3, 5, 6, 7, 13, 8, 9, 10, 11, 12:
+			if EventFlowSystemActor.GlobalEventNow('InsectConvention', 'cMainOnly', false):
+				run Sub_grp_Event32()
+		case 4:
+			run Sub_grp_Event32()
+
+flow ChkHHPMember():
+	SubflowResults[0] = 0
+	if ((MainNpc.NpcLabel('otg')) or (MainNpc.NpcLabel('otgB')) or (MainNpc.NpcLabel('mnc')) or (MainNpc.NpcLabel('man'))) and (not EventFlowSystemActor.SaveHasWherearenIslands()):
+		SubflowResults[1] = 1
+
+flow ChkReactSNPC():
+	SubflowResults[0] = 0
+	if not MainNpc.EventFlags['cHotelNpcMemory:TalkedAboutTodayVisitedSnpc']:
+		if MainNpc.NpcLabel('bev'):
+			run ChkExist_bey()
+			run ChkExist_chy()
+		elif MainNpc.NpcLabel('bey'):
+			run ChkExist_chy()
+		elif MainNpc.NpcLabel('chm'):
+			run ChkExist_bey()
+			run ChkExist_chy()
+		elif MainNpc.NpcLabel('chy'):
+			run ChkExist_bey()
+		elif MainNpc.NpcLabel('grf'):
+			if EventFlowSystemActor.NowVisitSpNpc() == 11:
+				SubflowResults[0] = 1
+		elif (MainNpc.NpcLabel('boa')) and (EventFlowSystemActor.NowVisitSpNpc() == 6):
+			SubflowResults[0] = 1
+
+flow FinishVIPEdit():
+	MainNpc.SetReplaceSNPCMsgLabel()
+	if (MainNpc.NpcLabel('otg')) or (MainNpc.NpcLabel('otgB')):
+		System.EventFlags['cPlayer:HotelInvitedOtg'] = true
+	# RANDOM: Holy moley, this is a nice room! A fell…
+	MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:001', true)
+
+flow Root():
+	MainNpc.SetReplaceSNPCMsgLabel()
+	if MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc']:
+		run ChkReactSNPC()
+		switch SubflowResults@3[0]:
+			case 0:
+				run ChkHHPMember()
+				if SubflowResults@2[1] == 0:
+					# RANDOM: Feel free to snap pics of this room! Bu… // Ya know, I make my way customizing  fur… // Whenever I take a trip, I try to bring … // I've been thinkin' about all the hard w… // The ol' wanderlust is kickin' in! Vacat…
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:201', false)
+				else:
+					# RANDOM:  // 
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:202', false)
+			case 1:
+				# RANDOM: 
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:301', false)
+				MainNpc.EventFlags['cHotelNpcMemory:TalkedAboutTodayVisitedSnpc'] = true
+			case 2:
+				# RANDOM: 
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:302', false)
+				MainNpc.EventFlags['cHotelNpcMemory:TalkedAboutTodayVisitedSnpc'] = true
+	else:
+		MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc'] = true
+		if EventFlowSystemActor.SystemCheckNowStage('cEditHotelRoom'):
+			# RANDOM: Hey! Glad you came! Gives me a chance t…
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:101', false)
+		else:
+			# RANDOM: Hey! You're from this island, right? I'…
+			MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_HotelGuest:102', false)
+
+local flow Sub_grp_Event32():
+	if MainNpc.NpcLabel('bey'):
+		SubflowResults[0] = 1
+	else:
+		SubflowResults[0] = 2

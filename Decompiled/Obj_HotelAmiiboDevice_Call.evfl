@@ -1,0 +1,101 @@
+flow ChkSnpcInvite():
+	SubflowResults[0] = 0
+	if MainNpc.NpcLabel('hgc'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A1_hgc()
+	elif MainNpc.NpcLabel('fox'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A2_fox()
+	elif (MainNpc.NpcLabel('tkkA')) or (MainNpc.NpcLabel('tkkB')):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A3_tkk()
+	elif MainNpc.NpcLabel('gstA'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A4_gstA()
+	elif MainNpc.NpcLabel('boc'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A5_boc()
+	elif MainNpc.NpcLabel('skk'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A6_skk()
+	elif MainNpc.NpcLabel('bey'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A7_bey()
+	elif MainNpc.NpcLabel('gul'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A8_gul()
+	else:
+		run ChkSnpcInvite2()
+
+flow ChkSnpcInvite2():
+	if MainNpc.NpcLabel('spn'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A9_spn()
+	elif MainNpc.NpcLabel('ows'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A10_ows()
+	elif MainNpc.NpcLabel('slo'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A11_slo()
+	elif MainNpc.NpcLabel('chy'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A12_chy()
+	elif MainNpc.NpcLabel('cml'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::A13_cml()
+	else:
+		run ChkSnpcInvite3()
+
+flow ChkSnpcInvite3():
+	if MainNpc.NpcLabel('pck'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B3_pck()
+	elif MainNpc.NpcLabel('pyn'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B4_pyn()
+	elif MainNpc.NpcLabel('xct'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B5_xct()
+	elif MainNpc.NpcLabel('alw'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B7_alw()
+	elif MainNpc.NpcLabel('alp'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B8_alp()
+	elif MainNpc.NpcLabel('pkn'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B10_pkn()
+	elif MainNpc.NpcLabel('tuk'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B11_tuk()
+	elif MainNpc.NpcLabel('rei'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::B12_rei()
+	else:
+		run ChkSnpcInvite4()
+
+flow ChkSnpcInvite4():
+	if MainNpc.NpcLabel('boa'):
+		run Obj_HotelAmiiboDevice_ChkSNPC::C1_boa()
+
+flow Root():
+	switch MainNpc.CheckNpcCharacterSize():
+		case 0:
+			EventFlowSystemActor.CameraSetDemoParam('Small', '', 'CameraTag:Root', false, false, false, 0)
+		case 1:
+			EventFlowSystemActor.CameraSetDemoParam('Normal', '', 'CameraTag:Root', false, false, false, 0)
+		case 2:
+			EventFlowSystemActor.CameraSetDemoParam('Large', '', 'CameraTag:Root', false, false, false, 0)
+		case 3:
+			EventFlowSystemActor.CameraSetDemoParam('ExtraLarge', '', 'CameraTag:Root', false, false, false, 0)
+	EventFlowSystemActor.SystemFaderRelease()
+	EventFlowSystemActor.WaitFrame(30)
+	if EventFlowSystemActor.CheckAmiiboNPC('cSNPC'):
+		MainNpc.SetReplaceSNPCMsgLabel()
+		switch MainNpc.HotelAmiiboCallType():
+			case 0:
+				run Sub_Event11()
+			case 1:
+				run ChkSnpcInvite()
+				if SubflowResults@2[0] == 0:
+					run Sub_Event11()
+				else:
+					# Yello, <110:10> here. What do you need?<10:4> VIP room?! Are you messin' with me? Well, if that don't beat all. A trip to ISLAND could be great… So w…
+					MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_Amiibo:302', true)
+			case 2:
+				# Yello, <110:10> here. What do you need?<10:4> VIP room?! Are you messin' with me? Well, if that don't beat all. A trip to ISLAND could be great… So w…
+				MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_Amiibo:302', true)
+	else:
+		# RANDOM: I'm <110:10>! Whaddaya need? I'm real b… // Hello! This is <110:10>. Thanks for the… // Hi! It's <110:10>! What's up? Hi, by th… // Hi! It's lovable <110:10>! It's so exci…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/Spot/BO_Spot_Camp_Amiibo:401', false)
+		# RANDOM: Whoa, are you really inviting me to a h… // A VIP room in a snazzy hotel? That soun… // You want me to come hang out? There's a…
+		MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest:91002', true)
+		System.EventFlags['cPlayerTemp:HotelReserveKpmAmiiboSpeak'] = true
+		EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:kpm', '', false)
+	EventFlowSystemActor.SoundTriggerEmit('ReturnFromAmiiboPhone', -1)
+	EventFlowSystemActor.ReturnStage('', 'cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.20000000298023224)
+
+local flow Sub_Event11():
+	# Yello, <110:10> here. What do you need?<10:4> VIP room?! Are you messin' with me? Well if that don't beat all. A trip to ISLAND could be great… So wh…
+	MainNpc.OpenMessageWindow('TalkSNpc/alp/SP_alp_Amiibo:301', true)
+	System.EventFlags['cPlayerTemp:HotelReserveKpmAmiiboSpeak'] = true
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:kpm', '', false)

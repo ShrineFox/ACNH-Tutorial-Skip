@@ -9,6 +9,10 @@ local flow Sub_Event10(IgnoreError: bool, Terminate: bool):
 		if Terminate:
 			EventFlowSystemActor.ExitFlowchart()
 
+local flow Sub_Event153(HasError: bool, WithSave: bool):
+	EventFlowSystemActor.MessageSuspend()
+	run UserRegist_Save(WithSave=WithSave)
+
 flow UploadProfileCore(IgnoreError: bool, Terminate: bool):
 	EventFlowSystemActor.NetCheckProfileBan(IgnoreError)
 	if EventFlowSystemActor.CheckErrorType(2):
@@ -37,21 +41,74 @@ flow UploadResortProfile(IgnoreError: bool, Terminate: bool):
 				if Terminate:
 					EventFlowSystemActor.ExitFlowchart()
 
-flow UserRegist(HasError: bool = false, WithLogin: bool, WithSave: bool, Terminate: bool):
+flow UserRegist(HasError: bool = false, WithLogin: bool, Terminate: bool, WithSave: bool):
 	SubflowResults[0] = 0
 	EventFlowSystemActor.MessageLockNext(1)
-	# Connecting to the internet...
-	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+	if SubflowResults@2[29] == 0:
+		# Connecting to the internet...
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+	else:
+		# Preparing to invite other players...
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:043', false)
 	run UserResistCore(Terminate=Terminate)
 	if WithLogin:
 		EventFlowSystemActor.NetLoginNEX('cLoginNEX', false)
 	EventFlowSystemActor.MessageSuspend()
-	if (not EventFlowSystemActor.NetIsDreaming()) and (WithSave):
-		EventFlowSystemActor.MessageLockNext(1)
-		# Saving. Do not touch .
-		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
-		EventFlowSystemActor.SaveSimpleSave('cAll')
+	run UserRegist_Save(WithSave=WithSave)
+
+flow UserRegist_CloudIslandSession(WithLogin: bool, Terminate: bool, WithSave: bool):
+	run UserRegist_CloudIsland_Core(WithLogin=WithLogin, Terminate=Terminate, WithSave=WithSave, NexLoginOnly=false)
+
+flow UserRegist_CloudIsland_Core(HasError: bool = false, NexLoginOnly: bool, Terminate: bool, WithLogin: bool, WithSave: bool):
+	SubflowResults[0] = 0
+	EventFlowSystemActor.MessageLockNext(1)
+	if SubflowResults@2[29] == 0:
+		# Connecting to the internet...
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:001', false)
+	else:
+		# Preparing to invite other players...
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:043', false)
+	run UserResistCore(Terminate=Terminate)
+	if SubflowResults@2[0] != 0:
 		EventFlowSystemActor.MessageSuspend()
+	elif WithLogin:
+		if NexLoginOnly:
+			EventFlowSystemActor.NetCloudIslandNexLogInInDreamScene()
+		else:
+			if Terminate:
+				EventFlowSystemActor.NetLoginNEX('cLoginNEX', false)
+			else:
+				EventFlowSystemActor.NetLoginNEX('cLoginNEX', true)
+		if EventFlowSystemActor.CheckErrorType(2):
+			run UserRegist_CloudIsland_OccurError(Terminate=Terminate)
+			EventFlowSystemActor.MessageSuspend()
+		else:
+			run Sub_Event153(HasError=HasError, WithSave=WithSave)
+	else:
+		run Sub_Event153(HasError=HasError, WithSave=WithSave)
+
+flow UserRegist_CloudIsland_InDreamScene(WithLogin: bool, Terminate: bool, WithSave: bool):
+	run UserRegist_CloudIsland_Core(WithLogin=WithLogin, Terminate=Terminate, WithSave=WithSave, NexLoginOnly=true)
+
+flow UserRegist_CloudIsland_OccurError(Terminate: bool):
+	SubflowResults[0] = 1
+	if Terminate:
+		EventFlowSystemActor.ExitFlowchart()
+
+flow UserRegist_Save(WithSave: bool):
+	if (not EventFlowSystemActor.NetIsDreaming()) and (WithSave):
+		if not EventFlowSystemActor.NetCloudIslandInCloudIslandStage():
+			EventFlowSystemActor.MessageLockNext(1)
+			# Saving. Do not touch .
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+			EventFlowSystemActor.SaveSimpleSave('cAll')
+			EventFlowSystemActor.MessageSuspend()
+		elif EventFlowSystemActor.NetCloudIslandInOwner():
+			EventFlowSystemActor.MessageLockNext(1)
+			# Saving. Do not touch .
+			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Save:001', false)
+			EventFlowSystemActor.SaveSimpleSave('cCloudIsland')
+			EventFlowSystemActor.MessageSuspend()
 	EventFlowSystemActor.MessageUnlockNext()
 
 flow UserResistCore(Terminate: bool):
@@ -94,25 +151,25 @@ flow UserResistCore(Terminate: bool):
 				if EventFlowSystemActor.CheckErrorType(2):
 					SubflowResults[0] = 1
 					if Terminate:
-EventFlowSystemActor.ExitFlowchart()
+						EventFlowSystemActor.ExitFlowchart()
 				else:
 					EventFlowSystemActor.NetUploadResortUnlock(false, false)
 					if EventFlowSystemActor.CheckErrorType(2):
- SubflowResults[0] = 1
+						SubflowResults[0] = 1
 						if Terminate:
-EventFlowSystemActor.ExitFlowchart()
+							EventFlowSystemActor.ExitFlowchart()
 					else:
 						EventFlowSystemActor.NetUploadLifeTips(false, false)
 						if EventFlowSystemActor.CheckErrorType(2):
-	SubflowResults[0] = 1
+							SubflowResults[0] = 1
 							if Terminate:
-EventFlowSystemActor.ExitFlowchart()
+								EventFlowSystemActor.ExitFlowchart()
 						else:
 							EventFlowSystemActor.NetUploadPlayerMemories(false, false)
 							if EventFlowSystemActor.CheckErrorType(2):
-	  SubflowResults[0] = 1
+								SubflowResults[0] = 1
 								if Terminate:
-EventFlowSystemActor.ExitFlowchart()
+									EventFlowSystemActor.ExitFlowchart()
 							else:
 								run UploadResortProfile(IgnoreError=false, Terminate=Terminate)
 	else:
@@ -132,26 +189,26 @@ EventFlowSystemActor.ExitFlowchart()
 					run UploadProfileCore(IgnoreError=false, Terminate=Terminate)
 					EventFlowSystemActor.NetUploadEmoticon(false, -1, true)
 					if EventFlowSystemActor.CheckErrorType(2):
- SubflowResults[0] = 1
+						SubflowResults[0] = 1
 					else:
 						EventFlowSystemActor.NetUploadCatalog(true, false)
 						if EventFlowSystemActor.CheckErrorType(2):
-	SubflowResults[0] = 1
+							SubflowResults[0] = 1
 						else:
 							EventFlowSystemActor.NetUploadRewardUnlock(false, true)
 							if EventFlowSystemActor.CheckErrorType(2):
-	  SubflowResults[0] = 1
+								SubflowResults[0] = 1
 							else:
 								EventFlowSystemActor.NetUploadResortUnlock(false, false)
 								if EventFlowSystemActor.CheckErrorType(2):
-		SubflowResults[0] = 1
+									SubflowResults[0] = 1
 								else:
 									EventFlowSystemActor.NetUploadLifeTips(false, false)
 									if EventFlowSystemActor.CheckErrorType(2):
-		  SubflowResults[0] = 1
+										SubflowResults[0] = 1
 									else:
 										EventFlowSystemActor.NetUploadPlayerMemories(false, false)
 										if EventFlowSystemActor.CheckErrorType(2):
-			SubflowResults[0] = 1
+											SubflowResults[0] = 1
 										else:
 											run UploadResortProfile(IgnoreError=false, Terminate=Terminate)

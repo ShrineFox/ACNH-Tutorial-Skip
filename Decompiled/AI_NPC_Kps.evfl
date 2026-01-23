@@ -1,0 +1,14 @@
+flow Init():
+	MainNpc.NpcRegistAIBlackBoard('IsFinishHotelTutorial', 0)
+	MainNpc.NpcRegistAIBlackBoard('CancelWorkMotion', 0)
+	MainNpc.NpcAISetting(8, true)
+	MainNpc.NpcAISetRequestSpeakFunc('cSitDownHotelEntranceKps', true)
+
+flow Root():
+	if MainNpc.NpcBlackBoard('CancelWorkMotion', 1):
+		MainNpc.NpcDisableServiceMotion()
+		MainNpc.NpcChangeAIState('cWait', '', 'SNPC_kps', 'Root', true, false)
+	elif MainNpc.NpcCheckStateSelectTiming('cInit'):
+		MainNpc.NpcChangeAIState('cWait', '', 'SNPC_kps', 'Root', true, false)
+	else:
+		MainNpc.NpcChangeAIState('cWherearenOfficerWait', '', 'SNPC_kps', 'Root', false, true)

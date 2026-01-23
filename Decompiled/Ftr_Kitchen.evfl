@@ -47,10 +47,19 @@ flow Kitchen_CookingDemo():
 	Player.PlayerCookingGetDemo(false, false)
 	if (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) or (EventFlowSystemActor.SystemCheckNowStage('cField')):
 		EventFlowSystemActor.NpcPlayerActivity('cActivityType_CookingCount')
-	System.EventFlags['cLifeSupportAchievement:CookFood'] += 1
 	System.EventFlags['cLifeSupportDaily:DoCooking'] = true
-	# Look what I made... [a|an]<125:0:0000>!
-	Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:031', true)
+	EventFlowSystemActor.EventFlagCookingNumAdd()
+	if EventFlowSystemActor.IsDIYMultiCreation('cCook'):
+		EventFlowSystemActor.SetTagFromUIResult('cCookingCreatedNum', 1)
+		if EventFlowSystemActor.IsCreateItemFlours():
+			# Look what I made... <90:1:0001> <50:8:0100000c0073007400610063006b0073000a0073007400610063006b000c0073007400610063006b0073> of <125:0:0000>!
+			Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:031_03', true)
+		else:
+			# Look what I made... <125:0:0000> × <90:1:0001>!
+			Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:031_02', true)
+	else:
+		# Look what I made... [a|an]<125:0:0000>!
+		Player.OpenMessageWindow('TalkFtr/FTR_Kitchen:031', true)
 
 flow Kitchen_CookingDemo_Finish():
 	EventFlowSystemActor.BGMPropertyControl(21)

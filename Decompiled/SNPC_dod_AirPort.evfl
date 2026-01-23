@@ -92,6 +92,9 @@ flow EntryPoint_Host():
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:401', true)
 
 flow EntryPoint_LockRetryLeave():
+	if Player.HotelMannequinIsRentalAny():
+		run RentalMannequinCodeRemove()
+		EventFlowSystemActor.MessageSuspend()
 	run EntryPoint_PreProcedure(ContinueAS=true)
 	EventFlowSystemActor.MessageLockNext(1)
 	# Getting ready to return home...
@@ -131,7 +134,7 @@ flow EntryPoint_PostProcedure():
 flow EntryPoint_PreProcedure(ContinueAS: bool):
 	MainNpc.TurnNeck(11, false)
 	MainNpc.TurnBody(12, -90.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.NpcStartAS('DodProcedure', false, ContinueAS)
 
 flow EntryPoint_RememberKeyword():
@@ -176,6 +179,48 @@ flow LandMakingRemove_Host():
 	if System.EventFlags['cPlayer:DodHeardAboutIslandCreator']:
 		# Oh, dang it! Looks like I forgot to check if you were using your Island Designer app.<10:7:003c0000> You can't use that app during flights or network…
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:121_01', false)
+		if Player.HotelMannequinIsRentalAny():
+			if System.EventFlags['cPlayer:DodRemoveMannequinRentalCode']:
+				# Aaand we'll just reclaim the outfit you borrowed from the hotel.<10:7:005a0000>
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1502', false)
+			else:
+				# Also, the outfit you borrowed from the hotel must be returned before you leave the island.<10:7:005a0000> I can just go ahead and get that back from …
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1503', false)
+			Player.HotelMannequinRental(false, true, true, false)
+		else:
+			run Sub_Event93()
+	else:
+		# Looks like you're busy doing Island Designer stuff.<10:7:005a0000> Sorry, but the regs say we can't let you use the Island Designer app during flight…
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:120_01', false)
+		if Player.HotelMannequinIsRentalAny():
+			if System.EventFlags['cPlayer:DodRemoveMannequinRentalCode']:
+				# Aaand we'll just reclaim the outfit you borrowed from the hotel.<10:7:005a0000>
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1502', false)
+			else:
+				# Also, the outfit you borrowed from the hotel must be returned before you leave the island.<10:7:005a0000> I can just go ahead and get that back from …
+				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1503', false)
+			Player.HotelMannequinRental(false, true, true, false)
+		else:
+			run Sub_Event93()
+	if System.EventFlags['cPlayer:DodHeardAboutIslandCreator']:
+		# Appreciate your patience, pal.<10:7:003c0000>
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:121_02', true)
+	else:
+		# Hey, thanks for humoring us! The dodos at the other airports tease us when we make a mess.<10:7:003c0000>
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:120_02', true)
+		System.EventFlags['cPlayer:DodHeardAboutIslandCreator'] = true
+		System.EventFlags['cPlayer:DodRemoveMannequinRentalCode'] = true
+
+flow LandMakingRemove_Soloplay():
+	run LandMakingRemove_Host()
+
+flow LandMakingRemove_Visitor():
+	run LandMakingRemove_Host()
+
+flow OnlyLandMakingRemove_Host():
+	if System.EventFlags['cPlayer:DodHeardAboutIslandCreator']:
+		# Oh, dang it! Looks like I forgot to check if you were using your Island Designer app.<10:7:003c0000> You can't use that app during flights or network…
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:121_01', false)
 	else:
 		# Looks like you're busy doing Island Designer stuff.<10:7:005a0000> Sorry, but the regs say we can't let you use the Island Designer app during flight…
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:120_01', false)
@@ -189,11 +234,21 @@ flow LandMakingRemove_Host():
 		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:120_02', true)
 		System.EventFlags['cPlayer:DodHeardAboutIslandCreator'] = true
 
-flow LandMakingRemove_Soloplay():
-	run LandMakingRemove_Host()
-
-flow LandMakingRemove_Visitor():
-	run LandMakingRemove_Host()
+flow RentalMannequinCodeRemove():
+	if System.EventFlags['cPlayer:DodRemoveMannequinRentalCode']:
+		# Oh! I'm so sorry, but… Well, I forgot about the outfit you borrowed from the hotel…<10:7:005a0000> You'll have to return it before you head out, so I…
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1500', false)
+	else:
+		# Oh! I'm so sorry, but… Well, you're still wearing the outfit you borrowed from the hotel.<10:7:005a0000> We'll need to get that back from you before …
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1501', false)
+	Player.HotelMannequinRental(false, false, true, false)
+	if System.EventFlags['cPlayer:DodRemoveMannequinRentalCode']:
+		# Appreciate your patience, pal.<10:7:003c0000>
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:121_02', true)
+	else:
+		# Hey, thanks for humoring us! The dodos at the other airports tease us when we make a mess.<10:7:003c0000>
+		MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:120_02', true)
+		System.EventFlags['cPlayer:DodRemoveMannequinRentalCode'] = true
 
 flow Root():
 	if EventFlowSystemActor.NetIsDreaming():
@@ -207,7 +262,7 @@ flow Root():
 				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:300', false)
 				switch EventFlowSystemActor.NetSessionCreateSetting():
 					case 0:
-run SNPC_dod_02_Airport_GateCheck::EntryPoint_GateCheck()
+						run SNPC_dod_02_Airport_GateCheck::EntryPoint_GateCheck()
 					case 1:
 						if EventFlowSystemActor.IsVillageGateOpened():
 							# By the way, is there anything I can do to help you out?
@@ -217,11 +272,11 @@ run SNPC_dod_02_Airport_GateCheck::EntryPoint_GateCheck()
 							MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:301', false)
 						switch EventFlowSystemActor.GeneralTalkChoice3():
 							case 0:
-run SNPC_dod_02_Airport_GateCheck::Dod_ChangeGate()
+								run SNPC_dod_02_Airport_GateCheck::Dod_ChangeGate()
 							case 1:
-run EntryPoint_RememberPassword()
+								run EntryPoint_RememberPassword()
 							case 2:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 					case 2:
 						if EventFlowSystemActor.IsVillageGateOpened():
 							# By the way, is there anything I can do to help you out?
@@ -231,11 +286,11 @@ run EntryPoint_RememberPassword()
 							MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:303', false)
 						switch EventFlowSystemActor.GeneralTalkChoice3():
 							case 0:
-run SNPC_dod_02_Airport_GateCheck::Dod_ChangeGate()
+								run SNPC_dod_02_Airport_GateCheck::Dod_ChangeGate()
 							case 1:
-run EntryPoint_RememberKeyword()
+								run EntryPoint_RememberKeyword()
 							case 2:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 			elif EventFlowSystemActor.IsVillageGateOpened():
 				switch EventFlowSystemActor.NetSessionCreateSetting():
 					case 0:
@@ -243,35 +298,35 @@ run EntryPoint_RememberKeyword()
 						MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:210', false)
 						switch EventFlowSystemActor.GeneralTalkChoice3():
 							case 0:
-run EntryPoint_CloseGateAndResetNetwork()
+								run EntryPoint_CloseGateAndResetNetwork()
 							case 1:
- run EntryPoint_ChangeToJoin()
+								run EntryPoint_ChangeToJoin()
 							case 2:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 					case 1:
 						# Hey there again! What can I do you for?
 						MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:211', false)
 						switch EventFlowSystemActor.GeneralTalkChoice4():
 							case 0:
-run EntryPoint_CloseGateAndResetNetwork()
+								run EntryPoint_CloseGateAndResetNetwork()
 							case 1:
-run EntryPoint_RememberPassword()
+								run EntryPoint_RememberPassword()
 							case 2:
- run EntryPoint_ChangeToJoin()
+								run EntryPoint_ChangeToJoin()
 							case 3:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 					case 2:
 						# Hey there again! What can I do you for?
 						MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:212', false)
 						switch EventFlowSystemActor.GeneralTalkChoice4():
 							case 0:
-run EntryPoint_CloseGateAndResetNetwork()
+								run EntryPoint_CloseGateAndResetNetwork()
 							case 1:
-run EntryPoint_RememberKeyword()
+								run EntryPoint_RememberKeyword()
 							case 2:
- run EntryPoint_ChangeToJoin()
+								run EntryPoint_ChangeToJoin()
 							case 3:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 			else:
 				switch EventFlowSystemActor.NetSessionCreateSetting():
 					case 0:
@@ -279,41 +334,41 @@ run EntryPoint_RememberKeyword()
 						MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:200', false)
 						switch EventFlowSystemActor.GeneralTalkChoice4():
 							case 0:
-run SNPC_dod_02_Airport_GateCheck::Dod_OpenGate()
+								run SNPC_dod_02_Airport_GateCheck::Dod_OpenGate()
 							case 1:
- run Close_NetworkConnection()
+								run Close_NetworkConnection()
 							case 2:
- run EntryPoint_ChangeToJoin()
+								run EntryPoint_ChangeToJoin()
 							case 3:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 					case 1:
 						# Hey there again! What can I do you for?
 						MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:201', false)
 						switch EventFlowSystemActor.GeneralTalkChoice5():
 							case 0:
-run SNPC_dod_02_Airport_GateCheck::Dod_OpenGate()
+								run SNPC_dod_02_Airport_GateCheck::Dod_OpenGate()
 							case 1:
- run Close_NetworkConnection()
+								run Close_NetworkConnection()
 							case 2:
-run EntryPoint_RememberPassword()
+								run EntryPoint_RememberPassword()
 							case 3:
- run EntryPoint_ChangeToJoin()
+								run EntryPoint_ChangeToJoin()
 							case 4:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 					case 2:
 						# Hey there again! What can I do you for?
 						MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:202', false)
 						switch EventFlowSystemActor.GeneralTalkChoice5():
 							case 0:
-run SNPC_dod_02_Airport_GateCheck::Dod_OpenGate()
+								run SNPC_dod_02_Airport_GateCheck::Dod_OpenGate()
 							case 1:
- run Close_NetworkConnection()
+								run Close_NetworkConnection()
 							case 2:
-run EntryPoint_RememberKeyword()
+								run EntryPoint_RememberKeyword()
 							case 3:
- run EntryPoint_ChangeToJoin()
+								run EntryPoint_ChangeToJoin()
 							case 4:
-	 run EntryPoint_Cancel()
+								run EntryPoint_Cancel()
 		elif EventFlowSystemActor.EnvHourOverGrowUp():
 			# Oh, hey—the island-wide broadcast is about to start. I'll have to close down for a minute. Don't worry—we'll get you where you're goin', but I never …
 			MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:1400', false)
@@ -328,6 +383,10 @@ run EntryPoint_RememberKeyword()
 flow Root_Init():
 	if (EventFlowSystemActor.IsMyVillage()) and (not EventFlowSystemActor.NetHasVisitor()):
 		MainNpc.NpcAITalkSubCastEntry('doc', 1)
+
+local flow Sub_Event93():
+	System.EventFlags['cPlayer:EquipLicenseHelmet'] = false
+	Player.PlayerOutfitFieldMakeToolKit('cOff')
 
 flow Visitor_Root():
 	MainNpc.TurnNeck(10, false)

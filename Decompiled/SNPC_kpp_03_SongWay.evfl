@@ -32,14 +32,17 @@ flow Root():
 			SubflowResults[0] = 1
 			run SongCancel()
 		else:
-			System.EventFlags['cPlayer:KppTakeTourTodayFlag'] = true
+			if System.EventFlags['cPlayer:KppTakeTourTodayFlag']:
+				System.EventFlags['cPlayer:KppTakeTour2TodayFlag'] = true
+			else:
+				System.EventFlags['cPlayer:KppTakeTourTodayFlag'] = true
 			System.EventFlags['cLifeSupportAchievement:VisitKappeiTour'] += 1
 			EventFlowSystemActor.SoundDuckingOff(56)
 			EventFlowSystemActor.CameraSetDemoParam('WayOut', 'WayOut', 'KeepFollow', false, false, false, 0)
 			EventFlowSystemActor.WaitFrame(80)
 			EventFlowSystemActor.SoundTriggerEmit('Boat_Stop', -1)
 			EventFlowSystemActor.WaitFrame(60)
-			run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cGoToKppTourIsland', FadeOutSpeed=0.0, FadeInSpeed='cNormal', FadeOutKindString='cNormalFader', FadeInKindString='cNormalFader')
+			run `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cGoToKppTourIsland', FadeOutSpeed=0.0, FadeInSpeed='cNormal', FadeOutKindString='cNormalFader', FadeInKindString='cNormalFader')
 
 flow Root_Init():
 	MainNpc.NpcAITalkSubCastEntry('NpcPlayer', 1)
@@ -60,7 +63,10 @@ flow SongCancel():
 				MainNpc.OpenMessageWindow('TalkSNpc/kpp/Song/SP_kpp_Song_Cancel:002', false)
 		branch:
 			EventFlowSystemActor.WaitFlowSwitchTag()
-			System.EventFlags['cPlayer:KppTakeTourTodayFlag'] = true
+			if System.EventFlags['cPlayer:KppTakeTourTodayFlag']:
+				System.EventFlags['cPlayer:KppTakeTour2TodayFlag'] = true
+			else:
+				System.EventFlags['cPlayer:KppTakeTourTodayFlag'] = true
 			System.EventFlags['cLifeSupportAchievement:VisitKappeiTour'] += 1
-			run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cGoToKppTourIsland', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=-2.0)
+			run `00_System_StageChange`::ChangeStage(FadeColorString='cBlack', TargetStage='cGoToKppTourIsland', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeInSpeed='cNormal', FadeOutSpeed=-2.0)
 	EventFlowSystemActor.SoundDuckingOff(56)

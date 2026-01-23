@@ -59,27 +59,36 @@ flow AmiiboPhone_RetryFromUI(NpadId: int = 0, ReadPadId: int = 0):
 flow Flow_NNPC():
 	EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcName', 'cDegit', 0, 0, '')
 	EventFlowSystemActor.SetUnlockFlagCollaboAmiiboNPC()
-	if EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cCamp'):
+	if EventFlowSystemActor.CheckAmiiboNPC('cSpltMantaro'):
+		# This amiibo can be used to invite Cece or Viché to the campsite. Which one would you like to invite?
+		Player.OpenMessageWindow('TalkObj/OBJ_RcoMachine:534', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu19')
+				run Sub_grp_Event55()
+			case 1:
+				EventFlowSystemActor.ChangeAmiiboNPC('cSqu20')
+				EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcName', 'cDegit', 0, 0, '')
+				run Sub_grp_Event55()
+			case 2:
+				run Obj_Common_AmiiboProcess::NFC_AskUsingOtherAmiibo()
+	elif EventFlowSystemActor.CheckAmiiboNPC('cCollaboVer30000'):
+		if EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cCamp'):
+			# This amiibo can be used to invite <115:1:cd00>, but they are already staying at the campsite.
+			Player.OpenMessageWindow('TalkObj/OBJ_RcoMachine:533', false)
+			run Obj_Common_AmiiboProcess::NFC_AskUsingOtherAmiibo()
+		else:
+			# This amiibo can be used to invite <115:1:cd00>. Would you like to invite them to the campsite?
+			Player.OpenMessageWindow('TalkObj/OBJ_RcoMachine:532', false)
+			run v3CollaboNPC()
+	elif EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cCamp'):
 		# That's <115:1:cd00>'s amiibo! But [he's|she's] already at the campsite.
 		Player.OpenMessageWindow('TalkObj/OBJ_RcoMachine:525', false)
 		run Obj_Common_AmiiboProcess::NFC_AskUsingOtherAmiibo()
 	else:
 		# That's <115:1:cd00>'s amiibo! Would you like to invite [him|her] to the campsite?
 		Player.OpenMessageWindow('TalkObj/OBJ_RcoMachine:522', false)
-		if EventFlowSystemActor.GeneralTalkChoice2() != 0:
-			run Obj_Common_AmiiboProcess::NFC_AskUsingOtherAmiibo()
-		elif not EventFlowSystemActor.IsCallableAmiiboNpc('cCamp'):
-			run AmiiboInviting_OutOfService()
-		elif EventFlowSystemActor.IsAmiiboNpcMigrated():
-			if EventFlowSystemActor.IsAmiiboNpcLiving():
-				run Sub_grp_Event21()
-			else:
-				run AmiiboInviting_VoiceMail()
-		else:
-			if EventFlowSystemActor.IsAmiiboNpcLiving():
-				run Sub_grp_Event21()
-			else:
-				run Sub_Event19()
+		run v3CollaboNPC()
 
 flow Root():
 	run Obj_RcoMachine::ChkRcoMachineSel()
@@ -109,3 +118,33 @@ local flow Sub_grp_Event21():
 			run AmiiboInviting_VoiceMail()
 		case 2:
 			run AmiiboInviting_OutOfService()
+
+local flow Sub_grp_Event55():
+	if EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cCamp'):
+		# They are already staying at the campsite.
+		Player.OpenMessageWindow('TalkObj/OBJ_RcoMachine:535', false)
+		run Obj_Common_AmiiboProcess::NFC_AskUsingOtherAmiibo()
+	else:
+		run v3Mantaro()
+
+flow v3CollaboNPC():
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run v3Mantaro()
+	else:
+		run Obj_Common_AmiiboProcess::NFC_AskUsingOtherAmiibo()
+
+flow v3Mantaro():
+	if (EventFlowSystemActor.CheckHotelAmiiboNpc('cStayHotel')) or (EventFlowSystemActor.CheckHotelAmiiboNpc('cWandering')) or (EventFlowSystemActor.CheckHotelAmiiboNpc('cWorkData')):
+		run AmiiboInviting_OutOfService()
+	elif not EventFlowSystemActor.IsCallableAmiiboNpc('cCamp'):
+		run AmiiboInviting_OutOfService()
+	elif EventFlowSystemActor.IsAmiiboNpcMigrated():
+		if EventFlowSystemActor.IsAmiiboNpcLiving():
+			run Sub_grp_Event21()
+		else:
+			run AmiiboInviting_VoiceMail()
+	else:
+		if EventFlowSystemActor.IsAmiiboNpcLiving():
+			run Sub_grp_Event21()
+		else:
+			run Sub_Event19()

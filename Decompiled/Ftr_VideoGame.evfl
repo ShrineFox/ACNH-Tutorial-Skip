@@ -1,0 +1,189 @@
+flow `1stCheck`():
+	if not System.EventFlags['cPlayer:FamicomCheckNSOFlag']:
+		EventFlowSystemActor.MessageSuspend()
+		# You can play this game if you have a Nintendo Switch Online membership.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10805', false)
+		System.EventFlags['cPlayer:FamicomCheckNSOFlag'] = true
+
+flow CheckCanBootNetStatus():
+	if not ((EventFlowSystemActor.IsSubscribeNSO() == 0) and (EventFlowSystemActor.NetNetworkServiceAccountCacheCheck())):
+		# A Nintendo Switch Online membership is required to play this game. Would you like to connect to the internet to check your Nintendo Switch Online mem…
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10801', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Quit()
+		else:
+			run CheckCanBootNetStatus_Retry()
+
+flow CheckCanBootNetStatus_Retry():
+	run CheckNSOSimple()
+	if SubflowResults@2[1] != 0:
+		# Unable to confirm membership for Nintendo Switch Online. Do you want to try checking your Nintendo Switch Online membership status again?
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10804', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Quit()
+		else:
+			run CheckCanBootNetStatus_Retry()
+	elif EventFlowSystemActor.IsSubscribeNSO() == 0:
+		# Nintendo Switch Online membership confirmed.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10802', false)
+	else:
+		# Nintendo Switch Online membership could not be confirmed.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:10803', false)
+		run Quit()
+
+flow CheckCanBootScene():
+	if not EventFlowSystemActor.IsMyVillage():
+		# I'm hanging out with someone now, so I'll play games later…
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:012', false)
+		run Quit()
+	elif EventFlowSystemActor.NetHasVisitor():
+		# I have company over right now, so I'll play games later…
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:010', false)
+		run Quit()
+	elif EventFlowSystemActor.IsVillageGateOpened():
+		# A visitor might arrive at the airport soon, so I'll play games later…
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:011', false)
+		run Quit()
+	elif EventFlowSystemActor.IsSharePlay(0):
+		# I'm hanging out with someone now, so I'll play games later…
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:013', false)
+		run Quit()
+	elif EventFlowSystemActor.SystemCheckNowStage('cTalkingPlayerHouse'):
+		if EventFlowSystemActor.IsNpcVisitPlayerHouse():
+			# I have company over right now, so I'll play games later…
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:014', false)
+			run Quit()
+	elif EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse'):
+		# I probably shouldn't play someone else's games without asking…
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:015', false)
+		run Quit()
+
+flow CheckNSOSimple():
+	SubflowResults[1] = 1
+	EventFlowSystemActor.MessageLockNext(1)
+	# Connecting to the internet to check Nintendo Switch Online membership status...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:032', false)
+	if EventFlowSystemActor.NetMode() not in (0, 2):
+		EventFlowSystemActor.NetShutdown('cNetShutdown', false)
+	EventFlowSystemActor.NetConnectInit('cConnectInet', true)
+	if not EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.NetCheckNSAUnavailable('cCheckNSAUnavailable', true)
+		if not EventFlowSystemActor.CheckErrorType(2):
+			SubflowResults[1] = 0
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.MessageUnlockNext()
+
+flow PlayReport():
+	switch SubflowResults@7[0]:
+		case 0:
+			System.EventFlags['cPlayer:FamicomPlayCount1'] += 1
+		case 1:
+			System.EventFlags['cPlayer:FamicomPlayCount2'] += 1
+		case 2:
+			System.EventFlags['cPlayer:FamicomPlayCount3'] += 1
+		case 3:
+			System.EventFlags['cPlayer:FamicomPlayCount4'] += 1
+		case 4:
+			System.EventFlags['cPlayer:FamicomPlayCount5'] += 1
+		case 5:
+			System.EventFlags['cPlayer:FamicomPlayCount6'] += 1
+		case 6:
+			System.EventFlags['cPlayer:FamicomPlayCount7'] += 1
+
+flow Quit():
+	Ftr.FtrChangeSwitch(false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow Root():
+	Ftr.FtrChangeSwitch(true)
+	run Title()
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run CheckCanBootScene()
+		EventFlowSystemActor.MessageSuspend()
+		run CheckCanBootNetStatus()
+		run PlayReport()
+		run StartGame()
+	else:
+		run Quit()
+
+flow StartGame():
+	# To exit the game, press and hold  and  at the same time.
+	EventFlowSystemActor.OpenMessageWindow('TalkFtr/FTR_VideoGame:008', false)
+	EventFlowSystemActor.MessageSuspend()
+	Ftr.SetRunVideoGameItem()
+	EventFlowSystemActor.WaitFrame(5)
+	run `00_System_StageChange`::ChangeStage(TargetStage='cVideogameEmulation', FadeColorString='cBlack', FadeInKindString='cNormalFader', FadeOutKindString='cNormalFader', FadeOutSpeed=0.0, FadeInSpeed='cNormal')
+
+flow Title():
+	if Ftr.IsTargetFtr(978):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag1']:
+			EventFlowSystemActor.SetTagItemNameDirect(978, 1, 0, 0)
+			# There's a Clu Clu Land game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:100', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag1'] = true
+		# Maybe I'll play Clu Clu Land.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:001', false)
+		SubflowResults[0] = 0
+	elif Ftr.IsTargetFtr(979):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag2']:
+			EventFlowSystemActor.SetTagItemNameDirect(979, 1, 0, 0)
+			# There's an Ice Climber game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:101', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag2'] = true
+		# Maybe I'll play Ice Climber.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:002', false)
+		SubflowResults[0] = 1
+	elif Ftr.IsTargetFtr(980):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag3']:
+			EventFlowSystemActor.SetTagItemNameDirect(980, 1, 0, 0)
+			# There's an Ice Hockey game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:102', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag3'] = true
+		# Maybe I'll play Ice Hockey.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:003', false)
+		SubflowResults[0] = 2
+	elif Ftr.IsTargetFtr(982):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag4']:
+			EventFlowSystemActor.SetTagItemNameDirect(982, 1, 0, 0)
+			# There's a Panel de Pon game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:103', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag4'] = true
+		# Maybe I'll play Panel de Pon.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:004', false)
+		SubflowResults[0] = 3
+	elif Ftr.IsTargetFtr(983):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag5']:
+			EventFlowSystemActor.SetTagItemNameDirect(983, 1, 0, 0)
+			# There's an F-Zero game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:104', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag5'] = true
+		# Maybe I'll play F-Zero.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:005', false)
+		SubflowResults[0] = 4
+	elif Ftr.IsTargetFtr(984):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag6']:
+			EventFlowSystemActor.SetTagItemNameDirect(984, 1, 0, 0)
+			# There's an F-Zero game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:105', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag6'] = true
+		# Maybe I'll play F-Zero.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:006', false)
+		SubflowResults[0] = 5
+	elif Ftr.IsTargetFtr(985):
+		if not System.EventFlags['cPlayer:FamicomCheckFlag7']:
+			EventFlowSystemActor.SetTagItemNameDirect(985, 1, 0, 0)
+			# There's a Dr. Mario game in the <125:0:0000>.
+			Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:106', false)
+			run `1stCheck`()
+			System.EventFlags['cPlayer:FamicomCheckFlag7'] = true
+		# Maybe I'll play Dr. Mario.
+		Player.OpenMessageWindow('TalkFtr/FTR_VideoGame:007', false)
+		SubflowResults[0] = 6
+	else:
+		run Quit()

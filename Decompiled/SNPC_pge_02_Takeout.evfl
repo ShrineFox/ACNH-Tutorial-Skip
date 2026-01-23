@@ -1,12 +1,12 @@
 flow Pge_Anime_TakeOut():
 	EventFlowSystemActor.MessageSuspend()
 	MainNpc.TurnBody(12, 270.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.PgeCafeReaction('cTakeOut', true)
 	MainNpc.PgeCafeReaction('cPourCoffee', true)
 	MainNpc.PgeCafeReaction('cPutOnLid', true)
 	MainNpc.TurnBody(12, 0.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.PgeCafeReaction('cPutOnTable', true)
 	EventFlowSystemActor.WaitFrame(10)
 	Player.PlayerMuseumCafe(0, true)
@@ -95,7 +95,7 @@ entrypoint Event41:
 						if not EventFlowSystemActor.ShoppingCapacity('cItemName', 14541):
 							# Looks like…your pockets are full…
 							MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:022', false)
-run SNPC_pge::Pge_DeleteUI()
+							run SNPC_pge::Pge_DeleteUI()
 						elif EventFlowSystemActor.HasBellCount(300):
 							MainNpc.SetDeliveryItemAtRandom(14541, false, 'cVillageRemakePattern', 0)
 							EventFlowSystemActor.BellCountDown(300, true)
@@ -105,27 +105,27 @@ run SNPC_pge::Pge_DeleteUI()
 							else:
 								# Coming right up… No matter where you're from, I'll give you a cup of coffee you're sure to appreciate.
 								MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:027', false)
-run SNPC_pge::Pge_DeleteUI()
-  run Pge_Anime_TakeOut()
+							run SNPC_pge::Pge_DeleteUI()
+							run Pge_Anime_TakeOut()
 							EventFlowSystemActor.SetMemoryValuePlayer('cBlancoValuePlayer:PV_Cafe_TakeoutCoffee', 1)
 							EventFlowSystemActor.SetItemToPocket(14541, 1)
 							# Coo… Thank you very much.
 							MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:024', false)
 							if EventFlowSystemActor.IsMyVillage():
-System.EventFlags['cPlayer:PgeCoffeeTodayFlag'] = true
+								System.EventFlags['cPlayer:PgeCoffeeTodayFlag'] = true
 								if not System.EventFlags['cLand:CoffeTakeout']:
-System.EventFlags['cLand:CoffeTakeout'] = true
+									System.EventFlags['cLand:CoffeTakeout'] = true
 								if not System.EventFlags['cPlayer:DrinkCoffeeToday']:
-System.EventFlags['cLifeSupportAchievement:DrinkCoffee'] += 1
-System.EventFlags['cPlayer:DrinkCoffeeToday'] = true
+									System.EventFlags['cLifeSupportAchievement:DrinkCoffee'] += 1
+									System.EventFlags['cPlayer:DrinkCoffeeToday'] = true
 							else:
-System.EventFlags['cPlayerVisit:PgeVisitorCoffeeFlag'] = true
+								System.EventFlags['cPlayerVisit:PgeVisitorCoffeeFlag'] = true
 						else:
 							# Coo!<10:4> You're a little short on cash… Sorry, but…I don't run tabs…
 							MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:021', false)
-run SNPC_pge::Pge_DeleteUI()
+							run SNPC_pge::Pge_DeleteUI()
 					else:
- run Sub_grp_Event14()
+						run Sub_grp_Event14()
 				else:
 					# Looks like…your pockets are full…
 					MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge_02_Takeout:022', false)

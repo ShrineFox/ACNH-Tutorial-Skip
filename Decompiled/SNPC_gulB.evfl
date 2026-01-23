@@ -398,6 +398,20 @@ entrypoint Event163:
 	else:
 		run GulB_GetUp_NotStart()
 
+flow MegaphoneWakeUp():
+	if not System.EventFlags['cLand:JohnnySitUpFlag']:
+		run GulBTalkChk()
+		if EventFlowSystemActor.IsSharePlay(0):
+			run GulB_Share()
+		elif not EventFlowSystemActor.IsMyVillage():
+			run GulB_DC()
+		elif System.EventFlags['cPlayer:GulBQuestFinishFlag']:
+			run GulBKeepSleep()
+		elif System.EventFlags['cPlayer:GulBQuestStartFlag']:
+			run GulB_GetUp_Start()
+		else:
+			run GulB_GetUp_NotStart()
+
 flow Root():
 	if EventFlowSystemActor.IsSharePlay(0):
 		run GulB_Share()

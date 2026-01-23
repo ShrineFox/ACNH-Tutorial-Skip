@@ -9,6 +9,14 @@ flow ChkSituation_v200():
 		run EnableSwitch()
 		EventFlowSystemActor.ExitFlowchart()
 
+flow ChkSituation_v300():
+	if (EventFlowSystemActor.SystemCheckNowStage('cCloudIsland')) or (EventFlowSystemActor.SystemCheckNowStage('cCloudIslandTalkingPlayerHouse')):
+		run EnableSwitch()
+		EventFlowSystemActor.ExitFlowchart()
+	elif (EventFlowSystemActor.SystemCheckNowStage('cHotelRoom')) and (not EventFlowSystemActor.HotelOrderProgress()):
+		run EnableSwitch()
+		EventFlowSystemActor.ExitFlowchart()
+
 flow EnableSwitch():
 	if EventFlowSystemActor.SystemRadioPlayMusic():
 		EventFlowSystemActor.SystemSetTagRadioPlayMusic()
@@ -34,6 +42,7 @@ flow Root():
 
 local flow Sub_Event22():
 	run ChkSituation_v200()
+	run ChkSituation_v300()
 	if not Ftr.IsOnStarterFtrSwitch():
 		# Nothing is playing.
 		Player.OpenMessageWindow('TalkFtr/FTR_Radio:005', false)

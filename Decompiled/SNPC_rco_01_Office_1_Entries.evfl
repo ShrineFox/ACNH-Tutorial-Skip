@@ -64,6 +64,26 @@ flow IslandDevelopmentIntro():
 		else:
 			run SNPC_rco_00_Common_Entries::Rco_CmnSel_Cancel()
 
+flow NoticeHotelCeremony():
+	SubflowResults[0] = 0
+	run Event156()
+
+flow NoticeHotelCeremony_Force():
+	run SNPC_rco_01_Tent_1_Entries::RcoTent_Force_PlayerPos()
+	SubflowResults[0] = 1
+entrypoint Event156:
+	if not System.EventFlags['cPlayerTemp:RcoTalkSceneFlag']:
+		# Ah, PLAYER! Hello, hello!
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_00_Common:000', false)
+		System.EventFlags['cPlayerTemp:RcoTalkSceneFlag'] = true
+	# Oh, yes! With your help, we were able to open the hotel, so we're putting together a little celebration ceremony. I'd love for you to be there. After…
+	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_08_Ceremony:300', false)
+	System.EventFlags['cPlayer:RcoNoticeHotelCeremony'] = true
+	if SubflowResults@2[0] == 0:
+		# Yes, yes! Anyway, enough about that.
+		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1007', false)
+		run SNPC_rco_00_Common::Root()
+
 flow NpcHouseCoordeOpen():
 	SubflowResults[0] = 0
 	run Event124()
@@ -113,7 +133,7 @@ entrypoint Event143:
 	MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1011', false)
 	System.EventFlags['cPlayer:RcoTalkAboutNpcHouseEditOfficeBuild'] = false
 	if SubflowResults@2[0] == 0:
-		# Yes, yes! That's my big idea. Anyway, thank you for hearing me out.
+		# Yes, yes! Anyway, enough about that.
 		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1007', false)
 		run SNPC_rco_00_Common::Root()
 
@@ -254,7 +274,7 @@ local flow Sub_Event114():
 	System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable'] = true
 	System.EventFlags['cLand:UnlockSzaResetHouse'] = true
 	if SubflowResults@2[0] == 0:
-		# Yes, yes! That's my big idea. Anyway, thank you for hearing me out.
+		# Yes, yes! Anyway, enough about that.
 		MainNpc.OpenMessageWindow('TalkSNpc/rco/SP_rco_14_CoordinateNpcHouse:1007', false)
 		run SNPC_rco_00_Common::Root()
 

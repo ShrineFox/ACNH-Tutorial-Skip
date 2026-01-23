@@ -1,0 +1,20 @@
+flow Init():
+	if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+		MainNpc.NpcRegistAIBlackBoard('DemoSpeak', 0)
+
+flow Root():
+	if MainNpc.NpcCheckStateSelectTiming('cInit'):
+		if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+			MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+			MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_rco_13_HotelTutorial', 'Root', false, true, ArgInt0=0, ArgStr0='kpp')
+		else:
+			run AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_rco_14_TradeBoxTutorial')
+			MainNpc.NpcAISetting(4, false)
+	elif MainNpc.NpcBlackBoard('DemoSpeak', 1):
+		run AI_NPC_Common::ContinueSpeak(EntryName='Root', FlowName='SNPC_rco_13_HotelTutorial')
+		MainNpc.NpcAISetting(4, false)
+		MainNpc.NpcAISetting(2, false)
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcSetAIBlackBoard('DemoSpeak', 0)
+	else:
+		MainNpc.NpcChangeAIState('cInvisible', '', '', 'Root', false, false)

@@ -30,15 +30,15 @@ entrypoint Event432:
 							MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:083', false)
 					if System.EventFlags['cPlayer:CatchInsectFesCount'] <= 10:
 						if System.EventFlags['cPlayer:CatchInsectFesCount'] != 10:
-  run Sub_grp_Event430()
+							run Sub_grp_Event430()
 						else:
 							# Um, anyway, it looks like you've still got some points… You've got <90:8:0001> points available. Would you like to redeem them for a relic?
 							MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:084', false)
-  run Sub_grp_Event407()
+							run Sub_grp_Event407()
 					else:
 						# Um, anyway, it looks like you've still got some points… You've got <90:8:0001> points available. Would you like to redeem <90:1:0000> of them for a r…
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:085', false)
-run Sub_grp_Event407()
+						run Sub_grp_Event407()
 				else:
 					run Sub_Event400()
 			else:
@@ -94,7 +94,7 @@ flow AfterEv_Always():
 			case `January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `November`:
 				switch EventFlowSystemActor.RandomChoice3(3):
 					case 0:
-run AfterEv_TalkNextMonth()
+						run AfterEv_TalkNextMonth()
 					case 1:
 						# Bug season goes on, until their light leaves our world again. There'll be another Bug-Off next month.
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:102', false)
@@ -107,7 +107,7 @@ run AfterEv_TalkNextMonth()
 						# With MONTH's bug festival over, it'll be time to de-people my life again for a while…
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:103', false)
 					case 1:
-run AfterEv_TalkNextYear()
+						run AfterEv_TalkNextYear()
 					case 2:
 						# And so ends another bug season… Don't forget—the next Bug-Off is next year. I hope I see you again!
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:105', false)
@@ -484,13 +484,13 @@ flow Result_Bonus_DC():
 flow Result_CatchP():
 	run Event156()
 
-flow Result_CatchP-Bonus_C():
+flow `Result_CatchP-Bonus_C`():
 	run Event181()
 
-flow Result_CatchP-Bonus_DC():
+flow `Result_CatchP-Bonus_DC`():
 	run Event182()
 
-flow Result_CatchP-Bonus_DC-C():
+flow `Result_CatchP-Bonus_DC-C`():
 	run Event183()
 
 flow Result_CatchPOver_Bornus_C():
@@ -611,17 +611,17 @@ flow SellBOX(SellTotal: int = 0):
 				EventFlowSystemActor.UIMoneyAppear()
 				switch EventFlowSystemActor.MoneyCapacity(SellTotal, 'cFishInsectFes'):
 					case 0:
-MainNpc.InsectFishBoxSellDone(1.5)
+						MainNpc.InsectFishBoxSellDone(1.5)
 						# Th-thanks!
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:125', false)
 					case 1:
-MainNpc.InsectFishBoxSellDone(1.5)
+						MainNpc.InsectFishBoxSellDone(1.5)
 						# Oh! That filled up your wallet, so I'll just give you the rest in a bag, OK? Thanks!
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:126', false)
 					case 2:
 						# Oh, uh, looks like your wallet is actually full. I'll just send this to your bank account…
 						MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:124', false)
-MainNpc.InsectFishBoxSellDone(1.5)
+						MainNpc.InsectFishBoxSellDone(1.5)
 				switch EventFlowSystemActor.EventCheck('InsectConvention'):
 					case 0, 1:
 						# I'll be sure to provide a good home for any bugs from your bug cage. I hope you'll play another round!
@@ -642,7 +642,7 @@ MainNpc.InsectFishBoxSellDone(1.5)
 								# This is the last Bug-Off for this year, but the next one will be in <90:35:cd00>. Prepare yourself.
 								MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:129', false)
 					case 3:
-  run Talk_AfterEv()
+						run Talk_AfterEv()
 			else:
 				run SellBoxCancel()
 		case 1:
@@ -666,7 +666,7 @@ entrypoint Event114:
 							# The bugs will not accept becagement forever. I expect the bug cage will be empty by tomorrow at <90:37:cd03> <110:21:cd03>. If there's a bug in there…
 							MainNpc.OpenMessageWindow('TalkSNpc/chy/SP_chy_event:133', true)
 						else:
-	run AfterEv_Always()
+							run AfterEv_Always()
 				case 3:
 					run AfterEv_Always()
 
@@ -869,15 +869,15 @@ entrypoint Event441:
 	else:
 		if System.EventFlags['cPlayerVisit:DC_CatchInsectFes_CooperativeBonus']:
 			if not System.EventFlags['cPlayerVisit:DC_CatchInsectFes_Bonus']:
-				run Result_CatchP-Bonus_DC()
+				run `Result_CatchP-Bonus_DC`()
 			elif System.EventFlags['cPlayerTemp:CatchInsectFesGetNum'] < 21:
-				run Result_CatchP-Bonus_DC-C()
+				run `Result_CatchP-Bonus_DC-C`()
 			else:
 				run Result_CatchPOver_Bornus_DC_C()
 		elif not System.EventFlags['cPlayerVisit:DC_CatchInsectFes_Bonus']:
 			run Result_CatchP()
 		elif System.EventFlags['cPlayerTemp:CatchInsectFesGetNum'] < 21:
-			run Result_CatchP-Bonus_C()
+			run `Result_CatchP-Bonus_C`()
 		else:
 			run Result_CatchPOver_Bornus_C()
 

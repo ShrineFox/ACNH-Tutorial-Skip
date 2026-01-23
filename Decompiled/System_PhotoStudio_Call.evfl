@@ -1,3 +1,21 @@
+flow Call_squ19squ20():
+	if EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cPhotoStudio'):
+		EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
+		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+		# <50:3><115:1:cd00> is already in Photopia.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1605', true)
+	else:
+		run ChkPhoneCallPrintService()
+		if EventFlowSystemActor.IsCallableAmiiboNpc('cPhotoStudio'):
+			EventFlowSystemActor.SetAmiiboReadOn()
+			EventFlowSystemActor.CreateSelectNpc(true)
+		else:
+			EventFlowSystemActor.SetAmiiboReadOn()
+			EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
+			EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+			# <50:3><115:1:cd00> can't be invited to Photopia.
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1606', true)
+
 flow ChkPhoneCallPrintService():
 	if not EventFlowSystemActor.IsCallableAmiiboNpc('cPhotoStudio'):
 		run ChkPhoneCall_Villager()
@@ -10,6 +28,18 @@ flow ChkPhoneCall_Villager():
 		System.EventFlags['cPlayer:StandByPhoneCallPrintService'] = true
 		System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
 		System.EventFlags['cPlayer:PhotoStudioUseCantCallAmiibo'] = true
+
+flow Chk_Mantaro():
+	if EventFlowSystemActor.CheckAmiiboNPC('cSpltMantaro'):
+		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+		# This amiibo can be used to call Cece or Viché. Who would you like to call?
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1615', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			EventFlowSystemActor.ChangeAmiiboNPC('cSqu19')
+		else:
+			EventFlowSystemActor.ChangeAmiiboNPC('cSqu20')
+		run Call_squ19squ20()
+		EventFlowSystemActor.ExitFlowchart()
 
 flow LoadNFP_Error():
 	EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
@@ -40,60 +70,45 @@ flow PostLoadNFP():
 		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
 		# Up to 10 characters can be invited at once.
 		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1607', false)
-	elif not EventFlowSystemActor.IsAcceptableAmiibo():
-		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
-		# This amiibo is not supported.
-		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1614', false)
-	elif EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
-		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
-		# Would you like to call Timmy or Tommy?
-		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1609', false)
-		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-			EventFlowSystemActor.ChangeAmiiboNPC('cRcm')
-			run Sub_grp_Event47()
-		else:
-			EventFlowSystemActor.ChangeAmiiboNPC('cRct')
-			run Sub_grp_Event47()
-	elif EventFlowSystemActor.CheckAmiiboNPC('cVillager'):
-		run PhotoStudioCallVillager()
-	else:
-		if EventFlowSystemActor.IsAlreadyCalledAmiiboAnotherTkk():
+	elif EventFlowSystemActor.IsAcceptableAmiibo():
+		run Chk_Mantaro()
+		if EventFlowSystemActor.CheckAmiiboNPC('cRcmAndRct'):
+			EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+			# Would you like to call Timmy or Tommy?
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1609', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				EventFlowSystemActor.ChangeAmiiboNPC('cRcm')
+				run Call_squ19squ20()
+			else:
+				EventFlowSystemActor.ChangeAmiiboNPC('cRct')
+				run Call_squ19squ20()
+		elif EventFlowSystemActor.CheckAmiiboNPC('cVillager'):
+			run PhotoStudioCallVillager()
+		elif EventFlowSystemActor.IsAlreadyCalledAmiiboAnotherTkk():
 			EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
 			EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
 			# <115:1:cd00> can't be invited right now…
 			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1605_01', false)
 		else:
-			run Sub_grp_Event47()
+			run Call_squ19squ20()
+	else:
+		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
+		# This amiibo is not supported.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1614', false)
 
 flow PostOpenNFP(NpadId: int = 0, ReadPadId: int = 0):
 	if not System.EventFlags['cPlayerTemp:PhotoStudioAmiiboInfoDone']:
 		EventFlowSystemActor.UIAmiiboPreviousNoticeGuideCreate()
 		System.EventFlags['cPlayerTemp:PhotoStudioAmiiboInfoDone'] = true
-	if not EventFlowSystemActor.NfcDisabled():
+	if EventFlowSystemActor.NfcDisabled():
+		if not System.EventFlags['cPlayerTemp:NFPFlightModeAssertDone']:
+			# When Airplane Mode is on, amiibo can't be read. Hold down  to access Quick Settings, where you can turn off Airplane Mode.
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1612', false)
+			System.EventFlags['cPlayerTemp:NFPFlightModeAssertDone'] = true
+	else:
 		EventFlowSystemActor.CheckNfpController(NpadId)
 		if (NpadId < 0) and (not System.EventFlags['cPlayerTemp:NFPControllerAssertDone']):
 			# The controller you are using cannot be used to read amiibo. Please use a controller that is compatible with amiibo. Note that the Pro Controller cann…
 			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1602', false)
 			System.EventFlags['cPlayerTemp:NFPControllerAssertDone'] = true
-	elif not System.EventFlags['cPlayerTemp:NFPFlightModeAssertDone']:
-		# When Airplane Mode is on, amiibo can't be read. Hold down  to access Quick Settings, where you can turn off Airplane Mode.
-		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1612', false)
-		System.EventFlags['cPlayerTemp:NFPFlightModeAssertDone'] = true
-
-local flow Sub_grp_Event47():
-	if EventFlowSystemActor.IsAlreadyCalledAmiiboNpc('cPhotoStudio'):
-		EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
-		EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
-		# <50:3><115:1:cd00> is already in Photopia.
-		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1605', true)
-	else:
-		run ChkPhoneCallPrintService()
-		if EventFlowSystemActor.IsCallableAmiiboNpc('cPhotoStudio'):
-			EventFlowSystemActor.SetAmiiboReadOn()
-			EventFlowSystemActor.CreateSelectNpc(true)
-		else:
-			EventFlowSystemActor.SetAmiiboReadOn()
-			EventFlowSystemActor.SetTagFromSystem('cAmiiboCallNpcNameToDialog', 'cDegit', 0, 0, '')
-			EventFlowSystemActor.UIPhotoIslandInteriorEditGuideOff()
-			# <50:3><115:1:cd00> can't be invited to Photopia.
-			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:1606', true)
+	run System_CmnDialog::NoticeAboutInteriorModeMouseDialog()

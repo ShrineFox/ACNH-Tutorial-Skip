@@ -1,0 +1,303 @@
+flow CloudIsland_NetErrorOccur(ErrorType: int):
+	EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(false)
+	run SNPC_tap_11_Indoor_ForCloudIsland::OpenPlayerEyes()
+	# Mmm… It appears the connection has failed.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:401', false)
+	if ErrorType <= 0:
+		run EndConnectProcess()
+	else:
+		# Shall I try it again?
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:402', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run Retry_FromNetworkError()
+		else:
+			run EndConnectProcess()
+
+flow ConfirmEndConnect():
+	# Do you still wish to find an island to visit?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:324', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run EndConnectProcess()
+	else:
+		run Guest_Step1_Search()
+
+flow Connect_BeforeSearch():
+	run System_ServerRegistration::UserRegist_CloudIslandSession(WithLogin=true, WithSave=true, Terminate=false)
+	run SNPC_tap::ConnectionMsg_End()
+	if SubflowResults@2[0] == 1:
+		run CloudIsland_NetErrorOccur(ErrorType=1)
+
+flow EndConnectProcess():
+	SubflowResults[1] = 0
+	EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	run SNPC_tap_11_Indoor_ForCloudIsland::Return_SelectionRoot()
+
+flow Guest_Root():
+	EventFlowSystemActor.CheckFreeCommunication(true)
+	if EventFlowSystemActor.IsApprovedFreeCommunication():
+		EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+		# You wish to visit a friend's Slumber Island? Of course.
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:301', false)
+		if System.EventFlags['cPlayer:OdekakeFirstInternet']:
+			# To send you on your way, I will first need to connect to the internet.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:302_01', false)
+			run Retry_FromNetworkError()
+		else:
+			# Oh! Before we get to that, there are some instructions I am obligated to share. Please read them over.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:398', true)
+			# Be considerate! Please do not share illegal content, personal information, content that infringes on the rights of others, or content that irritates …
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:0804', true)
+			System.EventFlags['cPlayer:OdekakeFirstInternet'] = true
+			# Thank you for reading that. Next, to send you on your way, I will need to connect to the internet. May I?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:302', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run Retry_FromNetworkError()
+			else:
+				run EndConnectProcess()
+	else:
+		# The parent or guardian who set up your system's Parental Controls must enable "Communicating with Others." Until this setting is changed, I will not …
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:399', false)
+		run EndConnectProcess()
+
+flow Guest_Step1_Search():
+	# We are connected with the world. How shall I find a Slumber Island for you?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:303', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			SubflowResults[1] = 0
+			if EventFlowSystemActor.NetHasFriend():
+				run SendAppFriendList()
+entrypoint Event17:
+				run SearchIsland_Friend()
+				run Sub_grp_Event61()
+			else:
+				# Oh… Your Nintendo Switch system's friend list appears to be empty. Well, once you have registered your friends, I am sure you will have a lovely time.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:397', false)
+				run ConfirmEndConnect()
+		case 1:
+			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+			# Excellent. What is the Doze Code?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:311', false)
+			EventFlowSystemActor.UISoftwareKeyboardHandling('cCloudIslandPassword', true)
+entrypoint Event24:
+			SubflowResults[1] = 1
+			if EventFlowSystemActor.UIResultMenuDecide():
+				EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+				run SearchIsland_Password()
+				run Sub_grp_Event61()
+			else:
+				EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+				run ConfirmEndConnect()
+		case 2:
+			run EndConnectProcess()
+
+flow Guest_Step2_Rock():
+	EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(true)
+	fork:
+		branch:
+			run RockIsland()
+		branch:
+			run SNPC_tap_11_Indoor_ForCloudIsland::ClosePlayerEyes()
+	run Event114()
+
+flow Guest_Step3_Join():
+	run JoinIsland()
+
+flow JoinIsland():
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:InDreamZoomIn', '', false)
+	EventFlowSystemActor.CameraSetDemoParam('InIdrDreamZoomIn', 'InIdrDreamZoomInOut', 'Player', false, false, false, 0)
+	EventFlowSystemActor.TapSmoke('cIdrDreamSmokeCloudIsland')
+	EventFlowSystemActor.WaitFrame(90)
+	EventFlowSystemActor.NextLPFadeOff()
+	EventFlowSystemActor.SystemBGMVolumeFadeOut(10.0, 2, 0.0)
+	EventFlowSystemActor.SoundSceneChangeFadeOutDucking(0)
+	EventFlowSystemActor.NetEnterVillage()
+
+flow ReInput_Password():
+	EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+	# Excellent. What is the Doze Code?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:311', false)
+	EventFlowSystemActor.UISoftwareKeyboardHandling('cCloudIslandPassword', false)
+	run Event24()
+
+flow Retry_FromNetworkError():
+	run Connect_BeforeSearch()
+	run Guest_Step1_Search()
+
+flow RockIsland():
+	EventFlowSystemActor.MessageLockNext(1)
+	# Preparing to visit a Slumber Island...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:042', false)
+	EventFlowSystemActor.NetJoinSessionVillage()
+	if EventFlowSystemActor.CheckErrorType(4):
+		run Sub_Event9()
+	else:
+entrypoint Event113:
+		EventFlowSystemActor.NetDemoLock(0)
+		if EventFlowSystemActor.CheckErrorType(4):
+			run Sub_Event9()
+		else:
+			run SNPC_tap::ConnectionMsg_End()
+
+flow RockIsland_Retry():
+	EventFlowSystemActor.MessageLockNext(1)
+	# Preparing to visit a Slumber Island...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:042', false)
+	run Event113()
+
+flow SearchIsland_Friend():
+	EventFlowSystemActor.MessageLockNext(1)
+	# Searching for Slumber Islands you can visit...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:041', false)
+	EventFlowSystemActor.NetFindSessionCloudIsland('cFriend')
+	run SNPC_tap::ConnectionMsg_End()
+	if EventFlowSystemActor.CheckErrorType(4):
+		run CloudIsland_NetErrorOccur(ErrorType=2)
+
+flow SearchIsland_Password():
+	EventFlowSystemActor.MessageLockNext(1)
+	# Searching for Slumber Islands you can visit...
+	EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_Network:041', false)
+	EventFlowSystemActor.NetFindSessionCloudIsland('cPassword')
+	run SNPC_tap::ConnectionMsg_End()
+	if EventFlowSystemActor.CheckErrorType(4):
+		run CloudIsland_NetErrorOccur(ErrorType=2)
+
+flow SearchIsland_Retry():
+	if SubflowResults@2[1] == 0:
+		run Event17()
+	else:
+		run ReInput_Password()
+
+flow SendAppFriendList():
+	if not System.EventFlags['cPlayer:MainmenuFriendList']:
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.WaitFrame(5)
+		# Aha! How special! It seems this is your first time playing with a friend. May I present the "Best Friends List" NookPhone app. It works whether you a…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4541', false)
+		run Demo_Common_PhoneCall::SendingDataOneWay_TapGuest()
+		System.EventFlags['cPlayer:MainmenuFriendList'] = true
+		EventFlowSystemActor.UIMenuDeviceAppear('cInstall', 'cFriendList')
+		# There. The app itself should be able to tell you everything you need to know. And tell your friends!
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:4542', true)
+		EventFlowSystemActor.WaitFrame(5)
+		MainNpc.SmartPhone(1)
+
+flow Step1_Search_Retry():
+	run Guest_Step1_Search()
+
+flow Step2_Rock_Retry():
+	EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(true)
+	fork:
+		branch:
+			run RockIsland_Retry()
+		branch:
+			run SNPC_tap_11_Indoor_ForCloudIsland::ClosePlayerEyes()
+entrypoint Event114:
+	if EventFlowSystemActor.CheckErrorType(2):
+		EventFlowSystemActor.ChangeSwitchIdrDreamAromaPot(false)
+		run SNPC_tap_11_Indoor_ForCloudIsland::OpenPlayerEyes()
+		switch EventFlowSystemActor.NetLockFailReason():
+			case 0:
+				# Hmm… It seems the host of that Slumber Island is busy at the moment.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:394', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run Step2_Rock_Retry()
+					case 1:
+						# I cannot send you to a Slumber Island while its host is conversing or busy working on something. If this situation persists, it may be simpler to try…
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:394_01', false)
+						# Or I could try again…just in case.
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:394_02', false)
+						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+							run Step2_Rock_Retry()
+						else:
+							run EndConnectProcess()
+					case 2:
+						run EndConnectProcess()
+			case 1:
+				# Oh. It appears the host of that Slumber Island stopped…hosting.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:392', false)
+				run Sub_Event71()
+			case 2:
+				# I am terribly sorry, but I no longer seem able to connect you. I am not sure what happened.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:392_01', false)
+				run Sub_Event71()
+	else:
+		EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+		# Success. I hope you enjoy your visit.<10:7:003c0000>
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:323', true)
+		run Guest_Step3_Join()
+
+local flow Sub_Event71():
+	# Would you like to search for another Slumber Island?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:392_02', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run Step1_Search_Retry()
+	else:
+		run ConfirmEndConnect()
+
+local flow Sub_Event9():
+	run SNPC_tap::ConnectionMsg_End()
+	run CloudIsland_NetErrorOccur(ErrorType=3)
+
+local flow Sub_grp_Event61():
+	switch EventFlowSystemActor.NetFoundVillageNum():
+		case 0:
+			# Sadly, I was unable to find a Slumber Island hosting guests.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:395', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				run SearchIsland_Retry()
+			else:
+				run ConfirmEndConnect()
+		case 1:
+			if EventFlowSystemActor.NetAllSessionIsFull():
+				# Ah. There does not appear to be room for any more guests on <115:0:cd00>'s island.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:396', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run SearchIsland_Retry()
+				else:
+					run ConfirmEndConnect()
+			elif EventFlowSystemActor.NetFindOnlyOneSessionIsOver8NX():
+				# It seems that only those playing on the Nintendo Switch 2 Edition may visit <115:0:cd00>'s island.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:396_01', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run SearchIsland_Retry()
+					case 1:
+						# It means that the island's host may only invite those who are playing the Nintendo Switch 2 Edition. The host will need to recreate the invitation as…
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:396_02', false)
+						# But I could also simply try again…
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:396_03', false)
+						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+							run SearchIsland_Retry()
+						else:
+							run ConfirmEndConnect()
+					case 2:
+						run ConfirmEndConnect()
+			else:
+				# At the moment, the only Slumber Island I can find is being hosted by <115:0:cd00>.
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:321', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run Guest_Step2_Rock()
+					case 1:
+						run SearchIsland_Retry()
+					case 2:
+						run ConfirmEndConnect()
+		case 2:
+			# Thank you for your patience. Here are the Slumber Islands I found hosting guests right now…
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:322', true)
+			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
+			EventFlowSystemActor.UICloudIslandDialogSelectIsland()
+			switch EventFlowSystemActor.NetIsDecidedVillage():
+				case 0:
+					EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+					run Guest_Step2_Rock()
+				case 1:
+					EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+					run SearchIsland_Retry()
+				case 2:
+					EventFlowSystemActor.UIVersionGuideAppear('cNormal', 'cOn')
+					run ConfirmEndConnect()

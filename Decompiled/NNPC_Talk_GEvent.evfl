@@ -1,8 +1,12 @@
 flow Birthday_Judge():
-	if (EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime')) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
-		run NNPC_GEvent_BirthdayP::Root()
-	elif (EventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
-		run NNPC_GEvent_BirthdayP::Root_NextDay()
+	if EventFlowSystemActor.MainPlayerIsBirthday(false, 'cGrowUpTime'):
+		if EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0:
+			run NNPC_GEvent_BirthdayP::Root()
+		else:
+			run NNPC_GEvent_BirthdayP::Root_NextDay()
+	else:
+		if (EventFlowSystemActor.IsTheDayAfterTalkPlayerBithday()) and (EventFlowSystemActor.EnvHourCompare(0, -1, true, false) == 0):
+			run NNPC_GEvent_BirthdayP::Root_NextDay()
 
 flow Root():
 	if MainNpc.NpcIsSitting() in (0, 1, 2, 3, 5):
@@ -18,10 +22,10 @@ flow Root():
 				if EventFlowSystemActor.EventCheck('XmasEve') == 1:
 					if System.EventFlags['cPlayer:ReiStartQuest2']:
 						if ((not MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsFlag']) or (MainNpc.EventFlags['cNpcMemory:ChristmasSantaPresentsNoGetFlag']) or (System.EventFlags['cPlayer:ReiGetReward3'])) and (not MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']):
-run NNPC_Reaction_Sitting::StandingUp_Chk()
+							run NNPC_Reaction_Sitting::StandingUp_Chk()
 					else:
 						if (EventFlowSystemActor.CheckChristmasSantaPresentsProgress(true, 0)) and (not MainNpc.EventFlags['cNpcMemory:ChristmasGiftExchangeFlag']):
-run NNPC_Reaction_Sitting::StandingUp_Chk()
+							run NNPC_Reaction_Sitting::StandingUp_Chk()
 			default:
 				return
 	else:

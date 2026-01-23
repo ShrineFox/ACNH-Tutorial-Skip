@@ -1,0 +1,701 @@
+flow ChestNumOver():
+	# Uh-oh… Hey, buddy! I can't do no resettin' if your home storage is full! I could do some work if ya had, say, <90:3:0000> slots free… So whaddaya say…
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060', false)
+	if System.EventFlags['cPlayer:RcoStorageExpansion_v300'] != 2:
+		switch EventFlowSystemActor.PlayerHouseLevel():
+			case `BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`:
+				# Hey! I was thinkin'… If ya put an addition on your place, you'd have a lot more room for storage…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_01_01', false)
+				# You should hit up Nook Inc. I betcha they could help ya out.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_02', false)
+			case `Basement`:
+				# I was thinkin'. This is one mole's opinion, but…if ya did some work on your place, you'd have more storage.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_01_00', false)
+				# You should hit up Nook Inc. I betcha they could help ya out.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_02', false)
+			default:
+				return
+	# Not to get all up in your business or nothin'. I'm just tryin' to help you help me, capisce?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_03', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow ExecuteTidying(FieldTidyingTarget: str, IsTidyingMyDesign: bool, IsTidyingFlower: bool, IsToChestFgFlower: bool, EndPreview: bool):
+	EventFlowSystemActor.UISetFlowDataTidying(FieldTidyingTarget)
+	# Let's go! It's mole time!
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:084', false)
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.SoundDuckingOn(72)
+	EventFlowSystemActor.FadeOut('cTidyingMol', 'cTidyingMol', 'cBrown', 1.0, 1.0, true)
+	EventFlowSystemActor.RequestRunAwayBeeFotTidying()
+	if EndPreview:
+		EventFlowSystemActor.ControlFieldTidyingPreview('cEnd', FieldTidyingTarget, IsTidyingMyDesign, IsTidyingFlower)
+	EventFlowSystemActor.ExecuteFieldTidying(FieldTidyingTarget, IsTidyingMyDesign, IsTidyingFlower, IsToChestFgFlower)
+	if System.EventFlags['cPlayer:NpcTidyRequestBeforeFlag']:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):
+			case 0:
+				# Aw…dirt clods… This gadget is always cloggin' up…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:300', false)
+			case 1:
+				# Aww…earthworms… Am I doin' this right?
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:301', false)
+			case 2:
+				# Aw…gimme a break… Cord's all tangled up… I ain't got time for this nonsense…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:302', false)
+			case 3:
+				# Oh…ya got a problem, mole… Geez, ya forgot to charge this thing last night…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:303', false)
+			case 4:
+				# Er…hmm… Huh? Somethin's stuck in the hose…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:304', false)
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# What in… Hey! It's my sock! I thought I lost this one, and I wasted Bells on a second pair!
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:304_00', false)
+					case 1:
+						# Uh… Holy moly! My fuzzy slippers! So this is where they disappeared to!
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:304_01', false)
+					case 2:
+						# Wait… My boots! When did these get sucked up in here?
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:304_02', false)
+	else:
+		# Aw…dirt clods… This gadget is always cloggin' up…
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:300', false)
+	# NOW… We're ready!
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:310', false)
+	EventFlowSystemActor.SoundTriggerEmit('レンジャー！', -1)
+	# <10:12>  　　<100:2>RANGERS, GO!</100:2><10:8:001e0000>
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:311', false)
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.StartTidyingLoadIcon()
+	EventFlowSystemActor.SetMemoryEventPlayer('cBlancoEventPlayer:PE_TidyUp')
+	MainNpc.TurnNeck(11, false)
+	MainNpc.TurnBody(12, 180.0)
+	Player.TurnBody(12, 180.0)
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.FinalizeFieldTidying()
+	EventFlowSystemActor.FadeIn(true)
+	EventFlowSystemActor.WaitFrame(30)
+	EventFlowSystemActor.AfterTidyingEffectEmit()
+	EventFlowSystemActor.SoundTriggerEmit('TidyingSparkle', -1)
+	run mol_AfterAct()
+	EventFlowSystemActor.StoreNormalCamera(false, '')
+	MainNpc.TalkCamera(true, 'AfterTidying', 0)
+	EventFlowSystemActor.WaitFrame(10)
+	EventFlowSystemActor.SoundDuckingOff(72)
+	fork:
+		branch:
+			Player.TurnBody(0, 0.0)
+		branch:
+			MainNpc.TurnBody(10, 0.0)
+	run mol_AfterTidying()
+	run mol_PaymentFee()
+	# Thanks a ton.
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:096', false)
+	EventFlowSystemActor.RequestCameraIdlerNextUpdateSetTargetPos()
+	EventFlowSystemActor.ExitFlowchart()
+
+flow Root():
+	if EventFlowSystemActor.IsMyVillage():
+		run mol_SetPrice()
+		run mol_HaveTransceiver()
+		run mol_FirstTalk()
+		if SubflowResults@2[0] == 0:
+			# Ya ready to start resettin'?
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:030', false)
+		else:
+			# Huh? Should I start resettin'?
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:032', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run mol_Request()
+			case 1:
+				# OK! Let's talk 'bout the Reset Service. There's a lot, so scrub the dirt outta yer ears and pay attention!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:033', false)
+				run mol_Explain()
+				# Ya ready to start resettin'?
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:031', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					run mol_Request()
+				else:
+					run mol_Cancel()
+			case 2:
+				run mol_Cancel()
+	else:
+		run mol_DC_Out()
+
+local flow Sub_Event137():
+	# Sure thing! Uh… Hold up. You tryin' to pull a fast one? You ain't got enough Bells for the job! You want a reset, ya gotta pay <90:22:0000>, or there…
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:037', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+local flow Sub_Event247():
+	EventFlowSystemActor.UIMoneyDisappear()
+	System.EventFlags['cLand:TidyingToday'] = true
+	EventFlowSystemActor.SetTodayPayTidyingPlayer()
+	System.EventFlags['cPlayer:NpcTidyPayTodayFlag'] = true
+
+local flow Sub_Event271(IsTidyingMyDesign: bool, IsTidyingFlower: bool, IsToChestFgFlower: bool, FieldTidyingTarget: str):
+	# OK! So this is the area you want I should reset, right?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:104', false)
+entrypoint Event10:
+	EventFlowSystemActor.FinalizeCalcFieldTidyingInfo()
+	if not EventFlowSystemActor.CheckFieldTidyingInfo('cCanToChest', false, false):
+		EventFlowSystemActor.SetTidyingMessageTag('cNeedSpaceNum', 0)
+		run ChestNumOver()
+	elif (not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistTidyingObject', true, true)) and ((not EventFlowSystemActor.CheckFieldTidyingInfo('cIsToATMBell', false, false)) or (EventFlowSystemActor.CheckFieldTidyingInfo('cFailToATMBellAll', false, false))):
+		switch SubflowResults@3[2]:
+			case 0:
+				# Hmm… You're callin' the shots, kid, but the island is already as reset as it gets. There's nothin' for me to do!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:068_00', false)
+			case 1:
+				# Hmm… You're callin' the shots, kid, but the beach is already as reset as it gets. There's nothin' for me to do!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:068_01', false)
+			case 2:
+				# Hmm… I gotta tell ya, there's nothin' in this area I can reset.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:068_02', false)
+		# Here's what'll go away with a reset: decorations, stuff placed on the ground, flowers, and custom designs.
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:069', false)
+		EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistFgFlower', false, false):
+		# I see ya got some planted flowers. Ya want me to stick 'em in storage, dispose of 'em, or leave 'em be?
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:064', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				# You got it, boss! I'll put the flowers into storage.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:065_00', false)
+				EventFlowSystemActor.EntryVariableOn('IsTidyingFlower')
+				EventFlowSystemActor.EntryVariableOn('IsToChestFgFlower')
+				if EventFlowSystemActor.CheckFieldTidyingInfo('cCanToChestIncludeFgFlower', false, false):
+					run Sub_grp_Event15(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+				else:
+					EventFlowSystemActor.SetTidyingMessageTag('cNeedSpaceNumFlowerTidying', 0)
+					run ChestNumOver()
+			case 1:
+				# Sure thing. Planted flowers get unplanted and tossed.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:065_01', false)
+				EventFlowSystemActor.EntryVariableOn('IsTidyingFlower')
+				run Sub_grp_Event15(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+			case 2:
+				# I hear ya! Don't touch the flowers!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:066', false)
+				run Sub_grp_Event15(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+	else:
+		run Sub_grp_Event15(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+
+local flow Sub_Event361(IsTidyingMyDesign: bool, IsTidyingFlower: bool, IsToChestFgFlower: bool):
+	EventFlowSystemActor.UIMoneyAppear()
+	# OK! So this is the area you want I should reset, right?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:104', false)
+	# Uh… Hold up. You tryin' to pull a fast one? You ain't got enough Bells for the job! You want a reset, ya gotta pay <90:22:0000>, or there's no deal! …
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:038', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+local flow Sub_grp_Event15(IsTidyingMyDesign: bool, IsTidyingFlower: bool, IsToChestFgFlower: bool, FieldTidyingTarget: str):
+	if EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistMyDesign', false, false):
+		# Ya got some custom designs on the ground. Ya want I should get rid of 'em too?
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:061', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# You got it, boss! I'll take out all the custom designs too.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:062', false)
+			EventFlowSystemActor.EntryVariableOn('IsTidyingMyDesign')
+		else:
+			# You're the boss, boss! Custom designs stay where they is.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:063', false)
+	if (not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistTidyingObject', IsTidyingMyDesign, IsTidyingFlower)) and ((not EventFlowSystemActor.CheckFieldTidyingInfo('cIsToATMBell', true, true)) or (EventFlowSystemActor.CheckFieldTidyingInfo('cFailToATMBellAll', false, false))):
+		# Hmm… You're the boss, pal, but that means there ain't nothin' to reset.
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:067', false)
+		# Here's what'll go away with a reset: decorations, stuff placed on the ground, flowers, and custom designs.
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:069', false)
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		if SubflowResults@3[2] in (0, 1):
+			EventFlowSystemActor.CalcFieldTidyingScore(FieldTidyingTarget, IsTidyingMyDesign, IsTidyingFlower)
+			switch EventFlowSystemActor.CheckWarpTidyingPos(FieldTidyingTarget):
+				case 0:
+					if not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistAroundObject', IsTidyingMyDesign, IsTidyingFlower):
+						run mol_MovePos()
+				case 1:
+					run mol_MovePos()
+				default:
+					return
+		# Can I get started? Or do ya wanna see what it'll look like when I'm done?
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:082', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				EventFlowSystemActor.MessageSuspend()
+				EventFlowSystemActor.FadeOut('cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.5, true)
+				switch SubflowResults@3[2]:
+					case 0:
+						EventFlowSystemActor.ControlFieldTidyingPreview('cCameraSet', 'cMainField', IsTidyingMyDesign, IsTidyingFlower)
+					case 1:
+						EventFlowSystemActor.ControlFieldTidyingPreview('cCameraSet', 'cBeach', IsTidyingMyDesign, IsTidyingFlower)
+					case 2:
+						EventFlowSystemActor.ControlFieldTidyingPreview('cCameraSet', 'cUserSelect', IsTidyingMyDesign, IsTidyingFlower)
+				Player.PlayerChangeDemoState('cSharePlaySubHideUntilDemoEnd')
+				EventFlowSystemActor.WaitFtrDynamicCreate(30)
+				if SubflowResults@3[2] in (0, 1):
+					EventFlowSystemActor.ControlFieldTidyingPreview('cStart', FieldTidyingTarget, IsTidyingMyDesign, IsTidyingFlower)
+				else:
+					EventFlowSystemActor.ControlFieldTidyingPreview('cStart', 'cUserSelect', IsTidyingMyDesign, IsTidyingFlower)
+				EventFlowSystemActor.FadeIn(true)
+				EventFlowSystemActor.WaitFrame(60)
+				# It'll look a little somethin' like this when I'm all done. If it's OK with you, I'll get started.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:083', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() != 0:
+					EventFlowSystemActor.MessageSuspend()
+					EventFlowSystemActor.FadeOut('cNormalFader', 'cNormalFader', 'cWhite', 0.5, 0.5, true)
+					if SubflowResults@3[2] in (0, 1):
+						EventFlowSystemActor.ControlFieldTidyingPreview('cEnd', FieldTidyingTarget, IsTidyingMyDesign, IsTidyingFlower)
+					else:
+						EventFlowSystemActor.ControlFieldTidyingPreview('cEnd', 'cUserSelect', IsTidyingMyDesign, IsTidyingFlower)
+					MainNpc.TalkCamera(false, 'cTalk', 2)
+					EventFlowSystemActor.FadeIn(true)
+					# Not what you were expectin'? Well, if you do still want a reset, gimme a call, capisce?
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:085', false)
+				elif SubflowResults@3[2] in (0, 1):
+					run ExecuteTidying(EndPreview=true, IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, FieldTidyingTarget=FieldTidyingTarget, IsToChestFgFlower=IsToChestFgFlower)
+				else:
+					run ExecuteTidying(EndPreview=true, FieldTidyingTarget='cUserSelect', IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower)
+			case 1:
+				if SubflowResults@3[2] in (0, 1):
+					run ExecuteTidying(EndPreview=true, IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, FieldTidyingTarget=FieldTidyingTarget, IsToChestFgFlower=IsToChestFgFlower)
+				else:
+					run ExecuteTidying(EndPreview=true, FieldTidyingTarget='cUserSelect', IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower)
+			case 2:
+				run mol_YappaCancel()
+
+flow Tidying_Filed(IsTidyingMyDesign: bool = false, IsTidyingFlower: bool = false, IsToChestFgFlower: bool = false, FieldTidyingTarget: str):
+	run Event10()
+
+flow Tidying_UserSelect(IsTidyingMyDesign: bool = false, IsTidyingFlower: bool = false, IsToChestFgFlower: bool = false, FieldTidyingTarget: str):
+	SubflowResults[2] = 2
+	run mol_SetPrice()
+	MainNpc.TurnBody(10, 0.0)
+	MainNpc.TalkCamera(false, 'cTalk', 0)
+	EventFlowSystemActor.CalcFieldTidyingInfo('cUserSelect')
+	EventFlowSystemActor.FadeIn(true)
+	switch SubflowResults@6[1]:
+		case 0:
+			if EventFlowSystemActor.HasBellCount(60000):
+				run Sub_Event271(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+			else:
+				run Sub_Event361(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower)
+		case 1:
+			if EventFlowSystemActor.HasBellCount(30000):
+				run Sub_Event271(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+			else:
+				run Sub_Event361(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower)
+		case 2, 3, 4, 5:
+			run Sub_Event271(IsTidyingMyDesign=IsTidyingMyDesign, IsTidyingFlower=IsTidyingFlower, IsToChestFgFlower=IsToChestFgFlower, FieldTidyingTarget=FieldTidyingTarget)
+
+flow mol_AfterAct():
+	if (System.EventFlags['cPlayer:NpcTidyRequestBeforeFlag']) and (EventFlowSystemActor.RandomChoiceExcludePrevious7(7, true) == 0):
+		MainNpc.CharacterEmoticonAction('AddStretch', true, '', 0, false)
+		EventFlowSystemActor.WaitFrame(50)
+	else:
+		MainNpc.CharacterEmoticonAction('Nodding', true, '', 0, false)
+		EventFlowSystemActor.WaitFrame(30)
+
+flow mol_AfterTidying():
+	# All done! Whaddaya think? Pretty tidy, ain't it?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:086', false)
+	if EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistTurnip', false, false):
+		# Figured I shouldn't mess with the turnips, so I left 'em the way they were!
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:089_00', false)
+	if EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistWrapping', false, false):
+		# Ah, yeah, there was a real nicely wrapped-up thing like a present just sittin' there… No clue who it belonged to, so I threw it in the recycle box at…
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:089_01', false)
+	if (EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistTreasureQuest', false, false)) or (EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistLostQuest', false, false)):
+		# While I got ya, I found something lyin' around. I got no idea whose it is either. Didn't seem like it was yours, so I left it where I found it. Is it…
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:089_02', false)
+	if EventFlowSystemActor.CheckFieldTidyingInfo('cIsToATMBell', false, false):
+		if EventFlowSystemActor.CheckFieldTidyingInfo('cFailToATMBellAll', false, false):
+			# I found some Bells while I was resettin', so I tried to deposit 'em in the ABD, but… your balance was maxed out, so I couldn't. Lucky you. I left 'em…
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:088_04', false)
+		else:
+			if (not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistTurnip', false, false)) and (not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistWrapping', false, false)) and (not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistTreasureQuest', false, false)) and (not EventFlowSystemActor.CheckFieldTidyingInfo('cIsExistLostQuest', false, false)):
+				# I found some Bells while I was cleanin' and deposited 'em in the ABD.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:088_00', false)
+			else:
+				# I also found some Bells while I was cleanin' and deposited 'em in the ABD.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:088_01', false)
+			if EventFlowSystemActor.CheckFieldTidyingInfo('cIsSuccessToATMBell', false, false):
+				# That ain't the best place to be leavin' Bells layin' around, pal. Get your act together, will ya?
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:088_02', false)
+			else:
+				# But your balance got maxed out, and I couldn't get 'em all in! I left the rest the way they were, so take care of 'em yourself, OK?
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:088_03', false)
+	if Player.IsExistCockroachInHouse():
+		# Oh, yeah, before I forget, I took care of the bugs in your house. You can sleep easy. You're pest-free!
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:087', false)
+		Player.ClearCockroachInHouse()
+
+flow mol_Cancel():
+	# What's that? Ya ain't interested?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:035', false)
+	EventFlowSystemActor.ExitFlowchart()
+
+flow mol_CheckPrice():
+	switch SubflowResults@6[1]:
+		case 0:
+			if not EventFlowSystemActor.HasBellCount(60000):
+				run Sub_Event137()
+		case 1:
+			if not EventFlowSystemActor.HasBellCount(30000):
+				run Sub_Event137()
+		default:
+			return
+
+flow mol_DC_Home():
+	if EventFlowSystemActor.NetHasVisitor():
+		if (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (SubflowResults@2[0] != 0):
+			# I can start resettin' once the visitors have left. Until that happens, this mole's on break!
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:205', false)
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			# We got some visitors on the island, yeah? So, uh, let's put a hold on any reset jobs for now.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:204', false)
+			EventFlowSystemActor.ExitFlowchart()
+	elif EventFlowSystemActor.IsVillageGateOpened():
+		if (EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) != 0) and (SubflowResults@2[0] != 0):
+			# I'll start resettin' once the airport gate's closed. In the meanwhile, I'll be in the area, ya know, relaxin'.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:207', false)
+			EventFlowSystemActor.ExitFlowchart()
+		else:
+			# Visitors could pop in here anytime. So for the time being, let's put a hold on any reset jobs.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:206', false)
+			EventFlowSystemActor.ExitFlowchart()
+
+flow mol_DC_Out():
+	if System.EventFlags['cPlayerVisit:DC_xxxTalkTodayFlag']:
+		switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+			case 0:
+				# I'm with the Reset Service. Name's Resetti.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:201', false)
+			case 1:
+				# Who knows? One day I might just do a little work on your island too.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:202', false)
+			case 2:
+				# I gotta put my reset on hold when visitors are on the island, so… This mole's a tourist for now, I guess!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:203', false)
+	else:
+		# How ya doin'? I got a job on this island today, so here I am.
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:200', false)
+		System.EventFlags['cPlayerVisit:DC_xxxTalkTodayFlag'] = true
+	EventFlowSystemActor.ExitFlowchart()
+
+flow mol_Explain():
+	# So what can I reset? Let's start with the basics. I can reset decorative things, like furniture, fencing, ladders, and stuff. Also things placed on t…
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:012', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# Let's see… What's next? Oh, yeah, lemme tell ya WHERE I can reset. I can tackle the entire island in one go… I can also focus on specific spots, like…
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:013', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# EARTHWORMS! I haven't told ya about how much this is gonna cost ya yet! The daily fee is 60,000 Bells! That may sound a bit high, but it covers a who…
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:014', false)
+			System.EventFlags['cPlayerTemp:NpcTidyTalkTodayFee'] = true
+			switch SubflowResults@6[1]:
+				case 0:
+					pass
+				case 1:
+					# But hey! Today and today only, as a special deal from me to you…it's half-price! Just <90:22:0000>!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:014_03', false)
+				case 2:
+					# And that ain't all! I got a special deal for first-time users. You're gonna love this. It's FREE!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:014_01', false)
+				case 3:
+					# That being said, I ain't done any work on <110:33> in forever. So today's special rate is free!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:014_02', false)
+				case 4:
+					# In case ya forgot, ya already paid for the day. So we're good. Capisce?
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:014_05', false)
+				case 5:
+					EventFlowSystemActor.SetTidyingMessageTag('cTodayPayTidyingPlayer', 0)
+					# But <115:0:cd00> already forked over the Bells for the day, so you ain't gotta pay a thing!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:014_04', false)
+			# I got a bit more to explain. Wanna hear it?
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:015', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# As an optional service, I can reset planted flowers and custom designs placed on the ground. Oh, and you can choose to toss out the flowers instead o…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:016', false)
+				# One more thing… I'll also do some pest control while I'm resettin'. So if your house is infested with creepy-crawlies, well, it won't be when I'm don…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:017', false)
+				# Let's see… That, uh, took a while. But that about covers it.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:018', false)
+			else:
+				# So no more explanations. I get it. It's a lot. And my endless yappin' don't make it any easier.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:019', false)
+		else:
+			# So no more explanations. I get it. It's a lot. And my endless yappin' don't make it any easier.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:019', false)
+	else:
+		# So no more explanations. I get it. It's a lot. And my endless yappin' don't make it any easier.
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:019', false)
+
+flow mol_FirstTalk():
+	if System.EventFlags['cPlayer:NpcTidyFirstTalk']:
+		if System.EventFlags['cPlayer:NpcTidyTalkToday']:
+			if not System.EventFlags['cPlayerTemp:NpcTidyTalkTodayFee']:
+				# Hey, PLAYER!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:010', false)
+			SubflowResults[0] = 1
+		else:
+			System.EventFlags['cPlayer:NpcTidyTalkToday'] = true
+			switch EventFlowSystemActor.NpcTidyVisitType():
+				case 0:
+					pass
+				case 1:
+					# Hey, PLAYER!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:010', false)
+				case 2:
+					# Hey, PLAYER! I'm makin' my regular rounds today.
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:006', false)
+				case 3:
+					# Hey, PLAYER! It's been a while, ain't it? You lookin' for a little mole power? Gah ha ha!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:007', false)
+				case 4:
+					if System.EventFlags['cPlayer:NpcTidyCall']:
+						# Hey, PLAYER! You the one who called?
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:008', false)
+					elif System.EventFlags['cLand:TidyingToday']:
+						# Hey, PLAYER! Ya need a reset?
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:009', false)
+					else:
+						# Hey, PLAYER!
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:010', false)
+			SubflowResults[0] = 0
+		run mol_DC_Home()
+		if SubflowResults@6[1] in (0, 1):
+			EventFlowSystemActor.UIMoneyAppear()
+		if not System.EventFlags['cPlayerTemp:NpcTidyTalkTodayFee']:
+			System.EventFlags['cPlayerTemp:NpcTidyTalkTodayFee'] = true
+			SubflowResults[0] = 0
+			switch SubflowResults@6[1]:
+				case 0:
+					# The reset fee is <90:22:0000>!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:020', false)
+				case 1:
+					# Today, as a special deal from me to you, I'll do it for half the usual price: just <90:22:0000>!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:021', false)
+				case 2:
+					if not System.EventFlags['cPlayer:NpcTidyRequestTodayFlag']:
+						# Since today's your first time usin' the service, I'm waivin' the fee. Ya heard me—it's free! And this deal won't expire, so you ain't gotta rush. The…
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:023', false)
+				case 3:
+					if not System.EventFlags['cPlayer:NpcTidyRequestTodayFlag']:
+						# I ain't done any work on <110:33> in a mole's age, so I'll do the job for free!
+						MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:022', false)
+				case 4:
+					# But I already been paid today, so ya don't owe me a single Bell more.
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:024', false)
+				case 5:
+					EventFlowSystemActor.SetTidyingMessageTag('cTodayPayTidyingPlayer', 0)
+					# <50:3><115:0:cd00> covered the bill, so you ain't gotta pay a thing!
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:025', false)
+	else:
+		System.EventFlags['cPlayer:NpcTidyFirstTalk'] = true
+		System.EventFlags['cPlayer:NpcTidyTalkToday'] = true
+		System.EventFlags['cPlayer:NpcTidyFirstTalkToday'] = true
+		# Uh, hello. My name is Resetti. I'm here to, uh, greet all the, um, island residents and inform them of our terrific Reset Service… AAAH! DIRT CLODS!<…
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:001', false)
+		# I'm gonna start over… Name's Resetti. That's clear, ain't it? On your NookPhone, ya got the app for the Rescue Service, right? Yeah, that's me. I'm …
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:001_00', false)
+		# Now, anyone who knows me knows resets and I have…a little history. I'd get riled up at just the word! But the game has changed, and it's long past ti…
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:001_01', false)
+		# So, you want I should give you the nitty-gritty? Yeah?
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:002', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Here we go! There's a lot to get through, so no noddin' off!
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:003', false)
+			run mol_Explain()
+			run mol_Mail()
+			if EventFlowSystemActor.NetHasVisitor():
+				EventFlowSystemActor.ExitFlowchart()
+			elif EventFlowSystemActor.IsVillageGateOpened():
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			# That so? Well, if ya ever wanna hear about the Reset Service, gimme a holler.
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:004', false)
+			run mol_Mail()
+			EventFlowSystemActor.ExitFlowchart()
+
+flow mol_HaveTransceiver():
+	if EventFlowSystemActor.HasTargetItem(1233, 1):
+		if EventFlowSystemActor.NetIsConnected():
+			SubflowResults[0] = 1
+			run mol_DC_Home()
+		else:
+			# Huh? What's up?
+			MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:100', false)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					run mol_Request2()
+					EventFlowSystemActor.ExitFlowchart()
+				case 1:
+					# Your call, boss! No sense in keepin' a <item>transceiver you ain't using.
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:107', false)
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.SetDeliveryItemAtRandom(1233, true, 'cVillageRemakePattern', 0)
+					MainNpc.NpcDelivery(0, 'Default')
+					# I'll be waitin' if ya change your mind.
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:103', false)
+					EventFlowSystemActor.ExitFlowchart()
+				case 2:
+					# Nice. Once you, uh, settle on a place, gimme a shout on the <item>transceiver.
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:106', false)
+					EventFlowSystemActor.ExitFlowchart()
+
+flow mol_Mail():
+	# Oh, one more thing… If ya ever need a reset, give Isabelle over at Resident Services a call. She'll put in the order, and I'll come a-tunnelin'. The …
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:005', false)
+	if not System.EventFlags['cLand:UnlockCallNpcTidy']:
+		System.EventFlags['cLand:UnlockCallNpcTidy'] = true
+		System.EventFlags['cLand:UnlockCallNpcTidyToday'] = true
+		EventFlowSystemActor.ResetNpcTidyVisitDay()
+		EventFlowSystemActor.SystemMailSend('cMol', 'MAIL_SNpc_mol', 1, 'cNone', 'cFastTomorrow', 'cNone', false, false)
+		EventFlowSystemActor.SystemMailSendVillager('cMol', 'MAIL_SNpc_mol', 1, 'cNone', 'cFastTomorrow', 'cNone')
+
+flow mol_MovePos():
+	# Time's a-wastin'. Let's get over to the reset site!
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:080', false)
+	EventFlowSystemActor.MessageSuspend()
+	EventFlowSystemActor.FadeOut('cCircle', 'cCircle', 'cBlack', 1.0, 1.0, true)
+	EventFlowSystemActor.WaitFrame(10)
+	EventFlowSystemActor.EscapeNpcForTidyingWarpMol(false)
+	Player.PlayerChangeDemoState('cSharePlaySubHideUntilDemoEnd')
+	fork:
+		branch:
+			MainNpc.NpcWarpTidyingPos('cTidyingPos')
+		branch:
+			Player.PlayerWarp(9)
+	EventFlowSystemActor.StoreNormalCamera(true, '')
+	MainNpc.TalkCamera(false, 'cTalk', 1)
+	MainNpc.TurnBody(10, 0.0)
+	EventFlowSystemActor.WaitFrame(10)
+	EventFlowSystemActor.FadeIn(true)
+	# This the place? Yeah, it could use a little TMC. That's "tender mole care." Gah ha ha!
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:081', false)
+
+flow mol_PaymentFee():
+	if not System.EventFlags['cPlayerTemp:NpcTidyTalkFeeAfterTidying']:
+		switch SubflowResults@6[1]:
+			case 0:
+				EventFlowSystemActor.UIMoneyAppear()
+				# Let's wrap things up with your payment. The reset fee is <90:22:0000>!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:090', false)
+				EventFlowSystemActor.MessageSuspend()
+				MainNpc.SetDeliveryItemAtRandom(2114, false, 'cVillageRemakePattern', 0)
+				MainNpc.NpcDelivery(0, 'Default')
+				EventFlowSystemActor.BellCountDown(-60000, false)
+				run Sub_Event247()
+			case 1:
+				EventFlowSystemActor.UIMoneyAppear()
+				# Let's wrap up your payment. Like I told ya, it's half-price this time, so that's gonna be <90:22:0000>.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:091', false)
+				EventFlowSystemActor.MessageSuspend()
+				MainNpc.SetDeliveryItemAtRandom(2114, false, 'cVillageRemakePattern', 0)
+				MainNpc.NpcDelivery(0, 'Default')
+				EventFlowSystemActor.BellCountDown(-30000, false)
+				run Sub_Event247()
+			case 2:
+				# Like I told ya earlier, today's your first time usin' the service, so it's free! Zero Bells! Nada! Zilch! Startin' tomorrow though, ya pay the standa…
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:092', false)
+			case 3:
+				# Like I said before, ya get a special rate today. Special as in free!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:093', false)
+			case 4:
+				# Hey, pal… You already paid today's fee. You're good to go.
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:094', false)
+			case 5:
+				EventFlowSystemActor.SetTidyingMessageTag('cTodayPayTidyingPlayer', 0)
+				# <50:3><115:0:cd00> already paid for today's services, so I don't need nothin' from you!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:095', false)
+		System.EventFlags['cPlayer:NpcTidyRequestTodayFlag'] = true
+		System.EventFlags['cPlayerTemp:NpcTidyTalkFeeAfterTidying'] = true
+		System.EventFlags['cPlayerTemp:NpcTidyTalkTodayFee'] = true
+		if not System.EventFlags['cPlayer:NpcTidyRequestBeforeFlag']:
+			System.EventFlags['cPlayer:NpcTidyRequestBeforeFlag'] = true
+			System.EventFlags['cPlayer:NpcTidyFirstRequestTodayFlag'] = true
+
+flow mol_Request():
+	if EventFlowSystemActor.PlayerHouseLevel() in (`Homeless`, `PlacedTent`):
+		# Sure thing! Uh… Hold up. We got a problem. Ya ain't got no place to store the stuff I clean up. If ya built a house, you'd have some storage to work …
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:036', false)
+		# You should hit up Nook Inc. I betcha they could help ya out.
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_02', false)
+		# Not to get all up in your business or nothin'. I'm just tryin' to help you help me, capisce?
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:060_03', false)
+		EventFlowSystemActor.ExitFlowchart()
+	else:
+		run mol_CheckPrice()
+		# Ya got it, kid! Where do ya want me resettin'?
+		MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:034', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				# So you wanna pick the area! In that case, lemme give you this!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:050', false)
+				if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+					# Earthworms… Listen, pal, you can't carry anything else, 'cause your pockets are burstin' at the seams! Go make some room, then come find me again so …
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:052', false)
+				else:
+					EventFlowSystemActor.MessageSuspend()
+					MainNpc.SetDeliveryItemAtRandom(1233, true, 'cVillageRemakePattern', 0)
+					MainNpc.NpcDelivery(1, 'Default')
+					# Once you've decided on the area, use that <item>transceiver ya got there and give me a call. Capisce?
+					MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:051', false)
+				EventFlowSystemActor.ExitFlowchart()
+			case 1:
+entrypoint Event141:
+				EventFlowSystemActor.CalcFieldTidyingInfo('cBeach')
+				# You got it, boss! One beach reset comin' up!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:053', false)
+				SubflowResults[2] = 1
+				run Tidying_Filed(FieldTidyingTarget='cBeach')
+				EventFlowSystemActor.ExitFlowchart()
+			case 2:
+entrypoint Event337:
+				EventFlowSystemActor.CalcFieldTidyingInfo('cMainField')
+				# I hear ya, boss! I'll tidy up the entire island!
+				MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:054', false)
+				SubflowResults[2] = 0
+				run Tidying_Filed(FieldTidyingTarget='cMainField')
+				EventFlowSystemActor.ExitFlowchart()
+			case 3:
+				run mol_YappaCancel()
+
+flow mol_Request2():
+	run mol_CheckPrice()
+	# Ya got it, kid! Where do ya want me resettin'?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:108', false)
+	switch EventFlowSystemActor.GeneralTalkChoice3():
+		case 0:
+			run Event141()
+		case 1:
+			run Event337()
+		case 2:
+			run mol_YappaCancel()
+
+flow mol_SetPrice():
+	if (System.EventFlags['cPlayer:NpcTidyFirstRequestTodayFlag']) or (not System.EventFlags['cPlayer:NpcTidyRequestBeforeFlag']):
+		SubflowResults[1] = 2
+	elif not System.EventFlags['cLand:TidyingToday']:
+		switch EventFlowSystemActor.NpcTidyVisitType():
+			case 2:
+				EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 30000, '')
+				SubflowResults[1] = 1
+			case 3:
+				SubflowResults[1] = 3
+			case 4:
+				EventFlowSystemActor.SetTagFromSystem('cFlow', 'cMoney', 0, 60000, '')
+				SubflowResults[1] = 0
+			default:
+				return
+	elif System.EventFlags['cPlayer:NpcTidyPayTodayFlag']:
+		SubflowResults[1] = 4
+	else:
+		SubflowResults[1] = 5
+
+flow mol_YappaCancel():
+	# What's that? Ya cancelin' the order?
+	MainNpc.OpenMessageWindow('TalkSNpc/mol/SP_mol_FieldTidying:055', false)
+	EventFlowSystemActor.ExitFlowchart()

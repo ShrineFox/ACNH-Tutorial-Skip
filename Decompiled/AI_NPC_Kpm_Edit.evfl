@@ -1,0 +1,12 @@
+flow Init():
+	MainNpc.NpcAISetRequestSpeakFunc('cLeaveHotelRoom', false)
+
+flow Leave():
+	run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpm_HotelEdit', EntryName='StopLeave')
+
+flow Root():
+	MainNpc.NpcAIDefaultSetting(1)
+	if System.EventFlags['cPlayerTemp:HotelReserveKpmSpeak']:
+		run AI_NPC_Common::ContinueSpeak(EntryName='StartEdit', FlowName='SNPC_kpm_HotelEdit')
+	else:
+		MainNpc.NpcChangeAIState('cHotelEditWait', '', 'SNPC_kpm_HotelEdit', 'Root', true, false)

@@ -1,0 +1,412 @@
+flow CancelCodinate():
+	# What? Ye're quittin'?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:004', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# If ye quit, the room will go back to how it was before ye started. That gonna be OK?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:008', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			if EventFlowSystemActor.IsEditHotelVIPRoom():
+				# Yar… I'll explain it to our guest. Ye just come decorate when ye've got time.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:006', true)
+			else:
+				# Got it. Then let's sail back to the lobby.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005', true)
+			System.EventFlags['cPlayer:HotelEditCameraExplanation'] = false
+			EventFlowSystemActor.HotelOrderCallback('cCancelOrder')
+			run StopReturnEntrance()
+		else:
+			# Got it. I'll leave ye to do the rest, then.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_01', true)
+	else:
+		# Got it. I'll leave ye to do the rest, then.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_01', true)
+
+flow CmlVIPFirstEditEnd():
+	EventFlowSystemActor.SetNpcAIBlackBoardByLabel('cml', 'ReserveForErase', 1, 1)
+	EventFlowSystemActor.WaitFrame(6)
+	EventFlowSystemActor.SetupActorPosition(21)
+	EventFlowSystemActor.WaitFrame(6)
+
+flow EditStart():
+	# When ye're done, come talk to me. And now, I'll leave it in yer hands.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:001', true)
+	EventFlowSystemActor.HotelOrderCallback('cEditStart')
+	EventFlowSystemActor.HotelEditBGMStart()
+
+flow EditTutorial():
+	if System.EventFlags['cPlayer:HotelEditCameraExplanation']:
+		# What's the scuttlebutt?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:106', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run FinishedCodinate()
+			case 1:
+				run CancelCodinate()
+			case 2:
+				run ExplainEdit()
+			case 3:
+				run Nothing()
+	else:
+		# Oh! Yar! When ye're done decoratin', I want ye to take a photo usin' yer Camera app. The photos ye take'll get used fer the guest-rooms guide.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:103_02', false)
+		System.EventFlags['cPlayer:HotelEditCameraExplanation'] = true
+
+flow EditTutorialStart():
+	EventFlowSystemActor.WaitFrame(20)
+	if System.EventFlags['cLand:HotelIsCompletedEditTutorialAnyone']:
+		if EventFlowSystemActor.IsEditHotelVIPRoom():
+			# This be the VIP room. I want ye to decorate it, PLAYER.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:101_03', false)
+		else:
+			EventFlowSystemActor.SetHotelRoomNumberTag('cEditting', 0)
+			# This be <50:1><140:29:cd00>. I want ye to start off by decoratin' here.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:150', false)
+	else:
+		# This here be room 1! I want ye ta start decoratin' here.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:101', false)
+	# Decorate the room so it looks nice. I mean placin' furniture and changin' the wallpaper and floorin' and such.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_03', false)
+	# Press  to enter Decorating Mode. It'll make the whole process easier.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:102', false)
+	# An' if ye pick , ye can take out all the furniture ye know, so use what ye've got.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:103', false)
+	if EventFlowSystemActor.IsEditHotelVIPRoom():
+		# An' don't forget—ye can use  to imagine the guest visitin' the room. If ye're wonderin' if the room suits yer guest, give yer imagination a try!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:151_01', false)
+	if System.EventFlags['cLand:HotelIsCompletedEditTutorialAnyone']:
+		EventFlowSystemActor.SetHotelThemeMessageTag('CurrentTheme', 0)
+		# The theme for this one was… <140:28:cd00>.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:152', false)
+		# I've put some furniture that matches the theme on the Recommended tab in , so head there if ye're lost.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:153', false)
+	else:
+		EventFlowSystemActor.SetHotelRoomNumberTag('cEditting', 0)
+		# Arrr…instead o' havin' similar rooms, I'm thinkin' a variety o' rooms is what'll make our guests happy. Shakin' up the themes so every room o' the ho…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:114_01', false)
+		# That's why I've prepared some room themes—so ye can be designin' based on the mood ye're feelin'. Fer example, with <50:1><140:29:cd00>, I'm thinkin'…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:115', false)
+	# That bein' said, I'll leave it up to yer considerable artistic senses. Ye gotta do it yer way, PLAYER.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_04', false)
+	# When ye're done with yer decoratin', or if ye're unsure of anythin', come jabber with me! And now, I'll leave ye to it.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:105', true)
+	EventFlowSystemActor.HotelEditBGMStart()
+	EventFlowSystemActor.ExitFlowchart()
+
+flow EmotionReturnEntrance_VIP():
+	EventFlowSystemActor.SoundDuckingOn(73)
+	Player.CharacterEmoticonAction('RequestOkay', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(36)
+
+flow EmotionReturnEntrance_kpm():
+	EventFlowSystemActor.SoundDuckingOn(73)
+	if MainNpc.NpcIsSitting() not in (0, 1, 2, 3, 5):
+		MainNpc.TurnBody(10, 0.0)
+		MainNpc.NpcWaitTurn(false)
+	fork:
+		branch:
+			MainNpc.CharacterEmoticonAction('OkayOnehandLeft', true, '', 0, false)
+		branch:
+			Player.CharacterEmoticonAction('OkayOnehandLeft', true, '', 0, false)
+	EventFlowSystemActor.WaitFrame(28)
+
+flow EndEdit():
+	EventFlowSystemActor.HotelOrderCallback('cEditEnd')
+	run ReturnEntrance()
+
+flow ExplainEdit():
+	# Decorate the room so it looks nice. I mean placin' furniture and changin' the wallpaper and floorin' and such.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_03', false)
+	# Press  to enter Decorating Mode. It'll make the whole process easier.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:102', false)
+	# An' if ye pick , ye can take out all the furniture ye know, so use what ye've got.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:103', false)
+	if EventFlowSystemActor.IsEditHotelVIPRoom():
+		# An' don't forget—ye can use  to imagine the guest visitin' the room. If ye're wonderin' if the room suits yer guest, give yer imagination a try!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:151_01', false)
+	if System.EventFlags['cLand:HotelIsCompletedEditTutorialAnyone']:
+		EventFlowSystemActor.SetHotelThemeMessageTag('CurrentTheme', 0)
+		# Yar, the theme for this was gonna be…<140:28:cd00>!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:151', false)
+	else:
+		EventFlowSystemActor.SetHotelThemeMessageTag('CurrentTheme', 0)
+		# The theme for this one was… <140:28:cd00>.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:152', false)
+	# I've put some furniture that matches the theme on the Recommended tab in , so head there if ye're lost.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:153', false)
+	# That bein' said, I'll leave it up to yer considerable artistic senses. Ye gotta do it yer way, PLAYER.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_04', false)
+	# Alrighty then.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:052', false)
+
+flow FinishedCodinate():
+	# Oh me stars! Are ye finished?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:109', false)
+	if EventFlowSystemActor.IsEditHotelVIPRoom():
+		run VIPTutorial()
+	else:
+		MainNpc.TurnNeck(11, false)
+		MainNpc.TurnBody(18, 0.0)
+		EventFlowSystemActor.WaitFrame(20)
+		if not EventFlowSystemActor.CheckHotelEditEndCondition('cIsEntranceSpace'):
+			EventFlowSystemActor.WaitFrame(20)
+			MainNpc.TurnBody(10, 0.0)
+			# Arr… Sorry, but…ye gotta leave some entry room! Guests need ta get in an' outta their rooms, do they not?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:113', true)
+		elif not EventFlowSystemActor.CheckHotelEditEndCondition('cIsSpaceInRoom'):
+			EventFlowSystemActor.WaitFrame(20)
+			MainNpc.TurnBody(10, 0.0)
+			# It's…a bit cramped. The guests are gonna want at least a little space fer relaxin', don't ye think?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:113_01', false)
+		elif EventFlowSystemActor.CheckHotelEditEndCondition('cIsExistFtr'):
+			if EventFlowSystemActor.CheckHotelRoomFtrNum(3):
+				# What a wonderful room! The guests are gonna love it!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:110', true)
+			else:
+				# It be quite the simple room, yar? Decoratin' be a tough job…
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_01_04', false)
+			MainNpc.TurnBody(10, 0.0)
+			# Let's sail back to the lobby together.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_06', true)
+			EventFlowSystemActor.HotelOrderCallback('cEditEnd')
+			if not System.EventFlags['cLand:HotelIsCompletedEditTutorialAnyone']:
+				EventFlowSystemActor.ChooseFirstHotelVisitorNpc()
+			run ReturnEntrance()
+		else:
+			EventFlowSystemActor.WaitFrame(20)
+			MainNpc.TurnBody(10, 0.0)
+			# Arrr! Me voice is still echoing in here. Why don't ye try puttin' down some furniture.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:111_01', true)
+
+flow NomalRoomInpression():
+	if EventFlowSystemActor.CheckHotelRoomFtrNum(3):
+		if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+			# Shiver me timbers! What a wonderful room! I'd love ta stay in such a spot.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_01', true)
+		else:
+			# It be wonderful! Ye've got a popular room on yer hands. No doubt.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_01_01', true)
+	else:
+		# It be quite the simple room, yar? Decoratin' be a tough job…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_01_04', true)
+	MainNpc.TurnBody(10, 0.0)
+	# Let's sail back to the lobby together.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_06', true)
+
+flow Nothing():
+	# I'll leave ye to do the rest, then.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_02', true)
+
+flow ReturnEntrance():
+	run EmotionReturnEntrance_kpm()
+	run Event16()
+
+flow ReturnEntrance_VIP():
+	EventFlowSystemActor.HotelOrderCallback('cEditEnd')
+	run EmotionReturnEntrance_VIP()
+	if System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']:
+entrypoint Event16:
+		EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:kpm', '', false)
+	else:
+		EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:VIPTutorialEndTalk', 'Player', true)
+	System.EventFlags['cPlayerTemp:HotelReserveKpmDoneSpeak'] = true
+	EventFlowSystemActor.SoundTriggerEmit('HotelWipe_Return', -1)
+	EventFlowSystemActor.SystemRequestChangeStage('cHotelEntrance', 'cHotel', 'cHotel', 'cBlack', 1.0, 1.0)
+
+flow Root():
+	if System.EventFlags['cPlayer:SeqHotelEditTutorialDone']:
+		run StopLeave2()
+	else:
+		run EditTutorial()
+
+flow StartEdit():
+	System.EventFlags['cPlayerTemp:HotelReserveKpmSpeak'] = false
+	if not System.EventFlags['cPlayer:SeqHotelEditTutorialDone']:
+		run EditTutorialStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom2'):
+		run EditStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom3'):
+		run EditStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom4'):
+		run EditStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom5'):
+		run EditStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom6'):
+		run EditStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom7'):
+		run EditStart()
+	elif not EventFlowSystemActor.CheckHotelRoomCreated('cRoom8'):
+		run EditStart()
+	elif System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']:
+		run EditStart()
+	else:
+		# The decoratin' process is the same as before, but… If ye wonder if the room's suitable for yer guest, use  to imagine 'em in here an' see what ye th…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:001_01', true)
+		EventFlowSystemActor.HotelOrderCallback('cEditStart')
+		EventFlowSystemActor.HotelEditBGMStart()
+
+flow StopLeave():
+	# Yar? Ye're really gonna quit?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:007', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		# If ye quit, the room will go back to how it was before ye started. That gonna be OK?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:008', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Got it. Then let's sail back to the lobby.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005', true)
+			EventFlowSystemActor.HotelOrderCallback('cCancelOrder')
+			run StopReturnEntrance()
+		else:
+			# I'll leave ye to do the rest, then.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_02', false)
+	else:
+		# I'll leave ye to do the rest, then.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_02', false)
+
+flow StopLeave2():
+	# Yar? What's afoot?
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:002', false)
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			# Arrr…ye finished?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003', true)
+			run VIPTutorial()
+		case 1:
+			# What? Ye're quittin'?
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:004', false)
+			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+				# If ye quit, the room will go back to how it was before ye started. That gonna be OK?
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:008', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					if EventFlowSystemActor.IsEditHotelVIPRoom():
+						# Yar… I'll explain it to our guest. Ye just come decorate when ye've got time.
+						MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:006', true)
+					else:
+						# Got it. Then let's sail back to the lobby.
+						MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005', true)
+					EventFlowSystemActor.HotelOrderCallback('cCancelOrder')
+					run StopReturnEntrance()
+				else:
+					# Got it. I'll leave ye to do the rest, then.
+					MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_01', true)
+			else:
+				# Got it. I'll leave ye to do the rest, then.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_01', true)
+		case 2:
+			# Decorate the room so it looks nice. I mean placin' furniture and changin' the wallpaper and floorin' and such.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_03', false)
+			# Press  to enter Decorating Mode. It'll make the whole process easier.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:102', false)
+			# An' if ye pick , ye can take out all the furniture ye know, so use what ye've got.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:103', false)
+			if (EventFlowSystemActor.IsEditHotelVIPRoom()) or (EventFlowSystemActor.IsStayNpcEditHotelRoom()):
+				# An' don't forget—ye can use  to imagine the guest visitin' the room. If ye're wonderin' if the room suits yer guest, give yer imagination a try!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:151_01', false)
+			if not EventFlowSystemActor.IsHotelOrderFreeTheme():
+				EventFlowSystemActor.SetHotelThemeMessageTag('CurrentTheme', 0)
+				# Yar, the theme for this was gonna be…<140:28:cd00>!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:151', false)
+				# I've put some furniture that matches the theme on the Recommended tab in , so head there if ye're lost.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:153', false)
+				# That bein' said, I'll leave it up to yer considerable artistic senses. Ye gotta do it yer way, PLAYER.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_04', false)
+			# Alrighty then.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm:052', false)
+		case 3:
+			# I'll leave ye to do the rest, then.
+			MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:005_02', true)
+
+flow StopReturnEntrance():
+	System.EventFlags['cPlayerTemp:HotelReserveKpmStopSpeak'] = true
+	EventFlowSystemActor.CameraReserveFirstStateCommand('Talk:kpm', '', false)
+	run `00_System_StageChange`::ChangeStage(TargetStage='cHotelEntrance', FadeOutSpeed=-2.0, FadeInSpeed='cSlow', FadeOutKindString='cCircle', FadeInKindString='cCircle', FadeColorString='cBlack')
+
+local flow Sub_Event135():
+	# Ye've done yerself proud! Such exquisite placement! But I'd expect no less from ye, PLAYER.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:114', false)
+	run Sub_Event172()
+
+local flow Sub_Event172():
+	MainNpc.TurnBody(10, 0.0)
+	# Let's sail back to the lobby together.
+	MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_06', true)
+	run EndEdit()
+
+flow VIPRoomInpressionFirst():
+	EventFlowSystemActor.SetTagHotelVisitorNpcName('cInvitedVIP', 0)
+	if not EventFlowSystemActor.CheckHotelRoomFtrNum(3):
+		# It be quite the simple room, yar? Decoratin' be a tough job…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_01_04', true)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		# This be a nice room, an' a memorable one fer guests, no doubt.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_03', true)
+	else:
+		# This be fittin' fer a VIP room! <115:1:cd00>'ll love it.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_03_01', true)
+
+flow VIPRoomInpressionSecond():
+	EventFlowSystemActor.SetTagHotelVisitorNpcName('cInvitedVIP', 0)
+	if not EventFlowSystemActor.CheckHotelRoomFtrNum(3):
+		# It be quite the simple room, yar? Decoratin' be a tough job…
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_01_04', true)
+	elif EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
+		# Yer last layout was good, but this one be swell too. I'm sure <115:1:cd00>'ll like it.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_03_02', true)
+	else:
+		# What a nice room! I can't wait to show it off to <115:1:cd00>!
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_03_03', true)
+
+flow VIPTutorial():
+	MainNpc.TurnNeck(11, false)
+	MainNpc.TurnBody(18, 0.0)
+	EventFlowSystemActor.WaitFrame(20)
+	if not EventFlowSystemActor.CheckHotelEditEndCondition('cIsEntranceSpace'):
+		EventFlowSystemActor.WaitFrame(20)
+		MainNpc.TurnBody(10, 0.0)
+		# Arr… Sorry, but…ye gotta leave some entry room! Guests need ta get in an' outta their rooms, do they not?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:113', true)
+	elif not EventFlowSystemActor.CheckHotelEditEndCondition('cIsSpaceInRoom'):
+		EventFlowSystemActor.WaitFrame(20)
+		MainNpc.TurnBody(10, 0.0)
+		# It's…a bit cramped. The guests are gonna want at least a little space fer relaxin', don't ye think?
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:113_01', false)
+	elif not EventFlowSystemActor.CheckHotelEditEndCondition('cIsExistFtr'):
+		EventFlowSystemActor.WaitFrame(20)
+		MainNpc.TurnBody(10, 0.0)
+		# Arrr! Me voice is still echoing in here. Why don't ye try puttin' down some furniture.
+		MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:111_01', false)
+	elif EventFlowSystemActor.HotelOrderType() in (0, 2, 3):
+		if not EventFlowSystemActor.IsEditHotelVIPRoom():
+			run NomalRoomInpression()
+			run EndEdit()
+		elif EventFlowSystemActor.CheckHotelRoomCreated('cNowPlayerVIP'):
+			if EventFlowSystemActor.HotelOrderType() in (0, 2, 3):
+				run VIPRoomInpressionSecond()
+				run Sub_Event172()
+			else:
+				run Sub_Event135()
+		else:
+			run VIPRoomInpressionFirst()
+			System.EventFlags['cPlayer:HotelCoordinatedVIPCount'] += 1
+			if EventFlowSystemActor.IsVIPNpcAmiibo():
+				System.EventFlags['cPlayer:HotelCoordinatedVIPCount_amiibo'] += 1
+				MainNpc.TurnBody(10, 0.0)
+				# Yar! Our guest be about to arrive! It's time to greet 'em and show 'em the room.
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_04', true)
+			else:
+				System.EventFlags['cPlayer:HotelCoordinatedVIPCount_VisitingNPC'] += 1
+				MainNpc.TurnBody(10, 0.0)
+				# Now, we'd best be showin' our guest to their room!
+				MainNpc.OpenMessageWindow('TalkSNpc/kpm/SP_kpm_HotelEdit:003_05', true)
+				System.EventFlags['cPlayer:HotelVIPTutorialEndExplanation'] = true
+			MainNpc.CharacterEmoticonAction('Greeting', true, '', 0, false)
+			EventFlowSystemActor.WaitFrame(10)
+			EventFlowSystemActor.SystemBGMVolumeFadeOut(1.0, 0, 0.0)
+			EventFlowSystemActor.RequestDuckingNextWiping()
+			run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+			if EventFlowSystemActor.IsFindNpcByLabel('cml'):
+				run CmlVIPFirstEditEnd()
+			else:
+				EventFlowSystemActor.NpcSetPos(165.0, 220.0, 180.0, '-Hotel:VIP')
+				EventFlowSystemActor.SetNpcAIBlackBoardByLabel('-Hotel:VIP', 'ReserveVIPFinish', 1, 1)
+	else:
+		run Sub_Event135()

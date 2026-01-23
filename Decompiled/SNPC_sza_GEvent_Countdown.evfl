@@ -109,33 +109,35 @@ local flow Sub_Event0():
 	MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:003', false)
 	run Sub_grp_Event5()
 
-local flow Sub_Event30():
+local flow Sub_grp_Event30():
 	switch EventFlowSystemActor.RandomChoiceExcludePrevious4(4, true):
 		case 0:
 			# What do you think of my outfit? Such a special night deserves extra special attire!
 			MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:026', true)
-			return
 		case 1:
 			# YEAR really flew by so quickly…<10:4> Of course, I say that every year.
 			MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:027', true)
-			return
 		case 2:
 			# I wonder what kind of surprises next year will hold… Hopefully spending lots of time with my friends on ISLAND!
 			MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:028', true)
-			return
 		case 3:
-			if Player.PlayerIsUseCoordinate():
-				run Sub_Event30()
-			elif System.EventFlags['cPlayer:EquipLicenseHelmet']:
-				run Sub_Event30()
+			if (Player.PlayerIsUseCoordinate()) or (System.EventFlags['cPlayer:EquipLicenseHelmet']) or (Player.HotelMannequinIsRentalAny()):
+				switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
+					case 0:
+						# What do you think of my outfit? Such a special night deserves extra special attire!
+						MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:026', true)
+					case 1:
+						# YEAR really flew by so quickly…<10:4> Of course, I say that every year.
+						MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:027', true)
+					case 2:
+						# I wonder what kind of surprises next year will hold… Hopefully spending lots of time with my friends on ISLAND!
+						MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:028', true)
+			elif (not EventFlowSystemActor.PlayerIsEquipItem(4799, 5186, 5187, 5192, 5188, 5190, 5189, 5191, 'cAny', true, false)) and (not EventFlowSystemActor.PlayerIsEquipItem(5946, 5947, 5948, 5953, 5949, 5951, 5950, 5952, 'cAny', true, false)):
+				# You can buy a <item>New Year's hat from Mr. Nook if you visit his stall. You should go pick one up for today's festivities! It's nice to have an excu…
+				MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:029_01', true)
 			else:
-				if (not EventFlowSystemActor.PlayerIsEquipItem(4799, 5186, 5187, 5192, 5188, 5190, 5189, 5191, 'cAny', true, false)) and (not EventFlowSystemActor.PlayerIsEquipItem(5946, 5947, 5948, 5953, 5949, 5951, 5950, 5952, 'cAny', true, false)):
-					# You can buy a <item>New Year's hat from Mr. Nook if you visit his stall. You should go pick one up for today's festivities! It's nice to have an excu…
-					MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:029_01', true)
-				else:
-					# That <item>New Year's hat looks marvelous on you, PLAYER! I like that we kind of match!
-					MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:029_00', true)
-				return
+				# That <item>New Year's hat looks marvelous on you, PLAYER! I like that we kind of match!
+				MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:029_00', true)
 
 local flow Sub_grp_Event5():
 	if EventFlowSystemActor.ShoppingCapacity('cItemName', 5741):
@@ -184,7 +186,7 @@ flow Sza_Chat_After_Newyear():
 
 flow Sza_Chat_Before_Newyear():
 	if EventFlowSystemActor.RandomChoice2(2) == 0:
-		run Sub_Event30()
+		run Sub_grp_Event30()
 	else:
 		switch EventFlowSystemActor.EnvTimeZone():
 			case `05:00-07:59`, `08:00-11:59`, `12:00-15:59`:
@@ -198,7 +200,6 @@ flow Sza_Chat_Before_Newyear():
 					case 2:
 						# I was up really early this morning to start setting up for today's events, so excuse…my…<10:4> AH! I CAN'T! The Countdown only happens once a year! S…
 						MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:018', true)
-				return
 			case `16:00-18:59`:
 				if EventFlowSystemActor.RandomChoiceExcludePrevious2(2, true) == 0:
 					# It's starting to hit me that this is the last day of the year… But I have so much left to do!
@@ -206,10 +207,9 @@ flow Sza_Chat_Before_Newyear():
 				else:
 					# Everybody is starting to get fired up for the main event! Especially me!
 					MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:020', true)
-				return
 			case `19:00-23:59`, `00:00-04:59`:
 				if EventFlowSystemActor.EnvHourCompare(23, -1, true, true) == 0:
-					run Sub_Event30()
+					run Sub_grp_Event30()
 				else:
 					if EventFlowSystemActor.EnvHourCompare(23, 55, true, true) == 0:
 						switch EventFlowSystemActor.RandomChoiceExcludePrevious3(3, true):
@@ -228,7 +228,6 @@ flow Sza_Chat_Before_Newyear():
 					else:
 						# Less than five minutes to go! Please direct your attention to the digital display.
 						MainNpc.OpenMessageWindow('TalkSNpc/sza/GEvent/SP_sza_GEvent_Countdown:025', true)
-					return
 
 flow Sza_Get_StickLight():
 	MainNpc.MessageSuspend()

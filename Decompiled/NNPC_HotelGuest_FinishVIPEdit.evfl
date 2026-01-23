@@ -1,0 +1,92 @@
+flow CheckNpcFace():
+	switch MainNpc.IsNpcType():
+		case 0:
+			if (not MainNpc.NpcRace('bul')) and (not MainNpc.NpcRace('ant')) and (not MainNpc.NpcRace('elp')):
+				SubflowResults[1] = 0
+			else:
+				SubflowResults[1] = 1
+		case 1:
+			if (not MainNpc.NpcLabel('cml')) and (not MainNpc.NpcLabel('alp')) and (not MainNpc.NpcLabel('ttlA')) and (not MainNpc.NpcLabel('plo')) and (not MainNpc.NpcLabel('plk')) and (not MainNpc.NpcLabel('plm')) and (not MainNpc.NpcLabel('ott')):
+				SubflowResults[1] = 0
+			else:
+				SubflowResults[1] = 1
+		default:
+			return
+
+flow EnterRoom():
+	EventFlowSystemActor.ControlHotelRoomEntranceBox('Off')
+	fork:
+		branch:
+			MainNpc.NpcEnterWithOffsetZ('Entrance', 0, 5.0, 10)
+		branch:
+			run `00_Demo_Fade`::FadeIn_Cmn(IsWait=false)
+			EventFlowSystemActor.CameraSetDemoParam('VIPEditFinish_WalkEnd', 'VIPEditFinish_Walk', 'Place:SafeArea', false, false, false, 0)
+	Player.TurnBody(12, 180.0)
+
+flow FaceToFace():
+	run CheckNpcFace()
+	fork:
+		branch:
+			if SubflowResults@2[1] == 0:
+				Player.TurnBody(0, 0.0)
+				Player.PlayerWaitTurn()
+				Player.TurnNeck(0, false)
+			else:
+				Player.TurnBody(12, 60.0)
+				Player.PlayerWaitTurn()
+		branch:
+			if SubflowResults@2[1] == 0:
+				MainNpc.TurnBody(12, 270.0)
+			else:
+				MainNpc.TurnBody(12, 300.0)
+
+flow InvisibleCompanion():
+	if MainNpc.NpcLabel('alw'):
+		EventFlowSystemActor.NpcSetPos(0.0, 0.0, 0.0, 'alp')
+		EventFlowSystemActor.SetNpcAIBlackBoardByLabel('alp', 'RequestInvisible', 1, 1)
+	elif MainNpc.NpcLabel('alp'):
+		EventFlowSystemActor.NpcSetPos(0.0, 0.0, 0.0, 'alw')
+		EventFlowSystemActor.SetNpcAIBlackBoardByLabel('alw', 'RequestInvisible', 1, 1)
+
+flow PrepareEnterRoom():
+	SubNpc.NpcAISetPos(0.0, 0.0, 180.0, false, false)
+	SubNpc.NpcSetVisibleAction(false)
+	run InvisibleCompanion()
+	MainNpc.NpcSetVisibleAction(false)
+	MainNpc.TurnNeck(11, false)
+	Player.TurnBody(11, 45.0)
+	EventFlowSystemActor.SetupActorPosition(20)
+
+flow Root():
+	switch MainNpc.IsNpcType():
+		case 0:
+			# RANDOM: Whoa! This room's actually for me? This… // Ooo, this is my VIP room? It's even coo… // This is the comfiest-looking room I've …
+			MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/HotelGuest/BO_HotelGuest:95001', true)
+			MainNpc.HotelNpcBecomeAcquainedWithPlayer()
+			MainNpc.EventFlags['cHotelNpcMemory:TalkedHotelNpc'] = true
+		case 1:
+			run SNPC_common_HotelGuest::FinishVIPEdit()
+		default:
+			return
+
+flow StartCompleteBGM():
+	EventFlowSystemActor.HotelEditBGMEnd()
+	EventFlowSystemActor.WaitFrame(1)
+	EventFlowSystemActor.SystemBGMVolumeFadeIn(0.0, 0, 0.0)
+	EventFlowSystemActor.BGMPropertyControl(200)
+
+flow VIPFinish():
+	EventFlowSystemActor.CameraSetDemoParam('VIPEditFinish_EnterRoom', '', 'Place:SafeArea', false, false, false, 0)
+	run PrepareEnterRoom()
+	EventFlowSystemActor.WaitFrame(45)
+	run StartCompleteBGM()
+	run EnterRoom()
+	MainNpc.NpcFascinated(true)
+	run FaceToFace()
+	EventFlowSystemActor.CameraSetDemoParam('VIPEditFinish_Talk', 'VIPEditFinish_Talk', 'Place:SafeArea', false, false, false, 0)
+	run Root()
+	System.EventFlags['cPlayer:FinishEditVIPRoomToday'] = true
+	run SNPC_kpm_HotelEdit::ReturnEntrance_VIP()
+
+flow VIPFinish_Init():
+	MainNpc.NpcAITalkSubCastEntry('kpm', 1)

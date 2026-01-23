@@ -1,0 +1,92 @@
+flow FirstExplain():
+	# So curious! Or at least, I presume so. Would you like to know more about what you can do on Slumber Islands?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3001', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run Root()
+	else:
+		# Ah! How kind. Hello to you as well. But please do not mind me. Go forth and have fun. Oh, and if you want to know more about what you may do here, me…
+		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3001_01', false)
+		System.EventFlags['cPlayerTemp:ReserveTapFirstTalkCloudIsland'] = false
+		EventFlowSystemActor.ExitFlowchart()
+
+flow ForGuest_ExplainAboutIsland():
+	# If you need advice about how these islands differ from those you may be used to, I would be happy to help.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3013', false)
+	run Event9()
+
+flow ReturnSel_Explain():
+	# Is there anything else I may assist you with?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3003', false)
+	run Event5()
+
+flow ReturnSel_ExplainAboutIsland():
+	# Are there any other topics in need of elucidation? You need only ask.
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3012', false)
+	run Event9()
+
+flow Root():
+	# How may I inform you?
+	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3002', false)
+entrypoint Event5:
+	switch EventFlowSystemActor.GeneralTalkChoice5():
+		case 0:
+			# Many things! Which of such things shall I tell you about?
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3011', false)
+entrypoint Event9:
+			switch EventFlowSystemActor.GeneralTalkChoice5():
+				case 0:
+					# Ah yes, decorating! On Slumber Islands, you may set any item you have at home—be it a tree, furniture, or flowers—by pressing . Be aware that items …
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3031', false)
+					run ReturnSel_ExplainAboutIsland()
+				case 1:
+					# A set of common tools is already in your pockets. Simply press  to switch to , then press .
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3032', false)
+					run ReturnSel_ExplainAboutIsland()
+				case 2:
+					if EventFlowSystemActor.NetCloudIslandInOwner():
+						# On this Slumber Island is a house mirroring the size of the one you have in the real world. You may redecorate its interior as you please, though som…
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3033', false)
+						run ReturnSel_ExplainAboutIsland()
+					else:
+						# You are welcome to redecorate the house on this island as you please. You should know, however, that while in the same room as someone else, some opt…
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3033_01', false)
+						run ReturnSel_ExplainAboutIsland()
+				case 3:
+					# Pressing  to switch to  will let you place fences, while switching to  lets you landscape. You may use any fencing you have at home and any landsc…
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3034', false)
+					if EventFlowSystemActor.NetCloudIslandInOwner():
+						# For larger projects, such as moving a house or building bridges and inclines, please speak to Lloid.
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3035', false)
+						run ReturnSel_ExplainAboutIsland()
+					else:
+						# Larger projects, like moving a house and building a bridge or incline, can only be done by the island's host.
+						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3035_01', false)
+						run ReturnSel_ExplainAboutIsland()
+				case 4:
+					if EventFlowSystemActor.NetCloudIslandInOwner():
+						run ReturnSel_Explain()
+					else:
+						run SNPC_tap_03_InCloudIsland::GoodBye_Guest()
+		case 1:
+			# Thanks to the wonder that is the internet, experiences had on this island are saved automatically. If a  is in the upper right, it means the island …
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3021', false)
+			run ReturnSel_Explain()
+		case 2:
+			# Friends and acquaintances can be invited to visit this island through the internet. Invitations can be limited to friends, or a Doze Code may be crea…
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3022', false)
+			run ReturnSel_Explain()
+		case 3:
+			if EventFlowSystemActor.IsCloudIslandIdOverwrited():
+				# At the moment, the name of this island is <110:33>. While I adore this name, if you have a better one in mind, just say to me, "Rename this island."
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3023_01', false)
+				run ReturnSel_Explain()
+			else:
+				# This island has yet to be named. But if you have one in mind, say to me, "Name this island."
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap_CloudIsland:3023', false)
+				run ReturnSel_Explain()
+		case 4:
+			if System.EventFlags['cPlayerTemp:ReserveTapFirstTalkCloudIsland']:
+				System.EventFlags['cPlayerTemp:ReserveTapFirstTalkCloudIsland'] = false
+				run SNPC_tap_03_InCloudIsland::GoodBye_AfterCancel()
+			else:
+				run SNPC_tap_03_InCloudIsland::ReturnSel_Root()

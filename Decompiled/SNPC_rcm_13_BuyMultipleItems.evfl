@@ -16,16 +16,32 @@ flow PumpkinSeeding():
 
 flow Root():
 	run PumpkinSeeding()
-	# <50:3><125:0:0200>? I can sell in singles or in bulk. How many would you like?
-	MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:131', false)
-	run Select()
+	if EventFlowSystemActor.MultiItemSelectInclude(2513, 65534, 65534, 65534, 65534, 65534, 65534, 65534, 'cItemSelect'):
+		# <50:3><125:0:0200>? I can sell in singles or in bulk. How many would you like?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:131_01', false)
+		switch EventFlowSystemActor.GeneralTalkChoice4():
+			case 0:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 1:
+				SubflowResults[0] = 1
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 2:
+				SubflowResults[0] = 2
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 3:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
+	else:
+		# <50:3><125:0:0200>? I can sell in singles or in bulk. How many would you like?
+		MainNpc.OpenMessageWindow('TalkSNpc/rcm/SP_rcm_00_common:131', false)
+entrypoint Event1:
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 1:
+				SubflowResults[0] = 1
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
+			case 2:
+				run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
 
 flow Select():
-	switch EventFlowSystemActor.GeneralTalkChoice3():
-		case 0:
-			run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
-		case 1:
-			SubflowResults[0] = 1
-			run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Process()
-		case 2:
-			run SNPC_rcm_00_Common::Rcm_Groceries_Buy_Cancel()
+	run Event1()

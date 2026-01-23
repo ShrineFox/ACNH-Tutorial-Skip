@@ -1,0 +1,52 @@
+flow CheckRob():
+	if EventFlowSystemActor.NetIsConnected():
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+	elif (not System.EventFlags['cPlayer:FinishEditVIPRoomToday']) and (not MainNpc.IsExistTakeldPlayerSuspendData()):
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 0)
+		MainNpc.NpcSetAIBlackBoard('IsSmileAmiibo', 1)
+	else:
+		MainNpc.NpcSetAIBlackBoard('CheckRobResult', 1)
+
+flow Init():
+	MainNpc.NpcRegistAIBlackBoard('CheckRobResult', 0)
+	MainNpc.NpcAISetCheckRobFunc('cHotelAmiiboDevice', 'CheckRob', 'SNPC_kpm_BreakInSpeak', 'CheckAmiiboDevice', false, true)
+	MainNpc.NpcAISetting(8, true)
+	MainNpc.NpcRegistAIBlackBoard('IsSmileAmiibo', 0)
+
+flow Root():
+	if EventFlowSystemActor.CheckHotelTutorialReserved('cHotelIntroduction'):
+		MainNpc.NpcWarpDemoPos('cHotelIntroductionKpm')
+		MainNpc.NpcAISetting(2, false)
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcChangeConversationPretenseState('cConversationPretense', '', 'SNPC_kpm', 'Root', false, true, ArgInt0=0, ArgStr0='rco')
+	elif EventFlowSystemActor.NetIsConnected():
+		MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_kpm', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=1, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')
+	elif System.EventFlags['cPlayerTemp:HotelReserveInviteDemo']:
+		EventFlowSystemActor.CameraReserveFirstStateCommand('Demo:GuestDemo', 'Npc:kpm', false)
+		MainNpc.NpcAISetting(5, false)
+		MainNpc.NpcAISetting(2, false)
+		MainNpc.NpcAISetting(3, false)
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.NpcAISetting(4, false)
+		run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpm', EntryName='NoRoomNpcRoot')
+	elif EventFlowSystemActor.CheckHotelTutorialReserved('cMannequin'):
+		MainNpc.NpcWarpDemoPos('cHotelMannequineKpm')
+		MainNpc.NpcAISetting(2, false)
+		MainNpc.NpcAISetting(5, false)
+		MainNpc.NpcChangeHeadCtrlMode('cNoLook', false)
+		MainNpc.SetDefaultWaitAs('cNpcSpKpmArrangeHigh')
+		run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpm_MannequinTutorial', EntryName='Root')
+		MainNpc.NpcAISetting(4, false)
+	elif System.EventFlags['cPlayerTemp:HotelReserveKpmAmiiboSpeak']:
+		MainNpc.NpcChangeHeadCtrlMode('cPlayer', false)
+		run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpm', EntryName='AmiiboRoot')
+	elif System.EventFlags['cPlayerTemp:HotelReserveKpmStopSpeak']:
+		run AI_NPC_Common::ContinueSpeak(FlowName='SNPC_kpm', EntryName='NotCompleteOrder')
+	elif System.EventFlags['cPlayerTemp:HotelReserveKpmDoneSpeak']:
+		if (EventFlowSystemActor.IsEditHotelVIPRoom()) and (not System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']):
+			MainNpc.NpcAISetting(4, false)
+		run AI_NPC_Common::ContinueSpeak(EntryName='CompleteOrder', FlowName='SNPC_kpm')
+	else:
+		MainNpc.NpcChangeHeadCtrlMode('cNormal', false)
+		MainNpc.NpcAISetExitStrc('Smiling', 'cTriggerType_ExitStrc', 0)
+		MainNpc.NpcChangeSpNpcTurnState('cSpNpcTurn', '', 'SNPC_kpm', 'Root', false, true, ArgFlag0=true, ArgFlag1=false, ArgFloat0=0.0, ArgInt0=30, ArgInt1=1, ArgInt2=0, ArgInt3=0, ArgStr0='', ArgStr1='')

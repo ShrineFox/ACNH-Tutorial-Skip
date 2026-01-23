@@ -38,6 +38,8 @@ flow Root():
 		MainNpc.NpcChangeWaitState('cWait', '', 'NNPC_Quest_VisitP_Home', 'Home_Talk', false, false, ArgFlag0=true, ArgInt0=30, ArgStr0='')
 		MainNpc.EventFlags['cNpcTemp:TalkEndWait'] = false
 	elif MainNpc.EventFlags['cNpcTemp:AtHomeAI']:
+		if (MainNpc.NpcCheckStateSelectTiming('cInit')) and (EventFlowSystemActor.DuringTransitionByUIStage()):
+			MainNpc.NpcChangeAIState('cVisitWander', '', 'NNPC_Quest_VisitP_Home', 'Home_Talk', false, false)
 		MainNpc.SetNpcTalkFlowName('NNPC_Quest_VisitP_Home', 'Home_Talk')
 		MainNpc.SetIsStartNeedActivity('cOnKeepTalkFlow')
 	else:
@@ -50,10 +52,10 @@ flow VisitPCall():
 	MainNpc.NpcAISetting(5, false)
 	MainNpc.NpcAISetting(9, false)
 	MainNpc.NpcAISetting(4, false)
-	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitP_Home')
+	run AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitP_Home')
 
 flow VisitPGoHome():
-	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='End', FlowName='NNPC_Quest_VisitP_End')
+	run AI_NPC_Common::ContinueSpeak(EntryName='End', FlowName='NNPC_Quest_VisitP_End')
 
 flow VisitPGreet():
-	run AI_NPC_Common::ContinueSpeakrun AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitP_Home')
+	run AI_NPC_Common::ContinueSpeak(EntryName='Home_In', FlowName='NNPC_Quest_VisitP_Home')

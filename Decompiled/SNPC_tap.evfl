@@ -284,6 +284,13 @@ flow Exit_ThisScene():
 	EventFlowSystemActor.FadeOut('cDream', 'cDream', 'cBlack', 1.0, 1.0, true)
 	EventFlowSystemActor.SystemRequestChangeStage('cDreamDemo', 'cDream', 'cDream', 'cBlack', 1.0, 1.0)
 
+flow Exit_ThisScene_ForCloud():
+	EventFlowSystemActor.NextLPFadeOff()
+	EventFlowSystemActor.SystemBGMVolumeFadeOut(4.5, 0, 0.0)
+	EventFlowSystemActor.SoundSceneChangeFadeOutDucking(1)
+	EventFlowSystemActor.FadeOut('cCloudIslandDream', 'cCloudIslandDream', 'cBlack', 1.0, 1.0, true)
+	EventFlowSystemActor.SystemRequestChangeStage('cDreamDemo', 'cCloudIslandDream', 'cCloudIslandDream', 'cBlack', 1.0, 1.0)
+
 flow ExplainSearchByIslandName():
 	if not System.EventFlags['cPlayer:TapUnlockSearchByIslandName']:
 		if SubflowResults@2[6] == 0:
@@ -385,14 +392,14 @@ flow LeaveTap_Error_Cmn():
 flow Network_Signin():
 	EventFlowSystemActor.CheckFreeCommunication(true)
 	if EventFlowSystemActor.IsApprovedFreeCommunication():
-		run System_ServerRegistration::UserRegistrun System_ServerRegistration::UserRegist(WithLogin=false, Terminate=false, WithSave=true)
+		run System_ServerRegistration::UserRegist(WithLogin=false, Terminate=false, WithSave=true)
 	else:
 		run Caution_Parental()
 
 flow Network_Signin_SkipSave():
 	EventFlowSystemActor.CheckFreeCommunication(true)
 	if EventFlowSystemActor.IsApprovedFreeCommunication():
-		run System_ServerRegistration::UserRegistrun System_ServerRegistration::UserRegist(WithLogin=false, Terminate=false, WithSave=false)
+		run System_ServerRegistration::UserRegist(WithLogin=false, Terminate=false, WithSave=false)
 	else:
 		run Caution_Parental()
 
@@ -700,10 +707,10 @@ flow Root():
 	EventFlowSystemActor.CameraSetDemoParam('InIdrDreamZoomOut', '', 'Player', false, false, false, 0)
 	Player.TurnNeck(11, false)
 	if System.EventFlags['cLandTemp:TapIndoorPos']:
-		EventFlowSystemActor.WaitFrame(20)
+		EventFlowSystemActor.WaitFrame(35)
 		Player.PlayerStartAnimeBedWaitWithHandsClaspedOpenEyes()
-		EventFlowSystemActor.WaitFrame(10)
-		run Sub_grp_Event10()
+		EventFlowSystemActor.WaitFrame(45)
+		run Sub_grp_Event677()
 	else:
 		EventFlowSystemActor.WaitFrame(30)
 		MainNpc.NpcChangeNameStatus(1)
@@ -714,12 +721,12 @@ flow Root():
 				MainNpc.NpcChangeHeadCtrlMode('cNoLook', true)
 				MainNpc.NpcRailMove(0, false, false, 0, 1, 0)
 				MainNpc.TurnBody(12, 60.0)
-				MainNpc.NpcWaitTurn()
+				MainNpc.NpcWaitTurn(false)
 			branch:
-				EventFlowSystemActor.WaitFrame(30)
-				EventFlowSystemActor.WaitFrame(120)
+				EventFlowSystemActor.WaitFrame(15)
 				Player.PlayerStartAnimeBedWaitWithHandsClaspedOpenEyes()
-		run Sub_grp_Event10()
+				EventFlowSystemActor.WaitFrame(135)
+		run Sub_grp_Event677()
 
 flow RunSetting():
 	run Event559()
@@ -789,72 +796,87 @@ flow Stay_PublishNo():
 	MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:3403', false)
 	run Return_About_MyDream()
 
-local flow Sub_grp_Event10():
-	if System.EventFlags['cPlayer:TapDreamFirstTalk']:
-		if System.EventFlags['cPlayer:TapDreamTalkToday']:
-			# Welcome back. The dreams are well rested, tucked into their idling hard drives.
-			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_06', false)
+local flow Sub_grp_Event677():
+	if System.EventFlags['cLandTemp:TapIndoorSelectCloudIsland']:
+		System.EventFlags['cLandTemp:TapIndoorSelectCloudIsland'] = false
+		run SNPC_tap_11_Indoor_ForCloudIsland::Root()
+	else:
+		if System.EventFlags['cPlayer:TapDreamFirstTalk']:
+			if System.EventFlags['cPlayer:NoticeAboutPMovinghTapDream']:
+				System.EventFlags['cPlayer:TapDreamTalkToday'] = true
+				System.EventFlags['cPlayer:NoticeAboutPMovinghTapDream'] = false
+				# Welcome, welcome. The binary fields are teeming with beautiful dreams!
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_05', false)
+				# Oh! Something seems different since our last meeting… Have you moved? Even if you find yourself living on a new island, I will always be here to help…
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:004', false)
+				if System.EventFlags['cPlayer:TapULFirstExplain']:
+					# Of course, if you wish to share a dream of your new home, simply say, "I'd like to share a dream." Now…
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:005', false)
+			else:
+				if System.EventFlags['cPlayer:TapDreamTalkToday']:
+					# Welcome back. The dreams are well rested, tucked into their idling hard drives.
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_06', false)
+				else:
+					System.EventFlags['cPlayer:TapDreamTalkToday'] = true
+					# Welcome, welcome. The binary fields are teeming with beautiful dreams!
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_05', false)
+			if (System.EventFlags['cLand:EnableMyDream']) and (EventFlowSystemActor.NetIsDreamUploader()):
+				SubflowResults[3] = 0
+			else:
+				SubflowResults[3] = 2
+			run FirstLeaveTapSetting()
 		else:
+			System.EventFlags['cPlayer:TapDreamFirstTalk'] = true
 			System.EventFlags['cPlayer:TapDreamTalkToday'] = true
-			# Welcome, welcome. The binary fields are teeming with beautiful dreams!
-			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_05', false)
-		if (System.EventFlags['cLand:EnableMyDream']) and (EventFlowSystemActor.NetIsDreamUploader()):
-			SubflowResults[3] = 0
-		else:
-			SubflowResults[3] = 2
-		run FirstLeaveTapSetting()
-	else:
-		System.EventFlags['cPlayer:TapDreamFirstTalk'] = true
-		System.EventFlags['cPlayer:TapDreamTalkToday'] = true
-		System.EventFlags['cPlayer:TapUpdatedDreamFirstTalk'] = true
-		EventFlowSystemActor.WaitFrame(10)
-		# If I am not mistaken, you are from ISLAND, yes? You must be the famous PLAYER.
-		MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_01', false)
-		switch EventFlowSystemActor.GeneralTalkChoice2():
-			case 0, 1:
-				# Mmmmmm… Few dream as pleasantly as those from ISLAND. Forgive me. I have yet to introduce myself. My name is Luna. Think of me as a guide to the libr…
-				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_02', true)
-				switch EventFlowSystemActor.GeneralTalkChoice2():
-					case 0, 1:
-MainNpc.NpcChangeNameStatus(0)
-						# A dream is but a manifestation of a memory that one holds dear…then chooses to upload to the internet. My role is to ferry travelers between dreams, …
-						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_03', false)
-						# This need not be a one-way matter either. If you wish, I can collect your dream of ISLAND as well! Then I will spirit your dream through channels of …
-						MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_04', false)
-	if (System.EventFlags['cLand:EnableMyDream']) and (System.EventFlags['cPlayer:TapULFirstExplain']):
-		if System.EventFlags['cPlayer:TapSelWhereAreHere']:
-			# How may I be of assistance?
-			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002_05', false)
-		else:
-			# How may I be of assistance?
-			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002_01', false)
+			System.EventFlags['cPlayer:TapUpdatedDreamFirstTalk'] = true
+			EventFlowSystemActor.WaitFrame(10)
+			# If I am not mistaken, you are from ISLAND, yes? You must be the famous PLAYER.
+			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_01', false)
+			switch EventFlowSystemActor.GeneralTalkChoice2():
+				case 0, 1:
+					# Mmmmmm… Few dream as pleasantly as those from ISLAND. Forgive me. I have yet to introduce myself. My name is Luna. Think of me as a guide to the libr…
+					MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_02', true)
+					switch EventFlowSystemActor.GeneralTalkChoice2():
+						case 0, 1:
+							MainNpc.NpcChangeNameStatus(0)
+							# A dream is but a manifestation of a memory that one holds dear…then chooses to upload to the internet. My role is to ferry travelers between dreams, …
+							MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_03', false)
+							# This need not be a one-way matter either. If you wish, I can collect your dream of ISLAND as well! Then I will spirit your dream through channels of …
+							MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:001_04', false)
+		if (System.EventFlags['cLand:EnableMyDream']) and (System.EventFlags['cPlayer:TapULFirstExplain']):
+			if System.EventFlags['cPlayer:TapSelWhereAreHere']:
+				# How may I be of assistance?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002_05', false)
+			else:
+				# How may I be of assistance?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002_01', false)
 entrypoint Event42:
-		switch EventFlowSystemActor.GeneralTalkChoice4():
-			case 0:
-				run Download_Dream()
-			case 1:
-				run About_MyDream()
-			case 2:
-				run Receive_Explanation()
-			case 3:
-				run Exit_ThisScene()
-	else:
-		if System.EventFlags['cPlayer:TapSelWhereAreHere']:
-			# How may I be of assistance?
-			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002_04', false)
+			switch EventFlowSystemActor.GeneralTalkChoice4():
+				case 0:
+					run Download_Dream()
+				case 1:
+					run About_MyDream()
+				case 2:
+					run Receive_Explanation()
+				case 3:
+					run Exit_ThisScene()
 		else:
-			# How may I be of assistance?
-			MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002', false)
+			if System.EventFlags['cPlayer:TapSelWhereAreHere']:
+				# How may I be of assistance?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002_04', false)
+			else:
+				# How may I be of assistance?
+				MainNpc.OpenMessageWindow('TalkSNpc/tap/SP_tap:002', false)
 entrypoint Event3:
-		switch EventFlowSystemActor.GeneralTalkChoice4():
-			case 0:
-				run Download_Dream()
-			case 1:
-				run Upload_Dream()
-			case 2:
-				run Receive_Explanation()
-			case 3:
-				run Exit_ThisScene()
+			switch EventFlowSystemActor.GeneralTalkChoice4():
+				case 0:
+					run Download_Dream()
+				case 1:
+					run Upload_Dream()
+				case 2:
+					run Receive_Explanation()
+				case 3:
+					run Exit_ThisScene()
 
 flow UGCNotice():
 	if EventFlowSystemActor.PlayerVillagerCount(2):

@@ -1,3 +1,9 @@
+flow ChkHotelEdit():
+	if not EventFlowSystemActor.HotelOrderProgress():
+		# You can't call anyone right now.
+		EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:017', false)
+		EventFlowSystemActor.ExitFlowchart()
+
 flow ChkNpcHouseCoordinate():
 	if (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
 		# You can't call anyone right now.
@@ -75,6 +81,7 @@ flow Root():
 		EventFlowSystemActor.CancelSharePlayEntry()
 	elif (not EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00')) and (not EventFlowSystemActor.SystemCheckNowStage('cKappeiIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cMysteryTourIsland')) and (not EventFlowSystemActor.SystemCheckNowStage('cPhotoStudioIsland')):
 		run ChkNpcHouseCoordinate()
+		run ChkHotelEdit()
 		if EventFlowSystemActor.IsPlayerBirthdayRoom():
 			# You can't call anyone right now.
 			EventFlowSystemActor.OpenMessageWindow('TalkSys/SYS_SharePlay:017', false)

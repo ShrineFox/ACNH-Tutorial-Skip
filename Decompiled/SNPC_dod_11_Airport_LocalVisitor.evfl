@@ -96,12 +96,12 @@ entrypoint Event23:
 				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:104', false)
 				switch EventFlowSystemActor.GeneralTalkChoice3():
 					case 0:
- run Sub_grp_Event68()
+						run Sub_grp_Event68()
 					case 1:
-run EntryPoint_ResearchLocal()
+						run EntryPoint_ResearchLocal()
 					case 2:
 						EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+						run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
 		case 2:
 			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
 			System.EventFlags['cPlayerTemp:AirportTripListError'] = false
@@ -115,12 +115,12 @@ run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
 			else:
 				switch EventFlowSystemActor.NetIsDecidedVillage():
 					case 0:
- run Sub_grp_Event68()
+						run Sub_grp_Event68()
 					case 1:
-run EntryPoint_ResearchLocal()
+						run EntryPoint_ResearchLocal()
 					case 2:
 						EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
-run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
+						run SNPC_dod_AirPort::EntryPoint_Cancel_Nega()
 
 local flow Sub_Event56():
 	EventFlowSystemActor.NetEndSessionVillage('cEndVillageSession', false)
@@ -152,10 +152,16 @@ entrypoint Event46:
 		if not EventFlowSystemActor.CheckErrorType(2):
 			EventFlowSystemActor.UIVersionGuideDisappear('cNormal')
 			if System.EventFlags['cPlayer:EquipLicenseHelmet']:
-				run SNPC_dod_AirPort::LandMakingRemove_Visitor()
+				if Player.HotelMannequinIsRentalAny():
+					run SNPC_dod_AirPort::LandMakingRemove_Visitor()
+				else:
+					run SNPC_dod_AirPort::LandMakingRemove_Visitor()
 			else:
-				# Alrighty then—you're all set! And when you need to travel, just think, "What would dodos do?"<10:7:003c0000>
-				MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:109', true)
+				if Player.HotelMannequinIsRentalAny():
+					run SNPC_dod_AirPort::RentalMannequinCodeRemove()
+				else:
+					# Alrighty then—you're all set! And when you need to travel, just think, "What would dodos do?"<10:7:003c0000>
+					MainNpc.OpenMessageWindow('TalkSNpc/dod/SP_dod_AirPort:109', true)
 			run SNPC_dod_30_Airport_DepartVisitor::EntryPoint_Depart()
 		elif EventFlowSystemActor.NetLockFailReason() == 0:
 			# Wuh-oh! Looks like we're getting interference… Hang on… Someone not put their NookPhone into airplane mode again?
@@ -166,9 +172,9 @@ entrypoint Event46:
 				case 1:
 					run Cmn_Hint_Going()
 					if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-run EntryPoint_RockRetryLocal()
+						run EntryPoint_RockRetryLocal()
 					else:
-	run Sub_Event56()
+						run Sub_Event56()
 				case 2:
 					run Sub_Event56()
 		else:

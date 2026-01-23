@@ -41,11 +41,11 @@ entrypoint Event0:
 				run Process_Promote()
 				switch SubflowResults@5[0]:
 					case 0:
-run FromMyPageFinishUpload()
+						run FromMyPageFinishUpload()
 					case 1, 2, 3:
-	run FromMyPage()
+						run FromMyPage()
 					case 4:
-	run ExitMyPage()
+						run ExitMyPage()
 			else:
 				run FromMyPage()
 		case 4:
@@ -86,53 +86,67 @@ flow Process_Promote():
 		EventFlowSystemActor.UIClientListHandling()
 		if EventFlowSystemActor.UIClientListResult() in (0, 1, 2, 4):
 			SubflowResults[0] = 2
+			EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
 		else:
 			EventFlowSystemActor.UINetConnectWaitAppear()
 			EventFlowSystemActor.NetWherearenUploadOpusData()
 			if EventFlowSystemActor.CheckErrorType(2):
 				EventFlowSystemActor.UINetConnectWaitDisappear()
 				SubflowResults[0] = 1
+				EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
 			else:
 				EventFlowSystemActor.NetWherearenSearchOpusList('cMyself')
 				EventFlowSystemActor.UINetConnectWaitDisappear()
 				if EventFlowSystemActor.CheckErrorType(2):
 					SubflowResults[0] = 4
+					EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
 				else:
 					EventFlowSystemActor.UIPortfolioPromotionAppear()
 					EventFlowSystemActor.UIPortfolioPromotionWaitManipulate()
 					if EventFlowSystemActor.UIPortfolioPromotionNewTargetFailure():
-EventFlowSystemActor.UIPortfolioPromotionDisappear()
- SubflowResults[0] = 4
-					elif not EventFlowSystemActor.WherearenTodayFlagBool('cTkkrInfoSNS'):
-EventFlowSystemActor.WherearenTodayFlagOn('cTkkrInfoSNS')
-						# The post has been added to your profile page! Did you want to share the posted property on social media?
-						EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1105', true)
-						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = true
-							# You can share the posted property to social media at any time from your profile page.
-							EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1106', true)
-	SubflowResults[0] = 0
+						EventFlowSystemActor.UIPortfolioPromotionDisappear()
+						SubflowResults[0] = 4
+						EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
+					elif EventFlowSystemActor.IsPlayingOn():
+						if not EventFlowSystemActor.WherearenTodayFlagBool('cTkkrInfoSNS'):
+							EventFlowSystemActor.WherearenTodayFlagOn('cTkkrInfoSNS')
+							# The post has been added to your profile page! Did you want to share the posted property on social media?
+							EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1105', true)
+							if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+								System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = true
+								# You can share the posted property to social media at any time from your profile page.
+								EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1106', true)
+entrypoint Event52:
+								SubflowResults[0] = 0
+								EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
+							else:
+								System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = false
+								EventFlowSystemActor.UIPortfolioPromotionDisappear()
+								run Process_UpdateSNS(is_new=true)
+								SubflowResults[0] = 3
+								EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
+						elif System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled']:
+entrypoint Event52:
+							SubflowResults[0] = 0
+							EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
 						else:
-System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = false
-EventFlowSystemActor.UIPortfolioPromotionDisappear()
-run Process_UpdateSNS(is_new=true)
-	SubflowResults[0] = 3
-					elif System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled']:
- SubflowResults[0] = 0
+							# The post has been added to your profile page! Did you want to share the posted property on social media?
+							EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1105', true)
+							if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+								System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = true
+								# You can share the posted property to social media at any time from your profile page.
+								EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1106', true)
+entrypoint Event52:
+								SubflowResults[0] = 0
+								EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
+							else:
+								System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = false
+								EventFlowSystemActor.UIPortfolioPromotionDisappear()
+								run Process_UpdateSNS(is_new=true)
+								SubflowResults[0] = 3
+								EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
 					else:
-						# The post has been added to your profile page! Did you want to share the posted property on social media?
-						EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1105', true)
-						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = true
-							# You can share the posted property to social media at any time from your profile page.
-							EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_WherearenMsg:1106', true)
-	SubflowResults[0] = 0
-						else:
-System.EventFlags['cPlayer:WHEREAREN_IsSnsShareCanceled'] = false
-EventFlowSystemActor.UIPortfolioPromotionDisappear()
-run Process_UpdateSNS(is_new=true)
-	SubflowResults[0] = 3
-		EventFlowSystemActor.UISetIsPromotionFlowFlag(false)
+						run v300_SkipSNS()
 	else:
 		SubflowResults[0] = 1
 
@@ -174,3 +188,6 @@ flow Process_UpdateSlot():
 		SubflowResults[0] = 1
 	else:
 		SubflowResults[0] = 0
+
+flow v300_SkipSNS():
+	run Event52()

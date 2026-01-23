@@ -1,0 +1,19 @@
+flow Root():
+	if not System.EventFlags['cPlayer:HotelUnlockDIYTrade']:
+		# I wonder what this is…
+		Player.OpenMessageWindow('TalkSys/SYS_Player:1801', false)
+	elif (not EventFlowSystemActor.NetIsDreaming()) and (EventFlowSystemActor.IsMyVillage()):
+		fork:
+			branch:
+				GeneralObject.StartAnimation('BoxOpen', 'cTrigger')
+				EventFlowSystemActor@Sub.WaitFrame(15)
+				Player.PlayerPurchaseBoxThinking()
+			branch:
+				EventFlowSystemActor.WaitFrame(5)
+				EventFlowSystemActor.UIDIYTradeHandling()
+		GeneralObject.StartAnimation('BoxClose', 'cTrigger')
+		if (not EventFlowSystemActor.NetHasVisitor()) and (EventFlowSystemActor.IsKppTradeBonusTalk('FromTradeBox', false)):
+			EventFlowSystemActor.SetNpcAIBlackBoardByLabel('kpp', 'TradeBoxSpeak', 1, 1)
+	else:
+		# The box cannot be used at this time.
+		EventFlowSystemActor.OpenMessageWindow('TalkObj/OBJ_TradeBox:001', true)

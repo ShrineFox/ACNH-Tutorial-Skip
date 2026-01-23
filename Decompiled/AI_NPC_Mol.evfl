@@ -1,0 +1,14 @@
+flow Init():
+	MainNpc.NpcAISetting(0, true)
+	MainNpc.NpcAISetting(1, true)
+	MainNpc.NpcRegistAIBlackBoard('UserSelectCallSpeak', 0)
+
+flow Root():
+	if MainNpc.NpcBlackBoard('UserSelectCallSpeak', 1):
+		MainNpc.NpcSetAIBlackBoard('UserSelectCallSpeak', 0)
+		MainNpc.NpcAISetting(14, true)
+		MainNpc.NpcWarpTidyingPos('cNextPlayer')
+		run AI_NPC_Common::ContinueSpeak(EntryName='Tidying_UserSelect', FlowName='SNPC_mol')
+	else:
+		MainNpc.NpcAISetting(14, false)
+		MainNpc.NpcChangeBlockWanderState('cBlockWander', '', 'SNPC_mol', 'Root', true, true, ArgFlag0=false, ArgInt0=0, ArgInt1=1, ArgInt2=0, ArgInt3=0)

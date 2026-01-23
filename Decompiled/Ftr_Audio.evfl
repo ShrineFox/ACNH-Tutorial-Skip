@@ -2,8 +2,25 @@ flow Check_Coordinate():
 	if (EventFlowSystemActor.SystemCheckNowStage('cAnyNpcHouse')) and (System.EventFlags['cLandTemp:NpcInteriorCoordinate']):
 		run StartAudio()
 	elif not EventFlowSystemActor.SystemCheckNowStage('cCheckStageSymbol00'):
-		run Event34()
+		run Check_v300()
 	elif EventFlowSystemActor.WherearenOrderStatus() in (0, 1, 3, 4, 5, 6, 7):
+		run Event34()
+	else:
+		run StartAudio()
+
+flow Check_v300():
+	if EventFlowSystemActor.SystemCheckNowStage('cCloudIsland'):
+		run StartAudio_CloudIsland()
+	elif EventFlowSystemActor.SystemCheckNowStage('cCloudIslandIndoor'):
+		Ftr.RequestGetAudioControlIndoorCloudIsland()
+		if Ftr.GetResultAudioControlIndoorCloudIsland():
+			run StartAudio_CloudIsland()
+		else:
+			# It seems someone else is selecting a song…
+			Player.OpenMessageWindow('TalkFtr/FTR_Audio:004', false)
+	elif not EventFlowSystemActor.SystemCheckNowStage('cHotelRoom'):
+		run Event34()
+	elif EventFlowSystemActor.HotelOrderProgress():
 		run Event34()
 	else:
 		run StartAudio()
@@ -72,3 +89,17 @@ flow StartAudio():
 	switch EventFlowSystemActor.UIResultMenuDecide():
 		default:
 			return
+
+flow StartAudio_CloudIsland():
+	if not EventFlowSystemActor.IsPlayingAudioMusic():
+		run StartAudio()
+	elif EventFlowSystemActor.IsLastControlAudioMusicForCloudIsland():
+		run StartAudio()
+	else:
+		EventFlowSystemActor.SetTagFromSystem('cPlayingAudioMusicName', 'cDegit', 1, 0, '')
+		# Someone put on <125:0:0001>. Should I stop it so I can play another song?
+		Player.OpenMessageWindow('TalkFtr/FTR_Audio:005', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run StartAudio()
+		else:
+			Ftr.RequestEndControlCloudIslandAudio()

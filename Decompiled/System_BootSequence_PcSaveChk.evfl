@@ -13,28 +13,35 @@ flow ExtendSaveDataSize():
 flow NACheckAgain():
 	if EventFlowSystemActor.NetIsAvailableNA():
 		if not EventFlowSystemActor.NetIsRegisteredSameNA():
-			# The Nintendo Account linked to this user is different than it was before. Any features that use the internet, like the Best Friends List, will be res…
-			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8016', false)
-			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-				run Sub_Event67()
-			else:
-				run Sub_Event64()
+			# The Nintendo Account linked to this user is different from the one that was used before.
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8101', false)
+			run v300_ResetPOPIDSeq()
 	elif SubflowResults@2[0] == 0:
-		# The link between this user account and a valid Nintendo Account needs to be verified via the internet. You will now have a chance to connect to the i…
-		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8018', false)
+		# The link between this user account and a valid Nintendo Account needs to be verified.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8102', false)
+		# Connecting to the internet to verify the status of your Nintendo Account.
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8111', false)
 		run Sub_grp_Event70()
 	else:
-		# The link between this user account and a valid Nintendo Account needs to be verified via the internet. You will now have a chance to connect to the i…
-		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8020', false)
+		# The status of the Nintendo Account linked to this user could not be verified. Do you want to try again?
+		EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8112', false)
 		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-			# The link between this user account and a valid Nintendo Account needs to be verified via the internet. If you begin playing before verifying, all fea…
-			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8017', false)
-			if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-				run Sub_Event67()
-			else:
-				run Sub_Event64()
+			# The Nintendo Account linked to this user cannot be used with this game.
+			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8113', false)
+			run v300_ResetPOPIDSeq()
 		else:
 			run Sub_grp_Event70()
+
+flow NACheckAgain_ExistP():
+	EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
+	run Event41()
+
+flow NACheck_ExistP():
+	if EventFlowSystemActor.NetMode() not in (0, 2):
+		EventFlowSystemActor.NetShutdown('cNetShutdown', false)
+	EventFlowSystemActor.NetEnsureNSA()
+	SubflowResults[0] = 1
+	run NACheckAgain_ExistP()
 
 flow ReSelect():
 	if EventFlowSystemActor.IsFullPlayerVillager():
@@ -108,25 +115,32 @@ flow Sel_ExistP():
 	EventFlowSystemActor.UIMsgCardAdrHandling('cAccountChange')
 	if EventFlowSystemActor.UIResultMenuDecide():
 		EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
-		if EventFlowSystemActor.NetIsAvailableNA():
-			if EventFlowSystemActor.NetIsRegisteredSameNA():
-				# Would you like to start playing as island resident <115:0:cd00>?
-				EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8007', false)
-				SubflowResults[1] = 0
+		if EventFlowSystemActor.NetHasPOPIDInAccountChange():
+entrypoint Event41:
+			if EventFlowSystemActor.NetIsAvailableNA():
+				if EventFlowSystemActor.NetIsRegisteredSameNA():
+					run Sub_Event17()
+				else:
+					# The Nintendo Account linked to this user is different from the one that was used before.
+					EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8101', false)
+					run v300_ResetPOPIDSeq_ExistP()
+			elif SubflowResults@2[0] == 0:
+				# The resident <115:0:cd00> has used features that require internet access.
+				EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8131', false)
+				# Connecting to the internet to verify the status of your Nintendo Account.
+				EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8111', false)
+				run NACheck_ExistP()
 			else:
-				# The Nintendo Account linked to this user is different than it was before. Any features that use the internet, like the Best Friends List, will be res…
-				EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8014', false)
-				SubflowResults[1] = 1
+				# The status of the Nintendo Account linked to this user could not be verified. Do you want to try again?
+				EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8112', false)
+				if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+					# This user may not be linked to a Nintendo Account.
+					EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8133', false)
+					run v300_ResetPOPIDSeq_ExistP()
+				else:
+					run NACheck_ExistP()
 		else:
-			# This user does not have a Nintendo Account linked. Any features that use the internet, like the Best Friends List, will be reset if you play again. D…
-			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8015', false)
-			SubflowResults[1] = 1
-		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-			run Sel_Rethink()
-		else:
-			run System_Cmn_UserSaveDataAccess::Cmn_UserAcc_Connect()
-			# You will now start playing the game as island resident PLAYER.
-			EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8008', false)
+			run Sub_Event17()
 	else:
 		run Sel_Rethink()
 
@@ -140,15 +154,14 @@ flow Sel_Rethink():
 	else:
 		run ReSelect()
 
-local flow Sub_Event64():
-	run System_Cmn_UserSaveDataAccess::Cmn_UserAcc_ResetOnline()
-	# Starting game again.
-	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8019', false)
-
-local flow Sub_Event67():
-	# To close this screen, please close the game from the HOME Menu.
-	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8013', false)
-	EventFlowSystemActor.WaitFrame(-1)
+local flow Sub_Event17():
+	# Would you like to start playing as island resident <115:0:cd00>?
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8007', false)
+	SubflowResults[1] = 0
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run v300_SeqSetRethink()
+	else:
+		run v300_ResetPOPID_ExistP()
 
 local flow Sub_grp_Event70():
 	if EventFlowSystemActor.NetMode() not in (0, 2):
@@ -156,3 +169,54 @@ local flow Sub_grp_Event70():
 	EventFlowSystemActor.NetEnsureNSA()
 	SubflowResults[0] = 1
 	run NACheckAgain()
+
+flow v300_ResetPOPID():
+	run System_Cmn_UserSaveDataAccess::Cmn_UserAcc_ResetOnline()
+	# Starting game again.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8019', false)
+
+flow v300_ResetPOPIDSeq():
+	# The current resident has used features that require internet access.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8121', false)
+	# Features used that require internet access include Best Friends, Slumber Island data, and posting to the Custom Designs Portal.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8121_01', false)
+	# Choosing not to use the previously linked Nintendo Account requires the data for these features to be erased and the game to relaunch.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8122', false)
+	# Do you want to erase the data for features requiring internet access and relaunch the game?
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8123', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run v300_ResetPOPID()
+	else:
+		run v300_SeqStop()
+
+flow v300_ResetPOPIDSeq_ExistP():
+	EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
+	# The resident <115:0:cd00> has used features that require internet access.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8131', false)
+	# Features used that require internet access include Best Friends, Slumber Island data, and posting to the Custom Designs Portal.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8121_01', false)
+	# Choosing not to use the previously linked Nintendo Account requires the data for these features to be erased and the game to relaunch.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8122', false)
+	EventFlowSystemActor.SetTagFromUIResult('cVillagerPlayerNameD', 0)
+	# Do you want to erase the data for the features requiring internet access, relaunch the game, and play as <115:0:cd00>?
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8132', false)
+	SubflowResults[1] = 1
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run v300_ResetPOPID_ExistP()
+	else:
+		run v300_SeqSetRethink()
+
+flow v300_ResetPOPID_ExistP():
+	run System_Cmn_UserSaveDataAccess::Cmn_UserAcc_Connect()
+	# You will now start playing the game as island resident PLAYER.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8008', false)
+
+flow v300_SeqSetRethink():
+	run Sel_Rethink()
+
+flow v300_SeqStop():
+	# Please close the game and confirm that this user has been linked to a Nintendo Account.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8141', false)
+	# To close this screen, please close the game from the HOME Menu.
+	EventFlowSystemActor.OpenMessageWindow('Dialog/DIALOG_Msg:8013', false)
+	EventFlowSystemActor.WaitFrame(-1)

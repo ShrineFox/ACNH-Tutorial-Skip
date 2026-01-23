@@ -49,6 +49,37 @@ flow GulAfterQuestChat():
 			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:044', false)
 	EventFlowSystemActor.ExitFlowchart()
 
+flow GulAfterQuest_Sleep():
+	if EventFlowSystemActor.HasKindItem('cKind', 'JohnnyQuest', ''):
+		run GulSitUp()
+		# Oh! Ahoy! You're that skipper from earlier, right? Thanks for the wake-up call.
+		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:080', false)
+		if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerQuestNow'):
+			if EventFlowSystemActor.HasTargetItem(2381, 2):
+				# I managed to get my communicator working with the parts you dug up… But it's still kind of busted. It won't even play my games anymore! I'm guessing …
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:084_pl', false)
+			else:
+				# I managed to get my communicator working with the parts you dug up… But it's still kind of busted. It won't even play my games anymore! I'm guessing …
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:084', false)
+			run GulGivePartsForced()
+			# This is great! More parts means this thing will be back to normal in no time! Thanks and thanks again, skipper!
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:085', false)
+		else:
+			# I was just, uh, keeping an eye out for my shipmates when I was hit by a wave…of the sleepies.
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:081', false)
+			if EventFlowSystemActor.HasTargetItem(2381, 2):
+				# Well, dock my boat! You found more of my missing <item>communicator parts! Thanks for helping! I'll take those sneaky little parts off your hands…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:082_pl', false)
+			else:
+				# Well, dock my boat! You found one of my missing <item>communicator parts! Thanks for helping! I'll take that sneaky little part off your hands…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:082', false)
+			run GulGivePartsForced()
+			# Can't believe I managed to send a message without all the parts shoved back in here. These must be some kind of bonus parts or something. Maybe they'…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:083', false)
+		run GulClear()
+	else:
+		run GulKeepSleep()
+
 flow GulClear():
 	if not System.EventFlags['cPlayer:JohnnyQuestFinishFlag']:
 		System.EventFlags['cLifeSupportAchievement:HelpGul'] += 1
@@ -215,6 +246,9 @@ flow Gul_GetUp_NotStart():
 	if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerQuestNow'):
 		# Oh! Hi! Thanks for waking me up. Blech! Mouth tastes like sand…
 		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:100', false)
+		if SubflowResults@2[0] != 0:
+			# Wait, what, huh? How do you know my name is Gulliver? Pretty sure we've never met before… I guess tales of my travels are spreading farther than I th…
+			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:100_01', false)
 		# I'm Gulliver, a salty sailor scouring these seven seas, see?
 		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:101', false)
 		# More specifically, I was scouring this beach for something…but I guess I wore myself out and fell asleep.
@@ -225,6 +259,9 @@ flow Gul_GetUp_NotStart():
 		if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerClear'):
 			# Oh! Hi! Thanks for waking me up. Blech! Mouth tastes like sand…
 			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:100', false)
+			if SubflowResults@2[0] != 0:
+				# Wait, what, huh? How do you know my name is Gulliver? Pretty sure we've never met before… I guess tales of my travels are spreading farther than I th…
+				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:100_01', false)
 			# I'm Gulliver, a salty sailor scouring these seven seas, see?
 			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:101', false)
 			# My brain was seriously overloaded. Got a lot going on. Thought a power nap might fit the bill, y'know?
@@ -265,8 +302,12 @@ flow Gul_GetUp_NotStart():
 						MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:015', false)
 			else:
 				System.EventFlags['cPlayer:JohnnySitUpBeforeFlag'] = true
-				# Blerrrgh… D-do you have my pickled-herring pizza? I already tipped online, so… Wait—I don't see a pizza! Where am I? Who are you? Who am I?! Oh, hang…
-				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:002', false)
+				if SubflowResults@2[0] == 0:
+					# Blerrrgh… D-do you have my pickled-herring pizza? I already tipped online, so… Wait—I don't see a pizza! Where am I? Who are you? Who am I?! Oh, hang…
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:002', false)
+				else:
+					# <10:12>AYE, CAPTAIN!<10:9> Wait, huh? How do you know my name is Gulliver?! And you know it so loudly too! Pretty sure we've never met before… Did th…
+					MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:002_01', false)
 				# Thanks for the wake-up call! Those tasty hallucinations tend to sneak up on me… Can you find it in your heart to forgive this waterlogged birdbrain? …
 				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:003', false)
 				# Guess I dozed off and tumbled overboard again… That's an endearing character trait of mine. My crewmates love it when I slip over the bow! HA! Don't …
@@ -364,8 +405,28 @@ entrypoint Event173:
 		System.EventFlags['cLandTemp:JohnnyTalkShareplay'] = true
 		run Sub_grp_Event93()
 
+flow MegaphoneWakeUp():
+	if not System.EventFlags['cLand:JohnnySitUpFlag']:
+		EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 0, 0, 'cLand:JohnnyRequirePartsNum')
+		if System.EventFlags['cPlayer:JohnnySitUpBeforeFlag']:
+			SubflowResults[0] = 0
+		else:
+			SubflowResults[0] = 1
+		run GulTalkChk()
+		if EventFlowSystemActor.IsSharePlay(0):
+			run Gul_Share()
+		elif not EventFlowSystemActor.IsMyVillage():
+			run Gul_DC()
+		elif System.EventFlags['cPlayer:JohnnyQuestFinishFlag']:
+			run GulAfterQuest_Sleep()
+		elif System.EventFlags['cPlayer:JohnnyQuestStartFlag']:
+			run Gul_GetUp_Start()
+		else:
+			run Gul_GetUp_NotStart()
+
 flow Root():
 	EventFlowSystemActor.SetTagFromSystem('cEventFlag', 'cDegit', 0, 0, 'cLand:JohnnyRequirePartsNum')
+	SubflowResults[0] = 0
 	run GulTalkChk()
 	if EventFlowSystemActor.IsSharePlay(0):
 		run Gul_Share()
@@ -378,48 +439,20 @@ flow Root():
 			run GulQuestNow()
 		else:
 			run GulAfterQuest()
-	elif not System.EventFlags['cPlayer:JohnnyQuestFinishFlag']:
-		if System.EventFlags['cPlayer:JohnnyQuestStartFlag']:
-			run Gul_GetUp_Start()
-		else:
-			System.EventFlags['cPlayer:JonnyTalkCount'] += 1
-			if System.EventFlags['cPlayer:JonnyTalkCount'] == 1:
-				run GulTalkSleep()
-			elif EventFlowSystemActor.PercentChoice(10):
-				run Gul_GetUp_NotStart()
-			elif System.EventFlags['cPlayer:JonnyTalkCount'] < 6:
-				run GulTalkSleep()
-			else:
-				run Gul_GetUp_NotStart()
-	elif EventFlowSystemActor.HasKindItem('cKind', 'JohnnyQuest', ''):
-		run GulSitUp()
-		# Oh! Ahoy! You're that skipper from earlier, right? Thanks for the wake-up call.
-		MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:080', false)
-		if MainNpc.GulFreeQuery2('cGulQueryType_OtherPlayerQuestNow'):
-			if EventFlowSystemActor.HasTargetItem(2381, 2):
-				# I managed to get my communicator working with the parts you dug up… But it's still kind of busted. It won't even play my games anymore! I'm guessing …
-				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:084_pl', false)
-			else:
-				# I managed to get my communicator working with the parts you dug up… But it's still kind of busted. It won't even play my games anymore! I'm guessing …
-				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:084', false)
-			run GulGivePartsForced()
-			# This is great! More parts means this thing will be back to normal in no time! Thanks and thanks again, skipper!
-			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:085', false)
-		else:
-			# I was just, uh, keeping an eye out for my shipmates when I was hit by a wave…of the sleepies.
-			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:081', false)
-			if EventFlowSystemActor.HasTargetItem(2381, 2):
-				# Well, dock my boat! You found more of my missing <item>communicator parts! Thanks for helping! I'll take those sneaky little parts off your hands…
-				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:082_pl', false)
-			else:
-				# Well, dock my boat! You found one of my missing <item>communicator parts! Thanks for helping! I'll take that sneaky little part off your hands…
-				MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:082', false)
-			run GulGivePartsForced()
-			# Can't believe I managed to send a message without all the parts shoved back in here. These must be some kind of bonus parts or something. Maybe they'…
-			MainNpc.OpenMessageWindow('TalkSNpc/gul/SP_gul:083', false)
-		run GulClear()
+	elif System.EventFlags['cPlayer:JohnnyQuestFinishFlag']:
+		run GulAfterQuest_Sleep()
+	elif System.EventFlags['cPlayer:JohnnyQuestStartFlag']:
+		run Gul_GetUp_Start()
 	else:
-		run GulKeepSleep()
+		System.EventFlags['cPlayer:JonnyTalkCount'] += 1
+		if System.EventFlags['cPlayer:JonnyTalkCount'] == 1:
+			run GulTalkSleep()
+		elif EventFlowSystemActor.PercentChoice(10):
+			run Gul_GetUp_NotStart()
+		elif System.EventFlags['cPlayer:JonnyTalkCount'] < 6:
+			run GulTalkSleep()
+		else:
+			run Gul_GetUp_NotStart()
 
 local flow Sub_grp_Event211():
 	switch EventFlowSystemActor.RandomChoiceExcludePrevious5(5, true):

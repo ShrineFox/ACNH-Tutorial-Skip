@@ -118,7 +118,7 @@ flow ChkMayDayTour_PhoneCall_MailPost():
 		System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
 
 flow ChkPhoneCallRcoNpcCoodinate():
-	if (System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']) and (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (not System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']) and (EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`) and (not EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)):
+	if (System.EventFlags['cPlayer:WHEREAREN_Unlock_CoordinateNpcHouse']) and (not System.EventFlags['cPlayer:RcoCordinateNpcHouseSelEnable']) and (not System.EventFlags['cPlayer:RcoCoordinateUnlockWithPhoneCall']) and (EventFlowSystemActor.OfficeLevel() == `ResServiceBuilding`) and (not EventFlowSystemActor.GlobalEventNow('Countdown', 'cMainOnly', false)) and ((System.EventFlags['cPlayer:SeqHotelIntroductionDone']) or (not System.EventFlags['cPlayer:ReserveHotelintroduction'])):
 		System.EventFlags['cPlayer:StandByCallByRcoNpcHouseCoodinate'] = true
 		System.EventFlags['cPlayer:StandByGameStartPhoneCall'] = true
 
@@ -319,6 +319,9 @@ flow Process_Anytime():
 	run CheckSendCommuneExpandLetter_Already()
 	run RcoOfficeBuiltLetter()
 	run ChkEndTipsPurchaseBox()
+	run SendCloudIslandLetter()
+	run SendMegaphoneLetter()
+	run UnlockKpp2ndTourTips()
 
 flow Process_Daily():
 	run HgsFriendship()
@@ -447,6 +450,17 @@ flow SeasonMaterialHintReset():
 			case `December`:
 				run ResetFlag_Summer()
 
+flow SendCloudIslandLetter():
+	if (not System.EventFlags['cPlayer:UnlockCloudIsland']) and (System.EventFlags['cPlayer:TapDreamFirstTalk']) and (System.EventFlags['cLand:v200_Enabled_ChangeRegulation']):
+		System.EventFlags['cPlayer:UnlockCloudIsland'] = true
+		EventFlowSystemActor.SystemMailSend('cTap', 'MAIL_SNpc_tap', 5, 'cNone', 'cFastToday', 'cNone', false, false)
+
+flow SendMegaphoneLetter():
+	if (EventFlowSystemActor.IsSwitch2Edition()) and (not System.EventFlags['cPlayer:PlayOnceAfterUpdateAOC']) and (not System.EventFlags['cLand:MarketConstruction2']):
+		System.EventFlags['cPlayer:PlayOnceAfterUpdateAOC'] = true
+		if (EventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (not System.EventFlags['cLand:MarketOpen1stDay1']):
+			EventFlowSystemActor.SystemMailSend('cRcm', 'MAIL_SP_NooksCranny', 1, 'cNone', 'cFastToday', 'cNone', false, false)
+
 flow SendTapBedLetter():
 	if (not System.EventFlags['cPlayer:ReceiveTapBedLetter']) and (EventFlowSystemActor.PlayerHouseLevel() in (`BaseHouse`, `HouseExpansion1`, `BackRoom`, `LeftRoom`, `RightRoom`, `SecondFloor`, `Basement`)) and (not System.EventFlags['cPlayer:PlayerHouseBuiltToday']) and (EventFlowSystemActor.NpcHouseNum('cConstructed') >= 5):
 		EventFlowSystemActor.SelectRewardItemDirect(13221, 1, 'cVillageRemakePattern', 0)
@@ -478,3 +492,7 @@ flow SkipResetLoginChk():
 local flow Sub_Event47():
 	System.EventFlags['cPlayer:RcoMachineDailyLoginCheck'] = false
 	run ChkEnableLoginTips()
+
+flow UnlockKpp2ndTourTips():
+	if (System.EventFlags['cPlayer:HotelVipRoomIntroductionDone']) and (System.EventFlags['cPlayer:KppTourExplain1st']):
+		System.EventFlags['cPlayer:Kpp2ndBoatTourTips'] = true

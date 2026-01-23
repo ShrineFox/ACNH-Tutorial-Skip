@@ -29,7 +29,7 @@ flow EndShareHouse():
 				if EventFlowSystemActor.SystemCheckNowStage('cWherearenNpcGarden'):
 					System.EventFlags['cWherearenPlayer:RequestEndShareHouseDemo'] = 1
 					MainNpc.MessageSuspend()
-					run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cNormalFader', FadeSpeed='cSlow', FadeColor='cBlack', SoundDucking='cWorldDucking')
+					run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cNormalFader', FadeSpeed='cSlow', FadeColor='cBlack', SoundDucking='cWorldDucking')
 					EventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cEraseForNpcOrder')
 					EventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cUnregistAmiibo')
 					EventFlowSystemActor.WaitFrame(3)
@@ -38,7 +38,7 @@ flow EndShareHouse():
 					System.EventFlags['cLandTemp:ReserveFaderKeep'] = true
 					EventFlowSystemActor.ReserveSystemFlowDemo('NNPC_Spot_WherearenEndShareHouseDemo', 'KeepFaderOff_FromHouse', false, false, false)
 					EventFlowSystemActor.WherearenOperateNpcWithoutOfficer('cUnregistAmiibo')
-					run `00_System_StageChange`::ChangeStagerun `00_System_StageChange`::ChangeStage(TargetStage='cWherearenNpcGarden', FadeColorString='cBlack', FadeInKindString='cNormalFader', FadeInSpeed='cSlow', FadeOutKindString='cCircle', FadeOutSpeed=0.0)
+					run `00_System_StageChange`::ChangeStage(TargetStage='cWherearenNpcGarden', FadeColorString='cBlack', FadeInKindString='cNormalFader', FadeInSpeed='cSlow', FadeOutKindString='cCircle', FadeOutSpeed=0.0)
 			else:
 				# Hmm? OK, I'll do more thinking… Done! You're right. Things are cool how they are. Thanks for listening!
 				MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:117', false)
@@ -282,7 +282,7 @@ flow OrderStart():
 						# Go design your heart out, PLAYER! Oh, hey, since they'll be using the place together from now on… You might want to make it more roomie friendly by m…
 						SubNpc.OpenMessageWindow('TalkSNpc/mnc/SP_mnc_04_WherearenEvent:211', true)
 					branch:
-EventFlowSystemActor.WaitFrame(15)
+						EventFlowSystemActor.WaitFrame(15)
 						Player.TurnBody(11, 0.0)
 						Player.TurnNeck(1, false)
 				run Sub_Event147()
@@ -366,9 +366,9 @@ flow SalesTalk_PiC():
 						run Move()
 					case 2:
 						if MainNpc.WherearenIsNpcLiveTogether():
-	 run EndShareHouse()
+							run EndShareHouse()
 						else:
-	run StartShareHouse()
+							run StartShareHouse()
 					case 3:
 						# Oh! That's, uh…not what I thought you were gonna say. But that's OK! I'll see you around, <110:6>!
 						MainNpc.OpenMessageWindow('TalkNNpc/B1_Bo/OneRoom/BO_Spot_WherearenGarden:110_01', false)

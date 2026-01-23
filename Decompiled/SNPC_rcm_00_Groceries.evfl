@@ -5,6 +5,7 @@ flow ChkChestNormal():
 flow Root():
 	run SNPC_rcm::Check_ShopEnable()
 	run Unlock_v200_Item_Grocery()
+	run UnLockMegaphone()
 	run SNPC_rcm::Regulation()
 	MainNpc.SetTwinsTag()
 	System.EventFlags['cPlayerTemp:RcmShopshelfCheck'] = true
@@ -43,6 +44,10 @@ flow Root_Init():
 flow UnLockFIXLadderRecipe():
 	if (EventFlowSystemActor.IsMyVillage()) and (EventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)) and (EventFlowSystemActor.PlayerHasCraftRecipe('', 2615)):
 		System.EventFlags['cPlayer:UnlockBuyFIXLadderRecipe'] = true
+
+flow UnLockMegaphone():
+	if (EventFlowSystemActor.IsSwitch2Edition()) and (EventFlowSystemActor.ShopLevel() in (`NooksCrannyInitial`, `NooksCrannyUpgraded`)):
+		System.EventFlags['cPlayer:UnlockBuyMegaphone'] = true
 
 flow Unlock_v200_Item_Grocery():
 	run UnLockFIXLadderRecipe()

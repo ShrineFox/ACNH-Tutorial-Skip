@@ -236,7 +236,7 @@ flow Pge_Anime_FinishCamera():
 
 flow Pge_Anime_Make():
 	MainNpc.TurnBody(12, 270.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.PgeCafeReaction('cTakeOut', false)
 	MainNpc.PgeCafeReaction('cPourCoffee', false)
 	if System.EventFlags['cPlayerTemp:PgeAddMilkFlag']:
@@ -246,7 +246,7 @@ flow Pge_Anime_Make():
 
 flow Pge_Anime_Make_TakeoutNpc():
 	MainNpc.TurnBody(12, 270.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)
 	MainNpc.PgeCafeReaction('cTakeOut', true)
 	MainNpc.PgeCafeReaction('cPourCoffee', true)
 	MainNpc.PgeCafeReaction('cPutOnLid', true)
@@ -344,23 +344,25 @@ flow Pge_FirstReset():
 
 flow Pge_ImmpressCamera():
 	if not EventFlowSystemActor.IsSharePlay(0):
-		switch EventFlowSystemActor.CafePlayerSeatPos():
-			case 0:
-				if MainNpc.NpcNetStatus(0):
-					MainNpc.NpcAISetting(4, false)
-					MainNpc.NpcAISetting(21, true)
-				else:
-					EventFlowSystemActor.CameraSetDemoParam('CafeImpressCounter', 'cDefault', 'Player', false, false, false, 0)
-			case 1:
-				EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable0', 'cDefault', 'Player', false, false, false, 0)
-			case 2:
-				EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable1', 'cDefault', 'Player', false, false, false, 0)
-			case 3:
-				EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable2', 'cDefault', 'Player', false, false, false, 0)
-			case 4:
-				EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable3', 'cDefault', 'Player', false, false, false, 0)
-			default:
-				return
+		if EventFlowSystemActor.NetIsSwitch2EditionSession():
+			if EventFlowSystemActor.CafePlayerSeatPos() == 0:
+				run Sub_grp_Event576()
+			else:
+				EventFlowSystemActor.SetMuseumCafeOver8CameraDemoParam('cDefault')
+		else:
+			switch EventFlowSystemActor.CafePlayerSeatPos():
+				case 0:
+					run Sub_grp_Event576()
+				case 1:
+					EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable0', 'cDefault', 'Player', false, false, false, 0)
+				case 2:
+					EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable1', 'cDefault', 'Player', false, false, false, 0)
+				case 3:
+					EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable2', 'cDefault', 'Player', false, false, false, 0)
+				case 4:
+					EventFlowSystemActor.CameraSetDemoParam('CafeImpressTable3', 'cDefault', 'Player', false, false, false, 0)
+				default:
+					return
 
 flow Pge_Impressions(IsSharePlay: bool):
 	run Pge_ImmpressCamera()
@@ -551,21 +553,21 @@ flow Pge_Msg_Cool():
 						# You like your coffee on the lukewarm side, I take it…
 						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge:047', false)
 						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-	 run Sub_Event265()
+							run Sub_Event265()
 						else:
-	 run Sub_Event266()
+							run Sub_Event266()
 					else:
-  run Sub_Event370()
+						run Sub_Event370()
 				case 4, 5:
 					if SubflowResults@2[3] == 0:
 						# I get the sense that you like your coffee…on the lukewarm side?
 						MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge:048', false)
 						if EventFlowSystemActor.GeneralTalkChoice2() == 0:
-	 run Sub_Event265()
+							run Sub_Event265()
 						else:
-	 run Sub_Event266()
+							run Sub_Event266()
 					else:
-  run Sub_Event370()
+						run Sub_Event370()
 
 flow Pge_Msg_Cool_4Times():
 	run Event171()
@@ -784,7 +786,7 @@ local flow Sub_Event194():
 	run Pge_DeleteUI()
 	fork:
 		branch:
-			run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+			run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 		branch:
 			MainNpc.PgeCafeReaction('cPutCloth', false)
 	Player.PlayerForceLookAtDemoPartnerNpc(3)
@@ -799,13 +801,12 @@ local flow Sub_Event194():
 	Player.PlayerForceLookAtDemoPartnerNpc(2)
 	if EventFlowSystemActor.IsExistCafeCounterPlayer():
 		MainNpc.TurnBody(12, 270.0)
-		MainNpc.NpcWaitTurn()
+		MainNpc.NpcWaitTurn(false)
 		MainNpc.PgeCafeReaction('cPutawayNet', false)
 	EventFlowSystemActor.WaitFrame(15)
 	EventFlowSystemActor.BGMPropertyControl(157)
 	# Coo… Thank you very much.
 	MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge:032', false)
-	System.EventFlags['cPlayer:PgeCoffeeTodayFlag'] = true
 	Player.PlayerForceLookAtDemoPartnerNpc(3)
 	EventFlowSystemActor.ExitFlowchart()
 
@@ -847,7 +848,7 @@ local flow Sub_Event511():
 	run Pge_DeleteUI()
 	fork:
 		branch:
-			run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+			run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 		branch:
 			MainNpc.PgeCafeReaction('cPutCloth', false)
 	Player.PlayerForceLookAtDemoPartnerNpc(3)
@@ -887,7 +888,7 @@ local flow Sub_Event517():
 	run Pge_DeleteUI()
 	fork:
 		branch:
-			run `00_Demo_Fade`::FadeOut_Cmnrun `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
+			run `00_Demo_Fade`::FadeOut_Cmn(FadeType='cCircle', FadeColor='cBlack', FadeSpeed='cNormal', SoundDucking='cWorldDucking')
 		branch:
 			MainNpc.PgeCafeReaction('cPutCloth', false)
 	Player.PlayerForceLookAtDemoPartnerNpc(3)
@@ -971,6 +972,13 @@ local flow Sub_grp_Event283():
 				# I brewed this cup…especially for you… Drink up. Coo…
 				MainNpc.OpenMessageWindow('TalkSNpc/pge/SP_pge:027', false)
 
+local flow Sub_grp_Event576():
+	if MainNpc.NpcNetStatus(0):
+		MainNpc.NpcAISetting(4, false)
+		MainNpc.NpcAISetting(21, true)
+	else:
+		EventFlowSystemActor.CameraSetDemoParam('CafeImpressCounter', 'cDefault', 'Player', false, false, false, 0)
+
 local flow Sub_grp_Event88():
 	switch SubflowResults@6[0]:
 		case 0:
@@ -996,4 +1004,4 @@ flow TurnToCounter():
 	MainNpc.NpcAISetting(2, false)
 	MainNpc.NpcAISetting(3, false)
 	MainNpc.TurnBody(12, 270.0)
-	MainNpc.NpcWaitTurn()
+	MainNpc.NpcWaitTurn(false)

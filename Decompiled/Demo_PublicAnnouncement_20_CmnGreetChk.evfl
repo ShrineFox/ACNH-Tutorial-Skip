@@ -4,6 +4,14 @@ flow Root():
 	run Subflow2B_22_PreEventGreeting()
 	run Subflow3_BdayChk()
 
+local flow Sub_Event72():
+	SubflowResults[1] = 9
+	run Sub_Event93()
+
+local flow Sub_Event93():
+	if SubflowResults@2[0] == 0:
+		run Sub_grp_Event1()
+
 local flow Sub_grp_Event1():
 	switch EventFlowSystemActor.EnvTimeZone():
 		case `05:00-07:59`:
@@ -28,16 +36,18 @@ flow Subflow1_GreetingChk():
 		SubflowResults[21] = 6
 		if EventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
 			SubflowResults[1] = 8
+			run Sub_Event93()
 		else:
-			SubflowResults[1] = 9
-	elif EventFlowSystemActor.TermEventNow('XmasAfter', false):
-		SubflowResults[22] = 2
-		if EventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
-			SubflowResults[1] = 9
+			run Sub_Event72()
+	else:
+		if EventFlowSystemActor.TermEventNow('XmasAfter', false):
+			SubflowResults[22] = 2
+			if EventFlowSystemActor.EnvHourCompare(0, 0, true, true) == 0:
+				run Sub_Event72()
+			else:
+				run Sub_grp_Event1()
 		else:
 			run Sub_grp_Event1()
-	else:
-		run Sub_grp_Event1()
 
 flow Subflow2B_22_PreEventGreeting():
 	if (EventFlowSystemActor.TermEventNow('XmasReady1', false)) or (EventFlowSystemActor.TermEventNow('XmasReady2', false)):

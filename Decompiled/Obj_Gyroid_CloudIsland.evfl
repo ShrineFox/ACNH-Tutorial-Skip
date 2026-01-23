@@ -1,0 +1,439 @@
+flow Bridge():
+	# Absolutely, chum! We can build bridges on this island.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:301', false)
+	if EventFlowSystemActor.HasTargetItem(909, 1):
+		EventFlowSystemActor.SetTagFromCloudIslandBridgeSlopeKit('cBridge', 0)
+		# You should have a kit for building [a|an]<125:0:0000>. I can help you with any additional bridge orders after you've used that kit to finish your cur…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:311', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run EndeExplain_Bridge()
+			case 1:
+				# Of course! I can tell you how to use the <item>dream bridge kit.
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:321', false)
+				run ReExplain_Bridge()
+			case 2:
+				# Ah, changed your mind about the <125:0:0000>, then? In that case, I'll just take back that <item>dream bridge kit. If you do decide to build a bridge…
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:331', false)
+				EventFlowSystemActor.DeleteTargetItem(909, 1, false)
+	elif EventFlowSystemActor.CloudIslandBridgeNum(10):
+		# Now, listen. There is a limit of 10 bridges on a single island. If you'd like to build a new bridge, you'll need to destroy one of the existing bridg…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:351', false)
+		run ReSelect()
+	else:
+		run ChkGetKit()
+		run ReSel_BridgeCatalog()
+
+flow ChkDeleteExplain():
+	if not System.EventFlags['cPlayerTemp:IsExplainedDeleteBridgeSlopeCloudIsland']:
+		System.EventFlags['cPlayerTemp:IsExplainedDeleteBridgeSlopeCloudIsland'] = true
+		# Just point out the unneeded bridge or incline, and I'll take care of it.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:501_01', false)
+	if (EventFlowSystemActor.NetHasVisitor()) and (not System.EventFlags['cPlayerTemp:IsExplainedDeleteBridgeSlopeMultiCloudIsland']):
+		System.EventFlags['cPlayerTemp:IsExplainedDeleteBridgeSlopeMultiCloudIsland'] = true
+		# Now, be aware that I can't demolish a bridge or an incline if someone is standing on it or is too close to it.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:501_02', false)
+
+flow ChkGetGoods():
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Terribly sorry, bud, but I can't give 'em to you when your pockets are full. Wanna return something first?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:701', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Alright! Please pick out what you want to return to me.
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:631', true)
+			EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'CloudIslandGyroid_Pitfall', '', false)
+			if EventFlowSystemActor.UIResultMenuDecide():
+				EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+				# Thank you kindly. I'll hold on to everything you turned over to me.
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:632', false)
+			else:
+				run Pitfall_Resel()
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			run Pitfall_Resel()
+			EventFlowSystemActor.ExitFlowchart()
+
+flow ChkGetKit():
+	if EventFlowSystemActor.SystemHasBaggageSpace('cPocketBag') < 1:
+		# Terribly sorry, pal, but I can't give you the kit when your pockets are full. Wanna return something first?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:700', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			# Alright! Please pick out what you want to return to me.
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:631', true)
+			EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'CloudIslandGyroid_Pitfall', '', false)
+			if EventFlowSystemActor.UIResultMenuDecide():
+				EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+				# Thank you kindly. I'll hold on to everything you turned over to me.
+				MainNpc.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:632', false)
+			else:
+				run ReSelect()
+				EventFlowSystemActor.ExitFlowchart()
+		else:
+			run ReSelect()
+			EventFlowSystemActor.ExitFlowchart()
+
+flow ChkHaveGoods():
+	if (not EventFlowSystemActor.HasTargetItem(2578, 1)) and (not EventFlowSystemActor.HasTargetItem(1301, 1)):
+		# It doesn't look like you have anything you can return to me at the moment. I can accept any <item>pitfall seeds or <item>gold nuggets that you don't …
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:633', false)
+		run Pitfall_Resel()
+		EventFlowSystemActor.ExitFlowchart()
+
+flow DeleteBridgeSlope():
+	EventFlowSystemActor.UICloudIslandMapRemoveCreate()
+	# OK, pal! I can help you demolish a bridge or an incline.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:501', false)
+	run ChkDeleteExplain()
+	# Please select the bridge or incline you'd like to demolish.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:502', true)
+	EventFlowSystemActor.UICloudIslandMapRemoveHandling()
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cBridgeSlopeName', 0)
+		# If I've got it right, I'm demolishing the <125:0:0000>?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:503', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			run ReSelect()
+		else:
+			EventFlowSystemActor.CloudIslandStructureRequestLock('cBuildRange', 'cBridgeSlopeRemove', 'cBridge')
+			if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cBuildRange', 'cBridgeSlopeRemove'):
+				EventFlowSystemActor.CloudIslandStructureLockEffect()
+				EventFlowSystemActor.CloudIslandStructureRemoveBridgeSlope()
+				# OK, I've demolished the <125:0:0000>.
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:504', false)
+			else:
+				EventFlowSystemActor.CloudIslandStructureCancelLock()
+entrypoint Event89:
+				# It seems someone is loitering on or near the bridge or incline you've asked me to demolish… Please resubmit your request when no one is on or near a …
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:505', false)
+			run ReSelect()
+	else:
+		run ReSelect()
+
+flow Delete_Failure():
+	run Event89()
+
+flow EndeExplain_Bridge():
+	# Great! The <item>dream bridge kit is in your pockets, so please try using it when you've found just the right river spot.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:312', false)
+
+flow EndeExplain_Slope():
+	# Great! The <item>dream incline kit is in your pockets, so please use it when you've found just the right cliff spot.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:412', false)
+
+flow Explain_Pitfall():
+	# I give you <item>pitfall seeds, you bury 'em in the ground to create pitfalls. That's how it goes, friend! Think of 'em as pranks you can pull on you…
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:642', false)
+	# All you have to do is dig a hole with a shovel, then pull a <item>pitfall seed from your pockets and bury it. Now, if you only plant <item>pitfall se…
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:643', false)
+	System.EventFlags['cPlayer:SelectPitfallCloudIslnad'] = true
+	run Pitfall_Resel()
+
+flow GetGold():
+	run ChkGetGoods()
+	# I'll go ahead and slip 10 <item>dream gold nuggets in your pockets, pally.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:621', false)
+	EventFlowSystemActor.SetItemToPocket(1301, 10)
+	if not System.EventFlags['cPlayerTemp:GetGoldThisConversation']:
+		System.EventFlags['cPlayerTemp:GetGoldThisConversation'] = true
+		# Nothing special happens if you bury one, but…it does make a mark on the ground identical to a pitfall. It's real fun to hide your pitfalls among your…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:622', false)
+	run Pitfall_Resel()
+
+flow GetPitFalls():
+	run ChkGetGoods()
+	# I'll go ahead and slip 10 <item>pitfall seeds into your pockets.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:611', false)
+	EventFlowSystemActor.SetItemToPocket(2578, 10)
+	if not System.EventFlags['cPlayerTemp:GetPitfallThisConversation']:
+		System.EventFlags['cPlayerTemp:GetPitfallThisConversation'] = true
+		# Stand in front of a hole while holding a shovel, then bury a seed from your pockets to create a pitfall.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:612', false)
+	run Pitfall_Resel()
+
+flow GoodBye_Guest():
+	# I'm here when you need me, friend!
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:005', false)
+	System.EventFlags['cPlayerTemp:GetPitfallThisConversation'] = false
+	System.EventFlags['cPlayerTemp:GetGoldThisConversation'] = false
+
+flow HostSelect():
+	# Please allow me to assist with any construction or installation dreams you might have.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:002', false)
+entrypoint Event87:
+	switch EventFlowSystemActor.GeneralTalkChoice4():
+		case 0:
+			# How can I help you with your house?
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:002_01', false)
+			switch EventFlowSystemActor.GeneralTalkChoice3():
+				case 0:
+					run Reform()
+				case 1:
+					run Move()
+				case 2:
+					run ReSelect()
+		case 1:
+			if (not EventFlowSystemActor.CloudIslandBridgeNum(1)) and (not EventFlowSystemActor.CloudIslandSlopeNum(1)):
+				# How can I help you with bridges or inclines?
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:003_01', false)
+				switch EventFlowSystemActor.GeneralTalkChoice3():
+					case 0:
+						run Bridge()
+					case 1:
+						run Slope()
+					case 2:
+						run ReSelect()
+			else:
+				# How can I help you with bridges or inclines?
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:003', false)
+				switch EventFlowSystemActor.GeneralTalkChoice4():
+					case 0:
+						run Bridge()
+					case 1:
+						run Slope()
+					case 2:
+						run DeleteBridgeSlope()
+					case 3:
+						run ReSelect()
+		case 2:
+			run Pitfall()
+		case 3:
+			run GoodBye_Guest()
+
+flow Move(ItemPrice: int = 0):
+	# Sure, chum! I can help you move your house.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:201', false)
+	if EventFlowSystemActor.HasTargetItem(906, 1):
+entrypoint Event96:
+		# If you use the <item>dream moving kit I gave you to select a spot for your house, I can move it right away. You'll need to find a spot that is fairly…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:203', false)
+		if EventFlowSystemActor.NetHasVisitor():
+			# Now, I can't move a house if anyone is inside it, so please ask any guests to exit.
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:204', false)
+		# That about covers it. Do you feel you can confidently use the <item>dream moving kit without issues?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:205', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				# Great! The <item>dream moving kit is in your pockets, so go ahead and try it out when you find the right spot.
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:206', false)
+			case 1:
+				run ReExplain_Move()
+			case 2:
+				# Ah, so you'd like to leave your house right where it is, then. In that case, let me just take that <item>dream moving kit back from you now. If you c…
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:208', false)
+				EventFlowSystemActor.DeleteTargetItem(906, 1, false)
+	else:
+		run ChkGetKit()
+		# You'll need a <item>dream moving kit. Select a wide-open space, and I'll move your house to that location. I've placed the kit in your pockets, so go…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:202', true)
+		EventFlowSystemActor.SetItemToPocket(906, 1)
+		EventFlowSystemActor.NpcEventItemSet(906, 'cTalk', 0, ItemPrice)
+
+flow Pitfall():
+	if System.EventFlags['cPlayer:SelectPitfallCloudIslnad']:
+		# So, friend, you want to play around with pitfall seeds.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:600', false)
+	else:
+		# Curious about pitfall seeds, eh?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:641', false)
+		# I give you <item>pitfall seeds, you bury 'em in the ground to create pitfalls. That's how it goes, friend! Think of 'em as pranks you can pull on you…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:642', false)
+		System.EventFlags['cPlayer:SelectPitfallCloudIslnad'] = true
+	# How can I help you out?
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:601', false)
+entrypoint Event24:
+	switch EventFlowSystemActor.GeneralTalkChoice5():
+		case 0:
+			run GetPitFalls()
+		case 1:
+			run GetGold()
+		case 2:
+			run RemoveGoods()
+		case 3:
+			run Explain_Pitfall()
+		case 4:
+			if not EventFlowSystemActor.NetHasVisitor():
+				run ReSelect()
+			elif EventFlowSystemActor.NetIsInviteFriend():
+				run ReSelect()
+			else:
+				run GoodBye_Guest()
+
+flow Pitfall_Guest():
+	# I'm giving out <item>pitfall seeds to visitors to play around with, pal.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:603', false)
+	run Event24()
+
+flow Pitfall_Resel():
+	# Anything else I can help with?
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:602', false)
+	run Event24()
+
+flow ReExplain_Bridge():
+	# You'll need to face a river at the spot where you want to build the bridge, and then use the kit. However, if the river is too wide or too narrow, yo…
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:322', false)
+	# That covers all my advice. Do you need to hear it again?
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:323', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run EndeExplain_Bridge()
+	else:
+		# Sure, friend! Let's take it from the top.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:324', false)
+		run ReExplain_Bridge()
+
+flow ReExplain_Move():
+	# Of course, friend! Let's take it from the top.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:207', false)
+	run Event96()
+
+flow ReExplain_Slope():
+	# You'll need to face a cliff at the spot where you want to build the incline, and then use the kit. As long as there's enough space near the base of t…
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:422', false)
+	# That covers all my advice. Do you need to hear it again?
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:423', false)
+	if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+		run EndeExplain_Slope()
+	else:
+		# Sure, friend! Let's take it from the top.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:424', false)
+		run ReExplain_Slope()
+
+flow ReSel_BridgeCatalog():
+	# Please select the type of bridge you'd like to build here.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:302', true)
+	EventFlowSystemActor.UIShopBuyHandling('cCloudIslandBridge')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+		# And you're happy with your choice? The <125:0:0000>?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:303', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				# Excellent! Then let me give you the <item>dream bridge kit you'll be needing. Use it next to a river. Find a spot where a bridge will fit nicely, and…
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:304', false)
+				EventFlowSystemActor.SetBridgeSlopeKitToPlayerBaggageCloudIsland(0)
+			case 1:
+				run ReSel_BridgeCatalog()
+			case 2:
+				run ReSelect()
+	else:
+		run ReSelect()
+
+flow ReSel_SlopeCatalog():
+	# Please select the type of incline you'd like to build here.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:402', true)
+	EventFlowSystemActor.UIShopBuyHandling('cCloudIslandSlope')
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SetTagFromUIResult('cItemName', 0)
+		# And you're happy with your choice? The <125:0:0000>?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:403', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				# Excellent! Then let me give you the <item>dream incline kit you'll be needing. Use it next to a cliff where an incline will fit nicely, and I'll get …
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:404', false)
+				EventFlowSystemActor.SetBridgeSlopeKitToPlayerBaggageCloudIsland(1)
+			case 1:
+				run ReSel_SlopeCatalog()
+			case 2:
+				run ReSelect()
+	else:
+		run ReSelect()
+
+flow ReSelect():
+	# Will there be anything else?
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:051', false)
+	run Event87()
+
+flow Reform():
+	# Of course, chum! I can help you with your renovations.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:101', false)
+	if EventFlowSystemActor.NetHasVisitor():
+		# Now, I can't carry out renovations if anyone is in the house or near it. So, are you ready to begin?
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:102', false)
+		if EventFlowSystemActor.GeneralTalkChoice2() == 0:
+			if EventFlowSystemActor.CloudIslandStructureIsExistPlayerInHouse():
+				run Reform_Failure()
+			else:
+				run Sub_Event12()
+		else:
+			run ReSelect()
+	else:
+		# Within a dream, I can instantly change the way your house looks.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:101_01', false)
+		run Sub_Event12()
+
+flow Reform_Failure():
+	# Unfortunately, it seems someone is either in the house or near it… Please put in your request when no one is in or near your house.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:151', true)
+	EventFlowSystemActor.CloudIslandStructureCancelLock()
+	run ReSelect()
+
+flow RemoveGoods():
+	run ChkHaveGoods()
+	# Alright! Please pick out what you want to return to me.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:631', true)
+	EventFlowSystemActor.UIItemSelectWindowHandling('cItemFilter', 65534, '', 'CloudIslandGyroid_Pitfall', '', false)
+	if EventFlowSystemActor.UIResultMenuDecide():
+		EventFlowSystemActor.SystemDeletePlayerItem('cItemWindow', 1)
+		# Thank you kindly. I'll hold on to everything you turned over to me.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:632', false)
+	run Pitfall_Resel()
+
+flow Root(ItemPrice: int = 0):
+	if not System.EventFlags['cPlayerTemp:FirstTalkedCloudIslandGyroid']:
+		System.EventFlags['cPlayerTemp:FirstTalkedCloudIslandGyroid'] = true
+		if EventFlowSystemActor.IsCloudIslandIdOverwrited():
+			# Welcome to ISLAND! I'm here to support you as you make your dreams a reality.
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:001', false)
+		else:
+			# Welcome! I'm here to support you as you make your idyllic dreams a reality!
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:001_01', false)
+	if not EventFlowSystemActor.NetHasVisitor():
+		run HostSelect()
+	elif EventFlowSystemActor.NetIsInviteFriend():
+		run HostSelect()
+	else:
+		# If you have any construction goals, please pass them along to the host of this dream.
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:004', false)
+		run Pitfall_Guest()
+
+flow Slope():
+	# Righty-o, chum! We can build inclines on this island.
+	HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:401', false)
+	if EventFlowSystemActor.HasTargetItem(910, 1):
+		EventFlowSystemActor.SetTagFromCloudIslandBridgeSlopeKit('cSlope', 0)
+		# You should have a kit for building [a|an]<125:0:0000>. I can help you with any additional incline orders after you've used that kit to finish your cu…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:411', false)
+		switch EventFlowSystemActor.GeneralTalkChoice3():
+			case 0:
+				run EndeExplain_Slope()
+			case 1:
+				# Of course! I can tell you how to use the <item>dream incline kit.
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:421', false)
+				run ReExplain_Slope()
+			case 2:
+				# Ah, changed your mind about the <125:0:0000>, then? In that case, I'll just take back that <item>dream incline kit. If you do decide to build an incl…
+				HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:431', false)
+				EventFlowSystemActor.DeleteTargetItem(910, 1, false)
+	elif EventFlowSystemActor.CloudIslandSlopeNum(10):
+		# Now, listen. There is a limit of 10 inclines on a single island. If you'd like to build a new incline, you'll need to destroy one of the existing inc…
+		HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:451', false)
+		run ReSelect()
+	else:
+		run ChkGetKit()
+		run ReSel_SlopeCatalog()
+
+local flow Sub_Event12():
+	EventFlowSystemActor.CloudIslandStructureRequestLock('cBuildRange', 'cHouseChange', 'cCloudIslandPlayerHouse')
+	if EventFlowSystemActor.CloudIslandStructureIsLockSuccess('cBuildRange', 'cHouseChange'):
+		EventFlowSystemActor.CloudIslandStructureLockEffect()
+		EventFlowSystemActor.MessageSuspend()
+		EventFlowSystemActor.UICloudIslandCustomHomeHandling()
+		if EventFlowSystemActor.UIResultMenuDecide():
+			EventFlowSystemActor.CloudIslandStructureWaitHouseChange()
+			# I've finished the renovations. Please check to see that everything is the way you want it.
+			HaniwaKun.OpenMessageWindow('TalkObj/OBJ_Gyroid_CloudIsland:103', true)
+			run ReSelect()
+		else:
+			EventFlowSystemActor.CloudIslandStructureCancelLock()
+			run ReSelect()
+	else:
+		run Reform_Failure()
